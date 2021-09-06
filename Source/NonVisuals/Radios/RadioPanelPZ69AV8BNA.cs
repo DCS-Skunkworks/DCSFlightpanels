@@ -9,6 +9,10 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using MEF;
+
+    using NonVisuals.Plugin;
+
     public class RadioPanelPZ69AV8BNA : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
         private CurrentAV8BNARadioMode _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM1;
@@ -185,7 +189,7 @@ namespace NonVisuals.Radios
                 {
                     case CurrentAV8BNARadioMode.COMM1:
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockCOMM1DialsObject)
                             {
                                 frequencyAsString = _comm1Frequency;
@@ -197,7 +201,7 @@ namespace NonVisuals.Radios
                         break;
                     case CurrentAV8BNARadioMode.COMM2:
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockCOMM2DialsObject)
                             {
                                 frequencyAsString = _comm2Frequency;
@@ -218,7 +222,7 @@ namespace NonVisuals.Radios
                 {
                     case CurrentAV8BNARadioMode.COMM1:
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockCOMM1DialsObject)
                             {
                                 frequencyAsString = _comm1Frequency;
@@ -230,7 +234,7 @@ namespace NonVisuals.Radios
                         break;
                     case CurrentAV8BNARadioMode.COMM2:
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockCOMM2DialsObject)
                             {
                                 frequencyAsString = _comm2Frequency;
@@ -254,7 +258,7 @@ namespace NonVisuals.Radios
 
         private string GetUHFCockpitFrequencyAsString()
         {
-            /*var frequencyAsString = "";
+            /*var frequencyAsString = string.Empty;
             lock (_lockUhfBigFreqObject1)
             {
                 lock (_lockUhfDial3FreqObject2)
@@ -270,7 +274,7 @@ namespace NonVisuals.Radios
                 }
             }
             return frequencyAsString;*/
-            return "";
+            return string.Empty;
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
@@ -606,7 +610,13 @@ namespace NonVisuals.Radios
                                 break;
                             }
                     }
+
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.DoEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                    }
                 }
+
                 AdjustFrequency(hashSet);
             }
         }
@@ -675,7 +685,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -687,7 +697,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
 

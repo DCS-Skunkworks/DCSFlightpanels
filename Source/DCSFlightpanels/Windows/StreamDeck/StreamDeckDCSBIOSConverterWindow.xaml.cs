@@ -17,6 +17,8 @@ using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace DCSFlightpanels.Windows.StreamDeck
 {
+    using MEF;
+
     public partial class StreamDeckDCSBIOSConverterWindow : Window, IIsDirty
     {
         private bool _isLoaded = false;
@@ -150,8 +152,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
             set => _dcsbiosConverter = value;
         }
 
-        private string lastChecked1 = "";
-        private string lastChecked2 = "";
+        private string lastChecked1 = string.Empty;
+        private string lastChecked2 = string.Empty;
         private void TextBoxReferenceValue_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
@@ -347,7 +349,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 infoWindow.AddInline("\n");
                 infoWindow.AddInline("Here you can convert DCS-BIOS values to have unique images / texts based on DCS-BIOS value.\n");
                 infoWindow.AddInline("A radio can based on a dial's position show texts : OFF MANUAL PRESET and so on.\n");
-                infoWindow.AddInline("");
                 infoWindow.AddInline("If you want to show units after the value you can do this here too. Choose comparison mode \"Always\" for this.\n");
                 infoWindow.AddInline(new Run("7400 RPM\n") { FontWeight = FontWeights.Bold });
                 infoWindow.AddInline(new Run("242°\n") { FontWeight = FontWeights.Bold });
@@ -487,7 +488,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 {
                     textBox = TextBoxOverlayImagePath;
                 }
-                var imageRelativePath = "";
+                var imageRelativePath = string.Empty;
                 var directory = SettingsManager.LastImageFileDirectory;
 
                 var dialogResult = StreamDeckUICommon.BrowseForImage(ref directory, ref imageRelativePath);

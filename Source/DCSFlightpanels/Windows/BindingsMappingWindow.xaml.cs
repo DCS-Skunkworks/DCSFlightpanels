@@ -96,7 +96,7 @@ namespace DCSFlightpanels.Windows
 
         private void ShowMissingHardwareInformation()
         {
-            LabelMissingPanelInformation.Content = "";
+            LabelMissingPanelInformation.Content = string.Empty;
             var genericBinding = (GenericPanelBinding)ComboBoxMissingHardware.SelectedItem;
             if (genericBinding == null)
             {
@@ -108,7 +108,7 @@ namespace DCSFlightpanels.Windows
 
         private void ShowReplacementHardwareInformation()
         {
-            LabelReplacementInformation.Content = "";
+            LabelReplacementInformation.Content = string.Empty;
             var gamingPanel = (GamingPanel)ComboBoxReplacementHardware.SelectedItem;
             if (gamingPanel == null)
             {
@@ -120,7 +120,7 @@ namespace DCSFlightpanels.Windows
         private void ClearReplacementHardware()
         {
             ComboBoxReplacementHardware.ItemsSource = null;
-            LabelReplacementInformation.Content = "";
+            LabelReplacementInformation.Content = string.Empty;
         }
 
         private void PopulateReplacementHardware(GamingPanelEnum panelType)
@@ -191,7 +191,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
 
-                var informationTextBlockWindow = new InformationTextBlockWindow(string.IsNullOrEmpty(genericBinding.SettingsString) ? "" : genericBinding.SettingsString);
+                var informationTextBlockWindow = new InformationTextBlockWindow(string.IsNullOrEmpty(genericBinding.SettingsString) ? string.Empty : genericBinding.SettingsString);
 
                 informationTextBlockWindow.ShowDialog();
 

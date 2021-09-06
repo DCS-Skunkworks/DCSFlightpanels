@@ -10,13 +10,15 @@ using NonVisuals.Interfaces;
 
 namespace DCSFlightpanels.Windows
 {
+    using MEF;
+
     /// <summary>
     /// Interaction logic for SequenceWindow.xaml
     /// </summary>
     public partial class KeySequenceWindow : Window, IIsDirty
     {
 
-        private readonly SortedList<int, KeyPressInfo> _sortedList = new SortedList<int, KeyPressInfo>();
+        private readonly SortedList<int, IKeyPressInfo> _sortedList = new SortedList<int, IKeyPressInfo>();
         private bool _isDirty;
         private bool _formLoaded = false;
         private bool _supportIndefinite;
@@ -28,7 +30,7 @@ namespace DCSFlightpanels.Windows
             _supportIndefinite = supportIndefinite;
         }
 
-        public KeySequenceWindow(string description, SortedList<int, KeyPressInfo> sortedList, bool supportIndefinite = true)
+        public KeySequenceWindow(string description, SortedList<int, IKeyPressInfo> sortedList, bool supportIndefinite = true)
         {
             InitializeComponent();
             _sortedList = sortedList;
@@ -68,7 +70,7 @@ namespace DCSFlightpanels.Windows
             _isDirty = false;
         }
 
-        public SortedList<int, KeyPressInfo> KeySequence
+        public SortedList<int, IKeyPressInfo> KeySequence
         {
             get { return _sortedList; }
         }

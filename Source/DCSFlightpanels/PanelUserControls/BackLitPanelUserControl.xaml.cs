@@ -220,7 +220,7 @@ namespace DCSFlightpanels.PanelUserControls
                     SetConfigExistsImageVisibility(_backlitPanelBIP.HasConfiguration(position), position);
                 }
 
-                TextBoxBrightnessControl.Text = _backlitPanelBIP.BrightnessBinding != null ? _backlitPanelBIP.BrightnessBinding.ControlId : "";
+                TextBoxBrightnessControl.Text = _backlitPanelBIP.BrightnessBinding != null ? _backlitPanelBIP.BrightnessBinding.ControlId : string.Empty;
             }
             catch (Exception ex)
             {
@@ -622,7 +622,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_backlitPanelBIP != null)
                 {
-                    TextBoxLogBIP.Text = "";
+                    TextBoxLogBIP.Text = string.Empty;
                     TextBoxLogBIP.Text = _backlitPanelBIP.HIDInstanceId;
                     Clipboard.SetText(_backlitPanelBIP.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");

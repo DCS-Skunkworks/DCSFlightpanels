@@ -11,6 +11,10 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using MEF;
+
+    using NonVisuals.Plugin;
+
     public class RadioPanelPZ69Mi8 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
         private CurrentMi8RadioMode _currentUpperRadioMode = CurrentMi8RadioMode.R863_MANUAL;
@@ -1350,7 +1354,13 @@ namespace NonVisuals.Radios
                                     break;
                                 }
                         }
+
+                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                        {
+                            PluginManager.DoEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                        }
                     }
+
                     AdjustFrequency(hashSet);
                 }
             }
@@ -2112,7 +2122,7 @@ namespace NonVisuals.Radios
                     {
                         case CurrentMi8RadioMode.R863_MANUAL:
                             {
-                                var frequencyAsString = "";
+                                var frequencyAsString = string.Empty;
                                 lock (_lockR863ManualDialsObject1)
                                 {
                                     frequencyAsString = _r863ManualCockpitFreq1DialPos.ToString();//_r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString();
@@ -2141,7 +2151,7 @@ namespace NonVisuals.Radios
                                 //      " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 uint unitSwitch = 0;
                                 lock (_lockR863Preset1DialObject1)
                                 {
@@ -2182,7 +2192,7 @@ namespace NonVisuals.Radios
                                 //      " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10 
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockR828Preset1DialObject1)
                                 {
                                     channelAsString = (_r828PresetCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -2196,7 +2206,7 @@ namespace NonVisuals.Radios
                                 //Dial1 XX00
                                 //Dial2 00XX
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 uint backupMain = 0;
                                 lock (_lockADFBackupMainDialObject)
                                 {
@@ -2236,7 +2246,7 @@ namespace NonVisuals.Radios
                             }
                         case CurrentMi8RadioMode.ARK_UD:
                             {
-                                var stringToBeShownLeft = "";
+                                var stringToBeShownLeft = string.Empty;
                                 uint arkPreset = 0;
                                 uint arkMode = 0;
                                 uint arkBand = 0;
@@ -2262,7 +2272,7 @@ namespace NonVisuals.Radios
                         case CurrentMi8RadioMode.SPU7:
                             {
                                 //0-5
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 uint spuICSSwitch = 0;
                                 lock (_lockSpu7DialObject1)
                                 {
@@ -2287,7 +2297,7 @@ namespace NonVisuals.Radios
                     {
                         case CurrentMi8RadioMode.R863_MANUAL:
                             {
-                                var frequencyAsString = "";
+                                var frequencyAsString = string.Empty;
                                 lock (_lockR863ManualDialsObject1)
                                 {
                                     frequencyAsString = _r863ManualCockpitFreq1DialPos.ToString(); //_r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString();
@@ -2318,7 +2328,7 @@ namespace NonVisuals.Radios
                                 //      " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 uint unitSwitch = 0;
                                 lock (_lockR863Preset1DialObject1)
                                 {
@@ -2358,7 +2368,7 @@ namespace NonVisuals.Radios
                                 //      " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10 
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockR828Preset1DialObject1)
                                 {
                                     channelAsString = (_r828PresetCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -2372,7 +2382,7 @@ namespace NonVisuals.Radios
                                 //Dial1 XX00
                                 //Dial2 00XX
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 uint backupMain = 0;
                                 lock (_lockADFBackupMainDialObject)
                                 {
@@ -2412,7 +2422,7 @@ namespace NonVisuals.Radios
                             }
                         case CurrentMi8RadioMode.ARK_UD:
                             {
-                                var stringToBeShownLeft = "";
+                                var stringToBeShownLeft = string.Empty;
                                 uint arkPreset = 0;
                                 uint arkMode = 0;
                                 uint arkBand = 0;
@@ -2438,7 +2448,7 @@ namespace NonVisuals.Radios
                         case CurrentMi8RadioMode.SPU7:
                             {
                                 //0-5
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 uint spuICSSwitch = 0;
                                 lock (_lockSpu7DialObject1)
                                 {
@@ -2993,7 +3003,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -3005,7 +3015,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
 

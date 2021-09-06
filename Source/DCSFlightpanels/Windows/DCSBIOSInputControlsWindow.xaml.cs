@@ -177,16 +177,17 @@ namespace DCSFlightpanels.Windows
 
         private void AddNewControl()
         {
-            var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, "");
+            var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, string.Empty);
             dcsBiosInputWindow.ShowDialog();
             if (dcsBiosInputWindow.DialogResult.HasValue && dcsBiosInputWindow.DialogResult.Value)
             {
                 var dcsBiosInput = dcsBiosInputWindow.DCSBiosInput;
-                //1 appropriate text to textbox
-                //2 update bindings
+                // 1 appropriate text to textbox
+                // 2 update bindings
                 _dcsbiosInputs.Add(dcsBiosInput);
                 SetIsDirty();
             }
+
             SetFormState();
             ShowItems();
         }

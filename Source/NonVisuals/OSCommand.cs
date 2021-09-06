@@ -45,7 +45,7 @@ namespace NonVisuals
         {
             //OSCommand{FILE\o/ARGUMENTS\o/NAME}
             var tmp = value;
-            tmp = tmp.Replace("OSCommand{", "").Replace("}", "");
+            tmp = tmp.Replace("OSCommand{", string.Empty).Replace("}", string.Empty);
             //FILE\o/ARGUMENTS\o/NAME]
             var array = tmp.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.None);
             _file = array[0];
@@ -75,7 +75,7 @@ namespace NonVisuals
 
         public string Execute(CancellationToken cancellationToken)
         {
-            var result = "";
+            var result = string.Empty;
             try
             {
                 var process = new Process

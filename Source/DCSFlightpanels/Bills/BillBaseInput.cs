@@ -1,24 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.Windows;
-using NonVisuals;
-using NonVisuals.DCSBIOSBindings;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-
-namespace DCSFlightpanels.Bills
+﻿namespace DCSFlightpanels.Bills
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.Windows;
+
+    using DCS_BIOS;
+
+    using MEF;
+
+    using NonVisuals;
+    using NonVisuals.DCSBIOSBindings;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.Panels;
+
     public abstract class BillBaseInput
     {
         private KeyPress _keyPress;
-        private OSCommand _osCommand;
+        private OSCommand _operatingSystemCommand;
         private IGlobalHandler _globalHandler;
         private IPanelUI _panelUI;
         private TextBox _textBox;
@@ -71,7 +77,7 @@ namespace DCSFlightpanels.Bills
             {
                 case CopyContentType.KeyStroke:
                     {
-                        description = "";
+                        description = string.Empty;
                         content = GetKeyPress();
                         break;
                     }
@@ -131,24 +137,30 @@ namespace DCSFlightpanels.Bills
                         {
                             AddKeyStroke((KeyPressInfo)copyPackage.Content);
                         }
+
                         break;
                     }
+
                 case CopyContentType.KeySequence:
                     {
                         if (IsEmptyNoCareBipLink())
                         {
-                            AddKeySequence(copyPackage.Description, (SortedList<int, KeyPressInfo>)copyPackage.Content);
+                            AddKeySequence(copyPackage.Description, (SortedList<int, IKeyPressInfo>)copyPackage.Content);
                         }
+
                         break;
                     }
+
                 case CopyContentType.DCSBIOS:
                     {
                         if (IsEmptyNoCareBipLink())
                         {
                             AddDCSBIOS(copyPackage.Description, (List<DCSBIOSInput>)copyPackage.Content);
                         }
+
                         break;
                     }
+
                 case CopyContentType.BIPLink:
                     {
                         if (!ContainsBIPLink())
@@ -157,12 +169,14 @@ namespace DCSFlightpanels.Bills
                         }
                         break;
                     }
+
                 case CopyContentType.OSCommand:
                     {
                         if (IsEmptyNoCareBipLink())
                         {
                             AddOSCommand((OSCommand)copyPackage.Content);
                         }
+
                         break;
                     }
             }
@@ -411,13 +425,13 @@ namespace DCSFlightpanels.Bills
                 if (string.IsNullOrEmpty(keyPressReadingWindow.VirtualKeyCodesAsString))
                 {
                     KeyPress = null;
-                    TextBox.Text = "";
+                    TextBox.Text = string.Empty;
                 }
                 else
                 {
                     var keyPress = new KeyPress(keyPressReadingWindow.VirtualKeyCodesAsString, keyPressReadingWindow.LengthOfKeyPress);
                     KeyPress = keyPress;
-                    KeyPress.Description = "";
+                    KeyPress.Description = string.Empty;
                     TextBox.Text = keyPressReadingWindow.VirtualKeyCodesAsString;
                 }
                 UpdateKeyBindingKeyStroke();
@@ -428,13 +442,13 @@ namespace DCSFlightpanels.Bills
         {
             var keyPress = new KeyPress();
             keyPress.KeySequence.Add(0, keyStroke);
-            keyPress.Description = "";
+            keyPress.Description = string.Empty;
             KeyPress = keyPress;
             TextBox.Text = keyStroke.VirtualKeyCodesAsString;
             UpdateKeyBindingKeyStroke();
         }
 
-        public void AddKeySequence(string description, SortedList<int, KeyPressInfo> keySequence)
+        public void AddKeySequence(string description, SortedList<int, IKeyPressInfo> keySequence)
         {
             var keyPress = new KeyPress("Key stroke sequence", keySequence);
             KeyPress = keyPress;
@@ -498,11 +512,11 @@ namespace DCSFlightpanels.Bills
             DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
             if (ContainsDCSBIOS())
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", ""), DCSBIOSInputs, TextBox.Text);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", string.Empty), DCSBIOSInputs, TextBox.Text);
             }
             else
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", ""), null);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", string.Empty), null);
             }
             dcsBIOSInputControlsWindow.ShowDialog();
             if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
@@ -582,10 +596,10 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public void AddOSCommand(OSCommand osCommand)
+        public void AddOSCommand(OSCommand operatingSystemCommand)
         {
-            OSCommandObject = osCommand;
-            TextBox.Text = osCommand.Name;
+            OSCommandObject = operatingSystemCommand;
+            TextBox.Text = operatingSystemCommand.Name;
             UpdateOSCommandBindings();
         }
 
@@ -685,20 +699,20 @@ namespace DCSFlightpanels.Bills
         public void DeleteKeyStroke()
         {
             KeyPress?.KeySequence?.Clear();
-            TextBox.Text = "";
+            TextBox.Text = string.Empty;
             UpdateKeyBindingSequencedKeyStrokes();
         }
 
         public void DeleteSequence()
         {
             KeyPress?.KeySequence?.Clear();
-            TextBox.Text = "";
+            TextBox.Text = string.Empty;
             UpdateKeyBindingSequencedKeyStrokes();
         }
 
         public void DeleteDCSBIOS()
         {
-            TextBox.Text = "";
+            TextBox.Text = string.Empty;
             _saitekPanel.RemoveSwitchFromList(ControlListPZ55.DCSBIOS, _panelUI.GetSwitch(TextBox));
             ClearDCSBIOSFromBill();
         }
@@ -712,14 +726,14 @@ namespace DCSFlightpanels.Bills
 
         public void DeleteOSCommand()
         {
-            TextBox.Text = "";
+            TextBox.Text = string.Empty;
             _saitekPanel.RemoveSwitchFromList(ControlListPZ55.OSCOMMANDS, _panelUI.GetSwitch(_textBox));
             OSCommandObject = null;
         }
 
         public bool ContainsOSCommand()
         {
-            return _osCommand != null;
+            return _operatingSystemCommand != null;
         }
 
         public bool ContainsKeyPress()
@@ -747,11 +761,11 @@ namespace DCSFlightpanels.Bills
                     throw new Exception("Cannot insert KeyPress, Bill already contains DCSBIOSInputs");
                 }
                 _keyPress = value;
-                _textBox.Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : "";
+                _textBox.Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : string.Empty;
             }
         }
 
-        public KeyPressInfo GetKeyPress()
+        public IKeyPressInfo GetKeyPress()
         {
             return _keyPress.KeySequence[0];
         }
@@ -761,18 +775,18 @@ namespace DCSFlightpanels.Bills
             return _keyPress.Description;
         }
 
-        public SortedList<int, KeyPressInfo> GetKeySequence()
+        public SortedList<int, IKeyPressInfo> GetKeySequence()
         {
             return _keyPress.KeySequence;
         }
 
         public OSCommand OSCommandObject
         {
-            get => _osCommand;
+            get => _operatingSystemCommand;
             set
             {
-                _osCommand = value;
-                _textBox.Text = _osCommand != null ? _osCommand.Name : "";
+                _operatingSystemCommand = value;
+                _textBox.Text = _operatingSystemCommand != null ? _operatingSystemCommand.Name : string.Empty;
             }
         }
 
@@ -784,8 +798,8 @@ namespace DCSFlightpanels.Bills
 
         public OSCommand OSCommand
         {
-            get => _osCommand;
-            set => _osCommand = value;
+            get => _operatingSystemCommand;
+            set => _operatingSystemCommand = value;
         }
 
         public IGlobalHandler GlobalHandler

@@ -39,12 +39,12 @@ namespace NonVisuals.DCSBIOSBindings
 
                 //[0]
                 //MultiPanelDCSBIOSControlLCD{ALT}
-                var param0 = parameters[0].Replace("MultiPanelDCSBIOSControlLCD{", "").Replace("}", "");
+                var param0 = parameters[0].Replace("MultiPanelDCSBIOSControlLCD{", string.Empty).Replace("}", string.Empty);
                 _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), param0);
 
                 //[1]
                 //{LowerLCD}
-                var param1 = parameters[1].Replace("{", "").Replace("}", "").Trim();
+                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty).Trim();
                 _pz70LCDPosition = (PZ70LCDPosition)Enum.Parse(typeof(PZ70LCDPosition), param1);
 
                 //[2]
@@ -59,12 +59,12 @@ namespace NonVisuals.DCSBIOSBindings
 
                 //[0]
                 //MultiPanelDCSBIOSFormulaLCD{ALT}
-                var param0 = parameters[0].Replace("MultiPanelDCSBIOSControlLCD{", "").Replace("}", "").Trim();
+                var param0 = parameters[0].Replace("MultiPanelDCSBIOSControlLCD{", string.Empty).Replace("}", string.Empty).Trim();
                 _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), param0);
 
                 //[1]
                 //{UpperLCD}
-                var param1 = parameters[1].Replace("{", "").Replace("}", "").Trim();
+                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty).Trim();
                 _pz70LCDPosition = (PZ70LCDPosition)Enum.Parse(typeof(PZ70LCDPosition), param1);
 
                 //[2]

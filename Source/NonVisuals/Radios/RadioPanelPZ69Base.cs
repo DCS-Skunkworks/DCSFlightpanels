@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading;
-using ClassLibraryCommon;
-using NonVisuals.Saitek.Panels;
-
-namespace NonVisuals.Radios
+﻿namespace NonVisuals.Radios
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using NonVisuals.Saitek.Panels;
+
     public enum PZ69LCDPosition
     {
         UPPER_ACTIVE_LEFT = 1,
@@ -20,6 +22,7 @@ namespace NonVisuals.Radios
         private byte _ignoreSwitchButtonCounter = 3;
         protected NumberFormatInfo NumberFormatInfoFullDisplay;
         protected NumberFormatInfo NumberFormatInfoEmpty;
+
         private int _frequencyKnobSensitivity;
         private volatile byte _frequencySensitivitySkipper;
         protected readonly object LockLCDUpdateObject = new object();
@@ -28,7 +31,8 @@ namespace NonVisuals.Radios
         /*
          * IMPORTANT WHEN SYNCHING DIALS
          */
-        //MSDN (DateTime.Now.Ticks : There are 10,000 ticks in a millisecond
+
+        // MSDN (DateTime.Now.Ticks : There are 10,000 ticks in a millisecond
         private int _synchSleepTime = 300;
         private long _resetSyncTimeout = 35000000;
         private long _syncOKDelayTimeout = 50000000; //5s
@@ -45,11 +49,11 @@ namespace NonVisuals.Radios
             NumberFormatInfoFullDisplay = new NumberFormatInfo();
             NumberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
             NumberFormatInfoFullDisplay.NumberDecimalDigits = 4;
-            NumberFormatInfoFullDisplay.NumberGroupSeparator = "";
+            NumberFormatInfoFullDisplay.NumberGroupSeparator = string.Empty;
 
             NumberFormatInfoEmpty = new NumberFormatInfo();
             NumberFormatInfoEmpty.NumberDecimalSeparator = ".";
-            NumberFormatInfoEmpty.NumberGroupSeparator = "";
+            NumberFormatInfoEmpty.NumberGroupSeparator = string.Empty;
         }
 
 
@@ -259,7 +263,7 @@ namespace NonVisuals.Radios
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
             var i = 0;
-            var digits = "";
+            var digits = string.Empty;
             if (digitString.Length > 5)
             {
                 if (digitString.Contains("."))

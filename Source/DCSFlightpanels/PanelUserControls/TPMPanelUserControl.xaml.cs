@@ -1,29 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using ClassLibraryCommon;
-using DCSFlightpanels.Bills;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.Windows;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-using NonVisuals.Saitek.Switches;
-
-namespace DCSFlightpanels.PanelUserControls
+﻿namespace DCSFlightpanels.PanelUserControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Bills;
+    using DCSFlightpanels.CustomControls;
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.Windows;
+
+    using MEF;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.Panels;
+    using NonVisuals.Saitek.Switches;
+
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml
     /// </summary>
     public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
-
         private readonly TPMPanel _tpmPanel;
         private bool _once;
         private bool _textBoxBillsSet;
@@ -181,7 +185,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (e.HidInstance.Equals(_tpmPanel.HIDInstanceId) && e.PanelType == GamingPanelEnum.TPM)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Text = string.Empty));
                 }
             }
             catch (Exception ex)
@@ -530,12 +534,12 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
 
-                foreach (var osCommand in _tpmPanel.OSCommandHashSet)
+                foreach (var operatingSystemCommand in _tpmPanel.OSCommandHashSet)
                 {
-                    var textBox = (TPMTextBox)GetTextBox(osCommand.TPMSwitch, osCommand.WhenTurnedOn);
-                    if (osCommand.OSCommandObject != null)
+                    var textBox = (TPMTextBox)GetTextBox(operatingSystemCommand.TPMSwitch, operatingSystemCommand.WhenTurnedOn);
+                    if (operatingSystemCommand.OSCommandObject != null)
                     {
-                        textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
+                        textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
                     }
                 }
 
@@ -569,7 +573,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_tpmPanel != null)
                 {
-                    TextBoxLogTPM.Text = "";
+                    TextBoxLogTPM.Text = string.Empty;
                     TextBoxLogTPM.Text = _tpmPanel.HIDInstanceId;
                     Clipboard.SetText(_tpmPanel.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
@@ -846,10 +850,10 @@ namespace DCSFlightpanels.PanelUserControls
                         return;
                     }
 
-                    var osCommand = osCommandWindow.OSCommandObject;
-                    textBox.Bill.OSCommandObject = osCommand;
+                    var operatingSystemCommand = osCommandWindow.OSCommandObject;
+                    textBox.Bill.OSCommandObject = operatingSystemCommand;
                     UpdateOSCommandBindingsTPM(textBox);
-                    textBox.Text = osCommand.Name;
+                    textBox.Text = operatingSystemCommand.Name;
                 }
 
                 TextBoxLogTPM.Focus();

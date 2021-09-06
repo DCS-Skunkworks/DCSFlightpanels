@@ -3,6 +3,8 @@ using System.Windows.Input;
 
 namespace NonVisuals
 {
+    using MEF;
+
     public static class CommonVK
     {
 

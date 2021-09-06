@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Controls;
-using System.Windows.Media;
-using DCS_BIOS;
-using DCSFlightpanels.Interfaces;
-using NonVisuals.DCSBIOSBindings;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-
-namespace DCSFlightpanels.Bills
+﻿namespace DCSFlightpanels.Bills
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+
+    using DCSFlightpanels.Interfaces;
+
+    using DCS_BIOS;
+
+    using NonVisuals.DCSBIOSBindings;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.Panels;
+
     public class BillTPM : BillBaseInput
     {
         private DCSBIOSActionBindingTPM _dcsbiosBindingTPM;
         private BIPLinkTPM _bipLinkTPM;
-
         
         public BillTPM(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
@@ -56,9 +58,7 @@ namespace DCSFlightpanels.Bills
         {
             DCSBIOSBinding = null;
         }
-
-
-
+        
         public override BIPLink BipLink
         {
             get => _bipLinkTPM;
@@ -119,7 +119,7 @@ namespace DCSFlightpanels.Bills
                 }
                 else
                 {
-                    TextBox.Text = "";
+                    TextBox.Text = string.Empty;
                 }
             }
         }
@@ -130,7 +130,7 @@ namespace DCSFlightpanels.Bills
             _bipLinkTPM = null;
             KeyPress = null;
             TextBox.Background = Brushes.White;
-            TextBox.Text = "";
+            TextBox.Text = string.Empty;
         }
     }
 }

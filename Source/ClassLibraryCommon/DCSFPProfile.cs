@@ -4,6 +4,8 @@ using System.IO;
 
 namespace ClassLibraryCommon
 {
+    using System.Windows;
+
     public class DCSFPProfile
     {
         private int _id;
@@ -46,26 +48,15 @@ namespace ClassLibraryCommon
 
         public static List<DCSFPProfile> Modules => ModulesList;
 
-        public static void ParseSettings(string dcsbiosJsonFolder, string filename)
+        public static void ParseSettings(string dcsbiosJsonFolder)
         {
-            if (!File.Exists(filename))
-            {
-                return;
-            }
 
-            var stringArray = File.ReadAllLines(filename);
-
-            foreach (var s in stringArray)
-            {
-                if (string.IsNullOrEmpty(s) || s.Trim().StartsWith("#"))
-                {
-                    continue;
-                }
-
-                var settings = s.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                var dcsBiosModule = new DCSFPProfile(int.Parse(settings[0]), settings[1].Trim(), settings[2].Trim());
-                ModulesList.Add(dcsBiosModule);
-            }
+            var module = new DCSFPProfile(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
+            ModulesList.Add(module);
+            module = new DCSFPProfile(2, "Key Emulation", "KEYEMULATOR");
+            ModulesList.Add(module);
+            module = new DCSFPProfile(3, "Key Emulation with SRS support", "KEYEMULATOR_SRS");
+            ModulesList.Add(module);
 
             var biosLua = Path.Combine(dcsbiosJsonFolder, "..\\..\\", "BIOS.lua");
 
@@ -73,7 +64,8 @@ namespace ClassLibraryCommon
             {
                 return;
             }
-            stringArray = File.ReadAllLines(biosLua);
+
+            var stringArray = File.ReadAllLines(biosLua);
             //dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]]) -- ID = 5, ProperName = A-10C Thunderbolt II
 
             foreach (var s in stringArray)
@@ -107,12 +99,12 @@ namespace ClassLibraryCommon
                 }
             }
 
-            throw new Exception("Failed to determine airplane/helicopter in your bindings file.\nPlease check file [Settings\\dcsfp_profiles.txt] & BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
+            throw new Exception("Failed to determine airplane/helicopter in your bindings file.\nPlease check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
         }
         
         public static bool IsNoFrameLoadedYet(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.ID == 1;
+            return dcsfpModule != null && dcsfpModule.ID == 1;
         }
 
         public static DCSFPProfile GetNoFrameLoadedYet()
@@ -514,7 +506,7 @@ namespace ClassLibraryCommon
                 return Modules.Find(o => o.ID == 39);
             }
 
-            throw new Exception("Failed to determine airplane/helicopter in your bindings file.\nPlease check file [Settings\\dcsfp_profiles.txt] & BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
+            throw new Exception("Failed to determine airplane/helicopter in your bindings file.\nPlease check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
         }
     }
 }

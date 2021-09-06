@@ -174,6 +174,9 @@
     <Compile Include="CustomControls\FontInfoTextBox.cs" />
     <Compile Include="CustomControls\OffsetInfoTextBox.cs" />
     <Compile Include="CustomControls\FarmingPanelTextBox.cs" />
+    <Compile Include="CustomControls\TextBoxBaseOutput.cs" />
+    <Compile Include="CustomControls\TextBoxBaseStreamDeckInput.cs" />
+    <Compile Include="DCSFPContextMenuVisibility.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Interfaces\IPanelUI.cs" />
     <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIMini.xaml.cs">
@@ -746,6 +749,10 @@
       <Project>{6ef4492f-d4b4-42bc-b209-98783098db22}</Project>
       <Name>DCS-BIOS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MEF\MEF.csproj">
+      <Project>{0c0196b3-2442-4838-a587-c51660136f9c}</Project>
+      <Name>MEF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NonVisuals\NonVisuals.csproj">
       <Project>{54c2dd8f-259c-41b7-94ed-88f51f698595}</Project>
       <Name>NonVisuals</Name>
@@ -935,7 +942,7 @@
     <SplashScreen Include="Images\dcs_screenshot_by_derbysieger_splash.png" />
     <Resource Include="Images\BIP Saitek2.jpg" />
     <Resource Include="Images\sidepanel.png" />
-    <Content Include="Settings\dcsfp_profiles.txt">
+    <Content Include="Extensions\readme.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">

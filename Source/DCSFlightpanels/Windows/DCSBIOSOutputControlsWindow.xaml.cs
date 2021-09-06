@@ -149,13 +149,13 @@ namespace DCSFlightpanels.Windows
             try
             {
                 DCSBiosInputWindow dcsBiosInputWindow;
-                dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, "");
+                dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, string.Empty);
                 dcsBiosInputWindow.ShowDialog();
                 if (dcsBiosInputWindow.DialogResult.HasValue && dcsBiosInputWindow.DialogResult.Value)
                 {
                     var dcsBiosInput = dcsBiosInputWindow.DCSBiosInput;
-                    //1 appropriate text to textbox
-                    //2 update bindings
+                    // 1 appropriate text to textbox
+                    // 2 update bindings
                     _dcsbiosInputs.Add(dcsBiosInput);
                     SetIsDirty();
                 }

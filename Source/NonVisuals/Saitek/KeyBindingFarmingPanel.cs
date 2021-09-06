@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek
 {
+    using MEF;
+
     [Serializable]
     public class KeyBindingFarmingPanel : KeyBinding
     {

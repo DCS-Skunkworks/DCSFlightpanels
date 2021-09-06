@@ -49,7 +49,7 @@ namespace DCS_BIOS
             }
         }
 
-        public string StringValue => string.Join("", _internalBuffer);
+        public string StringValue => string.Join(string.Empty, _internalBuffer);
 
         public bool IsMatch(uint address)
         {
@@ -94,7 +94,7 @@ namespace DCS_BIOS
                     _internalBuffer[offset + 1] = str2;
                     //Debug.WriteLine("str2 : " + str2 + " added to buffer[" + (offset) + "]");
                 }
-                //Debug.WriteLine("DCSBIOSString Add() Internal buffer now " + string.Join("", _internalBuffer));
+                //Debug.WriteLine("DCSBIOSString Add() Internal buffer now " + string.Join(string.Empty, _internalBuffer));
                 //Debug.WriteLine("*******************************************************");
             }
         }
@@ -120,7 +120,7 @@ namespace DCS_BIOS
                 }
 
                 //Debug.WriteLine("_internalBuffer.Length : " + _internalBuffer.Length + " offset : " + (offset));
-                //Debug.WriteLine("DCSBIOSString Add() Internal buffer now " + string.Join("", _internalBuffer));
+                //Debug.WriteLine("DCSBIOSString Add() Internal buffer now " + string.Join(string.Empty, _internalBuffer));
                 //Debug.WriteLine("*******************************************************");
             }
         }

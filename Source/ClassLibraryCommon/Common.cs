@@ -77,11 +77,11 @@ namespace ClassLibraryCommon
         {
             if (keySequence.Contains(@"RMENU + LCONTROL"))
             {
-                keySequence = keySequence.Replace(@"+ LCONTROL", "");
+                keySequence = keySequence.Replace(@"+ LCONTROL", string.Empty);
             }
             if (keySequence.Contains(@"LCONTROL + RMENU"))
             {
-                keySequence = keySequence.Replace(@"LCONTROL +", "");
+                keySequence = keySequence.Replace(@"LCONTROL +", string.Empty);
             }
 
             return keySequence;
@@ -183,7 +183,7 @@ namespace ClassLibraryCommon
                 _pz69NumberFormatInfoFullDisplay = new NumberFormatInfo();
                 _pz69NumberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
                 _pz69NumberFormatInfoFullDisplay.NumberDecimalDigits = 4;
-                _pz69NumberFormatInfoFullDisplay.NumberGroupSeparator = "";
+                _pz69NumberFormatInfoFullDisplay.NumberGroupSeparator = string.Empty;
             }
             return _pz69NumberFormatInfoFullDisplay;
         }
@@ -218,7 +218,7 @@ namespace ClassLibraryCommon
                 rngCryptoServiceProvider.GetBytes(bytes);
             }
 
-            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+            return BitConverter.ToString(bytes).Replace("-", string.Empty).ToLower();
         }
 
         public static NumberFormatInfo GetPZ69EmptyDisplayNumberFormat()
@@ -227,7 +227,7 @@ namespace ClassLibraryCommon
             {
                 _pz69NumberFormatInfoEmpty = new NumberFormatInfo();
                 _pz69NumberFormatInfoEmpty.NumberDecimalSeparator = ".";
-                _pz69NumberFormatInfoEmpty.NumberGroupSeparator = "";
+                _pz69NumberFormatInfoEmpty.NumberGroupSeparator = string.Empty;
             }
             return _pz69NumberFormatInfoEmpty;
         }
@@ -242,7 +242,7 @@ namespace ClassLibraryCommon
                     return ip.ToString();
                 }
             }
-            return "";
+            return string.Empty;
         }
 
         public static string GetDescriptionField(this Enum value)
@@ -259,8 +259,8 @@ namespace ClassLibraryCommon
         public static APIModeEnum APIMode = 0;
         private static readonly object ErrorLogLockObject = new object();
         //private static readonly object DebugLogLockObject = new object();
-        private static string _errorLog = "";
-        //private static string _debugLog = "";
+        private static string _errorLog = string.Empty;
+        //private static string _debugLog = string.Empty;
 
         public static void SetErrorLog(string filename)
         {
@@ -293,6 +293,7 @@ namespace ClassLibraryCommon
                         var fileStream = File.Create(_errorLog);
                         fileStream.Close();
                     }
+
                     var tempFile = Path.GetTempFileName();
                     using (var streamWriter = new StreamWriter(tempFile))
                     using (var streamReader = File.OpenText(_errorLog))
@@ -304,6 +305,7 @@ namespace ClassLibraryCommon
                             streamWriter.WriteLine(streamReader.ReadLine());
                         }
                     }
+
                     File.Copy(tempFile, _errorLog, true);
                 }
             }
@@ -320,7 +322,7 @@ namespace ClassLibraryCommon
 
         public static void LogError(Exception ex, string message = null)
         {
-            Log(Environment.NewLine + (string.IsNullOrEmpty(message) ? "" : " Custom message = [" + message + "]") + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+            Log(Environment.NewLine + (string.IsNullOrEmpty(message) ? string.Empty : " Custom message = [" + message + "]") + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
         }
         
         public static void ShowErrorMessageBox(Exception ex, string message = null)
@@ -374,7 +376,7 @@ namespace ClassLibraryCommon
 
         public static string PrintBitStrings(byte[] array)
         {
-            var result = "";
+            var result = string.Empty;
             for (int i = 0; i < array.Length; i++)
             {
                 var str = Convert.ToString(array[i], 2).PadLeft(8, '0');

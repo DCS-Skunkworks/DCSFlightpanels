@@ -6,10 +6,10 @@ namespace NonVisuals
     [Serializable]
     public class CopyPackage
     {
-        private string _sourceName = "";
+        private string _sourceName = string.Empty;
         private object _content;
         private CopyContentType _copyContentType;
-        private string _description = "";
+        private string _description = string.Empty;
 
         public string SourceName
         {

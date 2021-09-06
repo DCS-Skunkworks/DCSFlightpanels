@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace NonVisuals.StreamDeck
 {
+    using MEF;
 
     [Serializable]
     public class ButtonExport

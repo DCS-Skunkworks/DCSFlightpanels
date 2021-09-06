@@ -1,14 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading;
 
+    using ClassLibraryCommon;
+
+    using MEF;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
+    using NonVisuals.Plugin;
 
     [Serializable]
     public class StreamDeckButton : IDisposable
@@ -113,6 +118,21 @@ namespace NonVisuals.StreamDeck
         {
             if (ActionForPress == null)
             {
+                /*
+                 * Must do this here as there are no ActionTypeKey for this button, otherwise Plugin would never get any event.
+                 * Otherwise it is sent from ActionTypeKey together with key configs associated with the button.
+                 */
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.DoEvent(
+                        ProfileHandler.SelectedProfile().Description, 
+                        StreamDeckPanelInstance.HIDInstanceId, 
+                        (int)(int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
+                        (int)StreamDeckButtonName, 
+                        true, 
+                        null);
+                }
+
                 return;
             }
 
@@ -180,7 +200,50 @@ namespace NonVisuals.StreamDeck
             _cancellationTokenSource.Cancel();
 
             if (ActionForRelease == null)
-            {
+            {/*
+                 * Must do this here as there are no ActionTypeKey for this button, otherwise Plugin would never get any event
+                 */
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    var pluginPanel = PluginGamingPanelEnum.Unknown;
+
+                    switch (this._streamDeckPanel.TypeOfPanel)
+                    {
+                        case GamingPanelEnum.StreamDeckMini:
+                            {
+                                pluginPanel = PluginGamingPanelEnum.StreamDeckMini;
+                                break;
+                            }
+                        case GamingPanelEnum.StreamDeck:
+                            {
+                                pluginPanel = PluginGamingPanelEnum.StreamDeck;
+                                break;
+                            }
+                        case GamingPanelEnum.StreamDeckV2:
+                            {
+                                pluginPanel = PluginGamingPanelEnum.StreamDeckV2;
+                                break;
+                            }
+                        case GamingPanelEnum.StreamDeckMK2:
+                            {
+                                pluginPanel = PluginGamingPanelEnum.StreamDeckMK2;
+                                break;
+                            }
+                        case GamingPanelEnum.StreamDeckXL:
+                            {
+                                pluginPanel = PluginGamingPanelEnum.StreamDeckXL;
+                                break;
+                            }
+                    }
+
+                    PluginManager.DoEvent(
+                        ProfileHandler.SelectedProfile().Description,
+                        StreamDeckPanelInstance.HIDInstanceId,
+                        (int)pluginPanel,
+                        (int)StreamDeckButtonName,
+                        false,
+                        null);
+                }
                 return;
             }
 
@@ -408,42 +471,6 @@ namespace NonVisuals.StreamDeck
     }
 
 
-    public enum EnumStreamDeckButtonNames
-    {
-        BUTTON0_NO_BUTTON,
-        BUTTON1,
-        BUTTON2,
-        BUTTON3,
-        BUTTON4,
-        BUTTON5,
-        BUTTON6,
-        BUTTON7,
-        BUTTON8,
-        BUTTON9,
-        BUTTON10,
-        BUTTON11,
-        BUTTON12,
-        BUTTON13,
-        BUTTON14,
-        BUTTON15,
-        BUTTON16,
-        BUTTON17,
-        BUTTON18,
-        BUTTON19,
-        BUTTON20,
-        BUTTON21,
-        BUTTON22,
-        BUTTON23,
-        BUTTON24,
-        BUTTON25,
-        BUTTON26,
-        BUTTON27,
-        BUTTON28,
-        BUTTON29,
-        BUTTON30,
-        BUTTON31,
-        BUTTON32
-    }
 
 
 }

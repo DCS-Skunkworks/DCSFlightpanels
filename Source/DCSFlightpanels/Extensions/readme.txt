@@ -1,0 +1,1 @@
+For information on plugin support go to https://github.com/DCSFlightpanels/DCSFlightpanels/wiki

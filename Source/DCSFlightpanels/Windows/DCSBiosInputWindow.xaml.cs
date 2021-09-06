@@ -184,7 +184,7 @@ namespace DCSFlightpanels.Windows
                 }
                 else
                 {
-                    TextBoxMaxValue.Text = "";
+                    TextBoxMaxValue.Text = string.Empty;
                 }
             }
         }
@@ -251,7 +251,7 @@ namespace DCSFlightpanels.Windows
                             }
                             catch (Exception)
                             {
-                                var dcsbiosInputString = "";
+                                var dcsbiosInputString = string.Empty;
                                 if (_dcsBiosInput != null)
                                 {
                                     dcsbiosInputString = _dcsBiosInput.ControlId + " / " + _dcsBiosInput.SelectedDCSBIOSInput.Interface;
@@ -275,7 +275,7 @@ namespace DCSFlightpanels.Windows
                             }
                             catch (Exception)
                             {
-                                var dcsbiosInputString = "";
+                                var dcsbiosInputString = string.Empty;
                                 if (_dcsBiosInput != null)
                                 {
                                     dcsbiosInputString = _dcsBiosInput.ControlId + " / " + _dcsBiosInput.SelectedDCSBIOSInput.Interface;
@@ -391,14 +391,12 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                if (TextBoxSearchWord.Text == "")
+                if (TextBoxSearchWord.Text == string.Empty)
                 {
                     // Create an ImageBrush.
                     var textImageBrush = new ImageBrush();
                     textImageBrush.ImageSource =
-                        new BitmapImage(
-                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)
-                        );
+                        new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute));
                     textImageBrush.AlignmentX = AlignmentX.Left;
                     textImageBrush.Stretch = Stretch.Uniform;
                     // Use the brush to paint the button's background.

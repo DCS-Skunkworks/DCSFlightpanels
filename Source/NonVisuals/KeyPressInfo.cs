@@ -6,8 +6,10 @@ using Newtonsoft.Json;
 
 namespace NonVisuals
 {
+    using MEF;
+
     [Serializable]
-    public class KeyPressInfo
+    public class KeyPressInfo : IKeyPressInfo
     {
         private KeyPressLength _lengthOfBreak = KeyPressLength.FiftyMilliSec;
         private KeyPressLength _lengthOfKeyPress = KeyPressLength.FiftyMilliSec;

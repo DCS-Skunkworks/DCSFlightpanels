@@ -1,10 +1,10 @@
-﻿using System;
-using System.Text;
-using Newtonsoft.Json;
-using NonVisuals.Saitek.Panels;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+    using System.Text;
+
+    using NonVisuals.Saitek.Panels;
+
     public enum BIPLightDelays 
     {
         Zeroms = 0,
@@ -28,29 +28,6 @@ namespace NonVisuals.Saitek
     }
 
     [Serializable]
-    public abstract class PanelSwitchBIPLightBinding
-    {
-        public abstract void ImportSettings(string settings);
-        public abstract string ExportSettings();
-
-
-        [JsonProperty("LEDColor", Required = Required.Default)]
-        public PanelLEDColor LEDColor { get; set; }
-
-        [JsonProperty("BIPLedPosition", Required = Required.Default)]
-        public BIPLedPositionEnum BIPLedPosition { get; set; }
-
-        [JsonProperty("DelayBefore", Required = Required.Default)]
-        public BIPLightDelays DelayBefore { get; set; }
-
-        [JsonProperty("BindingHash", Required = Required.Default)]
-        public string BindingHash { get; set; }
-
-        [JsonProperty("Separator", Required = Required.Default)]
-        public string[] Separator { get; } = { "|" };
-    }
-
-    [Serializable]
     public class BIPLight : PanelSwitchBIPLightBinding
     {
         public override void ImportSettings(string settings)
@@ -59,13 +36,15 @@ namespace NonVisuals.Saitek
             {
                 return;
             }
-            //BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}
-            settings = settings.Replace("BIPLight{", "");
-            settings = settings.Replace("}", "");
-            //Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e
+
+            // BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}
+            settings = settings.Replace("BIPLight{", string.Empty);
+            settings = settings.Replace("}", string.Empty);
+
+            // Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e
             var settingsArray = settings.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            //Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e
+            // Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e
             BIPLedPosition = (BIPLedPositionEnum)Enum.Parse(typeof(BIPLedPositionEnum), settingsArray[0].ToString());
             LEDColor = (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), settingsArray[1].ToString());
             DelayBefore = (BIPLightDelays) Enum.Parse(typeof(BIPLightDelays), settingsArray[2].ToString());
@@ -74,7 +53,7 @@ namespace NonVisuals.Saitek
 
         public override string ExportSettings()
         {
-            //BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}
+            // BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}
             var stringBuilder = new StringBuilder();
             var position = BIPLedPosition.ToString();
             stringBuilder.Append("BIPLight{" + position + "|" + LEDColor + "|" + DelayBefore + "|" + BindingHash + "}");

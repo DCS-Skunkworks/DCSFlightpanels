@@ -8,9 +8,11 @@ using NonVisuals.StreamDeck.Events;
 
 namespace NonVisuals.StreamDeck
 {
+    using MEF;
+
     public class StreamDeckLayer
     {
-        private string _name = "";
+        private string _name = string.Empty;
         private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
         private Font _textFont;
         private Color _fontColor;

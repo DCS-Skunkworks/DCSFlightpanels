@@ -69,17 +69,5 @@ namespace DCSFlightpanels.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {\rtf1\ansi\ansicpg1252\deff0\deflang1035{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
-        ///{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sa200\sl276\slmult1\qc\lang11\f0\fs48 FlightPanels -- Programming Notes\fs22\par
-        ///\pard\sa200\sl276\slmult1 The following set of notes applies to the PZ55 Switch Panel and might or might not apply to other panels.\par
-        ///Due to international differences between keyboard standards, some things won&apos;t work as expected.  On U.S. keyboards, \b RALT \b0 and \b LALT \b0 will show [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PZ55Notes {
-            get {
-                return ResourceManager.GetString("PZ55Notes", resourceCulture);
-            }
-        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,6 +21,8 @@ using NonVisuals.Saitek.Switches;
 
 namespace DCSFlightpanels.PanelUserControls
 {
+    using MEF;
+
     /// <summary>
     /// Interaction logic for MultiPanelUserControl.xaml
     /// </summary>
@@ -211,7 +212,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ70MultiPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = string.Empty));
                 }
             }
             catch (Exception ex)
@@ -230,7 +231,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_multiPanelPZ70 != null)
                 {
-                    TextBoxLogPZ70.Text = "";
+                    TextBoxLogPZ70.Text = string.Empty;
                     TextBoxLogPZ70.Text = _multiPanelPZ70.HIDInstanceId;
                     Clipboard.SetText(_multiPanelPZ70.HIDInstanceId);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
@@ -622,13 +623,13 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
 
-                foreach (var osCommand in _multiPanelPZ70.OSCommandHashSet)
+                foreach (var operatingSystemCommand in _multiPanelPZ70.OSCommandHashSet)
                 {
-                    var textBox = (PZ70TextBox)GetTextBox(osCommand.MultiPanelPZ70Knob, osCommand.WhenTurnedOn);
-                    if (osCommand.DialPosition == _multiPanelPZ70.PZ70DialPosition)
-                        if (osCommand.OSCommandObject != null)
+                    var textBox = (PZ70TextBox)GetTextBox(operatingSystemCommand.MultiPanelPZ70Knob, operatingSystemCommand.WhenTurnedOn);
+                    if (operatingSystemCommand.DialPosition == _multiPanelPZ70.PZ70DialPosition)
+                        if (operatingSystemCommand.OSCommandObject != null)
                         {
-                            textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
+                            textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
                         }
                 }
             

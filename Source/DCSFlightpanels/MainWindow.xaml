@@ -160,7 +160,11 @@
                 <TextBlock Name="LabelInformation" HorizontalAlignment="Right" Margin="0,0,10,0" Width="300"/>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
-                <TextBlock Name="LabelDCSBIOSReleaseDate" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Name="LabelPluginInfo" Text="Plugin support disabled." HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                    <ComboBox Name="ComboBoxPlugins" IsReadOnly="True" Width="200" Visibility="Visible"  Margin="0,0,20,0"></ComboBox>
+                    <TextBlock Name="LabelDCSBIOSReleaseDate" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                </StackPanel>
             </StatusBarItem>
         </StatusBar>
     </Grid>

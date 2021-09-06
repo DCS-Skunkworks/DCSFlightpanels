@@ -2,6 +2,7 @@
 
 namespace NonVisuals.Interfaces
 {
+    using MEF;
 
     public enum EnumStreamDeckFaceType
     {

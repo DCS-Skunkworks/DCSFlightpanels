@@ -14,7 +14,7 @@ namespace DCSFlightpanels.Windows
     public partial class OSCommandWindow : Window, IIsDirty
     {
         private bool _isLoaded = false;
-        private OSCommand _osCommand;
+        private OSCommand _operatingSystemCommand;
         private bool _isDirty;
 
         public OSCommandWindow()
@@ -22,13 +22,13 @@ namespace DCSFlightpanels.Windows
             InitializeComponent();
         }
 
-        public OSCommandWindow(OSCommand osCommand)
+        public OSCommandWindow(OSCommand operatingSystemCommand)
         {
             InitializeComponent();
-            _osCommand = osCommand;
-            TextBoxName.Text = _osCommand.Name;
-            TextBoxCommand.Text = _osCommand.Command;
-            TextBoxArguments.Text = _osCommand.Arguments;
+            _operatingSystemCommand = operatingSystemCommand;
+            TextBoxName.Text = _operatingSystemCommand.Name;
+            TextBoxCommand.Text = _operatingSystemCommand.Command;
+            TextBoxArguments.Text = _operatingSystemCommand.Arguments;
         }
 
         private void OSCommandWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -66,8 +66,8 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var osCommand = new OSCommand(TextBoxCommand.Text, TextBoxArguments.Text, "");
-                TextBoxResult.Text = osCommand.Execute(new CancellationToken());
+                var operatingSystemCommand = new OSCommand(TextBoxCommand.Text, TextBoxArguments.Text, string.Empty);
+                TextBoxResult.Text = operatingSystemCommand.Execute(new CancellationToken());
             }
             catch (Exception ex)
             {
@@ -104,8 +104,8 @@ namespace DCSFlightpanels.Windows
 
         public OSCommand OSCommandObject
         {
-            get => _osCommand;
-            set => _osCommand = value;
+            get => _operatingSystemCommand;
+            set => _operatingSystemCommand = value;
         }
 
         private void TextBox_OnKeyUp(object sender, KeyEventArgs e)

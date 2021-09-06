@@ -12,6 +12,8 @@ using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace NonVisuals.StreamDeck
 {
+    using MEF;
+
     public static class BitMapCreator
     {
 

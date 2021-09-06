@@ -20,27 +20,6 @@ namespace ClassLibraryCommon
         OSCommand
     }
 
-    public enum KeyPressLength
-    {
-        //Zero = 0, <-- DCS & keybd_event does not work without delay between key press & release
-        Indefinite = 999999999,
-        ThirtyTwoMilliSec = 32,
-        FiftyMilliSec = 50,
-        HalfSecond = 500,
-        Second = 1000,
-        SecondAndHalf = 1500,
-        TwoSeconds = 2000,
-        ThreeSeconds = 3000,
-        FourSeconds = 4000,
-        FiveSecs = 5000,
-        TenSecs = 10000,
-        FifteenSecs = 15000,
-        TwentySecs = 20000,
-        ThirtySecs = 30000,
-        FortySecs = 40000,
-        SixtySecs = 60000
-    }
-
     public enum APIModeEnum
     {
         keybd_event = 0,

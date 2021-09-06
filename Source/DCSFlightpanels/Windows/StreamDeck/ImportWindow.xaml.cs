@@ -10,6 +10,7 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
 using Newtonsoft.Json;
+using NonVisuals;
 using NonVisuals.StreamDeck;
 using Cursors = System.Windows.Input.Cursors;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -18,6 +19,8 @@ using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace DCSFlightpanels.Windows.StreamDeck
 {
+    using MEF;
+
     /// <summary>
     /// Interaction logic for ExportWindow.xaml
     /// </summary>
@@ -27,7 +30,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private readonly string _bindingHash;
         private List<ButtonExport> _buttonExports = new List<ButtonExport>();
 
-        private string _extractedFilesFolder = "";
+        private string _extractedFilesFolder = string.Empty;
 
 
 
@@ -67,7 +70,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             ButtonImport.IsEnabled = !string.IsNullOrEmpty(TextBoxImageImportFolder.Text) && DataGridStreamDeckButtons.SelectedItems.Count > 0 && PreCheckBeforeImport();
             ComboBoxButtonName.IsEnabled = DataGridStreamDeckButtons.SelectedItems.Count == 1;
 
-            ButtonImport.Content = "Import" + (DataGridStreamDeckButtons.SelectedItems.Count == 0 ? "" : "(" + DataGridStreamDeckButtons.SelectedItems.Count + ")");
+            ButtonImport.Content = "Import" + (DataGridStreamDeckButtons.SelectedItems.Count == 0 ? string.Empty : "(" + DataGridStreamDeckButtons.SelectedItems.Count + ")");
         }
 
         private void ShowButtons()
@@ -192,7 +195,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                 if (DataGridStreamDeckButtons.SelectedItems.Cast<ButtonExport>().ToList().Select(m => m.LayerName).Distinct().ToList().Count > 1)
                 {
-                    ComboBoxLayers.Text = "";
+                    ComboBoxLayers.Text = string.Empty;
                 }
                 else if (DataGridStreamDeckButtons.SelectedItems.Count == 1)
                 {
@@ -200,7 +203,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 }
                 else if (DataGridStreamDeckButtons.SelectedItems.Count == 0)
                 {
-                    ComboBoxLayers.Text = "";
+                    ComboBoxLayers.Text = string.Empty;
                 }
 
                 SetFormState();
@@ -222,7 +225,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                var zipFileName = "";
+                var zipFileName = string.Empty;
                 var openFileDialog = new OpenFileDialog();
 
                 openFileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastStreamDeckImportFolder) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastStreamDeckImportFolder;
@@ -318,7 +321,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private void SetComboBoxButtonNameValueNone()
         {
             ComboBoxButtonName.DropDownClosed -= ComboBoxButtonName_OnDropDownClosed;
-            ComboBoxButtonName.Text = "";
+            ComboBoxButtonName.Text = string.Empty;
             ComboBoxButtonName.DropDownClosed += ComboBoxButtonName_OnDropDownClosed;
         }
 
