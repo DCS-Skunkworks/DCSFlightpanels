@@ -124,7 +124,7 @@
                  */
                 if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
-                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                    PluginManager.DoEvent(
                         ProfileHandler.SelectedProfile().Description, 
                         StreamDeckPanelInstance.HIDInstanceId, 
                         (int)(int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
@@ -236,7 +236,7 @@
                             }
                     }
 
-                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                    PluginManager.DoEvent(
                         ProfileHandler.SelectedProfile().Description,
                         StreamDeckPanelInstance.HIDInstanceId,
                         (int)pluginPanel,

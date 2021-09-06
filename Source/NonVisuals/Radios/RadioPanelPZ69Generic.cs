@@ -377,7 +377,7 @@ namespace NonVisuals.Radios
                                 
                                 if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                                 {
-                                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                                    PluginManager.DoEvent(
                                         ProfileHandler.SelectedProfile().Description, 
                                         HIDInstanceId, 
                                         (int)PluginGamingPanelEnum.PZ69RadioPanel, 
@@ -395,7 +395,7 @@ namespace NonVisuals.Radios
                     {
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.Get().PanelEventHandler.PanelEvent(
+                            PluginManager.DoEvent(
                                 ProfileHandler.SelectedProfile().Description,
                                 HIDInstanceId,
                                 (int)PluginGamingPanelEnum.PZ69RadioPanel,

@@ -781,7 +781,7 @@
                             
                             if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                             {
-                                PluginManager.Get().PanelEventHandler.PanelEvent(
+                                PluginManager.DoEvent(
                                     ProfileHandler.SelectedProfile().Description, 
                                     HIDInstanceId, 
                                     (int)PluginGamingPanelEnum.PZ70MultiPanel, 
@@ -803,7 +803,7 @@
 
                 if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
-                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                    PluginManager.DoEvent(
                         ProfileHandler.SelectedProfile().Description,
                         HIDInstanceId,
                         (int)PluginGamingPanelEnum.PZ70MultiPanel,

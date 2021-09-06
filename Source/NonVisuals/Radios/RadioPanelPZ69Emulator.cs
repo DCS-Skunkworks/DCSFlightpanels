@@ -231,7 +231,7 @@
 
                             if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                             {
-                                PluginManager.Get().PanelEventHandler.PanelEvent(
+                                PluginManager.DoEvent(
                                     ProfileHandler.SelectedProfile().Description, 
                                     HIDInstanceId, 
                                     (int)PluginGamingPanelEnum.PZ69RadioPanel, 
@@ -248,7 +248,7 @@
                     // Just that we don't send any keypress configs this time.
                     if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.Get().PanelEventHandler.PanelEvent(
+                        PluginManager.DoEvent(
                             ProfileHandler.SelectedProfile().Description,
                             HIDInstanceId,
                             (int)PluginGamingPanelEnum.PZ69RadioPanel,

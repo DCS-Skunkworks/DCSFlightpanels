@@ -9,19 +9,10 @@
      * Use this class as a template for your plugin.
      * Reference the MEF project where the interface and necessary files are located.
      */
-
-
     [Export(typeof(IPanelEventHandler))]
-    public class PanelEventHandler : IPanelEventHandler
+    [ExportMetadata("Name", "Sample Plugin 1")]
+    public class PanelEventHandler1 : IPanelEventHandler
     {
-        public string PluginGuid =>
-            /*
-             * Generate a new Guid for YOUR plugin
-             */
-            "b2d3e289-6388-4d42-9256-861acf0990e7";
-
-        public string PluginName => "Sample Plugin";
-
         public void PanelEvent(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
         {
             /*

@@ -73,7 +73,7 @@ namespace NonVisuals.StreamDeck
 
             if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
             {
-                PluginManager.Get().PanelEventHandler.PanelEvent(
+                PluginManager.DoEvent(
                     ProfileHandler.SelectedProfile().Description,
                     StreamDeckPanelInstance.HIDInstanceId,
                     (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),

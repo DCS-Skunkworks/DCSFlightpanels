@@ -4,15 +4,6 @@
 
     public interface IPanelEventHandler
     {
-        /// <summary>
-        /// Gets the plugin guid.
-        /// </summary>
-        string PluginGuid { get; }
-
-        /// <summary>
-        /// Gets the plugin name.
-        /// </summary>
-        string PluginName { get; }
         /*
          * eventType : 0 Released / Inactive, 1 Pressed / Active
          * All id's for panels and switches can be found in Switched.cs

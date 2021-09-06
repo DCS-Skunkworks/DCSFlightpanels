@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IKeyPressInfo.cs" />
+    <Compile Include="IPanelEventHandlerMetaData.cs" />
     <Compile Include="IPanelEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Switches.cs" />

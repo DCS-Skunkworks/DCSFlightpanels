@@ -244,7 +244,7 @@ namespace NonVisuals.Saitek.Panels
 
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.Get().PanelEventHandler.PanelEvent(
+                            PluginManager.DoEvent(
                                 ProfileHandler.SelectedProfile().Description, 
                                 HIDInstanceId, 
                                 (int)PluginGamingPanelEnum.TPM, 
@@ -258,7 +258,7 @@ namespace NonVisuals.Saitek.Panels
                 
                 if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
-                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                    PluginManager.DoEvent(
                         ProfileHandler.SelectedProfile().Description,
                         HIDInstanceId,
                         (int)PluginGamingPanelEnum.TPM,

@@ -98,13 +98,6 @@ namespace DCSFlightpanels
 
                 DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
-                PluginManager.PlugSupportActivated = Settings.Default.EnablePlugin;
-                PluginManager.DisableKeyboardAPI = Settings.Default.DisableKeyboardAPI;
-                if (PluginManager.HasPlugin())
-                {
-                    LabelPluginInformation.Text = "Plugin [" + PluginManager.Get().PanelEventHandler.PluginName + "] is now loaded.";
-                }
-
                 if (Settings.Default.RunMinimized)
                 {
                     WindowState = WindowState.Minimized;
@@ -170,11 +163,14 @@ namespace DCSFlightpanels
                 SendEventRegardingForwardingOfKeys();
 
                 CheckForNewDCSFPRelease();
-
+                
                 if (Settings.Default.LoadStreamDeck == false && Process.GetProcessesByName("StreamDeck").Length >= 1)
                 {
                     MessageBox.Show("StreamDeck's official software is running in the background.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
+
+                ConfigurePlugins();
+                
                 _isLoaded = true;
             }
             catch (Exception ex)
@@ -1750,6 +1746,32 @@ namespace DCSFlightpanels
             }
         }
 
+        private void ConfigurePlugins()
+        {
+            PluginManager.PlugSupportActivated = Settings.Default.EnablePlugin;
+            PluginManager.DisableKeyboardAPI = Settings.Default.DisableKeyboardAPI;
+
+            if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+            {
+                foreach (var plugin in PluginManager.Get().Plugins)
+                {
+                    ComboBoxPlugins.Items.Add(plugin.Metadata.Name);
+                }
+
+                ComboBoxPlugins.Visibility = Visibility.Visible;
+                LabelPluginInfo.Text = "Loaded Plugins : ";
+            }
+            else if (PluginManager.PlugSupportActivated && !PluginManager.HasPlugin())
+            {
+                LabelPluginInfo.Text = "No Plugins found.";
+            }
+            else
+            {
+                LabelPluginInfo.Text = "Plugin support disabled.";
+                ComboBoxPlugins.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private void MenuItemSettings_OnClick(object sender, RoutedEventArgs e)
         {
             var settingsWindow = new SettingsWindow();
@@ -1779,8 +1801,7 @@ namespace DCSFlightpanels
                     SRSListenerFactory.ReStart();
                 }
 
-                PluginManager.PlugSupportActivated = Settings.Default.EnablePlugin;
-                PluginManager.DisableKeyboardAPI = Settings.Default.DisableKeyboardAPI;
+                ConfigurePlugins();
             }
         }
 
