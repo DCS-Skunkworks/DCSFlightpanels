@@ -32,33 +32,32 @@
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
         private readonly object _lockObject = new object();
-        
+
         //Both directory and filename
         private string _filename = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)) + "\\" + "dcsfp_profile.bindings";
         private string _lastProfileUsed = string.Empty;
         private bool _isDirty;
         private bool _isNewProfile;
-
+        private string _dcsbiosJSONDirectory; //hunting weird bug
         private bool _profileLoaded;
 
         private IHardwareConflictResolver _hardwareConflictResolver;
 
 
-
-
-
-
-
-
         public ProfileHandler(string dcsbiosJSONDirectory)
         {
-            DCSBIOSControlLocator.JSONDirectory = dcsbiosJSONDirectory;
+            _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
         }
 
         public ProfileHandler(string dcsbiosJSONDirectory, string lastProfileUsed)
         {
-            DCSBIOSControlLocator.JSONDirectory = dcsbiosJSONDirectory;
+            _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
             _lastProfileUsed = lastProfileUsed;
+        }
+
+        public void Init()
+        {
+            DCSBIOSControlLocator.JSONDirectory = _dcsbiosJSONDirectory;
         }
 
         public string OpenProfile()

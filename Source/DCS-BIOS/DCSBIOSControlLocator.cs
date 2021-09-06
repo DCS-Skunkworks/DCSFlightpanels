@@ -189,7 +189,7 @@ namespace DCS_BIOS
             }
             catch (Exception e)
             {
-                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + _jsonDirectory + "]<==" + e.Message);
+                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + _jsonDirectory + "]<==", e);
             }
         }
 

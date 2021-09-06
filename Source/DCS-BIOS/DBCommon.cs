@@ -35,17 +35,18 @@ namespace DCS_BIOS
         {
             var replaceString = "$USERDIRECTORY$";
 
-            //Cannot use %USERPROFILE%, DirectoryInfo gets crazy
+            // Cannot use %USERPROFILE%, DirectoryInfo gets crazy
             if (!string.IsNullOrEmpty(jsonDirectory))
             {
                 if (jsonDirectory.Contains(replaceString))
                 {
                     jsonDirectory = jsonDirectory.Replace(replaceString, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
                 }
+
                 return jsonDirectory;
             }
+
             return null;
         }
-
     }
 }

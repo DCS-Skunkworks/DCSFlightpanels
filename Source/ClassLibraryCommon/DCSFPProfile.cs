@@ -22,6 +22,10 @@ namespace ClassLibraryCommon
             _description = description;
         }
 
+        public static void Init()
+        {
+            AddInternalModules();
+        }
         public int ID
         {
             get => _id;
@@ -48,16 +52,29 @@ namespace ClassLibraryCommon
 
         public static List<DCSFPProfile> Modules => ModulesList;
 
+        public static void AddInternalModules()
+        {
+            if (!ModulesList.Exists(o => o.ID == 1))
+            {
+                var module = new DCSFPProfile(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
+                ModulesList.Add(module);
+            }
+
+            if (!ModulesList.Exists(o => o.ID == 2))
+            {
+                var module = new DCSFPProfile(2, "Key Emulation", "KEYEMULATOR");
+                ModulesList.Add(module);
+            }
+
+            if (!ModulesList.Exists(o => o.ID == 3))
+            {
+                var module = new DCSFPProfile(3, "Key Emulation with SRS support", "KEYEMULATOR_SRS");
+                ModulesList.Add(module);
+            }
+        }
+
         public static void ParseSettings(string dcsbiosJsonFolder)
         {
-
-            var module = new DCSFPProfile(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
-            ModulesList.Add(module);
-            module = new DCSFPProfile(2, "Key Emulation", "KEYEMULATOR");
-            ModulesList.Add(module);
-            module = new DCSFPProfile(3, "Key Emulation with SRS support", "KEYEMULATOR_SRS");
-            ModulesList.Add(module);
-
             var biosLua = Path.Combine(dcsbiosJsonFolder, "..\\..\\", "BIOS.lua");
 
             if (!File.Exists(biosLua))
@@ -99,12 +116,19 @@ namespace ClassLibraryCommon
                 }
             }
 
+            Common.Log("Failed to determine airplane/helicopter in your bindings file.\nPlease check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
             throw new Exception("Failed to determine airplane/helicopter in your bindings file.\nPlease check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
         }
         
         public static bool IsNoFrameLoadedYet(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule != null && dcsfpModule.ID == 1;
+            if (dcsfpModule == null)
+            {
+                Common.LogError("DCSFPProfile : Parameter dcsfpModule is null.");
+                throw new Exception("DCSFPProfile : Parameter dcsfpModule is null.");
+            }
+
+            return dcsfpModule.ID == 1;
         }
 
         public static DCSFPProfile GetNoFrameLoadedYet()
@@ -117,7 +141,8 @@ namespace ClassLibraryCommon
                 }
             }
 
-            return null;
+            Common.LogError("DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : " + Modules.Count);
+            throw new Exception("DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : " + Modules.Count);
         }
 
         public static bool IsKeyEmulator(DCSFPProfile dcsfpModule)
@@ -135,7 +160,8 @@ namespace ClassLibraryCommon
                 }
             }
 
-            return null;
+            Common.LogError("DCSFPProfile : Failed to find internal module KeyEmulator. Modules loaded : " + Modules.Count);
+            throw new Exception("DCSFPProfile : Failed to find internal module KeyEmulator. Modules loaded : " + Modules.Count);
         }
         
         public static bool IsKeyEmulatorSRS(DCSFPProfile dcsfpModule)
@@ -153,7 +179,8 @@ namespace ClassLibraryCommon
                 }
             }
 
-            return null;
+            Common.LogError("DCSFPProfile : Failed to find internal module KeyEmulatorSRS. Modules loaded : " + Modules.Count);
+            throw new Exception("DCSFPProfile : Failed to find internal module KeyEmulatorSRS. Modules loaded : " + Modules.Count);
         }
         
         

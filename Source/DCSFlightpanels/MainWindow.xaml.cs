@@ -12,6 +12,7 @@ namespace DCSFlightpanels
     using System.Media;
     using System.Reflection;
     using System.Text;
+    using System.Threading;
     using System.Timers;
     using System.Windows;
     using System.Windows.Controls;
@@ -79,6 +80,8 @@ namespace DCSFlightpanels
         {
             InitializeComponent();
 
+            DCSFPProfile.Init();
+
             // Stop annoying "Cannot find source for binding with reference .... " from being shown
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
         }
@@ -95,9 +98,7 @@ namespace DCSFlightpanels
                 {
                     return;
                 }
-
-                DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
-
+                
                 if (Settings.Default.RunMinimized)
                 {
                     WindowState = WindowState.Minimized;
@@ -118,6 +119,8 @@ namespace DCSFlightpanels
                 }
 
                 Common.SetErrorLog(_errorLogFile);
+                
+                DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 CheckErrorLogAndDCSBIOSLocation();
                 /*******************************************************************************************/
@@ -138,6 +141,7 @@ namespace DCSFlightpanels
                 /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
                 /*******************************************************************************************/
                 _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
+                _profileHandler.Init(); 
                 SearchForPanels();
                 _profileHandler.Attach(this);
                 _profileHandler.AttachUserMessageHandler(this);
@@ -251,8 +255,11 @@ namespace DCSFlightpanels
             /*
              * Special case as loaded type of radio panel depends on profile settings, all other panels are the same regardless of profile.
              */
+
             CloseTemporaryRadioPanels();
+
             SearchForRadioPanels();
+
             _profileHandler.SendRadioSettings();
 
             if (Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
@@ -1380,8 +1387,13 @@ namespace DCSFlightpanels
             {
                 return false;
             }
+
+            try
+            {
+
             CloseTabItems();
             _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
+            _profileHandler.Init();
             _profileHandler.Attach(this);
             _profileHandler.AttachUserMessageHandler(this);
             _dcsfpProfile = _profileHandler.Profile;
@@ -1390,6 +1402,13 @@ namespace DCSFlightpanels
             SetWindowState();
             SendEventRegardingForwardingOfKeys();
 
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                Common.LogError(e.InnerException);
+                throw;
+            }
             return true;
         }
 

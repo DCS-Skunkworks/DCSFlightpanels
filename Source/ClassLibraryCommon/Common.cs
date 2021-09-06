@@ -322,7 +322,16 @@ namespace ClassLibraryCommon
 
         public static void LogError(Exception ex, string message = null)
         {
-            Log(Environment.NewLine + (string.IsNullOrEmpty(message) ? string.Empty : " Custom message = [" + message + "]") + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+            Log(Environment.NewLine + 
+                (string.IsNullOrEmpty(message) ? string.Empty : " Custom message = [" + message + "]") + 
+                Environment.NewLine + 
+                ex.GetBaseException().GetType() + 
+                Environment.NewLine + 
+                ex.Message + 
+                Environment.NewLine + 
+                ex.StackTrace +
+                Environment.NewLine +
+                ex.InnerException != null ? ex.InnerException.Message + Environment.NewLine + ex.InnerException.StackTrace : "");
         }
         
         public static void ShowErrorMessageBox(Exception ex, string message = null)
