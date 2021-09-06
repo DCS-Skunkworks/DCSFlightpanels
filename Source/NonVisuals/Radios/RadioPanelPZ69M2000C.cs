@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
@@ -18,9 +19,11 @@ namespace NonVisuals.Radios
         /*M-2000C VHF PRESETS COM1*/
         //Large dial PRESETS [step of 1]
         //Small dial Volume
+        private readonly object _lockVUHFPresetFreqObject = new object();
         private readonly object _lockVUHFPresetDialObject = new object();
-
+        private DCSBIOSOutput _vhfDcsbiosOutputPresetFreqString;
         private DCSBIOSOutput _vhfDcsbiosOutputPresetDial;
+        private string _vhfPresetCockpitFrequency = "";
         private volatile uint _vhfPresetCockpitDialPos = 1;
         private const string VHFPresetCommandInc = "VHF_CH_SEL INC\n";
         private const string VHFPresetCommandDec = "VHF_CH_SEL DEC\n";
@@ -32,8 +35,11 @@ namespace NonVisuals.Radios
         /*M2000C UHF PRESETS COM2*/
         //Large dial PRESETS [step of 1]
         //Small dial Volume
+        private readonly object _lockUHFPresetFreqObject = new object();
         private readonly object _lockUHFPresetDialObject = new object();
+        private DCSBIOSOutput _uhfDcsbiosOutputPresetFreqString;
         private DCSBIOSOutput _uhfDcsbiosOutputPresetDial;
+        private string _uhfPresetCockpitFrequency = "";
         private volatile uint _uhfPresetCockpitDialPos = 1;
         private const string UHF_PRESET_COMMAND_INC = "UHF_PRESET_KNOB INC\n";
         private const string UHF_PRESET_COMMAND_DEC = "UHF_PRESET_KNOB DEC\n";
@@ -100,16 +106,36 @@ namespace NonVisuals.Radios
         {
             try
             {
-                /*
-                if (string.IsNullOrWhiteSpace(e.StringData))
+                // VHF Preset Channel Frequency
+                if (e.Address == _vhfDcsbiosOutputPresetFreqString.Address && !string.IsNullOrEmpty(e.StringData) && double.TryParse(e.StringData, out var tmpValue))
                 {
-                    Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
-                    return;
-                }*/
+                    lock (_lockVUHFPresetFreqObject)
+                    {
+                        var tmp = _vhfPresetCockpitFrequency;
+                        _vhfPresetCockpitFrequency = (double.Parse(e.StringData) / 100).ToString(NumberFormatInfo);
+                        if (!string.IsNullOrEmpty(_vhfPresetCockpitFrequency) && tmp != _vhfPresetCockpitFrequency)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                        }
+                    }
+                }
+                // UHF Preset Channel Frequency
+                if (e.Address == _uhfDcsbiosOutputPresetFreqString.Address && !string.IsNullOrEmpty(e.StringData) && double.TryParse(e.StringData, out var tmpValue2))
+                {
+                    lock (_lockUHFPresetFreqObject)
+                    {
+                        var tmp = _uhfPresetCockpitFrequency;
+                        _uhfPresetCockpitFrequency = (double.Parse(e.StringData) / 100).ToString(NumberFormatInfo);
+                        if (!string.IsNullOrEmpty(_uhfPresetCockpitFrequency) && tmp != _uhfPresetCockpitFrequency)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
             //ShowFrequenciesOnPanel();
         }
@@ -135,10 +161,14 @@ namespace NonVisuals.Radios
                     lock (_lockVUHFPresetDialObject)
                     {
                         var tmp = _vhfPresetCockpitDialPos;
-                        _vhfPresetCockpitDialPos = _vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        _vhfPresetCockpitDialPos++;
+                        _vhfPresetCockpitDialPos = _vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data) + 2;
+                        if (_vhfPresetCockpitDialPos == 21)
+                        {
+                            _vhfPresetCockpitDialPos = 1; //something weird with this
+                        }
                         if (tmp != _vhfPresetCockpitDialPos)
                         {
+                            Debug.WriteLine(_vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data));
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
                     }
@@ -150,7 +180,7 @@ namespace NonVisuals.Radios
                     lock (_lockUHFPresetDialObject)
                     {
                         var tmp = _uhfPresetCockpitDialPos;
-                        _uhfPresetCockpitDialPos = _uhfDcsbiosOutputPresetDial.GetUIntValue(e.Data);
+                        _uhfPresetCockpitDialPos = _uhfDcsbiosOutputPresetDial.GetUIntValue(e.Data) + 1;
                         if (tmp != _uhfPresetCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -234,7 +264,7 @@ namespace NonVisuals.Radios
                     lock (_lockVoRialObject)
                     {
                         var tmp = _vorOnesCockpitDialPos;
-                        _vorOnesCockpitDialPos = _vorDcsbiosOutputDialOnes.GetUIntValue(e.Data) - 1;
+                        _vorOnesCockpitDialPos = _vorDcsbiosOutputDialOnes.GetUIntValue(e.Data);
                         if (tmp != _vorOnesCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -276,7 +306,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -484,7 +514,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -843,7 +873,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -855,7 +885,6 @@ namespace NonVisuals.Radios
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-
                         return;
                     }
 
@@ -878,7 +907,19 @@ namespace NonVisuals.Radios
                                     channelAsString = (_vhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+
+                                lock (_vhfPresetCockpitFrequency)
+                                {
+                                    if (!string.IsNullOrEmpty(_vhfPresetCockpitFrequency))
+                                    {
+                                        SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfPresetCockpitFrequency, NumberFormatInfoFullDisplay), 2, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    }
+                                    else
+                                    {
+                                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    }
+                                }
+
                                 break;
                             }
                         case CurrentM2000CRadioMode.UHF:
@@ -889,7 +930,18 @@ namespace NonVisuals.Radios
                                     channelAsString = (_uhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+
+                                lock (_uhfPresetCockpitFrequency)
+                                {
+                                    if (!string.IsNullOrEmpty(_uhfPresetCockpitFrequency))
+                                    {
+                                        SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfPresetCockpitFrequency, NumberFormatInfoFullDisplay), 2, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    }
+                                    else
+                                    {
+                                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    }
+                                }
                                 break;
                             }
                         case CurrentM2000CRadioMode.TACAN:
@@ -937,7 +989,18 @@ namespace NonVisuals.Radios
                                     channelAsString = (_vhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+
+                                lock (_vhfPresetCockpitFrequency)
+                                {
+                                    if (!string.IsNullOrEmpty(_vhfPresetCockpitFrequency))
+                                    {
+                                        SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfPresetCockpitFrequency, NumberFormatInfoFullDisplay), 2, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    }
+                                    else
+                                    {
+                                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    }
+                                }
                                 break;
                             }
                         case CurrentM2000CRadioMode.UHF:
@@ -948,7 +1011,18 @@ namespace NonVisuals.Radios
                                     channelAsString = (_uhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+
+                                lock (_uhfPresetCockpitFrequency)
+                                {
+                                    if (!string.IsNullOrEmpty(_uhfPresetCockpitFrequency))
+                                    {
+                                        SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfPresetCockpitFrequency, NumberFormatInfoFullDisplay), 2, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    }
+                                    else
+                                    {
+                                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    }
+                                }
                                 break;
                             }
                         case CurrentM2000CRadioMode.TACAN:
@@ -991,7 +1065,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
@@ -1009,9 +1083,13 @@ namespace NonVisuals.Radios
                 StartupBase("M2000C");
 
                 //COM1
+                _vhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_FREQUENCY");
+                DCSBIOSStringManager.AddListener(_vhfDcsbiosOutputPresetFreqString, this);
                 _vhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_CH_SEL");
 
                 //COM2
+                _uhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FREQUENCY");
+                DCSBIOSStringManager.AddListener(_uhfDcsbiosOutputPresetFreqString, this);
                 _uhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET_KNOB");
 
                 //NAV1
@@ -1031,7 +1109,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -1071,7 +1149,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -1085,7 +1163,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -1107,7 +1185,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
             return false;
         }
@@ -1129,7 +1207,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
             return false;
         }
@@ -1151,7 +1229,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
             return false;
         }
@@ -1173,7 +1251,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
             return false;
         }

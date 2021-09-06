@@ -52,7 +52,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-
+        
         public bool IsRunning()
         {
             return OSKeyPress.IsRunning();
@@ -65,6 +65,7 @@ namespace NonVisuals.StreamDeck
         }
 
 
+        [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName
         {
             get => _streamDeckButtonName;
@@ -107,10 +108,20 @@ namespace NonVisuals.StreamDeck
             set => _streamDeckPanel = value;
         }
 
+        [JsonProperty("SoundFile", Required = Required.Default)]
         public string SoundFile { get; set; }
+
+        [JsonProperty("Volume", Required = Required.Default)]
         public double Volume { get; set; }
+
+        [JsonProperty("Delay", Required = Required.Default)]
         public int Delay { get; set; }
+
+        [Obsolete]
+        [JsonProperty("HasSound", Required = Required.Default)]
         public bool HasSound => !string.IsNullOrEmpty(SoundFile) && File.Exists(SoundFile);
+
+        
         public void PlaySound()
         {
             Common.PlaySoundFile(false, SoundFile, Volume);

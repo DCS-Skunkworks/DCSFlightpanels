@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using ClassLibraryCommon;
+using Newtonsoft.Json;
 
 namespace NonVisuals.Saitek
 {
@@ -123,13 +124,14 @@ namespace NonVisuals.Saitek
         {
             Interlocked.Exchange(ref _threadHasFinished, 0);
         }
-        
+
+        [JsonProperty("BIPLights", Required = Required.Default)]
         public SortedList<int, BIPLight> BIPLights
         {
             get => _bipLights;
             set => _bipLights = value;
         }
-        
+
         private int GetNewKeyValue()
         {
             if (_bipLights.Count == 0)
@@ -139,12 +141,14 @@ namespace NonVisuals.Saitek
             return _bipLights.Keys.Max() + 1;
         }
 
+        [JsonProperty("WhenTurnedOn", Required = Required.Default)]
         public bool WhenTurnedOn
         {
             get => WhenOnTurnedOn;
             set => WhenOnTurnedOn = value;
         }
 
+        [JsonProperty("Description", Required = Required.Default)]
         public string Description
         {
             get => _description;

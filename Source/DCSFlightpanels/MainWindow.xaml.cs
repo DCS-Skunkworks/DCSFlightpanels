@@ -558,6 +558,7 @@ namespace DCSFlightpanels
                             case GamingPanelEnum.StreamDeckXL:
                             case GamingPanelEnum.StreamDeck:
                             case GamingPanelEnum.StreamDeckV2:
+                            case GamingPanelEnum.StreamDeckMK2:
                                 {
                                     if (!DCSFPProfile.IsKeyEmulator(_profileHandler.Profile))
                                     {
@@ -846,6 +847,7 @@ namespace DCSFlightpanels
             panelOrderList.Add(GamingPanelEnum.StreamDeckXL);
             panelOrderList.Add(GamingPanelEnum.StreamDeck);
             panelOrderList.Add(GamingPanelEnum.StreamDeckV2);
+            panelOrderList.Add(GamingPanelEnum.StreamDeckMK2);
             panelOrderList.Add(GamingPanelEnum.StreamDeckMini);
             panelOrderList.Add(GamingPanelEnum.BackLitPanel);
             panelOrderList.Add(GamingPanelEnum.PZ69RadioPanel);

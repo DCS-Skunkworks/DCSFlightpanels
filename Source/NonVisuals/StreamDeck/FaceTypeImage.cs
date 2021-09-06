@@ -10,6 +10,7 @@ namespace NonVisuals.StreamDeck
     [Serializable]
     public class FaceTypeImage : FaceTypeBase, IStreamDeckButtonFace
     {
+        [JsonProperty("FaceType", Required = Required.Default)]
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Image;
         private string _imageFile;
         [NonSerialized]private KeyBitmap _keyBitmap;
@@ -90,7 +91,8 @@ namespace NonVisuals.StreamDeck
 
         [JsonIgnore]
         public string Text { get; set; }
-        
+
+        [JsonProperty("TextFont", Required = Required.Default)]
         public Font TextFont
         {
             get => _textFont;
@@ -101,6 +103,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("FontColor", Required = Required.Default)]
         public Color FontColor
         {
             get => _fontColor;
@@ -111,6 +114,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("BackgroundColor", Required = Required.Default)]
         public Color BackgroundColor
         {
             get => _backgroundColor;
@@ -121,6 +125,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("ImageFile", Required = Required.Default)]
         public string ImageFile
         {
             get => _imageFile;

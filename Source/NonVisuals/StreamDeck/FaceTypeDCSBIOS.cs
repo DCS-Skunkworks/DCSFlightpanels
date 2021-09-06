@@ -9,6 +9,7 @@ namespace NonVisuals.StreamDeck
     [Serializable]
     public class FaceTypeDCSBIOS : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
+        [JsonProperty("FaceType", Required = Required.Default)]
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.DCSBIOS;
         private string _buttonTextTemplate ="";
         private string _buttonFinalText = "";
@@ -88,6 +89,8 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+
+        [JsonProperty("ButtonTextTemplate", Required = Required.Default)]
         public string ButtonTextTemplate
         {
             get => _buttonTextTemplate;
@@ -109,6 +112,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("TextFont", Required = Required.Default)]
         public Font TextFont
         {
             get => _textFont;
@@ -119,12 +123,14 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("FontColor", Required = Required.Default)]
         public Color FontColor
         {
             get => _fontColor;
             set => _fontColor = value;
         }
 
+        [JsonProperty("BackgroundColor", Required = Required.Default)]
         public Color BackgroundColor
         {
             get => _backgroundColor;

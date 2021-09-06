@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Text;
 using ClassLibraryCommon;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -34,6 +36,7 @@ namespace NonVisuals.StreamDeck
         private const Formatting INDENTED_FORMATTING = Formatting.Indented;
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings()
         {
+            ContractResolver = new ExcludeObsoletePropertiesResolver(),
             TypeNameHandling = TypeNameHandling.All,
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             Error = (sender, args) =>
@@ -60,13 +63,14 @@ namespace NonVisuals.StreamDeck
             }
             return result;
         }
-
+        
         public string ExportJSONSettings()
         {
             CleanLayers();
 
             CheckHomeLayerExists();
 
+            
             return JsonConvert.SerializeObject(_layerList, INDENTED_FORMATTING, _jsonSettings);
         }
 
@@ -637,5 +641,18 @@ namespace NonVisuals.StreamDeck
         public static int InstanceIdCounter => _instanceIdCounter;
 
         public int InstanceId => _instanceId;
+    }
+
+    public class ExcludeObsoletePropertiesResolver : DefaultContractResolver
+    {
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        {
+            var jsonProperty = base.CreateProperty(member, memberSerialization);
+            if (jsonProperty.AttributeProvider.GetAttributes(true).OfType<ObsoleteAttribute>().Any())
+            {
+                jsonProperty.ShouldSerialize = obj => false;
+            }
+            return jsonProperty;
+        }
     }
 }

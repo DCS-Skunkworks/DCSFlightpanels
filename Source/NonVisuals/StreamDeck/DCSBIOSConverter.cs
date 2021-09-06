@@ -33,18 +33,24 @@ namespace NonVisuals.StreamDeck
             _faceTypeDCSBIOSOverlay = new FaceTypeDCSBIOSOverlay(streamDeckPanel);
         }
 
+
+        [JsonProperty("FaceTypeText", Required = Required.Default)]
         public FaceTypeText FaceTypeText
         {
             get => _faceTypeText;
             set => _faceTypeText = value;
         }
 
+
+        [JsonProperty("FaceTypeImage", Required = Required.Default)]
         public FaceTypeImage FaceTypeImage
         {
             get => _faceTypeImage;
             set => _faceTypeImage = value;
         }
 
+
+        [JsonProperty("FaceTypeDCSBIOSOverlay", Required = Required.Default)]
         public FaceTypeDCSBIOSOverlay FaceTypeDCSBIOSOverlay
         {
             get => _faceTypeDCSBIOSOverlay;
@@ -184,6 +190,8 @@ namespace NonVisuals.StreamDeck
 
         }
 
+
+        [JsonProperty("ConverterOutputType", Required = Required.Default)]
         public EnumConverterOutputType ConverterOutputType
         {
             get => _converterOutputType;
@@ -232,24 +240,28 @@ namespace NonVisuals.StreamDeck
         }
 
 
+        [JsonProperty("Comparator1", Required = Required.Default)]
         public EnumComparator Comparator1
         {
             get => _comparator1;
             set => _comparator1 = value;
         }
 
+        [JsonProperty("ReferenceValue1", Required = Required.Default)]
         public double ReferenceValue1
         {
             get => _referenceValue1;
             set => _referenceValue1 = value;
         }
 
+        [JsonProperty("Comparator2", Required = Required.Default)]
         public EnumComparator Comparator2
         {
             get => _comparator2;
             set => _comparator2 = value;
         }
 
+        [JsonProperty("ReferenceValue2", Required = Required.Default)]
         public double ReferenceValue2
         {
             get => _referenceValue2;

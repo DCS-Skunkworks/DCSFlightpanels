@@ -320,12 +320,14 @@ namespace DCS_BIOS
             }
         }
 
+        [JsonProperty("ControlId", Required = Required.Default)]
         public string ControlId
         {
             get { return _controlId; }
             set { _controlId = value; }
         }
 
+        [JsonProperty("Address", Required = Required.Default)]
         public uint Address
         {
             get { return _address; }
@@ -336,6 +338,7 @@ namespace DCS_BIOS
             }
         }
 
+        [JsonProperty("Mask", Required = Required.Default)]
         public uint Mask
         {
             get { return _mask; }
@@ -345,6 +348,7 @@ namespace DCS_BIOS
             }
         }
 
+        [JsonProperty("Shiftvalue", Required = Required.Default)]
         public int Shiftvalue
         {
             get { return _shiftvalue; }
@@ -354,12 +358,14 @@ namespace DCS_BIOS
             }
         }
 
+        [JsonProperty("DCSBiosOutputType", Required = Required.Default)]
         public DCSBiosOutputType DCSBiosOutputType
         {
             get { return _dcsBiosOutputType; }
             set { _dcsBiosOutputType = value; }
         }
 
+        [JsonProperty("DCSBiosOutputComparison", Required = Required.Default)]
         public DCSBiosOutputComparison DCSBiosOutputComparison
         {
             get { return _dcsBiosOutputComparison; }
@@ -400,24 +406,28 @@ namespace DCS_BIOS
             }
         }
 
+        [JsonProperty("ControlDescription", Required = Required.Default)]
         public string ControlDescription
         {
             get { return _controlDescription; }
             set { _controlDescription = value; }
         }
 
+        [JsonProperty("MaxValue", Required = Required.Default)]
         public int MaxValue
         {
             get { return _maxValue; }
             set { _maxValue = value; }
         }
 
+        [JsonProperty("MaxLength", Required = Required.Default)]
         public int MaxLength
         {
             get { return _maxLength; }
             set { _maxLength = value; }
         }
 
+        [JsonProperty("ControlType", Required = Required.Default)]
         public string ControlType
         {
             get { return _controlType; }
