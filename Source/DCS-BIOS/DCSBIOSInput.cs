@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-
-// ReSharper disable All
-/*
+﻿/*
  * naming of all variables can not be changed because these classes are instantiated from Json based on DCS-BIOS naming standard. *
  */
 namespace DCS_BIOS
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+
+    using ClassLibraryCommon;
+
+    using Newtonsoft.Json;
 
     public enum DCSBIOSFixedStepInput
     {
@@ -26,29 +26,18 @@ namespace DCS_BIOS
     }
 
     [Serializable]
-    public static class DCSBIOSInputHandler
-    {
-        public static DCSBIOSInput GetDCSBIOSInput(string controlId)
-        {
-            var result = new DCSBIOSInput();
-            var control = DCSBIOSControlLocator.GetControl(controlId);
-            result.Consume(control);
-            return result;
-        }
-    }
-
-    [Serializable]
     public class DCSBIOSInput
     {
-        //These are loaded and saved, all the rest are fetched from DCS-BIOS
+        // These are loaded and saved, all the rest are fetched from DCS-BIOS
         private string _controlId;
-        //TODO Can a DCSBIOSInput have multiple _dcsbiosInputObjects????
-        //The user has entered these two depending on type
+
+        // TODO Can a DCSBIOSInput have multiple _dcsbiosInputObjects????
+        // The user has entered these two depending on type
         private List<DCSBIOSInputObject> _dcsbiosInputObjects = new List<DCSBIOSInputObject>();
         private DCSBIOSInputObject _selectedDCSBIOSInput;
 
         private string _controlDescription;
-        private string _controlType; //display button toggle etc
+        private string _controlType; // display button toggle etc
         private int _delay;
         private bool _debug;
 

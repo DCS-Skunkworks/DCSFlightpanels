@@ -1,22 +1,23 @@
-﻿using System.Collections.Generic;
-
-namespace DCS_BIOS
+﻿namespace DCS_BIOS
 {
+    using System.Collections.Generic;
+
     public class DCSBIOSString
     {
+        // Use this, some strings need to be fully contructed before being broadcasted
+        private readonly List<uint> _receivedAddresses = new List<uint>();
+
         private readonly string[] _internalBuffer;
         private int _length;
         private uint _address;
 
-        //Use this, some strings need to be fully contructed before being broadcasted
-        private readonly List<uint> _receivedAddresses = new List<uint>();
 
         public DCSBIOSString(uint address, int length)
         {
             _address = address;
             for (var i = _address; i < _address + length; i = i + 2)
             {
-                //Common.DebugP("DCSBIOSString Registering()" + address + ", total length = " + _length);
+                // ommon.DebugP("DCSBIOSString Registering()" + address + ", total length = " + _length);
                 DCSBIOSProtocolParser.RegisterAddressToBroadCast(i);
                 _receivedAddresses.Add(i);
             }
@@ -28,16 +29,12 @@ namespace DCS_BIOS
         {
             for (var i = _address; i < _address + _length; i = i + 2)
             {
-                //Fill list of addresses to listen for
+                // Fill list of addresses to listen for
                 _receivedAddresses.Add(i);
             }
         }
 
-        public int Length
-        {
-            get => _length;
-            set { _length = value; }
-        }
+        public int Length { get; set; }
 
         public uint Address
         {

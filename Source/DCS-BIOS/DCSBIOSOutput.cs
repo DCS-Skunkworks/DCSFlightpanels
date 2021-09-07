@@ -1,14 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using Newtonsoft.Json;
-
-
-
-
-
-
-namespace DCS_BIOS
+﻿namespace DCS_BIOS
 {
+    using System;
+    using System.ComponentModel;
+
+    using Newtonsoft.Json;
+
     public enum DCSBiosOutputType
     {
         STRING_TYPE,
@@ -30,9 +26,10 @@ namespace DCS_BIOS
     [Serializable]
     public class DCSBIOSOutput
     {
-        //These are loaded and saved, all the rest are fetched from DCS-BIOS
+        // These are loaded and saved, all the rest are fetched from DCS-BIOS
         private string _controlId;
-        //The user has entered these two depending on type
+
+        // The user has entered these two depending on type
         private uint _specifiedValueInt;
         private string _specifiedValueString = string.Empty;
 
@@ -40,25 +37,15 @@ namespace DCS_BIOS
         private int _maxValue;
         private uint _address;
         private uint _mask;
-        private int _shiftvalue;
+        private int _shiftValue;
         private int _maxLength;
         private volatile uint _lastIntValue = uint.MaxValue;
-        private string _controlType; //display button toggle etc
+        private string _controlType; // display button toggle etc
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
 
         [NonSerialized] private object _lockObject = new object();
-
-
-
-
-
-
-
-
-
-
-
+        
         public static DCSBIOSOutput CreateCopy(DCSBIOSOutput dcsbiosOutput)
         {
             var tmp = new DCSBIOSOutput();
@@ -107,7 +94,7 @@ namespace DCS_BIOS
 
         public bool CheckForValueMatchAndChange(object data)
         {
-            //todo change not processed
+            // todo change not processed
             lock (_lockObject)
             {
                 var result = false;
@@ -255,7 +242,7 @@ namespace DCS_BIOS
                 _mask = dcsbiosControl.outputs[0].mask;
                 _maxValue = dcsbiosControl.outputs[0].max_value;
                 _maxLength = dcsbiosControl.outputs[0].max_length;
-                _shiftvalue = dcsbiosControl.outputs[0].shift_by;
+                this._shiftValue = dcsbiosControl.outputs[0].shift_by;
                 if (dcsbiosControl.outputs[0].type.Equals("string"))
                 {
                     _dcsBiosOutputType = DCSBiosOutputType.STRING_TYPE;
@@ -277,9 +264,9 @@ namespace DCS_BIOS
         {
             if (_dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE)
             {
-                return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftvalue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
+                return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + this._shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
             }
-            return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftvalue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
+            return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + this._shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
         }
 
         public override string ToString()
@@ -352,10 +339,10 @@ namespace DCS_BIOS
         [JsonProperty("Shiftvalue", Required = Required.Default)]
         public int Shiftvalue
         {
-            get { return _shiftvalue; }
+            get { return this._shiftValue; }
             set
             {
-                _shiftvalue = value;
+                this._shiftValue = value;
             }
         }
 

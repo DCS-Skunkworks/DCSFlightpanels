@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-
-namespace DCS_BIOS
+﻿namespace DCS_BIOS
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
+    using ClassLibraryCommon;
+
+    using Newtonsoft.Json;
+
     public static class DCSBIOSControlLocator
     {
+        private static readonly List<DCSBIOSControl> DCSBIOSControls = new List<DCSBIOSControl>();
         private static readonly object LockObject = new object();
         private static DCSFPProfile _dcsfpProfile;
         private static string _jsonDirectory;
-        private static readonly List<DCSBIOSControl> DCSBIOSControls = new List<DCSBIOSControl>();
-        //private static bool _listOnce = true;
         public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
 
 
