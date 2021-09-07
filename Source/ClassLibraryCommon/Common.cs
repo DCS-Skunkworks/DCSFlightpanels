@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-
-namespace ClassLibraryCommon
+﻿namespace ClassLibraryCommon
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.IO;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Reflection;
+    using System.Security.Cryptography;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Input;
+    using System.Windows.Media;
+
     [Flags]
     public enum EmulationMode
     {
@@ -27,7 +27,6 @@ namespace ClassLibraryCommon
 
     public static class Common
     {
-
         public static void PlaySoundFile(bool showException, string soundFile, double volume) //Volume 0 - 100
         {
             try
@@ -52,7 +51,7 @@ namespace ClassLibraryCommon
 
         public static bool IsStreamDeck(GamingPanelEnum panelType)
         {
-            return (panelType == GamingPanelEnum.StreamDeckMini || panelType == GamingPanelEnum.StreamDeck || panelType == GamingPanelEnum.StreamDeckXL || panelType == GamingPanelEnum.StreamDeckV2 || panelType == GamingPanelEnum.StreamDeckMK2);
+            return panelType == GamingPanelEnum.StreamDeckMini || panelType == GamingPanelEnum.StreamDeck || panelType == GamingPanelEnum.StreamDeckXL || panelType == GamingPanelEnum.StreamDeckV2 || panelType == GamingPanelEnum.StreamDeckMK2;
         }
 
         public static Key RealKey(this KeyEventArgs e)
@@ -106,7 +105,7 @@ namespace ClassLibraryCommon
         private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
 
         private static int _emulationModesFlag = 0;
-        
+
         public static void ValidateFlag()
         {
             if (IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
@@ -192,12 +191,13 @@ namespace ClassLibraryCommon
         {
 
             var md5 = MD5.Create();
+
             // Convert the input string to a byte array and compute the hash.
             byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
 
             // Create a new Stringbuilder to collect the bytes
             // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
+            var sBuilder = new StringBuilder();
 
             // Loop through each byte of the hashed data 
             // and format each one as a hexadecimal string.
@@ -258,9 +258,7 @@ namespace ClassLibraryCommon
 
         public static APIModeEnum APIMode = 0;
         private static readonly object ErrorLogLockObject = new object();
-        //private static readonly object DebugLogLockObject = new object();
         private static string _errorLog = string.Empty;
-        //private static string _debugLog = string.Empty;
 
         public static void SetErrorLog(string filename)
         {
@@ -269,15 +267,7 @@ namespace ClassLibraryCommon
                 _errorLog = filename;
             }
         }
-        /*
-        public static void SetDebugLog(string filename)
-        {
-            lock (DebugLogLockObject)
-            {
-                _debugLog = filename;
-            }
-        }
-        */
+
         public static void Log(string message)
         {
             try
@@ -317,23 +307,23 @@ namespace ClassLibraryCommon
 
         public static void LogError(string message)
         {
-            Log(Environment.NewLine + message );
+            Log(Environment.NewLine + message);
         }
 
         public static void LogError(Exception ex, string message = null)
         {
-            Log(Environment.NewLine + 
-                (string.IsNullOrEmpty(message) ? string.Empty : " Custom message = [" + message + "]") + 
-                Environment.NewLine + 
-                ex.GetBaseException().GetType() + 
-                Environment.NewLine + 
-                ex.Message + 
-                Environment.NewLine + 
+            Log(Environment.NewLine +
+                (string.IsNullOrEmpty(message) ? string.Empty : " Custom message = [" + message + "]") +
+                Environment.NewLine +
+                ex.GetBaseException().GetType() +
+                Environment.NewLine +
+                ex.Message +
+                Environment.NewLine +
                 ex.StackTrace +
                 Environment.NewLine +
-                ex.InnerException != null ? ex.InnerException.Message + Environment.NewLine + ex.InnerException.StackTrace : "");
+                ex.InnerException != null ? ex.InnerException.Message + Environment.NewLine + ex.InnerException.StackTrace : string.Empty);
         }
-        
+
         public static void ShowErrorMessageBox(Exception ex, string message = null)
         {
             LogError(ex, message);
@@ -353,7 +343,7 @@ namespace ClassLibraryCommon
 
             foreach (var line in lines)
             {
-                bool found = false;
+                var found = false;
                 foreach (var mustIncludeProject in traceLineMustInclude)
                 {
                     if (line.Contains(mustIncludeProject))
@@ -391,6 +381,7 @@ namespace ClassLibraryCommon
                 var str = Convert.ToString(array[i], 2).PadLeft(8, '0');
                 result = result + "  " + str;
             }
+
             return result;
         }
 
@@ -422,6 +413,7 @@ namespace ClassLibraryCommon
             {
                 rel = $".{ Path.DirectorySeparatorChar }{ rel }";
             }
+
             return rel;
         }
 
@@ -445,31 +437,5 @@ namespace ClassLibraryCommon
                 }
             }
         }
-        /*
-        public static void LogToDebugFile(string message = null)
-        {
-            lock (DebugLogLockObject)
-            {
-                if (!File.Exists(_debugLog))
-                {
-                    var stream = File.Create(_debugLog);
-                    stream.Close();
-                }
-
-                var debugStreamWriter = File.AppendText(_debugLog);
-                try
-                {
-                    debugStreamWriter.Write(Environment.NewLine + "Message = [" + message + "]" + Environment.NewLine);
-                }
-                finally
-                {
-                    debugStreamWriter.Close();
-                }
-            }
-        }*/
     }
-
-
-    
-
 }

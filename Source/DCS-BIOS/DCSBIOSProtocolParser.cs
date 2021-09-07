@@ -1,15 +1,18 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using ClassLibraryCommon;
+
 // ReSharper disable All
 /*
  * Do not adhere to naming standard in DCS-BIOS code, standard are based on DCS-BIOS json files and byte streamnaming
  */
 namespace DCS_BIOS
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
     public enum DCSBiosStateEnum
     {
         WAIT_FOR_SYNC = 0,
@@ -253,6 +256,7 @@ namespace DCS_BIOS
                             _state = DCSBiosStateEnum.DATA_LOW;
                         break;
                 }
+
                 if (b == 0x55)
                 {
                     //Console.WriteLine(Environment.TickCount - ticks);
@@ -263,6 +267,7 @@ namespace DCS_BIOS
                 {
                     _syncByteCount = 0;
                 }
+
                 if (_syncByteCount == 4)
                 {
                     _state = DCSBiosStateEnum.ADDRESS_LOW;

@@ -50,6 +50,7 @@ namespace DCS_BIOS
                     return dcsbiosInputObject.Description;
                 }
             }
+
             return string.Empty;
         }
 
@@ -59,6 +60,7 @@ namespace DCS_BIOS
             {
                 return -99;
             }
+
             foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
             {
                 if (dcsbiosInputObject.Interface == dcsbiosInputType)
@@ -66,6 +68,7 @@ namespace DCS_BIOS
                     return dcsbiosInputObject.MaxValue;
                 }
             }
+
             return -99;
         }
 
@@ -102,15 +105,17 @@ namespace DCS_BIOS
                 {
                     return _dcsbiosInputObjects[0];
                 }
+
                 return _selectedDCSBIOSInput;
             }
-            set { _selectedDCSBIOSInput = value; }
+
+            set => _selectedDCSBIOSInput = value;
         }
 
         public List<DCSBIOSInputObject> DCSBIOSInputObjects
         {
-            get { return _dcsbiosInputObjects; }
-            set { _dcsbiosInputObjects = value; }
+            get => _dcsbiosInputObjects;
+            set => _dcsbiosInputObjects = value;
         }
 
         public void SetSelectedInputBasedOnInterfaceType(DCSBIOSInputType dcsbiosInputType)
@@ -134,24 +139,23 @@ namespace DCS_BIOS
             */
             try
             {
-                if (SelectedDCSBIOSInput == null || SelectedDCSBIOSInput.Interface == null)
-                {
-                    Debugger.Break();
-                }
                 switch (SelectedDCSBIOSInput.Interface)
                 {
                     case DCSBIOSInputType.FIXED_STEP:
                         {
                             return "DCSBIOSInput{" + _controlId + "|FIXED_STEP|" + SelectedDCSBIOSInput.SpecifiedFixedStepArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
                         }
+
                     case DCSBIOSInputType.SET_STATE:
                         {
                             return "DCSBIOSInput{" + _controlId + "|SET_STATE|" + SelectedDCSBIOSInput.SpecifiedSetStateArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
                         }
+
                     case DCSBIOSInputType.ACTION:
                         {
                             return "DCSBIOSInput{" + _controlId + "|ACTION|" + SelectedDCSBIOSInput.SpecifiedActionArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
                         }
+
                     case DCSBIOSInputType.VARIABLE_STEP:
                         {
                             return "DCSBIOSInput{" + _controlId + "|VARIABLE_STEP|" + SelectedDCSBIOSInput.SpecifiedVariableStepArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
@@ -163,31 +167,36 @@ namespace DCS_BIOS
                 Common.LogError( ex, "Error in DCSBIOSInput.ToString(), ControlId = " + _controlId);
                 throw;
             }
+
             return "SHOULD NEVER ARRIVE HERE";
         }
 
         public void ImportString(string str)
         {
-            //DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC|0}
-            //DCSBIOSInput{AAP_EGIPWR|SET_STATE|65535|0}
-            //DCSBIOSInput{AAP_EGIPWR|ACTION|TOGGLE|0}
+            // DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC|0}
+            // DCSBIOSInput{AAP_EGIPWR|SET_STATE|65535|0}
+            // DCSBIOSInput{AAP_EGIPWR|ACTION|TOGGLE|0}
             var value = str;
             if (string.IsNullOrEmpty(str))
             {
                 throw new Exception("DCSBIOSInput cannot import null string.");
             }
+
             if (!str.StartsWith("DCSBIOSInput{") || !str.EndsWith("}"))
             {
                 throw new Exception("DCSBIOSInput cannot import string : " + str);
             }
+
             value = value.Substring(value.IndexOf("{", StringComparison.InvariantCulture) + 1);
-            //AAP_EGIPWR|FIXED_STEP|INC}
-            //AAP_EGIPWR|SET_STATE|65535}
-            //AAP_EGIPWR|ACTION|TOGGLE}
+
+            // AAP_EGIPWR|FIXED_STEP|INC}
+            // AAP_EGIPWR|SET_STATE|65535}
+            // AAP_EGIPWR|ACTION|TOGGLE}
             value = value.Substring(0, value.Length - 1);
-            //AAP_EGIPWR|FIXED_STEP|INC
-            //AAP_EGIPWR|SET_STATE|65535
-            //AAP_EGIPWR|ACTION|TOGGLE
+
+            // AAP_EGIPWR|FIXED_STEP|INC
+            // AAP_EGIPWR|SET_STATE|65535
+            // AAP_EGIPWR|ACTION|TOGGLE
             var entries = value.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
             _controlId = entries[0];
             if (entries.Length == 4)
@@ -198,6 +207,7 @@ namespace DCS_BIOS
             {
                 Delay = 0;
             }
+
             var dcsBIOSControl = DCSBIOSControlLocator.GetControl(_controlId);
             Consume(dcsBIOSControl);
 
@@ -219,11 +229,14 @@ namespace DCS_BIOS
                                 {
                                     SelectedDCSBIOSInput.Delay = 0;
                                 }
+
                                 break;
                             }
                         }
+
                         break;
                     }
+
                 case "SET_STATE":
                     {
                         foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
@@ -240,11 +253,14 @@ namespace DCS_BIOS
                                 {
                                     SelectedDCSBIOSInput.Delay = 0;
                                 }
+
                                 break;
                             }
                         }
+
                         break;
                     }
+
                 case "ACTION":
                     {
                         foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
@@ -261,11 +277,14 @@ namespace DCS_BIOS
                                 {
                                     SelectedDCSBIOSInput.Delay = 0;
                                 }
+
                                 break;
                             }
                         }
+
                         break;
                     }
+
                 case "VARIABLE_STEP":
                     {
                         foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
@@ -282,9 +301,11 @@ namespace DCS_BIOS
                                 {
                                     SelectedDCSBIOSInput.Delay = 0;
                                 }
+
                                 break;
                             }
                         }
+
                         break;
                     }
             }
@@ -293,37 +314,37 @@ namespace DCS_BIOS
         [JsonProperty("ControlId", Required = Required.Default)]
         public string ControlId
         {
-            get { return _controlId; }
-            set { _controlId = value; }
+            get => _controlId;
+            set => _controlId = value;
         }
 
         [JsonProperty("Delay", Required = Required.Default)]
         public int Delay
         {
-            get { return _delay; }
-            set { _delay = value; }
+            get => _delay;
+            set => _delay = value;
         }
 
         [Obsolete]
         [JsonProperty("Debug", Required = Required.Default)]
         public bool Debug
         {
-            get { return _debug; }
-            set { _debug = value; }
+            get => _debug;
+            set => _debug = value;
         }
 
         [JsonProperty("ControlDescription", Required = Required.Default)]
         public string ControlDescription
         {
-            get { return _controlDescription; }
-            set { _controlDescription = value; }
+            get => _controlDescription;
+            set => _controlDescription = value;
         }
 
         [JsonProperty("ControlType", Required = Required.Default)]
         public string ControlType
         {
-            get { return _controlType; }
-            set { _controlType = value; }
+            get => _controlType;
+            set => _controlType = value;
         }
     }
 }

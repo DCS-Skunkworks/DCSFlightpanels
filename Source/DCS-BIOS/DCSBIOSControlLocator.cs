@@ -17,7 +17,6 @@
         private static string _jsonDirectory;
         public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
 
-
         private static void Reset()
         {
             DCSBIOSProfileLoadStatus.Clear();
@@ -32,6 +31,7 @@
                 {
                     return null;
                 }
+
                 try
                 {
                     LoadControls();
@@ -55,6 +55,7 @@
                     {
                         throw new Exception("Error, control " + controlId + " does not exist. (" + Profile.Description + ")");
                     }
+
                     return DCSBIOSControls.Single(controlObject => controlObject.identifier.Equals(controlId));
                 }
                 catch (InvalidOperationException ioe)
@@ -72,6 +73,7 @@
                 {
                     throw new Exception("DCSBIOSControlLocator.GetDCSBIOSOutput() Should not be called when only key emulator is active");
                 }
+
                 try
                 {
                     var control = GetControl(controlId);
@@ -170,11 +172,12 @@
                 {
                     LoadCommonData(_jsonDirectory);
                     LoadMetaDataEnd(_jsonDirectory);
-                    //Load the controls for the actual aircraft/helicopter
+
+                    // Load the controls for the actual aircraft/helicopter
                     ReadDataFromJsonFile(Profile.JSONFilename);
                 }
 
-                //Remove duplicates which may come from loading NS430 or other additional profiles
+                // Remove duplicates which may come from loading NS430 or other additional profiles
                 while (DCSBIOSControls.Count(controlObject => controlObject.identifier.Equals("_UPDATE_COUNTER")) > 1)
                 {
                     DCSBIOSControls.Remove(DCSBIOSControls.FindLast(controlObject =>
@@ -194,7 +197,7 @@
             }
         }
 
-        static void PrintDuplicateControlIdentifiers(List<DCSBIOSControl> dcsbiosControls, bool printAll = false)
+        private static void PrintDuplicateControlIdentifiers(List<DCSBIOSControl> dcsbiosControls, bool printAll = false)
         {
             var result = new List<string>();
             var dupes = new List<string>();
@@ -205,7 +208,7 @@
                     result.Add(dcsbiosControl.identifier);
                 }
 
-                //Debug.Print(dcsbiosControl.identifier);
+                // Debug.Print(dcsbiosControl.identifier);
                 var found = false;
                 foreach (var str in result)
                 {
@@ -214,16 +217,18 @@
                         found = true;
                     }
                 }
+
                 if (!found)
                 {
                     result.Add(dcsbiosControl.identifier);
                 }
+
                 if (found)
                 {
                     dupes.Add(dcsbiosControl.identifier);
                 }
-
             }
+
             if (dupes.Count > 0)
             {
                 var message = "Below is a list of duplicate identifiers found in the " + Profile.JSONFilename + " profile (DCS-BIOS)\n";
@@ -233,12 +238,12 @@
                 {
                     message = message + dupe + "\n";
                 }
+
                 message = message + "---------------------------------------------\n";
                 Common.LogError(message);
             }
         }
-
-
+        
         private static void LoadMetaDataEnd(string jsonDirectory)
         {
             if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
@@ -295,7 +300,7 @@
 
         public static DCSFPProfile Profile
         {
-            get { return _dcsfpProfile; }
+            get => _dcsfpProfile;
             set
             {
                 if (_dcsfpProfile != value)
@@ -338,6 +343,7 @@
             {
                 return null;
             }
+
             LoadControls();
             var result = DCSBIOSControls.Where(controlObject => (controlObject.outputs.Count > 0) && controlObject.outputs[0].OutputDataType == DCSBiosOutputType.STRING_TYPE);
             return result;
@@ -349,6 +355,7 @@
             {
                 return null;
             }
+
             LoadControls();
             return DCSBIOSControls.Where(controlObject => (controlObject.outputs.Count > 0) && controlObject.outputs[0].OutputDataType == DCSBiosOutputType.INTEGER_TYPE);
         }
@@ -359,6 +366,7 @@
             {
                 return null;
             }
+
             LoadControls();
             return DCSBIOSControls.Where(controlObject => (controlObject.inputs.Count > 0));
         }

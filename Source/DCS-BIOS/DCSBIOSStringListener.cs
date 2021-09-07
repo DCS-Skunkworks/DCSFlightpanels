@@ -1,5 +1,4 @@
-﻿
-// ReSharper disable All
+﻿// ReSharper disable All
 /*
  * Do not adhere to naming standard in DCS-BIOS code, standard are based on DCS-BIOS json files and byte streamnaming
  */

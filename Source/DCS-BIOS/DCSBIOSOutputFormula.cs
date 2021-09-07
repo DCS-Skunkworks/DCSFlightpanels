@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using ClassLibraryCommon;
-
-namespace DCS_BIOS
+﻿namespace DCS_BIOS
 {
+    using System;
+    using System.Collections.Generic;
+
+    using ClassLibraryCommon;
+
     public class DCSBIOSOutputFormula
     {
-        private string _formula;
         private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new List<DCSBIOSOutput>();
-        readonly Dictionary<string, double> _variables = new Dictionary<string, double>();
-        readonly JaceExtended _jaceExtended = new JaceExtended();
+        private readonly Dictionary<string, double> _variables = new Dictionary<string, double>();
+        private readonly JaceExtended _jaceExtended = new JaceExtended();
+        private string _formula;
 
         public DCSBIOSOutputFormula()
         {
@@ -31,7 +32,7 @@ namespace DCS_BIOS
                 {
                     if (_formula.Contains(dcsbiosControl.identifier))
                     {
-                        //   Console.WriteLine("Variable " + dcsbiosControl.identifier + " set to 0");
+                        // Console.WriteLine("Variable " + dcsbiosControl.identifier + " set to 0");
                         _variables.Add(dcsbiosControl.identifier, 0);
                         var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControl.identifier);
                         _dcsbiosOutputs.Add(dcsbiosOutput);
@@ -39,11 +40,11 @@ namespace DCS_BIOS
                         found = true;
                     }
                 }
+
                 if (!found)
                 {
                     throw new Exception("Could not find any DCS-BIOS Controls in formula expression.");
                 }
-                //_expression = new Expression(_formula);
             }
             catch (Exception ex)
             {
@@ -52,8 +53,8 @@ namespace DCS_BIOS
             }
         }
 
-        //Returns true if address was found in formula
-        //If true do a subsequent call to Evaluate() to get new value
+        // Returns true if address was found in formula
+        // If true do a subsequent call to Evaluate() to get new value
         public bool CheckForMatch(uint address, uint data)
         {
             try
@@ -65,11 +66,14 @@ namespace DCS_BIOS
                     {
                         dcsbiosOutput.CheckForValueMatchAndChange(data);
                         result = true;
-                        //Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
+
+                        // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
                         _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+
                         //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
                     }
                 }
+
                 return result;
             }
             catch (Exception ex)
@@ -95,6 +99,7 @@ namespace DCS_BIOS
             {
                 Common.LogError( ex, "Evaluate() function");
             }
+
             return 99;
         }
 
@@ -106,10 +111,12 @@ namespace DCS_BIOS
             {
                 throw new Exception("DCSBiosOutputFormula cannot import null string.");
             }
+
             if (!str.StartsWith("DCSBiosOutputFormula{") || !str.EndsWith("}"))
             {
                 throw new Exception("DCSBiosOutputFormula cannot import string : " + str);
             }
+
             value = value.Replace("DCSBiosOutputFormula{", string.Empty).Replace("}", string.Empty);
 
             // (AAP_EGIPWR+1)/2
@@ -122,7 +129,6 @@ namespace DCS_BIOS
         {
             return "DCSBiosOutputFormula{" + _formula + "}";
         }
-
 
         public string Formula => _formula;
     }

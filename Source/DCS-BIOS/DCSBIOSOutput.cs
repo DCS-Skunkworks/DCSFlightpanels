@@ -58,15 +58,17 @@
             tmp.Mask = dcsbiosOutput.Mask;
             tmp.MaxLength = dcsbiosOutput.MaxLength;
             tmp.MaxValue = dcsbiosOutput.MaxValue;
-            tmp.Shiftvalue = dcsbiosOutput.Shiftvalue;
+            tmp.ShiftValue = dcsbiosOutput.ShiftValue;
             if (tmp.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
             {
                 tmp.SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
             }
+
             if (tmp.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
             {
                 tmp.SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
             }
+
             return tmp;
         }
 
@@ -81,11 +83,12 @@
             Mask = dcsbiosOutput.Mask;
             MaxLength = dcsbiosOutput.MaxLength;
             MaxValue = dcsbiosOutput.MaxValue;
-            Shiftvalue = dcsbiosOutput.Shiftvalue;
+            ShiftValue = dcsbiosOutput.ShiftValue;
             if (DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
             {
                 SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
             }
+
             if (DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
             {
                 SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
@@ -110,6 +113,7 @@
                 {
                     throw new Exception("Invalid DCSBiosOutput. Data is of type " + data.GetType() + " but DCSBiosOutputType set to " + DCSBiosOutputType);
                 }
+
                 return result;
             }
         }
@@ -117,7 +121,7 @@
         private bool CheckForValueMatchAndChange(uint data)
         {
             var tmpData = data;
-            var value = (tmpData & Mask) >> Shiftvalue;
+            var value = (tmpData & Mask) >> this.ShiftValue;
             var resultComparison = false;
             switch (DCSBiosOutputComparison)
             {
@@ -126,27 +130,32 @@
                         resultComparison = value > _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.LessThan:
                     {
                         resultComparison = value < _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.NotEquals:
                     {
                         resultComparison = value != _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.Equals:
                     {
                         resultComparison = value == _specifiedValueInt;
                         break;
                     }
             }
+
             var resultChange = !value.Equals(_lastIntValue);
             if (resultChange)
             {
                 _lastIntValue = value;
             }
+
             return resultComparison && resultChange;
         }
 
@@ -168,6 +177,7 @@
                 {
                     throw new Exception("Invalid DCSBiosOutput. Data is of type " + data.GetType() + " but DCSBiosOutputType set to " + DCSBiosOutputType);
                 }
+
                 return result;
             }
         }
@@ -175,7 +185,7 @@
         private bool CheckForValueMatch(uint data)
         {
             var tmpData = data;
-            var value = (tmpData & Mask) >> Shiftvalue;
+            var value = (tmpData & Mask) >> this.ShiftValue;
             var result = false;
             switch (DCSBiosOutputComparison)
             {
@@ -184,22 +194,26 @@
                         result = value > _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.LessThan:
                     {
                         result = value < _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.NotEquals:
                     {
                         result = value != _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.Equals:
                     {
                         result = value == _specifiedValueInt;
                         break;
                     }
             }
+
             return result;
         }
 
@@ -212,9 +226,10 @@
             {
                 _lockObject = new object();
             }
+
             lock (_lockObject)
             {
-                return (data & Mask) >> Shiftvalue;
+                return (data & Mask) >> ShiftValue;
             }
         }
 
@@ -227,6 +242,7 @@
                 {
                     result = _specifiedValueString.Equals(data);
                 }
+
                 return result;
             }
         }
@@ -251,7 +267,8 @@
                 {
                     _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
                 }
-                //TODO Denna borde göras så att förutom _address så är mottagarens unika ID med så slipper alla lyssna eller ..? (prestanda)
+
+                // TODO Denna borde göras så att förutom _address så är mottagarens unika ID med så slipper alla lyssna eller ..? (prestanda)
                 DCSBIOSProtocolParser.RegisterAddressToBroadCast(_address);
             }
             catch (Exception)
@@ -266,6 +283,7 @@
             {
                 return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + this._shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
             }
+
             return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + this._shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
         }
 
@@ -275,6 +293,7 @@
             {
                 return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
             }
+
             return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
         }
 
@@ -286,10 +305,12 @@
             {
                 throw new Exception("DCSBiosOutput cannot import null string.");
             }
+
             if (!str.StartsWith("DCSBiosOutput{") || !str.EndsWith("}"))
             {
                 throw new Exception("DCSBiosOutput cannot import string : " + str);
             }
+
             value = value.Replace("DCSBiosOutput{", string.Empty).Replace("}", string.Empty);
 
             // AAP_EGIPWR|Equals|0
@@ -311,14 +332,15 @@
         [JsonProperty("ControlId", Required = Required.Default)]
         public string ControlId
         {
-            get { return _controlId; }
-            set { _controlId = value; }
+            get => _controlId;
+            set => _controlId = value;
         }
 
         [JsonProperty("Address", Required = Required.Default)]
         public uint Address
         {
-            get { return _address; }
+            get => _address;
+
             set
             {
                 _address = value;
@@ -329,50 +351,42 @@
         [JsonProperty("Mask", Required = Required.Default)]
         public uint Mask
         {
-            get { return _mask; }
-            set
-            {
-                _mask = value;
-            }
+            get => _mask;
+            set => _mask = value;
         }
 
         [JsonProperty("Shiftvalue", Required = Required.Default)]
-        public int Shiftvalue
+        public int ShiftValue
         {
-            get { return this._shiftValue; }
-            set
-            {
-                this._shiftValue = value;
-            }
+            get => _shiftValue;
+            set => _shiftValue = value;
         }
 
         [JsonProperty("DCSBiosOutputType", Required = Required.Default)]
         public DCSBiosOutputType DCSBiosOutputType
         {
-            get { return _dcsBiosOutputType; }
-            set { _dcsBiosOutputType = value; }
+            get => _dcsBiosOutputType;
+            set => _dcsBiosOutputType = value;
         }
 
         [JsonProperty("DCSBiosOutputComparison", Required = Required.Default)]
         public DCSBiosOutputComparison DCSBiosOutputComparison
         {
-            get { return _dcsBiosOutputComparison; }
-            set { _dcsBiosOutputComparison = value; }
+            get => _dcsBiosOutputComparison;
+            set => _dcsBiosOutputComparison = value;
         }
 
         [JsonIgnore]
         public uint SpecifiedValueInt
         {
-            get
-            {
-                return _specifiedValueInt;
-            }
+            get => _specifiedValueInt;
             set
             {
                 if (DCSBiosOutputType != DCSBiosOutputType.INTEGER_TYPE)
                 {
                     throw new Exception("Invalid DCSBiosOutput. Specified value (trigger value) set to [int] but DCSBiosOutputType set to " + DCSBiosOutputType);
                 }
+
                 _specifiedValueInt = value;
             }
         }
@@ -380,16 +394,14 @@
         [JsonIgnore]
         public string SpecifiedValueString
         {
-            get
-            {
-                return _specifiedValueString;
-            }
+            get => _specifiedValueString;
             set
             {
                 if (DCSBiosOutputType != DCSBiosOutputType.STRING_TYPE)
                 {
                     throw new Exception("Invalid DCSBiosOutput. Specified value (trigger value) set to [String] but DCSBiosOutputType set to " + DCSBiosOutputType);
                 }
+
                 _specifiedValueString = value;
             }
         }
@@ -397,38 +409,37 @@
         [JsonProperty("ControlDescription", Required = Required.Default)]
         public string ControlDescription
         {
-            get { return _controlDescription; }
-            set { _controlDescription = value; }
+            get => _controlDescription;
+            set => _controlDescription = value;
         }
 
         [JsonProperty("MaxValue", Required = Required.Default)]
         public int MaxValue
         {
-            get { return _maxValue; }
-            set { _maxValue = value; }
+            get => _maxValue;
+            set => _maxValue = value;
         }
 
         [JsonProperty("MaxLength", Required = Required.Default)]
         public int MaxLength
         {
-            get { return _maxLength; }
-            set { _maxLength = value; }
+            get => _maxLength;
+            set => _maxLength = value;
         }
 
         [JsonProperty("ControlType", Required = Required.Default)]
         public string ControlType
         {
-            get { return _controlType; }
-            set { _controlType = value; }
+            get => _controlType;
+            set => _controlType = value;
         }
 
         [JsonIgnore]
         public uint LastIntValue
         {
-            get { return _lastIntValue; }
-            set { _lastIntValue = value; }
+            get => _lastIntValue;
+            set => _lastIntValue = value;
         }
-
 
         public static DCSBIOSOutput GetUpdateCounter()
         {

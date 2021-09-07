@@ -19,7 +19,6 @@
     /// </summary>
     public partial class KeySequenceWindow : Window, IIsDirty
     {
-
         private readonly SortedList<int, IKeyPressInfo> _sortedList = new SortedList<int, IKeyPressInfo>();
         private bool _isDirty;
         private bool _formLoaded = false;
@@ -131,6 +130,7 @@
             {
                 return 0;
             }
+
             return _sortedList.Keys.Max() + 1;
         }
 
@@ -174,6 +174,7 @@
                     //User made no changes
                     return;
                 }
+
                 _sortedList[keyValuePair.Key].LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
                 _sortedList[keyValuePair.Key].VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
                 _sortedList[keyValuePair.Key].LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
@@ -282,6 +283,7 @@
                 {
                     return;
                 }
+
                 SetIsDirty();
                 SetFormState();
             }
