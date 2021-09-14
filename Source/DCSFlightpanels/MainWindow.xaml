@@ -48,6 +48,7 @@
             <MenuItem Header="Extras">
                 <MenuItem Name ="MenuItemUseNS430" Header="Load NS 430" Click="MenuItemUseNS430_OnClick" IsChecked="false"/>
             </MenuItem>
+            <MenuItem Name="MenuItemPlugins" Header="Plugins"/>
             <MenuItem Header="Help">
                 <MenuItem Header="Wiki (Github)" Click="MenuItemWikiClick" />
                 <MenuItem Header="About" Click="MenuItemAboutClick" />
@@ -162,7 +163,6 @@
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Name="LabelPluginInfo" Text="Plugin support disabled." HorizontalAlignment="Right" Margin="0,0,10,0"/>
-                    <ComboBox Name="ComboBoxPlugins" IsReadOnly="True" Width="200" Visibility="Visible"  Margin="0,0,20,0"></ComboBox>
                     <TextBlock Name="LabelDCSBIOSReleaseDate" HorizontalAlignment="Right" Margin="0,0,10,0"/>
                 </StackPanel>
             </StatusBarItem>

@@ -33,5 +33,10 @@
         /// Is NULL if nothing is associated with the key/switch/knob
         /// </param>
         void PanelEvent(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence);
+
+        /// <summary>
+        /// Called by DCSFP when someone clicks the plugin's menu. So user can change settings, plugin may bring up a window, settings file.
+        /// </summary>
+        void Settings();
     }
 }

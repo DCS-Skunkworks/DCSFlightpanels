@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
+    using System.Linq;
     using System.Windows.Forms;
 
     using MEF;
@@ -20,6 +21,15 @@
              * Your code here
              */
             MessageBox.Show(profile + " PanelID : " + panelId + " SwitchId : " + switchId + " Action : " + (pressed ? "Pressed" : "Released"));
+        }
+
+        public void Settings()
+        {
+            var name = this.GetType()
+                .GetCustomAttributes(false)
+                .OfType<ExportMetadataAttribute>()
+                .Single(attribute => attribute.Name == "Name").Value;
+            MessageBox.Show("This would be the settings for plugin " + name, "You clicked the plugin menu.", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace DCSFlightpanels
     using System.Linq;
     using System.Media;
     using System.Reflection;
+    using System.Runtime.Remoting.Messaging;
     using System.Text;
     using System.Threading;
     using System.Timers;
@@ -30,6 +31,8 @@ namespace DCSFlightpanels
     using DCSFlightpanels.Windows;
 
     using DCS_BIOS;
+
+    using MEF;
 
     using Microsoft.Win32;
 
@@ -221,7 +224,9 @@ namespace DCSFlightpanels
                     window.ShowDialog();
                     MessageBox.Show(
                         "This warning will be shown as long as there are error messages in error log stating that DCS-BIOS can not be found. Delete or clear the error log once you have fixed the problem.",
-                        "Delete Error Log", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        "Delete Error Log", 
+                        MessageBoxButton.OK, 
+                        MessageBoxImage.Warning);
                 }
             }
             catch (Exception ex)
@@ -1772,15 +1777,19 @@ namespace DCSFlightpanels
             PluginManager.PlugSupportActivated = Settings.Default.EnablePlugin;
             PluginManager.DisableKeyboardAPI = Settings.Default.DisableKeyboardAPI;
 
+            MenuItemPlugins.Items.Clear();
+            
             if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
             {
                 foreach (var plugin in PluginManager.Get().Plugins)
                 {
-                    ComboBoxPlugins.Items.Add(plugin.Metadata.Name);
+                    var menuItem = new MenuItem();
+                    menuItem.Header = plugin.Metadata.Name;
+                    menuItem.Click += MenuItemPlugin_OnClick;
+                    MenuItemPlugins.Items.Add(menuItem);
                 }
-
-                ComboBoxPlugins.Visibility = Visibility.Visible;
-                LabelPluginInfo.Text = "Loaded Plugins : ";
+                
+                LabelPluginInfo.Text = "Plugin(s) Loaded";
             }
             else if (PluginManager.PlugSupportActivated && !PluginManager.HasPlugin())
             {
@@ -1789,8 +1798,9 @@ namespace DCSFlightpanels
             else
             {
                 LabelPluginInfo.Text = "Plugin support disabled.";
-                ComboBoxPlugins.Visibility = Visibility.Collapsed;
             }
+
+            MenuItemPlugins.IsEnabled = MenuItemPlugins.HasItems;
         }
 
         private void MenuItemSettings_OnClick(object sender, RoutedEventArgs e)
@@ -2075,13 +2085,33 @@ namespace DCSFlightpanels
             }
         }
 
-
         public List<ModifiedGenericBinding> ResolveConflicts()
         {
             var bindingsMappingWindow = new BindingsMappingWindow(BindingMappingManager.PanelBindings, GamingPanel.GamingPanels);
             bindingsMappingWindow.ShowDialog();
 
             return bindingsMappingWindow.ModifiedGenericBindings;
+        }
+
+        private void MenuItemPlugin_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var pluginName = ((MenuItem)sender).Header;
+                foreach (var plugin in PluginManager.Get().Plugins)
+                {
+                    if (plugin.Metadata.Name.Equals(pluginName))
+                    {
+                        plugin.Value.Settings();
+                    }
+                }
+
+                SetWindowState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }
