@@ -27,17 +27,17 @@
 
     public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
+        private readonly object _updateStreamDeckOledLockObject = new object();
         private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
+        private readonly int _buttonCount;
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new List<StreamDeckPanel>();
-        private IStreamDeckBoard _streamDeckBoard;
+        private readonly IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
         private GamingPanelEnum _panelType;
 
-        private int _buttonCount = 0;
 
-        private object _updateStreamDeckOledLockObject = new object();
 
 
 
@@ -51,6 +51,7 @@
                         _buttonCount = 6;
                         break;
                     }
+
                 case GamingPanelEnum.StreamDeck:
                 case GamingPanelEnum.StreamDeckV2:
                 case GamingPanelEnum.StreamDeckMK2:
@@ -58,12 +59,19 @@
                         _buttonCount = 15;
                         break;
                     }
+
                 case GamingPanelEnum.StreamDeckXL:
                     {
                         _buttonCount = 32;
                         break;
                     }
+
+                default:
+                    {
+                        throw new Exception("Failed to determine Stream Deck model");
+                    }
             }
+
             Startup();
             _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
@@ -138,7 +146,7 @@
                 var thread = new Thread(ShowIdentifyingValue);
                 thread.Start();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -173,7 +181,7 @@
                     SetImage(i, blackBitmap);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

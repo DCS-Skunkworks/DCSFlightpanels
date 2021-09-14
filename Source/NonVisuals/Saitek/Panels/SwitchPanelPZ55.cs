@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.DCSBIOSBindings;
-using NonVisuals.Saitek.Switches;
-
-namespace NonVisuals.Saitek.Panels
+﻿namespace NonVisuals.Saitek.Panels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
+    using NonVisuals.DCSBIOSBindings;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek.Switches;
 
     public enum SwitchPanelPZ55LEDPosition : byte
     {
@@ -198,7 +200,7 @@ namespace NonVisuals.Saitek.Panels
                 var thread = new Thread(ShowIdentifyingValue);
                 thread.Start();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -227,7 +229,7 @@ namespace NonVisuals.Saitek.Panels
                 SetLandingGearLED(SwitchPanelPZ55LEDPosition.LEFT, PanelLEDColor.DARK);
                 SetLandingGearLED(SwitchPanelPZ55LEDPosition.RIGHT, PanelLEDColor.DARK);
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

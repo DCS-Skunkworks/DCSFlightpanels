@@ -19,17 +19,17 @@
     /// </summary>
     public partial class DCSBiosOutputFormulaWindow : Window
     {
+        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
+        private readonly string _description;
+        private readonly bool _userEditsDescription;
+        private readonly JaceExtended _jaceExtended = new JaceExtended();
         private DCSBIOSOutput _dcsBiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula;
-        private readonly string _description;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
         private DCSFPProfile _dcsfpProfile;
-        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
-        private readonly JaceExtended _jaceExtended = new JaceExtended();
-        private bool _userEditsDescription = false;
 
         public DCSBiosOutputFormulaWindow(DCSFPProfile dcsfpProfile, string description, bool userEditsDescription = false)
         {

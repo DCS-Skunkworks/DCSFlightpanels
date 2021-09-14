@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-
-namespace NonVisuals.Saitek.Panels
+﻿namespace NonVisuals.Saitek.Panels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
     public class BacklitPanelBIP : SaitekPanel
     {
-        private readonly byte[] _upperRowBytes = { (byte)0x0, (byte)0x0 }; //byte 1 & 4
-        private readonly byte[] _middleRowBytes = { (byte)0x0, (byte)0x0 };//byte 2 & 5
-        private readonly byte[] _lowerRowBytes = { (byte)0x0, (byte)0x0 }; //byte 3 & 6
         private const byte _1BIPMask = 0x01;
         private const byte _2BIPMask = 0x02;
         private const byte _3BIPMask = 0x04;
@@ -22,8 +21,11 @@ namespace NonVisuals.Saitek.Panels
         private const byte _6BIPMask = 0x20;
         private const byte _7BIPMask = 0x40;
         private const byte _8BIPMask = 0x80;
-        private uint _ledBrightness = 50; // 0 - 100 in 5 step intervals
         private readonly List<DcsOutputAndColorBindingBIP> _listColorOutputBinding = new List<DcsOutputAndColorBindingBIP>();
+        private readonly byte[] _upperRowBytes = { (byte)0x0, (byte)0x0 }; //byte 1 & 4
+        private readonly byte[] _middleRowBytes = { (byte)0x0, (byte)0x0 };//byte 2 & 5
+        private readonly byte[] _lowerRowBytes = { (byte)0x0, (byte)0x0 }; //byte 3 & 6
+        private uint _ledBrightness = 50; // 0 - 100 in 5 step intervals
 
         private DCSBIOSBrightnessBinding _dcsBiosBrightnessBinding;
 
@@ -364,7 +366,7 @@ namespace NonVisuals.Saitek.Panels
                 var thread = new Thread(ShowIdentifyingValue);
                 thread.Start();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -390,7 +392,7 @@ namespace NonVisuals.Saitek.Panels
 
                 TurnOffAllLEDs();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

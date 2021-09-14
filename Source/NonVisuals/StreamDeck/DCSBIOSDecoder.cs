@@ -1,26 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Windows.Media.Imaging;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using Newtonsoft.Json;
-using NonVisuals.StreamDeck.Events;
-using ThreadState = System.Threading.ThreadState;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
+    using System.Threading;
+    using System.Windows.Media.Imaging;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.StreamDeck.Events;
+
+    using ThreadState = System.Threading.ThreadState;
+
     [Serializable]
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener, IDisposable
     {
         private DCSBIOSOutput _dcsbiosOutput = null;
         private string _formula = string.Empty;
         private bool _useFormula = false;
-        private double _formulaResult = Double.MaxValue;
+        private double _formulaResult = double.MaxValue;
         private string _lastFormulaError = string.Empty;
         private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
         private volatile bool _valueUpdated = true;
@@ -29,14 +34,10 @@ namespace NonVisuals.StreamDeck
         private bool _treatStringAsNumber = false;
         private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
         
-        //[NonSerialized] private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
         [NonSerialized] private Thread _imageUpdateTread = null;
         private bool _shutdown = false;
-
-        private string _defaultImageFilePath;//DO NOT USE THESE
-        private Bitmap _defaultImage;//DO NOT USE THESE
-
-        Bitmap _converterBitmap = null;
+        
+        private Bitmap _converterBitmap = null;
 
         public DCSBIOSDecoder(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
         {
@@ -622,7 +623,10 @@ namespace NonVisuals.StreamDeck
         public string DefaultImageFilePath
         {
             //No getter, this is to be phased out, setter here so that any existing setting in user's file still can be parsed by JSON.
-            set => _defaultImageFilePath = value;
+            set
+            {
+                var notUsedAnymoreDefaultImageFilePath = value;
+            }
         }
     }
 

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using ClassLibraryCommon;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows;
+
+    using ClassLibraryCommon;
+
     public static class BindingMappingManager
     {
         private static volatile List<GenericPanelBinding> _genericBindings = new List<GenericPanelBinding>();
@@ -165,7 +166,8 @@ namespace NonVisuals
                 
             }
         }
-        //PROCESSING OF BIPLINKS AND STREAM LINKS STILL MISSING
+
+        // PROCESSING OF BIPLINKS AND STREAM LINKS STILL MISSING
         public static bool FindSolution(GenericPanelBinding genericBinding, ref bool settingsWereModified)
         {
             settingsWereModified = false;

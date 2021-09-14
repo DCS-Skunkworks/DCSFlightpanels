@@ -561,10 +561,6 @@
             get => _isDirty;
             set
             {
-                if (value)
-                {
-                    var asd = 1;
-                }
                 _isDirty = value;
             }
         }
@@ -633,21 +629,27 @@
 
 
         public delegate void ProfileReadFromFileEventHandler(object sender, PanelBindingReadFromFileEventArgs e);
+
         public event ProfileReadFromFileEventHandler OnSettingsReadFromFile;
 
         public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
+
         public event SavePanelSettingsEventHandler OnSavePanelSettings;
 
         public delegate void SavePanelSettingsEventHandlerJSON(object sender, ProfileHandlerEventArgs e);
+
         public event SavePanelSettingsEventHandlerJSON OnSavePanelSettingsJSON;
 
         public delegate void AirframeSelectedEventHandler(object sender, AirframeEventArgs e);
+
         public event AirframeSelectedEventHandler OnAirframeSelected;
 
         public delegate void ClearPanelSettingsEventHandler(object sender);
+
         public event ClearPanelSettingsEventHandler OnClearPanelSettings;
 
         public delegate void UserMessageEventHandler(object sender, UserMessageEventArgs e);
+
         public event UserMessageEventHandler OnUserMessageEventHandler;
 
         public void Attach(GamingPanel gamingPanel)
@@ -692,25 +694,7 @@
 
         public void StateSaved()
         {
-
+            _isDirty = false;
         }
     }
-
-    public class AirframeEventArgs : EventArgs
-    {
-        public DCSFPProfile Profile { get; set; }
-    }
-
-    public class ProfileHandlerEventArgs : EventArgs
-    {
-        public ProfileHandler ProfileHandlerEA { get; set; }
-    }
-
-    public class UserMessageEventArgs : EventArgs
-    {
-        public string UserMessage { get; set; }
-    }
-
-
-
 }

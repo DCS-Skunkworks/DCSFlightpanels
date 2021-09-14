@@ -22,7 +22,11 @@
     /// </summary>
     public partial class JaceSandboxWindow : Window, IDcsBiosDataListener, IDisposable
     {
-
+        private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+        private readonly string _typeToSearch = "Type to search control";
+        private readonly DCSBIOS _dcsbios;
+        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
+        private readonly JaceExtended _jaceExtended = new JaceExtended();
         private DCSBIOSOutput _dcsbiosOutput1 = null;
         private DCSBIOSOutput _dcsbiosOutput2 = null;
         private DCSBIOSOutput _dcsbiosOutput3 = null;
@@ -37,18 +41,13 @@
         private bool _formLoaded;
         private bool _isLooping;
         private bool _exitThread;
-        private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
-        private readonly string _typeToSearch = "Type to search control";
-        private readonly DCSBIOS _dcsbios;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
-        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private DCSBIOSControl _dcsbiosControl1;
         private DCSBIOSControl _dcsbiosControl2;
         private DCSBIOSControl _dcsbiosControl3;
         private DCSBIOSControl _dcsbiosControl4;
         private DCSBIOSControl _dcsbiosControl5;
-        private readonly JaceExtended _jaceExtended = new JaceExtended();
         private Dictionary<string, double> _variables = new Dictionary<string, double>();
 
         public JaceSandboxWindow(DCSBIOS dcsbios)

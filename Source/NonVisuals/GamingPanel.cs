@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
+    using NonVisuals.Interfaces;
 
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty
     {
@@ -25,19 +27,29 @@ namespace NonVisuals
          * IMPORTANT STUFF
          */
         private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
+        private readonly Guid _guid = Guid.NewGuid();
         private static readonly object UpdateCounterLockObject = new object();
         private uint _count;
         private bool _synchedOnce;
-        private readonly Guid _guid = Guid.NewGuid();
+
         public abstract void Startup();
+
         public abstract void Identify();
+
         public abstract void Dispose();
+
         public abstract void ClearSettings(bool setIsDirty = false);
+
         public abstract void ImportSettings(GenericPanelBinding genericPanelBinding);
+
         public abstract List<string> ExportSettings();
+
         public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
+
         public abstract void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e);
+
         public abstract void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
+
         protected readonly HIDSkeleton HIDSkeletonBase;
         private bool _closed;
         public long ReportCounter = 0;
@@ -59,7 +71,7 @@ namespace NonVisuals
                 {
                     _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                 }
             }

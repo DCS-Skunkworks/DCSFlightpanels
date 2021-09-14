@@ -22,15 +22,15 @@
     /// </summary>
     public partial class DCSBiosOutputTriggerWindow
     {
-        private DCSBIOSOutput _dcsBiosOutput;
+        private readonly bool _showCriteria;
+        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private readonly string _description;
+        private DCSBIOSOutput _dcsBiosOutput;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
         private DCSFPProfile _dcsfpProfile;
-        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
-        private readonly bool _showCriteria;
 
         public DCSBiosOutputTriggerWindow(DCSFPProfile dcsfpProfile, string description, bool showCriteria = true)
         {

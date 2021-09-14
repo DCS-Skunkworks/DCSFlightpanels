@@ -275,7 +275,7 @@
                 var thread = new Thread(ShowIdentifyingValue);
                 thread.Start();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -314,7 +314,7 @@
                     _lcdButtonByteListHandler.SetButtonOff(PZ70DialPosition, multiPanelPZ70Knob);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

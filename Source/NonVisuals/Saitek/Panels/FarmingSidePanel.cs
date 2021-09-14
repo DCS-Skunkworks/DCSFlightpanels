@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.DCSBIOSBindings;
-using NonVisuals.Saitek.Switches;
-
-namespace NonVisuals.Saitek.Panels
+﻿namespace NonVisuals.Saitek.Panels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
+    using NonVisuals.DCSBIOSBindings;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek.Switches;
 
     public class FarmingSidePanel : SaitekPanel
     {
@@ -166,7 +168,7 @@ namespace NonVisuals.Saitek.Panels
                 var thread = new Thread(ShowIdentifyingValue);
                 thread.Start();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -177,7 +179,7 @@ namespace NonVisuals.Saitek.Panels
             {
                 
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

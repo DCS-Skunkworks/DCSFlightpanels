@@ -634,9 +634,7 @@
                     {
                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                             {
-                                //0-2
-                                uint mode = 0;
-                                //0-4
+                                // 0-4
                                 uint channel = 0;
                                 lock (_lockHFRadioPresetDialObject1)
                                 {
@@ -662,14 +660,16 @@
                                     }
 
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _hfRadioModeCockpitDialPosition, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, channel, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
+
                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                             {
-                                //Preset Channel Selector
-                                //0-1
+                                // Preset Channel Selector
+                                // 0-1
 
                                 uint bChannel = 0;
                                 uint dChannel = 0;
@@ -678,17 +678,21 @@
                                     bChannel = _iffBiffCockpitDialPos;
                                     dChannel = _iffDiffCockpitDialPos;
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, dChannel, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, bChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
+
                         case CurrentSpitfireLFMkIXRadioMode.NOUSE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
+
                     }
+
                     switch (_currentLowerRadioMode)
                     {
                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
@@ -723,10 +727,11 @@
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, channel, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
+
                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                             {
-                                //Preset Channel Selector
-                                //0-1
+                                // Preset Channel Selector
+                                // 0-1
 
                                 uint bChannel = 0;
                                 uint dChannel = 0;
@@ -745,6 +750,7 @@
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
+
                     }
                     SendLCDData(bytes);
                 }
@@ -993,7 +999,7 @@
 
                 return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition - 1) + "\n";
             }
-            return null;
+
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)

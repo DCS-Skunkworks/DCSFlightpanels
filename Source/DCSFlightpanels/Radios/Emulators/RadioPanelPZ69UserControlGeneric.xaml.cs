@@ -10,6 +10,7 @@
 
     using ClassLibraryCommon;
 
+    using DCS_BIOS;
     using DCSFlightpanels.Bills;
     using DCSFlightpanels.CustomControls;
     using DCSFlightpanels.Interfaces;
@@ -17,7 +18,6 @@
     using DCSFlightpanels.Properties;
     using DCSFlightpanels.Windows;
 
-    using DCS_BIOS;
 
     using MEF;
 
@@ -29,13 +29,13 @@
 
     public partial class RadioPanelPZ69UserControlGeneric : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
+        private const string UPPER_TEXT = "Upper Dial Profile : ";
+        private const string LOWER_TEXT = "Lower Dial Profile : ";
+        private readonly List<Key> _allowedKeys = new List<Key>() { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
         private readonly RadioPanelPZ69Generic _radioPanelPZ69;
         private bool _userControlLoaded;
         private bool _textBoxBillsSet;
         private bool _buttonBillsSet;
-        private readonly List<Key> _allowedKeys = new List<Key>() { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
-        private const string UPPER_TEXT = "Upper Dial Profile : ";
-        private const string LOWER_TEXT = "Lower Dial Profile : ";
 
         public RadioPanelPZ69UserControlGeneric(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {

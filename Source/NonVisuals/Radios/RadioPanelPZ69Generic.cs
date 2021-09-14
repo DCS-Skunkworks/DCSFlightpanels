@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using DCS_BIOS;
-using System.Threading;
-using ClassLibraryCommon;
-using NonVisuals.DCSBIOSBindings;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Radios.Misc;
-using NonVisuals.Saitek;
-
-
-namespace NonVisuals.Radios
+﻿namespace NonVisuals.Radios
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
+    using NonVisuals.DCSBIOSBindings;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Radios.Misc;
+    using NonVisuals.Saitek;
 
     public class RadioPanelPZ69Generic : RadioPanelPZ69Base
     {

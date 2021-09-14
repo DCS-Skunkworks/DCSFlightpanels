@@ -202,7 +202,7 @@
                 var thread = new Thread(ShowIdentifyingValue);
                 thread.Start();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -213,7 +213,6 @@
             {
                 var bytes = new byte[21];
                 bytes[0] = 0x0;
-                PZ69LCDPosition pz69LCDPosition = PZ69LCDPosition.UPPER_ACTIVE_LEFT;
                 var random = new Random();
                 var lcdPositionArray = Enum.GetValues(typeof(PZ69LCDPosition));
                 var lcdValueArray = new string[] { "00000", "11111", "22222", "33333", "44444", "55555", "66666", "77777", "88888", "99999" };
@@ -233,7 +232,7 @@
 
                 TurnOffAllDisplays();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -252,7 +251,7 @@
                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                 SendLCDData(bytes);
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

@@ -30,8 +30,8 @@
     /// </summary>
     public partial class ImportWindow : Window, IDisposable
     {
-        private bool _formLoaded = false;
         private readonly string _bindingHash;
+        private bool _formLoaded = false;
         private List<ButtonExport> _buttonExports = new List<ButtonExport>();
 
         private string _extractedFilesFolder = string.Empty;

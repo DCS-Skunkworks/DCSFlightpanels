@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.DCSBIOSBindings;
-using NonVisuals.Saitek.Switches;
-
-namespace NonVisuals.Saitek.Panels
+﻿namespace NonVisuals.Saitek.Panels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
+    using NonVisuals.DCSBIOSBindings;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek.Switches;
 
     public class TPMPanel : SaitekPanel
     {
@@ -163,7 +165,7 @@ namespace NonVisuals.Saitek.Panels
             {
                 //This panel can not identify itself, no LEDs, nothing
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

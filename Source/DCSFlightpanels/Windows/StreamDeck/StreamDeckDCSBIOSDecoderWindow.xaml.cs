@@ -17,9 +17,10 @@
 
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.Shared;
 
     using DCS_BIOS;
+    using DCSFlightpanels.Shared;
+
 
     using NonVisuals;
     using NonVisuals.Interfaces;
@@ -38,13 +39,14 @@
     /// </summary>
     public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty, IDisposable
     {
-        private StreamDeckPanel _streamDeckPanel;
+        private readonly JaceExtended _jaceExtended = new JaceExtended();
+        private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
+        private readonly StreamDeckPanel _streamDeckPanel;
         private bool _formLoaded;
         private Popup _popupSearch;
         private DataGrid _popupDataGrid;
         private IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private DCSBIOSControl _dcsbiosControl;
-        private readonly JaceExtended _jaceExtended = new JaceExtended();
         private Dictionary<string, double> _variables = new Dictionary<string, double>();
         private bool _isDirty = false;
         private bool _populatingData = false;
@@ -52,7 +54,6 @@
         private DCSBIOSDecoder _dcsbiosDecoder = null;
         private bool _exitThread;
 
-        private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
 
 
 

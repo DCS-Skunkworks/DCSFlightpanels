@@ -695,8 +695,6 @@
                     {
                         case CurrentP47DRadioMode.HFRADIO:
                             {
-                                //0-2
-                                uint mode = 0;
                                 //0-4
                                 uint channel = 0;
                                 lock (_lockHFRadioPresetDialObject1)
@@ -997,7 +995,7 @@
 
                 return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition - 1) + "\n";
             }
-            return null;
+
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
