@@ -1,14 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using Newtonsoft.Json;
-
-
-
-
-
-
-namespace DCS_BIOS
+﻿namespace DCS_BIOS
 {
+    using System;
+    using System.ComponentModel;
+
+    using Newtonsoft.Json;
+
     public enum DCSBiosOutputType
     {
         STRING_TYPE,
@@ -30,9 +26,10 @@ namespace DCS_BIOS
     [Serializable]
     public class DCSBIOSOutput
     {
-        //These are loaded and saved, all the rest are fetched from DCS-BIOS
+        // These are loaded and saved, all the rest are fetched from DCS-BIOS
         private string _controlId;
-        //The user has entered these two depending on type
+
+        // The user has entered these two depending on type
         private uint _specifiedValueInt;
         private string _specifiedValueString = string.Empty;
 
@@ -40,25 +37,15 @@ namespace DCS_BIOS
         private int _maxValue;
         private uint _address;
         private uint _mask;
-        private int _shiftvalue;
+        private int _shiftValue;
         private int _maxLength;
         private volatile uint _lastIntValue = uint.MaxValue;
-        private string _controlType; //display button toggle etc
+        private string _controlType; // display button toggle etc
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
 
         [NonSerialized] private object _lockObject = new object();
-
-
-
-
-
-
-
-
-
-
-
+        
         public static DCSBIOSOutput CreateCopy(DCSBIOSOutput dcsbiosOutput)
         {
             var tmp = new DCSBIOSOutput();
@@ -71,15 +58,17 @@ namespace DCS_BIOS
             tmp.Mask = dcsbiosOutput.Mask;
             tmp.MaxLength = dcsbiosOutput.MaxLength;
             tmp.MaxValue = dcsbiosOutput.MaxValue;
-            tmp.Shiftvalue = dcsbiosOutput.Shiftvalue;
+            tmp.ShiftValue = dcsbiosOutput.ShiftValue;
             if (tmp.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
             {
                 tmp.SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
             }
+
             if (tmp.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
             {
                 tmp.SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
             }
+
             return tmp;
         }
 
@@ -94,11 +83,12 @@ namespace DCS_BIOS
             Mask = dcsbiosOutput.Mask;
             MaxLength = dcsbiosOutput.MaxLength;
             MaxValue = dcsbiosOutput.MaxValue;
-            Shiftvalue = dcsbiosOutput.Shiftvalue;
+            ShiftValue = dcsbiosOutput.ShiftValue;
             if (DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
             {
                 SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
             }
+
             if (DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
             {
                 SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
@@ -107,7 +97,7 @@ namespace DCS_BIOS
 
         public bool CheckForValueMatchAndChange(object data)
         {
-            //todo change not processed
+            // todo change not processed
             lock (_lockObject)
             {
                 var result = false;
@@ -123,6 +113,7 @@ namespace DCS_BIOS
                 {
                     throw new Exception("Invalid DCSBiosOutput. Data is of type " + data.GetType() + " but DCSBiosOutputType set to " + DCSBiosOutputType);
                 }
+
                 return result;
             }
         }
@@ -130,7 +121,7 @@ namespace DCS_BIOS
         private bool CheckForValueMatchAndChange(uint data)
         {
             var tmpData = data;
-            var value = (tmpData & Mask) >> Shiftvalue;
+            var value = (tmpData & Mask) >> this.ShiftValue;
             var resultComparison = false;
             switch (DCSBiosOutputComparison)
             {
@@ -139,27 +130,32 @@ namespace DCS_BIOS
                         resultComparison = value > _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.LessThan:
                     {
                         resultComparison = value < _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.NotEquals:
                     {
                         resultComparison = value != _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.Equals:
                     {
                         resultComparison = value == _specifiedValueInt;
                         break;
                     }
             }
+
             var resultChange = !value.Equals(_lastIntValue);
             if (resultChange)
             {
                 _lastIntValue = value;
             }
+
             return resultComparison && resultChange;
         }
 
@@ -181,6 +177,7 @@ namespace DCS_BIOS
                 {
                     throw new Exception("Invalid DCSBiosOutput. Data is of type " + data.GetType() + " but DCSBiosOutputType set to " + DCSBiosOutputType);
                 }
+
                 return result;
             }
         }
@@ -188,7 +185,7 @@ namespace DCS_BIOS
         private bool CheckForValueMatch(uint data)
         {
             var tmpData = data;
-            var value = (tmpData & Mask) >> Shiftvalue;
+            var value = (tmpData & Mask) >> this.ShiftValue;
             var result = false;
             switch (DCSBiosOutputComparison)
             {
@@ -197,22 +194,26 @@ namespace DCS_BIOS
                         result = value > _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.LessThan:
                     {
                         result = value < _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.NotEquals:
                     {
                         result = value != _specifiedValueInt;
                         break;
                     }
+
                 case DCSBiosOutputComparison.Equals:
                     {
                         result = value == _specifiedValueInt;
                         break;
                     }
             }
+
             return result;
         }
 
@@ -225,9 +226,10 @@ namespace DCS_BIOS
             {
                 _lockObject = new object();
             }
+
             lock (_lockObject)
             {
-                return (data & Mask) >> Shiftvalue;
+                return (data & Mask) >> ShiftValue;
             }
         }
 
@@ -240,6 +242,7 @@ namespace DCS_BIOS
                 {
                     result = _specifiedValueString.Equals(data);
                 }
+
                 return result;
             }
         }
@@ -255,7 +258,7 @@ namespace DCS_BIOS
                 _mask = dcsbiosControl.outputs[0].mask;
                 _maxValue = dcsbiosControl.outputs[0].max_value;
                 _maxLength = dcsbiosControl.outputs[0].max_length;
-                _shiftvalue = dcsbiosControl.outputs[0].shift_by;
+                this._shiftValue = dcsbiosControl.outputs[0].shift_by;
                 if (dcsbiosControl.outputs[0].type.Equals("string"))
                 {
                     _dcsBiosOutputType = DCSBiosOutputType.STRING_TYPE;
@@ -264,7 +267,8 @@ namespace DCS_BIOS
                 {
                     _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
                 }
-                //TODO Denna borde göras så att förutom _address så är mottagarens unika ID med så slipper alla lyssna eller ..? (prestanda)
+
+                // TODO Denna borde göras så att förutom _address så är mottagarens unika ID med så slipper alla lyssna eller ..? (prestanda)
                 DCSBIOSProtocolParser.RegisterAddressToBroadCast(_address);
             }
             catch (Exception)
@@ -277,9 +281,10 @@ namespace DCS_BIOS
         {
             if (_dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE)
             {
-                return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftvalue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
+                return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + this._shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
             }
-            return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftvalue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
+
+            return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + this._shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
         }
 
         public override string ToString()
@@ -288,6 +293,7 @@ namespace DCS_BIOS
             {
                 return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
             }
+
             return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
         }
 
@@ -299,10 +305,12 @@ namespace DCS_BIOS
             {
                 throw new Exception("DCSBiosOutput cannot import null string.");
             }
+
             if (!str.StartsWith("DCSBiosOutput{") || !str.EndsWith("}"))
             {
                 throw new Exception("DCSBiosOutput cannot import string : " + str);
             }
+
             value = value.Replace("DCSBiosOutput{", string.Empty).Replace("}", string.Empty);
 
             // AAP_EGIPWR|Equals|0
@@ -324,14 +332,15 @@ namespace DCS_BIOS
         [JsonProperty("ControlId", Required = Required.Default)]
         public string ControlId
         {
-            get { return _controlId; }
-            set { _controlId = value; }
+            get => _controlId;
+            set => _controlId = value;
         }
 
         [JsonProperty("Address", Required = Required.Default)]
         public uint Address
         {
-            get { return _address; }
+            get => _address;
+
             set
             {
                 _address = value;
@@ -342,50 +351,42 @@ namespace DCS_BIOS
         [JsonProperty("Mask", Required = Required.Default)]
         public uint Mask
         {
-            get { return _mask; }
-            set
-            {
-                _mask = value;
-            }
+            get => _mask;
+            set => _mask = value;
         }
 
         [JsonProperty("Shiftvalue", Required = Required.Default)]
-        public int Shiftvalue
+        public int ShiftValue
         {
-            get { return _shiftvalue; }
-            set
-            {
-                _shiftvalue = value;
-            }
+            get => _shiftValue;
+            set => _shiftValue = value;
         }
 
         [JsonProperty("DCSBiosOutputType", Required = Required.Default)]
         public DCSBiosOutputType DCSBiosOutputType
         {
-            get { return _dcsBiosOutputType; }
-            set { _dcsBiosOutputType = value; }
+            get => _dcsBiosOutputType;
+            set => _dcsBiosOutputType = value;
         }
 
         [JsonProperty("DCSBiosOutputComparison", Required = Required.Default)]
         public DCSBiosOutputComparison DCSBiosOutputComparison
         {
-            get { return _dcsBiosOutputComparison; }
-            set { _dcsBiosOutputComparison = value; }
+            get => _dcsBiosOutputComparison;
+            set => _dcsBiosOutputComparison = value;
         }
 
         [JsonIgnore]
         public uint SpecifiedValueInt
         {
-            get
-            {
-                return _specifiedValueInt;
-            }
+            get => _specifiedValueInt;
             set
             {
                 if (DCSBiosOutputType != DCSBiosOutputType.INTEGER_TYPE)
                 {
                     throw new Exception("Invalid DCSBiosOutput. Specified value (trigger value) set to [int] but DCSBiosOutputType set to " + DCSBiosOutputType);
                 }
+
                 _specifiedValueInt = value;
             }
         }
@@ -393,16 +394,14 @@ namespace DCS_BIOS
         [JsonIgnore]
         public string SpecifiedValueString
         {
-            get
-            {
-                return _specifiedValueString;
-            }
+            get => _specifiedValueString;
             set
             {
                 if (DCSBiosOutputType != DCSBiosOutputType.STRING_TYPE)
                 {
                     throw new Exception("Invalid DCSBiosOutput. Specified value (trigger value) set to [String] but DCSBiosOutputType set to " + DCSBiosOutputType);
                 }
+
                 _specifiedValueString = value;
             }
         }
@@ -410,38 +409,37 @@ namespace DCS_BIOS
         [JsonProperty("ControlDescription", Required = Required.Default)]
         public string ControlDescription
         {
-            get { return _controlDescription; }
-            set { _controlDescription = value; }
+            get => _controlDescription;
+            set => _controlDescription = value;
         }
 
         [JsonProperty("MaxValue", Required = Required.Default)]
         public int MaxValue
         {
-            get { return _maxValue; }
-            set { _maxValue = value; }
+            get => _maxValue;
+            set => _maxValue = value;
         }
 
         [JsonProperty("MaxLength", Required = Required.Default)]
         public int MaxLength
         {
-            get { return _maxLength; }
-            set { _maxLength = value; }
+            get => _maxLength;
+            set => _maxLength = value;
         }
 
         [JsonProperty("ControlType", Required = Required.Default)]
         public string ControlType
         {
-            get { return _controlType; }
-            set { _controlType = value; }
+            get => _controlType;
+            set => _controlType = value;
         }
 
         [JsonIgnore]
         public uint LastIntValue
         {
-            get { return _lastIntValue; }
-            set { _lastIntValue = value; }
+            get => _lastIntValue;
+            set => _lastIntValue = value;
         }
-
 
         public static DCSBIOSOutput GetUpdateCounter()
         {

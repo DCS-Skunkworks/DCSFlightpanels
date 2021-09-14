@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-
-namespace DCS_BIOS
+﻿namespace DCS_BIOS
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
+    using ClassLibraryCommon;
+
+    using Newtonsoft.Json;
+
     public static class DCSBIOSControlLocator
     {
+        private static readonly List<DCSBIOSControl> DCSBIOSControls = new List<DCSBIOSControl>();
         private static readonly object LockObject = new object();
         private static DCSFPProfile _dcsfpProfile;
         private static string _jsonDirectory;
-        private static readonly List<DCSBIOSControl> DCSBIOSControls = new List<DCSBIOSControl>();
-        //private static bool _listOnce = true;
         public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
-
 
         private static void Reset()
         {
@@ -31,6 +31,7 @@ namespace DCS_BIOS
                 {
                     return null;
                 }
+
                 try
                 {
                     LoadControls();
@@ -54,6 +55,7 @@ namespace DCS_BIOS
                     {
                         throw new Exception("Error, control " + controlId + " does not exist. (" + Profile.Description + ")");
                     }
+
                     return DCSBIOSControls.Single(controlObject => controlObject.identifier.Equals(controlId));
                 }
                 catch (InvalidOperationException ioe)
@@ -71,6 +73,7 @@ namespace DCS_BIOS
                 {
                     throw new Exception("DCSBIOSControlLocator.GetDCSBIOSOutput() Should not be called when only key emulator is active");
                 }
+
                 try
                 {
                     var control = GetControl(controlId);
@@ -169,11 +172,12 @@ namespace DCS_BIOS
                 {
                     LoadCommonData(_jsonDirectory);
                     LoadMetaDataEnd(_jsonDirectory);
-                    //Load the controls for the actual aircraft/helicopter
+
+                    // Load the controls for the actual aircraft/helicopter
                     ReadDataFromJsonFile(Profile.JSONFilename);
                 }
 
-                //Remove duplicates which may come from loading NS430 or other additional profiles
+                // Remove duplicates which may come from loading NS430 or other additional profiles
                 while (DCSBIOSControls.Count(controlObject => controlObject.identifier.Equals("_UPDATE_COUNTER")) > 1)
                 {
                     DCSBIOSControls.Remove(DCSBIOSControls.FindLast(controlObject =>
@@ -193,7 +197,7 @@ namespace DCS_BIOS
             }
         }
 
-        static void PrintDuplicateControlIdentifiers(List<DCSBIOSControl> dcsbiosControls, bool printAll = false)
+        private static void PrintDuplicateControlIdentifiers(List<DCSBIOSControl> dcsbiosControls, bool printAll = false)
         {
             var result = new List<string>();
             var dupes = new List<string>();
@@ -204,7 +208,7 @@ namespace DCS_BIOS
                     result.Add(dcsbiosControl.identifier);
                 }
 
-                //Debug.Print(dcsbiosControl.identifier);
+                // Debug.Print(dcsbiosControl.identifier);
                 var found = false;
                 foreach (var str in result)
                 {
@@ -213,16 +217,18 @@ namespace DCS_BIOS
                         found = true;
                     }
                 }
+
                 if (!found)
                 {
                     result.Add(dcsbiosControl.identifier);
                 }
+
                 if (found)
                 {
                     dupes.Add(dcsbiosControl.identifier);
                 }
-
             }
+
             if (dupes.Count > 0)
             {
                 var message = "Below is a list of duplicate identifiers found in the " + Profile.JSONFilename + " profile (DCS-BIOS)\n";
@@ -232,12 +238,12 @@ namespace DCS_BIOS
                 {
                     message = message + dupe + "\n";
                 }
+
                 message = message + "---------------------------------------------\n";
                 Common.LogError(message);
             }
         }
-
-
+        
         private static void LoadMetaDataEnd(string jsonDirectory)
         {
             if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
@@ -294,7 +300,7 @@ namespace DCS_BIOS
 
         public static DCSFPProfile Profile
         {
-            get { return _dcsfpProfile; }
+            get => _dcsfpProfile;
             set
             {
                 if (_dcsfpProfile != value)
@@ -337,6 +343,7 @@ namespace DCS_BIOS
             {
                 return null;
             }
+
             LoadControls();
             var result = DCSBIOSControls.Where(controlObject => (controlObject.outputs.Count > 0) && controlObject.outputs[0].OutputDataType == DCSBiosOutputType.STRING_TYPE);
             return result;
@@ -348,6 +355,7 @@ namespace DCS_BIOS
             {
                 return null;
             }
+
             LoadControls();
             return DCSBIOSControls.Where(controlObject => (controlObject.outputs.Count > 0) && controlObject.outputs[0].OutputDataType == DCSBiosOutputType.INTEGER_TYPE);
         }
@@ -358,6 +366,7 @@ namespace DCS_BIOS
             {
                 return null;
             }
+
             LoadControls();
             return DCSBIOSControls.Where(controlObject => (controlObject.inputs.Count > 0));
         }

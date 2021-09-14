@@ -1,23 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using ClassLibraryCommon;
-using NonVisuals;
-using NonVisuals.Interfaces;
-
-namespace DCSFlightpanels.Windows
+﻿namespace DCSFlightpanels.Windows
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
 
     /// <summary>
     /// Interaction logic for SequenceWindow.xaml
     /// </summary>
     public partial class KeySequenceWindow : Window, IIsDirty
     {
-
         private readonly SortedList<int, IKeyPressInfo> _sortedList = new SortedList<int, IKeyPressInfo>();
         private bool _isDirty;
         private bool _formLoaded = false;
@@ -108,7 +109,7 @@ namespace DCSFlightpanels.Windows
             keyPressWindow.ShowDialog();
             if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
             {
-                //Clicked OK
+                // Clicked OK
                 var keyPressInfo = new KeyPressInfo();
                 keyPressInfo.LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
                 keyPressInfo.VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
@@ -129,6 +130,7 @@ namespace DCSFlightpanels.Windows
             {
                 return 0;
             }
+
             return _sortedList.Keys.Max() + 1;
         }
 
@@ -172,6 +174,7 @@ namespace DCSFlightpanels.Windows
                     //User made no changes
                     return;
                 }
+
                 _sortedList[keyValuePair.Key].LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
                 _sortedList[keyValuePair.Key].VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
                 _sortedList[keyValuePair.Key].LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
@@ -280,6 +283,7 @@ namespace DCSFlightpanels.Windows
                 {
                     return;
                 }
+
                 SetIsDirty();
                 SetFormState();
             }

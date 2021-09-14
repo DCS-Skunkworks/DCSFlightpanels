@@ -9,7 +9,7 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         KeyDown="StreamDeckDCSBIOSConverterWindow_OnKeyDown"
-        Title="Converter" Height="400" Width="800"  Loaded="StreamDeckDCSBIOSConverterWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
+        Title="Converter" Height="450" Width="800"  Loaded="StreamDeckDCSBIOSConverterWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
     <Window.Resources>
         <Image x:Key="UpArrow" Source="/dcsfp;component/Images/up_arrow.png"/>
         <Image x:Key="DownArrow" Source="/dcsfp;component/Images/down_arrow.png"/>
@@ -25,6 +25,7 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="45" />
             <RowDefinition Height="70*" />
             <RowDefinition Height="15*" />
         </Grid.RowDefinitions>
@@ -33,8 +34,26 @@
             <ColumnDefinition Width="10*"/>
             <ColumnDefinition Width="40*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Margin="5,5,5,0">
 
+
+
+        <DockPanel Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Stretch"  Margin="5,5,0,0" Background="LightGray">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Criteria"  FontSize="20" HorizontalContentAlignment="Center" ></Label>
+                <Image Grid.Column="1"  Height="30" Name="ImagePZ55Panel" Source="/dcsfp;component/Images/white-arrow-35.png"></Image>
+                <Label Grid.Column="2" Content="Output"  FontSize="20" HorizontalContentAlignment="Center"></Label>
+            </Grid>
+        </DockPanel>
+
+        <StackPanel Grid.Column="0" Grid.Row="1" Margin="5,15,5,0" >
             <StackPanel Name="StackPanelFirstCriteria"  Orientation="Horizontal" VerticalAlignment="Top">
                 <Label Content="if {dcsbios}" Margin="5,0,0,0" FontWeight="DemiBold" />
                 <StackPanel VerticalAlignment="Top">
@@ -56,8 +75,6 @@
                 </StackPanel>
             </StackPanel>
 
-
-
             <StackPanel Name="StackPanelSecondCriteria" Orientation="Horizontal" Margin="0,5,5,0">
                 <Label Content="and {dcsbios}" Margin="5,0,0,0" FontWeight="DemiBold" />
                 <StackPanel VerticalAlignment="Top">
@@ -78,11 +95,8 @@
 
         </StackPanel>
 
-        <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Label Content=" then " FontWeight="DemiBold" Margin="5,0,0,0"/>
-        </StackPanel>
 
-        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,5,0">
+        <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,15,5,0" >
             <GroupBox Header="Result Type" >
                 <StackPanel Orientation="Horizontal">
                     <RadioButton Name="RadioButtonDCSBIOSValue" Content="Raw" GroupName="ResultType" Margin="5,5,0,0" Checked="RadioButtonDCSBIOSValue_OnChecked"/>
@@ -109,7 +123,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
                                     <Button Name="ButtonTextFaceBackgroundColorRaw" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
-                                    <Button Name="ButtonTestTextFaceRaw" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/> 
+                                    <Button Name="ButtonTestTextFaceRaw" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -171,7 +185,7 @@
         </StackPanel>
 
 
-        <StackPanel Grid.Row="1" Grid.Column="2" Margin="5,5,5,0" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="2" Grid.Column="2" Margin="5,5,5,0" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="ButtonHelp" Content="Help" Click="ButtonHelp_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
             <Button Name="ButtonOk" Content="Ok" Click="ButtonOk_OnClick" Grid.Row="3" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,10,0"></Button>
             <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />

@@ -23,21 +23,27 @@
 
     public abstract class BillBaseInput
     {
+        private readonly SaitekPanel _saitekPanel;
         private KeyPress _keyPress;
         private OSCommand _operatingSystemCommand;
         private IGlobalHandler _globalHandler;
         private IPanelUI _panelUI;
         private TextBox _textBox;
-        private readonly SaitekPanel _saitekPanel;
         private ContextMenuPanelTextBox _contextMenu;
 
 
         public abstract bool ContainsDCSBIOS();
+
         public abstract bool ContainsBIPLink();
+
         public abstract bool IsEmpty();
+
         public abstract bool IsEmptyNoCareBipLink();
+
         public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs);
+
         public abstract void ClearAll();
+
         protected abstract void ClearDCSBIOSFromBill();
 
 
@@ -117,13 +123,13 @@
 
         public void Paste()
         {
-            var iDataObject = Clipboard.GetDataObject();
-            if (iDataObject == null || !iDataObject.GetDataPresent("NonVisuals.CopyPackage"))
+            var dataObject = Clipboard.GetDataObject();
+            if (dataObject == null || !dataObject.GetDataPresent("NonVisuals.CopyPackage"))
             {
                 return;
             }
 
-            var copyPackage = (CopyPackage)iDataObject.GetData("NonVisuals.CopyPackage");
+            var copyPackage = (CopyPackage)dataObject.GetData("NonVisuals.CopyPackage");
             if (copyPackage?.Content == null || copyPackage.SourceName == TextBox.Name)
             {
                 return;
@@ -266,21 +272,20 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
-
+        
         public void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             try
             {
                 if (!(TextBox.IsFocused && Equals(TextBox.Background, Brushes.Yellow)))
                 {
-                    //UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
+                    // UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
                     _contextMenu.HideAll();
                     return;
                 }
 
-                _contextMenu.SetVisibility(IsEmpty(),
+                _contextMenu.SetVisibility(
+                    IsEmpty(),
                     ContainsKeyStroke(),
                     ContainsKeySequence(),
                     ContainsDCSBIOS(),
@@ -386,15 +391,16 @@
         public void AddVKNULL()
         {
             ClearAll();
-            var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
-            if (string.IsNullOrEmpty(vkNull))
+            var virtualKeyNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
+            if (string.IsNullOrEmpty(virtualKeyNull))
             {
                 return;
             }
-            var keyPress = new KeyPress(vkNull, KeyPressLength.ThirtyTwoMilliSec);
+
+            var keyPress = new KeyPress(virtualKeyNull, KeyPressLength.ThirtyTwoMilliSec);
             KeyPress = keyPress;
             KeyPress.Description = "VK_NULL";
-            TextBox.Text = vkNull;
+            TextBox.Text = virtualKeyNull;
             UpdateKeyBindingKeyStroke();
         }
 
@@ -411,14 +417,15 @@
             {
                 keyPressReadingWindow = new KeyPressReadingWindow(supportIndefinite);
             }
+
             keyPressReadingWindow.ShowDialog();
             if (keyPressReadingWindow.DialogResult.HasValue && keyPressReadingWindow.DialogResult.Value)
             {
-                //Clicked OK
-                //If the user added only a single key stroke combo then let's not treat this as a sequence
+                // Clicked OK
+                // If the user added only a single key stroke combo then let's not treat this as a sequence
                 if (!keyPressReadingWindow.IsDirty)
                 {
-                    //User made no changes
+                    // User made no changes
                     return;
                 }
 
@@ -448,7 +455,7 @@
             UpdateKeyBindingKeyStroke();
         }
 
-        public void AddKeySequence(string description, SortedList<int, IKeyPressInfo> keySequence)
+        private void AddKeySequence(string description, SortedList<int, IKeyPressInfo> keySequence)
         {
             var keyPress = new KeyPress("Key stroke sequence", keySequence);
             KeyPress = keyPress;
@@ -468,11 +475,11 @@
 
             if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
             {
-                //Clicked OK
-                //If the user added only a single key stroke combo then let's not treat this as a sequence
+                // Clicked OK
+                // If the user added only a single key stroke combo then let's not treat this as a sequence
                 if (!keySequenceWindow.IsDirty)
                 {
-                    //User made no changes
+                    // User made no changes
                     return;
                 }
                 var sequenceList = keySequenceWindow.KeySequence;
@@ -486,7 +493,7 @@
                 }
                 else if (sequenceList.Count == 1)
                 {
-                    //If only one press was created treat it as a simple keypress
+                    // If only one press was created treat it as a simple keypress
                     var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                     KeyPress = keyPress;
                     KeyPress.Description = keySequenceWindow.Description;
@@ -498,10 +505,10 @@
 
         public void AddDCSBIOS(string description, List<DCSBIOSInput> dcsBiosInputs)
         {
-
             var text = string.IsNullOrWhiteSpace(description) ? "DCS-BIOS" : description;
-            //1 appropriate text to textbox
-            //2 update bindings
+
+            // 1 appropriate text to textbox
+            // 2 update bindings
             TextBox.Text = text;
             Consume(dcsBiosInputs);
             UpdateDCSBIOSBinding();
@@ -518,6 +525,7 @@
             {
                 dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", string.Empty), null);
             }
+
             dcsBIOSInputControlsWindow.ShowDialog();
             if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
             {
@@ -550,35 +558,41 @@
                         bipLinkWindow = new BIPLinkWindow(bipLink);
                         break;
                     }
+
                 case GamingPanelEnum.PZ55SwitchPanel:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkPZ55();
                         bipLinkWindow = new BIPLinkWindow(bipLink);
                         break;
                     }
+
                 case GamingPanelEnum.PZ70MultiPanel:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkPZ70();
                         bipLinkWindow = new BIPLinkWindow(bipLink);
                         break;
                     }
+
                 case GamingPanelEnum.PZ69RadioPanel:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkPZ69();
                         bipLinkWindow = new BIPLinkWindow(bipLink);
                         break;
                     }
+
                 case GamingPanelEnum.TPM:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkTPM();
                         bipLinkWindow = new BIPLinkWindow(bipLink);
                         break;
                     }
+
                 default:
                     {
                         return;
                     }
             }
+
             bipLinkWindow.ShowDialog();
 
             if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
@@ -596,7 +610,7 @@
             }
         }
 
-        public void AddOSCommand(OSCommand operatingSystemCommand)
+        private void AddOSCommand(OSCommand operatingSystemCommand)
         {
             OSCommandObject = operatingSystemCommand;
             TextBox.Text = operatingSystemCommand.Name;
@@ -605,22 +619,21 @@
 
         public void EditOSCommand()
         {
-            var osCommandWindow = ContainsOSCommand() ? new OSCommandWindow(OSCommandObject) : new OSCommandWindow();
-            osCommandWindow.ShowDialog();
-            if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
+            var operatingSystemCommandWindow = ContainsOSCommand() ? new OSCommandWindow(OSCommandObject) : new OSCommandWindow();
+            operatingSystemCommandWindow.ShowDialog();
+            if (operatingSystemCommandWindow.DialogResult.HasValue && operatingSystemCommandWindow.DialogResult.Value)
             {
                 //Clicked OK
-                if (!osCommandWindow.IsDirty)
+                if (!operatingSystemCommandWindow.IsDirty)
                 {
                     //User made no changes
                     return;
                 }
-                AddOSCommand(osCommandWindow.OSCommandObject);
+                AddOSCommand(operatingSystemCommandWindow.OSCommandObject);
             }
         }
 
-
-        public void UpdateKeyBindingKeyStroke()
+        private void UpdateKeyBindingKeyStroke()
         {
             try
             {
@@ -642,7 +655,7 @@
             }
         }
 
-        public void UpdateKeyBindingSequencedKeyStrokes()
+        private void UpdateKeyBindingSequencedKeyStrokes()
         {
             try
             {
@@ -657,7 +670,7 @@
             }
         }
 
-        public void UpdateDCSBIOSBinding()
+        private void UpdateDCSBIOSBinding()
         {
             try
             {
@@ -669,7 +682,7 @@
             }
         }
 
-        public void UpdateBIPLinkBindings()
+        private void UpdateBIPLinkBindings()
         {
             try
             {
@@ -684,7 +697,7 @@
             }
         }
 
-        public void UpdateOSCommandBindings()
+        private void UpdateOSCommandBindings()
         {
             try
             {
@@ -696,35 +709,35 @@
             }
         }
 
-        public void DeleteKeyStroke()
+        private void DeleteKeyStroke()
         {
             KeyPress?.KeySequence?.Clear();
             TextBox.Text = string.Empty;
             UpdateKeyBindingSequencedKeyStrokes();
         }
 
-        public void DeleteSequence()
+        private void DeleteSequence()
         {
             KeyPress?.KeySequence?.Clear();
             TextBox.Text = string.Empty;
             UpdateKeyBindingSequencedKeyStrokes();
         }
 
-        public void DeleteDCSBIOS()
+        private void DeleteDCSBIOS()
         {
             TextBox.Text = string.Empty;
             _saitekPanel.RemoveSwitchFromList(ControlListPZ55.DCSBIOS, _panelUI.GetSwitch(TextBox));
             ClearDCSBIOSFromBill();
         }
 
-        public void DeleteBIPLink()
+        private void DeleteBIPLink()
         {
             BipLink?.BIPLights?.Clear();
             TextBox.Background = Brushes.White;
             UpdateBIPLinkBindings();
         }
 
-        public void DeleteOSCommand()
+        private void DeleteOSCommand()
         {
             TextBox.Text = string.Empty;
             _saitekPanel.RemoveSwitchFromList(ControlListPZ55.OSCOMMANDS, _panelUI.GetSwitch(_textBox));
@@ -765,12 +778,12 @@
             }
         }
 
-        public IKeyPressInfo GetKeyPress()
+        private IKeyPressInfo GetKeyPress()
         {
             return _keyPress.KeySequence[0];
         }
 
-        public string GetKeySequenceDescription()
+        private string GetKeySequenceDescription()
         {
             return _keyPress.Description;
         }
@@ -790,13 +803,13 @@
             }
         }
 
-        public TextBox TextBox
+        protected TextBox TextBox
         {
             get => _textBox;
             set => _textBox = value;
         }
 
-        public OSCommand OSCommand
+        private OSCommand OSCommand
         {
             get => _operatingSystemCommand;
             set => _operatingSystemCommand = value;

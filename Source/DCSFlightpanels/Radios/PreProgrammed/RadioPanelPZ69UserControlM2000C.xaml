@@ -116,7 +116,7 @@
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="4">
             <Label Content="M-2000C" FontSize="30" FontWeight="Bold"/>
             <Label Content="V/UHF UHF" FontWeight="Bold"/>
-            <Image Height="290" Source="/dcsfp;component/Images/M2000c_TRT ERA 7000.png" />
+            <Image Height="290" Source="/dcsfp;component/Images/M2000C_new.png" />
         </StackPanel>
         <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="6" LastChildFill="False">
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">

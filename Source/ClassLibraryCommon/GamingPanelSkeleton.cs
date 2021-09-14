@@ -1,7 +1,7 @@
-﻿using System.Text;
-
-namespace ClassLibraryCommon
+﻿namespace ClassLibraryCommon
 {
+    using System.Text;
+
     public class GamingPanelSkeleton
     {
         private GamingPanelEnum _gamingPanelsEnum = GamingPanelEnum.Unknown;

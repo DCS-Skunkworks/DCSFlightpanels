@@ -149,6 +149,7 @@
   <ItemGroup>
     <Compile Include="DBCommon.cs" />
     <Compile Include="DCSBIOS.cs" />
+    <Compile Include="DCSBIOSInputHandler.cs" />
     <Compile Include="DCSBIOSInputObject.cs" />
     <Compile Include="Json\DCSBIOSControl.cs" />
     <Compile Include="Json\DCSBIOSControlInput.cs" />
