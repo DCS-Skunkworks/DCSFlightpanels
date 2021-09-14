@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.Saitek.Switches
+﻿namespace NonVisuals.Saitek.Switches
 {
+    using System;
+    using System.Collections.Generic;
+
     using MEF;
+
+    using NonVisuals.Interfaces;
 
     public class MultiPanelKnob : ISaitekPanelKnob
     {
@@ -36,23 +37,28 @@ namespace NonVisuals.Saitek.Switches
             {
                 throw new ArgumentException("Import string empty. (MultiPanelKnob)");
             }
+
             if (!str.StartsWith("MultiPanelKnob{") || !str.EndsWith("}"))
             {
                 throw new ArgumentException("Import string format exception. (MultiPanelKnob) >" + str + "<");
             }
-            //MultiPanelKnob{SWITCHKEY_MASTER_ALT}
+
+            // MultiPanelKnob{SWITCHKEY_MASTER_ALT}
             var dataString = str.Remove(0, 15);
-            //SWITCHKEY_MASTER_ALT}
+
+            // SWITCHKEY_MASTER_ALT}
             dataString = dataString.Remove(dataString.Length - 1, 1);
-            //SWITCHKEY_MASTER_ALT
+
+            // SWITCHKEY_MASTER_ALT
             MultiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), dataString.Trim());
         }
 
         public static HashSet<ISaitekPanelKnob> GetMultiPanelKnobs()
         {
-            //true means clockwise turn
+            // true means clockwise turn
             var result = new HashSet<ISaitekPanelKnob>();
-            //Group 0
+
+            // Group 0
             result.Add(new MultiPanelKnob(0, Convert.ToInt32("1", 2), true, MultiPanelPZ70Knobs.KNOB_ALT));
             result.Add(new MultiPanelKnob(0, Convert.ToInt32("10", 2), false, MultiPanelPZ70Knobs.KNOB_VS));
             result.Add(new MultiPanelKnob(0, Convert.ToInt32("100", 2), true, MultiPanelPZ70Knobs.KNOB_IAS));
@@ -62,7 +68,7 @@ namespace NonVisuals.Saitek.Switches
             result.Add(new MultiPanelKnob(0, Convert.ToInt32("1000000", 2), true, MultiPanelPZ70Knobs.LCD_WHEEL_DEC));
             result.Add(new MultiPanelKnob(0, Convert.ToInt32("10000000", 2), false, MultiPanelPZ70Knobs.AP_BUTTON));
 
-            //Group 1
+            // Group 1
             result.Add(new MultiPanelKnob(1, Convert.ToInt32("1", 2), true, MultiPanelPZ70Knobs.HDG_BUTTON));
             result.Add(new MultiPanelKnob(1, Convert.ToInt32("10", 2), true, MultiPanelPZ70Knobs.NAV_BUTTON));
             result.Add(new MultiPanelKnob(1, Convert.ToInt32("100", 2), true, MultiPanelPZ70Knobs.IAS_BUTTON));
@@ -72,15 +78,13 @@ namespace NonVisuals.Saitek.Switches
             result.Add(new MultiPanelKnob(1, Convert.ToInt32("1000000", 2), true, MultiPanelPZ70Knobs.REV_BUTTON));
             result.Add(new MultiPanelKnob(1, Convert.ToInt32("10000000", 2), true, MultiPanelPZ70Knobs.AUTO_THROTTLE));
 
-            //Group 2
+            // Group 2
             result.Add(new MultiPanelKnob(2, Convert.ToInt32("1", 2), true, MultiPanelPZ70Knobs.FLAPS_LEVER_UP));
             result.Add(new MultiPanelKnob(2, Convert.ToInt32("10", 2), true, MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN));
             result.Add(new MultiPanelKnob(2, Convert.ToInt32("100", 2), true, MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP));
             result.Add(new MultiPanelKnob(2, Convert.ToInt32("1000", 2), true, MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN));
             return result;
         }
-
-
     }
 
 }

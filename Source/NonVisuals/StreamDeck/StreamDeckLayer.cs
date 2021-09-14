@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-using NonVisuals.StreamDeck.Events;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
+
     using MEF;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
+    using NonVisuals.StreamDeck.Events;
 
     public class StreamDeckLayer
     {
@@ -17,7 +19,7 @@ namespace NonVisuals.StreamDeck
         private Font _textFont;
         private Color _fontColor;
         private Color _backgroundColor;
-        private volatile bool _isVisible = false;
+        private volatile bool _isVisible;
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
@@ -56,6 +58,7 @@ namespace NonVisuals.StreamDeck
                         {
                             oldStreamDeckButton.ClearConfiguration();
                             oldStreamDeckButton.Consume(true, newStreamDeckButton);
+
                             // Let propagate down so it isn't null
                             oldStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
 
@@ -64,6 +67,7 @@ namespace NonVisuals.StreamDeck
                         else if (importMode == EnumButtonImportMode.Overwrite)
                         {
                             oldStreamDeckButton.Consume(true, newStreamDeckButton);
+
                             // Let propagate down so it isn't null
                             oldStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
 
@@ -78,18 +82,21 @@ namespace NonVisuals.StreamDeck
                                 oldStreamDeckButton.Face = face;
                                 changesMade = true;
                             }
+
                             if (oldStreamDeckButton.ActionForPress == null && newStreamDeckButton.ActionForPress != null)
                             {
                                 oldStreamDeckButton.ActionForPress = newStreamDeckButton.ActionForPress.DeepClone();
 
                                 changesMade = true;
                             }
+
                             if (oldStreamDeckButton.ActionForRelease == null && newStreamDeckButton.ActionForRelease != null)
                             {
                                 oldStreamDeckButton.ActionForRelease = newStreamDeckButton.ActionForRelease.DeepClone();
 
                                 changesMade = true;
                             }
+
                             // Let propagate down so it isn't null
                             oldStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
                         }
@@ -288,7 +295,7 @@ namespace NonVisuals.StreamDeck
 
         public List<StreamDeckButton> GetButtonsWithConfig()
         {
-            return (List<StreamDeckButton>)_streamDeckButtons.Where(o => o.HasConfig).ToList();
+            return this._streamDeckButtons.Where(o => o.HasConfig).ToList();
         }
 
         public List<StreamDeckButton> StreamDeckButtons
@@ -306,6 +313,7 @@ namespace NonVisuals.StreamDeck
                     return streamDeckButton;
                 }
             }
+
             var newButton = new StreamDeckButton(streamDeckButtonName, _streamDeckPanel);
             _streamDeckButtons.Add(newButton);
             return newButton;

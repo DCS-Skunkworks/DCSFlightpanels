@@ -1,8 +1,8 @@
-﻿using NonVisuals.StreamDeck;
-
-namespace NonVisuals.Interfaces
+﻿namespace NonVisuals.Interfaces
 {
     using MEF;
+
+    using NonVisuals.StreamDeck;
 
     public enum EnumStreamDeckFaceType
     {

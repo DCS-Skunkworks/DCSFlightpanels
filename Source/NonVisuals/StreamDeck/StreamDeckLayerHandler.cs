@@ -1,26 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Media;
-using System.Reflection;
-using System.Text;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using NonVisuals.StreamDeck.Events;
-using OpenMacroBoard.SDK;
-using StreamDeckSharp;
-
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Media;
+    using System.Reflection;
+    using System.Text;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
+
+    using NonVisuals.StreamDeck.Events;
+
+    using OpenMacroBoard.SDK;
+
+    using StreamDeckSharp;
 
     public class StreamDeckLayerHandler
     {
-        private readonly StreamDeckPanel _streamDeckPanel = null;
+        private readonly StreamDeckPanel _streamDeckPanel;
         private volatile List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
         private const string HOME_LAYER_ID = "*";
         private volatile List<string> _layerHistory = new List<string>();
@@ -28,24 +32,24 @@ namespace NonVisuals.StreamDeck
         private readonly IStreamDeckBoard _streamDeckBoard;
         private EnumStreamDeckButtonNames _selectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
-        private bool _jsonImported = false;
+        private bool _jsonImported;
 
-        private static int _instanceIdCounter = 0;
-        private readonly int _instanceId = 0;
+        private static int _instanceIdCounter;
+        private readonly int _instanceId;
 
 
         private readonly UnicodeEncoding _uniCodeEncoding = new UnicodeEncoding();
         private const Formatting INDENTED_FORMATTING = Formatting.Indented;
-        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings()
-        {
-            ContractResolver = new ExcludeObsoletePropertiesResolver(),
-            TypeNameHandling = TypeNameHandling.All,
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            Error = (sender, args) =>
-            {
-                Common.LogError("JSON Error.\n" + args.ErrorContext.Error.Message);
-            }
-        };
+        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+                                                                    {
+                                                                        ContractResolver = new ExcludeObsoletePropertiesResolver(),
+                                                                        TypeNameHandling = TypeNameHandling.All,
+                                                                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                                                        Error = (sender, args) =>
+                                                                            {
+                                                                                Common.LogError("JSON Error.\n" + args.ErrorContext.Error.Message);
+                                                                            }
+                                                                    };
 
 
         public StreamDeckLayerHandler(StreamDeckPanel streamDeckPanel)
@@ -63,6 +67,7 @@ namespace NonVisuals.StreamDeck
             {
                 result.Add(layer.Name);
             }
+
             return result;
         }
         
@@ -72,7 +77,6 @@ namespace NonVisuals.StreamDeck
 
             CheckHomeLayerExists();
 
-            
             return JsonConvert.SerializeObject(_layerList, INDENTED_FORMATTING, _jsonSettings);
         }
 
@@ -83,6 +87,7 @@ namespace NonVisuals.StreamDeck
                 return;
             }
 
+            jsonText = JSONFixer.Fix(jsonText);
             _jsonSettings.MissingMemberHandling = MissingMemberHandling.Error;
 
             Debug.WriteLine("Count #1 is " + StreamDeckButton.WarningGetStaticButtons().Count);
@@ -146,13 +151,14 @@ namespace NonVisuals.StreamDeck
 
         public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
         {
-            var filesToCompressList = new List<string>(); //includes the json file and eventual image files
+            var filesToCompressList = new List<string>(); // includes the json file and eventual image files
 
             StreamDeckCommon.CleanDCSFPTemporaryFolder();
+
             /*
-             * Close because the list changes below. If not then subsequent operations by the user
-             * will cause null exceptions since image path is reset.
-             */
+                         * Close because the list changes below. If not then subsequent operations by the user
+                         * will cause null exceptions since image path is reset.
+                         */
             var clonedButtonExports = buttonExports.DeepClone();
 
             foreach (var buttonExport in clonedButtonExports)
@@ -177,6 +183,7 @@ namespace NonVisuals.StreamDeck
                         {
                             filesToCompressList = AddFileForCompression(filesToCompressList, imageFile);
                         }
+
                         /*
                          * We must remove any path imageFilePath.
                          * When importing a path will be added back following whatever folder
@@ -208,7 +215,7 @@ namespace NonVisuals.StreamDeck
             {
                 streamWriter.Write(chars);
             }
-            
+
             filesToCompressList = AddFileForCompression(filesToCompressList, filename);
             ZipArchiver.CreateZipFile(compressedFilenameAndPath, filesToCompressList.Distinct().ToList());
 
@@ -347,6 +354,7 @@ namespace NonVisuals.StreamDeck
                 streamDeckLayer.IsVisible = false;
                 streamDeckLayer.RemoveButtons(false);
             }
+
             _layerList.Clear();
             ClearAllFaces();
         }
@@ -367,6 +375,7 @@ namespace NonVisuals.StreamDeck
                 CheckHomeLayerExists();
                 return GetLayer(_selectedLayerName);
             }
+
             set => SetSelectedLayer(value.Name);
         }
 
@@ -377,16 +386,19 @@ namespace NonVisuals.StreamDeck
                 CheckHomeLayerExists();
                 return _selectedLayerName;
             }
+
             set
             {
                 if (LayerList.Count == 0)
                 {
                     return;
                 }
+
                 if (string.IsNullOrEmpty(value))
                 {
                     return;
                 }
+
                 var found = false;
                 foreach (var layer in LayerList)
                 {
@@ -444,6 +456,7 @@ namespace NonVisuals.StreamDeck
             {
                 stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.StreamDeckButtons.Count + ")\n");
             }
+
             stringBuilder.Append("\n");
 
             return stringBuilder.ToString();
@@ -472,6 +485,7 @@ namespace NonVisuals.StreamDeck
                 {
                     streamDeckButton.IsVisible = false;
                 }
+
                 ClearAllFaces();
             }
         }
@@ -483,7 +497,7 @@ namespace NonVisuals.StreamDeck
                 return;
             }
 
-            //We want one update after having read the json
+            // We want one update after having read the json
             _jsonImported = false;
 
             MarkAllButtonsHiddenAndClearFaces();
@@ -503,6 +517,7 @@ namespace NonVisuals.StreamDeck
             {
                 _layerHistory.Add(_selectedLayerName);
             }
+
             _selectedLayerName = layerName;
 
             var selectedLayer = GetLayer(_selectedLayerName);
@@ -536,6 +551,7 @@ namespace NonVisuals.StreamDeck
                     EventHandlers.SelectedButtonChanged(this, SelectedButton, _streamDeckPanel.BindingHash);
                     return;
                 }
+
                 _selectedButtonName = value;
             }
         }
@@ -654,6 +670,7 @@ namespace NonVisuals.StreamDeck
             {
                 jsonProperty.ShouldSerialize = obj => false;
             }
+
             return jsonProperty;
         }
     }

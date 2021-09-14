@@ -24,6 +24,7 @@
                     {
                         genericBinding.BindingHash = Common.GetRandomMd5Hash();
                     }
+
                     _genericBindings.Add(genericBinding);
                 }
             }
@@ -138,6 +139,7 @@
                                     modificationsMade = true;
                                     break;
                                 }
+
                             case GenericBindingStateEnum.Modified:
                                 {
                                     genericBinding.HIDInstance = modifiedGenericBinding.GenericPanelBinding.HIDInstance;
@@ -145,14 +147,11 @@
                                     modificationsMade = true;
                                     break;
                                 }
+
                             case GenericBindingStateEnum.Deleted:
                                 {
                                     genericBinding.HasBeenDeleted = true;
                                     modificationsMade = true;
-                                    break;
-                                }
-                            default:
-                                {
                                     break;
                                 }
                         }
@@ -182,7 +181,7 @@
                 var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType);
                 if (hidSkeleton != null)
                 {
-                    //This we can map ourselves!
+                    // This we can map ourselves!
                     genericBinding.HIDInstance = hidSkeleton.InstanceId;
                     settingsWereModified = true;
                     MessageBox.Show("USB settings has changed. Please save the profile.", "USB changes found", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -191,6 +190,7 @@
                 {
                     MessageBox.Show("Reference found in bindings file to a " + genericBinding.PanelType.GetDescriptionField() + ", no such hardware found.", "Hardware missing", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
+
                 return true;
             }
 
@@ -219,17 +219,12 @@
              *    If only 1, then we can map it without asking questions.
              * 2) Hardware missing, then it will be left as is and saved next time user saves bindings.
              */
-            foreach (var bindingsGrouped in _genericBindings.GroupBy(o => o.PanelType)
-                .Select(group => new
-                {
-                    PanelType = group.Key,
-                    Count = group.Count()
-                })
-                .OrderBy(x => x.PanelType))
+            foreach (var bindingsGrouped in _genericBindings.GroupBy(o => o.PanelType).Select(group => new { PanelType = group.Key, Count = group.Count() }).OrderBy(x => x.PanelType))
             {
-                //if(bindingsGrouped.Count
+                // if(bindingsGrouped.Count
             }
-            //var count = _genericBindings.FindAll(o => (o.HardwareWasFound == false) && (o.PanelType == genericBinding.PanelType)).GroupBy(o => o.PanelType);
+
+            // var count = _genericBindings.FindAll(o => (o.HardwareWasFound == false) && (o.PanelType == genericBinding.PanelType)).GroupBy(o => o.PanelType);
             /*if (count == 1)
             {
                 //This we can map ourselves!

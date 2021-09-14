@@ -103,12 +103,12 @@
 
                 if (keyCode > 0)
                 {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
+                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), keyCode));
                 }
                 var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
+                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));
                 }
                 var result = string.Empty;
                 foreach (var str in hashSetOfKeysPressed)

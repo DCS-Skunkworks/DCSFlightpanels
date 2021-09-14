@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Radios.SRS;
-using NonVisuals.Saitek;
-
-
-namespace NonVisuals.Radios
+﻿namespace NonVisuals.Radios
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
+    using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Radios.SRS;
+    using NonVisuals.Saitek;
 
     public struct SRSRadioSmallFreqStepping
     {
@@ -29,8 +30,8 @@ namespace NonVisuals.Radios
         private CurrentSRSRadioMode _currentUpperRadioMode = CurrentSRSRadioMode.COM1;
         private CurrentSRSRadioMode _currentLowerRadioMode = CurrentSRSRadioMode.COM1;
 
-        //private List<double> _listMainFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
-        //private List<double> _listGuardFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
+        // private List<double> _listMainFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
+        // private List<double> _listGuardFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
         private readonly object _freqListLockObject = new object();
 
         /*Radio1 COM1*/
@@ -40,15 +41,14 @@ namespace NonVisuals.Radios
         /*Radio5 ADF*/
         /*Radio6 DME*/
         /*Radio7 XPDR*/
-        //Large dial
-        //Small dial
-
-        private double _upperMainFreq = 0;
-        private double _lowerMainFreq = 0;
-        private double _upperGuardFreq = 0;
-        private double _lowerGuardFreq = 0;
-        private long _upperFreqSwitchPressed = 0;
-        private long _lowerFreqSwitchPressed = 0;
+        // Large dial
+        // Small dial
+        private double _upperMainFreq;
+        private double _lowerMainFreq;
+        private double _upperGuardFreq;
+        private double _lowerGuardFreq;
+        private long _upperFreqSwitchPressed;
+        private long _lowerFreqSwitchPressed;
         private int _largeDialSkipper;
         private int _smallDialSkipper;
         private readonly ClickSpeedDetector _largeDialIncreaseChangeMonitor = new ClickSpeedDetector(20);
@@ -141,112 +141,140 @@ namespace NonVisuals.Radios
                                     {
                                         SetUpperRadioMode(CurrentSRSRadioMode.COM1);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_COM2:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentSRSRadioMode.COM2);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_NAV1:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentSRSRadioMode.NAV1);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_NAV2:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentSRSRadioMode.NAV2);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_ADF:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentSRSRadioMode.ADF);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_DME:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentSRSRadioMode.DME);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_XPDR:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentSRSRadioMode.XPDR);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_COM1:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentSRSRadioMode.COM1);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_COM2:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentSRSRadioMode.COM2);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_NAV1:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentSRSRadioMode.NAV1);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_NAV2:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentSRSRadioMode.NAV2);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_ADF:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentSRSRadioMode.ADF);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_DME:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentSRSRadioMode.DME);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_XPDR:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentSRSRadioMode.XPDR);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_LARGE_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsSRS.UPPER_LARGE_FREQ_WHEEL_DEC:
                             case RadioPanelPZ69KnobsSRS.UPPER_SMALL_FREQ_WHEEL_INC:
@@ -256,9 +284,10 @@ namespace NonVisuals.Radios
                             case RadioPanelPZ69KnobsSRS.LOWER_SMALL_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsSRS.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
-                                    //Ignore
+                                    // Ignore
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_FREQ_SWITCH:
                                 {
                                     if (radioPanelKnob.IsOn)
@@ -274,8 +303,10 @@ namespace NonVisuals.Radios
                                             SRSListenerFactory.GetSRSListener().ToggleBetweenGuardAndFrequency(_currentUpperRadioMode);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_FREQ_SWITCH:
                                 {
                                     if (radioPanelKnob.IsOn)
@@ -291,6 +322,7 @@ namespace NonVisuals.Radios
                                             SRSListenerFactory.GetSRSListener().ToggleBetweenGuardAndFrequency(_currentLowerRadioMode);
                                         }
                                     }
+
                                     break;
                                 }
                         }
@@ -346,8 +378,10 @@ namespace NonVisuals.Radios
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     _largeDialDecreaseChangeMonitor.Click();
@@ -368,8 +402,10 @@ namespace NonVisuals.Radios
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_SMALL_FREQ_WHEEL_INC:
                                 {
                                     _firstSmallDialIncreaseChangeMonitor.Click();
@@ -396,8 +432,10 @@ namespace NonVisuals.Radios
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.UPPER_SMALL_FREQ_WHEEL_DEC:
                                 {
                                     _firstSmallDialDecreaseChangeMonitor.Click();
@@ -424,8 +462,10 @@ namespace NonVisuals.Radios
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     _largeDialIncreaseChangeMonitor.Click();
@@ -446,8 +486,10 @@ namespace NonVisuals.Radios
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     _largeDialDecreaseChangeMonitor.Click();
@@ -468,8 +510,10 @@ namespace NonVisuals.Radios
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_SMALL_FREQ_WHEEL_INC:
                                 {
                                     _firstSmallDialIncreaseChangeMonitor.Click();
@@ -496,8 +540,10 @@ namespace NonVisuals.Radios
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsSRS.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
                                     _firstSmallDialDecreaseChangeMonitor.Click();
@@ -524,6 +570,7 @@ namespace NonVisuals.Radios
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
+
                                     break;
                                 }
                         }
@@ -567,6 +614,7 @@ namespace NonVisuals.Radios
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                         }
+
                         if (_upperGuardFreq > 0)
                         {
                             SetPZ69DisplayBytesDefault(ref bytes, (_upperGuardFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -575,6 +623,7 @@ namespace NonVisuals.Radios
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                         }
+
                         if (_lowerMainFreq > 0)
                         {
                             if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
@@ -590,6 +639,7 @@ namespace NonVisuals.Radios
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
+
                         if (_lowerGuardFreq > 0)
                         {
                             SetPZ69DisplayBytesDefault(ref bytes, (_lowerGuardFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -598,6 +648,7 @@ namespace NonVisuals.Radios
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                         }
+
                         SendLCDData(bytes);
                     }
                 }
@@ -606,6 +657,7 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
+
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
 
@@ -648,8 +700,9 @@ namespace NonVisuals.Radios
             try
             {
                 _currentLowerRadioMode = currentBf109RadioMode;
-                //If NOUSE then send next round of data to the panel in order to clear the LCD.
-                //_sendNextRoundToPanel = true;catch (Exception ex)
+
+                // If NOUSE then send next round of data to the panel in order to clear the LCD.
+                // _sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
             {
@@ -666,6 +719,7 @@ namespace NonVisuals.Radios
                     _smallDialSkipper = 0;
                     return false;
                 }
+
                 _smallDialSkipper++;
                 return true;
             }
@@ -673,6 +727,7 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
+
             return false;
         }
 
@@ -685,6 +740,7 @@ namespace NonVisuals.Radios
                     _largeDialSkipper = 0;
                     return false;
                 }
+
                 _largeDialSkipper++;
                 return true;
             }
@@ -692,6 +748,7 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
+
             return false;
         }
 

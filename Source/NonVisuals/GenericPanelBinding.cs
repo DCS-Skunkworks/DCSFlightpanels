@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ClassLibraryCommon;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using ClassLibraryCommon;
+
     public class GenericPanelBinding
     {
         private GamingPanelEnum _panelType = GamingPanelEnum.Unknown;
@@ -12,8 +13,8 @@ namespace NonVisuals
         private string _bindingHash;
         private List<string> _settings = new List<string>(50);
         private string _jsonString = string.Empty;
-        private bool _hardwareWasFound = false;
-        private bool _hasBeenDeleted = false;
+        private bool _hardwareWasFound;
+        private bool _hasBeenDeleted;
 
         public GenericPanelBinding()
         { }
@@ -87,6 +88,7 @@ namespace NonVisuals
                 {
                     stringBuilder.AppendLine(setting);
                 }
+
                 return stringBuilder.ToString();
             }
         }

@@ -29,7 +29,8 @@
             {
                 throw new ArgumentException();
             }
-            //Fixed values
+
+            // Fixed values
             VendorId = 0x6A3;
             ProductId = 0xB4D;
             CreateSwitchKeys();
@@ -109,6 +110,7 @@
             {
                 return null;
             }
+
             var result = new List<string>();
 
             foreach (var keyBinding in _keyBindings)
@@ -118,6 +120,7 @@
                     result.Add(keyBinding.ExportSettings());
                 }
             }
+
             foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
             {
                 if (!operatingSystemCommand.OSCommandObject.IsEmpty)
@@ -125,6 +128,7 @@
                     result.Add(operatingSystemCommand.ExportSettings());
                 }
             }
+
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
@@ -132,6 +136,7 @@
                     result.Add(dcsBiosBinding.ExportSettings());
                 }
             }
+
             foreach (var bipLink in _bipLinks)
             {
                 if (bipLink.BIPLights.Count > 0)
@@ -139,6 +144,7 @@
                     result.Add(bipLink.ExportSettings());
                 }
             }
+
             return result;
         }
 
@@ -163,7 +169,7 @@
         {
             try
             {
-                //This panel can not identify itself, no LEDs, nothing
+                // This panel can not identify itself, no LEDs, nothing
             }
             catch (Exception)
             {
@@ -212,6 +218,7 @@
             {
                 return;
             }
+
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && keyBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
@@ -227,6 +234,7 @@
             {
                 return;
             }
+
             foreach (var tpmPanelSwitchObject in hashSet)
             {
                 var tpmPanelSwitch = (TPMPanelSwitch)tpmPanelSwitchObject;
@@ -252,13 +260,14 @@
                                 (int)PluginGamingPanelEnum.TPM, 
                                 (int)tpmPanelSwitch.TPMSwitch, 
                                 tpmPanelSwitch.IsOn,
-                                keyBinding.OSKeyPress.KeySequence);
+                                keyBinding.OSKeyPress.KeyPressSequence);
                         }
+
                         break;
                     }
                 }
                 
-                if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
                         ProfileHandler.SelectedProfile().Description,
@@ -312,6 +321,7 @@
                     result = keyBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
                 }
             }
+
             return result;
         }
 
@@ -323,6 +333,7 @@
                 ClearAllBindings(tpmPanelSwitchOnOff);
                 return;
             }
+
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
@@ -336,9 +347,11 @@
                     {
                         keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
                     }
+
                     found = true;
                 }
             }
+
             if (!found && !string.IsNullOrEmpty(keyPress))
             {
                 var keyBinding = new KeyBindingTPM();
@@ -347,6 +360,7 @@
                 keyBinding.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
                 _keyBindings.Add(keyBinding);
             }
+
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
             SetIsDirty();
         }
@@ -354,7 +368,8 @@
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
-            //This must accept lists
+
+            // This must accept lists
             var found = false;
 
             foreach (var operatingSystemCommandBinding in _operatingSystemCommandBindings)
@@ -366,6 +381,7 @@
                     break;
                 }
             }
+
             if (!found)
             {
                 var operatingSystemCommandBindingTPM = new OSCommandBindingTPM();
@@ -374,12 +390,13 @@
                 operatingSystemCommandBindingTPM.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
                 _operatingSystemCommandBindings.Add(operatingSystemCommandBindingTPM);
             }
+
             SetIsDirty();
         }
 
         public void ClearAllBindings(TPMSwitchOnOff tpmPanelSwitchOnOff)
         {
-            //This must accept lists
+            // This must accept lists
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && keyBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
@@ -387,6 +404,7 @@
                     keyBinding.OSKeyPress = null;
                 }
             }
+
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
@@ -394,19 +412,21 @@
                     dcsBiosBinding.DCSBIOSInputs.Clear();
                 }
             }
+
             SetIsDirty();
         }
 
         public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
-            var tpmPanelSwitchOnOff = (TPMSwitchOnOff) panelSwitchOnOff;
+            var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
             if (keySequence.Count == 0)
             {
                 RemoveSwitchFromList(ControlListTPM.KEYS, tpmPanelSwitchOnOff);
                 SetIsDirty();
                 return;
             }
-            //This must accept lists
+
+            // This must accept lists
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
@@ -420,10 +440,12 @@
                     {
                         keyBinding.OSKeyPress = new KeyPress(description, keySequence);
                     }
+
                     found = true;
                     break;
                 }
             }
+
             if (!found && keySequence.Count > 0)
             {
                 var keyBinding = new KeyBindingTPM();
@@ -432,6 +454,7 @@
                 keyBinding.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
                 _keyBindings.Add(keyBinding);
             }
+
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
             SetIsDirty();
         }
@@ -439,7 +462,7 @@
         public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
         {
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
-            var bipLinkTPM = (BIPLinkTPM) bipLink;
+            var bipLinkTPM = (BIPLinkTPM)bipLink;
 
             if (bipLinkTPM.BIPLights.Count == 0)
             {
@@ -447,7 +470,8 @@
                 SetIsDirty();
                 return;
             }
-            //This must accept lists
+
+            // This must accept lists
             var found = false;
 
             foreach (var tmpBipLink in _bipLinks)
@@ -460,12 +484,14 @@
                     break;
                 }
             }
+
             if (!found && bipLinkTPM.BIPLights.Count > 0)
             {
                 bipLinkTPM.TPMSwitch = tpmPanelSwitchOnOff.Switch;
                 bipLinkTPM.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
                 _bipLinks.Add(bipLinkTPM);
             }
+
             SetIsDirty();
         }
 
@@ -478,10 +504,11 @@
                 SetIsDirty();
                 return;
             }
-            //!!!!!!!
-            //If all DCS-BIOS commands has been deleted then provide a empty list, not null object!!!
 
-            //This must accept lists
+            // !!!!!!!
+            // If all DCS-BIOS commands has been deleted then provide a empty list, not null object!!!
+
+            // This must accept lists
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
@@ -493,6 +520,7 @@
                     break;
                 }
             }
+
             if (!found)
             {
                 var dcsBiosBinding = new DCSBIOSActionBindingTPM();
@@ -502,6 +530,7 @@
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
+
             SetIsDirty();
         }
 
@@ -522,6 +551,7 @@
                     }
                 }
             }
+
             if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -533,6 +563,7 @@
                     }
                 }
             }
+
             if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
@@ -580,6 +611,7 @@
                     keyBinding.OSKeyPress = null;
                 }
             }
+
             SetIsDirty();
         }
 

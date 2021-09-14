@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.Radios.Knobs
+﻿namespace NonVisuals.Radios.Knobs
 {
+    using System;
+    using System.Collections.Generic;
+
     using MEF;
+
+    using NonVisuals.Interfaces;
 
     public class RadioPanelKnobMiG21Bis : ISaitekPanelKnob
     {
@@ -26,9 +27,10 @@ namespace NonVisuals.Radios.Knobs
 
         public static HashSet<ISaitekPanelKnob> GetRadioPanelKnobs()
         {
-            //true means clockwise turn
+            // true means clockwise turn
             var result = new HashSet<ISaitekPanelKnob>();
-            //Group 0
+
+            // Group 0
             result.Add(new RadioPanelKnobMiG21Bis(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelInc));
             result.Add(new RadioPanelKnobMiG21Bis(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelDec));
             result.Add(new RadioPanelKnobMiG21Bis(2, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsMiG21Bis.UpperLargeFreqWheelInc));
@@ -38,7 +40,7 @@ namespace NonVisuals.Radios.Knobs
             result.Add(new RadioPanelKnobMiG21Bis(2, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsMiG21Bis.LowerLargeFreqWheelInc));
             result.Add(new RadioPanelKnobMiG21Bis(2, Convert.ToInt32("10000000", 2), false, RadioPanelPZ69KnobsMiG21Bis.LowerLargeFreqWheelDec));
 
-            //Group 1
+            // Group 1
             result.Add(new RadioPanelKnobMiG21Bis(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsMiG21Bis.LowerCom2));
             result.Add(new RadioPanelKnobMiG21Bis(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsMiG21Bis.LowerRsbn));
             result.Add(new RadioPanelKnobMiG21Bis(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsMiG21Bis.LowerNav2));
@@ -48,7 +50,7 @@ namespace NonVisuals.Radios.Knobs
             result.Add(new RadioPanelKnobMiG21Bis(1, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch));
             result.Add(new RadioPanelKnobMiG21Bis(1, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch));
 
-            //Group 2
+            // Group 2
             result.Add(new RadioPanelKnobMiG21Bis(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsMiG21Bis.UpperRadio));
             result.Add(new RadioPanelKnobMiG21Bis(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsMiG21Bis.UpperCom2));
             result.Add(new RadioPanelKnobMiG21Bis(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsMiG21Bis.UpperRsbn));
@@ -59,9 +61,5 @@ namespace NonVisuals.Radios.Knobs
             result.Add(new RadioPanelKnobMiG21Bis(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsMiG21Bis.LowerRadio));
             return result;
         }
-
-
-
-
     }
 }

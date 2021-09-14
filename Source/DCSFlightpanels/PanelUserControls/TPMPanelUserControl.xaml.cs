@@ -474,7 +474,7 @@
             try
             {
                 KeyPressLength keyPressLength;
-                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeySequence.Count == 0)
+                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeyPressSequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
                 }
@@ -802,7 +802,7 @@
                 }
 
                 textBox.Bill.ClearAll();
-                var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
+                var vkNull = Enum.GetName(typeof(MEF.VirtualKeyCode), MEF.VirtualKeyCode.VK_NULL);
                 if (string.IsNullOrEmpty(vkNull))
                 {
                     return;

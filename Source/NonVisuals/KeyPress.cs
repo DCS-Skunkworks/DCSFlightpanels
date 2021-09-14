@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-using ThreadState = System.Threading.ThreadState;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using Newtonsoft.Json;
 
     [Serializable]
     public class KeyPress
@@ -40,12 +41,16 @@ namespace NonVisuals
                 {
                     result = (result * 397) ^ tuple.Value.GetHash();
                 }
+
                 result = (result * 397) ^ (string.IsNullOrWhiteSpace(_description) ? 0 : _description.GetHashCode());
                 return result;
             }
         }
 
-        public KeyPress() { }
+        public KeyPress()
+        {
+
+        }
 
         public KeyPress(string keycodes, KeyPressLength keyPressLength = KeyPressLength.FiftyMilliSec, string description = null)
         {
@@ -98,7 +103,7 @@ namespace NonVisuals
                     negatorOSKeyPress.Abort = true;
                 }
 
-                //Check for already executing key sequence which may use long timings and breaks
+                // Check for already executing key sequence which may use long timings and breaks
                 if (IsRunning() && _executingThread != null)
                 {
                     Abort = true;
@@ -122,43 +127,41 @@ namespace NonVisuals
         {
             try
             {
-                try
+                if (sortedList == null)
                 {
-                    if (sortedList == null)
+                    return;
+                }
+
+                for (var i = 0; i < sortedList.Count; i++)
+                {
+                    var keyPressInfo = sortedList[i];
+                    if (keyPressInfo.VirtualKeyCodes == null || keyPressInfo.VirtualKeyCodes.Count == 0)
                     {
                         return;
                     }
-                    for (var i = 0; i < sortedList.Count; i++)
+
+                    var array = keyPressInfo.VirtualKeyCodes.ToArray();
+
+                    if (Common.APIMode == APIModeEnum.keybd_event)
                     {
-                        var keyPressInfo = sortedList[i];
-                        if (keyPressInfo.VirtualKeyCodes == null || keyPressInfo.VirtualKeyCodes.Count == 0)
-                        {
-                            return;
-                        }
+                        this.KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
 
-                        var array = keyPressInfo.VirtualKeyCodes.ToArray();
+                        // Common.DebugP("KeyBdEventAPI result code -----------------------------------> " + Marshal.GetLastWin32Error());
+                    }
+                    else
+                    {
+                        this.SendKeys(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
 
-                        if (Common.APIMode == APIModeEnum.keybd_event)
-                        {
-                            KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
-                            //Common.DebugP("KeyBdEventAPI result code -----------------------------------> " + Marshal.GetLastWin32Error());
-                        }
-                        else
-                        {
-                            SendKeys(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
-                            //Common.DebugP("SendKeys result code -----------------------------------> " + Marshal.GetLastWin32Error());
-                        }
-                        if (Abort)
-                        {
-                            break;
-                        }
+                        // Common.DebugP("SendKeys result code -----------------------------------> " + Marshal.GetLastWin32Error());
+                    }
+
+                    if (this.Abort)
+                    {
+                        break;
                     }
                 }
-                catch (Exception)
-                {
-                }
             }
-            finally
+            catch (Exception)
             {
             }
         }
@@ -167,10 +170,11 @@ namespace NonVisuals
         {
             var keyPressLengthTimeConsumed = 0;
             var breakLengthConsumed = 0;
+
             /*
-                //keybd_event
-                http://msdn.microsoft.com/en-us/library/windows/desktop/ms646304%28v=vs.85%29.aspx
-            */
+                            //keybd_event
+                            http://msdn.microsoft.com/en-us/library/windows/desktop/ms646304%28v=vs.85%29.aspx
+                        */
             while (breakLengthConsumed < (int)breakLength)
             {
                 Thread.Sleep(SLEEP_VALUE);
@@ -183,8 +187,8 @@ namespace NonVisuals
 
             while (keyPressLengthTimeConsumed < (int)keyPressLength)
             {
-                //Debug.WriteLine("VK = " + virtualKeyCodes[1] + " length = " + keyPressLength);
-                //Press modifiers
+                // Debug.WriteLine("VK = " + virtualKeyCodes[1] + " length = " + keyPressLength);
+                // Press modifiers
                 for (var i = 0; i < virtualKeyCodes.Count(); i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
@@ -193,7 +197,7 @@ namespace NonVisuals
                         if (CommonVK.IsExtendedKey(virtualKeyCode))
                         {
                             NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_EXTENDEDKEY | 0, 0);
-                            //keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, 0);
+                            // keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, 0);
                         }
                         else
                         {
@@ -202,7 +206,7 @@ namespace NonVisuals
                     }
                 }
 
-                //Press normal keys
+                // Press normal keys
                 for (var i = 0; i < virtualKeyCodes.Count(); i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
@@ -229,7 +233,7 @@ namespace NonVisuals
 
                 if (Abort || cancellationToken.IsCancellationRequested)
                 {
-                    //If we are to cancel the whole operation. Release pressed keys ASAP and exit.
+                    // If we are to cancel the whole operation. Release pressed keys ASAP and exit.
                     break;
                 }
             }
@@ -238,12 +242,11 @@ namespace NonVisuals
             {
                 ReleaseKeys(virtualKeyCodes);
             }
-
         }
 
         private void ReleaseKeys(VirtualKeyCode[] virtualKeyCodes)
         {
-            //Release normal keys
+            // Release normal keys
             for (var i = 0; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
@@ -253,7 +256,7 @@ namespace NonVisuals
                 }
             }
 
-            //Release modifiers
+            // Release modifiers
             for (var i = 0; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
@@ -283,9 +286,11 @@ namespace NonVisuals
                     {
                         result.Append(" + ");
                     }
+
                     result.Append(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
             }
+
             return result.ToString();
         }
 
@@ -304,11 +309,13 @@ namespace NonVisuals
                         {
                             result.Append(" + ");
                         }
+
                         result.Append(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                     }
                 }
             }
-            //Insert 1. or 2. indicating API used
+
+            // Insert 1. or 2. indicating API used
             result.Insert(0, Common.APIMode == APIModeEnum.keybd_event ? "1. " : "2. ");
             return result.ToString();
         }
@@ -330,8 +337,10 @@ namespace NonVisuals
                 {
                     return Description;
                 }
+
                 return "key press sequence";
             }
+
             return GetSimpleVirtualKeyCodesAsString();
         }
 
@@ -341,6 +350,7 @@ namespace NonVisuals
             {
                 throw new Exception("GetSimpleVirtualKeyCodesAsString() called for multisequenced key press. Use IsMultiSequenced() to check whether simple or multisequenced.");
             }
+
             var result = new StringBuilder();
 
             var keyPressInfo = _sortedKeyPressInfoList[0];
@@ -352,6 +362,7 @@ namespace NonVisuals
                     {
                         result.Append(" + ");
                     }
+
                     result.Append(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
             }
@@ -365,6 +376,7 @@ namespace NonVisuals
             {
                 throw new ArgumentException("Import string empty. (KeyBinding)");
             }
+
             if (str.Contains("["))
             {
                 ImportStringMultiKeySequence(str);
@@ -383,22 +395,25 @@ namespace NonVisuals
                 {
                     throw new ArgumentException("Import string empty. (OSKeyPress)");
                 }
+
                 if (!str.StartsWith("OSKeyPress{") || !str.EndsWith("}"))
                 {
                     throw new ArgumentException("Import string format exception. (OSKeyPress) >" + str + "<");
                 }
+
                 var keyPressInfo = new KeyPressInfo();
-                //OSKeyPress{1000,VK_D + RETURN + ...}
+
+                // OSKeyPress{1000,VK_D + RETURN + ...}
                 var dataString = str.Remove(0, 11);
-                //1000,VK_D + RETURN + ...}
+
+                // 1000,VK_D + RETURN + ...}
                 dataString = dataString.Remove(dataString.Length - 1, 1);
-                //1000,VK_D + RETURN + ... + ...
-                keyPressInfo.LengthOfKeyPress =
-                    (KeyPressLength)
-                    Enum.Parse(typeof(KeyPressLength),
-                               dataString.Substring(0, dataString.IndexOf(",", StringComparison.Ordinal)));
+
+                // 1000,VK_D + RETURN + ... + ...
+                keyPressInfo.LengthOfKeyPress = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), dataString.Substring(0, dataString.IndexOf(",", StringComparison.Ordinal)));
                 dataString = dataString.Substring(dataString.IndexOf(",", StringComparison.Ordinal) + 1);
-                //VK_D + RETURN + ... + ...
+
+                // VK_D + RETURN + ... + ...
                 keyPressInfo.VirtualKeyCodes = SplitStringKeyCodes(dataString);
                 _sortedKeyPressInfoList.Add(GetNewKeyValue(), keyPressInfo);
             }
@@ -416,28 +431,35 @@ namespace NonVisuals
                 {
                     throw new ArgumentException("Import string empty. (OSKeyPress)");
                 }
+
                 if (!str.StartsWith("OSKeyPress{") || !str.EndsWith("}"))
                 {
                     throw new ArgumentException("Import string format exception. (OSKeyPress) >" + str + "<");
                 }
-                //OSKeyPress{INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]}
+
+                // OSKeyPress{INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]}
                 var dataString = str.Remove(0, 11);
-                //INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]}
+
+                // INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]}
                 dataString = dataString.Remove(dataString.Length - 1, 1);
-                //INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]
+
+                // INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]
                 if (dataString.Contains("INFORMATION=^"))
                 {
-                    //INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]
+                    // INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]
                     var temp = dataString.Remove(0, 13);
-                    //DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]
+
+                    // DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]
                     _description = temp.Substring(0, temp.IndexOf("^", StringComparison.InvariantCultureIgnoreCase));
                     dataString = temp.Remove(0, _description.Length + 1);
                 }
+
                 var array = dataString.Split(new[] { "][" }, StringSplitOptions.RemoveEmptyEntries);
-                //[FiftyMilliSec,VK_A,FiftyMilliSec]
-                //[FiftyMilliSec,VK_B,FiftyMilliSec]
-                //[FiftyMilliSec,VK_C,FiftyMilliSec]
-                //[FiftyMilliSec,VK_D,FiftyMilliSec]}
+
+                // [FiftyMilliSec,VK_A,FiftyMilliSec]
+                // [FiftyMilliSec,VK_B,FiftyMilliSec]
+                // [FiftyMilliSec,VK_C,FiftyMilliSec]
+                // [FiftyMilliSec,VK_D,FiftyMilliSec]}
                 // ...
                 for (int i = 0; i < array.Count(); i++)
                 {
@@ -445,19 +467,20 @@ namespace NonVisuals
                     var entry = array[i];
                     entry = entry.Replace("[", string.Empty);
                     entry = entry.Replace("]", string.Empty);
-                    //FiftyMilliSec,VK_A,FiftyMilliSec
+
+                    // FiftyMilliSec,VK_A,FiftyMilliSec
                     keyPressInfo.LengthOfBreak = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), entry.Substring(0, entry.IndexOf(",", StringComparison.Ordinal)));
                     entry = entry.Substring(entry.IndexOf(",", StringComparison.Ordinal) + 1);
                     var keys = entry.Substring(0, entry.IndexOf(",", StringComparison.Ordinal));
                     keyPressInfo.VirtualKeyCodes = SplitStringKeyCodes(keys);
-                    keyPressInfo.LengthOfKeyPress = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), entry.Substring(entry.IndexOf(",", StringComparison.Ordinal) + 1)); ;
+                    keyPressInfo.LengthOfKeyPress = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), entry.Substring(entry.IndexOf(",", StringComparison.Ordinal) + 1));
                     _sortedKeyPressInfoList.Add(GetNewKeyValue(), keyPressInfo);
                 }
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
-                ;
+                
             }
         }
 
@@ -467,6 +490,7 @@ namespace NonVisuals
             {
                 throw new Exception("Key press is multisequenced. Cannot query single key stroke length as it may contain many such values. (OSKeyPress.GetLengthOfKeyPress())");
             }
+
             return _sortedKeyPressInfoList[0].LengthOfKeyPress;
         }
 
@@ -476,6 +500,7 @@ namespace NonVisuals
             {
                 throw new Exception("Key press is multisequenced. Cannot set single key stroke length as it may contain many such values. (OSKeyPress.SetLengthOfKeyPress())");
             }
+
             _sortedKeyPressInfoList[0].LengthOfKeyPress = keyPressLength;
         }
 
@@ -495,6 +520,7 @@ namespace NonVisuals
             {
                 Common.ShowErrorMessageBox(ex);
             }
+
             return result;
         }
 
@@ -510,8 +536,28 @@ namespace NonVisuals
             return _sortedKeyPressInfoList == null || _sortedKeyPressInfoList.Count == 0;
         }
 
+        private SortedList<int, KeyPressInfo> _oldSortedKeyPressInfoList = new SortedList<int, KeyPressInfo>();
+        [Obsolete]
         [JsonProperty("KeySequence", Required = Required.Default)]
-        public SortedList<int, IKeyPressInfo> KeySequence
+        public SortedList<int, KeyPressInfo> KeySequenceObsolete
+        {
+            // get => _sortedKeyPressInfoList;
+            set
+            {
+                _oldSortedKeyPressInfoList = value;
+                if (this._oldSortedKeyPressInfoList != null)
+                {
+                    for (var i = 0; i < _oldSortedKeyPressInfoList.Count; i++)
+                    {
+                        var keyPressInfo = _oldSortedKeyPressInfoList[i];
+                        _sortedKeyPressInfoList.Add(i, keyPressInfo);
+                    }
+                }
+            }
+        }
+
+        [JsonProperty("KeyPressSequence", Required = Required.Default)]
+        public SortedList<int, IKeyPressInfo> KeyPressSequence
         {
             get => _sortedKeyPressInfoList;
             set => _sortedKeyPressInfoList = value;
@@ -524,17 +570,20 @@ namespace NonVisuals
                 var keyPressInfo = _sortedKeyPressInfoList[0];
                 return "OSKeyPress{" + Enum.GetName(typeof(KeyPressLength), keyPressInfo.LengthOfKeyPress) + "," + GetSimpleVirtualKeyCodesAsString() + "}";
             }
+
             var result = new StringBuilder();
             result.Append("OSKeyPress{");
             if (!string.IsNullOrEmpty(_description))
             {
                 result.Append("INFORMATION=^" + _description + "^");
             }
+
             for (var i = 0; i < _sortedKeyPressInfoList.Count; i++)
             {
                 var keyPressInfo = _sortedKeyPressInfoList[i];
                 result.Append("[" + Enum.GetName(typeof(KeyPressLength), keyPressInfo.LengthOfBreak) + "," + GetVirtualKeyCodesAsString(keyPressInfo) + "," + Enum.GetName(typeof(KeyPressLength), keyPressInfo.LengthOfKeyPress) + "]");
             }
+
             result.Append("}");
             return result.ToString();
         }
@@ -550,6 +599,7 @@ namespace NonVisuals
             {
                 return 0;
             }
+
             return _sortedKeyPressInfoList.Keys.Max() + 1;
         }
 
@@ -573,6 +623,7 @@ namespace NonVisuals
                     return;
                 }
             }
+
             var inputs = new NativeMethods.INPUT[virtualKeyCodes.Count()];
 
             while (keyPressLengthTimeConsumed < (int)keyPressLength)
@@ -585,7 +636,8 @@ namespace NonVisuals
                         modifierCount++;
                     }
                 }
-                //Add modifiers
+
+                // Add modifiers
                 for (var i = 0; i < virtualKeyCodes.Count(); i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
@@ -598,15 +650,17 @@ namespace NonVisuals
                         {
                             inputs[i].InputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_EXTENDEDKEY;
                         }
+
                         inputs[i].InputUnion.ki.wVk = 0;
                         inputs[i].InputUnion.ki.wScan = (ushort)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0);
                         inputs[i].InputUnion.ki.dwExtraInfo = NativeMethods.GetMessageExtraInfo();
                     }
                 }
-                //[x][x] [] []
+
+                // [x][x] [] []
                 // 0  1  2  3
                 // 1  2  3  4
-                //Add normal keys
+                // Add normal keys
                 for (var i = modifierCount; i < virtualKeyCodes.Count(); i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
@@ -636,7 +690,7 @@ namespace NonVisuals
 
                 if (Abort || cancellationToken.IsCancellationRequested)
                 {
-                    //If we are to cancel the whole operation. Release pressed keys ASAP and exit.
+                    // If we are to cancel the whole operation. Release pressed keys ASAP and exit.
                     break;
                 }
             }
@@ -645,8 +699,10 @@ namespace NonVisuals
             {
                 inputs[i].InputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_KEYUP;
             }
+
             Array.Reverse(inputs);
-            //Release same keys
+
+            // Release same keys
             NativeMethods.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
         }
 

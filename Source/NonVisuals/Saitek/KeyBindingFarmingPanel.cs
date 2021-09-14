@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+    using System.Collections.Generic;
+
     using MEF;
 
     [Serializable]
@@ -19,21 +19,24 @@ namespace NonVisuals.Saitek
             {
                 throw new ArgumentException("Import string empty. (KeyBinding)");
             }
+
             if (settings.StartsWith("FarmingPanelKey{"))
             {
-                //FarmingPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                // FarmingPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                //FarmingPanelKey{1KNOB_ENGINE_LEFT}
+                // FarmingPanelKey{1KNOB_ENGINE_LEFT}
                 var param0 = parameters[0].Trim().Substring(16);
-                //1KNOB_ENGINE_LEFT}
+
+                // 1KNOB_ENGINE_LEFT}
                 param0 = param0.Remove(param0.Length - 1, 1);
-                //1KNOB_ENGINE_LEFT
+
+                // 1KNOB_ENGINE_LEFT
                 WhenTurnedOn = (param0.Substring(0, 1) == "1");
                 param0 = param0.Substring(1);
                 _farmingPanelKey = (FarmingPanelMKKeys)Enum.Parse(typeof(FarmingPanelMKKeys), param0);
 
-                //OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
+                // OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
                 OSKeyPress = new KeyPress();
                 OSKeyPress.ImportString(parameters[1]);
             }
@@ -51,6 +54,7 @@ namespace NonVisuals.Saitek
             {
                 return null;
             }
+
             var onStr = WhenTurnedOn ? "1" : "0";
             return "FarmingPanelKey{" + onStr + Enum.GetName(typeof(FarmingPanelMKKeys), FarmingPanelKey) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
         }
@@ -87,8 +91,10 @@ namespace NonVisuals.Saitek
                                         keyBindingFarmingPanel.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case FarmingPanelMKKeys.BUTTON_27:
                             {
                                 foreach (var keyBinding in knobBindings)
@@ -98,11 +104,13 @@ namespace NonVisuals.Saitek
                                         keyBindingFarmingPanel.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
                     }
                 }
             }
+
             return knobBindings;
         }
     }

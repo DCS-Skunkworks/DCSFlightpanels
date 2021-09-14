@@ -17,27 +17,25 @@
 
     using NonVisuals.StreamDeck.Events;
 
-    using ThreadState = System.Threading.ThreadState;
-
     [Serializable]
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener, IDisposable
     {
-        private DCSBIOSOutput _dcsbiosOutput = null;
+        private DCSBIOSOutput _dcsbiosOutput;
         private string _formula = string.Empty;
-        private bool _useFormula = false;
+        private bool _useFormula;
         private double _formulaResult = double.MaxValue;
         private string _lastFormulaError = string.Empty;
         private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
         private volatile bool _valueUpdated = true;
-        [NonSerialized] private int _jaceId = 0;
+        [NonSerialized] private int _jaceId;
         private DCSBiosOutputType _decoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
-        private bool _treatStringAsNumber = false;
+        private bool _treatStringAsNumber;
         private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
         
-        [NonSerialized] private Thread _imageUpdateTread = null;
-        private bool _shutdown = false;
+        [NonSerialized] private Thread _imageUpdateTread;
+        private bool _shutdown;
         
-        private Bitmap _converterBitmap = null;
+        private Bitmap _converterBitmap;
 
         public DCSBIOSDecoder(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
         {
@@ -101,15 +99,19 @@
         public override void AfterClone()
         {
             DCSBIOS.GetInstance().AttachDataReceivedListener(this);
-            //_autoResetEvent = new AutoResetEvent(false);
+
+            // _autoResetEvent = new AutoResetEvent(false);
             if (_imageUpdateTread != null)
             {
                 try
                 {
                     _imageUpdateTread.Abort();
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                }
             }
+
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();
         }
@@ -123,7 +125,7 @@
                     /*
                      * If decoder isn't visible we end up here until it is visible again
                      */
-                    //_autoResetEvent.WaitOne();
+                    // _autoResetEvent.WaitOne();
                 }
 
                 if (_shutdown)
@@ -135,6 +137,7 @@
                 {
                     HandleNewDCSBIOSValue();
                 }
+
                 Thread.Sleep(StreamDeckConstants.IMAGE_UPDATING_THREAD_SLEEP_TIME);
             }
         }
@@ -199,11 +202,11 @@
                      * If DCS-BIOS sends null string data and the decoder should 
                      * treat it as number then it will be represented by zero.
                      */
-
                     if (_treatStringAsNumber && uint.TryParse(string.IsNullOrWhiteSpace(e.StringData) ? "0" : e.StringData.Substring(0, _dcsbiosOutput.MaxLength), out var tmpUint))
                     {
                         UintDcsBiosValue = tmpUint;
                     }
+
                     _valueUpdated = true;
                 }
             }
@@ -232,8 +235,8 @@
                  * 2) Use converter    (formula / no formula)
                  * 3) show blank image
                  */
-
                 var showImage = false;
+
                 /*   1) Use decoder raw(formula / no formula)  */
                 if (_dcsbiosConverters.Count == 0)
                 {
@@ -265,10 +268,10 @@
                         }
                     }
                 }
+
                 /* 2) Use converter    (formula / no formula) */
                 else if (_dcsbiosConverters.Count > 0 && (_decoderSourceType == DCSBiosOutputType.STRING_TYPE && _treatStringAsNumber) || _decoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
                 {
-
                     foreach (var dcsbiosConverter in _dcsbiosConverters)
                     {
                         if (dcsbiosConverter.CriteriaFulfilled(UseFormula ? FormulaResult : UintDcsBiosValue))
@@ -290,6 +293,7 @@
                         }
                     }
                 }
+
                 /* 3) show blank image */
                 else
                 {
@@ -298,11 +302,12 @@
                         BlackoutKey();
                     }
                 }
+
                 _lastFormulaError = string.Empty;
             }
             catch (Exception exception)
             {
-                //Common.LogError(exception);
+                // Common.LogError(exception);
                 _lastFormulaError = exception.Message;
             }
         }
@@ -326,6 +331,7 @@
             {
                 throw new Exception("StreamDeckPanelInstance is not set, cannot show image [DCSBIOSDecoder]");
             }
+
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, bitmap);
         }
 
@@ -335,6 +341,7 @@
             {
                 throw new Exception("StreamDeckPanelInstance is not set, cannot show image [DCSBIOSDecoder]");
             }
+
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, bitmapImage);
         }
 
@@ -369,7 +376,7 @@
 
         private double EvaluateFormula()
         {
-            //360 - floor((HSI_HDG / 65535) * 360)
+            // 360 - floor((HSI_HDG / 65535) * 360)
             var variables = new Dictionary<string, double>();
             variables.Add(_dcsbiosOutput.ControlId, 0);
             variables[_dcsbiosOutput.ControlId] = UintDcsBiosValue;
@@ -564,10 +571,12 @@
                     {
                         return formulaIsOK && sourceIsOK && ConfigurationOK;
                     }
+
                 case EnumDCSBIOSDecoderOutputType.Converter:
                     {
                         return formulaIsOK && sourceIsOK && convertersOK;
                     }
+
                 default:
                     {
                         return false;
@@ -589,8 +598,10 @@
                         {
                             _formula = string.Empty;
                         }
+
                         break;
                     }
+
                 case EnumDCSBIOSDecoderOutputType.Converter:
                     {
                         break;
@@ -622,7 +633,7 @@
         [JsonProperty("DefaultImageFilePath", Required = Required.Default)]
         public string DefaultImageFilePath
         {
-            //No getter, this is to be phased out, setter here so that any existing setting in user's file still can be parsed by JSON.
+            // No getter, this is to be phased out, setter here so that any existing setting in user's file still can be parsed by JSON.
             set
             {
                 var notUsedAnymoreDefaultImageFilePath = value;

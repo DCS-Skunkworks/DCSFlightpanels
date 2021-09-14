@@ -18,6 +18,7 @@
     public class RadioPanelPZ69P47D : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
         private CurrentP47DRadioMode _currentUpperRadioMode = CurrentP47DRadioMode.HFRADIO;
+
         private CurrentP47DRadioMode _currentLowerRadioMode = CurrentP47DRadioMode.HFRADIO;
 
         /*
@@ -38,27 +39,44 @@
         *  Freq. Selector Light Switch        
         */
         private readonly object _lockHFRadioPresetDialObject1 = new object();
+
         private DCSBIOSOutput _hfRadioOffDcsbiosOutput;
+
         private DCSBIOSOutput _hfRadioChannelAPresetDcsbiosOutput;
+
         private DCSBIOSOutput _hfRadioChannelBPresetDcsbiosOutput;
+
         private DCSBIOSOutput _hfRadioChannelCPresetDcsbiosOutput;
+
         private DCSBIOSOutput _hfRadioChannelDPresetDcsbiosOutput;
+
         private volatile uint _hfRadioOffCockpitButton = 1;
-        private volatile uint _hfRadioChannelACockpitButton = 0;
-        private volatile uint _hfRadioChannelBCockpitButton = 0;
-        private volatile uint _hfRadioChannelCCockpitButton = 0;
-        private volatile uint _hfRadioChannelDCockpitButton = 0;
+
+        private volatile uint _hfRadioChannelACockpitButton;
+
+        private volatile uint _hfRadioChannelBCockpitButton;
+
+        private volatile uint _hfRadioChannelCCockpitButton;
+
+        private volatile uint _hfRadioChannelDCockpitButton;
+
         private int _hfRadioChannelPresetDialSkipper;
+
         private const string HF_RADIO_LIGHT_SWITCH_COMMAND = "RCTRL_DIM TOGGLE\n";
+
         private readonly object _lockHFRadioModeDialObject1 = new object();
+
         private volatile uint _hfRadioModeCockpitDialPosition = 1;
+
         private DCSBIOSOutput _hfRadioModeDialPresetDcsbiosOutput;
+
         private int _hfRadioModePresetDialSkipper;
+
         /* 
-        *  COM2 Large IFF Circuit D
-        *  COM2 Small IFF Circuit B
-        *  COM2 ACT/STBY IFF Destruction
-        */
+                *  COM2 Large IFF Circuit D
+                *  COM2 Small IFF Circuit B
+                *  COM2 ACT/STBY IFF Destruction
+                */
         /*private readonly object _lockIFFDialObject1 = new object();
         private DCSBIOSOutput _iffBiffDcsbiosOutputDial;
         private DCSBIOSOutput _iffDiffDcsbiosOutputDial;
@@ -72,16 +90,17 @@
         private const string IFFD_COMMAND_DEC = "IFF_D DEC\n";
         */
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
+
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69P47D(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69P47D(HIDSkeleton hidSkeleton)
+            : base(hidSkeleton)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
             CreateRadioKnobs();
             Startup();
         }
-
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
@@ -98,7 +117,6 @@
         {
             try
             {
-
                 UpdateCounter(e.Address, e.Data);
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
@@ -108,9 +126,7 @@
                  * reset. Reading the dial's position with no change in value will not reset.
                  */
 
-
-
-                //HF Radio Off Button
+                // HF Radio Off Button
                 if (e.Address == _hfRadioOffDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioPresetDialObject1)
@@ -124,7 +140,7 @@
                     }
                 }
 
-                //HF Radio Channel A Button
+                // HF Radio Channel A Button
                 if (e.Address == _hfRadioChannelAPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioPresetDialObject1)
@@ -138,7 +154,7 @@
                     }
                 }
 
-                //HF Radio Channel B Button
+                // HF Radio Channel B Button
                 if (e.Address == _hfRadioChannelBPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioPresetDialObject1)
@@ -152,7 +168,7 @@
                     }
                 }
 
-                //HF Radio Channel C Button
+                // HF Radio Channel C Button
                 if (e.Address == _hfRadioChannelCPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioPresetDialObject1)
@@ -166,7 +182,7 @@
                     }
                 }
 
-                //HF Radio Channel B Button
+                // HF Radio Channel B Button
                 if (e.Address == _hfRadioChannelDPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioPresetDialObject1)
@@ -180,7 +196,7 @@
                     }
                 }
 
-                //HF Radio Mode
+                // HF Radio Mode
                 if (e.Address == _hfRadioModeDialPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioModeDialObject1)
@@ -194,7 +210,7 @@
                     }
                 }
 
-                //IFF B
+                // IFF B
                 /*if (e.Address == _iffBiffDcsbiosOutputDial.Address)
                 {
                     lock (_lockIFFDialObject1)
@@ -222,17 +238,15 @@
                     }
                 }*/
 
-                //Set once
+                // Set once
                 DataHasBeenReceivedFromDCSBIOS = true;
                 ShowFrequenciesOnPanel();
-
             }
             catch (Exception ex)
             {
                 Common.LogError(ex);
             }
         }
-
 
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
@@ -244,19 +258,19 @@
                     foreach (var radioPanelKnobObject in hashSet)
                     {
                         var radioPanelKnob = (RadioPanelKnobP47D)radioPanelKnobObject;
-                        
+
                         switch (radioPanelKnob.RadioPanelPZ69Knob)
                         {
-                                
                             case RadioPanelPZ69KnobsP47D.UPPER_HFRADIO:
-                                 
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentP47DRadioMode.HFRADIO);
                                     }
+
                                     break;
                                 }
+
                             /*case RadioPanelPZ69KnobsP47D.UPPER_IFF:
                                 {
                                     if (radioPanelKnob.IsOn)
@@ -276,16 +290,20 @@
                                     {
                                         SetUpperRadioMode(CurrentP47DRadioMode.NOUSE);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.LOWER_HFRADIO:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentP47DRadioMode.HFRADIO);
                                     }
+
                                     break;
                                 }
+
                             /*case RadioPanelPZ69KnobsP47D.LOWER_IFF:
                                 {
                                     if (radioPanelKnob.IsOn)
@@ -305,8 +323,10 @@
                                     {
                                         SetLowerRadioMode(CurrentP47DRadioMode.NOUSE);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.UPPER_LARGE_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsP47D.UPPER_LARGE_FREQ_WHEEL_DEC:
                             case RadioPanelPZ69KnobsP47D.UPPER_SMALL_FREQ_WHEEL_INC:
@@ -316,9 +336,10 @@
                             case RadioPanelPZ69KnobsP47D.LOWER_SMALL_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsP47D.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
-                                    //Ignore
+                                    // Ignore
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.UPPER_FREQ_SWITCH:
                                 {
                                     if (_currentLowerRadioMode == CurrentP47DRadioMode.HFRADIO)
@@ -328,8 +349,10 @@
                                             DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.LOWER_FREQ_SWITCH:
                                 {
                                     if (_currentLowerRadioMode == CurrentP47DRadioMode.HFRADIO)
@@ -339,13 +362,20 @@
                                             DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
+
                                     break;
                                 }
                         }
 
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.DoEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                            PluginManager.DoEvent(
+                                ProfileHandler.SelectedProfile().Description,
+                                HIDInstanceId,
+                                (int)PluginGamingPanelEnum.PZ69RadioPanel,
+                                (int)radioPanelKnob.RadioPanelPZ69Knob,
+                                radioPanelKnob.IsOn,
+                                null);
                         }
                     }
 
@@ -380,7 +410,7 @@
                                     {
                                         case CurrentP47DRadioMode.HFRADIO:
                                             {
-                                                //MODE
+                                                // MODE
                                                 if (!SkipHFRadioModeDialChange())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(true);
@@ -389,8 +419,10 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
+
                                                 break;
                                             }
+
                                         /*case CurrentP47DRadioMode.IFF:
                                             {
                                                 if (!SkipIffdDialChange())
@@ -404,15 +436,17 @@
                                                 break;
                                             }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentP47DRadioMode.HFRADIO:
                                             {
-                                                //MODE
+                                                // MODE
                                                 if (!SkipHFRadioModeDialChange())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(false);
@@ -421,8 +455,10 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
+
                                                 break;
                                             }
+
                                         /*case CurrentP47DRadioMode.IFF:
                                             {
                                                 if (!SkipIffdDialChange())
@@ -432,15 +468,17 @@
                                                 break;
                                             }*/
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.UPPER_SMALL_FREQ_WHEEL_INC:
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentP47DRadioMode.HFRADIO:
                                             {
-                                                //CHANNEL
+                                                // CHANNEL
                                                 if (!SkipHFRadioChannelPresetDialChange())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(true);
@@ -449,8 +487,10 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
+
                                                 break;
                                             }
+
                                         /*case CurrentP47DRadioMode.IFF:
                                             {
                                                 if (!SkipIffbDialChange())
@@ -460,15 +500,17 @@
                                                 break;
                                             }*/
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.UPPER_SMALL_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentP47DRadioMode.HFRADIO:
                                             {
-                                                //CHANNEL
+                                                // CHANNEL
                                                 if (!SkipHFRadioChannelPresetDialChange())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(false);
@@ -477,8 +519,10 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
+
                                                 break;
                                             }
+
                                         /*case CurrentP47DRadioMode.IFF:
                                             {
                                                 if (!SkipIffbDialChange())
@@ -488,15 +532,17 @@
                                                 break;
                                             }*/
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentP47DRadioMode.HFRADIO:
                                             {
-                                                //MODE
+                                                // MODE
                                                 if (!SkipHFRadioModeDialChange())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(true);
@@ -505,8 +551,10 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
+
                                                 break;
                                             }
+
                                         /*case CurrentP47DRadioMode.IFF:
                                             {
                                                 if (!SkipIffdDialChange())
@@ -516,15 +564,17 @@
                                                 break;
                                             }*/
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentP47DRadioMode.HFRADIO:
                                             {
-                                                //MODE
+                                                // MODE
                                                 if (!SkipHFRadioModeDialChange())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(false);
@@ -533,8 +583,10 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
+
                                                 break;
                                             }
+
                                         /*case CurrentP47DRadioMode.IFF:
                                             {
                                                 if (!SkipIffdDialChange())
@@ -544,15 +596,17 @@
                                                 break;
                                             }*/
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.LOWER_SMALL_FREQ_WHEEL_INC:
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentP47DRadioMode.HFRADIO:
                                             {
-                                                //CHANNEL
+                                                // CHANNEL
                                                 if (!SkipHFRadioChannelPresetDialChange())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(true);
@@ -561,8 +615,10 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
+
                                                 break;
                                             }
+
                                         /*case CurrentP47DRadioMode.IFF:
                                             {
                                                 if (!SkipIffbDialChange())
@@ -572,15 +628,17 @@
                                                 break;
                                             }*/
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsP47D.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentP47DRadioMode.HFRADIO:
                                             {
-                                                //CHANNEL
+                                                // CHANNEL
                                                 if (!SkipHFRadioChannelPresetDialChange())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(false);
@@ -589,8 +647,10 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
+
                                                 break;
                                             }
+
                                         /*case CurrentP47DRadioMode.IFF:
                                             {
                                                 if (!SkipIffbDialChange())
@@ -600,11 +660,13 @@
                                                 break;
                                             }*/
                                     }
+
                                     break;
                                 }
                         }
                     }
                 }
+
                 ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
@@ -621,13 +683,11 @@
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-
                         return;
                     }
 
                     if (!FirstReportHasBeenRead)
                     {
-
                         return;
                     }
 
@@ -668,6 +728,7 @@
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, channel, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
+
                         /*case CurrentP47DRadioMode.IFF:
                             {
                                 //Preset Channel Selector
@@ -691,11 +752,12 @@
                                 break;
                             }
                     }
+
                     switch (_currentLowerRadioMode)
                     {
                         case CurrentP47DRadioMode.HFRADIO:
                             {
-                                //0-4
+                                // 0-4
                                 uint channel = 0;
                                 lock (_lockHFRadioPresetDialObject1)
                                 {
@@ -719,12 +781,13 @@
                                     {
                                         channel = 4;
                                     }
-
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _hfRadioModeCockpitDialPosition, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, channel, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
+
                         /*case CurrentP47DRadioMode.IFF:
                             {
                                 //Preset Channel Selector
@@ -748,6 +811,7 @@
                                 break;
                             }
                     }
+
                     SendLCDData(bytes);
                 }
             }
@@ -755,9 +819,9 @@
             {
                 Common.LogError(ex);
             }
+
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
-
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
@@ -770,20 +834,18 @@
             {
                 StartupBase("P-47D");
 
-                //COM1
+                // COM1
                 _hfRadioOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_OFF");
                 _hfRadioChannelAPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_A");
                 _hfRadioChannelBPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_B");
                 _hfRadioChannelCPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_C");
                 _hfRadioChannelDPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_D");
                 _hfRadioModeDialPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_T_MODE");
-                //COM2
-                //_iffBiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_B");
-                //_iffDiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_D");
-
-
+                // COM2
+                // _iffBiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_B");
+                // _iffDiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_D");
                 StartListeningForPanelChanges();
-                //IsAttached = true;
+                // IsAttached = true;
             }
             catch (Exception ex)
             {
@@ -803,7 +865,9 @@
             }
         }
 
-        public override void ClearSettings(bool setIsDirty = false) { }
+        public override void ClearSettings(bool setIsDirty = false)
+        {
+        }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
@@ -841,8 +905,8 @@
             try
             {
                 _currentLowerRadioMode = currentP47DRadioMode;
-                //If NOUSE then send next round of data to the panel in order to clear the LCD.
-                //_sendNextRoundToPanel = true;catch (Exception ex)
+                // If NOUSE then send next round of data to the panel in order to clear the LCD.
+                // _sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
             {
@@ -861,6 +925,7 @@
                         _hfRadioChannelPresetDialSkipper = 0;
                         return false;
                     }
+
                     _hfRadioChannelPresetDialSkipper++;
                     return true;
                 }
@@ -869,8 +934,10 @@
             {
                 Common.LogError(ex);
             }
+
             return false;
         }
+
         /*
         private bool SkipIffdDialChange()
         {
@@ -927,6 +994,7 @@
                         _hfRadioModePresetDialSkipper = 0;
                         return false;
                     }
+
                     _hfRadioModePresetDialSkipper++;
                     return true;
                 }
@@ -935,6 +1003,7 @@
             {
                 Common.LogError(ex);
             }
+
             return false;
         }
 
@@ -944,18 +1013,22 @@
             {
                 if (moveUp)
                 {
-                    if ((_hfRadioOffCockpitButton == 1 || _hfRadioOffCockpitButton == 0) && _hfRadioChannelACockpitButton == 0 && _hfRadioChannelBCockpitButton == 0 && _hfRadioChannelCCockpitButton == 0 && _hfRadioChannelDCockpitButton == 0)
+                    if ((_hfRadioOffCockpitButton == 1 || _hfRadioOffCockpitButton == 0) && _hfRadioChannelACockpitButton == 0 && _hfRadioChannelBCockpitButton == 0
+                        && _hfRadioChannelCCockpitButton == 0 && _hfRadioChannelDCockpitButton == 0)
                     {
                         return "RCTRL_A INC\n";
                     }
+
                     if (_hfRadioChannelACockpitButton == 1)
                     {
                         return "RCTRL_B INC\n";
                     }
+
                     if (_hfRadioChannelBCockpitButton == 1)
                     {
                         return "RCTRL_C INC\n";
                     }
+
                     if (_hfRadioChannelCCockpitButton == 1)
                     {
                         return "RCTRL_D INC\n";
@@ -967,20 +1040,24 @@
                     {
                         return "RCTRL_C INC\n";
                     }
+
                     if (_hfRadioChannelCCockpitButton == 1)
                     {
                         return "RCTRL_B INC\n";
                     }
+
                     if (_hfRadioChannelBCockpitButton == 1)
                     {
                         return "RCTRL_A INC\n";
                     }
+
                     if (_hfRadioChannelACockpitButton == 1)
                     {
                         return "RCTRL_OFF INC\n";
                     }
                 }
             }
+
             return null;
         }
 
@@ -995,7 +1072,6 @@
 
                 return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition - 1) + "\n";
             }
-
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
@@ -1021,6 +1097,5 @@
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
-
     }
 }

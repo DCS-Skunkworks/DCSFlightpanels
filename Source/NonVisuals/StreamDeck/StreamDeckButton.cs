@@ -19,14 +19,14 @@
     public class StreamDeckButton : IDisposable
     {
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private IStreamDeckButtonFace _buttonFace = null;
-        private IStreamDeckButtonAction _buttonActionForPress = null;
-        private IStreamDeckButtonAction _buttonActionForRelease = null;
+        private IStreamDeckButtonFace _buttonFace;
+        private IStreamDeckButtonAction _buttonActionForPress;
+        private IStreamDeckButtonAction _buttonActionForRelease;
         [NonSerialized] private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         [NonSerialized] private Thread _keyPressedThread;
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
-        private volatile bool _isVisible = false;
+        private volatile bool _isVisible;
 
         [NonSerialized] private static List<StreamDeckButton> _staticStreamDeckButtons = new List<StreamDeckButton>();
 
@@ -52,6 +52,7 @@
             {
                 return;
             }
+
             _staticStreamDeckButtons.Add(this);
         }
 
@@ -111,6 +112,7 @@
             {
                 return _staticStreamDeckButtons;
             }
+
             return _staticStreamDeckButtons.FindAll(o => o.StreamDeckPanelInstance.BindingHash == streamDeckPanel.BindingHash).ToList();
         }
 
@@ -127,7 +129,7 @@
                     PluginManager.DoEvent(
                         ProfileHandler.SelectedProfile().Description, 
                         StreamDeckPanelInstance.HIDInstanceId, 
-                        (int)(int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
+                        (int)StreamDeckCommon.ConvertEnum(this._streamDeckPanel.TypeOfPanel),
                         (int)StreamDeckButtonName, 
                         true, 
                         null);
@@ -214,21 +216,25 @@
                                 pluginPanel = PluginGamingPanelEnum.StreamDeckMini;
                                 break;
                             }
+
                         case GamingPanelEnum.StreamDeck:
                             {
                                 pluginPanel = PluginGamingPanelEnum.StreamDeck;
                                 break;
                             }
+
                         case GamingPanelEnum.StreamDeckV2:
                             {
                                 pluginPanel = PluginGamingPanelEnum.StreamDeckV2;
                                 break;
                             }
+
                         case GamingPanelEnum.StreamDeckMK2:
                             {
                                 pluginPanel = PluginGamingPanelEnum.StreamDeckMK2;
                                 break;
                             }
+
                         case GamingPanelEnum.StreamDeckXL:
                             {
                                 pluginPanel = PluginGamingPanelEnum.StreamDeckXL;
@@ -244,6 +250,7 @@
                         false,
                         null);
                 }
+
                 return;
             }
 
@@ -267,6 +274,7 @@
             {
                 ClearConfiguration();
             }
+
             ActionForPress = newStreamDeckButton.ActionForPress;
             ActionForRelease = newStreamDeckButton.ActionForRelease;
             Face = newStreamDeckButton.Face;
@@ -353,10 +361,12 @@
                 {
                     stringBuilder.Append("ActionPress : ").Append(_buttonActionForPress.ActionDescription).Append(" ");
                 }
+
                 if (ActionForRelease != null)
                 {
                     stringBuilder.Append("ActionRelease : ").Append(_buttonActionForRelease.ActionDescription).Append(" ");
                 }
+
                 if (Face != null)
                 {
                     stringBuilder.Append(Face.FaceDescription).Append(" ");
@@ -446,10 +456,12 @@
                 {
                     _buttonFace.StreamDeckPanelInstance = value;
                 }
+
                 if (_buttonActionForPress != null)
                 {
                     _buttonActionForPress.StreamDeckPanelInstance = value;
                 }
+
                 if (_buttonActionForRelease != null)
                 {
                     _buttonActionForRelease.StreamDeckPanelInstance = value;

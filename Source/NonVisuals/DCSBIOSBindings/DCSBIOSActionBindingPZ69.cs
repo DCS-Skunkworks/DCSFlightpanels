@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DCS_BIOS;
-using NonVisuals.Saitek;
-
-
-namespace NonVisuals.DCSBIOSBindings
+﻿namespace NonVisuals.DCSBIOSBindings
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using DCS_BIOS;
+
     using MEF;
+
+    using NonVisuals.Saitek;
 
     [Serializable]
     public class DCSBIOSActionBindingPZ69 : DCSBIOSActionBindingBase
@@ -34,10 +35,10 @@ namespace NonVisuals.DCSBIOSBindings
 
             if (settings.StartsWith("RadioPanelDCSBIOSControl{"))
             {
-                //RadioPanelDCSBIOSControl{COM1}\\o/{1UpperSmallFreqWheelInc|DCS-BIOS}\\o/\\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}\\o/\\\\?\\hid#vid_06a3&pid_0d06#9&244b4bcc&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}\\o/PanelSettingsVersion=2X"
+                // RadioPanelDCSBIOSControl{COM1}\\o/{1UpperSmallFreqWheelInc|DCS-BIOS}\\o/\\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}\\o/\\\\?\\hid#vid_06a3&pid_0d06#9&244b4bcc&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}\\o/PanelSettingsVersion=2X"
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                //RadioPanelDCSBIOSControl{COM1}
+                // RadioPanelDCSBIOSControl{COM1}
                 var param0 = parameters[0].Replace("RadioPanelDCSBIOSControl{", string.Empty).Replace("}", string.Empty);
                 _pz69DialPosition = (PZ69DialPosition) Enum.Parse(typeof(PZ69DialPosition), param0);
 
@@ -56,8 +57,8 @@ namespace NonVisuals.DCSBIOSBindings
                     _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator) Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param1);
                 }
 
-                //The rest of the array besides last entry are DCSBIOSInput
-                //DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC}
+                // The rest of the array besides last entry are DCSBIOSInput
+                // DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC}
                 DCSBIOSInputs = new List<DCSBIOSInput>();
                 for (var i = 0; i < parameters.Length; i++)
                 {
@@ -94,24 +95,25 @@ namespace NonVisuals.DCSBIOSBindings
             {
                 throw new Exception("Unknown dial position in DCSBIOSBindingPZ69 for knob " + RadioPanelPZ69Knob + ". Cannot export.");
             }
+
             var onStr = WhenTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
             foreach (var dcsbiosInput in DCSBIOSInputs)
             {
-                stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + dcsbiosInput.ToString());
+                stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + dcsbiosInput);
             }
 
             if (!string.IsNullOrWhiteSpace(Description))
             {
-                //RadioPanelDCSBIOSControl{0COM1_BUTTON|Oxygen System Test}\o/\o/DCSBIOSInput{ENVCP_OXY_TEST|SET_STATE|0}
+                // RadioPanelDCSBIOSControl{0COM1_BUTTON|Oxygen System Test}\o/\o/DCSBIOSInput{ENVCP_OXY_TEST|SET_STATE|0}
                 return "RadioPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" +
                        SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) +
-                       "|" + Description + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder.ToString();
+                       "|" + Description + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder;
             }
 
             return "RadioPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" +
                    SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) + "}" +
-                   SaitekConstants.SEPARATOR_SYMBOL + stringBuilder.ToString();
+                   SaitekConstants.SEPARATOR_SYMBOL + stringBuilder;
         }
     }
 }

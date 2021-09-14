@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Saitek;
-
-namespace NonVisuals.Radios
+﻿namespace NonVisuals.Radios
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
+    using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Saitek;
 
     public class RadioPanelPZ69AV8BNA : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
@@ -19,8 +21,8 @@ namespace NonVisuals.Radios
         private CurrentAV8BNARadioMode _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM1;
         
         /* COMM1 V/UHF AN/ARC-210 */
-        //Large dial xxx-xxx [step of 1]
-        //Small dial 0.00-0.97 [step of x.x[0 2 5 7]
+        // Large dial xxx-xxx [step of 1]
+        // Small dial 0.00-0.97 [step of x.x[0 2 5 7]
         private const string COMM1_CHANNEL_INC = "UFC_COM1_SEL +1000\n";
         private const string COMM1_CHANNEL_DEC = "UFC_COM1_SEL -1000\n";
         private const string COMM1_VOL_INC = "UFC_COM1_VOL +4000\n";
@@ -33,8 +35,8 @@ namespace NonVisuals.Radios
         private readonly ClickSpeedDetector _comm1ChannelClickSpeedDetector = new ClickSpeedDetector(8);
 
         /* COMM2 V/UHF AN/ARC-210 */
-        //Large dial xxx-xxx [step of 1]
-        //Small dial 0.00-0.97 [step of x.x[0 2 5 7]
+        // Large dial xxx-xxx [step of 1]
+        // Small dial 0.00-0.97 [step of x.x[0 2 5 7]
         private const string COMM2_CHANNEL_INC = "UFC_COM2_SEL +3200\n";
         private const string COMM2_CHANNEL_DEC = "UFC_COM2_SEL -3200\n";
         private const string COMM2_VOL_INC = "UFC_COM2_VOL +4000\n";
@@ -71,7 +73,7 @@ namespace NonVisuals.Radios
              * reset. Reading the dial's position with no change in value will not reset.
              */
 
-            //Set once
+            // Set once
             DataHasBeenReceivedFromDCSBIOS = true;
             ShowFrequenciesOnPanel();
         }
@@ -92,6 +94,7 @@ namespace NonVisuals.Radios
                         }
                     }
                 }
+
                 if (e.Address == _comm2DcsbiosOutputFreq.Address)
                 {
                     lock (_lockCOMM2DialsObject)
@@ -116,16 +119,18 @@ namespace NonVisuals.Radios
 
             if (IgnoreSwitchButtonOnce() && (knob.RadioPanelPZ69Knob == RadioPanelPZ69KnobsAV8BNA.UPPER_FREQ_SWITCH || knob.RadioPanelPZ69Knob == RadioPanelPZ69KnobsAV8BNA.LOWER_FREQ_SWITCH))
             {
-                //Don't do anything on the very first button press as the panel sends ALL
-                //switches when it is manipulated the first time
-                //This would cause unintended sync.
+                // Don't do anything on the very first button press as the panel sends ALL
+                // switches when it is manipulated the first time
+                // This would cause unintended sync.
                 return;
             }
+
             if (!DataHasBeenReceivedFromDCSBIOS)
             {
-                //Don't start communication with DCS-BIOS before we have had a first contact from "them"
+                // Don't start communication with DCS-BIOS before we have had a first contact from "them"
                 return;
             }
+
             switch (knob.RadioPanelPZ69Knob)
             {
                 case RadioPanelPZ69KnobsAV8BNA.UPPER_FREQ_SWITCH:
@@ -138,6 +143,7 @@ namespace NonVisuals.Radios
                                     ShowFrequenciesOnPanel();
                                     break;
                                 }
+
                             case CurrentAV8BNARadioMode.COMM2:
                                 {
                                     DCSBIOS.Send(knob.IsOn ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
@@ -147,6 +153,7 @@ namespace NonVisuals.Radios
                         }
                         break;
                     }
+
                 case RadioPanelPZ69KnobsAV8BNA.LOWER_FREQ_SWITCH:
                     {
 
@@ -158,6 +165,7 @@ namespace NonVisuals.Radios
                                     ShowFrequenciesOnPanel();
                                     break;
                                 }
+
                             case CurrentAV8BNARadioMode.COMM2:
                                 {
                                     DCSBIOS.Send(knob.IsOn ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
@@ -178,10 +186,12 @@ namespace NonVisuals.Radios
                 {
                     return;
                 }
+
                 if (!FirstReportHasBeenRead)
                 {
                     return;
                 }
+
                 var bytes = new byte[21];
                 bytes[0] = 0x0;
 
@@ -194,10 +204,12 @@ namespace NonVisuals.Radios
                             {
                                 frequencyAsString = _comm1Frequency;
                             }
+
                             SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
 
                         }
+
                         break;
                     case CurrentAV8BNARadioMode.COMM2:
                         {
@@ -206,10 +218,12 @@ namespace NonVisuals.Radios
                             {
                                 frequencyAsString = _comm2Frequency;
                             }
+
                             SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
 
                         }
+
                         break;
                     case CurrentAV8BNARadioMode.NOUSE:
                         {
@@ -227,10 +241,12 @@ namespace NonVisuals.Radios
                             {
                                 frequencyAsString = _comm1Frequency;
                             }
+
                             SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
 
                         }
+
                         break;
                     case CurrentAV8BNARadioMode.COMM2:
                         {
@@ -239,10 +255,12 @@ namespace NonVisuals.Radios
                             {
                                 frequencyAsString = _comm2Frequency;
                             }
+
                             SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
 
                         }
+
                         break;
                     case CurrentAV8BNARadioMode.NOUSE:
                         {
@@ -253,6 +271,7 @@ namespace NonVisuals.Radios
                 }
                 SendLCDData(bytes);
             }
+
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
 
@@ -299,31 +318,35 @@ namespace NonVisuals.Radios
                                         {
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
-                                                //No need for turbo
+                                                // No need for turbo
                                                 DCSBIOS.Send(COMM1_CHANNEL_INC);
                                             }
                                             else
                                             {
                                                 DCSBIOS.Send(COMM1_CHANNEL_INC);
                                             }
+
                                             break;
                                         }
+
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
-                                                //No need for turbo
+                                                // No need for turbo
                                                 DCSBIOS.Send(COMM2_CHANNEL_INC);
                                             }
                                             else
                                             {
                                                 DCSBIOS.Send(COMM2_CHANNEL_INC);
                                             }
+
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentUpperRadioMode)
@@ -332,31 +355,35 @@ namespace NonVisuals.Radios
                                         {
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
-                                                //No need for turbo
+                                                // No need for turbo
                                                 DCSBIOS.Send(COMM1_CHANNEL_DEC);
                                             }
                                             else
                                             {
                                                 DCSBIOS.Send(COMM1_CHANNEL_DEC);
                                             }
+
                                             break;
                                         }
+
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
-                                                //No need for turbo
+                                                // No need for turbo
                                                 DCSBIOS.Send(COMM2_CHANNEL_DEC);
                                             }
                                             else
                                             {
                                                 DCSBIOS.Send(COMM2_CHANNEL_DEC);
                                             }
+
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_INC:
                             {
                                 switch (_currentUpperRadioMode)
@@ -366,6 +393,7 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(COMM1_VOL_INC);
                                             break;
                                         }
+
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
                                             DCSBIOS.Send(COMM2_VOL_INC);
@@ -374,6 +402,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentUpperRadioMode)
@@ -383,6 +412,7 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(COMM1_VOL_DEC);
                                             break;
                                         }
+
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
                                             DCSBIOS.Send(COMM2_VOL_DEC);
@@ -391,6 +421,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_INC:
                             {
                                 switch (_currentLowerRadioMode)
@@ -399,31 +430,35 @@ namespace NonVisuals.Radios
                                         {
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
-                                                //No need for turbo
+                                                // No need for turbo
                                                 DCSBIOS.Send(COMM1_CHANNEL_INC);
                                             }
                                             else
                                             {
                                                 DCSBIOS.Send(COMM1_CHANNEL_INC);
                                             }
+
                                             break;
                                         }
+
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
-                                                //No need for turbo
+                                                // No need for turbo
                                                 DCSBIOS.Send(COMM2_CHANNEL_INC);
                                             }
                                             else
                                             {
                                                 DCSBIOS.Send(COMM2_CHANNEL_INC);
                                             }
+
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentLowerRadioMode)
@@ -432,31 +467,35 @@ namespace NonVisuals.Radios
                                         {
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
-                                                //No need for turbo
+                                                // No need for turbo
                                                 DCSBIOS.Send(COMM1_CHANNEL_DEC);
                                             }
                                             else
                                             {
                                                 DCSBIOS.Send(COMM1_CHANNEL_DEC);
                                             }
+
                                             break;
                                         }
+
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
-                                                //No need for turbo
+                                                // No need for turbo
                                                 DCSBIOS.Send(COMM2_CHANNEL_DEC);
                                             }
                                             else
                                             {
                                                 DCSBIOS.Send(COMM2_CHANNEL_DEC);
                                             }
+
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_INC:
                             {
                                 switch (_currentLowerRadioMode)
@@ -467,6 +506,7 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(COMM1_VOL_INC);
                                             break;
                                         }
+
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
                                             DCSBIOS.Send(COMM2_VOL_INC);
@@ -475,6 +515,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentLowerRadioMode)
@@ -484,6 +525,7 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(COMM1_VOL_DEC);
                                             break;
                                         }
+
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
                                             DCSBIOS.Send(COMM2_VOL_DEC);
@@ -495,6 +537,7 @@ namespace NonVisuals.Radios
                     }
                 }
             }
+
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
             ShowFrequenciesOnPanel();
         }
@@ -517,16 +560,20 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM1;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_COMM2:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM2;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_NAV1:
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_NAV2:
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_ADF:
@@ -537,24 +584,30 @@ namespace NonVisuals.Radios
                             {
                                 _currentUpperRadioMode = CurrentAV8BNARadioMode.NOUSE;
                             }
+
                             break;
                         }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_COMM1:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM1;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_COMM2:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM2;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_NAV1:
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_NAV2:
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_ADF:
@@ -565,45 +618,56 @@ namespace NonVisuals.Radios
                             {
                                 _currentLowerRadioMode = CurrentAV8BNARadioMode.NOUSE;
                             }
+
                             break;
                         }
+
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.UPPER_FREQ_SWITCH:
                             {
                                 SendFrequencyToDCSBIOS(radioPanelKnob);
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsAV8BNA.LOWER_FREQ_SWITCH:
                             {
                                 SendFrequencyToDCSBIOS(radioPanelKnob);
@@ -627,16 +691,17 @@ namespace NonVisuals.Radios
             {
                 StartupBase("AV-8B NA");
 
-                //V/UHF COMM1
+                // V/UHF COMM1
                 _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_STRING_FREQ");
                 DCSBIOSStringManager.AddListener(_comm1DcsbiosOutputFreq, this);
 
-                //V/UHF COMM2
+                // V/UHF COMM2
                 _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM2_STRING_FREQ");
                 DCSBIOSStringManager.AddListener(_comm2DcsbiosOutputFreq, this);
 
                 StartListeningForPanelChanges();
-                //IsAttached = true;
+
+                // IsAttached = true;
             }
             catch (Exception ex)
             {

@@ -2,6 +2,6 @@
 {
     public interface IOledImageListener
     {
-        //void OledImageChanged(object sender, StreamDeckOledImageChangeEventArgs e);
+        // void OledImageChanged(object sender, StreamDeckOledImageChangeEventArgs e);
     }
 }

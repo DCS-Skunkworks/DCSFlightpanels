@@ -73,7 +73,7 @@
             }
 
             Startup();
-            _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
+            _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
             _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
             EventHandlers.AttachStreamDeckListener(this);
@@ -151,11 +151,10 @@
             }
         }
 
-        private readonly Color[] _colors = new Color[]
-        {
-            Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
-            Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
-        };
+        private readonly Color[] _colors = {
+                                                   Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
+                                                   Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
+                                               };
 
         private void ShowIdentifyingValue()
         {
@@ -256,6 +255,7 @@
             {
                 return;
             }
+
             UpdateCounter(e.Address, e.Data);
         }
 
@@ -270,6 +270,7 @@
             {
                 return;
             }
+
             var keyBitmap = KeyBitmap.Create.FromBitmap(bitmap);
 
             lock (_updateStreamDeckOledLockObject)
@@ -284,6 +285,7 @@
             {
                 return;
             }
+
             var keyBitmap = KeyBitmap.Create.FromBitmap(BitMapCreator.BitmapImage2Bitmap(bitmapImage));
             lock (_updateStreamDeckOledLockObject)
             {
@@ -307,6 +309,7 @@
             {
                 return null;
             }
+
             return new List<string>();
         }
 
@@ -322,6 +325,7 @@
             {
                 _streamDeckLayerHandler.ImportJSONSettings(genericPanelBinding.JSONString);
             }
+
             SettingsLoading = false;
             SettingsApplied();
         }
@@ -340,13 +344,14 @@
         public string GetKeyPressForLoggingPurposes(StreamDeckButton streamDeckButton)
         {
             var result = string.Empty;
+
             /*foreach (var keyBinding in _keyBindings)
-            {
-                if (keyBinding.OSKeyPress != null && keyBinding.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && keyBinding.WhenTurnedOn == enumStreamDeckButton.IsPressed)
-                {
-                    result = keyBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
-                }
-            }*/
+                        {
+                            if (keyBinding.OSKeyPress != null && keyBinding.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && keyBinding.WhenTurnedOn == enumStreamDeckButton.IsPressed)
+                            {
+                                result = keyBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
+                            }
+                        }*/
             return result;
         }
 
@@ -369,8 +374,8 @@
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            //Set _selectedMode and LCD button statuses
-            //and performs the actual actions for key presses
+            // Set _selectedMode and LCD button statuses
+            // and performs the actual actions for key presses
             // ADD METHOD ?
         }
 
@@ -379,20 +384,21 @@
         {
             if (!ForwardPanelEvent)
             {
-                return;
             }
         }
 
         private void DeviceAttachedHandler()
         {
             Startup();
-            //IsAttached = true;
+
+            // IsAttached = true;
         }
 
         private void DeviceRemovedHandler()
         {
             Dispose();
-            //IsAttached = false;
+
+            // IsAttached = false;
         }
 
         public DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
@@ -528,7 +534,7 @@
             return FileNotFoundBitmap();
         }
 
-        private static Bitmap _fileNotFoundBitMap = null;
+        private static Bitmap _fileNotFoundBitMap;
 
         public static Bitmap FileNotFoundBitmap()
         {
@@ -536,6 +542,7 @@
             {
                 return _fileNotFoundBitMap;
             }
+
             var assembly = Assembly.GetExecutingAssembly();
 
             var tmpBitMapImage = new BitmapImage();

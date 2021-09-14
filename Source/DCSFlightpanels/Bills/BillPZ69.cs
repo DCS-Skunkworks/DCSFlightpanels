@@ -77,12 +77,12 @@
         
         public override bool IsEmpty()
         {
-            return _bipLinkPZ69 == null && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
+            return _bipLinkPZ69 == null && (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
         public override bool IsEmptyNoCareBipLink()
         {
-            return (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
+            return (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
         public override void ClearAll()

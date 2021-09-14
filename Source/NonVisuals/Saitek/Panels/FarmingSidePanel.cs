@@ -28,7 +28,8 @@
             {
                 throw new ArgumentException();
             }
-            //Fixed values
+
+            // Fixed values
             VendorId = 0x0738;
             ProductId = 0x2218;
             CreateKeys();
@@ -110,6 +111,7 @@
             {
                 return null;
             }
+
             var result = new List<string>();
 
             foreach (var keyBinding in _keyBindings)
@@ -119,6 +121,7 @@
                     result.Add(keyBinding.ExportSettings());
                 }
             }
+
             foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
             {
                 if (!operatingSystemCommand.OSCommandObject.IsEmpty)
@@ -126,6 +129,7 @@
                     result.Add(operatingSystemCommand.ExportSettings());
                 }
             }
+
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
@@ -133,6 +137,7 @@
                     result.Add(dcsBiosBinding.ExportSettings());
                 }
             }
+
             foreach (var bipLink in _bipLinks)
             {
                 if (bipLink.BIPLights.Count > 0)
@@ -140,6 +145,7 @@
                     result.Add(bipLink.ExportSettings());
                 }
             }
+
             return result;
         }
 
@@ -247,7 +253,7 @@
                                 (int)PluginGamingPanelEnum.FarmingPanel,
                                 (int)farmingPanelKey.FarmingPanelMKKey,
                                 farmingPanelKey.IsOn,
-                                keyBinding.OSKeyPress.KeySequence);
+                                keyBinding.OSKeyPress.KeyPressSequence);
                         }
 
                         found = true;
@@ -255,7 +261,7 @@
                     }
                 }
 
-                if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
                         ProfileHandler.SelectedProfile().Description,
@@ -310,6 +316,7 @@
                     result = keyBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
                 }
             }
+
             return result;
         }
 
@@ -323,6 +330,7 @@
                 SetIsDirty();
                 return;
             }
+
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
@@ -336,9 +344,11 @@
                     {
                         keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
                     }
+
                     found = true;
                 }
             }
+
             if (!found && !string.IsNullOrEmpty(keyPress))
             {
                 var keyBinding = new KeyBindingFarmingPanel();
@@ -361,7 +371,8 @@
                 SetIsDirty();
                 return;
             }
-            //This must accept lists
+
+            // This must accept lists
             var found = false;
 
             foreach (var keyBinding in _keyBindings)
@@ -377,10 +388,12 @@
                         var keyPress = new KeyPress(description, keySequence);
                         keyBinding.OSKeyPress = keyPress;
                     }
+
                     found = true;
                     break;
                 }
             }
+
             if (!found && keySequence.Count > 0)
             {
                 var keyBinding = new KeyBindingFarmingPanel();
@@ -398,7 +411,8 @@
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
             var farmingPanelOnOff = (FarmingPanelOnOff)panelSwitchOnOff;
-            //This must accept lists
+
+            // This must accept lists
             var found = false;
 
             foreach (var operatingSystemCommandBinding in _operatingSystemCommandBindings)
@@ -410,6 +424,7 @@
                     break;
                 }
             }
+
             if (!found)
             {
                 var operatingSystemCommandBindingFarmingPanel = new OSCommandBindingFarmingPanel();
@@ -418,6 +433,7 @@
                 operatingSystemCommandBindingFarmingPanel.WhenTurnedOn = farmingPanelOnOff.ButtonState;
                 _operatingSystemCommandBindings.Add(operatingSystemCommandBindingFarmingPanel);
             }
+
             SetIsDirty();
         }
 
@@ -435,10 +451,11 @@
                 SetIsDirty();
                 return;
             }
-            //!!!!!!!
-            //If all DCS-BIOS commands has been deleted then provide a empty list, not null object!!!
 
-            //This must accept lists
+            // !!!!!!!
+            // If all DCS-BIOS commands has been deleted then provide a empty list, not null object!!!
+
+            // This must accept lists
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
@@ -450,6 +467,7 @@
                     break;
                 }
             }
+
             if (!found)
             {
                 var dcsBiosBinding = new DCSBIOSActionBindingFarmingPanel();
@@ -459,20 +477,22 @@
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
+
             SetIsDirty();
         }
 
         public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
         {
             var farmingPanelOnOff = (FarmingPanelOnOff)panelSwitchOnOff;
-            var bipLinkFarmingPanel = (BIPLinkFarmingPanel) bipLink;
+            var bipLinkFarmingPanel = (BIPLinkFarmingPanel)bipLink;
             if (bipLinkFarmingPanel.BIPLights.Count == 0)
             {
                 RemoveSwitchFromList(ControlListFarmingPanel.BIPS, farmingPanelOnOff);
                 SetIsDirty();
                 return;
             }
-            //This must accept lists
+
+            // This must accept lists
             var found = false;
 
             foreach (var tmpBipLink in _bipLinks)
@@ -485,12 +505,14 @@
                     break;
                 }
             }
+
             if (!found && bipLinkFarmingPanel.BIPLights.Count > 0)
             {
                 bipLinkFarmingPanel.FarmingPanelKey = farmingPanelOnOff.Switch;
                 bipLinkFarmingPanel.WhenTurnedOn = farmingPanelOnOff.ButtonState;
                 _bipLinks.Add(bipLinkFarmingPanel);
             }
+
             SetIsDirty();
         }
 
@@ -511,6 +533,7 @@
                     }
                 }
             }
+
             if (controlListFarmingPanel == ControlListFarmingPanel.ALL || controlListFarmingPanel == ControlListFarmingPanel.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)

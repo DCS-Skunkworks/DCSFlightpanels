@@ -1,9 +1,10 @@
-﻿using System.Text;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.StreamDeck.Events
+﻿namespace NonVisuals.StreamDeck.Events
 {
+    using System.Text;
+
     using MEF;
+
+    using NonVisuals.Interfaces;
 
     public static class EventHandlers
     {
@@ -69,6 +70,7 @@ namespace NonVisuals.StreamDeck.Events
             {
                 return false;
             }
+
             var eventArguments = new StreamDeckDirtyReportArgs();
 
             OnDirtyConfigurationsEventHandler?.Invoke(sender, eventArguments);
@@ -78,7 +80,7 @@ namespace NonVisuals.StreamDeck.Events
 
                 if (eventArguments.Cancel)
                 {
-                    return true; //There are dirty listeners out there
+                    return true; // There are dirty listeners out there
                 }
             }
 
@@ -110,7 +112,7 @@ namespace NonVisuals.StreamDeck.Events
 
         public static void LayerSwitched(object sender, string bindingHash, string layerName)
         {
-            var eventArgs = new StreamDeckShowNewLayerArgs() { SelectedLayerName = layerName, BindingHash = bindingHash };
+            var eventArgs = new StreamDeckShowNewLayerArgs { SelectedLayerName = layerName, BindingHash = bindingHash };
             OnStreamDeckShowNewLayerEventHandler?.Invoke(sender, eventArgs);
         }
 
@@ -122,7 +124,7 @@ namespace NonVisuals.StreamDeck.Events
 
         public static void RemoteLayerSwitch(object sender, string remoteBindingHash, string layerName)
         {
-            var eventArgs = new RemoteStreamDeckShowNewLayerArgs() { SelectedLayerName = layerName, RemoteBindingHash = remoteBindingHash };
+            var eventArgs = new RemoteStreamDeckShowNewLayerArgs { SelectedLayerName = layerName, RemoteBindingHash = remoteBindingHash };
             OnRemoteStreamDeckShowNewLayerEventHandler?.Invoke(sender, eventArgs);
         }
 
@@ -134,7 +136,7 @@ namespace NonVisuals.StreamDeck.Events
 
         public static void SelectedButtonChanged(object sender, StreamDeckButton streamDeckButton, string bindingHash)
         {
-            var eventArgs = new StreamDeckSelectedButtonChangedArgs() { SelectedButton = streamDeckButton, BindingHash = bindingHash };
+            var eventArgs = new StreamDeckSelectedButtonChangedArgs { SelectedButton = streamDeckButton, BindingHash = bindingHash };
             OnStreamDeckSelectedButtonChangedEventHandler?.Invoke(sender, eventArgs);
         }
 
@@ -165,7 +167,7 @@ namespace NonVisuals.StreamDeck.Events
 
         public static void NotifyToSyncConfiguration(object sender, string bindingHash)
         {
-            OnStreamDeckSyncConfigurationEventHandler?.Invoke(sender, new StreamDeckSyncConfigurationArgs() { BindingHash = bindingHash });
+            OnStreamDeckSyncConfigurationEventHandler?.Invoke(sender, new StreamDeckSyncConfigurationArgs { BindingHash = bindingHash });
         }
 
         public static void AttachStreamDeckConfigListener(IStreamDeckConfigListener streamDeckConfigListener)
@@ -188,7 +190,7 @@ namespace NonVisuals.StreamDeck.Events
 
         public static void NotifyStreamDeckConfigurationChange(object sender, string bindingHash)
         {
-            OnStreamDeckConfigurationChangeEventHandler?.Invoke(sender, new StreamDeckConfigurationChangedArgs() { BindingHash = bindingHash });
+            OnStreamDeckConfigurationChangeEventHandler?.Invoke(sender, new StreamDeckConfigurationChangedArgs { BindingHash = bindingHash });
         }
 
         /********************************************************************************************

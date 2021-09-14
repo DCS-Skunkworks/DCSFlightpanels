@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using Newtonsoft.Json;
+
     [Serializable]
     public abstract class BIPLink
     {
@@ -27,7 +29,7 @@ namespace NonVisuals.Saitek
         {
             try
             {
-                //Check for already executing thread
+                // Check for already executing thread
                 if (!ThreadHasFinished() && _executingThread != null)
                 {
                     SetAbortThreadState();
@@ -35,6 +37,7 @@ namespace NonVisuals.Saitek
                     {
                         Thread.Sleep(50);
                     }
+
                     ResetAbortThreadState();
                     ResetThreadHasFinishedState();
                     _executingThread = new Thread(() => ExecuteThreaded(_bipLights));
@@ -65,23 +68,27 @@ namespace NonVisuals.Saitek
                     {
                         return;
                     }
+
                     var bipEventHandlerManager = BipFactory.GetBipEventHandlerManager();
                     if (!BipFactory.HasBips())
                     {
                         return;
                     }
+
                     for (var i = 0; i < bipLights.Count; i++)
                     {
                         if (AbortThread())
                         {
                             break;
                         }
+
                         var bipLight = bipLights[i];
                         Thread.Sleep((int)bipLight.DelayBefore);
                         if (AbortThread())
                         {
                             break;
                         }
+
                         bipEventHandlerManager.ShowLight(bipLight);
                     }
                 }
@@ -138,6 +145,7 @@ namespace NonVisuals.Saitek
             {
                 return 0;
             }
+
             return _bipLights.Keys.Max() + 1;
         }
 

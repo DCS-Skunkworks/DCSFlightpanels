@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace NonVisuals.Interfaces
+﻿namespace NonVisuals.Interfaces
 {
+    using System.Collections.Generic;
+
     public interface IHardwareConflictResolver
     {
         List<ModifiedGenericBinding> ResolveConflicts();

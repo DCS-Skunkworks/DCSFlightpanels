@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
     using MEF;
 
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek;
 
     [Serializable]
     public class ActionTypeKey : KeyBinding, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
@@ -79,7 +81,7 @@ namespace NonVisuals.StreamDeck
                     (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
                     (int)StreamDeckButtonName,
                     true,
-                    OSKeyPress.KeySequence);
+                    OSKeyPress.KeyPressSequence);
             }
         }
 

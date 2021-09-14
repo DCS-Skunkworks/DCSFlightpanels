@@ -89,12 +89,12 @@
                 e.Handled = true;
 
                 var hashSetOfKeysPressed = new HashSet<string>();
-                hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyPressed));
+                hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), keyPressed));
 
                 var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
+                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));
                 }
                 var result = string.Empty;
                 foreach (var str in hashSetOfKeysPressed)

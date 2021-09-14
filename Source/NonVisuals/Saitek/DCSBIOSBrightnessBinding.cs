@@ -57,6 +57,7 @@
             {
                 return null;
             }
+
             var stringBuilder = new StringBuilder();
 
             stringBuilder.Append(Keyword + "{" + DCSBiosOutput + "}");

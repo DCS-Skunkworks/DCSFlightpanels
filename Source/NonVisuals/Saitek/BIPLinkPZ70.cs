@@ -14,7 +14,6 @@
         /*
          This class binds a physical switch on the PZ55 with a BIP LED
          */
-
         public PZ70DialPosition DialPosition { get; set; }
 
         public MultiPanelPZ70Knobs MultiPanelPZ70Knob { get; set; }
@@ -25,6 +24,7 @@
             {
                 throw new ArgumentException("Import string empty. (BIPLinkPZ70)");
             }
+
             if (settings.StartsWith("MultipanelBIPLink{"))
             {
                 // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
@@ -33,6 +33,7 @@
 
                 // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}
                 var param0 = parameters[0].Replace("MultipanelBIPLink{", string.Empty).Replace("}", string.Empty).Trim();
+
                 // ALT|1KNOB_ENGINE_LEFT
                 var tmpArray = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 WhenOnTurnedOn = tmpArray[1].Substring(0, 1) == "1";
@@ -47,6 +48,7 @@
                         _bipLights.Add(GetNewKeyValue(), tmpBipLight);
                         tmpBipLight.ImportSettings(parameters[i]);
                     }
+
                     if (parameters[i].StartsWith("Description["))
                     {
                         var tmp = parameters[i].Replace("Description[", string.Empty).Replace("]", string.Empty);
@@ -63,6 +65,7 @@
             {
                 return null;
             }
+
             var onStr = WhenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("MultipanelBIPLink{" + DialPosition + "|" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}");
@@ -75,6 +78,7 @@
             {
                 stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + "Description[" + _description + "]");
             }
+
             return stringBuilder.ToString();
         }
 
@@ -84,6 +88,7 @@
             {
                 return 0;
             }
+
             return _bipLights.Keys.Max() + 1;
         }
         

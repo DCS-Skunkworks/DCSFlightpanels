@@ -1,12 +1,13 @@
-﻿using System;
-using DCS_BIOS;
-
-using NonVisuals.Radios;
-using NonVisuals.Saitek;
-
-namespace NonVisuals.DCSBIOSBindings
+﻿namespace NonVisuals.DCSBIOSBindings
 {
+    using System;
+
+    using DCS_BIOS;
+
     using MEF;
+
+    using NonVisuals.Radios;
+    using NonVisuals.Saitek;
 
     [Serializable]
     public class DCSBIOSOutputBindingPZ69
@@ -17,10 +18,10 @@ namespace NonVisuals.DCSBIOSBindings
          * 
          * The comparison part of the DCSBIOSOutput is ignored for DCSBIOSBindingLCDPZ69, all data will be shown
          */
-        private int _currentValue = 0;
+        private int _currentValue;
         private PZ69DialPosition _pz69DialPosition;
         private DCSBIOSOutput _dcsbiosOutput;
-        private DCSBIOSOutputFormula _dcsbiosOutputFormula; //If this is set to !null value then ignore the _dcsbiosOutput
+        private DCSBIOSOutputFormula _dcsbiosOutputFormula; // If this is set to !null value then ignore the _dcsbiosOutput
         private PZ69LCDPosition _pz69LCDPosition;
         
 
@@ -30,43 +31,45 @@ namespace NonVisuals.DCSBIOSBindings
             {
                 throw new ArgumentException("Import string empty. (DCSBIOSBindingPZ69)");
             }
+
             if (settings.StartsWith("RadioPanelDCSBIOSLCD{") && settings.Contains("DCSBiosOutput{"))
             {
-                //RadioPanelDCSBIOSLCD{COM1}\o/{LowerLCD}\o/DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
+                // RadioPanelDCSBIOSLCD{COM1}\o/{LowerLCD}\o/DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                //[0]
-                //RadioPanelDCSBIOSLCD{COM1}
+                // [0]
+                // RadioPanelDCSBIOSLCD{COM1}
                 var param0 = parameters[0].Replace("RadioPanelDCSBIOSLCD{", string.Empty).Replace("}", string.Empty);
                 _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
 
-                //[1]
-                //{LowerLCD}
+                // [1]
+                // {LowerLCD}
                 var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty).Trim();
                 _pz69LCDPosition = (PZ69LCDPosition)Enum.Parse(typeof(PZ69LCDPosition), param1);
 
-                //[2]
-                //DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
+                // [2]
+                // DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
                 _dcsbiosOutput = new DCSBIOSOutput();
                 _dcsbiosOutput.ImportString(parameters[2]);
             }
+
             if (settings.StartsWith("RadioPanelDCSBIOSLCD{") && settings.Contains("DCSBiosOutputFormula{"))
             {
-                //RadioPanelDCSBIOSLCD{COM1}\o/{UpperLCD}\o/DCSBiosOutputFormula{ANT_EGIHQTOD+10}
+                // RadioPanelDCSBIOSLCD{COM1}\o/{UpperLCD}\o/DCSBiosOutputFormula{ANT_EGIHQTOD+10}
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                //[0]
-                //MultiPanelDCSBIOSFormulaLCD{COM1}
+                // [0]
+                // MultiPanelDCSBIOSFormulaLCD{COM1}
                 var param0 = parameters[0].Replace("RadioPanelDCSBIOSLCD{", string.Empty).Replace("}", string.Empty).Trim();
                 _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
 
-                //[1]
-                //{UpperLCD}
+                // [1]
+                // {UpperLCD}
                 var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty).Trim();
                 _pz69LCDPosition = (PZ69LCDPosition)Enum.Parse(typeof(PZ69LCDPosition), param1);
 
-                //[2]
-                //DCSBiosOutputFormula{ANT_EGIHQTOD+10}
+                // [2]
+                // DCSBiosOutputFormula{ANT_EGIHQTOD+10}
                 _dcsbiosOutputFormula = new DCSBIOSOutputFormula();
                 _dcsbiosOutputFormula.ImportString(parameters[2]);
             }
@@ -111,16 +114,19 @@ namespace NonVisuals.DCSBIOSBindings
             {
                 return null;
             }
+
             if (_pz69DialPosition == PZ69DialPosition.Unknown)
             {
                 throw new Exception("Unknown dial position in DCSBIOSBindingLCDPZ69 for LCD " + _pz69LCDPosition + ". Cannot export.");
             }
+
             if (_dcsbiosOutputFormula != null)
             {
-                //RadioPanelDCSBIOSLCD{COM1}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
-                return "RadioPanelDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + _pz69LCDPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + _dcsbiosOutputFormula.ToString();
+                // RadioPanelDCSBIOSLCD{COM1}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
+                return "RadioPanelDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + _pz69LCDPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + this._dcsbiosOutputFormula;
             }
-            return "RadioPanelDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + _pz69LCDPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + _dcsbiosOutput.ToString();
+
+            return "RadioPanelDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + _pz69LCDPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + this._dcsbiosOutput;
         }
 
         public PZ69LCDPosition PZ69LcdPosition

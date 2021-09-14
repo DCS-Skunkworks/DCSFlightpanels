@@ -1,77 +1,78 @@
 ﻿namespace NonVisuals
 {
-    using Color = System.Drawing.Color;
-    using Font = System.Drawing.Font;
+    using System.Drawing;
+
+    using NonVisuals.Properties;
 
     public static class SettingsManager
     {
         public static Font DefaultFont
         {
-            get => Properties.Settings.Default.StreamDeckDefaultFont;
+            get => Settings.Default.StreamDeckDefaultFont;
             set
             {
-                Properties.Settings.Default.StreamDeckDefaultFont = value;
-                Properties.Settings.Default.Save();
+                Settings.Default.StreamDeckDefaultFont = value;
+                Settings.Default.Save();
             }
         }
 
         public static Color DefaultFontColor
         {
-            get => Properties.Settings.Default.StreamDeckDefaultFontColor;
+            get => Settings.Default.StreamDeckDefaultFontColor;
             set
             {
-                Properties.Settings.Default.StreamDeckDefaultFontColor = value;
-                Properties.Settings.Default.Save();
+                Settings.Default.StreamDeckDefaultFontColor = value;
+                Settings.Default.Save();
             }
         }
 
         public static Color DefaultBackgroundColor
         {
-            get => Properties.Settings.Default.StreamDeckDefaultBackgroundColor;
+            get => Settings.Default.StreamDeckDefaultBackgroundColor;
             set
             {
-                Properties.Settings.Default.StreamDeckDefaultBackgroundColor = value;
-                Properties.Settings.Default.Save();
+                Settings.Default.StreamDeckDefaultBackgroundColor = value;
+                Settings.Default.Save();
             }
         }
 
         public static string LastImageFileDirectory
         {
-            get => Properties.Settings.Default.LastImageFileDialogLocation;
+            get => Settings.Default.LastImageFileDialogLocation;
             set
             {
-                Properties.Settings.Default.LastImageFileDialogLocation = value;
-                Properties.Settings.Default.Save();
+                Settings.Default.LastImageFileDialogLocation = value;
+                Settings.Default.Save();
             }
         }
 
         public static string LastSoundFileDirectory
         {
-            get => Properties.Settings.Default.LastImageFileDialogLocation;
+            get => Settings.Default.LastImageFileDialogLocation;
             set
             {
-                Properties.Settings.Default.LastImageFileDialogLocation = value;
-                Properties.Settings.Default.Save();
+                Settings.Default.LastImageFileDialogLocation = value;
+                Settings.Default.Save();
             }
         }
 
         public static int OffsetX
         {
-            get => Properties.Settings.Default.OffsetX;
+            get => Settings.Default.OffsetX;
             set
             {
-                Properties.Settings.Default.OffsetX = value;
-                Properties.Settings.Default.Save();
+                Settings.Default.OffsetX = value;
+                Settings.Default.Save();
             }
         }
 
         public static int OffsetY
         {
-            get => Properties.Settings.Default.OffsetY;
+            get => Settings.Default.OffsetY;
             set
             {
-                Properties.Settings.Default.OffsetY = value;
-                Properties.Settings.Default.Save();
+                Settings.Default.OffsetY = value;
+                Settings.Default.Save();
             }
         }
     }

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.Radios.Knobs
+﻿namespace NonVisuals.Radios.Knobs
 {
+    using System;
+    using System.Collections.Generic;
+
     using MEF;
+
+    using NonVisuals.Interfaces;
 
     public enum CurrentEmulatorRadioMode
     {
@@ -37,9 +38,10 @@ namespace NonVisuals.Radios.Knobs
         
         public static HashSet<ISaitekPanelKnob> GetRadioPanelKnobs()
         {
-            //true means clockwise turn
+            // true means clockwise turn
             var result = new HashSet<ISaitekPanelKnob>();
-            //Group 0
+
+            // Group 0
             result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc));
             result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec));
             result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc));
@@ -49,7 +51,7 @@ namespace NonVisuals.Radios.Knobs
             result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc));
             result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("10000000", 2), false, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec));
 
-            //Group 1
+            // Group 1
             result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsEmulator.LowerCOM2));
             result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsEmulator.LowerNAV1));
             result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsEmulator.LowerNAV2));
@@ -59,7 +61,7 @@ namespace NonVisuals.Radios.Knobs
             result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch));
             result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch));
 
-            //Group 2
+            // Group 2
             result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsEmulator.UpperCOM1));
             result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsEmulator.UpperCOM2));
             result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsEmulator.UpperNAV1));

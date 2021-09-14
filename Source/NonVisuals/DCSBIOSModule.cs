@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     public class DCSBIOSModule
     {
         private string _luaFilename;
@@ -34,8 +34,9 @@ namespace NonVisuals
                     continue;
                 }
 
-                var settings = s.Trim().Split(new char[]{ ':' }, StringSplitOptions.RemoveEmptyEntries);
-                //A-4E Skyhawk : A-4E-C.lua
+                var settings = s.Trim().Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+                // A-4E Skyhawk : A-4E-C.lua
                 var dcsBiosModule = new DCSBIOSModule(settings[1], settings[0]);
                 result.Add(dcsBiosModule);
             }

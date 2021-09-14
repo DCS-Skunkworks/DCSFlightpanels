@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ClassLibraryCommon;
-using HidLibrary;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using ClassLibraryCommon;
+
+    using HidLibrary;
 
     public static class HIDSkeletonIgnore
     {
@@ -15,7 +16,7 @@ namespace NonVisuals
     public class HIDHandler
     {
         public List<HIDSkeleton> HIDSkeletons { get; } = new List<HIDSkeleton>();
-        private static HIDHandler _instance = null;
+        private static HIDHandler _instance;
 
         public static HIDHandler GetInstance()
         {
@@ -28,6 +29,7 @@ namespace NonVisuals
             {
                 throw new Exception("HIDHandler already exists.");
             }
+
             _instance = this;
         }
 
@@ -37,6 +39,7 @@ namespace NonVisuals
             {
                 return string.Empty;
             }
+
             var stringBuilder = new StringBuilder(100);
             stringBuilder.Append("HIDHandler has the following skeletons (" + _instance.HIDSkeletons.Count + ") :\n");
             foreach (var skeleton in _instance.HIDSkeletons)
@@ -117,6 +120,7 @@ namespace NonVisuals
             {
                 throw new Exception("Looking for empty/null InstanceId HIDDeviceAlreadyExists().");
             }
+
             foreach (var hidSkeleton in HIDSkeletons)
             {
                 if (hidSkeleton.InstanceId.Equals(instanceId))
@@ -124,6 +128,7 @@ namespace NonVisuals
                     return true;
                 }
             }
+
             return false;
         }
     }

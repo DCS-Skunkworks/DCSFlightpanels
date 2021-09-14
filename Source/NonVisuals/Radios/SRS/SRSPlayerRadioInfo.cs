@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿
 
 // ReSharper disable All
 /*
@@ -7,7 +6,9 @@ using Newtonsoft.Json;
  */
 namespace NonVisuals.Radios.SRS
 {
+    using System;
 
+    using Newtonsoft.Json;
 
     public class SRSRadioReceivingState
     {
@@ -58,7 +59,7 @@ namespace NonVisuals.Radios.SRS
     public class SRSPlayerRadioInfo
     {
 
-        //HOTAS or IN COCKPIT controls
+        // HOTAS or IN COCKPIT controls
         public enum RadioSwitchControls
         {
             HOTAS = 0,
@@ -69,7 +70,7 @@ namespace NonVisuals.Radios.SRS
         public SRSDcsPosition pos = new SRSDcsPosition();
         public volatile bool ptt = false;
 
-        public SRSRadioInformation[] radios = new SRSRadioInformation[11]; //10 + intercom
+        public SRSRadioInformation[] radios = new SRSRadioInformation[11]; // 10 + intercom
         public RadioSwitchControls control = RadioSwitchControls.HOTAS;
         public short selected = 0;
         public string unit = string.Empty;
@@ -102,14 +103,16 @@ namespace NonVisuals.Radios.SRS
             {
                 return false;
             }
-            //if (side != compareRadio.side)
-            //{
-            //    return false;
-            //}
+
+            // if (side != compareRadio.side)
+            // {
+            // return false;
+            // }
             if (!name.Equals(compareRadio.name))
             {
                 return false;
             }
+
             if (!unit.Equals(compareRadio.unit))
             {
                 return false;
@@ -137,11 +140,9 @@ namespace NonVisuals.Radios.SRS
             return true;
         }
 
-
         /*
          * Was Radio updated in the last 10 Seconds
          */
-
         public bool IsCurrent()
         {
             return LastUpdate > Environment.TickCount - 10000;

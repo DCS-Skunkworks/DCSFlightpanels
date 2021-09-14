@@ -54,10 +54,12 @@
             {
                 throw new Exception("Unknown dial position in OSCommandBindingPZ69FullEmulator for knob " + RadioPanelPZ69Key + ". Cannot export.");
             }
+
             if (OSCommandObject == null || OSCommandObject.IsEmpty)
             {
                 return null;
             }
+
             var onStr = WhenTurnedOn ? "1" : "0";
             return "RadioPanelKeyDialPos{" + _pz69DialPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSCommandObject.ExportString();
         }

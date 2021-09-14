@@ -1,7 +1,7 @@
-﻿using System.Drawing;
-
-namespace NonVisuals.Interfaces
+﻿namespace NonVisuals.Interfaces
 {
+    using System.Drawing;
+
     interface IFontFace
     {
         Font TextFont { get; set; }

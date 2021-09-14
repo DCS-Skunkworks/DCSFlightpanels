@@ -34,7 +34,7 @@
 
         public bool ContainsKeyPress()
         {
-            return _keyPress != null && _keyPress.KeySequence.Count > 0;
+            return _keyPress != null && _keyPress.KeyPressSequence.Count > 0;
         }
 
         public bool ContainsKeySequence()
@@ -44,7 +44,7 @@
 
         public bool ContainsKeyStroke()
         {
-            return _keyPress != null && !_keyPress.IsMultiSequenced() && _keyPress.KeySequence.Count > 0;
+            return _keyPress != null && !_keyPress.IsMultiSequenced() && _keyPress.KeyPressSequence.Count > 0;
         }
 
         public KeyPress KeyPress
@@ -63,7 +63,7 @@
 
         public SortedList<int, IKeyPressInfo> GetKeySequence()
         {
-            return _keyPress.KeySequence;
+            return _keyPress.KeyPressSequence;
         }
 
         public OSCommand OSCommandObject

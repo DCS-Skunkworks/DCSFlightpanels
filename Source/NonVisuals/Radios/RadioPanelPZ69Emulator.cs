@@ -23,8 +23,8 @@
         private readonly byte[] _newRadioPanelValue = { 0, 0, 0 };
         private readonly object _dcsBiosDataReceivedLock = new object();
 
-        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new List<RadioPanelPZ69KnobsEmulator>() { RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR };
-        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesLower = new List<RadioPanelPZ69KnobsEmulator>() { RadioPanelPZ69KnobsEmulator.LowerCOM1, RadioPanelPZ69KnobsEmulator.LowerCOM2, RadioPanelPZ69KnobsEmulator.LowerNAV1, RadioPanelPZ69KnobsEmulator.LowerNAV2, RadioPanelPZ69KnobsEmulator.LowerADF, RadioPanelPZ69KnobsEmulator.LowerDME, RadioPanelPZ69KnobsEmulator.LowerXPDR };
+        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new List<RadioPanelPZ69KnobsEmulator> { RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR };
+        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesLower = new List<RadioPanelPZ69KnobsEmulator> { RadioPanelPZ69KnobsEmulator.LowerCOM1, RadioPanelPZ69KnobsEmulator.LowerCOM2, RadioPanelPZ69KnobsEmulator.LowerNAV1, RadioPanelPZ69KnobsEmulator.LowerNAV2, RadioPanelPZ69KnobsEmulator.LowerADF, RadioPanelPZ69KnobsEmulator.LowerDME, RadioPanelPZ69KnobsEmulator.LowerXPDR };
 
         private HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
         private List<OSCommandBindingPZ69Emulator> _operatingSystemCommandBindings = new List<OSCommandBindingPZ69Emulator>();
@@ -117,6 +117,7 @@
             {
                 return null;
             }
+
             var result = new List<string>();
 
             foreach (var keyBinding in _keyBindings)
@@ -126,6 +127,7 @@
                     result.Add(keyBinding.ExportSettings());
                 }
             }
+
             foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
             {
                 if (!operatingSystemCommand.OSCommandObject.IsEmpty)
@@ -133,6 +135,7 @@
                     result.Add(operatingSystemCommand.ExportSettings());
                 }
             }
+
             foreach (var displayValue in _displayValues)
             {
                 var tmp = displayValue.ExportSettings();
@@ -141,6 +144,7 @@
                     result.Add(tmp);
                 }
             }
+
             foreach (var bipLink in _bipLinks)
             {
                 var tmp = bipLink.ExportSettings();
@@ -149,6 +153,7 @@
                     result.Add(tmp);
                 }
             }
+
             return result;
         }
 
@@ -236,7 +241,7 @@
                                     (int)PluginGamingPanelEnum.PZ69RadioPanel, 
                                     (int)radioPanelKey.RadioPanelPZ69Knob, 
                                     radioPanelKey.IsOn, 
-                                    keyBinding.OSKeyPress.KeySequence);
+                                    keyBinding.OSKeyPress.KeyPressSequence);
                             }
 
                             break;
@@ -245,7 +250,7 @@
 
                     // This is needed because there may not be key bindings configured, plugin should get the panel event regardless
                     // Just that we don't send any keypress configs this time.
-                    if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
                         PluginManager.DoEvent(
                             ProfileHandler.SelectedProfile().Description,
@@ -335,6 +340,7 @@
             {
                 SetPZ69DisplayBytesDefault(ref bytes, _upperActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
             }
+
             if (_upperStandby < 0)
             {
                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -343,6 +349,7 @@
             {
                 SetPZ69DisplayBytesDefault(ref bytes, _upperStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
             }
+
             if (_lowerActive < 0)
             {
                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -351,6 +358,7 @@
             {
                 SetPZ69DisplayBytesDefault(ref bytes, _lowerActive, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
             }
+
             if (_lowerStandby < 0)
             {
                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -374,6 +382,7 @@
                     result = keyBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
                 }
             }
+
             return result;
         }
 
@@ -423,6 +432,7 @@
                 ClearAllBindings(pz69SwitchOnOff);
                 return;
             }
+
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
@@ -477,6 +487,7 @@
                     {
                         keyBinding.OSKeyPress = new KeyPress(description, keySequence);
                     }
+
                     found = true;
                     break;
                 }
@@ -573,6 +584,7 @@
                     keyBinding.OSKeyPress = null;
                 }
             }
+
             SetIsDirty();
         }
 
@@ -595,10 +607,12 @@
                     {
                         keyBindingPZ55.OSKeyPress = null;
                     }
+
                     found = true;
                     break;
                 }
             }
+
             if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
@@ -607,10 +621,12 @@
                     {
                         bipLink.BIPLights.Clear();
                     }
+
                     found = true;
                     break;
                 }
             }
+
             if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.OSCOMMAND)
             {
                 OSCommandBindingPZ69Emulator operatingSystemCommandBindingPZ69 = null;
@@ -630,6 +646,7 @@
                     _operatingSystemCommandBindings.Remove(operatingSystemCommandBindingPZ69);
                 }
             }
+
             if (found)
             {
                 SetIsDirty();
@@ -645,6 +662,7 @@
                     keyBinding.OSKeyPress = null;
                 }
             }
+
             SetIsDirty();
         }
 

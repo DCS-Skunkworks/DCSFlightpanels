@@ -1,22 +1,23 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing.Text;
-using System.IO;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using ClassLibraryCommon;
-using Color = System.Drawing.Color;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Drawing;
+    using System.Drawing.Drawing2D;
+    using System.Drawing.Imaging;
+    using System.Drawing.Text;
+    using System.IO;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using Color = System.Drawing.Color;
+    using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
     public static class BitMapCreator
     {
-
         public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
         {
             using (var outStream = new MemoryStream())
@@ -24,50 +25,50 @@ namespace NonVisuals.StreamDeck
                 BitmapEncoder bmpBitmapEncoder = new BmpBitmapEncoder();
                 bmpBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));
                 bmpBitmapEncoder.Save(outStream);
-                var bitmap = new System.Drawing.Bitmap(outStream);
+                var bitmap = new Bitmap(outStream);
 
                 return new Bitmap(bitmap);
             }
         }
-        
+
         public static bool IsSmallerThanStreamdeckDefault(Bitmap bitmap)
         {
             return bitmap.Width < Constants.StreamDeckImageSideSize || bitmap.Height < Constants.StreamDeckImageSideSize;
         }
+
         /*
-        public static Bitmap AdjustImage(Bitmap bitmap, float contrast, float brightness, float gamma)
-        {
-            /*
-             * 1.0f is no change
-             *
-             * https://stackoverflow.com/questions/15408607/adjust-brightness-contrast-and-gamma-of-an-image
-             *
-            float adjustedBrightness = brightness - 1.0f;
-            // create matrix that will brighten and contrast the image
-            float[][] ptsArray ={
-                new float[] {contrast, 0, 0, 0, 0}, // scale red
-                new float[] {0, contrast, 0, 0, 0}, // scale green
-                new float[] {0, 0, contrast, 0, 0}, // scale blue
-                new float[] {0, 0, 0, 1.0f, 0}, // don't scale alpha
-                new float[] {adjustedBrightness, adjustedBrightness, adjustedBrightness, 0, 1}};
-
-            var imageAttributes = new ImageAttributes();
-            imageAttributes.ClearColorMatrix();
-            imageAttributes.SetColorMatrix(new ColorMatrix(ptsArray), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-            imageAttributes.SetGamma(gamma, ColorAdjustType.Bitmap);
-
-            var graphics = Graphics.FromImage(bitmap);
-            graphics.DrawImage(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height)
-                , 0, 0, bitmap.Width, bitmap.Height,
-                GraphicsUnit.Pixel, imageAttributes);
-
-            return bitmap;
-        }
-    */
+                public static Bitmap AdjustImage(Bitmap bitmap, float contrast, float brightness, float gamma)
+                {
+                    /*
+                     * 1.0f is no change
+                     *
+                     * https://stackoverflow.com/questions/15408607/adjust-brightness-contrast-and-gamma-of-an-image
+                     *
+                    float adjustedBrightness = brightness - 1.0f;
+                    // create matrix that will brighten and contrast the image
+                    float[][] ptsArray ={
+                        new float[] {contrast, 0, 0, 0, 0}, // scale red
+                        new float[] {0, contrast, 0, 0, 0}, // scale green
+                        new float[] {0, 0, contrast, 0, 0}, // scale blue
+                        new float[] {0, 0, 0, 1.0f, 0}, // don't scale alpha
+                        new float[] {adjustedBrightness, adjustedBrightness, adjustedBrightness, 0, 1}};
+        
+                    var imageAttributes = new ImageAttributes();
+                    imageAttributes.ClearColorMatrix();
+                    imageAttributes.SetColorMatrix(new ColorMatrix(ptsArray), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                    imageAttributes.SetGamma(gamma, ColorAdjustType.Bitmap);
+        
+                    var graphics = Graphics.FromImage(bitmap);
+                    graphics.DrawImage(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height)
+                        , 0, 0, bitmap.Width, bitmap.Height,
+                        GraphicsUnit.Pixel, imageAttributes);
+        
+                    return bitmap;
+                }
+            */
         public static void SetContrast(Bitmap bmp, int threshold)
         {
-            //https://efundies.com/adjust-the-contrast-of-an-image-in-c/
-
+            // https://efundies.com/adjust-the-contrast-of-an-image-in-c/
             var lockedBitmap = new LockBitmap(bmp);
             lockedBitmap.LockBits();
 
@@ -92,6 +93,7 @@ namespace NonVisuals.StreamDeck
                     lockedBitmap.SetPixel(x, y, newColor);
                 }
             }
+
             lockedBitmap.UnlockBits();
         }
 
@@ -110,28 +112,27 @@ namespace NonVisuals.StreamDeck
         public static Bitmap AdjustBitmap(Bitmap originalImage, float brightness, float contrast, float gamma)
         {
             var result = new Bitmap(originalImage.Width, originalImage.Height);
-            
+
             /*float brightness = 1.0f; // no change in brightness
             float contrast = 2.0f; // twice the contrast
             float gamma = 1.0f; // no change in gamma*/
-            
             float adjustedBrightness = brightness - 1.0f;
             // create matrix that will brighten and contrast the image
-            float[][] ptsArray ={
-                new float[] {contrast, 0, 0, 0, 0}, // scale red
-                new float[] {0, contrast, 0, 0, 0}, // scale green
-                new float[] {0, 0, contrast, 0, 0}, // scale blue
-                new float[] {0, 0, 0, 1.0f, 0}, // don't scale alpha
-                new float[] {adjustedBrightness, adjustedBrightness, adjustedBrightness, 0, 1}};
+            float[][] ptsArray =
+                {
+                    new[] { contrast, 0, 0, 0, 0 }, // scale red
+                    new[] { 0, contrast, 0, 0, 0 }, // scale green
+                    new[] { 0, 0, contrast, 0, 0 }, // scale blue
+                    new[] { 0, 0, 0, 1.0f, 0 }, // don't scale alpha
+                    new[] { adjustedBrightness, adjustedBrightness, adjustedBrightness, 0, 1 }
+                };
 
             ImageAttributes imageAttributes = new ImageAttributes();
             imageAttributes.ClearColorMatrix();
             imageAttributes.SetColorMatrix(new ColorMatrix(ptsArray), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
             imageAttributes.SetGamma(gamma, ColorAdjustType.Bitmap);
             var graphics = Graphics.FromImage(result);
-            graphics.DrawImage(originalImage, new Rectangle(0, 0, result.Width, result.Height)
-                , 0, 0, originalImage.Width, originalImage.Height,
-                GraphicsUnit.Pixel, imageAttributes);
+            graphics.DrawImage(originalImage, new Rectangle(0, 0, result.Width, result.Height), 0, 0, originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, imageAttributes);
 
             return result;
         }
@@ -157,19 +158,19 @@ namespace NonVisuals.StreamDeck
             var streamdeckSizedBitmap = new Bitmap(Constants.StreamDeckImageSideSize, Constants.StreamDeckImageSideSize);
 
             var graphics = Graphics.FromImage(streamdeckSizedBitmap);
-            
+
             graphics.SmoothingMode = SmoothingMode.None;
             graphics.CompositingMode = CompositingMode.SourceCopy;
             graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
             graphics.PixelOffsetMode = PixelOffsetMode.Half;
             graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-            var y = (Constants.StreamDeckImageSideSize / 2)- (bitmap.Height / 2);
+            var y = (Constants.StreamDeckImageSideSize / 2) - (bitmap.Height / 2);
             var x = (Constants.StreamDeckImageSideSize / 2) - (bitmap.Width / 2);
 
             // Paste source image on blank canvas, then save it as .png
             graphics.DrawImage(bitmap, x, y, bitmap.Width, bitmap.Height);
-            //graphics.DrawImageUnscaled(bitmap, 0, 0);
+            // graphics.DrawImageUnscaled(bitmap, 0, 0);
             return streamdeckSizedBitmap;
         }
 
@@ -179,7 +180,7 @@ namespace NonVisuals.StreamDeck
             {
                 using (MemoryStream memory = new MemoryStream())
                 {
-                    bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                    bitmap.Save(memory, ImageFormat.Bmp);
                     memory.Position = 0;
                     BitmapImage bitmapimage = new BitmapImage();
                     bitmapimage.BeginInit();
@@ -194,9 +195,9 @@ namespace NonVisuals.StreamDeck
             {
                 Common.LogError(e, "Failed to convert bitmap to bitmapimage.");
             }
+
             return null;
         }
-
 
         public static BitmapImage GetButtonImageFromResources(EnumStreamDeckButtonNames streamDeckButtonName, Color color)
         {
@@ -228,7 +229,7 @@ namespace NonVisuals.StreamDeck
 
             // Create a graphics object to measure the text's width and height.
             var graphicsObject = Graphics.FromImage(createdBitmap);
-            
+
             // Set Background color
             if (backgroundBitmap == null)
             {
@@ -239,7 +240,7 @@ namespace NonVisuals.StreamDeck
 
             if (!string.IsNullOrEmpty(text))
             {
-                graphicsObject.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                graphicsObject.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
                 graphicsObject.DrawString(text, font, new SolidBrush(fontColor), offsetX, offsetY, StringFormat.GenericDefault);
             }
 
@@ -262,33 +263,18 @@ namespace NonVisuals.StreamDeck
 
             var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
 
-            var bitmapData = bitmap.LockBits(
-                rect,
-                ImageLockMode.ReadWrite,
-                PixelFormat.Format32bppArgb);
+            var bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
             try
             {
                 var size = (rect.Width * rect.Height) * 4;
 
-                return BitmapSource.Create(
-                    bitmap.Width,
-                    bitmap.Height,
-                    bitmap.HorizontalResolution,
-                    bitmap.VerticalResolution,
-                    PixelFormats.Bgra32,
-                    null,
-                    bitmapData.Scan0,
-                    size,
-                    bitmapData.Stride);
+                return BitmapSource.Create(bitmap.Width, bitmap.Height, bitmap.HorizontalResolution, bitmap.VerticalResolution, PixelFormats.Bgra32, null, bitmapData.Scan0, size, bitmapData.Stride);
             }
             finally
             {
                 bitmap.UnlockBits(bitmapData);
             }
         }
-
-
-
     }
 }

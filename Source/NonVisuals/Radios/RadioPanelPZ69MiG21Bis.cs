@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using DCS_BIOS;
-using System.Threading;
-using ClassLibraryCommon;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Saitek;
-
-
-namespace NonVisuals.Radios
+﻿namespace NonVisuals.Radios
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
+    using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Saitek;
 
     public class RadioPanelPZ69MiG21Bis : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
@@ -20,9 +21,9 @@ namespace NonVisuals.Radios
         private CurrentMiG21BisRadioMode _currentLowerRadioMode = CurrentMiG21BisRadioMode.Radio;
 
         /*MiG-21bis Radio*/
-        //Large dial Freq selector 0-19  RAD_CHAN
-        //Small dial Radio volume RAD_VOL +/- 
-        //STBY/ACT, radio on/off RAD_PWR TOGGLE
+        // Large dial Freq selector 0-19  RAD_CHAN
+        // Small dial Radio volume RAD_VOL +/- 
+        // STBY/ACT, radio on/off RAD_PWR TOGGLE
         private volatile uint _radioFreqSelectorPositionCockpit;
         private readonly object _lockRadioFreqSelectorPositionObject = new object();
         private DCSBIOSOutput _radioDcsbiosOutputFreqSelectorPosition;
@@ -33,9 +34,9 @@ namespace NonVisuals.Radios
         private const string RADIO_ON_OFF_TOGGLE_COMMAND = "RAD_PWR TOGGLE\n";
 
         /*MiG-21bis RSBN*/
-        //Large dial RSBN Nav RSBN_CHAN
-        //Small dial RSBN ILS PRMG_CHAN
-        //STBY/ACT, RSBN/ARC switch  RSBN_ARC_SEL
+        // Large dial RSBN Nav RSBN_CHAN
+        // Small dial RSBN ILS PRMG_CHAN
+        // STBY/ACT, RSBN/ARC switch  RSBN_ARC_SEL
         private volatile uint _rsbnNavChannelCockpit = 1;
         private readonly object _lockRsbnNavChannelObject = new object();
         private DCSBIOSOutput _rsbnNavChannelCockpitOutput;
@@ -49,9 +50,9 @@ namespace NonVisuals.Radios
         private const string SELECT_RSBN_COMMAND = "RSBN_ARC_SEL INC\n";
 
         /*MiG-21bis ARC*/
-        //Large dial ARC Sector ARC_ZONE
-        //Small dial ARC Preset ARC_CHAN
-        //STBY/ACT, RSBN/ARC switch  RSBN_ARC_SEL 1
+        // Large dial ARC Sector ARC_ZONE
+        // Small dial ARC Preset ARC_CHAN
+        // STBY/ACT, RSBN/ARC switch  RSBN_ARC_SEL 1
         private volatile uint _arcSectorCockpit = 1;
         private readonly object _lockARCSectorObject = new object();
         private DCSBIOSOutput _arcSectorCockpitOutput;
@@ -88,7 +89,7 @@ namespace NonVisuals.Radios
              * reset. Reading the dial's position with no change in value will not reset.
              */
 
-            //Radio
+            // Radio
             if (e.Address == _radioDcsbiosOutputFreqSelectorPosition.Address)
             {
 
@@ -104,7 +105,7 @@ namespace NonVisuals.Radios
                 }
             }
 
-            //RSBN Nav
+            // RSBN Nav
             if (e.Address == _rsbnNavChannelCockpitOutput.Address)
             {
 
@@ -120,7 +121,7 @@ namespace NonVisuals.Radios
                 }
             }
 
-            //RSBN ILS
+            // RSBN ILS
             if (e.Address == _rsbnILSChannelCockpitOutput.Address)
             {
 
@@ -136,7 +137,7 @@ namespace NonVisuals.Radios
                 }
             }
 
-            //ARC Sector
+            // ARC Sector
             if (e.Address == _arcSectorCockpitOutput.Address)
             {
 
@@ -152,7 +153,7 @@ namespace NonVisuals.Radios
                 }
             }
 
-            //ARC Preset
+            // ARC Preset
             if (e.Address == _arcPresetChannelCockpitOutput.Address)
             {
 
@@ -168,7 +169,7 @@ namespace NonVisuals.Radios
                 }
             }
 
-            //Set once
+            // Set once
             DataHasBeenReceivedFromDCSBIOS = true;
             ShowFrequenciesOnPanel();
 
@@ -181,16 +182,18 @@ namespace NonVisuals.Radios
 
             if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch || knob == RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch))
             {
-                //Don't do anything on the very first button press as the panel sends ALL
-                //switches when it is manipulated the first time
-                //This would cause unintended sync.
+                // Don't do anything on the very first button press as the panel sends ALL
+                // switches when it is manipulated the first time
+                // This would cause unintended sync.
                 return;
             }
+
             if (!DataHasBeenReceivedFromDCSBIOS)
             {
-                //Don't start communication with DCS-BIOS before we have had a first contact from "them"
+                // Don't start communication with DCS-BIOS before we have had a first contact from "them"
                 return;
             }
+
             switch (knob)
             {
                 case RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch:
@@ -202,11 +205,13 @@ namespace NonVisuals.Radios
                                     DCSBIOS.Send(RADIO_ON_OFF_TOGGLE_COMMAND);
                                     break;
                                 }
+
                             case CurrentMiG21BisRadioMode.RSBN:
                                 {
                                     DCSBIOS.Send(SELECT_RSBN_COMMAND);
                                     break;
                                 }
+
                             case CurrentMiG21BisRadioMode.ARC:
                                 {
                                     DCSBIOS.Send(SELECT_ARC_COMMAND);
@@ -215,6 +220,7 @@ namespace NonVisuals.Radios
                         }
                         break;
                     }
+
                 case RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch:
                     {
                         switch (_currentLowerRadioMode)
@@ -224,11 +230,13 @@ namespace NonVisuals.Radios
                                     DCSBIOS.Send(RADIO_ON_OFF_TOGGLE_COMMAND);
                                     break;
                                 }
+
                             case CurrentMiG21BisRadioMode.RSBN:
                                 {
                                     DCSBIOS.Send(SELECT_RSBN_COMMAND);
                                     break;
                                 }
+
                             case CurrentMiG21BisRadioMode.ARC:
                                 {
                                     DCSBIOS.Send(SELECT_ARC_COMMAND);
@@ -248,10 +256,12 @@ namespace NonVisuals.Radios
                 {
                     return;
                 }
+
                 if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                 {
                     return;
                 }
+
                 var bytes = new byte[21];
                 bytes[0] = 0x0;
 
@@ -264,30 +274,37 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionCockpit, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
+
                             break;
                         }
+
                     case CurrentMiG21BisRadioMode.RSBN:
                         {
                             lock (_lockRsbnNavChannelObject)
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnNavChannelCockpit, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
+
                             lock (_lockRsbnilsChannelObject)
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelCockpit, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
+
                             break;
                         }
+
                     case CurrentMiG21BisRadioMode.ARC:
                         {
                             lock (_lockARCSectorObject)
                             {
                                 SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
+
                             lock (_lockARCPresetChannelObject)
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelCockpit, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
+
                             break;
                         }
                 }
@@ -300,35 +317,43 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionCockpit, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
+
                             break;
                         }
+
                     case CurrentMiG21BisRadioMode.RSBN:
                         {
                             lock (_lockRsbnNavChannelObject)
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnNavChannelCockpit, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
+
                             lock (_lockRsbnilsChannelObject)
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelCockpit, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
+
                             break;
                         }
+
                     case CurrentMiG21BisRadioMode.ARC:
                         {
                             lock (_lockARCSectorObject)
                             {
                                 SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
+
                             lock (_lockARCPresetChannelObject)
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelCockpit, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
+
                             break;
                         }
                 }
                 SendLCDData(bytes);
             }
+
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
 
@@ -355,11 +380,13 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(RADIO_FREQ_SELECTOR_POSITION_COMMAND_INC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
                                             DCSBIOS.Send(RSBN_NAV_CHANNEL_COMMAND_INC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
                                             DCSBIOS.Send(ARC_SECTOR_COMMAND_INC);
@@ -368,6 +395,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperLargeFreqWheelDec:
                             {
                                 switch (_currentUpperRadioMode)
@@ -377,11 +405,13 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(RADIO_FREQ_SELECTOR_POSITION_COMMAND_DEC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
                                             DCSBIOS.Send(RSBN_NAV_CHANNEL_COMMAND_DEC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
                                             DCSBIOS.Send(ARC_SECTOR_COMMAND_DEC);
@@ -390,6 +420,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelInc:
                             {
                                 switch (_currentUpperRadioMode)
@@ -399,11 +430,13 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(RADIO_VOLUME_COMMAND_INC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
                                             DCSBIOS.Send(RSBN_ILS_CHANNEL_COMMAND_INC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
                                             DCSBIOS.Send(ARC_PRESET_CHANNEL_COMMAND_INC);
@@ -412,6 +445,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelDec:
                             {
                                 switch (_currentUpperRadioMode)
@@ -421,11 +455,13 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(RADIO_VOLUME_COMMAND_DEC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
                                             DCSBIOS.Send(RSBN_ILS_CHANNEL_COMMAND_DEC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
                                             DCSBIOS.Send(ARC_PRESET_CHANNEL_COMMAND_DEC);
@@ -434,6 +470,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerLargeFreqWheelInc:
                             {
                                 switch (_currentLowerRadioMode)
@@ -443,11 +480,13 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(RADIO_FREQ_SELECTOR_POSITION_COMMAND_INC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
                                             DCSBIOS.Send(RSBN_NAV_CHANNEL_COMMAND_INC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
                                             DCSBIOS.Send(ARC_SECTOR_COMMAND_INC);
@@ -456,6 +495,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerLargeFreqWheelDec:
                             {
                                 switch (_currentLowerRadioMode)
@@ -465,12 +505,14 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(RADIO_FREQ_SELECTOR_POSITION_COMMAND_DEC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
 
                                             DCSBIOS.Send(RSBN_NAV_CHANNEL_COMMAND_DEC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
                                             DCSBIOS.Send(ARC_SECTOR_COMMAND_DEC);
@@ -479,6 +521,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerSmallFreqWheelInc:
                             {
                                 switch (_currentLowerRadioMode)
@@ -488,11 +531,13 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(RADIO_VOLUME_COMMAND_INC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
                                             DCSBIOS.Send(RSBN_ILS_CHANNEL_COMMAND_INC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
                                             DCSBIOS.Send(ARC_PRESET_CHANNEL_COMMAND_INC);
@@ -501,6 +546,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerSmallFreqWheelDec:
                             {
                                 switch (_currentLowerRadioMode)
@@ -510,11 +556,13 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(RADIO_VOLUME_COMMAND_DEC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
                                             DCSBIOS.Send(RSBN_ILS_CHANNEL_COMMAND_DEC);
                                             break;
                                         }
+
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
                                             DCSBIOS.Send(ARC_PRESET_CHANNEL_COMMAND_DEC);
@@ -526,6 +574,7 @@ namespace NonVisuals.Radios
                     }
                 }
             }
+
             ShowFrequenciesOnPanel();
         }
 
@@ -546,126 +595,157 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentMiG21BisRadioMode.Radio;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperRsbn:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentUpperRadioMode = CurrentMiG21BisRadioMode.RSBN;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperArc:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentUpperRadioMode = CurrentMiG21BisRadioMode.ARC;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperCom2:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperNav2:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperDme:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperXpdr:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerRadio:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentLowerRadioMode = CurrentMiG21BisRadioMode.Radio;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerRsbn:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentLowerRadioMode = CurrentMiG21BisRadioMode.RSBN;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerArc:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentLowerRadioMode = CurrentMiG21BisRadioMode.ARC;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerCom2:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerNav2:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerDme:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerXpdr:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperLargeFreqWheelInc:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperLargeFreqWheelDec:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelInc:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelDec:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerLargeFreqWheelInc:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerLargeFreqWheelDec:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerSmallFreqWheelInc:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerSmallFreqWheelDec:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch);
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch);
                                 }
+
                                 break;
                             }
                     }
@@ -686,20 +766,20 @@ namespace NonVisuals.Radios
             {
                 StartupBase("MiG21-Bis");
 
-
-                //Radio
+                // Radio
                 _radioDcsbiosOutputFreqSelectorPosition = DCSBIOSControlLocator.GetDCSBIOSOutput("RAD_CHAN");
 
-                //RSBN
+                // RSBN
                 _rsbnNavChannelCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RSBN_CHAN");
                 _rsbnILSChannelCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PRMG_CHAN");
 
-                //ARC
+                // ARC
                 _arcSectorCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_ZONE");
                 _arcPresetChannelCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_CHAN");
 
                 StartListeningForPanelChanges();
-                //IsAttached = true;
+
+                // IsAttached = true;
             }
             catch (Exception ex)
             {
@@ -752,50 +832,65 @@ namespace NonVisuals.Radios
             {
                 switch (_arcSectorCockpit)
                 {
-                    case 0://1  1 
+                    case 0:
                         {
+                            // 1  1 
                             result[0] = 1;
                             result[4] = 1;
                             break;
                         }
-                    case 1://1  2
+
+                    case 1:
                         {
+                            // 1  2
                             result[0] = 1;
                             result[4] = 2;
                             break;
                         }
-                    case 2://2  1
+
+                    case 2:
                         {
+                            // 2  1
                             result[0] = 2;
                             result[4] = 1;
                             break;
                         }
-                    case 3://2  2
+
+                    case 3:
                         {
+                            // 2  2
                             result[0] = 2;
                             result[4] = 2;
                             break;
                         }
-                    case 4://3  1
+
+                    case 4:
                         {
+                            // 3  1
                             result[0] = 3;
                             result[4] = 1;
                             break;
                         }
-                    case 5://3  2
+
+                    case 5:
                         {
+                            // 3  2
                             result[0] = 3;
                             result[4] = 2;
                             break;
                         }
-                    case 6://4  1
+
+                    case 6:
                         {
+                            // 4  1
                             result[0] = 4;
                             result[4] = 1;
                             break;
                         }
-                    case 7://4  2
+
+                    case 7:
                         {
+                            // 4  2
                             result[0] = 4;
                             result[4] = 2;
                             break;

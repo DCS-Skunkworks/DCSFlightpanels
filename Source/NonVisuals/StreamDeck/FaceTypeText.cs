@@ -1,11 +1,13 @@
-﻿using System;
-using System.Drawing;
-using System.Text;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Drawing;
+    using System.Text;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
+
     [Serializable]
     public class FaceTypeText : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
@@ -52,6 +54,7 @@ namespace NonVisuals.StreamDeck
                 {
                     _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonFinalText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
                 }
+
                 RefreshBitmap = false;
             }
         }
@@ -63,6 +66,7 @@ namespace NonVisuals.StreamDeck
             {
                 throw new Exception("StreamDeckPanelInstance is not set, cannot show image [FaceTypeDCSBIOS.]");
             }
+
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, Bitmap);
         }
 

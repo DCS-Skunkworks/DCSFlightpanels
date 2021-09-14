@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-
-namespace NonVisuals.Radios.SRS
+﻿namespace NonVisuals.Radios.SRS
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Text;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using Newtonsoft.Json;
 
     public enum SRSRadioMode
     {
@@ -25,7 +27,7 @@ namespace NonVisuals.Radios.SRS
 
     public static class SRSListenerFactory
     {
-        private static SRSRadio _srsListener = null;
+        private static SRSRadio _srsListener;
         private static string _srsSendToIPUdp = "127.0.0.1";
         private static int _srsReceivePortUdp = 7082;
         private static int _srsSendPortUdp = 9040;
@@ -61,6 +63,7 @@ namespace NonVisuals.Radios.SRS
             {
                 _srsListener = new SRSRadio(_srsReceivePortUdp, _srsSendToIPUdp, _srsSendPortUdp);
             }
+
             return _srsListener;
         }
 
@@ -78,12 +81,12 @@ namespace NonVisuals.Radios.SRS
         private readonly string _srsSendToIPUdp;
         private readonly int _srsReceivePortUdp;
         private readonly int _srsSendPortUdp;
-        private SRSPlayerRadioInfo _srsPlayerRadioInfo = null;
+        private SRSPlayerRadioInfo _srsPlayerRadioInfo;
         private bool _shutdown;
         private bool _started;
         private readonly object _sendSRSDataLockObject = new object();
         private readonly object _readSRSDataLockObject = new object();
-        public bool IsRunning = false;
+        public bool IsRunning;
 
 
 
@@ -117,7 +120,8 @@ namespace NonVisuals.Radios.SRS
                     try
                     {
                         var message = Encoding.UTF8.GetString(byteData, 0, byteData.Length);
-                        //Console.WriteLine(HIDSkeletonBase.InstanceId + " Message received on UDP");
+
+                        // Console.WriteLine(HIDSkeletonBase.InstanceId + " Message received on UDP");
                         var srsCombinedRadioState = JsonConvert.DeserializeObject<SRSCombinedRadioState>(message);
                         var srsPlayerRadioInfo = srsCombinedRadioState.RadioInfo;
                         if (srsPlayerRadioInfo != null)
@@ -126,6 +130,7 @@ namespace NonVisuals.Radios.SRS
                             {
                                 _srsPlayerRadioInfo = srsPlayerRadioInfo;
                             }
+
                             OnSRSDataReceived?.Invoke(this);
                         }
                     }
@@ -140,6 +145,7 @@ namespace NonVisuals.Radios.SRS
             {
                 Common.LogError( e, "SRSListener.ReceiveDataUdp()");
             }
+
             IsRunning = false;
         }
 
@@ -161,6 +167,7 @@ namespace NonVisuals.Radios.SRS
                     Common.LogError( e, "Error sending data to SRS. " + e.Message + Environment.NewLine + e.StackTrace);
                 }
             }
+
             return result;
         }
 
@@ -172,6 +179,7 @@ namespace NonVisuals.Radios.SRS
                 {
                     return;
                 }
+
                 _shutdown = false;
 
                 var ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
@@ -182,8 +190,8 @@ namespace NonVisuals.Radios.SRS
                 _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                 _udpReceiveClient.ExclusiveAddressUse = false;
                 _udpReceiveClient.Client.Bind(ipEndPointReceiverUdp);
-                //_udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(_srsReceiveFromIPUdp));
 
+                // _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(_srsReceiveFromIPUdp));
                 lock (_sendSRSDataLockObject)
                 {
                     _udpSendClient?.Close();
@@ -206,6 +214,7 @@ namespace NonVisuals.Radios.SRS
                     _udpReceiveClient.Close();
                     _udpReceiveClient = null;
                 }
+
                 lock (_sendSRSDataLockObject)
                 {
                     if (_udpSendClient != null && _udpSendClient.Client.Connected)
@@ -275,58 +284,72 @@ namespace NonVisuals.Radios.SRS
                             {
                                 return SRSRadioMode.Frequency;
                             }
+
                             return SRSRadioMode.Channel;
                         }
+
                     case CurrentSRSRadioMode.COM2:
                         {
                             if (_srsPlayerRadioInfo.radios[2].channel == -1)
                             {
                                 return SRSRadioMode.Frequency;
                             }
+
                             return SRSRadioMode.Channel;
                         }
+
                     case CurrentSRSRadioMode.NAV1:
                         {
                             if (_srsPlayerRadioInfo.radios[3].channel == -1)
                             {
                                 return SRSRadioMode.Frequency;
                             }
+
                             return SRSRadioMode.Channel;
                         }
+
                     case CurrentSRSRadioMode.NAV2:
                         {
                             if (_srsPlayerRadioInfo.radios[4].channel == -1)
                             {
                                 return SRSRadioMode.Frequency;
                             }
+
                             return SRSRadioMode.Channel;
                         }
+
                     case CurrentSRSRadioMode.ADF:
                         {
                             if (_srsPlayerRadioInfo.radios[5].channel == -1)
                             {
                                 return SRSRadioMode.Frequency;
                             }
+
                             return SRSRadioMode.Channel;
                         }
+
                     case CurrentSRSRadioMode.DME:
                         {
                             if (_srsPlayerRadioInfo.radios[6].channel == -1)
                             {
                                 return SRSRadioMode.Frequency;
                             }
+
                             return SRSRadioMode.Channel;
                         }
+
                     case CurrentSRSRadioMode.XPDR:
                         {
                             if (_srsPlayerRadioInfo.radios[7].channel == -1)
                             {
                                 return SRSRadioMode.Frequency;
                             }
+
                             return SRSRadioMode.Channel;
                         }
                 }
             }
+
             return SRSRadioMode.Frequency;
         }
 
@@ -355,10 +378,13 @@ namespace NonVisuals.Radios.SRS
                                 {
                                     return _srsPlayerRadioInfo.radios[1].freq;
                                 }
+
                                 return _srsPlayerRadioInfo.radios[1].channel;
                             }
+
                             return _srsPlayerRadioInfo.radios[1].secFreq;
                         }
+
                     case CurrentSRSRadioMode.COM2:
                         {
                             if (!guard)
@@ -367,10 +393,13 @@ namespace NonVisuals.Radios.SRS
                                 {
                                     return _srsPlayerRadioInfo.radios[2].freq;
                                 }
+
                                 return _srsPlayerRadioInfo.radios[2].channel;
                             }
+
                             return _srsPlayerRadioInfo.radios[2].secFreq;
                         }
+
                     case CurrentSRSRadioMode.NAV1:
                         {
                             if (!guard)
@@ -379,10 +408,13 @@ namespace NonVisuals.Radios.SRS
                                 {
                                     return _srsPlayerRadioInfo.radios[3].freq;
                                 }
+
                                 return _srsPlayerRadioInfo.radios[3].channel;
                             }
+
                             return _srsPlayerRadioInfo.radios[3].secFreq;
                         }
+
                     case CurrentSRSRadioMode.NAV2:
                         {
                             if (!guard)
@@ -391,10 +423,13 @@ namespace NonVisuals.Radios.SRS
                                 {
                                     return _srsPlayerRadioInfo.radios[4].freq;
                                 }
+
                                 return _srsPlayerRadioInfo.radios[4].channel;
                             }
+
                             return _srsPlayerRadioInfo.radios[4].secFreq;
                         }
+
                     case CurrentSRSRadioMode.ADF:
                         {
                             if (!guard)
@@ -403,10 +438,13 @@ namespace NonVisuals.Radios.SRS
                                 {
                                     return _srsPlayerRadioInfo.radios[5].freq;
                                 }
+
                                 return _srsPlayerRadioInfo.radios[5].channel;
                             }
+
                             return _srsPlayerRadioInfo.radios[5].secFreq;
                         }
+
                     case CurrentSRSRadioMode.DME:
                         {
                             if (!guard)
@@ -415,10 +453,13 @@ namespace NonVisuals.Radios.SRS
                                 {
                                     return _srsPlayerRadioInfo.radios[6].freq;
                                 }
+
                                 return _srsPlayerRadioInfo.radios[6].channel;
                             }
+
                             return _srsPlayerRadioInfo.radios[6].secFreq;
                         }
+
                     case CurrentSRSRadioMode.XPDR:
                         {
                             if (!guard)
@@ -427,12 +468,15 @@ namespace NonVisuals.Radios.SRS
                                 {
                                     return _srsPlayerRadioInfo.radios[7].freq;
                                 }
+
                                 return _srsPlayerRadioInfo.radios[7].channel;
                             }
+
                             return _srsPlayerRadioInfo.radios[7].secFreq;
                         }
                 }
             }
+
             return -1;
         }
 
@@ -457,36 +501,43 @@ namespace NonVisuals.Radios.SRS
                         radioId = 1;
                         break;
                     }
+
                 case CurrentSRSRadioMode.COM2:
                     {
                         radioId = 2;
                         break;
                     }
+
                 case CurrentSRSRadioMode.NAV1:
                     {
                         radioId = 3;
                         break;
                     }
+
                 case CurrentSRSRadioMode.NAV2:
                     {
                         radioId = 4;
                         break;
                     }
+
                 case CurrentSRSRadioMode.ADF:
                     {
                         radioId = 5;
                         break;
                     }
+
                 case CurrentSRSRadioMode.DME:
                     {
                         radioId = 6;
                         break;
                     }
+
                 case CurrentSRSRadioMode.XPDR:
                     {
                         radioId = 7;
                         break;
                     }
+
                 default:
                     {
                         radioId = 1;
@@ -514,46 +565,53 @@ namespace NonVisuals.Radios.SRS
             switch (currentSRSRadioMode)
             {
                 case CurrentSRSRadioMode.COM1:
-                {
-                    radioId = 1;
-                    break;
-                }
+                    {
+                        radioId = 1;
+                        break;
+                    }
+
                 case CurrentSRSRadioMode.COM2:
-                {
-                    radioId = 2;
-                    break;
-                }
+                    {
+                        radioId = 2;
+                        break;
+                    }
+
                 case CurrentSRSRadioMode.NAV1:
-                {
-                    radioId = 3;
-                    break;
-                }
+                    {
+                        radioId = 3;
+                        break;
+                    }
+
                 case CurrentSRSRadioMode.NAV2:
-                {
-                    radioId = 4;
-                    break;
-                }
+                    {
+                        radioId = 4;
+                        break;
+                    }
+
                 case CurrentSRSRadioMode.ADF:
-                {
-                    radioId = 5;
-                    break;
-                }
+                    {
+                        radioId = 5;
+                        break;
+                    }
+
                 case CurrentSRSRadioMode.DME:
-                {
-                    radioId = 6;
-                    break;
-                }
+                    {
+                        radioId = 6;
+                        break;
+                    }
+
                 case CurrentSRSRadioMode.XPDR:
-                {
-                    radioId = 7;
-                    break;
-                }
+                    {
+                        radioId = 7;
+                        break;
+                    }
             }
+
             var result = "{\"Command\": 2,\"RadioId\":" + radioId + "}\n";
-            //{ "Command": 2,"RadioId":2} 
+
+            // { "Command": 2,"RadioId":2} 
             SendDataFunction(result);
         }
-
 
         public void ChangeChannel(int radioNumber, bool increase)
         {
@@ -567,46 +625,53 @@ namespace NonVisuals.Radios.SRS
             switch (currentSRSRadioMode)
             {
                 case CurrentSRSRadioMode.COM1:
-                {
-                    radioId = 1;
-                    break;
-                }
-                case CurrentSRSRadioMode.COM2:
-                {
-                    radioId = 2;
-                    break;
-                }
-                case CurrentSRSRadioMode.NAV1:
-                {
-                    radioId = 3;
-                    break;
-                }
-                case CurrentSRSRadioMode.NAV2:
-                {
-                    radioId = 4;
-                    break;
-                }
-                case CurrentSRSRadioMode.ADF:
-                {
-                    radioId = 5;
-                    break;
-                }
-                case CurrentSRSRadioMode.DME:
-                {
-                    radioId = 6;
-                    break;
-                }
-                case CurrentSRSRadioMode.XPDR:
-                {
-                    radioId = 7;
-                    break;
-                }
-            }
-            /*{ "Command": 3,"RadioId":1}
-            --channel up(if channels have been configured)
+                    {
+                        radioId = 1;
+                        break;
+                    }
 
-            { "Command": 4,"RadioId":1}
-            --channel down(if channels have been configured)*/
+                case CurrentSRSRadioMode.COM2:
+                    {
+                        radioId = 2;
+                        break;
+                    }
+
+                case CurrentSRSRadioMode.NAV1:
+                    {
+                        radioId = 3;
+                        break;
+                    }
+
+                case CurrentSRSRadioMode.NAV2:
+                    {
+                        radioId = 4;
+                        break;
+                    }
+
+                case CurrentSRSRadioMode.ADF:
+                    {
+                        radioId = 5;
+                        break;
+                    }
+
+                case CurrentSRSRadioMode.DME:
+                    {
+                        radioId = 6;
+                        break;
+                    }
+
+                case CurrentSRSRadioMode.XPDR:
+                    {
+                        radioId = 7;
+                        break;
+                    }
+            }
+
+            /*{ "Command": 3,"RadioId":1}
+                        --channel up(if channels have been configured)
+            
+                        { "Command": 4,"RadioId":1}
+                        --channel down(if channels have been configured)*/
             var result = string.Empty;
             if (increase)
             {
@@ -616,6 +681,7 @@ namespace NonVisuals.Radios.SRS
             {
                 result = "{\"Command\": 4,\"RadioId\":" + radioId + "}\n";
             }
+
             SendDataFunction(result);
         }
 
@@ -631,6 +697,7 @@ namespace NonVisuals.Radios.SRS
                 catch (Exception)
                 {
                 }
+
                 try
                 {
                     _udpReceiveClient?.Close();
@@ -638,6 +705,7 @@ namespace NonVisuals.Radios.SRS
                 catch (Exception)
                 {
                 }
+
                 try
                 {
                     lock (_sendSRSDataLockObject)
@@ -648,6 +716,7 @@ namespace NonVisuals.Radios.SRS
                 catch (Exception)
                 {
                 }
+
                 _started = false;
             }
             catch (Exception ex)

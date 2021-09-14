@@ -1,18 +1,20 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
+﻿
 
 /*
  * The LockBitmap class was written by Vano Maisuradze and originally published on CodeProject.
  */
 namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.Runtime.InteropServices;
+
     public class LockBitmap
     {
-        readonly Bitmap _source = null;
+        readonly Bitmap _source;
         IntPtr _iptr = IntPtr.Zero;
-        BitmapData _bitmapData = null;
+        BitmapData _bitmapData;
 
         public byte[] Pixels { get; set; }
         public int Depth { get; private set; }
@@ -106,27 +108,32 @@ namespace NonVisuals.StreamDeck
             if (i > Pixels.Length - cCount)
                 throw new IndexOutOfRangeException();
 
-            if (Depth == 32) // For 32 bpp get Red, Green, Blue and Alpha
+            if (Depth == 32)
             {
+                // For 32 bpp get Red, Green, Blue and Alpha
                 byte b = Pixels[i];
                 byte g = Pixels[i + 1];
                 byte r = Pixels[i + 2];
                 byte a = Pixels[i + 3]; // a
                 clr = Color.FromArgb(a, r, g, b);
             }
-            if (Depth == 24) // For 24 bpp get Red, Green and Blue
+
+            if (Depth == 24)
             {
+                // For 24 bpp get Red, Green and Blue
                 byte b = Pixels[i];
                 byte g = Pixels[i + 1];
                 byte r = Pixels[i + 2];
                 clr = Color.FromArgb(r, g, b);
             }
+
             if (Depth == 8)
-            // For 8 bpp get color value (Red, Green and Blue values are the same)
             {
+                // For 8 bpp get color value (Red, Green and Blue values are the same)
                 byte c = Pixels[i];
                 clr = Color.FromArgb(c, c, c);
             }
+
             return clr;
         }
 
@@ -144,22 +151,26 @@ namespace NonVisuals.StreamDeck
             // Get start index of the specified pixel
             int i = ((y * Width) + x) * cCount;
 
-            if (Depth == 32) // For 32 bpp set Red, Green, Blue and Alpha
+            if (Depth == 32)
             {
+                // For 32 bpp set Red, Green, Blue and Alpha
                 Pixels[i] = color.B;
                 Pixels[i + 1] = color.G;
                 Pixels[i + 2] = color.R;
                 Pixels[i + 3] = color.A;
             }
-            if (Depth == 24) // For 24 bpp set Red, Green and Blue
+
+            if (Depth == 24)
             {
+                // For 24 bpp set Red, Green and Blue
                 Pixels[i] = color.B;
                 Pixels[i + 1] = color.G;
                 Pixels[i + 2] = color.R;
             }
+
             if (Depth == 8)
-            // For 8 bpp set color value (Red, Green and Blue values are the same)
             {
+                // For 8 bpp set color value (Red, Green and Blue values are the same)
                 Pixels[i] = color.B;
             }
         }

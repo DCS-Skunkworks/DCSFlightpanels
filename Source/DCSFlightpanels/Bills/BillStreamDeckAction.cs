@@ -56,7 +56,7 @@
         {
             return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && 
                    (_dcsbiosBindingStreamDeck?.DCSBIOSInputs == null || _dcsbiosBindingStreamDeck.DCSBIOSInputs.Count == 0) && 
-                   (KeyPress == null || KeyPress.KeySequence.Count == 0) &&
+                   (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) &&
                    _actionTypeLayer == null;
         }
 

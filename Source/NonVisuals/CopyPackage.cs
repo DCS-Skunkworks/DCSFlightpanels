@@ -1,8 +1,9 @@
-﻿using System;
-using ClassLibraryCommon;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+
+    using ClassLibraryCommon;
+
     [Serializable]
     public class CopyPackage
     {

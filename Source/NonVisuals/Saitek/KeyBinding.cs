@@ -1,8 +1,9 @@
-﻿using System;
-using Newtonsoft.Json;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+
+    using Newtonsoft.Json;
+
     [Serializable]
     public abstract class KeyBinding
     {

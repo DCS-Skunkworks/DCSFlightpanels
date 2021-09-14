@@ -1,9 +1,10 @@
-﻿using System;
-using Newtonsoft.Json;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+
     using MEF;
+
+    using Newtonsoft.Json;
 
     [Serializable]
     public class ButtonExport

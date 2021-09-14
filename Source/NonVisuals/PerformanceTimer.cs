@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using ClassLibraryCommon;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+
+    using ClassLibraryCommon;
+
     abstract class PerformanceTimer
     {
         private readonly string _id;
@@ -20,13 +21,13 @@ namespace NonVisuals
 
         public void ClickStart()
         {
-            //There are 10,000 ticks in a millisecond
+            // There are 10,000 ticks in a millisecond
             _clickTimesList.Add(new KeyValuePair<bool, long>(true, DateTime.Now.Ticks));
         }
 
         public void ClickEnd()
         {
-            //There are 10,000 ticks in a millisecond
+            // There are 10,000 ticks in a millisecond
             _clickTimesList.Add(new KeyValuePair<bool, long>(false, DateTime.Now.Ticks));
         }
 
@@ -57,6 +58,7 @@ namespace NonVisuals
                 {
                     stringBuilder.AppendLine(list[i]);
                 }
+
                 File.WriteAllText(filename, stringBuilder.ToString(), Encoding.ASCII);
             }
             catch (Exception ex)
@@ -70,7 +72,7 @@ namespace NonVisuals
             var result = new List<string>();
             try
             {
-                var header = DateTime.Now.ToString() + "\n\n" + _id + "\n------------";
+                var header = DateTime.Now + "\n\n" + _id + "\n------------";
 
                 result.Add(header);
                 for (var i = 0; i < _clickTimesList.Count; i++)
@@ -82,7 +84,7 @@ namespace NonVisuals
                         var diff = kvp.Value - previousKvp.Value;
                         if (kvp.Key)
                         {
-                            result.Add("Start : " + (kvp.Value - _start) / 10000 + " ms");//", diff from previous " + diff/10000 + " ms.");
+                            result.Add("Start : " + (kvp.Value - _start) / 10000 + " ms");// ", diff from previous " + diff/10000 + " ms.");
                         }
                         else
                         {
@@ -95,6 +97,7 @@ namespace NonVisuals
             {
                 Common.ShowErrorMessageBox( ex);
             }
+
             return result;
         }
     }

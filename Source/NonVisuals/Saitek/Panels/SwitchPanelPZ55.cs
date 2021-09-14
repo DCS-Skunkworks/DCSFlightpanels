@@ -136,6 +136,7 @@
             {
                 return null;
             }
+
             var result = new List<string>();
 
             foreach (var keyBinding in _keyBindings)
@@ -145,6 +146,7 @@
                     result.Add(keyBinding.ExportSettings());
                 }
             }
+
             foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
             {
                 if (!operatingSystemCommand.OSCommandObject.IsEmpty)
@@ -152,6 +154,7 @@
                     result.Add(operatingSystemCommand.ExportSettings());
                 }
             }
+
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
@@ -159,6 +162,7 @@
                     result.Add(dcsBiosBinding.ExportSettings());
                 }
             }
+
             foreach (var bipLink in _bipLinks)
             {
                 if (bipLink.BIPLights.Count > 0)
@@ -166,10 +170,12 @@
                     result.Add(bipLink.ExportSettings());
                 }
             }
+
             foreach (var colorOutputBinding in _listColorOutputBinding)
             {
                 result.Add(colorOutputBinding.ExportSettings());
             }
+
             result.Add("ManualLandingGearLEDs{" + _manualLandingGearLeds + "}");
             return result;
         }
@@ -298,20 +304,24 @@
                         SetLandingGearLED(SwitchPanelPZ55LEDPosition.UP, panelLEDColor);
                         upSet = true;
                     }
+
                     if (millisecsNow - millisecsStart > delayRight && !rightSet)
                     {
                         SetLandingGearLED(SwitchPanelPZ55LEDPosition.RIGHT, panelLEDColor);
                         rightSet = true;
                     }
+
                     if (millisecsNow - millisecsStart > delayLeft && !leftSet)
                     {
                         SetLandingGearLED(SwitchPanelPZ55LEDPosition.LEFT, panelLEDColor);
                         leftSet = true;
                     }
+
                     if (leftSet && upSet && rightSet)
                     {
                         break;
                     }
+
                     Thread.Sleep(10);
                 }
             }
@@ -376,7 +386,7 @@
                                 (int)PluginGamingPanelEnum.PZ55SwitchPanel, 
                                 (int)switchPanelKey.SwitchPanelPZ55Key, 
                                 switchPanelKey.IsOn,
-                                keyBinding.OSKeyPress.KeySequence);
+                                keyBinding.OSKeyPress.KeyPressSequence);
                         }
 
                         found = true;
@@ -384,7 +394,7 @@
                     }
                 }
 
-                if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
                         ProfileHandler.SelectedProfile().Description,
@@ -467,6 +477,7 @@
                                 SetLandingGearLED(cavb);
                             }
                         }
+
                         if (cavb.DCSBiosOutputLED.CheckForValueMatchAndChange(data))
                         {
 
@@ -492,6 +503,7 @@
                     result = keyBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
                 }
             }
+
             return result;
         }
 
@@ -505,6 +517,7 @@
                 SetIsDirty();
                 return;
             }
+
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
@@ -518,9 +531,11 @@
                     {
                         keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
                     }
+
                     found = true;
                 }
             }
+
             if (!found && !string.IsNullOrEmpty(keyPress))
             {
                 var keyBinding = new KeyBindingPZ55();
@@ -543,7 +558,8 @@
                 SetIsDirty();
                 return;
             }
-            //This must accept lists
+
+            // This must accept lists
             var found = false;
 
             foreach (var keyBinding in _keyBindings)
@@ -559,10 +575,12 @@
                         var keyPress = new KeyPress(description, keySequence);
                         keyBinding.OSKeyPress = keyPress;
                     }
+
                     found = true;
                     break;
                 }
             }
+
             if (!found && keySequence.Count > 0)
             {
                 var keyBinding = new KeyBindingPZ55();
@@ -580,7 +598,8 @@
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
-            //This must accept lists
+
+            // This must accept lists
             var found = false;
 
             foreach (var operatingSystemCommandBinding in _operatingSystemCommandBindings)
@@ -592,6 +611,7 @@
                     break;
                 }
             }
+
             if (!found)
             {
                 var operatingSystemCommandBindingPZ55 = new OSCommandBindingPZ55();
@@ -600,6 +620,7 @@
                 operatingSystemCommandBindingPZ55.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
                 _operatingSystemCommandBindings.Add(operatingSystemCommandBindingPZ55);
             }
+
             SetIsDirty();
         }
 
@@ -612,10 +633,11 @@
                 SetIsDirty();
                 return;
             }
-            //!!!!!!!
-            //If all DCS-BIOS commands has been deleted then provide a empty list, not null object!!!
 
-            //This must accept lists
+            // !!!!!!!
+            // If all DCS-BIOS commands has been deleted then provide a empty list, not null object!!!
+
+            // This must accept lists
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
@@ -627,6 +649,7 @@
                     break;
                 }
             }
+
             if (!found)
             {
                 var dcsBiosBinding = new DCSBIOSActionBindingPZ55();
@@ -636,20 +659,22 @@
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
+
             SetIsDirty();
         }
 
         public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
         {
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
-            var bipLinkPZ55 = (BIPLinkPZ55) bipLink;
+            var bipLinkPZ55 = (BIPLinkPZ55)bipLink;
             if (bipLinkPZ55.BIPLights.Count == 0)
             {
                 RemoveSwitchFromList(ControlListPZ55.BIPS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
-            //This must accept lists
+
+            // This must accept lists
             var found = false;
 
             foreach (var tmpBipLink in _bipLinks)
@@ -662,12 +687,14 @@
                     break;
                 }
             }
+
             if (!found && bipLinkPZ55.BIPLights.Count > 0)
             {
                 bipLinkPZ55.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
                 bipLinkPZ55.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
                 _bipLinks.Add(bipLinkPZ55);
             }
+
             SetIsDirty();
         }
 
@@ -688,6 +715,7 @@
                     }
                 }
             }
+
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -753,6 +781,7 @@
                     result.Add(colorOutputBinding);
                 }
             }
+
             return result;
         }
 
@@ -768,6 +797,7 @@
             {
                 _listColorOutputBinding.Add((DcsOutputAndColorBindingPZ55)dcsOutputAndColorBinding);
             }
+
             SetIsDirty();
         }
 
@@ -798,7 +828,7 @@
             return dcsOutputAndColorBinding;
         }
 
-        //SetLandingGearLED(cavb.PanelPZ55LEDPosition, cavb.PanelPZ55LEDColor);
+        // SetLandingGearLED(cavb.PanelPZ55LEDPosition, cavb.PanelPZ55LEDColor);
         public void SetLandingGearLED(DcsOutputAndColorBindingPZ55 dcsOutputAndColorBindingPZ55)
         {
             SetLandingGearLED((SwitchPanelPZ55LEDPosition)dcsOutputAndColorBindingPZ55.SaitekLEDPosition.GetPosition(), dcsOutputAndColorBindingPZ55.LEDColor);
@@ -815,11 +845,13 @@
                             _ledUpperColor = GetSwitchPanelPZ55LEDColor(switchPanelPZ55LEDPosition, switchPanelPZ55LEDColor);
                             break;
                         }
+
                     case SwitchPanelPZ55LEDPosition.LEFT:
                         {
                             _ledLeftColor = GetSwitchPanelPZ55LEDColor(switchPanelPZ55LEDPosition, switchPanelPZ55LEDColor);
                             break;
                         }
+
                     case SwitchPanelPZ55LEDPosition.RIGHT:
                         {
                             _ledRightColor = GetSwitchPanelPZ55LEDColor(switchPanelPZ55LEDPosition, switchPanelPZ55LEDColor);
@@ -835,7 +867,7 @@
             }
         }
 
-        //Do not use directly !
+        // Do not use directly !
         private void SetLandingGearLED(SwitchPanelPZ55LEDs switchPanelPZ55LEDs)
         {
             try
@@ -843,14 +875,16 @@
                 if (HIDSkeletonBase.HIDWriteDevice != null)
                 {
                     var array = new[] { (byte)0x0, (byte)switchPanelPZ55LEDs };
-                    //Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
+
+                    // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(new byte[] { 0, 0 });
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
                 }
-                //if (IsAttached)
-                //{
-                //Common.DebugP("Write ending");
-                //}
+
+                // if (IsAttached)
+                // {
+                // Common.DebugP("Write ending");
+                // }
             }
             catch (Exception e)
             {
@@ -873,16 +907,19 @@
                                     result = SwitchPanelPZ55LEDs.ALL_DARK;
                                     break;
                                 }
+
                             case PanelLEDColor.GREEN:
                                 {
                                     result = SwitchPanelPZ55LEDs.UP_GREEN;
                                     break;
                                 }
+
                             case PanelLEDColor.RED:
                                 {
                                     result = SwitchPanelPZ55LEDs.UP_RED;
                                     break;
                                 }
+
                             case PanelLEDColor.YELLOW:
                                 {
                                     result = SwitchPanelPZ55LEDs.UP_YELLOW;
@@ -891,6 +928,7 @@
                         }
                         break;
                     }
+
                 case SwitchPanelPZ55LEDPosition.LEFT:
                     {
                         switch (panelLEDColor)
@@ -900,16 +938,19 @@
                                     result = SwitchPanelPZ55LEDs.ALL_DARK;
                                     break;
                                 }
+
                             case PanelLEDColor.GREEN:
                                 {
                                     result = SwitchPanelPZ55LEDs.LEFT_GREEN;
                                     break;
                                 }
+
                             case PanelLEDColor.RED:
                                 {
                                     result = SwitchPanelPZ55LEDs.LEFT_RED;
                                     break;
                                 }
+
                             case PanelLEDColor.YELLOW:
                                 {
                                     result = SwitchPanelPZ55LEDs.LEFT_YELLOW;
@@ -918,6 +959,7 @@
                         }
                         break;
                     }
+
                 case SwitchPanelPZ55LEDPosition.RIGHT:
                     {
                         switch (panelLEDColor)
@@ -927,16 +969,19 @@
                                     result = SwitchPanelPZ55LEDs.ALL_DARK;
                                     break;
                                 }
+
                             case PanelLEDColor.GREEN:
                                 {
                                     result = SwitchPanelPZ55LEDs.RIGHT_GREEN;
                                     break;
                                 }
+
                             case PanelLEDColor.RED:
                                 {
                                     result = SwitchPanelPZ55LEDs.RIGHT_RED;
                                     break;
                                 }
+
                             case PanelLEDColor.YELLOW:
                                 {
                                     result = SwitchPanelPZ55LEDs.RIGHT_YELLOW;
@@ -951,7 +996,7 @@
 
         private void CreateSwitchKeys()
         {
-            //_switchPanelKeys = SwitchPanelKey.GetPanelSwitchKeys();
+            // _switchPanelKeys = SwitchPanelKey.GetPanelSwitchKeys();
             SaitekPanelKnobs = SwitchPanelKey.GetPanelSwitchKeys();
         }
 

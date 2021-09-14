@@ -1,7 +1,7 @@
-﻿using NonVisuals.StreamDeck.Events;
-
-namespace NonVisuals.Interfaces
+﻿namespace NonVisuals.Interfaces
 {
+    using NonVisuals.StreamDeck.Events;
+
     public interface INvStreamDeckListener
     {
         void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e);

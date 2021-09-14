@@ -22,6 +22,7 @@
             {
                 throw new ArgumentException("Import string empty. (KeyBinding)");
             }
+
             if (settings.StartsWith("MultiPanelKnob{"))
             {
                 // MultiPanelKey{ALT}\o/{1KNOB_ENGINE_LEFT}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
@@ -63,6 +64,7 @@
             {
                 return null;
             }
+
             var onStr = WhenTurnedOn ? "1" : "0";
             return "MultiPanelKnob{" + _pz70DialPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
         }
@@ -73,6 +75,7 @@
             {
                 return null;
             }
+
             foreach (var keyBindingPZ70 in knobBindings)
             {
                 /*
@@ -83,23 +86,22 @@
                 {
                     continue;
                 }
-                //Clear all negators
+
+                // Clear all negators
                 keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Clear();
 
-                if (keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_ALT ||
-                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_VS ||
-                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_IAS ||
-                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_HDG ||
-                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_CRS ||
-                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP ||
-                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN ||
-                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC ||
-                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC ||
-                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP ||
-                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN
-                )
+                if (keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_ALT || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_VS
+                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_IAS
+                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_HDG
+                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_CRS
+                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP
+                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN
+                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC
+                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC
+                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP
+                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN)
                 {
-                    //We have to deal with them separately
+                    // We have to deal with them separately
                     continue;
                 }
 
@@ -282,6 +284,7 @@
                     }
 
             }
+
             return knobBindings;
         }
     }

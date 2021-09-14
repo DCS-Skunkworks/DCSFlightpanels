@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace NonVisuals.Interfaces
+﻿namespace NonVisuals.Interfaces
 {
+    using System;
+
     public interface IProfileHandlerListener
     {
         void PanelSettingsChanged(object sender, PanelEventArgs e);

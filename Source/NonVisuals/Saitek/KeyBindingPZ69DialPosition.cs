@@ -22,6 +22,7 @@
             {
                 throw new ArgumentException("Import string empty. (KeyBinding)");
             }
+
             if (settings.StartsWith("RadioPanelKeyDialPos{"))
             {
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
@@ -54,10 +55,12 @@
             {
                 throw new Exception("Unknown dial position in KeyBindingPZ69DialPosition for knob " + RadioPanelPZ69Key + ". Cannot export.");
             }
+
             if (OSKeyPress == null || OSKeyPress.IsEmpty())
             {
                 return null;
             }
+
             var onStr = WhenTurnedOn ? "1" : "0";
             return "RadioPanelKeyDialPos{" + _pz69DialPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
         }
@@ -68,6 +71,7 @@
             {
                 return null;
             }
+
             foreach (var keyBindingPZ69 in knobBindings)
             {
                 /*
@@ -347,6 +351,7 @@
                     }
                 }
             }
+
             return knobBindings;
         }
 

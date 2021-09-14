@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.IO.Compression;
+
     public static class ZipArchiver
     {
 
@@ -28,8 +28,7 @@ namespace NonVisuals.StreamDeck
 
         public static void ExtractZipFile(string zipFileName, string extractFolder)
         {
-            //ZipFile.ExtractToDirectory(zipFileName, extractFolder);
-
+            // ZipFile.ExtractToDirectory(zipFileName, extractFolder);
             var zipArchive = ZipFile.OpenRead(zipFileName);
 
             foreach (var zipArchiveEntry in zipArchive.Entries)

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using DCS_BIOS;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System.Collections.Generic;
+
+    using DCS_BIOS;
+
     public static class JaceExtendedFactory
     {
         private static Dictionary<int, JaceExtended> _jaceEngines = new Dictionary<int, JaceExtended>();
@@ -15,6 +16,7 @@ namespace NonVisuals
                 {
                     id = RandomFactory.Get();
                 }
+
                 var jaceExtended = new JaceExtended();
                 _jaceEngines.Add(id, jaceExtended);
                 return jaceExtended;

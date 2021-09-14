@@ -391,7 +391,7 @@
         public void AddVKNULL()
         {
             ClearAll();
-            var virtualKeyNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
+            var virtualKeyNull = Enum.GetName(typeof(MEF.VirtualKeyCode), MEF.VirtualKeyCode.VK_NULL);
             if (string.IsNullOrEmpty(virtualKeyNull))
             {
                 return;
@@ -448,7 +448,7 @@
         public void AddKeyStroke(KeyPressInfo keyStroke)
         {
             var keyPress = new KeyPress();
-            keyPress.KeySequence.Add(0, keyStroke);
+            keyPress.KeyPressSequence.Add(0, keyStroke);
             keyPress.Description = string.Empty;
             KeyPress = keyPress;
             TextBox.Text = keyStroke.VirtualKeyCodesAsString;
@@ -638,7 +638,7 @@
             try
             {
                 KeyPressLength keyPressLength;
-                if (!ContainsKeyPress() || KeyPress.KeySequence.Count == 0)
+                if (!ContainsKeyPress() || KeyPress.KeyPressSequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
                 }
@@ -661,7 +661,7 @@
             {
                 if (_keyPress != null)
                 {
-                    _saitekPanel.AddOrUpdateSequencedKeyBinding(_panelUI.GetSwitch(TextBox), TextBox.Text, _keyPress.KeySequence);
+                    _saitekPanel.AddOrUpdateSequencedKeyBinding(_panelUI.GetSwitch(TextBox), TextBox.Text, _keyPress.KeyPressSequence);
                 }
             }
             catch (Exception ex)
@@ -711,14 +711,14 @@
 
         private void DeleteKeyStroke()
         {
-            KeyPress?.KeySequence?.Clear();
+            KeyPress?.KeyPressSequence?.Clear();
             TextBox.Text = string.Empty;
             UpdateKeyBindingSequencedKeyStrokes();
         }
 
         private void DeleteSequence()
         {
-            KeyPress?.KeySequence?.Clear();
+            KeyPress?.KeyPressSequence?.Clear();
             TextBox.Text = string.Empty;
             UpdateKeyBindingSequencedKeyStrokes();
         }
@@ -751,7 +751,7 @@
 
         public bool ContainsKeyPress()
         {
-            return _keyPress != null && _keyPress.KeySequence.Count > 0;
+            return _keyPress != null && _keyPress.KeyPressSequence.Count > 0;
         }
 
         public bool ContainsKeySequence()
@@ -761,7 +761,7 @@
 
         public bool ContainsKeyStroke()
         {
-            return _keyPress != null && !_keyPress.IsMultiSequenced() && _keyPress.KeySequence.Count > 0;
+            return _keyPress != null && !_keyPress.IsMultiSequenced() && _keyPress.KeyPressSequence.Count > 0;
         }
 
         public KeyPress KeyPress
@@ -780,7 +780,7 @@
 
         private IKeyPressInfo GetKeyPress()
         {
-            return _keyPress.KeySequence[0];
+            return _keyPress.KeyPressSequence[0];
         }
 
         private string GetKeySequenceDescription()
@@ -790,7 +790,7 @@
 
         public SortedList<int, IKeyPressInfo> GetKeySequence()
         {
-            return _keyPress.KeySequence;
+            return _keyPress.KeyPressSequence;
         }
 
         public OSCommand OSCommandObject

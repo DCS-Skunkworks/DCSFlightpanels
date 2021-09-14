@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Collections.Generic;
+
     public class ClickSpeedDetector
     {
         private readonly List<long> _clicksTimeTicksList = new List<long>();
@@ -34,7 +34,7 @@ namespace NonVisuals
             {
                 if (l / 10000 > millisecNow - millisecondPeriod)
                 {
-                    //we are within period
+                    // we are within period
                     result++;
                 }
             }
@@ -50,7 +50,7 @@ namespace NonVisuals
             {
                 if (l / 10000 > millisecNow - _defaultPeriod)
                 {
-                    //we are within period
+                    // we are within period
                     result++;
                 }
             }

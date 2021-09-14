@@ -1,19 +1,22 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Threading;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-using NonVisuals.StreamDeck.Events;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.IO;
+    using System.Text;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
+    using NonVisuals.StreamDeck.Events;
 
     public enum LayerNavType
     {
-        None = 3, //Do not change value because of JSON.
+        None = 3, // Do not change value because of JSON.
         SwitchToSpecificLayer = 0,
         Back = 1,
         Home = 2
@@ -101,16 +104,19 @@ namespace NonVisuals.StreamDeck
                     {
                         break;
                     }
+
                 case LayerNavType.Home:
                     {
                         _streamDeckPanel.ShowHomeLayer();
                         break;
                     }
+
                 case LayerNavType.Back:
                     {
                         _streamDeckPanel.ShowPreviousLayer();
                         break;
                     }
+
                 case LayerNavType.SwitchToSpecificLayer:
                     {
                         _streamDeckPanel.SelectedLayerName = TargetLayer;

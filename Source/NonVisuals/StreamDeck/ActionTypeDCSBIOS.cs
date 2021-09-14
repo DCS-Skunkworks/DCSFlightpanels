@@ -1,14 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-using NonVisuals.DCSBIOSBindings;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.IO;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.DCSBIOSBindings;
+    using NonVisuals.Interfaces;
 
     [Serializable]
     public class ActionTypeDCSBIOS : DCSBIOSActionBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
@@ -40,6 +43,7 @@ namespace NonVisuals.StreamDeck
                 {
                     result = (result * 397) ^ dcsbiosInput.GetHashCode();
                 }
+
                 return result;
             }
         }

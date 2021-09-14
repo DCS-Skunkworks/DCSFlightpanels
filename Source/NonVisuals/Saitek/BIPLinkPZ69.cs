@@ -24,6 +24,7 @@
             {
                 throw new ArgumentException("Import string empty. (BIPLinkPZ69)");
             }
+
             if (settings.StartsWith("RadioPanelBIPLink{"))
             {
                 // RadioPanelBIPLink{1UpperCOM1}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
@@ -46,6 +47,7 @@
                         _bipLights.Add(GetNewKeyValue(), tmpBipLight);
                         tmpBipLight.ImportSettings(parameters[i]);
                     }
+
                     if (parameters[i].StartsWith("Description["))
                     {
                         var tmp = parameters[i].Replace("Description[", string.Empty).Replace("]", string.Empty);

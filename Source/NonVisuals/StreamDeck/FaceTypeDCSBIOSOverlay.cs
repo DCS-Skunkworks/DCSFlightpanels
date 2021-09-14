@@ -1,19 +1,21 @@
-﻿using System;
-using System.Drawing;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Drawing;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
+
     [Serializable]
     public class FaceTypeDCSBIOSOverlay : FaceTypeDCSBIOS
     {
         [JsonProperty("FaceType", Required = Required.Default)]
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.DCSBIOSOverlay;
         private string _backgroundBitmapPath = string.Empty;
-        [NonSerialized] private Bitmap _backgroundBitmap = null;
-        private bool _loadBackground = false;
-        private double _dcsbiosValue = 0;
+        [NonSerialized] private Bitmap _backgroundBitmap;
+        private bool _loadBackground;
+        private double _dcsbiosValue;
 
         public FaceTypeDCSBIOSOverlay(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
         {
@@ -41,6 +43,7 @@ namespace NonVisuals.StreamDeck
             {
                 throw new Exception("StreamDeckPanelInstance is not set, cannot show image [FaceTypeDCSBIOSOverlay]");
             }
+
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, Bitmap);
         }
 

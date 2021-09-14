@@ -1,9 +1,10 @@
-﻿using System;
-using ClassLibraryCommon;
-using HidLibrary;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+
+    using ClassLibraryCommon;
+
+    using HidLibrary;
 
     public class HIDSkeleton
     {
@@ -12,7 +13,7 @@ namespace NonVisuals
         private HidDevice _hidReadDevice;
         private HidDevice _hidWriteDevice;
         private readonly GamingPanelSkeleton _gamingPanelSkeleton;
-        private bool _panelHasBeenInstantiated = false;
+        private bool _panelHasBeenInstantiated;
 
         public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string instanceId)
         {
@@ -28,10 +29,12 @@ namespace NonVisuals
                 {
                     _hidReadDevice.CloseDevice();
                 }
+
                 if (_hidWriteDevice.IsOpen)
                 {
                     _hidWriteDevice.CloseDevice();
                 }
+
                 _hidReadDevice.Dispose();
                 _hidWriteDevice.Dispose();
             }

@@ -1,33 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Saitek;
-
-
-namespace NonVisuals.Radios
+﻿namespace NonVisuals.Radios
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
+    using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Saitek;
 
     public class RadioPanelPZ69F5E : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
         private CurrentF5ERadioMode _currentUpperRadioMode = CurrentF5ERadioMode.UHF;
         private CurrentF5ERadioMode _currentLowerRadioMode = CurrentF5ERadioMode.UHF;
 
-        private bool _upperButtonPressed = false;
-        private bool _lowerButtonPressed = false;
-        private bool _upperButtonPressedAndDialRotated = false;
-        private bool _lowerButtonPressedAndDialRotated = false;
+        private bool _upperButtonPressed;
+        private bool _lowerButtonPressed;
+        private bool _upperButtonPressedAndDialRotated;
+        private bool _lowerButtonPressedAndDialRotated;
 
         /*F-5E UHF Radio COM1*/
-        //Large dial 225-399 [step of 1]
-        //Small dial 0.00-0.97 [step of 0 2 5 7]
+        // Large dial 225-399 [step of 1]
+        // Small dial 0.00-0.97 [step of 0 2 5 7]
 
         /*
          * Note, because of lack of information the A & T of the UHF
@@ -52,11 +53,11 @@ namespace NonVisuals.Radios
         private volatile uint _uhfCockpitFreq3DialPos = 1;
         private volatile uint _uhfCockpitFreq4DialPos = 1;
         private volatile uint _uhfCockpitFreq5DialPos = 1;
-        private const string UHF_FREQ_1DIAL_COMMAND = "UHF_100MHZ_SEL ";		//"2" "3" "A"
-        private const string UHF_FREQ_2DIAL_COMMAND = "UHF_10MHZ_SEL ";		//0 1 2 3 4 5 6 7 8 9
-        private const string UHF_FREQ_3DIAL_COMMAND = "UHF_1MHZ_SEL ";			//0 1 2 3 4 5 6 7 8 9
-        private const string UHF_FREQ_4DIAL_COMMAND = "UHF_01MHZ_SEL ";    //0 1 2 3 4 5 6 7 8 9
-        private const string UHF_FREQ_5DIAL_COMMAND = "UHF_0025MHZ_SEL ";		//"00" "25" "50" "75"
+        private const string UHF_FREQ_1DIAL_COMMAND = "UHF_100MHZ_SEL ";		// "2" "3" "A"
+        private const string UHF_FREQ_2DIAL_COMMAND = "UHF_10MHZ_SEL ";		// 0 1 2 3 4 5 6 7 8 9
+        private const string UHF_FREQ_3DIAL_COMMAND = "UHF_1MHZ_SEL ";			// 0 1 2 3 4 5 6 7 8 9
+        private const string UHF_FREQ_4DIAL_COMMAND = "UHF_01MHZ_SEL ";    // 0 1 2 3 4 5 6 7 8 9
+        private const string UHF_FREQ_5DIAL_COMMAND = "UHF_0025MHZ_SEL ";		// "00" "25" "50" "75"
         private Thread _uhfSyncThread;
         private long _uhfThreadNowSynching;
         private long _uhfDial1WaitingForFeedback;
@@ -70,8 +71,8 @@ namespace NonVisuals.Radios
         private const string UHF_FREQ_MODE_DECREASE = "UHF_FREQ DEC\n";
         private DCSBIOSOutput _uhfDcsbiosOutputFreqMode;  // 1 = PRESET
         private DCSBIOSOutput _uhfDcsbiosOutputSelectedChannel;
-        private volatile uint _uhfCockpitFreqMode = 0;
-        private volatile uint _uhfCockpitPresetChannel = 0;
+        private volatile uint _uhfCockpitFreqMode;
+        private volatile uint _uhfCockpitPresetChannel;
         private readonly ClickSpeedDetector _uhfBigFreqIncreaseClickSpeedDetector = new ClickSpeedDetector(15);
         private readonly ClickSpeedDetector _uhfBigFreqDecreaseClickSpeedDetector = new ClickSpeedDetector(15);
         private readonly ClickSpeedDetector _uhfChannelClickSpeedDetector = new ClickSpeedDetector(8);
@@ -80,13 +81,13 @@ namespace NonVisuals.Radios
         private const string UHF_FUNCTION_INCREASE = "UHF_FUNC INC\n";
         private const string UHF_FUNCTION_DECREASE = "UHF_FUNC DEC\n";
         private DCSBIOSOutput _uhfDcsbiosOutputFunction;  // UHF_FUNC
-        private volatile uint _uhfCockpitFunction = 0;
+        private volatile uint _uhfCockpitFunction;
         private readonly ClickSpeedDetector _uhfFunctionClickSpeedDetector = new ClickSpeedDetector(8);
 
         /*TACAN*/
-        //Large dial 0-12 [step of 1]
-        //Small dial 0-9 [step of 1]
-        //Last : X/Y [0,1]
+        // Large dial 0-12 [step of 1]
+        // Small dial 0-9 [step of 1]
+        // Last : X/Y [0,1]
         private int _tacanBigFrequencyStandby = 6;
         private int _tacanSmallFrequencyStandby = 5;
         private int _tacanXYStandby;
@@ -141,7 +142,7 @@ namespace NonVisuals.Radios
              */
 
 
-            //UHF
+            // UHF
             if (e.Address == _uhfDcsbiosOutputFreqDial1.Address)
             {
                 lock (_lockUhfDialsObject1)
@@ -155,6 +156,7 @@ namespace NonVisuals.Radios
                     }
                 }
             }
+
             if (e.Address == _uhfDcsbiosOutputFreqDial2.Address)
             {
                 lock (_lockUhfDialsObject2)
@@ -168,6 +170,7 @@ namespace NonVisuals.Radios
                     }
                 }
             }
+
             if (e.Address == _uhfDcsbiosOutputFreqDial3.Address)
             {
                 lock (_lockUhfDialsObject3)
@@ -181,6 +184,7 @@ namespace NonVisuals.Radios
                     }
                 }
             }
+
             if (e.Address == _uhfDcsbiosOutputFreqDial4.Address)
             {
                 lock (_lockUhfDialsObject4)
@@ -194,6 +198,7 @@ namespace NonVisuals.Radios
                     }
                 }
             }
+
             if (e.Address == _uhfDcsbiosOutputFreqDial5.Address)
             {
                 lock (_lockUhfDialsObject5)
@@ -207,6 +212,7 @@ namespace NonVisuals.Radios
                     }
                 }
             }
+
             if (e.Address == _uhfDcsbiosOutputFreqMode.Address)
             {
                 var tmp = _uhfCockpitFreqMode;
@@ -216,6 +222,7 @@ namespace NonVisuals.Radios
                     Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 }
             }
+
             if (e.Address == _uhfDcsbiosOutputSelectedChannel.Address)
             {
                 var tmp = _uhfCockpitPresetChannel;
@@ -225,6 +232,7 @@ namespace NonVisuals.Radios
                     Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 }
             }
+
             if (e.Address == _uhfDcsbiosOutputFunction.Address)
             {
                 var tmp = _uhfCockpitFunction;
@@ -236,9 +244,9 @@ namespace NonVisuals.Radios
             }
 
 
-            //TACAN is set via String listener
+            // TACAN is set via String listener
 
-            //Set once
+            // Set once
             DataHasBeenReceivedFromDCSBIOS = true;
             ShowFrequenciesOnPanel();
         }
@@ -247,47 +255,53 @@ namespace NonVisuals.Radios
         {
             try
             {
-                //Common.DebugP("RadioPanelPZ69F5E Received DCSBIOS stringData : ->" + e.StringData + "<-");
+                // Common.DebugP("RadioPanelPZ69F5E Received DCSBIOS stringData : ->" + e.StringData + "<-");
                 if (string.IsNullOrWhiteSpace(e.StringData))
                 {
-                    //Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
+                    // Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
+
                 if (e.Address.Equals(_tacanDcsbiosOutputFreqChannel.Address))
                 {
                     try
                     {
                         int changeCount = 0;
-                        //" 00X" --> "129X"
+
+                        // " 00X" --> "129X"
                         lock (_lockTacanDialsObject1)
                         {
                             if (!uint.TryParse(e.StringData.Substring(0, 2), out var tmpUint))
                             {
                                 return;
                             }
+
                             if (tmpUint != _tacanCockpitFreq1DialPos)
                             {
                                 changeCount = changeCount | 2;
                                 _tacanCockpitFreq1DialPos = tmpUint;
                             }
                         }
+
                         lock (_lockTacanDialsObject2)
                         {
                             if (!uint.TryParse(e.StringData.Substring(2, 1), out var tmpUint))
                             {
                                 return;
                             }
+
                             if (tmpUint != _tacanCockpitFreq2DialPos)
                             {
                                 changeCount = changeCount | 4;
                                 _tacanCockpitFreq2DialPos = tmpUint;
                             }
                         }
+
                         lock (_lockTacanDialsObject3)
                         {
                             var tmp = _tacanCockpitFreq3DialPos;
                             var tmpXY = e.StringData.Substring(3, 1);
-                            _tacanCockpitFreq3DialPos = tmpXY.Equals("X") ? (uint)0 : (uint)1;
+                            _tacanCockpitFreq3DialPos = tmpXY.Equals("X") ? 0 : (uint)1;
                             if (tmp != _tacanCockpitFreq3DialPos)
                             {
                                 changeCount = changeCount | 8;
@@ -311,12 +325,11 @@ namespace NonVisuals.Radios
                             Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 0);
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
-
                     }
                     catch (Exception)
                     {
-                        //Common.LogError(123, "DCSBIOSStringReceived TACAN: >" + e.StringData + "< " + exception.Message + " \n" + exception.StackTrace);
-                        //TODO Strange values from DCS-BIOS
+                        // Common.LogError(123, "DCSBIOSStringReceived TACAN: >" + e.StringData + "< " + exception.Message + " \n" + exception.StackTrace);
+                        // TODO Strange values from DCS-BIOS
                     }
                 }
             }
@@ -331,14 +344,15 @@ namespace NonVisuals.Radios
 
             if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsF5E.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsF5E.LOWER_FREQ_SWITCH))
             {
-                //Don't do anything on the very first button press as the panel sends ALL
-                //switches when it is manipulated the first time
-                //This would cause unintended sync.
+                // Don't do anything on the very first button press as the panel sends ALL
+                // switches when it is manipulated the first time
+                // This would cause unintended sync.
                 return;
             }
+
             if (!DataHasBeenReceivedFromDCSBIOS)
             {
-                //Don't start communication with DCS-BIOS before we have had a first contact from "them"
+                // Don't start communication with DCS-BIOS before we have had a first contact from "them"
                 return;
             }
 
@@ -357,6 +371,7 @@ namespace NonVisuals.Radios
 
                                     break;
                                 }
+
                             case CurrentF5ERadioMode.TACAN:
                                 {
                                     SendTacanToDCSBIOS();
@@ -366,6 +381,7 @@ namespace NonVisuals.Radios
 
                         break;
                     }
+
                 case RadioPanelPZ69KnobsF5E.LOWER_FREQ_SWITCH:
                     {
                         switch (_currentLowerRadioMode)
@@ -379,6 +395,7 @@ namespace NonVisuals.Radios
 
                                     break;
                                 }
+
                             case CurrentF5ERadioMode.TACAN:
                                 {
                                     SendTacanToDCSBIOS();
@@ -397,30 +414,30 @@ namespace NonVisuals.Radios
             {
                 return;
             }
+
             SaveCockpitFrequencyUhf();
-            //Frequency selector 1     
-            //       "2"  "3"  "A"
-            //Pos     0    1    2
 
-            //Frequency selector 2      
-            //0 1 2 3 4 5 6 7 8 9
+            // Frequency selector 1     
+            // "2"  "3"  "A"
+            // Pos     0    1    2
 
-            //Frequency selector 3
-            //0 1 2 3 4 5 6 7 8 9
+            // Frequency selector 2      
+            // 0 1 2 3 4 5 6 7 8 9
 
+            // Frequency selector 3
+            // 0 1 2 3 4 5 6 7 8 9
 
-            //Frequency selector 4
-            //0 1 2 3 4 5 6 7 8 9
+            // Frequency selector 4
+            // 0 1 2 3 4 5 6 7 8 9
 
-            //Frequency selector 5
-            //      "00" "25" "50" "75", only "00" and "50" used.
-            //Pos     0    1    2    3
+            // Frequency selector 5
+            // "00" "25" "50" "75", only "00" and "50" used.
+            // Pos     0    1    2    3
 
-            //Large dial 225-399 [step of 1]
-            //Small dial 0.00-0.95 [step of 0.05]
+            // Large dial 225-399 [step of 1]
+            // Small dial 0.00-0.95 [step of 0.05]
             var frequency = _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby;
             var frequencyAsString = frequency.ToString("0.00", NumberFormatInfoFullDisplay);
-
 
             var freqDial1 = 0;
             var freqDial2 = 0;
@@ -440,24 +457,28 @@ namespace NonVisuals.Radios
                         freqDial5 = 0;
                         break;
                     }
+
                 case 2:
                     {
                         freqDial5 = 1;
                         break;
                     }
+
                 case 5:
                     {
                         freqDial5 = 2;
                         break;
                     }
+
                 case 7:
                     {
                         freqDial5 = 3;
                         break;
                     }
+
                 default:
                     {
-                        //Safeguard in case it is in a invalid position
+                        // Safeguard in case it is in a invalid position
                         freqDial5 = 0;
                         break;
                     }
@@ -495,32 +516,37 @@ namespace NonVisuals.Radios
                     {
                         if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "UHF dial1Timeout"))
                         {
-                            //Lets do an ugly reset
+                            // Lets do an ugly reset
                             Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
                         }
+
                         if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "UHF dial2Timeout"))
                         {
-                            //Lets do an ugly reset
+                            // Lets do an ugly reset
                             Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
                         }
+
                         if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "UHF dial3Timeout"))
                         {
-                            //Lets do an ugly reset
+                            // Lets do an ugly reset
                             Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
                         }
+
                         if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "UHF dial4Timeout"))
                         {
-                            //Lets do an ugly reset
+                            // Lets do an ugly reset
                             Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 0);
                         }
+
                         if (IsTimedOut(ref dial5Timeout, ResetSyncTimeout, "UHF dial5Timeout"))
                         {
-                            //Lets do an ugly reset
+                            // Lets do an ugly reset
                             Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 0);
                         }
-                        //Frequency selector 1     
-                        //       "2"  "3"  "A"/"-1"
-                        //Pos     0    1    2
+
+                        // Frequency selector 1     
+                        // "2"  "3"  "A"/"-1"
+                        // Pos     0    1    2
                         if (Interlocked.Read(ref _uhfDial1WaitingForFeedback) == 0)
                         {
                             lock (_lockUhfDialsObject1)
@@ -529,6 +555,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
                                 }
+
                                 if (_uhfCockpitFreq1DialPos < desiredPosition1)
                                 {
                                     const string str = UHF_FREQ_1DIAL_COMMAND + "DEC\n";
@@ -543,6 +570,7 @@ namespace NonVisuals.Radios
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
                                 }
+
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -559,6 +587,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
                                 }
+
                                 if (_uhfCockpitFreq2DialPos < desiredPosition2)
                                 {
                                     const string str = UHF_FREQ_2DIAL_COMMAND + "DEC\n";
@@ -573,6 +602,7 @@ namespace NonVisuals.Radios
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
                                 }
+
                                 Reset(ref dial2Timeout);
                             }
                         }
@@ -589,6 +619,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
                                 }
+
                                 if (_uhfCockpitFreq3DialPos < desiredPosition3)
                                 {
                                     const string str = UHF_FREQ_3DIAL_COMMAND + "DEC\n";
@@ -603,6 +634,7 @@ namespace NonVisuals.Radios
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
                                 }
+
                                 Reset(ref dial3Timeout);
                             }
                         }
@@ -619,6 +651,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
                                 }
+
                                 if (_uhfCockpitFreq4DialPos < desiredPosition4)
                                 {
                                     const string str = UHF_FREQ_4DIAL_COMMAND + "DEC\n";
@@ -633,6 +666,7 @@ namespace NonVisuals.Radios
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
                                 }
+
                                 Reset(ref dial4Timeout);
                             }
                         }
@@ -649,6 +683,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial5OkTime = DateTime.Now.Ticks;
                                 }
+
                                 if (_uhfCockpitFreq5DialPos < desiredPosition5)
                                 {
                                     const string str = UHF_FREQ_5DIAL_COMMAND + "DEC\n";
@@ -663,6 +698,7 @@ namespace NonVisuals.Radios
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
                                 }
+
                                 Reset(ref dial5Timeout);
                             }
                         }
@@ -670,16 +706,18 @@ namespace NonVisuals.Radios
                         {
                             dial5OkTime = DateTime.Now.Ticks;
                         }
+
                         if (dial1SendCount > 3 || dial2SendCount > 10 || dial3SendCount > 10 || dial4SendCount > 10 || dial5SendCount > 5)
                         {
-                            //"Race" condition detected?
+                            // "Race" condition detected?
                             dial1SendCount = 0;
                             dial2SendCount = 0;
                             dial3SendCount = 0;
                             dial4SendCount = 0;
                             Thread.Sleep(5000);
                         }
-                        Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
+
+                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime) || IsTooShort(dial5OkTime));
                     SwapCockpitStandbyFrequencyUhf();
@@ -696,6 +734,7 @@ namespace NonVisuals.Radios
             {
                 Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
             }
+
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
         }
 
@@ -705,23 +744,23 @@ namespace NonVisuals.Radios
             {
                 return;
             }
+
             SaveCockpitFrequencyTacan();
-            //TACAN  00X/Y --> 129X/Y
-            //
-            //Frequency selector 1      LEFT
-            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-            //Frequency selector 2      MIDDLE
-            //0 1 2 3 4 5 6 7 8 9
+            // TACAN  00X/Y --> 129X/Y
+            // Frequency selector 1      LEFT
+            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-            //Frequency selector 3      RIGHT
-            //X=0 / Y=1
+            // Frequency selector 2      MIDDLE
+            // 0 1 2 3 4 5 6 7 8 9
 
-            //120X
-            //#1 = 12  (position = value)
-            //#2 = 0   (position = value)
-            //#3 = 1   (position = value)
+            // Frequency selector 3      RIGHT
+            // X=0 / Y=1
 
+            // 120X
+            // #1 = 12  (position = value)
+            // #2 = 0   (position = value)
+            // #3 = 1   (position = value)
             _tacanSyncThread?.Abort();
             _tacanSyncThread = new Thread(() => TacanSynchThreadMethod(_tacanBigFrequencyStandby, _tacanSmallFrequencyStandby, _tacanXYStandby));
             _tacanSyncThread.Start();
@@ -753,19 +792,19 @@ namespace NonVisuals.Radios
 
                         if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "TACAN dial1Timeout"))
                         {
-                            //Lets do an ugly reset
+                            // Lets do an ugly reset
                             Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 0);
                         }
 
                         if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
                         {
-                            //Lets do an ugly reset
+                            // Lets do an ugly reset
                             Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 0);
                         }
 
                         if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
                         {
-                            //Lets do an ugly reset
+                            // Lets do an ugly reset
                             Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 0);
                         }
 
@@ -782,6 +821,7 @@ namespace NonVisuals.Radios
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 1);
                                 }
+
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -804,6 +844,7 @@ namespace NonVisuals.Radios
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 1);
                                 }
+
                                 Reset(ref dial2Timeout);
                             }
                         }
@@ -827,6 +868,7 @@ namespace NonVisuals.Radios
                                     Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 1);
                                 }
                             }
+
                             Reset(ref dial3Timeout);
                         }
                         else
@@ -836,13 +878,14 @@ namespace NonVisuals.Radios
 
                         if (dial1SendCount > 12 || dial2SendCount > 10 || dial3SendCount > 2)
                         {
-                            //"Race" condition detected?
+                            // "Race" condition detected?
                             dial1SendCount = 0;
                             dial2SendCount = 0;
                             dial3SendCount = 0;
                             Thread.Sleep(5000);
                         }
-                        Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
+
+                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
 
 
                     }
@@ -861,6 +904,7 @@ namespace NonVisuals.Radios
             {
                 Interlocked.Exchange(ref _tacanThreadNowSynching, 0);
             }
+
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
         }
 
@@ -872,11 +916,13 @@ namespace NonVisuals.Radios
                 {
                     return;
                 }
+
                 CheckFrequenciesForValidity();
                 if (!FirstReportHasBeenRead)
                 {
                     return;
                 }
+
                 var bytes = new byte[21];
                 bytes[0] = 0x0;
 
@@ -896,25 +942,25 @@ namespace NonVisuals.Radios
                             }
                             else
                             {
-                                //Frequency selector 1     
-                                //     // "T" "2"  "3"  "A"
-                                //Pos      0   1    2    3
+                                // Frequency selector 1     
+                                // // "T" "2"  "3"  "A"
+                                // Pos      0   1    2    3
 
-                                //Frequency selector 2      
-                                //0 1 2 3 4 5 6 7 8 9
+                                // Frequency selector 2      
+                                // 0 1 2 3 4 5 6 7 8 9
 
-                                //Frequency selector 3
-                                //0 1 2 3 4 5 6 7 8 9
+                                // Frequency selector 3
+                                // 0 1 2 3 4 5 6 7 8 9
 
 
-                                //Frequency selector 4
-                                //0 1 2 3 4 5 6 7 8 9
+                                // Frequency selector 4
+                                // 0 1 2 3 4 5 6 7 8 9
 
-                                //Frequency selector 5
-                                //      "00" "25" "50" "75", only 0 2 5 7 used.
-                                //Pos     0    1    2    3
+                                // Frequency selector 5
+                                // "00" "25" "50" "75", only 0 2 5 7 used.
+                                // Pos     0    1    2    3
 
-                                //251.75
+                                // 251.75
                                 if (_uhfCockpitFunction == 0)
                                 {
                                     SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -957,38 +1003,41 @@ namespace NonVisuals.Radios
                                     SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
+
                             break;
                         }
+
                     case CurrentF5ERadioMode.TACAN:
                         {
-                            //TACAN  00X/Y --> 129X/Y
-                            //
-                            //Frequency selector 1      LEFT
-                            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+                            // TACAN  00X/Y --> 129X/Y
+                            // Frequency selector 1      LEFT
+                            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                            //Frequency selector 2      MIDDLE
-                            //0 1 2 3 4 5 6 7 8 9
+                            // Frequency selector 2      MIDDLE
+                            // 0 1 2 3 4 5 6 7 8 9
 
-                            //Frequency selector 3      RIGHT
-                            //X=0 / Y=1
+                            // Frequency selector 3      RIGHT
+                            // X=0 / Y=1
                             var frequencyAsString = string.Empty;
                             lock (_lockTacanDialsObject1)
                             {
                                 lock (_lockTacanDialsObject2)
                                 {
-                                    frequencyAsString = _tacanCockpitFreq1DialPos.ToString() + _tacanCockpitFreq2DialPos.ToString();
+                                    frequencyAsString = this._tacanCockpitFreq1DialPos + _tacanCockpitFreq2DialPos.ToString();
                                 }
                             }
+
                             frequencyAsString = frequencyAsString + ".";
                             lock (_lockTacanDialsObject3)
                             {
-                                frequencyAsString = frequencyAsString + _tacanCockpitFreq3DialPos.ToString();
+                                frequencyAsString = frequencyAsString + this._tacanCockpitFreq3DialPos;
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_tacanBigFrequencyStandby.ToString() + _tacanSmallFrequencyStandby.ToString() + "." + _tacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(this._tacanBigFrequencyStandby + _tacanSmallFrequencyStandby.ToString() + "." + this._tacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
+
                     default:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -1054,8 +1103,10 @@ namespace NonVisuals.Radios
                                     SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
+
                             break;
                         }
+
                     case CurrentF5ERadioMode.TACAN:
                         {
                             var frequencyAsString = string.Empty;
@@ -1063,19 +1114,21 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockTacanDialsObject2)
                                 {
-                                    frequencyAsString = _tacanCockpitFreq1DialPos.ToString() + _tacanCockpitFreq2DialPos.ToString();
+                                    frequencyAsString = this._tacanCockpitFreq1DialPos + _tacanCockpitFreq2DialPos.ToString();
                                 }
                             }
+
                             frequencyAsString = frequencyAsString + ".";
                             lock (_lockTacanDialsObject3)
                             {
-                                frequencyAsString = frequencyAsString + _tacanCockpitFreq3DialPos.ToString();
+                                frequencyAsString = frequencyAsString + this._tacanCockpitFreq3DialPos;
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_tacanBigFrequencyStandby.ToString() + _tacanSmallFrequencyStandby.ToString() + "." + _tacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(this._tacanBigFrequencyStandby + _tacanSmallFrequencyStandby.ToString() + "." + this._tacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
+
                     default:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -1085,6 +1138,7 @@ namespace NonVisuals.Radios
                 }
                 SendLCDData(bytes);
             }
+
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
 
@@ -1124,41 +1178,42 @@ namespace NonVisuals.Radios
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(399.00))
                                                 {
-                                                    //225-399
-                                                    //@ max value
-                                                    break;
+                                                    // 225-399
+                                                    // @ max value
                                                 }
                                                 else
                                                 {
                                                     UHFBigFrequencyStandbyAdjust(true);
                                                 }
                                             }
+
                                             break;
                                         }
+
                                     case CurrentF5ERadioMode.TACAN:
                                         {
-                                            //TACAN  00X/Y --> 129X/Y
-                                            //
-                                            //Frequency selector 1      LEFT
-                                            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+                                            // TACAN  00X/Y --> 129X/Y
+                                            // Frequency selector 1      LEFT
+                                            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                            //Frequency selector 2      MIDDLE
-                                            //0 1 2 3 4 5 6 7 8 9
+                                            // Frequency selector 2      MIDDLE
+                                            // 0 1 2 3 4 5 6 7 8 9
 
-                                            //Frequency selector 3      RIGHT
-                                            //X=0 / Y=1
-
+                                            // Frequency selector 3      RIGHT
+                                            // X=0 / Y=1
                                             if (_tacanBigFrequencyStandby >= 12)
                                             {
                                                 _tacanBigFrequencyStandby = 12;
                                                 break;
                                             }
+
                                             _tacanBigFrequencyStandby++;
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.UPPER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentUpperRadioMode)
@@ -1181,40 +1236,41 @@ namespace NonVisuals.Radios
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(100.00))
                                                 {
-                                                    //@ min value
-                                                    break;
+                                                    // @ min value
                                                 }
                                                 else
                                                 {
                                                     UHFBigFrequencyStandbyAdjust(false);
                                                 }
                                             }
+
                                             break;
                                         }
+
                                     case CurrentF5ERadioMode.TACAN:
                                         {
-                                            //TACAN  00X/Y --> 129X/Y
-                                            //
-                                            //Frequency selector 1      LEFT
-                                            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+                                            // TACAN  00X/Y --> 129X/Y
+                                            // Frequency selector 1      LEFT
+                                            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                            //Frequency selector 2      MIDDLE
-                                            //0 1 2 3 4 5 6 7 8 9
+                                            // Frequency selector 2      MIDDLE
+                                            // 0 1 2 3 4 5 6 7 8 9
 
-                                            //Frequency selector 3      RIGHT
-                                            //X=0 / Y=1
-
+                                            // Frequency selector 3      RIGHT
+                                            // X=0 / Y=1
                                             if (_tacanBigFrequencyStandby <= 0)
                                             {
                                                 _tacanBigFrequencyStandby = 0;
                                                 break;
                                             }
+
                                             _tacanBigFrequencyStandby--;
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.UPPER_SMALL_FREQ_WHEEL_INC:
                             {
                                 switch (_currentUpperRadioMode)
@@ -1233,33 +1289,35 @@ namespace NonVisuals.Radios
                                             {
                                                 UHFSmallFrequencyStandbyAdjust(true);
                                             }
+
                                             break;
                                         }
+
                                     case CurrentF5ERadioMode.TACAN:
                                         {
-                                            //TACAN  00X/Y --> 129X/Y
-                                            //
-                                            //Frequency selector 1      LEFT
-                                            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+                                            // TACAN  00X/Y --> 129X/Y
+                                            // Frequency selector 1      LEFT
+                                            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                            //Frequency selector 2      MIDDLE
-                                            //0 1 2 3 4 5 6 7 8 9
+                                            // Frequency selector 2      MIDDLE
+                                            // 0 1 2 3 4 5 6 7 8 9
 
-                                            //Frequency selector 3      RIGHT
-                                            //X=0 / Y=1
-
+                                            // Frequency selector 3      RIGHT
+                                            // X=0 / Y=1
                                             if (_tacanSmallFrequencyStandby >= 9)
                                             {
                                                 _tacanSmallFrequencyStandby = 9;
                                                 _tacanXYStandby = 1;
                                                 break;
                                             }
+
                                             _tacanSmallFrequencyStandby++;
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.UPPER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentUpperRadioMode)
@@ -1278,33 +1336,35 @@ namespace NonVisuals.Radios
                                             {
                                                 UHFSmallFrequencyStandbyAdjust(false);
                                             }
+
                                             break;
                                         }
+
                                     case CurrentF5ERadioMode.TACAN:
                                         {
-                                            //TACAN  00X/Y --> 129X/Y
-                                            //
-                                            //Frequency selector 1      LEFT
-                                            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+                                            // TACAN  00X/Y --> 129X/Y
+                                            // Frequency selector 1      LEFT
+                                            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                            //Frequency selector 2      MIDDLE
-                                            //0 1 2 3 4 5 6 7 8 9
+                                            // Frequency selector 2      MIDDLE
+                                            // 0 1 2 3 4 5 6 7 8 9
 
-                                            //Frequency selector 3      RIGHT
-                                            //X=0 / Y=1
-
+                                            // Frequency selector 3      RIGHT
+                                            // X=0 / Y=1
                                             if (_tacanSmallFrequencyStandby <= 0)
                                             {
                                                 _tacanSmallFrequencyStandby = 0;
                                                 _tacanXYStandby = 0;
                                                 break;
                                             }
+
                                             _tacanSmallFrequencyStandby--;
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_LARGE_FREQ_WHEEL_INC:
                             {
                                 switch (_currentLowerRadioMode)
@@ -1323,45 +1383,46 @@ namespace NonVisuals.Radios
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    //225-399
+                                                    // 225-399
                                                     DCSBIOS.Send(UHF_PRESET_INCREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(399.00))
                                                 {
-                                                    //@ max value
-                                                    break;
+                                                    // @ max value
                                                 }
                                                 else
                                                 {
                                                     UHFBigFrequencyStandbyAdjust(true);
                                                 }
                                             }
+
                                             break;
                                         }
+
                                     case CurrentF5ERadioMode.TACAN:
                                         {
-                                            //TACAN  00X/Y --> 129X/Y
-                                            //
-                                            //Frequency selector 1      LEFT
-                                            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+                                            // TACAN  00X/Y --> 129X/Y
+                                            // Frequency selector 1      LEFT
+                                            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                            //Frequency selector 2      MIDDLE
-                                            //0 1 2 3 4 5 6 7 8 9
+                                            // Frequency selector 2      MIDDLE
+                                            // 0 1 2 3 4 5 6 7 8 9
 
-                                            //Frequency selector 3      RIGHT
-                                            //X=0 / Y=1
-
+                                            // Frequency selector 3      RIGHT
+                                            // X=0 / Y=1
                                             if (_tacanBigFrequencyStandby >= 12)
                                             {
                                                 _tacanBigFrequencyStandby = 12;
                                                 break;
                                             }
+
                                             _tacanBigFrequencyStandby++;
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentLowerRadioMode)
@@ -1384,40 +1445,41 @@ namespace NonVisuals.Radios
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(100.00))
                                                 {
-                                                    //@ min value
-                                                    break;
+                                                    // @ min value
                                                 }
                                                 else
                                                 {
                                                     UHFBigFrequencyStandbyAdjust(false);
                                                 }
                                             }
+
                                             break;
                                         }
+
                                     case CurrentF5ERadioMode.TACAN:
                                         {
-                                            //TACAN  00X/Y --> 129X/Y
-                                            //
-                                            //Frequency selector 1      LEFT
-                                            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+                                            // TACAN  00X/Y --> 129X/Y
+                                            // Frequency selector 1      LEFT
+                                            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                            //Frequency selector 2      MIDDLE
-                                            //0 1 2 3 4 5 6 7 8 9
+                                            // Frequency selector 2      MIDDLE
+                                            // 0 1 2 3 4 5 6 7 8 9
 
-                                            //Frequency selector 3      RIGHT
-                                            //X=0 / Y=1
-
+                                            // Frequency selector 3      RIGHT
+                                            // X=0 / Y=1
                                             if (_tacanBigFrequencyStandby <= 0)
                                             {
                                                 _tacanBigFrequencyStandby = 0;
                                                 break;
                                             }
+
                                             _tacanBigFrequencyStandby--;
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_SMALL_FREQ_WHEEL_INC:
                             {
                                 switch (_currentLowerRadioMode)
@@ -1436,33 +1498,35 @@ namespace NonVisuals.Radios
                                             {
                                                 UHFSmallFrequencyStandbyAdjust(true);
                                             }
+
                                             break;
                                         }
+
                                     case CurrentF5ERadioMode.TACAN:
                                         {
-                                            //TACAN  00X/Y --> 129X/Y
-                                            //
-                                            //Frequency selector 1      LEFT
-                                            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+                                            // TACAN  00X/Y --> 129X/Y
+                                            // Frequency selector 1      LEFT
+                                            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                            //Frequency selector 2      MIDDLE
-                                            //0 1 2 3 4 5 6 7 8 9
+                                            // Frequency selector 2      MIDDLE
+                                            // 0 1 2 3 4 5 6 7 8 9
 
-                                            //Frequency selector 3      RIGHT
-                                            //X=0 / Y=1
-
+                                            // Frequency selector 3      RIGHT
+                                            // X=0 / Y=1
                                             if (_tacanSmallFrequencyStandby >= 9)
                                             {
                                                 _tacanSmallFrequencyStandby = 9;
                                                 _tacanXYStandby = 1;
                                                 break;
                                             }
+
                                             _tacanSmallFrequencyStandby++;
                                             break;
                                         }
                                 }
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentLowerRadioMode)
@@ -1481,33 +1545,35 @@ namespace NonVisuals.Radios
                                             {
                                                 if (_uhfSmallFrequencyStandby <= 0.00)
                                                 {
-                                                    //At min value
+                                                    // At min value
                                                     _uhfSmallFrequencyStandby = 0.97;
                                                     break;
                                                 }
+
                                                 UHFSmallFrequencyStandbyAdjust(false);
                                             }
+
                                             break;
                                         }
+
                                     case CurrentF5ERadioMode.TACAN:
                                         {
-                                            //TACAN  00X/Y --> 129X/Y
-                                            //
-                                            //Frequency selector 1      LEFT
-                                            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+                                            // TACAN  00X/Y --> 129X/Y
+                                            // Frequency selector 1      LEFT
+                                            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                            //Frequency selector 2      MIDDLE
-                                            //0 1 2 3 4 5 6 7 8 9
+                                            // Frequency selector 2      MIDDLE
+                                            // 0 1 2 3 4 5 6 7 8 9
 
-                                            //Frequency selector 3      RIGHT
-                                            //X=0 / Y=1
-
+                                            // Frequency selector 3      RIGHT
+                                            // X=0 / Y=1
                                             if (_tacanSmallFrequencyStandby <= 0)
                                             {
                                                 _tacanSmallFrequencyStandby = 0;
                                                 _tacanXYStandby = 0;
                                                 break;
                                             }
+
                                             _tacanSmallFrequencyStandby--;
                                             break;
                                         }
@@ -1517,6 +1583,7 @@ namespace NonVisuals.Radios
                     }
                 }
             }
+
             ShowFrequenciesOnPanel();
         }
 
@@ -1631,42 +1698,48 @@ namespace NonVisuals.Radios
 
         private void CheckFrequenciesForValidity()
         {
-            //Crude fix if any freqs are outside the valid boundaries
+            // Crude fix if any freqs are outside the valid boundaries
 
 
-            //UHF
-            //225.000 - 399.975 MHz
+            // UHF
+            // 225.000 - 399.975 MHz
             if (_uhfBigFrequencyStandby < 100)
             {
                 _uhfBigFrequencyStandby = 100;
             }
+
             if (_uhfBigFrequencyStandby > 399)
             {
                 _uhfBigFrequencyStandby = 399;
             }
 
-            //TACAN
-            //00X/Y - 129X/Y
+            // TACAN
+            // 00X/Y - 129X/Y
             if (_tacanBigFrequencyStandby < 0)
             {
                 _tacanBigFrequencyStandby = 0;
             }
+
             if (_tacanBigFrequencyStandby > 12)
             {
                 _tacanBigFrequencyStandby = 12;
             }
+
             if (_tacanSmallFrequencyStandby < 0)
             {
                 _tacanSmallFrequencyStandby = 0;
             }
+
             if (_tacanSmallFrequencyStandby > 9)
             {
                 _tacanSmallFrequencyStandby = 9;
             }
+
             if (_tacanXYStandby < 0)
             {
                 _tacanXYStandby = 0;
             }
+
             if (_tacanXYStandby > 1)
             {
                 _tacanXYStandby = 1;
@@ -1690,16 +1763,20 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentF5ERadioMode.UHF;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.UPPER_TACAN:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentUpperRadioMode = CurrentF5ERadioMode.TACAN;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.UPPER_NOUSE1:
                         case RadioPanelPZ69KnobsF5E.UPPER_NOUSE2:
                         case RadioPanelPZ69KnobsF5E.UPPER_NOUSE3:
@@ -1710,24 +1787,30 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentF5ERadioMode.NO_USE;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_UHF:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentLowerRadioMode = CurrentF5ERadioMode.UHF;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_TACAN:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
                                     _currentLowerRadioMode = CurrentF5ERadioMode.TACAN;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_NOUSE1:
                         case RadioPanelPZ69KnobsF5E.LOWER_NOUSE2:
                         case RadioPanelPZ69KnobsF5E.LOWER_NOUSE3:
@@ -1738,80 +1821,97 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentF5ERadioMode.NO_USE;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.UPPER_LARGE_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.UPPER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.UPPER_SMALL_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.UPPER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_LARGE_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_SMALL_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.UPPER_FREQ_SWITCH:
                             {
                                 if (ReportCounter == 1)
                                 {
-                                    //Don't do synch from the initial panel touch
-                                    //where are switches are included
+                                    // Don't do synch from the initial panel touch
+                                    // where are switches are included
                                     break;
                                 }
+
                                 _upperButtonPressed = radioPanelKnob.IsOn;
                                 if (!radioPanelKnob.IsOn)
                                 {
                                     if (!_upperButtonPressedAndDialRotated)
                                     {
-                                        //Do not synch if user has pressed the button to configure the radio
-                                        //Do when user releases button
+                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF5E.UPPER_FREQ_SWITCH);
                                     }
+
                                     _upperButtonPressedAndDialRotated = false;
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsF5E.LOWER_FREQ_SWITCH:
                             {
                                 if (ReportCounter == 1)
                                 {
-                                    //Don't do synch from the initial panel touch
-                                    //where are switches are included
+                                    // Don't do synch from the initial panel touch
+                                    // where are switches are included
                                     break;
                                 }
+
                                 _lowerButtonPressed = radioPanelKnob.IsOn;
                                 if (!radioPanelKnob.IsOn)
                                 {
                                     if (!_lowerButtonPressedAndDialRotated)
                                     {
-                                        //Do not synch if user has pressed the button to configure the radio
-                                        //Do when user releases button
+                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF5E.LOWER_FREQ_SWITCH);
                                     }
+
                                     _lowerButtonPressedAndDialRotated = false;
                                 }
+
                                 break;
                             }
                     }
@@ -1832,7 +1932,7 @@ namespace NonVisuals.Radios
             {
                 StartupBase("F-5E");
 
-                //UHF
+                // UHF
                 _uhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_100MHZ_SEL");
                 _uhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_10MHZ_SEL");
                 _uhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_1MHZ_SEL");
@@ -1842,12 +1942,13 @@ namespace NonVisuals.Radios
                 _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET_SEL");
                 _uhfDcsbiosOutputFunction = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FUNC");
 
-                //TACAN
+                // TACAN
                 _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
-                DCSBIOSStringManager.AddListener(_tacanDcsbiosOutputFreqChannel, this); //_tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
+                DCSBIOSStringManager.AddListener(_tacanDcsbiosOutputFreqChannel, this); // _tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
 
                 StartListeningForPanelChanges();
-                //IsAttached = true;
+
+                // IsAttached = true;
             }
             catch (Exception ex)
             {
@@ -1890,23 +1991,23 @@ namespace NonVisuals.Radios
 
         private string GetUhfDialFrequencyForPosition(int dial, uint position)
         {
-            //Frequency selector 1     
-            //     // "T"  "2"  "3"  "A"
-            //Pos      0    1    2    4
+            // Frequency selector 1     
+            // // "T"  "2"  "3"  "A"
+            // Pos      0    1    2    4
 
-            //Frequency selector 2      
-            //0 1 2 3 4 5 6 7 8 9
+            // Frequency selector 2      
+            // 0 1 2 3 4 5 6 7 8 9
 
-            //Frequency selector 3
-            //0 1 2 3 4 5 6 7 8 9
+            // Frequency selector 3
+            // 0 1 2 3 4 5 6 7 8 9
 
 
-            //Frequency selector 4
-            //0 1 2 3 4 5 6 7 8 9
+            // Frequency selector 4
+            // 0 1 2 3 4 5 6 7 8 9
 
-            //Frequency selector 5
-            //      "00" "25" "50" "75", only "00" and "50" used.
-            //Pos     0    1    2    3
+            // Frequency selector 5
+            // "00" "25" "50" "75", only "00" and "50" used.
+            // Pos     0    1    2    3
             switch (dial)
             {
                 case 1:
@@ -1917,53 +2018,63 @@ namespace NonVisuals.Radios
                                 {
                                     return "1";
                                 }
+
                             case 2:
                                 {
                                     return "2";
                                 }
+
                             case 3:
                                 {
                                     return "3";
                                 }
+
                             case 4:
                                 {
                                     return "4";
-                                    //throw new NotImplementedException("check how A should be treated.");
-                                    //return "0";//should be "A"
+
+                                    // throw new NotImplementedException("check how A should be treated.");
+                                    // return "0";//should be "A"
                                 }
                         }
                         break;
                     }
+
                 case 2:
                 case 3:
                 case 4:
                     {
                         return position.ToString();
                     }
+
                 case 5:
                     {
                         switch (position)
                         {
-                            //      "00" "25" "50" "75", only "00" and "50" used.
-                            //Pos     0    1    2    3
+                            // "00" "25" "50" "75", only "00" and "50" used.
+                            // Pos     0    1    2    3
                             case 0:
                                 {
                                     return "0";
                                 }
+
                             case 1:
                                 {
                                     return "2";
                                 }
+
                             case 2:
                                 {
                                     return "5";
                                 }
+
                             case 3:
                                 {
                                     return "7";
                                 }
                         }
                     }
+
                     break;
             }
             return string.Empty;
@@ -1999,20 +2110,24 @@ namespace NonVisuals.Radios
                     bigFrequencyAsString = GetUhfDialFrequencyForPosition(1, _uhfCockpitFreq1DialPos);
 
                 }
+
                 lock (_lockUhfDialsObject2)
                 {
                     bigFrequencyAsString = bigFrequencyAsString + GetUhfDialFrequencyForPosition(2, _uhfCockpitFreq2DialPos);
 
                 }
+
                 lock (_lockUhfDialsObject3)
                 {
                     bigFrequencyAsString = bigFrequencyAsString + GetUhfDialFrequencyForPosition(3, _uhfCockpitFreq3DialPos);
 
                 }
+
                 lock (_lockUhfDialsObject4)
                 {
                     smallFrequencyAsString = smallFrequencyAsString + GetUhfDialFrequencyForPosition(4, _uhfCockpitFreq4DialPos);
                 }
+
                 lock (_lockUhfDialsObject5)
                 {
                     smallFrequencyAsString = smallFrequencyAsString + GetUhfDialFrequencyForPosition(5, _uhfCockpitFreq5DialPos);
@@ -2043,9 +2158,9 @@ namespace NonVisuals.Radios
         private void SaveCockpitFrequencyTacan()
         {
             /*TACAN*/
-            //Large dial 0-12 [step of 1]
-            //Small dial 0-9 [step of 1]
-            //Last : X/Y [0,1]
+            // Large dial 0-12 [step of 1]
+            // Small dial 0-9 [step of 1]
+            // Last : X/Y [0,1]
             lock (_lockTacanDialsObject1)
             {
                 lock (_lockTacanDialsObject2)

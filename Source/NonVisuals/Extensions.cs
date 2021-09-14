@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms;
-using TextBox = System.Windows.Controls.TextBox;
-using NonVisuals.StreamDeck;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Windows.Forms;
+
+    using NonVisuals.StreamDeck;
+
+    using TextBox = System.Windows.Controls.TextBox;
+
     public static class Extensions
     {
 

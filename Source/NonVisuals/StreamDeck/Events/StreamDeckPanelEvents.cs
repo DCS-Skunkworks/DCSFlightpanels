@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-
-namespace NonVisuals.StreamDeck.Events
+﻿namespace NonVisuals.StreamDeck.Events
 {
+    using System;
+    using System.ComponentModel;
+
     using MEF;
 
     /*
@@ -14,7 +14,6 @@ namespace NonVisuals.StreamDeck.Events
      *
      * Pro-active, unsaved configs => show save button
      */
-
     public class StreamDeckSelectedButtonChangedArgs : EventArgs
     {
         /*

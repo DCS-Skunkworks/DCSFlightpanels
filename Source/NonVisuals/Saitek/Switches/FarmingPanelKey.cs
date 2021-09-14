@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.Saitek.Switches
+﻿namespace NonVisuals.Saitek.Switches
 {
+    using System;
+    using System.Collections.Generic;
+
     using MEF;
+
+    using NonVisuals.Interfaces;
 
     public class FarmingPanelKey : ISaitekPanelKnob
     {
@@ -28,7 +29,8 @@ namespace NonVisuals.Saitek.Switches
         public static HashSet<ISaitekPanelKnob> GetPanelFarmingPanelKeys()
         {
             var result = new HashSet<ISaitekPanelKnob>();
-            //Group 0
+
+            // Group 0
             result.Add(new FarmingPanelKey(0, Convert.ToInt32("1", 2), false, FarmingPanelMKKeys.BUTTON_1));
             result.Add(new FarmingPanelKey(0, Convert.ToInt32("10", 2), false, FarmingPanelMKKeys.BUTTON_2));
             result.Add(new FarmingPanelKey(0, Convert.ToInt32("100", 2), false, FarmingPanelMKKeys.BUTTON_3));
@@ -38,7 +40,7 @@ namespace NonVisuals.Saitek.Switches
             result.Add(new FarmingPanelKey(0, Convert.ToInt32("1000000", 2), false, FarmingPanelMKKeys.BUTTON_7));
             result.Add(new FarmingPanelKey(0, Convert.ToInt32("10000000", 2), false, FarmingPanelMKKeys.BUTTON_8));
 
-            //Group 1
+            // Group 1
             result.Add(new FarmingPanelKey(1, Convert.ToInt32("1", 2), false, FarmingPanelMKKeys.BUTTON_9));
             result.Add(new FarmingPanelKey(1, Convert.ToInt32("10", 2), false, FarmingPanelMKKeys.BUTTON_10));
             result.Add(new FarmingPanelKey(1, Convert.ToInt32("100", 2), false, FarmingPanelMKKeys.BUTTON_11));
@@ -48,7 +50,7 @@ namespace NonVisuals.Saitek.Switches
             result.Add(new FarmingPanelKey(1, Convert.ToInt32("1000000", 2), false, FarmingPanelMKKeys.BUTTON_15));
             result.Add(new FarmingPanelKey(1, Convert.ToInt32("10000000", 2), false, FarmingPanelMKKeys.BUTTON_16));
 
-            //Group 2
+            // Group 2
             result.Add(new FarmingPanelKey(2, Convert.ToInt32("1", 2), false, FarmingPanelMKKeys.BUTTON_17));
             result.Add(new FarmingPanelKey(2, Convert.ToInt32("10", 2), false, FarmingPanelMKKeys.BUTTON_18));
             result.Add(new FarmingPanelKey(2, Convert.ToInt32("100", 2), false, FarmingPanelMKKeys.BUTTON_19));
@@ -58,8 +60,7 @@ namespace NonVisuals.Saitek.Switches
             result.Add(new FarmingPanelKey(2, Convert.ToInt32("1000000", 2), false, FarmingPanelMKKeys.BUTTON_23));
             result.Add(new FarmingPanelKey(2, Convert.ToInt32("10000000", 2), false, FarmingPanelMKKeys.BUTTON_24));
 
-
-            //Group 3
+            // Group 3
             result.Add(new FarmingPanelKey(3, Convert.ToInt32("1", 2), false, FarmingPanelMKKeys.BUTTON_25));
             result.Add(new FarmingPanelKey(3, Convert.ToInt32("10", 2), false, FarmingPanelMKKeys.BUTTON_26));
             result.Add(new FarmingPanelKey(3, Convert.ToInt32("100", 2), false, FarmingPanelMKKeys.BUTTON_27));

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.Saitek.Switches
+﻿namespace NonVisuals.Saitek.Switches
 {
+    using System;
+    using System.Collections.Generic;
+
     using MEF;
+
+    using NonVisuals.Interfaces;
 
     [Flags]
     public enum SwitchPanelPZ55LEDs : byte
@@ -72,7 +73,8 @@ namespace NonVisuals.Saitek.Switches
         public static HashSet<ISaitekPanelKnob> GetPanelSwitchKeys()
         {
             var result = new HashSet<ISaitekPanelKnob>();
-            //Group 0
+
+            // Group 0
             result.Add(new SwitchPanelKey(0, Convert.ToInt32("1", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT));
             result.Add(new SwitchPanelKey(0, Convert.ToInt32("10", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT));
             result.Add(new SwitchPanelKey(0, Convert.ToInt32("100", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER));
@@ -82,7 +84,7 @@ namespace NonVisuals.Saitek.Switches
             result.Add(new SwitchPanelKey(0, Convert.ToInt32("1000000", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL));
             result.Add(new SwitchPanelKey(0, Convert.ToInt32("10000000", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL));
 
-            //Group 1
+            // Group 1
             result.Add(new SwitchPanelKey(1, Convert.ToInt32("1", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON));
             result.Add(new SwitchPanelKey(1, Convert.ToInt32("10", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV));
             result.Add(new SwitchPanelKey(1, Convert.ToInt32("100", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE));
@@ -92,7 +94,7 @@ namespace NonVisuals.Saitek.Switches
             result.Add(new SwitchPanelKey(1, Convert.ToInt32("1000000", 2), false, SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT));
             result.Add(new SwitchPanelKey(1, Convert.ToInt32("10000000", 2), false, SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT));
 
-            //Group 2
+            // Group 2
             result.Add(new SwitchPanelKey(2, Convert.ToInt32("1", 2), false, SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH));
             result.Add(new SwitchPanelKey(2, Convert.ToInt32("10", 2), false, SwitchPanelPZ55Keys.KNOB_ENGINE_START));
             result.Add(new SwitchPanelKey(2, Convert.ToInt32("100", 2), false, SwitchPanelPZ55Keys.LEVER_GEAR_UP));

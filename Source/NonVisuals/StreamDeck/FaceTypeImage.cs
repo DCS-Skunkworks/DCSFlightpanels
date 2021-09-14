@@ -1,12 +1,15 @@
-﻿using System;
-using System.Drawing;
-using System.Text;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-using OpenMacroBoard.SDK;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Drawing;
+    using System.Text;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
+
+    using OpenMacroBoard.SDK;
+
     [Serializable]
     public class FaceTypeImage : FaceTypeBase, IStreamDeckButtonFace
     {
@@ -54,6 +57,7 @@ namespace NonVisuals.StreamDeck
                     _bitmap = BitMapCreator.AdjustBitmap(_bitmap, 1.0f, 4.0f, 1.0f);
                     _bitmap = BitMapCreator.EnlargeBitmapCanvas(_bitmap);
                 }
+
                 RefreshBitmap = false;
             }
 
@@ -70,6 +74,7 @@ namespace NonVisuals.StreamDeck
             {
                 throw new Exception("StreamDeckPanelInstance is not set, cannot show image [FaceTypeImage]");
             }
+
             StreamDeckPanelInstance.StreamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(StreamDeckButtonName) - 1, _keyBitmap);
         }
 

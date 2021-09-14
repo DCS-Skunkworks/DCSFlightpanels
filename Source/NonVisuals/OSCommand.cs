@@ -1,12 +1,14 @@
-﻿using System;
-using System.Diagnostics;
-using System.Media;
-using System.Threading;
-using ClassLibraryCommon;
-using NonVisuals.Saitek;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Diagnostics;
+    using System.Media;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using NonVisuals.Saitek;
+
     [Serializable]
     public class OSCommand
     {
@@ -43,16 +45,18 @@ namespace NonVisuals
 
         public void ImportString(string value)
         {
-            //OSCommand{FILE\o/ARGUMENTS\o/NAME}
+            // OSCommand{FILE\o/ARGUMENTS\o/NAME}
             var tmp = value;
             tmp = tmp.Replace("OSCommand{", string.Empty).Replace("}", string.Empty);
-            //FILE\o/ARGUMENTS\o/NAME]
+
+            // FILE\o/ARGUMENTS\o/NAME]
             var array = tmp.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.None);
             _file = array[0];
             if (array.Length > 1)
             {
                 _arguments = array[1];
             }
+
             if (array.Length > 2)
             {
                 _name = array[2];
@@ -65,6 +69,7 @@ namespace NonVisuals
             {
                 return null;
             }
+
             return "OSCommand{" + _file + SaitekConstants.SEPARATOR_SYMBOL + _arguments + SaitekConstants.SEPARATOR_SYMBOL + _name + "}";
         }
 
@@ -97,6 +102,7 @@ namespace NonVisuals
                     {
                         break;
                     }
+
                     result = result + " " + process.StandardOutput.ReadLine();
                 }
 
@@ -109,6 +115,7 @@ namespace NonVisuals
                 result = "Failed to start " + _file + " with arguments " + _arguments + "." + ex.Message + "\n" + ex.StackTrace;
                 Common.LogError(result);
             }
+
             return result;
         }
 
@@ -132,8 +139,10 @@ namespace NonVisuals
                 {
                     return "Windows Command";
                 }
+
                 return _name;
             }
+
             set => _name = value;
         }
 

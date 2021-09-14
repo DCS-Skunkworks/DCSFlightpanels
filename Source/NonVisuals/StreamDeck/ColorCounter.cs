@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
+
     internal class ColorCounter
     {
         private List<ColorCount> _colorList = new List<ColorCount>(50);

@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Saitek;
-
-
-namespace NonVisuals.Radios
+﻿namespace NonVisuals.Radios
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
+    using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Saitek;
 
     public class RadioPanelPZ69F86F : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
@@ -20,8 +21,8 @@ namespace NonVisuals.Radios
         private CurrentF86FRadioMode _currentLowerRadioMode = CurrentF86FRadioMode.ARC27_PRESET;
 
         /*F-86F UHF ARC-27 PRESETS COM1*/
-        //Large dial 1-18 [step of 1]
-        //Small dial Power/Mode control
+        // Large dial 1-18 [step of 1]
+        // Small dial Power/Mode control
         private readonly object _lockARC27PresetDialObject1 = new object();
         private DCSBIOSOutput _arc27PresetDcsbiosOutputPresetDial;
         private volatile uint _arc27PresetCockpitDialPos = 1;
@@ -36,13 +37,13 @@ namespace NonVisuals.Radios
         private int _arc27ModeDialSkipper;
 
         /*F-86F ARC-27 PRESETS COM2*/
-        //Small dial Volume Control
+        // Small dial Volume Control
         private const string ARC27_VOLUME_KNOB_COMMAND_INC = "ARC_27_VOL +2500\n";
         private const string ARC27_VOLUME_KNOB_COMMAND_DEC = "ARC_27_VOL -2500\n";
 
         /*F-86F ARN-6 MANUAL NAV1*/
-        //Large dial -> tuning
-        //Small dial -> bands
+        // Large dial -> tuning
+        // Small dial -> bands
         private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
         private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
         const int CHANGE_VALUE = 10;
@@ -61,8 +62,8 @@ namespace NonVisuals.Radios
         private int _arn6BandDialSkipper;
 
         /*F-86F ARN-6 MODES NAV2*/
-        //Large dial MODES
-        //Small dial volume control
+        // Large dial MODES
+        // Small dial volume control
         private readonly object _lockARN6ModeObject = new object();
         private DCSBIOSOutput _arn6ModeDcsbiosOutputPresetDial;
         private volatile uint _arn6ModeCockpitDialPos = 1;
@@ -73,9 +74,9 @@ namespace NonVisuals.Radios
         private const string ARN6_VOLUME_KNOB_COMMAND_DEC = "ARN_6_VOL -2500\n";
 
         /*F-86F APX-6 ADF*/
-        //Large dial MODES
-        //Small - No Use
-        //ACT-STBY, Toggles IFF Dial Stop Button, button must be depressed to go into Emergency Mode.
+        // Large dial MODES
+        // Small - No Use
+        // ACT-STBY, Toggles IFF Dial Stop Button, button must be depressed to go into Emergency Mode.
         private volatile uint _apx6ModeCockpitDialPos = 1;
         private readonly object _lockAPX6ModeObject = new object();
         private int _apx6ModeDialSkipper;
@@ -108,27 +109,27 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
-            //ShowFrequenciesOnPanel();
+
+            // ShowFrequenciesOnPanel();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {
-
                 UpdateCounter(e.Address, e.Data);
+
                 /*
-                 * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
-                 * Once a dial has been deemed to be "off" position and needs to be changed
-                 * a change command is sent to DCS-BIOS.
-                 * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
-                 * reset. Reading the dial's position with no change in value will not reset.
-                 */
+                                 * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
+                                 * Once a dial has been deemed to be "off" position and needs to be changed
+                                 * a change command is sent to DCS-BIOS.
+                                 * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
+                                 * reset. Reading the dial's position with no change in value will not reset.
+                                 */
 
-
-                //ARC-27 Preset Channel Dial
+                // ARC-27 Preset Channel Dial
                 if (e.Address == _arc27PresetDcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockARC27PresetDialObject1)
@@ -142,7 +143,7 @@ namespace NonVisuals.Radios
                     }
                 }
 
-                //ARC-27 Mode Dial
+                // ARC-27 Mode Dial
                 if (e.Address == _arc27ModeDcsbiosOutputDial.Address)
                 {
                     lock (_lockARC27ModeDialObject1)
@@ -156,7 +157,7 @@ namespace NonVisuals.Radios
                     }
                 }
 
-                //ARN-6 Frequency
+                // ARN-6 Frequency
                 if (e.Address == _arn6ManualDcsbiosOutputCockpitFrequency.Address)
                 {
                     lock (_lockARN6FrequencyObject)
@@ -170,7 +171,7 @@ namespace NonVisuals.Radios
                     }
                 }
 
-                //ARN-6 Band
+                // ARN-6 Band
                 if (e.Address == _arn6BandDcsbiosOutputCockpit.Address)
                 {
                     lock (_lockARN6BandObject)
@@ -184,7 +185,7 @@ namespace NonVisuals.Radios
                     }
                 }
 
-                //ARN-6 Modes
+                // ARN-6 Modes
                 if (e.Address == _arn6ModeDcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockARN6ModeObject)
@@ -198,7 +199,7 @@ namespace NonVisuals.Radios
                     }
                 }
 
-                //APX-6 Modes
+                // APX-6 Modes
                 if (e.Address == _apx6ModeDcsbiosOutputCockpit.Address)
                 {
                     lock (_lockAPX6ModeObject)
@@ -211,7 +212,8 @@ namespace NonVisuals.Radios
                         }
                     }
                 }
-                //Set once
+
+                // Set once
                 DataHasBeenReceivedFromDCSBIOS = true;
                 ShowFrequenciesOnPanel();
             }
@@ -229,16 +231,18 @@ namespace NonVisuals.Radios
 
                 if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH))
                 {
-                    //Don't do anything on the very first button press as the panel sends ALL
-                    //switches when it is manipulated the first time
-                    //This would cause unintended sync.
+                    // Don't do anything on the very first button press as the panel sends ALL
+                    // switches when it is manipulated the first time
+                    // This would cause unintended sync.
                     return;
                 }
+
                 if (!DataHasBeenReceivedFromDCSBIOS)
                 {
-                    //Don't start communication with DCS-BIOS before we have had a first contact from "them"
+                    // Don't start communication with DCS-BIOS before we have had a first contact from "them"
                     return;
                 }
+
                 switch (knob)
                 {
                     case RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH:
@@ -249,18 +253,22 @@ namespace NonVisuals.Radios
                                     {
                                         break;
                                     }
+
                                 case CurrentF86FRadioMode.ARC27_VOL:
                                     {
                                         break;
                                     }
+
                                 case CurrentF86FRadioMode.ARN6:
                                     {
                                         break;
                                     }
+
                                 case CurrentF86FRadioMode.ARN6_MODES:
                                     {
                                         break;
                                     }
+
                                 case CurrentF86FRadioMode.ADF_APX6:
                                     {
                                         DCSBIOS.Send(APX_6DIAL_STOP_TOGGLE_COMMAND);
@@ -269,6 +277,7 @@ namespace NonVisuals.Radios
                             }
                             break;
                         }
+
                     case RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH:
                         {
                             switch (_currentLowerRadioMode)
@@ -277,18 +286,22 @@ namespace NonVisuals.Radios
                                     {
                                         break;
                                     }
+
                                 case CurrentF86FRadioMode.ARC27_VOL:
                                     {
                                         break;
                                     }
+
                                 case CurrentF86FRadioMode.ARN6:
                                     {
                                         break;
                                     }
+
                                 case CurrentF86FRadioMode.ARN6_MODES:
                                     {
                                         break;
                                     }
+
                                 case CurrentF86FRadioMode.ADF_APX6:
                                     {
                                         DCSBIOS.Send(APX_6DIAL_STOP_TOGGLE_COMMAND);
@@ -325,40 +338,50 @@ namespace NonVisuals.Radios
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.ARC27_PRESET);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.UPPER_ARC27_VOL:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.ARC27_VOL);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.UPPER_ARN6:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.ARN6);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.UPPER_ARN6_MODES:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.ARN6_MODES);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.UPPER_ADF_APX6:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.ADF_APX6);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.UPPER_NO_USE1:
                             case RadioPanelPZ69KnobsF86F.UPPER_NO_USE2:
                                 {
@@ -366,48 +389,60 @@ namespace NonVisuals.Radios
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.NOUSE);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_ARC27_PRESET:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.ARC27_PRESET);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_ARC27_VOL:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.ARC27_VOL);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_ARN6:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.ARN6);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_ARN6_MODES:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.ARN6_MODES);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_ADF_APX6:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.ADF_APX6);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_NO_USE1:
                             case RadioPanelPZ69KnobsF86F.LOWER_NO_USE2:
                                 {
@@ -415,8 +450,10 @@ namespace NonVisuals.Radios
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.NOUSE);
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.UPPER_LARGE_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsF86F.UPPER_LARGE_FREQ_WHEEL_DEC:
                             case RadioPanelPZ69KnobsF86F.UPPER_SMALL_FREQ_WHEEL_INC:
@@ -426,9 +463,10 @@ namespace NonVisuals.Radios
                             case RadioPanelPZ69KnobsF86F.LOWER_SMALL_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsF86F.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
-                                    //Ignore
+                                    // Ignore
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH:
                                 {
                                     if (_currentUpperRadioMode == CurrentF86FRadioMode.ADF_APX6)
@@ -438,8 +476,10 @@ namespace NonVisuals.Radios
                                             SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH:
                                 {
                                     if (_currentLowerRadioMode == CurrentF86FRadioMode.ADF_APX6)
@@ -449,6 +489,7 @@ namespace NonVisuals.Radios
                                             SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH);
                                         }
                                     }
+
                                     break;
                                 }
                         }
@@ -494,30 +535,37 @@ namespace NonVisuals.Radios
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqIncreaseChangeMonitor.Click();
                                                 DCSBIOS.Send(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_INC : ARN6_FREQUENCY_COMMAND_INC);
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
                                                 if (!SkipAPX6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.NOUSE:
                                             {
                                                 break;
@@ -525,6 +573,7 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentUpperRadioMode)
@@ -535,30 +584,37 @@ namespace NonVisuals.Radios
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqDecreaseChangeMonitor.Click();
                                                 DCSBIOS.Send(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_DEC : ARN6_FREQUENCY_COMMAND_DEC);
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
                                                 if (!SkipAPX6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.NOUSE:
                                             {
                                                 break;
@@ -566,6 +622,7 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.UPPER_SMALL_FREQ_WHEEL_INC:
                                 {
                                     switch (_currentUpperRadioMode)
@@ -576,29 +633,36 @@ namespace NonVisuals.Radios
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
                                                 DCSBIOS.Send(ARC27_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 if (!SkipARN6BandDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ADF_APX6:
                                         case CurrentF86FRadioMode.NOUSE:
                                             {
@@ -607,6 +671,7 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.UPPER_SMALL_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentUpperRadioMode)
@@ -617,29 +682,36 @@ namespace NonVisuals.Radios
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
                                                 DCSBIOS.Send(ARC27_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 if (!SkipARN6BandDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ADF_APX6:
                                         case CurrentF86FRadioMode.NOUSE:
                                             {
@@ -648,6 +720,7 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     switch (_currentLowerRadioMode)
@@ -658,30 +731,37 @@ namespace NonVisuals.Radios
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqIncreaseChangeMonitor.Click();
                                                 DCSBIOS.Send(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_INC : ARN6_FREQUENCY_COMMAND_INC);
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
                                                 if (!SkipAPX6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.NOUSE:
                                             {
                                                 break;
@@ -689,6 +769,7 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentLowerRadioMode)
@@ -699,30 +780,37 @@ namespace NonVisuals.Radios
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqDecreaseChangeMonitor.Click();
                                                 DCSBIOS.Send(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_DEC : ARN6_FREQUENCY_COMMAND_DEC);
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
                                                 if (!SkipAPX6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.NOUSE:
                                             {
                                                 break;
@@ -730,6 +818,7 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_SMALL_FREQ_WHEEL_INC:
                                 {
                                     switch (_currentLowerRadioMode)
@@ -740,29 +829,36 @@ namespace NonVisuals.Radios
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
                                                 DCSBIOS.Send(ARC27_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 if (!SkipARN6BandDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_INC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ADF_APX6:
                                         case CurrentF86FRadioMode.NOUSE:
                                             {
@@ -771,6 +867,7 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
+
                             case RadioPanelPZ69KnobsF86F.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentLowerRadioMode)
@@ -781,29 +878,36 @@ namespace NonVisuals.Radios
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
                                                 DCSBIOS.Send(ARC27_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 if (!SkipARN6BandDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_DEC);
                                                 }
+
                                                 break;
                                             }
+
                                         case CurrentF86FRadioMode.ADF_APX6:
                                         case CurrentF86FRadioMode.NOUSE:
                                             {
@@ -815,6 +919,7 @@ namespace NonVisuals.Radios
                         }
                     }
                 }
+
                 ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
@@ -848,24 +953,26 @@ namespace NonVisuals.Radios
                     {
                         case CurrentF86FRadioMode.ARC27_PRESET:
                             {
-                                //Preset Channel Selector
-                                //      " 1" -> "18"
-                                //Pos     0 .. 17
-
+                                // Preset Channel Selector
+                                // " 1" -> "18"
+                                // Pos     0 .. 17
                                 var channelAsString = string.Empty;
                                 lock (_lockARC27PresetDialObject1)
                                 {
                                     channelAsString = (_arc27PresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
+
                                 var modeAsString = string.Empty;
                                 lock (_lockARC27ModeDialObject1)
                                 {
                                     modeAsString = (_arc27ModeCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
+
                         case CurrentF86FRadioMode.ARC27_VOL:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -875,26 +982,28 @@ namespace NonVisuals.Radios
 
                         case CurrentF86FRadioMode.ARN6:
                             {
-                                //Frequency
-                                //Band
-
+                                // Frequency
+                                // Band
                                 var frequencyAsString = string.Empty;
                                 lock (_lockARN6FrequencyObject)
                                 {
                                     frequencyAsString = (_arn6CockpitFrequency).ToString().PadLeft(4, ' ');
                                 }
+
                                 var bandAsString = string.Empty;
                                 lock (_lockARN6BandObject)
                                 {
                                     bandAsString = (_arn6CockpitBand + 1).ToString().PadLeft(2, ' ');
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(bandAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(frequencyAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
+
                         case CurrentF86FRadioMode.ARN6_MODES:
                             {
-                                //Modes
+                                // Modes
                                 uint mode = 0;
                                 lock (_lockARN6ModeObject)
                                 {
@@ -905,16 +1014,19 @@ namespace NonVisuals.Radios
                                                 mode = 1;
                                                 break;
                                             }
+
                                         case 3:
                                             {
                                                 mode = 2;
                                                 break;
                                             }
+
                                         case 0:
                                             {
                                                 mode = 3;
                                                 break;
                                             }
+
                                         case 1:
                                             {
                                                 mode = 4;
@@ -922,25 +1034,28 @@ namespace NonVisuals.Radios
                                             }
                                     }
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
+
                         case CurrentF86FRadioMode.ADF_APX6:
                             {
-                                //Modes
-                                //Emergency ON OFF
-                                //Modes
-
+                                // Modes
+                                // Emergency ON OFF
+                                // Modes
                                 var modeAsString = string.Empty;
                                 lock (_lockAPX6ModeObject)
                                 {
                                     modeAsString = (_apx6ModeCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
+
                         case CurrentF86FRadioMode.NOUSE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -952,24 +1067,26 @@ namespace NonVisuals.Radios
                     {
                         case CurrentF86FRadioMode.ARC27_PRESET:
                             {
-                                //Preset Channel Selector
-                                //      " 1" -> "18"
-                                //Pos     0 .. 17
-
+                                // Preset Channel Selector
+                                // " 1" -> "18"
+                                // Pos     0 .. 17
                                 var channelAsString = string.Empty;
                                 lock (_lockARC27PresetDialObject1)
                                 {
                                     channelAsString = (_arc27PresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
+
                                 var modeAsString = string.Empty;
                                 lock (_lockARC27ModeDialObject1)
                                 {
                                     modeAsString = (_arc27ModeCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeAsString), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
+
                         case CurrentF86FRadioMode.ARC27_VOL:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -979,26 +1096,28 @@ namespace NonVisuals.Radios
 
                         case CurrentF86FRadioMode.ARN6:
                             {
-                                //Frequency
-                                //Band
-
+                                // Frequency
+                                // Band
                                 var frequencyAsString = string.Empty;
                                 lock (_lockARN6FrequencyObject)
                                 {
                                     frequencyAsString = (_arn6CockpitFrequency).ToString().PadLeft(4, ' ');
                                 }
+
                                 var bandAsString = string.Empty;
                                 lock (_lockARN6BandObject)
                                 {
                                     bandAsString = (_arn6CockpitBand + 1).ToString().PadLeft(2, ' ');
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(bandAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(frequencyAsString), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
+
                         case CurrentF86FRadioMode.ARN6_MODES:
                             {
-                                //Modes
+                                // Modes
                                 uint mode = 0;
                                 lock (_lockARN6ModeObject)
                                 {
@@ -1009,16 +1128,19 @@ namespace NonVisuals.Radios
                                                 mode = 1;
                                                 break;
                                             }
+
                                         case 3:
                                             {
                                                 mode = 2;
                                                 break;
                                             }
+
                                         case 0:
                                             {
                                                 mode = 3;
                                                 break;
                                             }
+
                                         case 1:
                                             {
                                                 mode = 4;
@@ -1026,25 +1148,28 @@ namespace NonVisuals.Radios
                                             }
                                     }
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
+
                         case CurrentF86FRadioMode.ADF_APX6:
                             {
-                                //Modes
-                                //Emergency ON OFF
-                                //Modes
-
+                                // Modes
+                                // Emergency ON OFF
+                                // Modes
                                 var modeAsString = string.Empty;
                                 lock (_lockAPX6ModeObject)
                                 {
                                     modeAsString = (_apx6ModeCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
+
                         case CurrentF86FRadioMode.NOUSE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -1059,6 +1184,7 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
+
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
 
@@ -1074,25 +1200,25 @@ namespace NonVisuals.Radios
             {
                 StartupBase("F-86F");
 
-                //COM1
+                // COM1
                 _arc27PresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC27_CHAN_SEL");
                 _arc27ModeDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC27_PWR_SEL");
 
-                //COM2
+                // COM2
 
-                //NAV1
+                // NAV1
                 _arn6ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("ARN6_FREQUENCY");
                 _arn6BandDcsbiosOutputCockpit = DCSBIOSControlLocator.GetDCSBIOSOutput("ARN6_CHAN_SEL");
 
-                //NAV2
+                // NAV2
                 _arn6ModeDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARN6_FUNC_SEL");
 
-                //ADF
+                // ADF
                 _apx6ModeDcsbiosOutputCockpit = DCSBIOSControlLocator.GetDCSBIOSOutput("APX6_MASTER");
 
-
                 StartListeningForPanelChanges();
-                //IsAttached = true;
+
+                // IsAttached = true;
             }
             catch (Exception ex)
             {
@@ -1145,8 +1271,9 @@ namespace NonVisuals.Radios
             try
             {
                 _currentLowerRadioMode = currentF86FRadioMode;
-                //If NOUSE then send next round of data to the panel in order to clear the LCD.
-                //_sendNextRoundToPanel = true;catch (Exception ex)
+
+                // If NOUSE then send next round of data to the panel in order to clear the LCD.
+                // _sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
             {
@@ -1166,6 +1293,7 @@ namespace NonVisuals.Radios
                         _arc27PresetDialSkipper = 0;
                         return false;
                     }
+
                     _arc27PresetDialSkipper++;
                     return true;
                 }
@@ -1174,6 +1302,7 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
+
             return false;
         }
 
@@ -1188,6 +1317,7 @@ namespace NonVisuals.Radios
                         _arc27ModeDialSkipper = 0;
                         return false;
                     }
+
                     _arc27ModeDialSkipper++;
                     return true;
                 }
@@ -1196,6 +1326,7 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
+
             return false;
         }
 
@@ -1210,6 +1341,7 @@ namespace NonVisuals.Radios
                         _arn6BandDialSkipper = 0;
                         return false;
                     }
+
                     _arn6BandDialSkipper++;
                     return true;
                 }
@@ -1218,6 +1350,7 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
+
             return false;
         }
 
@@ -1232,6 +1365,7 @@ namespace NonVisuals.Radios
                         _arn6ModeDialSkipper = 0;
                         return false;
                     }
+
                     _arn6ModeDialSkipper++;
                     return true;
                 }
@@ -1240,6 +1374,7 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
+
             return false;
         }
 
@@ -1254,6 +1389,7 @@ namespace NonVisuals.Radios
                         _apx6ModeDialSkipper = 0;
                         return false;
                     }
+
                     _apx6ModeDialSkipper++;
                     return true;
                 }
@@ -1262,6 +1398,7 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
+
             return false;
         }
 

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek.Panels;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+    using System.Collections.Generic;
+
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek.Panels;
+
     public static class BipFactory
     {
         private static readonly BipEventHandlerManager BIPEventHandlerManager = new BipEventHandlerManager();
@@ -40,6 +41,7 @@ namespace NonVisuals.Saitek
             {
                 return null;
             }
+
             return BIPEventHandlerManager;
         }
 
@@ -76,13 +78,13 @@ namespace NonVisuals.Saitek
 
     public class BipEventHandlerManager
     {
-
         public delegate void BipPanelRegisteredEventHandler(object sender, BipPanelRegisteredEventArgs e);
+
         public event BipPanelRegisteredEventHandler OnBipPanelRegistered;
 
         private readonly List<BacklitPanelBIP> _backlitPanels = new List<BacklitPanelBIP>();
-        //private object _panelLockObject = new object();
-        
+
+        // private object _panelLockObject = new object();
         public List<BacklitPanelBIP> GetBips()
         {
             return _backlitPanels;
@@ -169,7 +171,7 @@ namespace NonVisuals.Saitek
 
         private void OnPanelRegistered(BacklitPanelBIP backlitPanelBip)
         {
-            OnBipPanelRegistered?.Invoke(this, new BipPanelRegisteredEventArgs() { UniqueId = backlitPanelBip.HIDInstanceId, BacklitPanelBip = backlitPanelBip });
+            OnBipPanelRegistered?.Invoke(this, new BipPanelRegisteredEventArgs { UniqueId = backlitPanelBip.HIDInstanceId, BacklitPanelBip = backlitPanelBip });
         }
     }
 

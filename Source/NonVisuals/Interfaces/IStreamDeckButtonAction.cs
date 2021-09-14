@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using NonVisuals.StreamDeck;
-
-namespace NonVisuals.Interfaces
+﻿namespace NonVisuals.Interfaces
 {
+    using System.Threading;
+
+    using NonVisuals.StreamDeck;
 
     public enum EnumStreamDeckActionType
     {
@@ -16,18 +16,27 @@ namespace NonVisuals.Interfaces
     public interface IStreamDeckButtonAction
     {
         EnumStreamDeckActionType ActionType { get; }
+
         string ActionDescription { get; }
+
         void Execute(CancellationToken threadCancellationToken);
+
         bool IsRunning();
+
         bool IsRepeatable();
+
         StreamDeckPanel StreamDeckPanelInstance { get; set; }
 
         int GetHash();
         
         string SoundFile { get; set; }
+
         double Volume { get; set; }
+
         int Delay { get; set; }
+
         bool HasSound { get; }
+
         void PlaySound();
     }
 }

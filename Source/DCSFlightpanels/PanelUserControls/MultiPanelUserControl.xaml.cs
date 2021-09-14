@@ -736,7 +736,7 @@
             try
             {
                 KeyPressLength keyPressLength;
-                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeySequence.Count == 0)
+                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeyPressSequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
                 }

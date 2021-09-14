@@ -14,17 +14,29 @@
     public class BacklitPanelBIP : SaitekPanel
     {
         private const byte _1BIPMask = 0x01;
+
         private const byte _2BIPMask = 0x02;
+
         private const byte _3BIPMask = 0x04;
+
         private const byte _4BIPMask = 0x08;
+
         private const byte _5BIPMask = 0x10;
+
         private const byte _6BIPMask = 0x20;
+
         private const byte _7BIPMask = 0x40;
+
         private const byte _8BIPMask = 0x80;
+
         private readonly List<DcsOutputAndColorBindingBIP> _listColorOutputBinding = new List<DcsOutputAndColorBindingBIP>();
-        private readonly byte[] _upperRowBytes = { (byte)0x0, (byte)0x0 }; //byte 1 & 4
-        private readonly byte[] _middleRowBytes = { (byte)0x0, (byte)0x0 };//byte 2 & 5
-        private readonly byte[] _lowerRowBytes = { (byte)0x0, (byte)0x0 }; //byte 3 & 6
+
+        private readonly byte[] _upperRowBytes = { 0x0, 0x0 }; // byte 1 & 4
+
+        private readonly byte[] _middleRowBytes = { 0x0, 0x0 }; // byte 2 & 5
+
+        private readonly byte[] _lowerRowBytes = { 0x0, 0x0 }; // byte 3 & 6
+
         private uint _ledBrightness = 50; // 0 - 100 in 5 step intervals
 
         private DCSBIOSBrightnessBinding _dcsBiosBrightnessBinding;
@@ -45,19 +57,22 @@
          * 00000000
          *
          */
-        public BacklitPanelBIP(uint ledBrightness, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
+        public BacklitPanelBIP(uint ledBrightness, HIDSkeleton hidSkeleton)
+            : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
         {
             if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.BackLitPanel)
             {
                 throw new ArgumentException();
             }
+
             VendorId = 0x6A3;
             ProductId = 0xB4E;
             _ledBrightness = ledBrightness;
             BipFactory.RegisterBip(this);
             Startup();
         }
-        //sätta färg efter om Config finns
+
+        // sätta färg efter om Config finns
         public sealed override void Startup()
         {
             try
@@ -118,6 +133,7 @@
             {
                 return null;
             }
+
             var result = new List<string>();
             if (_listColorOutputBinding.Any())
             {
@@ -145,6 +161,7 @@
                     result.Add(colorOutputBinding);
                 }
             }
+
             return result;
         }
 
@@ -160,6 +177,7 @@
             {
                 _listColorOutputBinding.Add((DcsOutputAndColorBindingBIP)dcsOutputAndColorBinding);
             }
+
             SetIsDirty();
         }
 
@@ -179,7 +197,7 @@
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            //Nothing needs to be done here
+            // Nothing needs to be done here
         }
 
         public PanelLEDColor GetColor(BIPLedPositionEnum bipLedPositionEnum)
@@ -198,17 +216,20 @@
                             array = _upperRowBytes;
                             break;
                         }
+
                     case 2:
                         {
                             array = _middleRowBytes;
                             break;
                         }
+
                     case 3:
                         {
                             array = _lowerRowBytes;
                             break;
                         }
                 }
+
                 switch (index)
                 {
                     case 1:
@@ -216,36 +237,43 @@
                             mask = _1BIPMask;
                             break;
                         }
+
                     case 2:
                         {
                             mask = _2BIPMask;
                             break;
                         }
+
                     case 3:
                         {
                             mask = _3BIPMask;
                             break;
                         }
+
                     case 4:
                         {
                             mask = _4BIPMask;
                             break;
                         }
+
                     case 5:
                         {
                             mask = _5BIPMask;
                             break;
                         }
+
                     case 6:
                         {
                             mask = _6BIPMask;
                             break;
                         }
+
                     case 7:
                         {
                             mask = _7BIPMask;
                             break;
                         }
+
                     case 8:
                         {
                             mask = _8BIPMask;
@@ -253,27 +281,30 @@
                         }
                 }
 
-                //[0] & [1] == 0  --> DARK
-                //[0] == 1, [1] == 0 --> GREEN
-                //[0] == 1, [1] == 1 --> YELLOW
-                //[0] == 0, [1] == 1 --> RED
+                // [0] & [1] == 0  --> DARK
+                // [0] == 1, [1] == 0 --> GREEN
+                // [0] == 1, [1] == 1 --> YELLOW
+                // [0] == 0, [1] == 1 --> RED
                 if ((array[0] & mask) > 1)
                 {
                     if ((array[1] & mask) < 1)
                     {
                         return PanelLEDColor.GREEN;
                     }
+
                     if ((array[1] & mask) > 1)
                     {
                         return PanelLEDColor.YELLOW;
                     }
                 }
+
                 if ((array[0] & mask) < 1)
                 {
                     if ((array[1] & mask) < 1)
                     {
                         return PanelLEDColor.DARK;
                     }
+
                     if ((array[1] & mask) > 1)
                     {
                         return PanelLEDColor.RED;
@@ -284,6 +315,7 @@
             {
                 Common.LogError(ex);
             }
+
             return PanelLEDColor.RED;
         }
 
@@ -296,17 +328,13 @@
                     return true;
                 }
             }
+
             return false;
         }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingBIP
-            {
-                DCSBiosOutputLED = dcsBiosOutput,
-                LEDColor = panelLEDColor,
-                SaitekLEDPosition = saitekPanelLEDPosition
-            };
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingBIP { DCSBiosOutputLED = dcsBiosOutput, LEDColor = panelLEDColor, SaitekLEDPosition = saitekPanelLEDPosition };
             return dcsOutputAndColorBinding;
         }
 
@@ -315,7 +343,9 @@
             e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
-        public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
+        public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e)
+        {
+        }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -343,13 +373,14 @@
         {
             // Position_1_1
             return bipLedPositionEnum.ToString().Replace("Position_", string.Empty);
+
             // 1_1
         }
 
         public int GetIndex(BIPLedPositionEnum bipLedPositionEnum)
         {
             // Position_1_1
-            return int.Parse(bipLedPositionEnum.ToString().Remove(0, 9).Substring(2, 1)); 
+            return int.Parse(bipLedPositionEnum.ToString().Remove(0, 9).Substring(2, 1));
         }
 
         public int GetRow(BIPLedPositionEnum bipLedPositionEnum)
@@ -357,7 +388,6 @@
             // Position_1_1
             return int.Parse(bipLedPositionEnum.ToString().Remove(0, 9).Substring(0, 1));
         }
-
 
         public override void Identify()
         {
@@ -402,7 +432,7 @@
             var positions = Enum.GetValues(typeof(BIPLedPositionEnum)).Cast<BIPLedPositionEnum>();
             foreach (var position in positions)
             {
-                SetLED(position, PanelLEDColor.DARK);   
+                SetLED(position, PanelLEDColor.DARK);
             }
         }
 
@@ -422,17 +452,20 @@
                             array = _upperRowBytes;
                             break;
                         }
+
                     case 2:
                         {
                             array = _middleRowBytes;
                             break;
                         }
+
                     case 3:
                         {
                             array = _lowerRowBytes;
                             break;
                         }
                 }
+
                 switch (index)
                 {
                     case 1:
@@ -440,68 +473,79 @@
                             mask = _1BIPMask;
                             break;
                         }
+
                     case 2:
                         {
                             mask = _2BIPMask;
                             break;
                         }
+
                     case 3:
                         {
                             mask = _3BIPMask;
                             break;
                         }
+
                     case 4:
                         {
                             mask = _4BIPMask;
                             break;
                         }
+
                     case 5:
                         {
                             mask = _5BIPMask;
                             break;
                         }
+
                     case 6:
                         {
                             mask = _6BIPMask;
                             break;
                         }
+
                     case 7:
                         {
                             mask = _7BIPMask;
                             break;
                         }
+
                     case 8:
                         {
                             mask = _8BIPMask;
                             break;
                         }
                 }
+
                 switch (panelLEDColor)
                 {
                     case PanelLEDColor.DARK:
                         {
-                            //Set all to 0
+                            // Set all to 0
                             array[0] = (array[0] &= (byte)~mask);
                             array[1] = (array[1] &= (byte)~mask);
                             break;
                         }
+
                     case PanelLEDColor.GREEN:
                         {
-                            //Set first byte's bit to 1
+                            // Set first byte's bit to 1
                             array[0] = array[0] |= mask;
                             array[1] = (array[1] &= (byte)~mask);
                             break;
                         }
+
                     case PanelLEDColor.YELLOW:
                         {
-                            //Set both byte's bit to 1
+                            // Set both byte's bit to 1
                             array[0] = array[0] |= mask;
                             array[1] = array[1] |= mask;
                             break;
                         }
+
                     case PanelLEDColor.RED:
                         {
-                            //Set second byte's bit to 1
+                            // Set second byte's bit to 1
                             array[0] = (array[0] &= (byte)~mask);
                             array[1] = array[1] |= mask;
                             break;
@@ -523,9 +567,9 @@
                  *
                  */
 
-                //_upperRowBytes = { (byte)0x0, (byte)0x0 }; //byte 1 & 4
-                //_middleRowBytes = { (byte)0x0, (byte)0x0 };//byte 2 & 5
-                //_lowerRowBytes = { (byte)0x0, (byte)0x0 }; //byte 3 & 6
+                // _upperRowBytes = { (byte)0x0, (byte)0x0 }; //byte 1 & 4
+                // _middleRowBytes = { (byte)0x0, (byte)0x0 };//byte 2 & 5
+                // _lowerRowBytes = { (byte)0x0, (byte)0x0 }; //byte 3 & 6
                 var finalArray = new byte[7];
                 finalArray[0] = 0xb8;
                 finalArray[1] = _upperRowBytes[0];
@@ -558,14 +602,16 @@
         private void DeviceAttachedHandler()
         {
             Startup();
-            //IsAttached = true;
+
+            // IsAttached = true;
             DeviceAttached();
         }
 
         private void DeviceRemovedHandler()
         {
             Dispose();
-            //IsAttached = false;
+
+            // IsAttached = false;
             DeviceDetached();
         }
 
@@ -600,6 +646,7 @@
             {
                 _ledBrightness = 100;
             }
+
             _ledBrightness -= 10;
             SetLedStrength();
         }
@@ -610,6 +657,7 @@
             {
                 _ledBrightness = 20;
             }
+
             _ledBrightness += 10;
             SetLedStrength();
         }

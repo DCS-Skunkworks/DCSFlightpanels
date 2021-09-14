@@ -7,6 +7,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
+
     using ClassLibraryCommon;
 
     using MEF;
@@ -22,7 +23,6 @@
 
         // [Import(typeof(IPanelEventHandler))]
         // public IPanelEventHandler PanelEventHandler { get; set; }
-
         public static bool PlugSupportActivated { get; set; }
 
         public static bool DisableKeyboardAPI { get; set; }

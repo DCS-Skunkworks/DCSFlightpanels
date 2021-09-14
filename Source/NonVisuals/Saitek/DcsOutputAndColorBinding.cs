@@ -1,10 +1,11 @@
-﻿using System;
-using System.Text;
-using DCS_BIOS;
-using NonVisuals.Saitek.Panels;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+    using System.Text;
+
+    using DCS_BIOS;
+
+    using NonVisuals.Saitek.Panels;
 
     public enum PanelLEDColor : byte
     {
@@ -70,6 +71,7 @@ namespace NonVisuals.Saitek
             {
                 return;
             }
+
             var color = string.Empty;
             if (settings.Contains("SwitchPanelLedUp"))
             {
@@ -83,9 +85,11 @@ namespace NonVisuals.Saitek
             {
                 SaitekLEDPosition = new SaitekPanelLEDPosition(SwitchPanelPZ55LEDPosition.RIGHT);
             }
-            //SwitchPanelLedUp{DARK|DCSBiosOutput{INTEGER_TYPE|Equals|0x0000|0x0000|0|0}}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+
+            // SwitchPanelLedUp{DARK|DCSBiosOutput{INTEGER_TYPE|Equals|0x0000|0x0000|0|0}}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
             settings = settings.Split(Separator, StringSplitOptions.RemoveEmptyEntries)[0];
-            //SwitchPanelLedUp{DARK|DCSBiosOutput{INTEGER_TYPE|Equals|0x0000|0x0000|0|0}}
+
+            // SwitchPanelLedUp{DARK|DCSBiosOutput{INTEGER_TYPE|Equals|0x0000|0x0000|0|0}}
             settings = settings.Substring(settings.IndexOf("{", StringComparison.InvariantCulture) + 1);
             settings = settings.Substring(0, settings.Length - 1);
             color = settings.Substring(0, settings.IndexOf('|'));
@@ -102,14 +106,17 @@ namespace NonVisuals.Saitek
             {
                 stringBuilder.Append("SwitchPanelLedUp{" + LEDColor + "|" + DCSBiosOutputLED + "}");
             }
+
             if ((SwitchPanelPZ55LEDPosition)SaitekLEDPosition.GetPosition() == SwitchPanelPZ55LEDPosition.LEFT)
             {
                 stringBuilder.Append("SwitchPanelLedLeft{" + LEDColor + "|" + DCSBiosOutputLED + "}");
             }
+
             if ((SwitchPanelPZ55LEDPosition)SaitekLEDPosition.GetPosition() == SwitchPanelPZ55LEDPosition.RIGHT)
             {
                 stringBuilder.Append("SwitchPanelLedRight{" + LEDColor + "|" + DCSBiosOutputLED + "}");
             }
+
             return stringBuilder.ToString();
         }
     }
@@ -122,19 +129,23 @@ namespace NonVisuals.Saitek
             {
                 return;
             }
-            //PanelBIP{Position_1_4|GREEN|DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}}\o/\\?\hid#vid_06a3&pid_0b4e#9&1f079469&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+
+            // PanelBIP{Position_1_4|GREEN|DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}}\o/\\?\hid#vid_06a3&pid_0b4e#9&1f079469&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
             settings = settings.Split(Separator, StringSplitOptions.RemoveEmptyEntries)[0];
-            //PanelBIP{Position_1_4|GREEN|DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}}
+
+            // PanelBIP{Position_1_4|GREEN|DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}}
             settings = settings.Substring(settings.IndexOf("{", StringComparison.InvariantCulture) + 1);
-            //Position_1_4|GREEN|DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}}
+
+            // Position_1_4|GREEN|DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}}
             settings = settings.Substring(0, settings.Length - 1);
-            //Position_1_4|GREEN|DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}
+
+            // Position_1_4|GREEN|DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}
             var dcsBiosOutputString = settings.Substring(settings.IndexOf("DCSBiosOutput{", StringComparison.InvariantCulture));
-            //DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}
 
+            // DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}
             settings = settings.Remove(settings.IndexOf("DCSBiosOutput{", StringComparison.InvariantCulture));
-            //Position_1_4|GREEN|
 
+            // Position_1_4|GREEN|
             var settingsArray = settings.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             SaitekLEDPosition = new SaitekPanelLEDPosition((BIPLedPositionEnum)Enum.Parse(typeof(BIPLedPositionEnum), settingsArray[0]));
             LEDColor = (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), settingsArray[1]);

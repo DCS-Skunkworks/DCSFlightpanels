@@ -1,10 +1,12 @@
-﻿using System;
-using ClassLibraryCommon;
-using NonVisuals.Saitek.Panels;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using NonVisuals.Saitek.Panels;
 
     public class PZ70LCDButtonByteList
     {
@@ -35,12 +37,12 @@ namespace NonVisuals.Saitek
         private const int DIAL_CRS_MASK = 4096;
         private const int BUTTON_IS_ON_MASK = 8192;
 
-        //bool isSet = (b & mask) != 0
-        //Set to 1" b |= mask
-        //Set to zero
-        //b &= ~mask
-        //Toggle
-        //b ^= mask
+        // bool isSet = (b & mask) != 0
+        // Set to 1" b |= mask
+        // Set to zero
+        // b &= ~mask
+        // Toggle
+        // b ^= mask
         private readonly byte[] _buttonBytes = new byte[8];
         private readonly int[] _buttonDialPosition = new int[8];
 
@@ -79,6 +81,7 @@ namespace NonVisuals.Saitek
                         return (_buttonBytes[i] & buttonMask) != 0;
                     }
                 }
+
                 throw new Exception("Multipanel IsOn : Failed to find Mask for dial position " + pz70DialPosition + " knob " + multiPanelPZ70Knobs);
             }
             catch (Exception e)
@@ -99,18 +102,22 @@ namespace NonVisuals.Saitek
                         {
                             return DIAL_ALT_MASK;
                         }
+
                     case PZ70DialPosition.VS:
                         {
                             return DIAL_VS_MASK;
                         }
+
                     case PZ70DialPosition.IAS:
                         {
                             return DIAL_IAS_MASK;
                         }
+
                     case PZ70DialPosition.HDG:
                         {
                             return DIAL_HDG_MASK;
                         }
+
                     case PZ70DialPosition.CRS:
                         {
                             return DIAL_CRS_MASK;
@@ -135,30 +142,37 @@ namespace NonVisuals.Saitek
                         {
                             return AP_MASK;
                         }
+
                     case MultiPanelPZ70Knobs.HDG_BUTTON:
                         {
                             return HDG_MASK;
                         }
+
                     case MultiPanelPZ70Knobs.NAV_BUTTON:
                         {
                             return NAV_MASK;
                         }
+
                     case MultiPanelPZ70Knobs.IAS_BUTTON:
                         {
                             return IAS_MASK;
                         }
+
                     case MultiPanelPZ70Knobs.ALT_BUTTON:
                         {
                             return ALT_MASK;
                         }
+
                     case MultiPanelPZ70Knobs.VS_BUTTON:
                         {
                             return VS_MASK;
                         }
+
                     case MultiPanelPZ70Knobs.APR_BUTTON:
                         {
                             return APR_MASK;
                         }
+
                     case MultiPanelPZ70Knobs.REV_BUTTON:
                         {
                             return REV_MASK;
@@ -185,6 +199,7 @@ namespace NonVisuals.Saitek
                         return (_buttonBytes[i] & buttonMask) != 0;
                     }
                 }
+
                 throw new Exception("Multipanel FlipButton : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
             }
             catch (Exception e)
@@ -226,6 +241,7 @@ namespace NonVisuals.Saitek
                         return (_buttonBytes[i] & buttonMask) != 0;
                     }
                 }
+
                 throw new Exception("Multipanel ButtonOff : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
             }
             catch (Exception e)
@@ -252,6 +268,7 @@ namespace NonVisuals.Saitek
                         return (_buttonBytes[i] & buttonMask) != 0;
                     }
                 }
+
                 throw new Exception("Multipanel ButtonOn : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
             }
             catch (Exception e)
@@ -268,12 +285,13 @@ namespace NonVisuals.Saitek
                 var mask = GetMaskForDialPosition(pz70DialPosition);
                 for (int i = 0; i < _buttonDialPosition.Length; i++)
                 {
-                    //(b & mask) != 0
+                    // (b & mask) != 0
                     if ((_buttonDialPosition[i] & mask) != 0)
                     {
                         return _buttonBytes[i];
                     }
                 }
+
                 throw new Exception("Multipanel : Failed to find button byte for " + pz70DialPosition);
             }
             catch (Exception e)
@@ -294,6 +312,7 @@ namespace NonVisuals.Saitek
                         return _buttonBytes[i];
                     }
                 }
+
                 throw new Exception("Multipanel GetButtonByte : Failed to find Mask for dial " + buttonDialMask);
             }
             catch (Exception e)

@@ -13,14 +13,12 @@
 
     using MEF;
 
+    using Microsoft.Win32;
+
     using NonVisuals.Interfaces;
     using NonVisuals.Properties;
 
     using Theraot.Core;
-
-    using MessageBox = System.Windows.MessageBox;
-    using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-    using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
     public class ProfileHandler : IProfileHandlerListener, IIsDirty
     {
@@ -33,12 +31,12 @@
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
         private readonly object _lockObject = new object();
 
-        //Both directory and filename
+        // Both directory and filename
         private string _filename = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)) + "\\" + "dcsfp_profile.bindings";
         private string _lastProfileUsed = string.Empty;
         private bool _isDirty;
         private bool _isNewProfile;
-        private string _dcsbiosJSONDirectory; //hunting weird bug
+        private string _dcsbiosJSONDirectory; // hunting weird bug
         private bool _profileLoaded;
 
         private IHardwareConflictResolver _hardwareConflictResolver;
@@ -105,10 +103,12 @@
             {
                 return;
             }
+
             _isNewProfile = true;
             ClearAll();
-            Profile = DCSFPProfile.GetNoFrameLoadedYet();//Just a default that doesn't remove non emulation panels from the GUI
-            //This sends info to all to clear their settings
+            Profile = DCSFPProfile.GetNoFrameLoadedYet(); // Just a default that doesn't remove non emulation panels from the GUI
+
+            // This sends info to all to clear their settings
             OnClearPanelSettings?.Invoke(this);
         }
 
@@ -121,7 +121,6 @@
         {
             return Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
         }*/
-
         public bool ReloadProfile()
         {
             return LoadProfile(null, _hardwareConflictResolver);
@@ -161,21 +160,22 @@
 
                 if (string.IsNullOrEmpty(_filename) || !File.Exists(_filename))
                 {
-                    //Main window will handle this
+                    // Main window will handle this
                     return false;
                 }
+
                 /*
-                 * Read all information and add InstanceID to all lines using BeginPanel and EndPanel
-                 *             
-                 * PanelType=PZ55SwitchPanel
-                 * PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&3f11a32&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                 * BeginPanel
-                 *      SwitchPanelKey{1KNOB_ENGINE_RIGHT}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_Q}
-                 *      SwitchPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{FiftyMilliSec,LCONTROL + VK_Q}
-                 *      SwitchPanelKey{1KNOB_ENGINE_BOTH}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_C}
-                 * EndPanel
-                 * 
-                 */
+                                 * Read all information and add InstanceID to all lines using BeginPanel and EndPanel
+                                 *             
+                                 * PanelType=PZ55SwitchPanel
+                                 * PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&3f11a32&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                                 * BeginPanel
+                                 *      SwitchPanelKey{1KNOB_ENGINE_RIGHT}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_Q}
+                                 *      SwitchPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{FiftyMilliSec,LCONTROL + VK_Q}
+                                 *      SwitchPanelKey{1KNOB_ENGINE_BOTH}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_C}
+                                 * EndPanel
+                                 * 
+                                 */
                 _profileLoaded = true;
                 Debug.WriteLine("ProfileHandler reading file ".Append(_filename));
                 var fileLines = File.ReadAllLines(_filename);
@@ -189,16 +189,17 @@
 
                 foreach (var fileLine in fileLines)
                 {
-                    if (fileLine.StartsWith("Airframe=")) // <== Backward compability
+                    if (fileLine.StartsWith("Airframe="))
                     {
+                        // <== Backward compability
                         if (fileLine.StartsWith("Airframe=NONE"))
                         {
-                            //Backward compability
+                            // Backward compability
                             tmpProfile = DCSFPProfile.GetKeyEmulator();
                         }
                         else
                         {
-                            //Backward compability
+                            // Backward compability
                             var airframeAsString = fileLine.Replace("Airframe=", string.Empty).Trim();
                             tmpProfile = DCSFPProfile.GetBackwardCompatible(airframeAsString);
                         }
@@ -241,7 +242,7 @@
                         }
                         else if (fileLine.StartsWith("PanelSettingsVersion="))
                         {
-                            //do nothing, this will be phased out
+                            // do nothing, this will be phased out
                         }
                         else if (fileLine.Equals("BeginPanel"))
                         {
@@ -253,6 +254,7 @@
                             {
                                 BindingMappingManager.RegisterBindingFromFile(genericPanelBinding);
                             }
+
                             insidePanel = false;
                         }
                         else if (fileLine.Equals("BeginPanelJSON"))
@@ -265,6 +267,7 @@
                             {
                                 BindingMappingManager.RegisterBindingFromFile(genericPanelBinding);
                             }
+
                             insideJSONPanel = false;
                         }
                         else
@@ -287,7 +290,8 @@
                         }
                     }
                 }
-                //For backwards compability 10.11.2018
+
+                // For backwards compability 10.11.2018
                 if (Common.GetEmulationModesFlag() == 0)
                 {
                     SetEmulationModeFlag();
@@ -315,6 +319,7 @@
                 BindingMappingManager.MergeModifiedBindings(modifiedBindings);
                 settingsWereModified = modifiedBindings != null && modifiedBindings.Count > 0;
             }
+
             if (settingsWereModified)
             {
                 SetIsDirty();
@@ -349,13 +354,13 @@
             {
                 if (OnSettingsReadFromFile != null)
                 {
-                    OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Profile = _dcsfpProfile });
+                    OnAirframeSelected?.Invoke(this, new AirframeEventArgs { Profile = _dcsfpProfile });
 
                     foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                     {
                         try
                         {
-                            OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs() { PanelBinding = genericPanelBinding });
+                            OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs { PanelBinding = genericPanelBinding });
                         }
                         catch (Exception e)
                         {
@@ -382,7 +387,7 @@
                         {
                             if (genericPanelBinding.PanelType == GamingPanelEnum.PZ69RadioPanel)
                             {
-                                OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs() { PanelBinding = genericPanelBinding });
+                                OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs { PanelBinding = genericPanelBinding });
                             }
                         }
                         catch (Exception e)
@@ -415,13 +420,14 @@
                 SaveProfile();
                 return true;
             }
+
             return false;
         }
 
         public void SendEventRegardingSavingPanelConfigurations()
         {
-            OnSavePanelSettings?.Invoke(this, new ProfileHandlerEventArgs() { ProfileHandlerEA = this });
-            OnSavePanelSettingsJSON?.Invoke(this, new ProfileHandlerEventArgs() { ProfileHandlerEA = this });
+            OnSavePanelSettings?.Invoke(this, new ProfileHandlerEventArgs { ProfileHandlerEA = this });
+            OnSavePanelSettingsJSON?.Invoke(this, new ProfileHandlerEventArgs { ProfileHandlerEA = this });
         }
 
         public bool IsNewProfile => _isNewProfile;
@@ -487,7 +493,7 @@
         {
             try
             {
-                //Clear all current settings entries, requesting new ones from the panels
+                // Clear all current settings entries, requesting new ones from the panels
                 ClearAll();
                 SendEventRegardingSavingPanelConfigurations();
                 if (IsNewProfile)
@@ -495,6 +501,7 @@
                     SaveAsNewProfile();
                     return;
                 }
+
                 _lastProfileUsed = Filename;
 
                 var headerStringBuilder = new StringBuilder();
@@ -553,6 +560,7 @@
             {
                 stringBuilder.AppendLine("#\t" + @enum);
             }
+
             return stringBuilder.ToString();
         }
 
@@ -580,7 +588,7 @@
             get => _dcsfpProfile;
             set
             {
-                //Called only when user creates a new profile
+                // Called only when user creates a new profile
                 if (!DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile) && value != _dcsfpProfile)
                 {
                     SetIsDirty();
@@ -590,7 +598,7 @@
                 Common.ResetEmulationModesFlag();
                 SetEmulationModeFlag();
                 DCSBIOSControlLocator.Profile = Profile;
-                OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Profile = _dcsfpProfile });
+                OnAirframeSelected?.Invoke(this, new AirframeEventArgs { Profile = _dcsfpProfile });
             }
         }
 
@@ -623,6 +631,7 @@
                 {
                     Common.ClearEmulationModesFlag(EmulationMode.NS430Enabled);
                 }
+
                 SetIsDirty();
             }
         }

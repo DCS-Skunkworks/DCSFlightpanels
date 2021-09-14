@@ -201,6 +201,7 @@
     <Compile Include="StreamDeck\ButtonExport.cs" />
     <Compile Include="StreamDeck\ColorCounter.cs" />
     <Compile Include="StreamDeck\Events\EventHandlers.cs" />
+    <Compile Include="StreamDeck\JSONFixer.cs" />
     <Compile Include="StreamDeck\LockedBitmap.cs" />
     <Compile Include="StreamDeck\StreamDeckCommon.cs" />
     <Compile Include="StreamDeck\DCSBIOSDecoder.cs" />

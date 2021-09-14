@@ -45,9 +45,9 @@
             var settingsArray = settings.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
             // Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e
-            BIPLedPosition = (BIPLedPositionEnum)Enum.Parse(typeof(BIPLedPositionEnum), settingsArray[0].ToString());
-            LEDColor = (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), settingsArray[1].ToString());
-            DelayBefore = (BIPLightDelays) Enum.Parse(typeof(BIPLightDelays), settingsArray[2].ToString());
+            BIPLedPosition = (BIPLedPositionEnum)Enum.Parse(typeof(BIPLedPositionEnum), settingsArray[0]);
+            LEDColor = (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), settingsArray[1]);
+            DelayBefore = (BIPLightDelays) Enum.Parse(typeof(BIPLightDelays), settingsArray[2]);
             BindingHash = settingsArray[3];
         }
 

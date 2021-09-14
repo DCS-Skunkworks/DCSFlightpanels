@@ -1,7 +1,7 @@
-﻿using ClassLibraryCommon;
-
-namespace NonVisuals.Interfaces
+﻿namespace NonVisuals.Interfaces
 {
+    using ClassLibraryCommon;
+
     public interface IGlobalHandler
     {
         void Attach(GamingPanel gamingPanel);

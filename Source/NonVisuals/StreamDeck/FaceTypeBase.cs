@@ -1,11 +1,13 @@
-﻿using System;
-using System.Drawing;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Drawing;
+
     using MEF;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
 
     [Serializable]
     public abstract class FaceTypeBase
@@ -20,8 +22,8 @@ namespace NonVisuals.StreamDeck
         private StreamDeckPanel _streamDeckPanel;
         private StreamDeckButton _streamDeckButton;
         private volatile bool _isVisible;
-        private int _offsetX = 0;
-        private int _offsetY = 0;
+        private int _offsetX;
+        private int _offsetY;
 
 
         public abstract int GetHash();
@@ -38,6 +40,7 @@ namespace NonVisuals.StreamDeck
                 DrawBitmap();
                 return _bitmap;
             }
+
             set
             {
                 _bitmap = value;

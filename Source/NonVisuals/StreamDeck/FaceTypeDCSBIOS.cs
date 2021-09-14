@@ -1,11 +1,13 @@
-﻿using System;
-using System.Drawing;
-using System.Text;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Drawing;
+    using System.Text;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
+
     [Serializable]
     public class FaceTypeDCSBIOS : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
@@ -16,7 +18,7 @@ namespace NonVisuals.StreamDeck
         private Font _textFont = SettingsManager.DefaultFont;
         private Color _fontColor = SettingsManager.DefaultFontColor;
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
-        private uint _uintDcsBiosValue = UInt32.MaxValue;
+        private uint _uintDcsBiosValue = uint.MaxValue;
         private string _stringDcsBiosValue = "PÖLKASD2!";
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
@@ -52,6 +54,7 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
+
             if (_bitmap == null || RefreshBitmap)
             {
                 _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonFinalText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
@@ -71,6 +74,7 @@ namespace NonVisuals.StreamDeck
             {
                 throw new Exception("StreamDeckPanelInstance is not set, cannot show image [FaceTypeDCSBIOS]");
             }
+
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, Bitmap);
         }
 

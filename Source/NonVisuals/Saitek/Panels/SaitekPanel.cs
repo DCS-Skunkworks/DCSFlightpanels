@@ -157,7 +157,7 @@
                                          * Instead the buttons global bool value must be used!
                                          * 
                                          */
-                                        //Do not add OFF values for these buttons! Read comment above.
+                                        // Do not add OFF values for these buttons! Read comment above.
                                         addKnob = false;
                                         break;
                                     }
@@ -172,6 +172,7 @@
                     }
                 }
             }
+
             return result;
         }
 
@@ -229,7 +230,7 @@
 
         protected virtual void LedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
-            OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = HIDInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
+            OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs { UniqueId = HIDInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
         }
          
         // For those that wants to listen to this panel

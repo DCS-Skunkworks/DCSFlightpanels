@@ -312,6 +312,13 @@
 
         public static void LogError(Exception ex, string message = null)
         {
+            string innerMessage = string.Empty;
+
+            if (ex.InnerException != null)
+            {
+                innerMessage = ex.InnerException.Message + Environment.NewLine + ex.InnerException.StackTrace;
+            }
+
             Log(Environment.NewLine +
                 (string.IsNullOrEmpty(message) ? string.Empty : " Custom message = [" + message + "]") +
                 Environment.NewLine +
@@ -321,7 +328,7 @@
                 Environment.NewLine +
                 ex.StackTrace +
                 Environment.NewLine +
-                ex.InnerException != null ? ex.InnerException.Message + Environment.NewLine + ex.InnerException.StackTrace : string.Empty);
+                innerMessage);
         }
 
         public static void ShowErrorMessageBox(Exception ex, string message = null)

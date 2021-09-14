@@ -1,10 +1,12 @@
-﻿using System;
-using ClassLibraryCommon;
-using NonVisuals.Saitek;
-
-namespace NonVisuals.Radios.Misc
+﻿namespace NonVisuals.Radios.Misc
 {
+    using System;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using NonVisuals.Saitek;
 
     public class RadioPanelPZ69DisplayValue
     {
@@ -37,10 +39,12 @@ namespace NonVisuals.Radios.Misc
             {
                 throw new Exception("Invalid setting for RadioPanelPZ69DisplayValue, cannot import.");
             }
-            //PZ69DisplayValue{UpperCom1|UpperActive|124.12}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+
+            // PZ69DisplayValue{UpperCom1|UpperActive|124.12}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
             var tmp = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries)[0].Replace("PZ69DisplayValue{", string.Empty);
             tmp = tmp.Replace("}", string.Empty);
-            //UpperCom1|UpperActive|124.12
+
+            // UpperCom1|UpperActive|124.12
             var array = tmp.Split('|');
             try
             {
@@ -60,6 +64,7 @@ namespace NonVisuals.Radios.Misc
             {
                 return "PZ69DisplayValue{" + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), _radioPanelPZ69Knob) + "|" + Enum.GetName(typeof(RadioPanelPZ69Display), _radioPanelPZ69Display) + "|" + _value + "}";
             }
+
             return null;
         }
     }

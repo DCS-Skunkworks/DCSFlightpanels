@@ -1,7 +1,7 @@
-﻿using NonVisuals.Radios.SRS;
-
-namespace NonVisuals.Interfaces
+﻿namespace NonVisuals.Interfaces
 {
+    using NonVisuals.Radios.SRS;
+
     public interface ISRSHandler
     {
         bool GuardIsOn { get; set; }

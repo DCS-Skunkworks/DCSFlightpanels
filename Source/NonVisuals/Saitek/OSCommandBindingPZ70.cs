@@ -22,6 +22,7 @@
             {
                 throw new ArgumentException("Import string empty. (WindowsBinding)");
             }
+
             if (settings.StartsWith("MultiPanelOSPZ70{"))
             {
                 // MultiPanelOSPZ70{ALT}\o/{1KNOB_ENGINE_LEFT}\o/OSCommand{FILE\o/ARGUMENTS\o/NAME}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
@@ -63,6 +64,7 @@
             {
                 return null;
             }
+
             var onStr = WhenTurnedOn ? "1" : "0";
             return "MultiPanelOSPZ70{" + _pz70DialPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSCommandObject.ExportString();
         }

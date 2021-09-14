@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Windows.Controls;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.IO;
+    using System.Windows.Controls;
+
     using ClassLibraryCommon;
 
     using MEF;
@@ -41,9 +41,10 @@ namespace NonVisuals.StreamDeck
         {
             if (!directoryInfo.FullName.Contains(GetDCSFPTemporaryFolder()))
             {
-                //Safety that we are only recursing in our own temp data folder
+                // Safety that we are only recursing in our own temp data folder
                 return;
             }
+
             var directories = directoryInfo.EnumerateDirectories();
             foreach (var directory in directories)
             {
@@ -65,18 +66,22 @@ namespace NonVisuals.StreamDeck
                     {
                         return PluginGamingPanelEnum.StreamDeckMini;
                     }
+
                 case GamingPanelEnum.StreamDeck:
                     {
                         return PluginGamingPanelEnum.StreamDeck;
                     }
+
                 case GamingPanelEnum.StreamDeckV2:
                     {
                         return PluginGamingPanelEnum.StreamDeckV2;
                     }
+
                 case GamingPanelEnum.StreamDeckMK2:
                     {
                         return PluginGamingPanelEnum.StreamDeckMK2;
                     }
+
                 case GamingPanelEnum.StreamDeckXL:
                     {
                         return PluginGamingPanelEnum.StreamDeckXL;
@@ -93,6 +98,7 @@ namespace NonVisuals.StreamDeck
             {
                 Directory.CreateDirectory(folder);
             }
+
             return folder;
         }
 
@@ -132,34 +138,42 @@ namespace NonVisuals.StreamDeck
             {
                 return EnumComparator.NotSet;
             }
+
             if (text == "==")
             {
                 return EnumComparator.Equals;
             }
+
             if (text == "!=")
             {
                 return EnumComparator.NotEquals;
             }
+
             if (text == "<")
             {
                 return EnumComparator.LessThan;
             }
+
             if (text == "<=")
             {
                 return EnumComparator.LessThanEqual;
             }
+
             if (text == ">")
             {
                 return EnumComparator.GreaterThan;
             }
+
             if (text == ">=")
             {
                 return EnumComparator.GreaterThanEqual;
             }
+
             if (text == "Always")
             {
                 return EnumComparator.Always;
             }
+
             throw new Exception("Failed to decode comparison type.");
         }
 
@@ -172,41 +186,49 @@ namespace NonVisuals.StreamDeck
                         comboBox.Text = "NotSet";
                         break;
                     }
+
                 case EnumComparator.Equals:
                     {
                         comboBox.Text = "==";
                         break;
                     }
+
                 case EnumComparator.NotEquals:
                     {
                         comboBox.Text = "!=";
                         break;
                     }
+
                 case EnumComparator.LessThan:
                     {
                         comboBox.Text = "<";
                         break;
                     }
+
                 case EnumComparator.LessThanEqual:
                     {
                         comboBox.Text = "<=";
                         break;
                     }
+
                 case EnumComparator.GreaterThan:
                     {
                         comboBox.Text = ">";
                         break;
                     }
+
                 case EnumComparator.GreaterThanEqual:
                     {
                         comboBox.Text = ">=";
                         break;
                     }
+
                 case EnumComparator.Always:
                     {
                         comboBox.Text = "Always";
                         break;
                     }
+
                 default:
                     {
                         throw new Exception("Failed to decode comparison type.");

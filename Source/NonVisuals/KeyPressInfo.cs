@@ -25,6 +25,7 @@
                 {
                     result = (result * 397) ^ virtualKeyCode.GetHashCode();
                 }
+
                 result = (result * 397) ^ _lengthOfBreak.GetHashCode();
                 result = (result * 397) ^ _lengthOfKeyPress.GetHashCode();
                 return result;
@@ -66,9 +67,11 @@
                         {
                             result.Append(" + ");
                         }
+
                         result.Append(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                     }
                 }
+
                 return result.ToString();
             }
         }

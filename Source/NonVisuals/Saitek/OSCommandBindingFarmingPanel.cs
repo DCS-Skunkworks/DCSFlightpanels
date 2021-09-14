@@ -18,6 +18,7 @@
             {
                 throw new ArgumentException("Import string empty. (WindowsBinding)");
             }
+
             if (settings.StartsWith("FarmingPanelOS{"))
             {
                 // FarmingPanelOS{1KNOB_ENGINE_LEFT}\o/OSCommand{FILE\o/ARGUMENTS\o/NAME}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}

@@ -1,14 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Threading;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.IO;
+    using System.Text;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
 
     [Serializable]
     public class ActionTypeOS : OSCommandBinding, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
