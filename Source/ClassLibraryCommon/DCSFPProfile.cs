@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace ClassLibraryCommon
+﻿namespace ClassLibraryCommon
 {
-    using System.Windows;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
 
     public class DCSFPProfile
     {

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     using MEF;
+
+    using Newtonsoft.Json;
 
     [Serializable]
     public class KeyPressInfo : IKeyPressInfo

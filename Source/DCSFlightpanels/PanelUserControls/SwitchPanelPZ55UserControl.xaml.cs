@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
@@ -15,11 +14,8 @@
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.Windows;
 
-    using MEF;
-
     using NonVisuals;
     using NonVisuals.Interfaces;
-    using NonVisuals.Plugin;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
     using NonVisuals.Saitek.Switches;

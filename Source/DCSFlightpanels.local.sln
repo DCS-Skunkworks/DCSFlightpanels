@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCSFlightpanels", "DCSFlightpanels\DCSFlightpanels.csproj", "{6459906E-71BE-4987-B128-B793B50EAD10}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePanelEventPlugin", "SamplePanelEventHandlerPlugin\SamplePanelEventPlugin.csproj", "{571773A4-3DDC-41CE-814E-A199A42F2FCC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEF", "MEF\MEF.csproj", "{0C0196B3-2442-4838-A587-C51660136F9C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6CF35974-7D78-4027-BB40-76E724C4CE14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

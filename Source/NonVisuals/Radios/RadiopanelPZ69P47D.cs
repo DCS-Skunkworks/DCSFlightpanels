@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Saitek;
-
-
-namespace NonVisuals.Radios
+﻿namespace NonVisuals.Radios
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
+    using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Saitek;
 
     public class RadioPanelPZ69P47D : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
@@ -637,9 +638,7 @@ namespace NonVisuals.Radios
                     {
                         case CurrentP47DRadioMode.HFRADIO:
                             {
-                                //0-2
-                                uint mode = 0;
-                                //0-4
+                                // 0-4
                                 uint channel = 0;
                                 lock (_lockHFRadioPresetDialObject1)
                                 {
@@ -663,8 +662,8 @@ namespace NonVisuals.Radios
                                     {
                                         channel = 4;
                                     }
-
                                 }
+
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _hfRadioModeCockpitDialPosition, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, channel, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;

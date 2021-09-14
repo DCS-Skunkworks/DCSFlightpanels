@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Windows;
-using System.Windows.Forms;
-using ClassLibraryCommon;
-using DCSFlightpanels.Bills;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Shared;
-using DCSFlightpanels.Windows;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.StreamDeck;
-using NonVisuals.StreamDeck.Events;
-
-
-namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Windows;
+    using System.Windows.Forms;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Bills;
+    using DCSFlightpanels.CustomControls;
+    using DCSFlightpanels.Shared;
+    using DCSFlightpanels.Windows;
+
     using MEF;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.StreamDeck;
+    using NonVisuals.StreamDeck.Events;
 
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonAction.xaml

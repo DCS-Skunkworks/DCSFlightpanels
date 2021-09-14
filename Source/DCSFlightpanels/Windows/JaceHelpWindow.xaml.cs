@@ -1,10 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Navigation;
-
-namespace DCSFlightpanels.Windows
+﻿namespace DCSFlightpanels.Windows
 {
+    using System;
+    using System.Diagnostics;
+    using System.Windows;
+    using System.Windows.Navigation;
+
     /// <summary>
     /// Interaction logic for JaceHelpWindow.xaml
     /// </summary>

@@ -5,7 +5,6 @@ namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
 
     using ClassLibraryCommon;
 

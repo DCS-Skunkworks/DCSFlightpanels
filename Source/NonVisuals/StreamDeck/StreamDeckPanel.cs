@@ -1,35 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Threading;
-using System.Windows.Media.Imaging;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-using NonVisuals.StreamDeck.Events;
-using OpenMacroBoard.SDK;
-using StreamDeckSharp;
-using Theraot.Core;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.IO;
+    using System.Reflection;
+    using System.Threading;
+    using System.Windows.Media.Imaging;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
     using MEF;
 
-    using NonVisuals.Plugin;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.Panels;
+    using NonVisuals.StreamDeck.Events;
+
+    using OpenMacroBoard.SDK;
+
+    using StreamDeckSharp;
+
+    using Theraot.Core;
 
     public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
-        private IStreamDeckBoard _streamDeckBoard;
-        private int _lcdKnobSensitivity;
         private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
-        private GamingPanelEnum _panelType;
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new List<StreamDeckPanel>();
+        private IStreamDeckBoard _streamDeckBoard;
+        private int _lcdKnobSensitivity;
+        private GamingPanelEnum _panelType;
 
         private int _buttonCount = 0;
 

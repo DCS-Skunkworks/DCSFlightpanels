@@ -1,25 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Input;
-using ClassLibraryCommon;
-using DCSFlightpanels.Properties;
-using Newtonsoft.Json;
-using NonVisuals;
-using NonVisuals.StreamDeck;
-using Cursors = System.Windows.Input.Cursors;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MessageBox = System.Windows.MessageBox;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-
-namespace DCSFlightpanels.Windows.StreamDeck
+﻿namespace DCSFlightpanels.Windows.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Forms;
+    using System.Windows.Input;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Properties;
+
     using MEF;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.StreamDeck;
+
+    using Cursors = System.Windows.Input.Cursors;
+    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    using MessageBox = System.Windows.MessageBox;
+    using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
     /// <summary>
     /// Interaction logic for ExportWindow.xaml

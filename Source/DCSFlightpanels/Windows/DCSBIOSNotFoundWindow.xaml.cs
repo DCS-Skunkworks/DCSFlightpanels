@@ -1,9 +1,10 @@
-﻿using System;
-using System.Windows;
-using ClassLibraryCommon;
-
-namespace DCSFlightpanels.Windows
+﻿namespace DCSFlightpanels.Windows
 {
+    using System;
+    using System.Windows;
+
+    using ClassLibraryCommon;
+
     /// <summary>
     /// Interaction logic for DCSBIOSNotFoundWindow.xaml
     /// </summary>

@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-
-namespace DCSFlightpanels.Windows
+﻿namespace DCSFlightpanels.Windows
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
+    using NonVisuals.Interfaces;
+
     public partial class DCSBIOSOutputControlsWindow : Window, IIsDirty
     {
         private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();

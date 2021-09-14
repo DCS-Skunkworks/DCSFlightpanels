@@ -1,23 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using ClassLibraryCommon;
-using DCSFlightpanels.Bills;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Shared;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.StreamDeck;
-using NonVisuals.StreamDeck.Events;
-
-
-namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Bills;
+    using DCSFlightpanels.CustomControls;
+    using DCSFlightpanels.Shared;
+
     using MEF;
+
+    using NonVisuals.Interfaces;
+    using NonVisuals.StreamDeck;
+    using NonVisuals.StreamDeck.Events;
 
     public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, INvStreamDeckListener, IStreamDeckConfigListener, IOledImageListener
     {

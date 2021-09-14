@@ -1,27 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals;
-using DCSFlightpanels.Properties;
-using DCSFlightpanels.Bills;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.Windows;
-using NonVisuals.DCSBIOSBindings;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-using NonVisuals.Saitek.Switches;
-
-namespace DCSFlightpanels.PanelUserControls
+﻿namespace DCSFlightpanels.PanelUserControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+    using DCSFlightpanels.Bills;
+    using DCSFlightpanels.CustomControls;
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.Properties;
+    using DCSFlightpanels.Windows;
+
+
     using MEF;
+
+    using NonVisuals;
+    using NonVisuals.DCSBIOSBindings;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.Panels;
+    using NonVisuals.Saitek.Switches;
 
     /// <summary>
     /// Interaction logic for MultiPanelUserControl.xaml

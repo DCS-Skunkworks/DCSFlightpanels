@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using ClassLibraryCommon;
-using NonVisuals;
-using NonVisuals.Interfaces;
-
-namespace DCSFlightpanels.Windows
+﻿namespace DCSFlightpanels.Windows
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+
+    using ClassLibraryCommon;
+
     using MEF;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
 
     /// <summary>
     /// Interaction logic for KeyPressWindow.xaml

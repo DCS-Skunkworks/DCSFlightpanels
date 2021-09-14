@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using ClassLibraryCommon;
+﻿
 // ReSharper disable All
 /*
  * Do not adhere to naming standard in DCS-BIOS code, standard are based on DCS-BIOS json files and byte streamnaming
@@ -13,6 +6,15 @@ using ClassLibraryCommon;
 
 namespace DCS_BIOS
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Text;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
     [Flags]
     public enum DcsBiosNotificationMode
     {

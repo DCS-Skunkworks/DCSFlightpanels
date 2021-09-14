@@ -1,33 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Media;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using DCSFlightpanels.Shared;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.StreamDeck;
-using Color = System.Drawing.Color;
-using Cursors = System.Windows.Input.Cursors;
-using DataGrid = System.Windows.Controls.DataGrid;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MessageBox = System.Windows.MessageBox;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-using TextBox = System.Windows.Controls.TextBox;
-
-namespace DCSFlightpanels.Windows.StreamDeck
+﻿namespace DCSFlightpanels.Windows.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.Linq;
+    using System.Media;
+    using System.Threading;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Shared;
+
+    using DCS_BIOS;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.StreamDeck;
+
+    using Color = System.Drawing.Color;
+    using Cursors = System.Windows.Input.Cursors;
+    using DataGrid = System.Windows.Controls.DataGrid;
+    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    using MessageBox = System.Windows.MessageBox;
+    using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+    using TextBox = System.Windows.Controls.TextBox;
+
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.
     /// </summary>

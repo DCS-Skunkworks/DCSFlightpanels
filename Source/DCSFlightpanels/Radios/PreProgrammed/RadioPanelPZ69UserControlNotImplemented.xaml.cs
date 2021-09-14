@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using ClassLibraryCommon;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.PanelUserControls;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
+﻿
 
 // Resharper Disable all
 namespace DCSFlightpanels.Radios.PreProgrammed
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Navigation;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.PanelUserControls;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlNotImplemented.xaml
     /// </summary>

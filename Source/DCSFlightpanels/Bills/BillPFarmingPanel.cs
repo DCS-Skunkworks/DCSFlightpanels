@@ -5,10 +5,9 @@
     using System.Windows.Controls;
     using System.Windows.Media;
 
-    using DCSFlightpanels.Interfaces;
-
     using DCS_BIOS;
-
+    using DCSFlightpanels.Interfaces;
+    
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.Interfaces;
     using NonVisuals.Saitek;

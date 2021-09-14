@@ -1,7 +1,5 @@
 ﻿namespace MEF
 {
-    using System.Collections.Generic;
-
     public interface IPanelEventHandlerMetaData
     {
         /// <summary>

@@ -11,7 +11,6 @@
     using MEF;
 
     using NonVisuals.Plugin;
-    using NonVisuals.Properties;
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Radios.Misc;
     using NonVisuals.Saitek;

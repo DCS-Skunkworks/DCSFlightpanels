@@ -8,10 +8,10 @@
 
     using ClassLibraryCommon;
 
+    using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.Windows;
 
-    using DCS_BIOS;
 
     using MEF;
 

@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using ClassLibraryCommon;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.Properties;
-using DCSFlightpanels.Windows;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-
-namespace DCSFlightpanels.PanelUserControls
+﻿namespace DCSFlightpanels.PanelUserControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media.Imaging;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.Properties;
+    using DCSFlightpanels.Windows;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.Panels;
+
     /// <summary>
     /// Interaction logic for BackLitPanelUserControl.xaml
     /// </summary>

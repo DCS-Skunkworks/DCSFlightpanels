@@ -1,26 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using ClassLibraryCommon;
-using DCSFlightpanels.Bills;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.Windows;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-using NonVisuals.Saitek.Switches;
-using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
-using Image = System.Windows.Controls.Image;
-
-namespace DCSFlightpanels.PanelUserControls
+﻿namespace DCSFlightpanels.PanelUserControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Bills;
+    using DCSFlightpanels.CustomControls;
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.Windows;
+
     using MEF;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.Panels;
+    using NonVisuals.Saitek.Switches;
+
+    using Brush = System.Windows.Media.Brush;
+    using Brushes = System.Windows.Media.Brushes;
+    using Image = System.Windows.Controls.Image;
 
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml

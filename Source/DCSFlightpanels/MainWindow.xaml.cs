@@ -11,9 +11,7 @@ namespace DCSFlightpanels
     using System.Linq;
     using System.Media;
     using System.Reflection;
-    using System.Runtime.Remoting.Messaging;
     using System.Text;
-    using System.Threading;
     using System.Timers;
     using System.Windows;
     using System.Windows.Controls;
@@ -22,6 +20,7 @@ namespace DCSFlightpanels
 
     using ClassLibraryCommon;
 
+    using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.PanelUserControls;
     using DCSFlightpanels.Properties;
@@ -30,9 +29,6 @@ namespace DCSFlightpanels
     using DCSFlightpanels.Shared;
     using DCSFlightpanels.Windows;
 
-    using DCS_BIOS;
-
-    using MEF;
 
     using Microsoft.Win32;
 
@@ -41,7 +37,6 @@ namespace DCSFlightpanels
     using NonVisuals.Plugin;
     using NonVisuals.Radios.SRS;
     using NonVisuals.Saitek;
-    using NonVisuals.Saitek.Panels;
 
     using Octokit;
 
@@ -579,7 +574,7 @@ namespace DCSFlightpanels
                                     {
                                         var tabItemStreamDeck = new TabItem();
                                         tabItemStreamDeck.Header = hidSkeleton.PanelInfo.GamingPanelType.GetDescription();
-                                        var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck, this, _dcsBios);
+                                        var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck, this);
                                         _panelUserControls.Add(streamDeckUserControl);
                                         _profileHandler.Attach(streamDeckUserControl);
                                         tabItemStreamDeck.Content = streamDeckUserControl;

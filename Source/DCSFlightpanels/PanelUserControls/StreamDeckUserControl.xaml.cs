@@ -1,55 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.PanelUserControls.StreamDeck;
-using DCSFlightpanels.Windows.StreamDeck;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-using NonVisuals.StreamDeck;
-using NonVisuals.StreamDeck.Events;
-
-
-namespace DCSFlightpanels.PanelUserControls
+﻿namespace DCSFlightpanels.PanelUserControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Windows;
+    using System.Windows.Controls;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.PanelUserControls.StreamDeck;
+    using DCSFlightpanels.Windows.StreamDeck;
+
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.StreamDeck;
+    using NonVisuals.StreamDeck.Events;
+
     /// <summary>
     /// Interaction logic for StreamDeckUserControl.xaml
     /// </summary>
     public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, INvStreamDeckListener
     {
         private readonly StreamDeckPanel _streamDeckPanel;
-        private readonly DCSBIOS _dcsbios;
-
-        private CancellationTokenSource _cancellationTokenSource;
-        private readonly Random _random = new Random();
-        private Thread _identificationThread;
-
         private readonly UserControlStreamDeckUIBase _uiButtonGrid;
-
-
-
-
-
-
-        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, DCSBIOS dcsbios)
+        
+        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
 
-            //no worky worky for this library hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+            // no worky worky for this library hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
             _streamDeckPanel.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_streamDeckPanel);
             GlobalHandler = globalHandler;
-            _dcsbios = dcsbios;
 
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
@@ -102,7 +91,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             if (dispose)
             {
-                _cancellationTokenSource?.Dispose();
                 StackPanelButtonUI.Children.Clear();
                 EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonAction);
                 EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonFace);

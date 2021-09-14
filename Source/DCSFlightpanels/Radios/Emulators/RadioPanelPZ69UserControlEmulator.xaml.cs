@@ -1,27 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using ClassLibraryCommon;
-using NonVisuals;
-using DCSFlightpanels.Properties;
-using DCSFlightpanels.Bills;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.PanelUserControls;
-using DCSFlightpanels.Windows;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-
-namespace DCSFlightpanels.Radios.Emulators
+﻿namespace DCSFlightpanels.Radios.Emulators
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Bills;
+    using DCSFlightpanels.CustomControls;
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.PanelUserControls;
+    using DCSFlightpanels.Properties;
+    using DCSFlightpanels.Windows;
+
     using MEF;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Radios;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Saitek;
 
     public partial class RadioPanelPZ69UserControlEmulator : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {

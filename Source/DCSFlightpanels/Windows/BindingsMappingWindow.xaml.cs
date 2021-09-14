@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Media;
-using System.Windows;
-using System.Windows.Input;
-using ClassLibraryCommon;
-using NonVisuals;
-
-namespace DCSFlightpanels.Windows
+﻿namespace DCSFlightpanels.Windows
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Media;
+    using System.Windows;
+    using System.Windows.Input;
+
+    using ClassLibraryCommon;
+
+    using NonVisuals;
+
     /// <summary>
     /// Interaction logic for BindingsMappingWindow.xaml
     /// </summary>
@@ -19,7 +21,6 @@ namespace DCSFlightpanels.Windows
         private List<GenericPanelBinding> _genericBindings;
         private List<ModifiedGenericBinding> _modifiedGenericBindings = new List<ModifiedGenericBinding>();
         private List<GamingPanel> _gamingPanels;
-        private bool _problemsSolved = false;
 
 
 

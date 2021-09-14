@@ -1,14 +1,13 @@
-﻿using System.Windows;
-using System.Windows.Documents;
-
-namespace DCSFlightpanels.Windows
+﻿namespace DCSFlightpanels.Windows
 {
+    using System.Windows;
+    using System.Windows.Documents;
+
     /// <summary>
     /// Interaction logic for TextBlockDialogWindow.xaml
     /// </summary>
     public partial class TextBlockDialogWindow : Window
     {
-
         public TextBlockDialogWindow(string title)
         {
             InitializeComponent();

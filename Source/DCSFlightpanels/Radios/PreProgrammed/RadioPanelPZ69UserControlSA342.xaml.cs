@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using ClassLibraryCommon;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.PanelUserControls;
-using DCSFlightpanels.Properties;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-
-
-namespace DCSFlightpanels.Radios.PreProgrammed
+﻿namespace DCSFlightpanels.Radios.PreProgrammed
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Controls;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.PanelUserControls;
+    using DCSFlightpanels.Properties;
+
     using MEF;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Radios;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Saitek;
 
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlSA342.xaml

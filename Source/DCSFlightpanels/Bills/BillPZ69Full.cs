@@ -5,9 +5,9 @@
     using System.Windows.Controls;
     using System.Windows.Media;
 
+    using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
 
-    using DCS_BIOS;
 
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.Interfaces;

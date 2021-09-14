@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using EnumEx = ClassLibraryCommon.EnumEx;
-
-namespace DCSFlightpanels.Windows
+﻿namespace DCSFlightpanels.Windows
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
+    using EnumEx = ClassLibraryCommon.EnumEx;
+
     /// <summary>
     /// Interaction logic for DCSBiosOutputTriggerWindow.xaml
     /// </summary>
