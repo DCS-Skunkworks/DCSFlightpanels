@@ -400,6 +400,7 @@
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 
@@ -426,6 +427,7 @@
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 

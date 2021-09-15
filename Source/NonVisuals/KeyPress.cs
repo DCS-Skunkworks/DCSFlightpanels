@@ -163,6 +163,7 @@
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 

@@ -696,6 +696,7 @@
                 }
                 catch (Exception)
                 {
+                    // ignored
                 }
 
                 try
@@ -704,6 +705,7 @@
                 }
                 catch (Exception)
                 {
+                    // ignored
                 }
 
                 try
@@ -715,6 +717,7 @@
                 }
                 catch (Exception)
                 {
+                    // ignored
                 }
 
                 _started = false;

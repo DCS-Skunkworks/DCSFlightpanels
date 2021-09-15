@@ -326,6 +326,7 @@ namespace DCS_BIOS
             }
             catch (Exception)
             {
+                // ignore
             }
         }
 

@@ -177,18 +177,13 @@
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 
         private void ShowIdentifyingValue()
         {
-            try
-            {
-                
-            }
-            catch (Exception)
-            {
-            }
+            // ignored
         }
 
         public override void ClearSettings(bool setIsDirty = false)

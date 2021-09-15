@@ -28,6 +28,12 @@
 
     public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
+        private readonly Color[] _colors =
+            {
+                Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
+                Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
+            };
+
         private readonly object _updateStreamDeckOledLockObject = new object();
         private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly object _lcdLockObject = new object();
@@ -149,13 +155,9 @@
             }
             catch (Exception)
             {
+                // ignored
             }
         }
-
-        private readonly Color[] _colors = {
-                                                   Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
-                                                   Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
-                                               };
 
         private void ShowIdentifyingValue()
         {
@@ -183,6 +185,7 @@
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 

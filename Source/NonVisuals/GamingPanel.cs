@@ -70,6 +70,7 @@
                 }
                 catch (Exception)
                 {
+                    // ignore
                 }
             }
 

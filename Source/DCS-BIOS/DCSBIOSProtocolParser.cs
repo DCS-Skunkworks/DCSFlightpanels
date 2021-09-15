@@ -180,14 +180,6 @@ namespace DCS_BIOS
                     result = true;
                 }
             }
-
-            /*for (var i = 0; i < _listOfAddressesToBroascast.Count; i++)
-            {
-                if (_listOfAddressesToBroascast[i] == address)
-                {
-                    return true;
-                }
-            }*/
             return result;
         }
 
