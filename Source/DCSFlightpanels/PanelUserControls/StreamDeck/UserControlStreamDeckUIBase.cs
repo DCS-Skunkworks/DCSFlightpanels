@@ -265,14 +265,14 @@
                 {
                     if (contextMenuItem.GetType() == typeof(MenuItem) && ((MenuItem)contextMenuItem).Name == "MenuItemPaste")
                     {
-                        menuItemPaste = ((MenuItem)contextMenuItem);
+                        menuItemPaste = (MenuItem)contextMenuItem;
                     }
                 }
                 foreach (var contextMenuItem in contextMenu.Items)
                 {
                     if (contextMenuItem.GetType() == typeof(MenuItem) && ((MenuItem)contextMenuItem).Name == "MenuItemPaste")
                     {
-                        menuItemDelete = ((MenuItem)contextMenuItem);
+                        menuItemDelete = (MenuItem)contextMenuItem;
                     }
                 }
 
@@ -284,8 +284,8 @@
                 menuItemCopy.IsEnabled = selectedStreamDeckButton.HasConfig;
                 menuItemDelete.IsEnabled = selectedStreamDeckButton.HasConfig;
 
-                var iDataObject = Clipboard.GetDataObject();
-                menuItemPaste.IsEnabled = iDataObject != null && iDataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton");
+                var dataObject = Clipboard.GetDataObject();
+                menuItemPaste.IsEnabled = dataObject != null && dataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton");
             }
             catch (Exception ex)
             {
@@ -415,14 +415,14 @@
 
         protected bool Paste()
         {
-            var iDataObject = Clipboard.GetDataObject();
-            if (iDataObject == null || !iDataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton"))
+            var dataObject = Clipboard.GetDataObject();
+            if (dataObject == null || !dataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton"))
             {
                 return false;
             }
 
             var result = false;
-            var newStreamDeckButton = (StreamDeckButton)iDataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
+            var newStreamDeckButton = (StreamDeckButton)dataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
             var oldStreamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton) &&
                 MessageBox.Show("Overwrite previous configuration (partial or fully)", "Overwrite?)", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -560,7 +560,7 @@
             {
                 if (e.RemoteBindingHash == _streamDeckPanel.BindingHash)
                 {
-                    Dispatcher?.BeginInvoke((Action)(SetFormState));
+                    Dispatcher?.BeginInvoke((Action)SetFormState);
                 }
             }
             catch (Exception ex)
@@ -568,31 +568,5 @@
                 Common.LogError(ex);
             }
         }
-
-        /*public void OledImageChanged(object sender, StreamDeckOledImageChangeEventArgs e)
-        {
-            try
-            {
-                if (e.BindingHash != BindingHash || e.Bitmap == null)
-                {
-                    return;
-                }
-                Dispatcher?.BeginInvoke((Action)(() =>
-               {
-                   foreach (var streamDeckImage in ButtonImages)
-                   {
-                       if (streamDeckImage.Bill.StreamDeckButtonName == e.StreamDeckButtonName)
-                       {
-                           streamDeckImage.Bill.DeselectedImage = BitMapCreator.Bitmap2BitmapImage(e.Bitmap);
-                           break;
-                       }
-                   }
-               }));
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex);
-            }
-        }*/
     }
 }

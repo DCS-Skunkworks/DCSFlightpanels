@@ -95,7 +95,7 @@
             SetFormState();
         }
 
-        public void SetFormState()
+        private void SetFormState()
         {
             try
             {
@@ -144,8 +144,7 @@
             }
         }
 
-
-        public void SetButtonActionType()
+        private void SetButtonActionType()
         {
 
             if (_streamDeckButton == null)
@@ -208,7 +207,7 @@
             }
         }
 
-        public EnumStreamDeckActionType GetSelectedActionType()
+        private EnumStreamDeckActionType GetSelectedActionType()
         {
             if (RadioButtonKeyPress.IsChecked == true)
             {
@@ -287,7 +286,7 @@
             }
         }
 
-        public void ShowStreamDeckButton(StreamDeckButton streamDeckButton)
+        private void ShowStreamDeckButton(StreamDeckButton streamDeckButton)
         {
             Clear();
             _streamDeckButton = streamDeckButton;

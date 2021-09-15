@@ -6,51 +6,31 @@
 
     public class DCSFPProfile
     {
-        private int _id;
-        private string _description;
-        private string _jsonFilename;
         private static readonly List<DCSFPProfile> ModulesList = new List<DCSFPProfile>();
-        private bool _useGenericRadio = false;
 
-
-        public DCSFPProfile(int id, string description, string jsonFilename)
+        private DCSFPProfile(int id, string description, string jsonFilename)
         {
-            _id = id;
-            _jsonFilename = jsonFilename;
-            _description = description;
+            this.ID = id;
+            this.JSONFilename = jsonFilename;
+            this.Description = description;
         }
 
         public static void Init()
         {
             AddInternalModules();
         }
-        public int ID
-        {
-            get => _id;
-            set => _id = value;
-        }
 
-        public string JSONFilename
-        {
-            get => _jsonFilename;
-            set => _jsonFilename = value;
-        }
+        public int ID { get; set; }
 
-        public string Description
-        {
-            get => _description;
-            set => _description = value;
-        }
+        public string JSONFilename { get; set; }
 
-        public bool UseGenericRadio
-        {
-            get => _useGenericRadio;
-            set => _useGenericRadio = value;
-        }
+        public string Description { get; set; }
+
+        public bool UseGenericRadio { get; set; } = false;
 
         public static List<DCSFPProfile> Modules => ModulesList;
 
-        public static void AddInternalModules()
+        private static void AddInternalModules()
         {
             if (!ModulesList.Exists(o => o.ID == 1))
             {
@@ -81,22 +61,25 @@
             }
 
             var stringArray = File.ReadAllLines(biosLua);
-            //dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]]) -- ID = 5, ProperName = A-10C Thunderbolt II
 
+            // dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]]) -- ID = 5, ProperName = A-10C Thunderbolt II
             foreach (var s in stringArray)
             {
                 if (s.ToLower().Contains(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower()) && s.Contains("ProperName"))
                 {
                     var parts = s.Split(new string[]{"--"}, StringSplitOptions.RemoveEmptyEntries);
-                    //dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]])
-                    var json = parts[0].ToLower().Replace(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower(), "").Replace(".lua]])", "").Trim() + ".json";
 
-                    //ID = 5, ProperName = A-10C Thunderbolt II
-                    var info = parts[1].Split(new string[] {","}, StringSplitOptions.RemoveEmptyEntries);
-                    //ID = 5
-                    var id = int.Parse(info[0].Split(new[] {"="}, StringSplitOptions.None)[1]);
-                    //ProperName = A-10C Thunderbolt II
-                    var properName = info[1].Split(new[] {"="}, StringSplitOptions.None)[1].Trim();
+                    // dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]])
+                    var json = parts[0].ToLower().Replace(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower(), string.Empty).Replace(".lua]])", string.Empty).Trim() + ".json";
+
+                    // ID = 5, ProperName = A-10C Thunderbolt II
+                    var info = parts[1].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+                    // ID = 5
+                    var id = int.Parse(info[0].Split(new[] { "=" }, StringSplitOptions.None)[1]);
+
+                    // ProperName = A-10C Thunderbolt II
+                    var properName = info[1].Split(new[] { "=" }, StringSplitOptions.None)[1].Trim();
 
                     var dcsFPProfile = new DCSFPProfile(id, properName, json);
                     ModulesList.Add(dcsFPProfile);
@@ -181,8 +164,6 @@
             throw new Exception("DCSFPProfile : Failed to find internal module KeyEmulatorSRS. Modules loaded : " + Modules.Count);
         }
         
-        
-
         public static bool IsFlamingCliff(DCSFPProfile dcsfpModule)
         {
             return dcsfpModule.ID == 4;
@@ -245,7 +226,7 @@
         {
             return dcsfpModule.ID == 13;
         }
-
+        
         public static bool IsChristenEagleII(DCSFPProfile dcsfpModule)
         {
             return dcsfpModule.ID == 14;
@@ -382,150 +363,187 @@
             {
                 return Modules.Find(o => o.ID == 2);
             }
+
             if ("KEYEMULATOR_SRS".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 3);
             }
+
             if ("A4E".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 6);
             }
+
             if ("A10C".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 5);
             }
+
             if ("AH6J".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 7);
             }
+
             if ("AJS37".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 8);
             }
+
             if ("Alphajet".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 9);
             }
+
             if ("AV8BNA".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 10);
             }
+
             if ("Bf109".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 11);
             }
+
             if ("C101CC".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 12);
             }
+
             if ("ChristenEagle".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 14);
             }
+
             if ("Edge540".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 15);
             }
+
             if ("F5E".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 18);
             }
+
             if ("F14B".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 16);
             }
+
             if ("F16C".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 17);
             }
+
             if ("FA18C".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 20);
             }
+
             if ("F86F".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 19);
             }
+
             if ("FC3_CD_SRS".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 4);
             }
+
             if ("Fw190a8".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 21);
             }
+
             if ("Fw190d9".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 22);
             }
+
             if ("Hercules".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 13);
             }
+
             if ("I16".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 23);
             }
+
             if ("JF17".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 24);
             }
+
             if ("Ka50".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 25);
             }
+
             if ("L39ZA".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 26);
             }
+
             if ("M2000C".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 27);
             }
+
             if ("MB339".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 28);
             }
+
             if ("Mi8".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 29);
             }
+
             if ("Mig15bis".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 30);
             }
+
             if ("Mig19P".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 31);
             }
+
             if ("Mig21Bis".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 32);
             }
+
             if ("NS430".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 33);
             }
+
             if ("P51D".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 35);
             }
+
             if ("P47D".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 34);
             }
+
             if ("SA342M".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 36);
             }
+
             if ("SpitfireLFMkIX".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 37);
             }
+
             if ("UH1H".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 38);
             }
+
             if ("Yak52".Equals(oldEnumValue))
             {
                 return Modules.Find(o => o.ID == 39);

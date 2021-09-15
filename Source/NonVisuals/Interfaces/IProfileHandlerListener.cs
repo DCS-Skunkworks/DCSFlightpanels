@@ -1,6 +1,6 @@
 ﻿namespace NonVisuals.Interfaces
 {
-    using System;
+    using NonVisuals.EventArgs;
 
     public interface IProfileHandlerListener
     {
@@ -9,10 +9,5 @@
         void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e);
 
         void SelectedProfile(object sender, AirframeEventArgs e);
-    }
-
-    public class PanelBindingReadFromFileEventArgs : EventArgs
-    {
-        public GenericPanelBinding PanelBinding { get; set; }
     }
 }

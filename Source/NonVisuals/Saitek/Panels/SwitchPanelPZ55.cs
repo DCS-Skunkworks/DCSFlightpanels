@@ -13,6 +13,7 @@
     using MEF;
 
     using NonVisuals.DCSBIOSBindings;
+    using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
     using NonVisuals.Saitek.Switches;
 

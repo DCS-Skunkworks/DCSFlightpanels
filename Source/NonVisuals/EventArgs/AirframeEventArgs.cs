@@ -1,10 +1,8 @@
-﻿namespace NonVisuals
+﻿namespace NonVisuals.EventArgs
 {
-    using System;
-
     using ClassLibraryCommon;
 
-    public class AirframeEventArgs : EventArgs
+    public class AirframeEventArgs : System.EventArgs
     {
         public DCSFPProfile Profile { get; set; }
     }

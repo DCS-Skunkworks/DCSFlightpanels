@@ -20,7 +20,7 @@ namespace DCSFlightpanels.CustomControls
             Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#f2f5f3");
         }
 
-        public void UpdateOffsetInfo()
+        private void UpdateOffsetInfo()
         {
             Text = "OffSetX : " + OffSetX + "\nOffSetY : " + OffSetY;
         }

@@ -1,16 +1,20 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
-using ClassLibraryCommon;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Properties;
-using NonVisuals;
-using NonVisuals.StreamDeck;
-using Color = System.Drawing.Color;
-
-namespace DCSFlightpanels.Shared
+﻿namespace DCSFlightpanels.Shared
 {
+    using System;
+    using System.Drawing;
+    using System.IO;
+    using System.Windows.Forms;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.CustomControls;
+    using DCSFlightpanels.Properties;
+
+    using NonVisuals;
+    using NonVisuals.StreamDeck;
+
+    using Color = System.Drawing.Color;
+
     public static class StreamDeckUICommon
     {
 
@@ -148,8 +152,7 @@ namespace DCSFlightpanels.Shared
 
             return result;
         }
-
-
+        
 
         public static Bitmap FileNotFoundBitmap
         {

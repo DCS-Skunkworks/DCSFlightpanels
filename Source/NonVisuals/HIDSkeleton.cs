@@ -8,35 +8,30 @@
 
     public class HIDSkeleton
     {
-
-        private string _instanceId;
-        private HidDevice _hidReadDevice;
-        private HidDevice _hidWriteDevice;
         private readonly GamingPanelSkeleton _gamingPanelSkeleton;
-        private bool _panelHasBeenInstantiated;
 
         public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string instanceId)
         {
             _gamingPanelSkeleton = gamingPanelSkeleton;
-            _instanceId = instanceId;
+            this.InstanceId = instanceId;
         }
 
         public void Close()
         {
             try
             {
-                if (_hidReadDevice.IsOpen)
+                if (this.HIDReadDevice.IsOpen)
                 {
-                    _hidReadDevice.CloseDevice();
+                    this.HIDReadDevice.CloseDevice();
                 }
 
-                if (_hidWriteDevice.IsOpen)
+                if (this.HIDWriteDevice.IsOpen)
                 {
-                    _hidWriteDevice.CloseDevice();
+                    this.HIDWriteDevice.CloseDevice();
                 }
 
-                _hidReadDevice.Dispose();
-                _hidWriteDevice.Dispose();
+                this.HIDReadDevice.Dispose();
+                this.HIDWriteDevice.Dispose();
             }
             catch (Exception ex)
             {
@@ -49,31 +44,15 @@
             get => _gamingPanelSkeleton;
         }
 
-        public string InstanceId
-        {
-            get => _instanceId;
-            set => _instanceId = value;
-        }
+        public string InstanceId { get; set; }
 
-        public HidDevice HIDReadDevice
-        {
-            get => _hidReadDevice;
-            set => _hidReadDevice = value;
-        }
+        public HidDevice HIDReadDevice { get; set; }
 
-        public HidDevice HIDWriteDevice
-        {
-            get => _hidWriteDevice;
-            set => _hidWriteDevice = value;
-        }
+        public HidDevice HIDWriteDevice { get; set; }
 
         public GamingPanelSkeleton GamingPanelSkeleton => _gamingPanelSkeleton;
 
-        public bool PanelHasBeenInstantiated
-        {
-            get => _panelHasBeenInstantiated;
-            set => _panelHasBeenInstantiated = value;
-        }
+        public bool PanelHasBeenInstantiated { get; set; }
     }
 
 }

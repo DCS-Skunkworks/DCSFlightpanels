@@ -150,12 +150,19 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AirframeEventArgs.cs" />
+    <Compile Include="EventArgs\AirframeEventArgs.cs" />
     <Compile Include="BindingMappingManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CopyPackage.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingFarmingPanel.cs" />
     <Compile Include="DCSBIOSModule.cs" />
+    <Compile Include="EventArgs\BipPanelRegisteredEventArgs.cs" />
+    <Compile Include="EventArgs\DCSBIOSUpdatesMissedEventArgs.cs" />
+    <Compile Include="EventArgs\ForwardPanelEventArgs.cs" />
+    <Compile Include="EventArgs\PanelBindingReadFromFileEventArgs.cs" />
+    <Compile Include="EventArgs\PanelDataToDCSBIOSEventEventArgs.cs" />
+    <Compile Include="EventArgs\PanelEventArgs.cs" />
+    <Compile Include="EventArgs\SwitchesChangedEventArgs.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericPanelBinding.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
@@ -168,7 +175,7 @@
     <Compile Include="JaceExtendedFactory.cs" />
     <Compile Include="KeyPressInfo.cs" />
     <Compile Include="Plugin\PluginManager.cs" />
-    <Compile Include="ProfileHandlerEventArgs.cs" />
+    <Compile Include="EventArgs\ProfileHandlerEventArgs.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -177,10 +184,11 @@
     <Compile Include="Radios\Knobs\RadiopanelKnobP47D.cs" />
     <Compile Include="Radios\RadioPanelPZ69P47D.cs" />
     <Compile Include="RandomFactory.cs" />
+    <Compile Include="Saitek\BipEventHandlerManager.cs" />
     <Compile Include="Saitek\BIPLinkFarmingPanel.cs" />
     <Compile Include="Saitek\DCSBIOSBrightnessBinding.cs" />
     <Compile Include="Saitek\KeyBindingFarmingPanel.cs" />
-    <Compile Include="Saitek\LedLightChangeEventArgs.cs" />
+    <Compile Include="EventArgs\LedLightChangeEventArgs.cs" />
     <Compile Include="Saitek\OSCommandBindingFarmingPanel.cs" />
     <Compile Include="Saitek\PanelSwitchBIPLightBinding.cs" />
     <Compile Include="Saitek\Panels\BacklitPanelBIP.cs" />
@@ -318,7 +326,7 @@
     <Compile Include="Saitek\OSCommandBindingPZ69FullEmulator.cs" />
     <Compile Include="Saitek\OSCommandBindingPZ70.cs" />
     <Compile Include="Saitek\OSCommandBindingTPM.cs" />
-    <Compile Include="UserMessageEventArgs.cs" />
+    <Compile Include="EventArgs\UserMessageEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="flightpanels02_8Rc_icon.ico" />

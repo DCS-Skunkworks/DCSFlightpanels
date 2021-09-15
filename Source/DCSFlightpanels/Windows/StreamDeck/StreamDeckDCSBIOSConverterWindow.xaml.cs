@@ -1,31 +1,35 @@
-﻿using System;
-using System.Drawing;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using ClassLibraryCommon;
-using DCSFlightpanels.Shared;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.StreamDeck;
-using ComboBox = System.Windows.Controls.ComboBox;
-using Cursors = System.Windows.Input.Cursors;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-
-namespace DCSFlightpanels.Windows.StreamDeck
+﻿namespace DCSFlightpanels.Windows.StreamDeck
 {
+    using System;
+    using System.Drawing;
+    using System.Globalization;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Shared;
+
     using MEF;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.StreamDeck;
+
+    using ComboBox = System.Windows.Controls.ComboBox;
+    using Cursors = System.Windows.Input.Cursors;
+    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
     public partial class StreamDeckDCSBIOSConverterWindow : Window, IIsDirty
     {
+        private readonly StreamDeckPanel _streamDeckPanel;
+        private readonly EnumStreamDeckButtonNames _streamDeckButtonName;
         private bool _isLoaded = false;
         private DCSBIOSConverter _dcsbiosConverter = null;
         private bool _isDirty;
-        private StreamDeckPanel _streamDeckPanel;
-        private EnumStreamDeckButtonNames _streamDeckButtonName;
 
 
 

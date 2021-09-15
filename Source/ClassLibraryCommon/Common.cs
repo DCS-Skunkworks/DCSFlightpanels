@@ -106,7 +106,7 @@
 
         private static int _emulationModesFlag = 0;
 
-        public static void ValidateFlag()
+        private static void ValidateFlag()
         {
             if (IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
             {

@@ -8,15 +8,14 @@
 
     using ClassLibraryCommon;
 
-    using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.PanelUserControls.StreamDeck;
     using DCSFlightpanels.Windows.StreamDeck;
 
 
     using NonVisuals;
+    using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
-    using NonVisuals.Saitek;
     using NonVisuals.StreamDeck;
     using NonVisuals.StreamDeck.Events;
 

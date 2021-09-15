@@ -1,6 +1,5 @@
 ﻿namespace NonVisuals.Saitek
 {
-    using System;
     using System.Collections.Generic;
 
     using NonVisuals.Interfaces;
@@ -45,14 +44,14 @@
             return BIPEventHandlerManager;
         }
 
-        public static void AddBipListener(IGamingPanelListener iGamingPanelListener)
+        public static void AddBipListener(IGamingPanelListener gamingPanelListener)
         {
-            BIPEventHandlerManager.AddBipListener(iGamingPanelListener);
+            BIPEventHandlerManager.AddBipListener(gamingPanelListener);
         }
 
-        public static void RemoveBipListener(IGamingPanelListener iGamingPanelListener)
+        public static void RemoveBipListener(IGamingPanelListener gamingPanelListener)
         {
-            BIPEventHandlerManager.RemoveBipListener(iGamingPanelListener);
+            BIPEventHandlerManager.RemoveBipListener(gamingPanelListener);
         }
 
         public static void LightUpGreen(string hash)
@@ -74,110 +73,5 @@
         {
             BIPEventHandlerManager.ShowLight(bipLight);
         }
-    }
-
-    public class BipEventHandlerManager
-    {
-        public delegate void BipPanelRegisteredEventHandler(object sender, BipPanelRegisteredEventArgs e);
-
-        public event BipPanelRegisteredEventHandler OnBipPanelRegistered;
-
-        private readonly List<BacklitPanelBIP> _backlitPanels = new List<BacklitPanelBIP>();
-
-        // private object _panelLockObject = new object();
-        public List<BacklitPanelBIP> GetBips()
-        {
-            return _backlitPanels;
-        }
-
-        public void SetAllDark()
-        {
-            foreach (var backlitPanelBIP in _backlitPanels)
-            {
-                foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
-                {
-                    backlitPanelBIP.SetLED(position, PanelLEDColor.DARK);
-                }
-            }
-        }
-
-        public void ShowLight(BIPLight bipLight)
-        {
-            foreach (var backlitPanelBIP in _backlitPanels)
-            {
-                if (bipLight.BindingHash == backlitPanelBIP.BindingHash)
-                {
-                    backlitPanelBIP.SetLED(bipLight.BIPLedPosition, bipLight.LEDColor);
-                }
-            }
-        }
-
-        public void LightUpGreen(string hash)
-        {
-            foreach (var backlitPanelBIP in _backlitPanels)
-            {
-                if (hash == backlitPanelBIP.BindingHash)
-                {
-                    foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
-                    {
-                        backlitPanelBIP.SetLED(position, PanelLEDColor.GREEN);
-                    }
-                }
-            }
-        }
-
-        public void SetDark(string hash)
-        {
-            foreach (var backlitPanelBIP in _backlitPanels)
-            {
-                if (hash == backlitPanelBIP.BindingHash)
-                {
-                    foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
-                    {
-                        backlitPanelBIP.SetLED(position, PanelLEDColor.DARK);
-                    }
-                }
-            }
-        }
-
-        public void AddBipListener(IGamingPanelListener iGamingPanelListener)
-        {
-            OnBipPanelRegistered += iGamingPanelListener.BipPanelRegisterEvent;
-        }
-
-        public void RemoveBipListener(IGamingPanelListener iGamingPanelListener)
-        {
-            OnBipPanelRegistered -= iGamingPanelListener.BipPanelRegisterEvent;
-        }
-
-        public void BroadcastRegisteredBips()
-        {
-            foreach (var backlitPanelBip in _backlitPanels)
-            {
-                OnPanelRegistered(backlitPanelBip);
-            }
-        }
-
-        public void RegisterBip(BacklitPanelBIP backlitPanelBip)
-        {
-            _backlitPanels.Add(backlitPanelBip);
-            OnPanelRegistered(backlitPanelBip);
-        }
-
-        public void DeRegisterBip(BacklitPanelBIP backlitPanelBip)
-        {
-            _backlitPanels.Remove(backlitPanelBip);
-        }
-
-        private void OnPanelRegistered(BacklitPanelBIP backlitPanelBip)
-        {
-            OnBipPanelRegistered?.Invoke(this, new BipPanelRegisteredEventArgs { UniqueId = backlitPanelBip.HIDInstanceId, BacklitPanelBip = backlitPanelBip });
-        }
-    }
-
-    public class BipPanelRegisteredEventArgs : EventArgs
-    {
-        public string UniqueId { get; set; }
-        public BacklitPanelBIP BacklitPanelBip { get; set; }
     }
 }

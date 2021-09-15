@@ -17,8 +17,8 @@
     /// </summary>
     public partial class DCSBIOSInputControlsWindow : Window, IIsDirty
     {
-        private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();
         private readonly string _header;
+        private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();
         private string _description;
         private DCSFPProfile _dcsfpProfile;
         private bool _isDirty = false;

@@ -11,6 +11,8 @@
 
     using MEF;
 
+    using NonVisuals.EventArgs;
+
     public class BacklitPanelBIP : SaitekPanel
     {
         private const byte _1BIPMask = 0x01;

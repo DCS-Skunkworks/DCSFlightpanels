@@ -1,10 +1,11 @@
 ﻿namespace NonVisuals.Interfaces
 {
-    using NonVisuals.Saitek;
+    using NonVisuals.EventArgs;
 
     public interface IGamingPanelListener
     {
         void UISwitchesChanged(object sender, SwitchesChangedEventArgs e);
+
         void SettingsApplied(object sender, PanelEventArgs e);
 
         void SettingsCleared(object sender, PanelEventArgs e);

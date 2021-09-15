@@ -11,16 +11,17 @@
     using MEF;
 
     using NonVisuals.DCSBIOSBindings;
+    using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
     using NonVisuals.Saitek.Switches;
 
     public class TPMPanel : SaitekPanel
     {
+        private readonly object _dcsBiosDataReceivedLock = new object();
         private HashSet<DCSBIOSActionBindingTPM> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingTPM>();
         private HashSet<KeyBindingTPM> _keyBindings = new HashSet<KeyBindingTPM>();
         private List<OSCommandBindingTPM> _operatingSystemCommandBindings = new List<OSCommandBindingTPM>();
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
-        private readonly object _dcsBiosDataReceivedLock = new object();
 
 
         public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)

@@ -1,12 +1,14 @@
-﻿using System.Drawing;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using NonVisuals;
-using Color = System.Drawing.Color;
-
-namespace DCSFlightpanels.CustomControls
+﻿namespace DCSFlightpanels.CustomControls
 {
+    using System.Drawing;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+
+    using NonVisuals;
+
+    using Color = System.Drawing.Color;
+
     public class FontInfoTextBox : TextBox
     {
         private Font _font = SettingsManager.DefaultFont;

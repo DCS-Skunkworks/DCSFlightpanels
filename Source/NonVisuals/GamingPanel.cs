@@ -8,39 +8,21 @@
 
     using DCS_BIOS;
 
+    using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
 
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty
     {
-        private int _vendorId;
-
-        private int _productId;
+        private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
+        private readonly Guid _guid = Guid.NewGuid();
+        private static readonly object UpdateCounterLockObject = new object();
+        private static readonly object LockObject = new object();
+        private readonly object _exceptionLockObject = new object();
+        public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); // TODO REMOVE PUBLIC
 
         private Exception _lastException;
 
-        private readonly object _exceptionLockObject = new object();
-
-        private GamingPanelEnum _typeOfGamingPanel;
-
         private bool _isDirty;
-
-        // private bool _isAttached;
-        private bool _forwardPanelEvent;
-
-        private static readonly object LockObject = new object();
-
-        public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); // TODO REMOVE PUBLIC
-
-        private bool _settingsLoading;
-
-        /*
-         * IMPORTANT STUFF
-         */
-        private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
-
-        private readonly Guid _guid = Guid.NewGuid();
-
-        private static readonly object UpdateCounterLockObject = new object();
 
         private uint _count;
 
@@ -66,8 +48,6 @@
 
         protected readonly HIDSkeleton HIDSkeletonBase;
 
-        private bool _closed;
-
         public long ReportCounter = 0;
 
         protected bool FirstReportHasBeenRead = false;
@@ -80,7 +60,7 @@
 
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
-            _typeOfGamingPanel = typeOfGamingPanel;
+            this.TypeOfPanel = typeOfGamingPanel;
             HIDSkeletonBase = hidSkeleton;
             if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
@@ -136,20 +116,14 @@
                         {
                             OnUpdatesHasBeenMissed(
                                 this,
-                                new DCSBIOSUpdatesMissedEventArgs { HidInstance = HIDSkeletonBase.InstanceId, GamingPanelEnum = _typeOfGamingPanel, Count = (int)(newCount - _count) });
+                                new DCSBIOSUpdatesMissedEventArgs { HidInstance = HIDSkeletonBase.InstanceId, GamingPanelEnum = this.TypeOfPanel, Count = (int)(newCount - _count) });
                             _count = newCount;
                         }
                     }
                 }
             }
         }
-
-        /*
-        public void SignalPanelChange()
-        {
-            SetIsDirty();
-        }
-        */
+        
         public void SetIsDirty()
         {
             SettingsChanged();
@@ -163,26 +137,14 @@
         // User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
         public void SetForwardKeyPresses(object sender, ForwardPanelEventArgs e)
         {
-            _forwardPanelEvent = e.Forward;
+            ForwardPanelEvent = e.Forward;
         }
 
-        public bool ForwardPanelEvent
-        {
-            get => _forwardPanelEvent;
-            set => _forwardPanelEvent = value;
-        }
+        public bool ForwardPanelEvent { get; set; }
 
-        public int VendorId
-        {
-            get => _vendorId;
-            set => _vendorId = value;
-        }
+        public int VendorId { get; set; }
 
-        public int ProductId
-        {
-            get => _productId;
-            set => _productId = value;
-        }
+        public int ProductId { get; set; }
 
         public string HIDInstanceId
         {
@@ -219,7 +181,7 @@
         // public string Hash => _hash;
         public string GuidString => _guid.ToString();
 
-        public void SetLastException(Exception ex)
+        protected void SetLastException(Exception ex)
         {
             try
             {
@@ -236,6 +198,7 @@
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 
@@ -265,17 +228,9 @@
             _isDirty = false;
         }
 
-        public bool SettingsLoading
-        {
-            get => _settingsLoading;
-            set => _settingsLoading = value;
-        }
+        public bool SettingsLoading { get; set; }
 
-        public GamingPanelEnum TypeOfPanel
-        {
-            get => _typeOfGamingPanel;
-            set => _typeOfGamingPanel = value;
-        }
+        public GamingPanelEnum TypeOfPanel { get; set; }
 
         // TODO fixa att man kan koppla in/ur panelerna?
         /*
@@ -287,11 +242,7 @@
             set { _isAttached = value; }
         }
         */
-        public bool Closed
-        {
-            get => _closed;
-            set => _closed = value;
-        }
+        protected bool Closed { get; set; }
 
         // These events can be raised by the descendants of this class.
         public delegate void SwitchesHasBeenChangedEventHandler(object sender, SwitchesChangedEventArgs e);
@@ -327,45 +278,45 @@
         public event UpdatesHasBeenMissedEventHandler OnUpdatesHasBeenMissed;
 
         // For those that wants to listen to this panel
-        public virtual void Attach(IGamingPanelListener iGamingPanelListener)
+        public virtual void Attach(IGamingPanelListener gamingPanelListener)
         {
-            OnDeviceAttachedA += iGamingPanelListener.DeviceAttached;
-            OnSwitchesChangedA += iGamingPanelListener.UISwitchesChanged;
-            OnPanelDataAvailableA += iGamingPanelListener.PanelDataAvailable;
-            OnSettingsAppliedA += iGamingPanelListener.SettingsApplied;
-            OnSettingsClearedA += iGamingPanelListener.SettingsCleared;
-            OnUpdatesHasBeenMissed += iGamingPanelListener.UpdatesHasBeenMissed;
-            OnSettingsChangedA += iGamingPanelListener.PanelSettingsChanged;
+            OnDeviceAttachedA += gamingPanelListener.DeviceAttached;
+            OnSwitchesChangedA += gamingPanelListener.UISwitchesChanged;
+            OnPanelDataAvailableA += gamingPanelListener.PanelDataAvailable;
+            OnSettingsAppliedA += gamingPanelListener.SettingsApplied;
+            OnSettingsClearedA += gamingPanelListener.SettingsCleared;
+            OnUpdatesHasBeenMissed += gamingPanelListener.UpdatesHasBeenMissed;
+            OnSettingsChangedA += gamingPanelListener.PanelSettingsChanged;
         }
 
         // For those that wants to listen to this panel
-        public virtual void Detach(IGamingPanelListener iGamingPanelListener)
+        public virtual void Detach(IGamingPanelListener gamingPanelListener)
         {
-            OnDeviceAttachedA -= iGamingPanelListener.DeviceAttached;
-            OnSwitchesChangedA -= iGamingPanelListener.UISwitchesChanged;
-            OnPanelDataAvailableA -= iGamingPanelListener.PanelDataAvailable;
-            OnSettingsAppliedA -= iGamingPanelListener.SettingsApplied;
-            OnSettingsClearedA -= iGamingPanelListener.SettingsCleared;
-            OnUpdatesHasBeenMissed -= iGamingPanelListener.UpdatesHasBeenMissed;
-            OnSettingsChangedA -= iGamingPanelListener.PanelSettingsChanged;
+            OnDeviceAttachedA -= gamingPanelListener.DeviceAttached;
+            OnSwitchesChangedA -= gamingPanelListener.UISwitchesChanged;
+            OnPanelDataAvailableA -= gamingPanelListener.PanelDataAvailable;
+            OnSettingsAppliedA -= gamingPanelListener.SettingsApplied;
+            OnSettingsClearedA -= gamingPanelListener.SettingsCleared;
+            OnUpdatesHasBeenMissed -= gamingPanelListener.UpdatesHasBeenMissed;
+            OnSettingsChangedA -= gamingPanelListener.PanelSettingsChanged;
         }
 
         // For those that wants to listen to this panel when it's settings change
-        public void Attach(IProfileHandlerListener iProfileHandlerListener)
+        public void Attach(IProfileHandlerListener profileHandlerListener)
         {
-            OnSettingsChangedA += iProfileHandlerListener.PanelSettingsChanged;
+            OnSettingsChangedA += profileHandlerListener.PanelSettingsChanged;
         }
 
         // For those that wants to listen to this panel
-        public void Detach(IProfileHandlerListener iProfileHandlerListener)
+        public void Detach(IProfileHandlerListener profileHandlerListener)
         {
-            OnSettingsChangedA -= iProfileHandlerListener.PanelSettingsChanged;
+            OnSettingsChangedA -= profileHandlerListener.PanelSettingsChanged;
         }
 
         // Used by any but descendants that wants to see buttons that have changed, UI for example
         protected virtual void UISwitchesChanged(HashSet<object> hashSet)
         {
-            OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs { HidInstance = HIDInstanceId, GamingPanelEnum = _typeOfGamingPanel, Switches = hashSet });
+            OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs { HidInstance = HIDInstanceId, GamingPanelEnum = this.TypeOfPanel, Switches = hashSet });
         }
 
         // Used by any but descendants that wants to see buttons that have changed, UI for example
@@ -377,28 +328,28 @@
         protected virtual void DeviceAttached()
         {
             // IsAttached = true;
-            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = _typeOfGamingPanel });
+            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
         }
 
         protected virtual void DeviceDetached()
         {
             // IsAttached = false;
-            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = _typeOfGamingPanel });
+            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
         }
 
         protected virtual void SettingsChanged()
         {
-            OnSettingsChangedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = _typeOfGamingPanel });
+            OnSettingsChangedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
         }
 
         protected virtual void SettingsApplied()
         {
-            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = _typeOfGamingPanel });
+            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
         }
 
         protected virtual void SettingsCleared()
         {
-            OnSettingsClearedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = _typeOfGamingPanel });
+            OnSettingsClearedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
         }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e)
@@ -418,35 +369,5 @@
             ClearSettings();
             SettingsCleared();
         }
-    }
-
-    public class DCSBIOSUpdatesMissedEventArgs : EventArgs
-    {
-        public string HidInstance { get; set; }
-        public GamingPanelEnum GamingPanelEnum { get; set; }
-        public int Count { get; set; }
-    }
-
-    public class PanelEventArgs : EventArgs
-    {
-        public string HidInstance { get; set; }
-        public GamingPanelEnum PanelType { get; set; }
-    }
-
-    public class PanelDataToDCSBIOSEventEventArgs : EventArgs
-    {
-        public string StringData { get; set; }
-    }
-
-    public class SwitchesChangedEventArgs : EventArgs
-    {
-        public string HidInstance { get; set; }
-        public GamingPanelEnum GamingPanelEnum { get; set; }
-        public HashSet<object> Switches { get; set; }
-    }
-
-    public class ForwardPanelEventArgs : EventArgs
-    {
-        public bool Forward { get; set; }
     }
 }

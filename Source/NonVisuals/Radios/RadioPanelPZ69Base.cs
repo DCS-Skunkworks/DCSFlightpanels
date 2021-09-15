@@ -7,6 +7,7 @@
 
     using ClassLibraryCommon;
 
+    using NonVisuals.EventArgs;
     using NonVisuals.Saitek.Panels;
 
     public enum PZ69LCDPosition

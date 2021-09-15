@@ -14,6 +14,7 @@
     using DCSFlightpanels.Windows;
 
     using NonVisuals;
+    using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;

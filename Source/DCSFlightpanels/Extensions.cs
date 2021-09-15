@@ -1,8 +1,9 @@
-﻿using DCSFlightpanels.CustomControls;
-using NonVisuals.StreamDeck;
-
-namespace DCSFlightpanels
+﻿namespace DCSFlightpanels
 {
+    using DCSFlightpanels.CustomControls;
+
+    using NonVisuals.StreamDeck;
+
     public static class Extensions
     {
 

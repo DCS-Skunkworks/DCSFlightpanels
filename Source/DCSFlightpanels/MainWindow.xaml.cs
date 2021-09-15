@@ -33,10 +33,10 @@ namespace DCSFlightpanels
     using Microsoft.Win32;
 
     using NonVisuals;
+    using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.SRS;
-    using NonVisuals.Saitek;
 
     using Octokit;
 
@@ -276,7 +276,7 @@ namespace DCSFlightpanels
             SortTabs();
         }
 
-        public void CloseTemporaryRadioPanels()
+        private void CloseTemporaryRadioPanels()
         {
             try
             {
@@ -304,7 +304,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void CloseStreamDecks()
+        private void CloseStreamDecks()
         {
             foreach (var hidSkeleton in _hidHandler.HIDSkeletons)
             {
@@ -315,7 +315,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void CloseTabItem(string instanceId)
+        private void CloseTabItem(string instanceId)
         {
             try
             {
@@ -356,7 +356,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public int CloseTabItems()
+        private int CloseTabItems()
         {
             var closedItemCount = 0;
             try

@@ -14,10 +14,10 @@
     using MEF;
 
     using NonVisuals;
+    using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Radios;
     using NonVisuals.Radios.Knobs;
-    using NonVisuals.Saitek;
 
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlAJS37.xaml

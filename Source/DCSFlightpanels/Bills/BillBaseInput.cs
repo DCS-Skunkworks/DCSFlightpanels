@@ -272,8 +272,8 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
-        public void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
+
+        private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             try
             {
@@ -387,8 +387,7 @@
             }
         }
 
-
-        public void AddVKNULL()
+        private void AddVKNULL()
         {
             ClearAll();
             var virtualKeyNull = Enum.GetName(typeof(MEF.VirtualKeyCode), MEF.VirtualKeyCode.VK_NULL);
@@ -445,7 +444,7 @@
             }
         }
 
-        public void AddKeyStroke(KeyPressInfo keyStroke)
+        private void AddKeyStroke(KeyPressInfo keyStroke)
         {
             var keyPress = new KeyPress();
             keyPress.KeyPressSequence.Add(0, keyStroke);
@@ -503,7 +502,7 @@
             }
         }
 
-        public void AddDCSBIOS(string description, List<DCSBIOSInput> dcsBiosInputs)
+        private void AddDCSBIOS(string description, List<DCSBIOSInput> dcsBiosInputs)
         {
             var text = string.IsNullOrWhiteSpace(description) ? "DCS-BIOS" : description;
 
@@ -541,13 +540,13 @@
             }
         }
 
-        public void AddBipLink(BIPLink bipLink)
+        private void AddBipLink(BIPLink bipLink)
         {
             BipLink = bipLink;
             UpdateBIPLinkBindings();
         }
 
-        public void EditBIPLink(GamingPanelEnum panelType)
+        private void EditBIPLink(GamingPanelEnum panelType)
         {
             BIPLinkWindow bipLinkWindow;
             switch (panelType)
@@ -623,12 +622,13 @@
             operatingSystemCommandWindow.ShowDialog();
             if (operatingSystemCommandWindow.DialogResult.HasValue && operatingSystemCommandWindow.DialogResult.Value)
             {
-                //Clicked OK
+                // Clicked OK
                 if (!operatingSystemCommandWindow.IsDirty)
                 {
-                    //User made no changes
+                    // User made no changes
                     return;
                 }
+
                 AddOSCommand(operatingSystemCommandWindow.OSCommandObject);
             }
         }

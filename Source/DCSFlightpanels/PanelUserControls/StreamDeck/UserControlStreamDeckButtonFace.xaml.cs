@@ -1,35 +1,39 @@
-﻿using ClassLibraryCommon;
-using DCSFlightpanels.Bills;
-using DCSFlightpanels.CustomControls;
-using NonVisuals.Interfaces;
-using NonVisuals.StreamDeck;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Input;
-using DCSFlightpanels.Shared;
-using DCSFlightpanels.Windows.StreamDeck;
-using NonVisuals;
-using NonVisuals.StreamDeck.Events;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using RadioButton = System.Windows.Controls.RadioButton;
-
-namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Forms;
+    using System.Windows.Input;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Bills;
+    using DCSFlightpanels.CustomControls;
+    using DCSFlightpanels.Shared;
+    using DCSFlightpanels.Windows.StreamDeck;
+
     using MEF;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.StreamDeck;
+    using NonVisuals.StreamDeck.Events;
+
+    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    using RadioButton = System.Windows.Controls.RadioButton;
 
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonFace.xaml
     /// </summary>
     public partial class UserControlStreamDeckButtonFace : UserControlStreamDeckButtonAction.IStreamDeckButtonActionListener, IIsDirty, INvStreamDeckListener
     {
+        private readonly List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
+        private readonly List<RadioButton> _radioButtonList = new List<RadioButton>();
         private bool _isDirty = false;
         private bool _isLoaded = false;
-        private List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
-        private List<RadioButton> _radioButtonList = new List<RadioButton>();
         private EnumStreamDeckButtonNames _streamDeckButton;
         private StreamDeckPanel _streamDeckPanel;
 
@@ -68,7 +72,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             _streamDeckButton = streamDeckButton;a
         }*/
 
-        public void SetFormState()
+        private void SetFormState()
         {
             try
             {
@@ -80,9 +84,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 StackPanelButtonTextImage.Visibility = RadioButtonTextFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonDCSBIOSImage.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonImage.Visibility = RadioButtonImageFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-
-                //StackPanelRadioButtonsImageType.Visibility = UserControlStreamDeckButtonAction.GetSelectedActionType() != EnumStreamDeckActionType.Unknown ? Visibility.Visible : Visibility.Collapsed;
-
                 ButtonTextFaceFont.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTextFaceFontColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTextFaceBackgroundColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
@@ -143,16 +144,18 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             RadioButtonImageFace.IsChecked = false;
         }
 
-        public EnumStreamDeckFaceType GetSelectedFaceType()
+        private EnumStreamDeckFaceType GetSelectedFaceType()
         {
             if (RadioButtonTextFace.IsChecked == true)
             {
                 return EnumStreamDeckFaceType.Text;
             }
+
             if (RadioButtonDCSBIOSFace.IsChecked == true)
             {
                 return EnumStreamDeckFaceType.DCSBIOS;
             }
+
             if (RadioButtonImageFace.IsChecked == true)
             {
                 return EnumStreamDeckFaceType.Image;

@@ -16,6 +16,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
     using DCSFlightpanels.PanelUserControls;
 
     using NonVisuals;
+    using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
 

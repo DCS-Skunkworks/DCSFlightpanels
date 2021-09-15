@@ -16,6 +16,7 @@
     [Serializable]
     public class KeyPress
     {
+        private const int SLEEP_VALUE = 32;
         private SortedList<int, IKeyPressInfo> _sortedKeyPressInfoList = new SortedList<int, IKeyPressInfo>();
         private string _description = "Key press sequence";
         [NonSerialized] private Thread _executingThread;
@@ -28,7 +29,6 @@
          */
         private List<KeyPress> _negatorOSKeyPresses = new List<KeyPress>();
         private volatile bool _abort;
-        private const int SLEEP_VALUE = 32;
 
 
 

@@ -15,6 +15,7 @@
 
     using Microsoft.Win32;
 
+    using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Properties;
 

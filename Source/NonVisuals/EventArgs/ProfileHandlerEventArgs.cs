@@ -1,4 +1,4 @@
-﻿namespace NonVisuals
+﻿namespace NonVisuals.EventArgs
 {
     using System;
 

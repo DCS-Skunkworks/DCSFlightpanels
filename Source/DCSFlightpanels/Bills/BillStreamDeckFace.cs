@@ -1,15 +1,17 @@
-﻿using System.Drawing;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using NonVisuals;
-using NonVisuals.StreamDeck;
-using Brushes = System.Windows.Media.Brushes;
-using Color = System.Drawing.Color;
-
-namespace DCSFlightpanels.Bills
+﻿namespace DCSFlightpanels.Bills
 {
+    using System.Drawing;
+    using System.Windows;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+
     using MEF;
+
+    using NonVisuals;
+    using NonVisuals.StreamDeck;
+
+    using Brushes = System.Windows.Media.Brushes;
+    using Color = System.Drawing.Color;
 
     public class BillStreamDeckFace : BillBaseOutput
     {
@@ -19,13 +21,14 @@ namespace DCSFlightpanels.Bills
         public StreamDeckButton Button;
         private Font _textFont = SettingsManager.DefaultFont;
         private Color _fontColor = SettingsManager.DefaultFontColor;
-        private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
-        public BitmapImage SelectedImage { get; set; }
-        public BitmapImage DeselectedImage { get; set; }
+        private Color _backgroundColor = SettingsManager.DefaultBackgroundColor; 
         private DCSBIOSDecoder _dcsbiosDecoder;
         private string _imageFileRelativePath;
         private StreamDeckPanel _streamDeckPanel;
 
+        public BitmapImage SelectedImage { get; set; }
+
+        public BitmapImage DeselectedImage { get; set; }
 
         public override void Clear()
         {

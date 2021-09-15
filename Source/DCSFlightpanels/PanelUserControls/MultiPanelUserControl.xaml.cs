@@ -22,6 +22,7 @@
 
     using NonVisuals;
     using NonVisuals.DCSBIOSBindings;
+    using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
