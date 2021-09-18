@@ -163,7 +163,7 @@ namespace DCS_BIOS
                 {
                     return;
                 }
-                _dcsbiosListeningThread = new Thread(ReceiveDataUdp);
+                _dcsbiosListeningThread = new Thread(new ThreadStart(ReceiveDataUdp));
                 _dcsbiosListeningThread.Start();
                 _dcsProtocolParser.Startup();
 
