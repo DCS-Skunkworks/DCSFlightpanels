@@ -13,6 +13,9 @@ namespace DCS_BIOS
 
     using ClassLibraryCommon;
 
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
+
     public enum DCSBiosStateEnum
     {
         WAIT_FOR_SYNC = 0,
@@ -29,9 +32,12 @@ namespace DCS_BIOS
         public delegate void DcsDataAddressValueEventHandler(object sender, DCSBIOSDataEventArgs e);
         public event DcsDataAddressValueEventHandler OnDcsDataAddressValue;
 
+        public delegate void DcsConnectionActiveEventHandler(object sender, DCSBIOSConnectionEventArgs e);
+        public event DcsConnectionActiveEventHandler OnDcsConnectionActive;
+
         private List<string> _errorsLogged = new List<string>(10);
 
-        public void Attach(IDcsBiosDataListener iDcsBiosDataListener)
+        public void AttachDataListener(IDcsBiosDataListener iDcsBiosDataListener)
         {
             //Try to remove it first so not to get duplicate
             OnDcsDataAddressValue -= iDcsBiosDataListener.DcsBiosDataReceived;
@@ -39,9 +45,22 @@ namespace DCS_BIOS
             OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
         }
 
-        public void Detach(IDcsBiosDataListener iDcsBiosDataListener)
+        public void DetachDataListener(IDcsBiosDataListener iDcsBiosDataListener)
         {
             OnDcsDataAddressValue -= iDcsBiosDataListener.DcsBiosDataReceived;
+        }
+        
+        public void AttachConnectionStateListener(IDcsBiosConnectionListener connectionListener)
+        {
+            //Try to remove it first so not to get duplicate
+            OnDcsConnectionActive -= connectionListener.DcsBiosConnectionActive;
+
+            OnDcsConnectionActive += connectionListener.DcsBiosConnectionActive;
+        }
+
+        public void DetachConnectionStateListener(IDcsBiosConnectionListener connectionListener)
+        {
+            OnDcsConnectionActive -= connectionListener.DcsBiosConnectionActive;
         }
 
         private DCSBiosStateEnum _state;
@@ -89,9 +108,9 @@ namespace DCS_BIOS
         
         public void Startup()
         {
+            _shutdown = false;
             _processingThread = new Thread(ThreadedProcessArrays);
             _processingThread.Start();
-            _shutdown = false;
         }
 
         public void Shutdown()
@@ -217,6 +236,9 @@ namespace DCS_BIOS
                         _data = (uint)(b << 8) | _data;
                         _count--;
                         //_iDcsBiosDataListener.DcsBiosDataReceived(_address, _data);
+
+                        OnDcsConnectionActive?.Invoke(this, new DCSBIOSConnectionEventArgs()); // Informs main UI that data is coming
+
                         if (OnDcsDataAddressValue != null && IsBroadcastable(_address) && _data != 0x55)
                         {
                             /*if (_address == 25332)

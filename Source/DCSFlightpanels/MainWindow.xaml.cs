@@ -21,6 +21,9 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
+
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.PanelUserControls;
     using DCSFlightpanels.Properties;
@@ -49,7 +52,7 @@
     using Timer = System.Timers.Timer;
     using UserControl = System.Windows.Controls.UserControl;
 
-    public partial class MainWindow : IGamingPanelListener, IDcsBiosDataListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable, IHardwareConflictResolver
+    public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable, IHardwareConflictResolver
     {
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
         private readonly List<GamingPanel> _gamingPanels = new List<GamingPanel>();
@@ -456,8 +459,8 @@
 
             _dcsBios?.Startup();
 
-            _dcsBios?.DetachDataReceivedListener(this);
-            _dcsBios?.AttachDataReceivedListener(this);
+            _dcsBios?.DetachConnectionListener(this);
+            _dcsBios?.AttachConnectionListener(this);
             AttachGamingPanelsToDCSBIOS();
             _dcsStopGearTimer.Start();
             _dcsCheckDcsBiosStatusTimer.Start();
@@ -1616,13 +1619,8 @@
                 // ignore
             }
         }
-
-        public void DcsBiosDataReceived(byte[] array)
-        {
-            // ignored
-        }
-
-        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
+        
+        public void DcsBiosConnectionActive(object sender, DCSBIOSConnectionEventArgs e)
         {
             try
             {

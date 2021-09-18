@@ -16,6 +16,8 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
 
     /// <summary>
     /// Interaction logic for JaceSandbox.xaml

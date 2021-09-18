@@ -12,8 +12,11 @@ namespace DCS_BIOS
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
+    using System.Windows.Forms;
 
     using ClassLibraryCommon;
+
+    using DCS_BIOS.Interfaces;
 
     [Flags]
     public enum DcsBiosNotificationMode
@@ -51,15 +54,15 @@ namespace DCS_BIOS
         private Exception _lastException;
         private DCSBIOSProtocolParser _dcsProtocolParser;
         private readonly DcsBiosNotificationMode _dcsBiosNotificationMode;
-        private readonly IDcsBiosDataListener _iDcsBiosDataListener;
+        private readonly IDcsBiosConnectionListener _dcsBiosConnectionListener;
         private readonly object _lockObjectForSendingData = new object();
         private Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
         private bool _isRunning;
 
-        public DCSBIOS(IDcsBiosDataListener iDcsBiosDataListener, string ipFromUdp, string ipToUdp, int portFromUdp, int portToUdp, DcsBiosNotificationMode dcsNoficationMode)
+        public DCSBIOS(IDcsBiosConnectionListener dcsBiosConnectionListener, string ipFromUdp, string ipToUdp, int portFromUdp, int portToUdp, DcsBiosNotificationMode dcsNoficationMode)
         {
             IPAddress ipAddress;
-            _iDcsBiosDataListener = iDcsBiosDataListener;
+            this._dcsBiosConnectionListener = dcsBiosConnectionListener;
             if (!string.IsNullOrEmpty(ipFromUdp) && IPAddress.TryParse(ipFromUdp, out ipAddress))
             {
                 _dcsbiosReceiveFromIPUdp = ipFromUdp;
@@ -79,7 +82,7 @@ namespace DCS_BIOS
             _dcsBiosNotificationMode = dcsNoficationMode;
             
             _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
-            _dcsProtocolParser.Attach(_iDcsBiosDataListener);
+            _dcsProtocolParser.AttachConnectionStateListener(this._dcsBiosConnectionListener);
 
             _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePort);
             _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIp), SendPort);
@@ -91,6 +94,7 @@ namespace DCS_BIOS
 
             _udpSendClient = new UdpClient();
             _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            _udpSendClient.Client.Bind(_ipEndPointSenderUdp);
             _udpSendClient.EnableBroadcast = true;
 
             //_tcpIpPort = tcpIpPort;
@@ -132,6 +136,7 @@ namespace DCS_BIOS
                         _dcsProtocolParser.AddArray(byteData);
                     }
                 }
+                
             }
             catch (ThreadAbortException) { }
             catch (Exception e)
@@ -148,22 +153,11 @@ namespace DCS_BIOS
         {
             try
             {
-                /*
-                    None, do as normal.
-                */
-
-                /*
-                    Client, try establish connection to the master FP on the network every two seconds. After connection listen to data from master and add that to the arraysToProcess queue.
-                */
-
-                /*
-                    Master, start listening TCP socket, for every client contacting via TCP add them as clients and send raw DCS-BIOS data to them
-                */
                 if (_isRunning)
                 {
                     return;
                 }
-                _dcsbiosListeningThread = new Thread(new ThreadStart(ReceiveDataUdp));
+                _dcsbiosListeningThread = new Thread(ReceiveDataUdp);
                 _isRunning = true;
                 _dcsProtocolParser.Startup();
                 _dcsbiosListeningThread.Start();
@@ -191,7 +185,7 @@ namespace DCS_BIOS
             {
                 _udpReceiveClient?.Close();
                 _udpReceiveClient?.Close();
-                _dcsProtocolParser?.Detach(_iDcsBiosDataListener);
+                _dcsProtocolParser?.DetachConnectionStateListener(this._dcsBiosConnectionListener);
                 _dcsProtocolParser?.Shutdown();
 
                 _udpReceiveClient = null;
@@ -216,11 +210,11 @@ namespace DCS_BIOS
             return _dcsBIOSInstance;
         }
 
-        public static void AttachDataReceivedListenerSO(IDcsBiosDataListener iDcsBiosDataListener)
+        public static void AttachDataReceivedListenerSO(IDcsBiosDataListener dcsBiosDataListener)
         {
             if (_dcsBIOSInstance != null)
             {
-                _dcsBIOSInstance._dcsProtocolParser.OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
+                _dcsBIOSInstance._dcsProtocolParser.OnDcsDataAddressValue += dcsBiosDataListener.DcsBiosDataReceived;
             }
         }
 
@@ -240,7 +234,28 @@ namespace DCS_BIOS
             {
                 return;
             }
+
             _dcsProtocolParser.OnDcsDataAddressValue -= iDcsBiosDataListener.DcsBiosDataReceived;
+        }
+
+        public void AttachConnectionListener(IDcsBiosConnectionListener connectionListener)
+        {
+            if (_dcsProtocolParser == null)
+            {
+                return;
+            }
+
+            _dcsProtocolParser.OnDcsConnectionActive += connectionListener.DcsBiosConnectionActive;
+        }
+
+        public void DetachConnectionListener(IDcsBiosConnectionListener connectionListener)
+        {
+            if (_dcsProtocolParser == null)
+            {
+                return;
+            }
+
+            _dcsProtocolParser.OnDcsConnectionActive -= connectionListener.DcsBiosConnectionActive;
         }
 
         public static int Send(string stringData)

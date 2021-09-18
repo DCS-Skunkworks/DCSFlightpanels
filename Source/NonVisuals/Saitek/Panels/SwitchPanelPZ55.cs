@@ -9,6 +9,7 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
 
     using MEF;
 
