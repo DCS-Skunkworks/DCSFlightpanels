@@ -73,7 +73,7 @@
             return null;
         }
 
-        [JsonProperty("SoundFile", Required = Required.Default)]
+        [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName
         {
             get => _streamDeckButtonName;
