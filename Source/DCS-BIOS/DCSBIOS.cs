@@ -94,7 +94,6 @@ namespace DCS_BIOS
 
             _udpSendClient = new UdpClient();
             _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            _udpSendClient.Client.Bind(_ipEndPointSenderUdp);
             _udpSendClient.EnableBroadcast = true;
 
             //_tcpIpPort = tcpIpPort;
