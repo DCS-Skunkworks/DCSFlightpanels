@@ -4,8 +4,6 @@
 ![Support us!](https://github.com/DCSFlightpanels/DCSFlightpanels/blob/master/Documentation/support_dcsflightpanels4.png)
 <br/>
 [Support DCSFP](https://www.paypal.me/jerkerdahlblom)
-<br/>
-[Support DCS-BIOS](https://www.paypal.me/FPDCSBIOS)
 
 _With your support, we're able to buy new planes (DCS modules) or hardware, to making them work with these two projects._
 
