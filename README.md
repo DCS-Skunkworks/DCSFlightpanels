@@ -5,7 +5,7 @@
 <br/>
 [Support DCSFP](https://www.paypal.me/jerkerdahlblom)
 
-_With your support, we're able to buy new planes (DCS modules) or hardware, to making them work with these two projects._
+_With your support, we're able to buy new planes (DCS modules) or hardware, to making them work with this project._
 
 
 Please visit our [Wiki](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki) for answers to common questions.
