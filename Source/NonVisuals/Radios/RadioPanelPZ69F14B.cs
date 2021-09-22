@@ -8,6 +8,8 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
 
     using MEF;
 
@@ -565,7 +567,7 @@
                     }
                     catch (Exception)
                     {
-                        // TODO Strange values from DCS-BIOS
+                        // ignored
                     }
                 }
                 else if (e.Address.Equals(_uhfDcsbiosOutputSelectedChannel.Address))

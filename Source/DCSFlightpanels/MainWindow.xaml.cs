@@ -1,9 +1,9 @@
-﻿/*
- Custom Resharper Naming abbreviations
- ADF AJS ALL ALT APR BIOS BIP BIPS COM CRS DB DCS DCSBIOS DCSBIOSJSON DME DRO HDG HF IAS ICS IFF ILS IP IX JSON KEYS LCD LCDPZ LE LED NADIR NAV OS PZ REV SA SRS TACAN TPM UH UHF USB VHF VID VS XPDR XY ZY ARC ARN APX ABRIS OK ID FA ZA AV8BNA COMM NS DCSFP
-*/
-namespace DCSFlightpanels
+﻿namespace DCSFlightpanels
 {
+    /*
+    Custom Resharper Naming abbreviations
+    ADF AJS ALL ALT APR BIOS BIP BIPS COM CRS DB DCS DCSBIOS DCSBIOSJSON DME DRO HDG HF IAS ICS IFF ILS IP IX JSON KEYS LCD LCDPZ LE LED NADIR NAV OS PZ REV SA SRS TACAN TPM UH UHF USB VHF VID VS XPDR XY ZY ARC ARN APX ABRIS OK ID FA ZA AV8BNA COMM NS DCSFP
+    */
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -21,6 +21,9 @@ namespace DCSFlightpanels
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
+
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.PanelUserControls;
     using DCSFlightpanels.Properties;
@@ -28,7 +31,6 @@ namespace DCSFlightpanels
     using DCSFlightpanels.Radios.PreProgrammed;
     using DCSFlightpanels.Shared;
     using DCSFlightpanels.Windows;
-
 
     using Microsoft.Win32;
 
@@ -50,7 +52,7 @@ namespace DCSFlightpanels
     using Timer = System.Timers.Timer;
     using UserControl = System.Windows.Controls.UserControl;
 
-    public partial class MainWindow : IGamingPanelListener, IDcsBiosDataListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable, IHardwareConflictResolver
+    public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable, IHardwareConflictResolver
     {
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
         private readonly List<GamingPanel> _gamingPanels = new List<GamingPanel>();
@@ -73,7 +75,6 @@ namespace DCSFlightpanels
         private bool _disablePanelEventsFromBeingRouted;
         private bool _isLoaded = false;
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -83,7 +84,7 @@ namespace DCSFlightpanels
             // Stop annoying "Cannot find source for binding with reference .... " from being shown
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
         }
-        
+
         public delegate void ForwardKeyPressesChangedEventHandler(object sender, ForwardPanelEventArgs e);
 
         public event ForwardKeyPressesChangedEventHandler OnForwardKeyPressesChanged;
@@ -96,7 +97,7 @@ namespace DCSFlightpanels
                 {
                     return;
                 }
-                
+
                 if (Settings.Default.RunMinimized)
                 {
                     WindowState = WindowState.Minimized;
@@ -117,7 +118,7 @@ namespace DCSFlightpanels
                 }
 
                 Common.SetErrorLog(_errorLogFile);
-                
+
                 DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 CheckErrorLogAndDCSBIOSLocation();
@@ -139,7 +140,7 @@ namespace DCSFlightpanels
                 /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
                 /*******************************************************************************************/
                 _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
-                _profileHandler.Init(); 
+                _profileHandler.Init();
                 SearchForPanels();
                 _profileHandler.Attach(this);
                 _profileHandler.AttachUserMessageHandler(this);
@@ -165,14 +166,14 @@ namespace DCSFlightpanels
                 SendEventRegardingForwardingOfKeys();
 
                 CheckForNewDCSFPRelease();
-                
+
                 if (Settings.Default.LoadStreamDeck == false && Process.GetProcessesByName("StreamDeck").Length >= 1)
                 {
                     MessageBox.Show("StreamDeck's official software is running in the background.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
 
                 ConfigurePlugins();
-                
+
                 _isLoaded = true;
             }
             catch (Exception ex)
@@ -219,8 +220,8 @@ namespace DCSFlightpanels
                     window.ShowDialog();
                     MessageBox.Show(
                         "This warning will be shown as long as there are error messages in error log stating that DCS-BIOS can not be found. Delete or clear the error log once you have fixed the problem.",
-                        "Delete Error Log", 
-                        MessageBoxButton.OK, 
+                        "Delete Error Log",
+                        MessageBoxButton.OK,
                         MessageBoxImage.Warning);
                 }
             }
@@ -296,7 +297,6 @@ namespace DCSFlightpanels
 
                     counter++;
                 }
-
             }
             catch (Exception ex)
             {
@@ -348,7 +348,6 @@ namespace DCSFlightpanels
 
                     counter++;
                 }
-
             }
             catch (Exception ex)
             {
@@ -384,7 +383,6 @@ namespace DCSFlightpanels
 
                     _profileFileInstanceIDs.Clear();
                 }
-
             }
             catch (Exception ex)
             {
@@ -407,7 +405,6 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
 
         /*
          * DCS-BIOS may be created AFTER the panels are created so then
@@ -435,7 +432,6 @@ namespace DCSFlightpanels
             _dcsBios?.DetachDataReceivedListener(gamingPanel);
 
             Dispatcher?.BeginInvoke((Action)(() => CloseTabItem(gamingPanel.HIDInstanceId)));
-
         }
 
         private void CreateDCSBIOS()
@@ -460,10 +456,11 @@ namespace DCSFlightpanels
             {
                 return;
             }
+
             _dcsBios?.Startup();
 
-            _dcsBios?.DetachDataReceivedListener(this);
-            _dcsBios?.AttachDataReceivedListener(this);
+            _dcsBios?.DetachConnectionListener(this);
+            _dcsBios?.AttachConnectionListener(this);
             AttachGamingPanelsToDCSBIOS();
             _dcsStopGearTimer.Start();
             _dcsCheckDcsBiosStatusTimer.Start();
@@ -509,17 +506,16 @@ namespace DCSFlightpanels
                 {
                     foreach (var hidSkeleton in _hidHandler.HIDSkeletons)
                     {
-
                         switch (hidSkeleton.PanelInfo.GamingPanelType)
                         {
                             case GamingPanelEnum.Unknown:
                                 {
                                     continue;
                                 }
+
                             case GamingPanelEnum.PZ55SwitchPanel:
                                 {
-                                    var tabItem = new TabItem();
-                                    tabItem.Header = "PZ55";
+                                    var tabItem = new TabItem { Header = "PZ55" };
                                     var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton, tabItem, this);
                                     _panelUserControls.Add(switchPanelPZ55UserControl);
                                     _profileHandler.Attach(switchPanelPZ55UserControl);
@@ -528,10 +524,10 @@ namespace DCSFlightpanels
                                     _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     break;
                                 }
+
                             case GamingPanelEnum.PZ70MultiPanel:
                                 {
-                                    var tabItem = new TabItem();
-                                    tabItem.Header = "PZ70";
+                                    var tabItem = new TabItem { Header = "PZ70" };
                                     var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this);
                                     _panelUserControls.Add(multiPanelUserControl);
                                     _profileHandler.Attach(multiPanelUserControl);
@@ -540,10 +536,10 @@ namespace DCSFlightpanels
                                     _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     break;
                                 }
+
                             case GamingPanelEnum.BackLitPanel:
                                 {
-                                    var tabItem = new TabItem();
-                                    tabItem.Header = "B.I.P.";
+                                    var tabItem = new TabItem { Header = "B.I.P." };
                                     var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton);
                                     _panelUserControls.Add(backLitPanelUserControl);
                                     _profileHandler.Attach(backLitPanelUserControl);
@@ -552,10 +548,10 @@ namespace DCSFlightpanels
                                     _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     break;
                                 }
+
                             case GamingPanelEnum.TPM:
                                 {
-                                    var tabItem = new TabItem();
-                                    tabItem.Header = "TPM";
+                                    var tabItem = new TabItem { Header = "TPM" };
                                     var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this);
                                     _panelUserControls.Add(tpmPanelUserControl);
                                     _profileHandler.Attach(tpmPanelUserControl);
@@ -564,6 +560,7 @@ namespace DCSFlightpanels
                                     _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     break;
                                 }
+
                             case GamingPanelEnum.StreamDeckMini:
                             case GamingPanelEnum.StreamDeckXL:
                             case GamingPanelEnum.StreamDeck:
@@ -572,8 +569,7 @@ namespace DCSFlightpanels
                                 {
                                     if (!DCSFPProfile.IsKeyEmulator(_profileHandler.Profile))
                                     {
-                                        var tabItemStreamDeck = new TabItem();
-                                        tabItemStreamDeck.Header = hidSkeleton.PanelInfo.GamingPanelType.GetDescription();
+                                        var tabItemStreamDeck = new TabItem { Header = hidSkeleton.PanelInfo.GamingPanelType.GetDescription() };
                                         var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck, this);
                                         _panelUserControls.Add(streamDeckUserControl);
                                         _profileHandler.Attach(streamDeckUserControl);
@@ -581,29 +577,30 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItemStreamDeck);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.InstanceId, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
+
                                     break;
                                 }
+
                             case GamingPanelEnum.PZ69RadioPanel:
                                 {
-                                    var tabItem = new TabItem();
-                                    tabItem.Header = Constants.TemporaryRadioTabHeader;
+                                    var tabItem = new TabItem { Header = Constants.TemporaryRadioTabHeader };
                                     var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlNotImplemented(hidSkeleton, tabItem, this);
                                     tabItem.Content = radioPanelPZ69UserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                     break;
                                 }
+
                             case GamingPanelEnum.FarmingPanel:
-                            {
-                                var tabItem = new TabItem();
-                                tabItem.Header = "Side Panel";
-                                var farmingSidePanelUserControl = new FarmingPanelUserControl(hidSkeleton, tabItem, this);
-                                _panelUserControls.Add(farmingSidePanelUserControl);
-                                _profileHandler.Attach(farmingSidePanelUserControl);
-                                tabItem.Content = farmingSidePanelUserControl;
-                                TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
-                                break;
-                            }
+                                {
+                                    var tabItem = new TabItem { Header = "Side Panel" };
+                                    var farmingSidePanelUserControl = new FarmingPanelUserControl(hidSkeleton, tabItem, this);
+                                    _panelUserControls.Add(farmingSidePanelUserControl);
+                                    _profileHandler.Attach(farmingSidePanelUserControl);
+                                    tabItem.Content = farmingSidePanelUserControl;
+                                    TabControlPanels.Items.Add(tabItem);
+                                    _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                    break;
+                                }
                         }
                     } // for each
                 }
@@ -630,6 +627,7 @@ namespace DCSFlightpanels
                     {
                         return;
                     }
+
                     foreach (var hidSkeleton in _hidHandler.HIDSkeletons)
                     {
                         switch (hidSkeleton.PanelInfo.GamingPanelType)
@@ -638,10 +636,10 @@ namespace DCSFlightpanels
                                 {
                                     continue;
                                 }
+
                             case GamingPanelEnum.PZ69RadioPanel:
                                 {
-                                    var tabItem = new TabItem();
-                                    tabItem.Header = "PZ69";
+                                    var tabItem = new TabItem { Header = "PZ69" };
                                     if (DCSFPProfile.IsKeyEmulator(_profileHandler.Profile))
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton, tabItem, this);
@@ -852,24 +850,26 @@ namespace DCSFlightpanels
 
         private void SortTabs()
         {
-            var panelOrderList = new List<GamingPanelEnum>();
-            panelOrderList.Add(GamingPanelEnum.StreamDeckXL);
-            panelOrderList.Add(GamingPanelEnum.StreamDeck);
-            panelOrderList.Add(GamingPanelEnum.StreamDeckV2);
-            panelOrderList.Add(GamingPanelEnum.StreamDeckMK2);
-            panelOrderList.Add(GamingPanelEnum.StreamDeckMini);
-            panelOrderList.Add(GamingPanelEnum.BackLitPanel);
-            panelOrderList.Add(GamingPanelEnum.PZ69RadioPanel);
-            panelOrderList.Add(GamingPanelEnum.TPM);
-            panelOrderList.Add(GamingPanelEnum.PZ70MultiPanel);
-            panelOrderList.Add(GamingPanelEnum.PZ55SwitchPanel);
+            var panelOrderList = new List<GamingPanelEnum>
+                                     {
+                                         GamingPanelEnum.StreamDeckXL,
+                                         GamingPanelEnum.StreamDeck,
+                                         GamingPanelEnum.StreamDeckV2,
+                                         GamingPanelEnum.StreamDeckMK2,
+                                         GamingPanelEnum.StreamDeckMini,
+                                         GamingPanelEnum.BackLitPanel,
+                                         GamingPanelEnum.PZ69RadioPanel,
+                                         GamingPanelEnum.TPM,
+                                         GamingPanelEnum.PZ70MultiPanel,
+                                         GamingPanelEnum.PZ55SwitchPanel
+                                     };
 
             foreach (var gamingPanelEnum in panelOrderList)
             {
                 for (var i = 0; i < TabControlPanels.Items.Count; i++)
                 {
                     var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
-                    var userControl = (IGamingPanelUserControl)(tabItem).Content;
+                    var userControl = (IGamingPanelUserControl)tabItem.Content;
 
                     var panelType = userControl.GetPanelType();
                     if (panelType == gamingPanelEnum)
@@ -882,7 +882,6 @@ namespace DCSFlightpanels
 
             TabControlPanels.SelectedIndex = 0;
         }
-
 
         private void LoadSettings()
         {
@@ -908,15 +907,7 @@ namespace DCSFlightpanels
                 Left = Settings.Default.MainWindowLeft;
             }
 
-            if (Settings.Default.APIMode == 0)
-            {
-                Common.APIMode = APIModeEnum.keybd_event;
-            }
-            else
-            {
-                Common.APIMode = APIModeEnum.SendInput;
-            }
-
+            Common.APIMode = Settings.Default.APIMode == 0 ? APIModeEnum.keybd_event : APIModeEnum.SendInput;
         }
 
         private void MainWindowLocationChanged(object sender, EventArgs e)
@@ -953,7 +944,6 @@ namespace DCSFlightpanels
             }
         }
 
-
         public void SettingsCleared(object sender, PanelEventArgs e)
         {
             try
@@ -982,7 +972,6 @@ namespace DCSFlightpanels
             }
         }
 
-
         public void SelectedProfile(object sender, AirframeEventArgs e)
         {
             try
@@ -993,6 +982,7 @@ namespace DCSFlightpanels
                     SetApplicationMode(_dcsfpProfile);
                     SendEventRegardingForwardingOfKeys();
                 }
+
                 if (Common.KeyEmulationOnly())
                 {
                     SetNS430Status(false, false);
@@ -1117,6 +1107,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
+
                     if (newerAvailable)
                     {
                         Dispatcher?.Invoke(() =>
@@ -1133,6 +1124,7 @@ namespace DCSFlightpanels
                             LabelVersionInformation.Visibility = Visibility.Visible;
                         });
                     }
+
                     var lastDCSBIOSRelease = await client.Repository.Release.GetLatest("DCSFlightpanels", "dcs-bios");
                     Dispatcher?.Invoke(() =>
                     {
@@ -1157,10 +1149,14 @@ namespace DCSFlightpanels
                 LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
                 LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + Settings.Default.LastDCSBIOSRelease;
             }
-            //#endif
+
+            // #endif
         }
 
-        private void TimerCheckExceptions(object sender, ElapsedEventArgs e) { }
+        private void TimerCheckExceptions(object sender, ElapsedEventArgs e)
+        {
+            // ignored
+        }
 
         private void TimerStopRotation(object sender, ElapsedEventArgs e)
         {
@@ -1171,6 +1167,7 @@ namespace DCSFlightpanels
             }
             catch (Exception)
             {
+                // ignore
             }
         }
 
@@ -1234,7 +1231,8 @@ namespace DCSFlightpanels
             try
             {
                 Shutdown();
-                //Wtf is hanging?
+
+                // Wtf is hanging?
                 Application.Current.Shutdown();
                 Environment.Exit(0);
             }
@@ -1272,8 +1270,8 @@ namespace DCSFlightpanels
 
             try
             {
-                //TODO THIS CAUSES HANGING WHEN CLOSING THE APPLICATION!?!?
-                //_hidHandler.Shutdown();
+                // TODO THIS CAUSES HANGING WHEN CLOSING THE APPLICATION!?!?
+                // _hidHandler.Shutdown();
             }
             catch (Exception ex)
             {
@@ -1288,7 +1286,6 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(ex);
             }
-
         }
 
         private void MenuItemExitClick(object sender, RoutedEventArgs e)
@@ -1390,18 +1387,16 @@ namespace DCSFlightpanels
 
             try
             {
-
-            CloseTabItems();
-            _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
-            _profileHandler.Init();
-            _profileHandler.Attach(this);
-            _profileHandler.AttachUserMessageHandler(this);
-            _dcsfpProfile = _profileHandler.Profile;
-            SetApplicationMode(_dcsfpProfile);
-            SetWindowTitle();
-            SetWindowState();
-            SendEventRegardingForwardingOfKeys();
-
+                CloseTabItems();
+                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
+                _profileHandler.Init();
+                _profileHandler.Attach(this);
+                _profileHandler.AttachUserMessageHandler(this);
+                _dcsfpProfile = _profileHandler.Profile;
+                SetApplicationMode(_dcsfpProfile);
+                SetWindowTitle();
+                SetWindowState();
+                SendEventRegardingForwardingOfKeys();
             }
             catch (Exception e)
             {
@@ -1409,6 +1404,7 @@ namespace DCSFlightpanels
                 Common.LogError(e.InnerException);
                 throw;
             }
+
             return true;
         }
 
@@ -1489,6 +1485,7 @@ namespace DCSFlightpanels
                 {
                     return;
                 }
+
                 RestartWithProfile("NEWPROFILE");
             }
             catch (Exception ex)
@@ -1503,6 +1500,7 @@ namespace DCSFlightpanels
             {
                 return;
             }
+
             var bindingsFile = _profileHandler.OpenProfile();
             RestartWithProfile(bindingsFile);
         }
@@ -1566,14 +1564,7 @@ namespace DCSFlightpanels
             {
                 var forwardKeys = bool.Parse(ButtonImageDisable.Tag.ToString());
                 forwardKeys = !forwardKeys;
-                if (forwardKeys)
-                {
-                    ButtonImageDisable.Tag = "True";
-                }
-                else
-                {
-                    ButtonImageDisable.Tag = "False";
-                }
+                this.ButtonImageDisable.Tag = forwardKeys ? "True" : "False";
 
                 SendEventRegardingForwardingOfKeys();
             }
@@ -1585,7 +1576,7 @@ namespace DCSFlightpanels
 
         private void SendEventRegardingForwardingOfKeys()
         {
-            //Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
+            // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
             OnForwardKeyPressesChanged?.Invoke(this, new ForwardPanelEventArgs() { Forward = !_disablePanelEventsFromBeingRouted });
         }
 
@@ -1625,12 +1616,11 @@ namespace DCSFlightpanels
             }
             catch (Exception)
             {
+                // ignore
             }
         }
-
-        public void DcsBiosDataReceived(byte[] array) { }
-
-        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
+        
+        public void DcsBiosConnectionActive(object sender, DCSBIOSConnectionEventArgs e)
         {
             try
             {
@@ -1642,10 +1632,15 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceAttached(GamingPanelEnum gamingPanelsEnum) { }
+        public void DeviceAttached(GamingPanelEnum gamingPanelsEnum)
+        {
+            // ignore
+        }
 
-        public void DeviceDetached(GamingPanelEnum gamingPanelsEnum) { }
-
+        public void DeviceDetached(GamingPanelEnum gamingPanelsEnum)
+        {
+            // ignore
+        }
 
         private void ShowStatusBarMessage(string str)
         {
@@ -1668,14 +1663,7 @@ namespace DCSFlightpanels
             {
                 lock (_lockObjectStatusMessages)
                 {
-                    if (_statusMessages.Count > 0)
-                    {
-                        _statusMessagesTimer.Interval = 8000;
-                    }
-                    else
-                    {
-                        _statusMessagesTimer.Interval = 1000;
-                    }
+                    _statusMessagesTimer.Interval = this._statusMessages.Count > 0 ? 8000 : 1000;
 
                     Dispatcher?.BeginInvoke((Action)(() => LabelInformation.Text = string.Empty));
 
@@ -1773,17 +1761,16 @@ namespace DCSFlightpanels
             PluginManager.DisableKeyboardAPI = Settings.Default.DisableKeyboardAPI;
 
             MenuItemPlugins.Items.Clear();
-            
+
             if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
             {
                 foreach (var plugin in PluginManager.Get().Plugins)
                 {
-                    var menuItem = new MenuItem();
-                    menuItem.Header = plugin.Metadata.Name;
+                    var menuItem = new MenuItem { Header = plugin.Metadata.Name };
                     menuItem.Click += MenuItemPlugin_OnClick;
                     MenuItemPlugins.Items.Add(menuItem);
                 }
-                
+
                 LabelPluginInfo.Text = "Plugin(s) Loaded";
             }
             else if (PluginManager.PlugSupportActivated && !PluginManager.HasPlugin())
@@ -1810,7 +1797,7 @@ namespace DCSFlightpanels
 
                 if (settingsWindow.DCSBIOSChanged && Common.PartialDCSBIOSEnabled())
                 {
-                    //Refresh, make sure they are using the latest settings
+                    // Refresh, make sure they are using the latest settings
                     DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
                     _dcsBios.ReceiveFromIp = Settings.Default.DCSBiosIPFrom;
                     _dcsBios.ReceivePort = int.Parse(Settings.Default.DCSBiosPortFrom);
@@ -1837,7 +1824,7 @@ namespace DCSFlightpanels
              * This is a slightly modified code version of the original code which was made by http://uraster.com
              */
             MessageBox.Show("You need to run DCSFP as Administrator for this function to work!");
-            const string saitekVID = "VID_06A3";
+            const string SaitekVid = "VID_06A3";
             var result = new StringBuilder();
             result.AppendLine("USB Enhanced Power Management Disabler");
             result.AppendLine("http://uraster.com/en-us/products/usbenhancedpowermanagerdisabler.aspx");
@@ -1847,7 +1834,7 @@ namespace DCSFlightpanels
             result.AppendLine("You need admin rights to do that.");
             result.AppendLine("Plug in all devices in the ports you intend to use before continuing.");
             result.AppendLine(new string('-', 60));
-            result.AppendLine("Vendor ID (VID). For SAITEK use the default of " + saitekVID);
+            result.AppendLine("Vendor ID (VID). For SAITEK use the default of " + SaitekVid);
 
             try
             {
@@ -1857,10 +1844,10 @@ namespace DCSFlightpanels
                 {
                     if (usbDevicesKey != null)
                     {
-                        foreach (var usbDeviceKeyName in usbDevicesKey.GetSubKeyNames().Where(name => name.StartsWith(saitekVID)))
+                        foreach (var usbDeviceKeyName in usbDevicesKey.GetSubKeyNames().Where(name => name.StartsWith(SaitekVid)))
                         {
                             result.Append(Environment.NewLine);
-                            result.AppendLine("Processing product : " + GetProductId(saitekVID, usbDeviceKeyName));
+                            result.AppendLine("Processing product : " + GetProductId(SaitekVid, usbDeviceKeyName));
                             using (var usbDeviceKey = usbDevicesKey.OpenSubKey(usbDeviceKeyName))
                             {
                                 if (usbDeviceKey != null)
@@ -1927,21 +1914,37 @@ namespace DCSFlightpanels
             if (vid == saitedVID)
             {
                 if (pid.StartsWith("PID_0D06"))
+                {
                     result += " (Multi panel, PZ70)";
+                }
                 else if (pid.StartsWith("PID_0D05"))
+                {
                     result += " (Radio panel, PZ69)";
+                }
                 else if (pid.StartsWith("PID_0D67"))
+                {
                     result += " (Switch panel, PZ55)";
+                }
                 else if (pid.StartsWith("PID_A2AE"))
+                {
                     result += " (Instrument panel)";
+                }
                 else if (pid.StartsWith("PID_712C"))
+                {
                     result += " (Yoke)";
+                }
                 else if (pid.StartsWith("PID_0C2D"))
+                {
                     result += " (Throttle quadrant)";
+                }
                 else if (pid.StartsWith("PID_0763"))
+                {
                     result += " (Pedals)";
+                }
                 else if (pid.StartsWith("PID_0B4E"))
+                {
                     result += " (BIP)";
+                }
             }
 
             return result;
@@ -1962,7 +1965,6 @@ namespace DCSFlightpanels
             if (WindowState == WindowState.Minimized && Settings.Default.RunMinimized)
             {
                 Hide();
-
             }
         }
 
@@ -1984,7 +1986,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                var button = (Button)sender;
                 _disablePanelEventsFromBeingRouted = !_disablePanelEventsFromBeingRouted;
                 if (_disablePanelEventsFromBeingRouted)
                 {
@@ -1996,6 +1997,7 @@ namespace DCSFlightpanels
                     ButtonDisablePanelEventsFromBeingRouted.Content = "Enabled!";
                     ButtonDisablePanelEventsFromBeingRouted.ToolTip = "Panel events are routed";
                 }
+
                 SendEventRegardingForwardingOfKeys();
                 SetWindowState();
             }
@@ -2029,12 +2031,13 @@ namespace DCSFlightpanels
                     _dcsStopGearTimer.Dispose();
                     _exceptionTimer.Dispose();
                     _statusMessagesTimer.Dispose();
-                    ; _exceptionTimer.Dispose();
+                    _exceptionTimer.Dispose();
                     _dcsBios?.Dispose();
                 }
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
 
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+
+                // TODO: set large fields to null.
                 _hasBeenCalledAlready = true;
             }
         }
@@ -2050,6 +2053,7 @@ namespace DCSFlightpanels
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
+
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
@@ -2072,7 +2076,6 @@ namespace DCSFlightpanels
                 {
                     CreateNewProfile();
                 }
-
             }
             catch (Exception ex)
             {
@@ -2110,5 +2113,3 @@ namespace DCSFlightpanels
         }
     }
 }
-
-

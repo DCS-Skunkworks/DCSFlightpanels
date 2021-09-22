@@ -7,6 +7,7 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
 
     using MEF;
 
@@ -168,13 +169,7 @@
 
         public override void Identify()
         {
-            try
-            {
-                // This panel can not identify itself, no LEDs, nothing
-            }
-            catch (Exception)
-            {
-            }
+            // ignored
         }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

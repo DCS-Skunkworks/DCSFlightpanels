@@ -62,6 +62,7 @@
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 

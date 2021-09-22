@@ -151,6 +151,10 @@
     <Compile Include="DCSBIOS.cs" />
     <Compile Include="DCSBIOSInputHandler.cs" />
     <Compile Include="DCSBIOSInputObject.cs" />
+    <Compile Include="EventArgs\DCSBIOSConnectionEventArgs.cs" />
+    <Compile Include="EventArgs\DCSBIOSDataEventArgs.cs" />
+    <Compile Include="EventArgs\DCSBIOSStringDataEventArgs.cs" />
+    <Compile Include="Interfaces\IDcsBiosConnectionListener.cs" />
     <Compile Include="Json\DCSBIOSControl.cs" />
     <Compile Include="Json\DCSBIOSControlInput.cs" />
     <Compile Include="DCSBIOSControlLocator.cs" />
@@ -163,8 +167,8 @@
     <Compile Include="DCSBIOSStringListener.cs" />
     <Compile Include="DCSBIOSProtocolParser.cs" />
     <Compile Include="DCSBIOSStringManager.cs" />
-    <Compile Include="IDcsBiosListener.cs" />
-    <Compile Include="IDCSBIOSStringListener.cs" />
+    <Compile Include="Interfaces\IDcsBiosListener.cs" />
+    <Compile Include="Interfaces\IDCSBIOSStringListener.cs" />
     <Compile Include="JaceExtended.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

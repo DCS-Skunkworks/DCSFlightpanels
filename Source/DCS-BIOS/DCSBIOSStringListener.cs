@@ -10,6 +10,9 @@ namespace DCS_BIOS
 
     using ClassLibraryCommon;
 
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
+
     public class DCSBIOSStringListener : IDcsBiosDataListener
     {
         public delegate void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e);

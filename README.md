@@ -3,7 +3,6 @@
 
 
 
-
 Please visit our [Wiki](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki) for answers to common questions.
 <br/>
 <br/>

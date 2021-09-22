@@ -8,6 +8,8 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
 
     using MEF;
 
@@ -637,6 +639,7 @@
                     }
                     catch (Exception)
                     {
+                        // ignored
                         // Common.LogError(123, "DCSBIOSStringReceived TACAN: >" + e.StringData + "< " + exception.Message + " \n" + exception.StackTrace);
                         // TODO Strange values from DCS-BIOS
                     }

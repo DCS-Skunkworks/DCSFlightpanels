@@ -8,6 +8,7 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
 
     using MEF;
 
@@ -400,6 +401,7 @@
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 
@@ -426,6 +428,7 @@
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 

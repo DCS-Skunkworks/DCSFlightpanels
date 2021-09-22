@@ -12,6 +12,8 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
 
     using Newtonsoft.Json;
 
@@ -31,10 +33,10 @@
         private DCSBiosOutputType _decoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
         private bool _treatStringAsNumber;
         private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
-        
+
         [NonSerialized] private Thread _imageUpdateTread;
         private bool _shutdown;
-        
+
         private Bitmap _converterBitmap;
 
         public DCSBIOSDecoder(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
@@ -61,7 +63,9 @@
                 }
             }
             catch (Exception)
-            {}
+            {
+                // ignored
+            }
 
             base.Dispose();
         }
@@ -109,6 +113,7 @@
                 }
                 catch (Exception)
                 {
+                    // ignored
                 }
             }
 
@@ -456,7 +461,7 @@
         {
             foreach (var dcsbiosConverter in _dcsbiosConverters)
             {
-                if(dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.Image || dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.ImageOverlay)
+                if (dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.Image || dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.ImageOverlay)
                 {
                     dcsbiosConverter.ImageFileRelativePath = path + "\\" + Path.GetFileName(dcsbiosConverter.ImageFileRelativePath);
                 }
@@ -608,7 +613,7 @@
                     }
             }
         }
-     
+
         [JsonIgnore]
         public override bool IsVisible
         {
