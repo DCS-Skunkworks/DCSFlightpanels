@@ -1619,7 +1619,7 @@
                 // ignore
             }
         }
-        
+
         public void DcsBiosConnectionActive(object sender, DCSBIOSConnectionEventArgs e)
         {
             try
