@@ -357,6 +357,11 @@
             return dcsfpModule.ID == 39;
         }
 
+        public static bool IsMi24P(DCSFPProfile dcsfpModule) 
+        {
+            return dcsfpModule.ID == 42;
+        }
+
         public static DCSFPProfile GetBackwardCompatible(string oldEnumValue)
         {
             if ("KEYEMULATOR".Equals(oldEnumValue))
