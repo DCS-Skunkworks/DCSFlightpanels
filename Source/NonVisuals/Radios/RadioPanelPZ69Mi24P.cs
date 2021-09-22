@@ -6,6 +6,9 @@
     using System.Threading;
     using ClassLibraryCommon;
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
+
     using MEF;
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;

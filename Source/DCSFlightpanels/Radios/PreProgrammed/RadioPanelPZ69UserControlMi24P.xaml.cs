@@ -14,6 +14,7 @@
     using MEF;
 
     using NonVisuals;
+    using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Radios;
     using NonVisuals.Radios.Knobs;
