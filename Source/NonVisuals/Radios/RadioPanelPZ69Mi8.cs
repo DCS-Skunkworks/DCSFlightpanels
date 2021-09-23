@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Threading;
 
@@ -1057,9 +1058,6 @@
                             Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                         }
                         while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
-
-                        SwapCockpitStandbyFrequencyR863Manual();
-                        ShowFrequenciesOnPanel();
                     }
                     catch (ThreadAbortException ex)
                     {
@@ -1082,6 +1080,8 @@
 
             // Refresh panel once this debacle is finished
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            SwapCockpitStandbyFrequencyR863Manual();
+            ShowFrequenciesOnPanel();
         }
 
         private void SwapCockpitStandbyFrequencyR863Manual()
@@ -2491,7 +2491,7 @@
                                 SetPZ69DisplayBytesDefault(
                                     ref bytes,
                                     double.Parse(
-                                        _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'),
+                                        _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'),
                                         NumberFormatInfoFullDisplay),
                                     PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
@@ -2694,7 +2694,7 @@
                                 SetPZ69DisplayBytesDefault(
                                     ref bytes,
                                     double.Parse(
-                                        _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'),
+                                        _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'),
                                         NumberFormatInfoFullDisplay),
                                     PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
