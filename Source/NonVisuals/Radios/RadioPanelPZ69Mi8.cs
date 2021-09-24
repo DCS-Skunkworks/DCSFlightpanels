@@ -430,7 +430,16 @@
                 {
                     // "100.000" - "399.975"
                     // Last digit not used in panel
-                    var tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
+                    double tmpFreq = 0;
+                    try
+                    {
+                        tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
+
                     if (!tmpFreq.Equals(_r863ManualCockpitFrequency))
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -441,7 +450,7 @@
                         // No need to process same data over and over
                         return;
                     }
-
+                    
                     _r863ManualCockpitFrequency = tmpFreq;
                     lock (_lockR863ManualDialsObject1)
                     {
@@ -943,7 +952,7 @@
                                     {
                                         dial1OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_1DIAL_COMMAND
-                                              + "DEC\n"; // TODO is this still a problem? 30.7.2018 Went into loop GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
+                                              + GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);// + "DEC\n"; // TODO is this still a problem? 30.7.2018 Went into loop GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
 
                                         /*
                                                                                     25.7.2018
@@ -3093,6 +3102,7 @@
                  * Min is 10
                  * Max is 39
                  */
+
                 // count up
                 var tmpActualDialPositionUp = actualDialPosition;
                 var upCount = actualDialPosition;
