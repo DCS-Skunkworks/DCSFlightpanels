@@ -2338,7 +2338,7 @@
                                                     _r863ManualSmallFrequencyStandby = 975;
                                                     break;
                                                 }
-
+                                                
                                                 _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby - 25;
                                                 break;
                                             }
@@ -2406,7 +2406,7 @@
                     }
                 }
 
-                ShowFrequenciesOnPanel();
+                ShowFrequenciesOnPanel(true);
             }
             catch (Exception ex)
             {
@@ -2433,7 +2433,7 @@
                     _r863ManualBigFrequencyStandby = 399;
                 }
 
-                if (_r863ManualBigFrequencyStandby == 399 && _r863ManualSmallFrequencyStandby > 0)
+                /*if (_r863ManualBigFrequencyStandby == 399 && _r863ManualSmallFrequencyStandby > 0)
                 {
                     _r863ManualSmallFrequencyStandby = 0;
                 }
@@ -2441,7 +2441,7 @@
                 if (_r863ManualBigFrequencyStandby == 149 && _r863ManualSmallFrequencyStandby > 0)
                 {
                     _r863ManualSmallFrequencyStandby = 0;
-                }
+                }*/
             }
             catch (Exception ex)
             {
@@ -2449,13 +2449,13 @@
             }
         }
 
-        private void ShowFrequenciesOnPanel()
+        private void ShowFrequenciesOnPanel(bool force = false)
         {
             try
             {
                 lock (_lockShowFrequenciesOnPanelObject)
                 {
-                    if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
+                    if (!force && Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
                         return;
                     }
