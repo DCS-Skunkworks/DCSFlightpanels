@@ -1097,6 +1097,7 @@
         {
             try
             {
+                Debug.WriteLine("Cockpit Standby Frequency " + _r863ManualSavedCockpitBigFrequency + " " + _r863ManualSavedCockpitSmallFrequency);
                 _r863ManualBigFrequencyStandby = _r863ManualSavedCockpitBigFrequency;
                 _r863ManualSmallFrequencyStandby = _r863ManualSavedCockpitSmallFrequency;
             }
@@ -2495,12 +2496,12 @@
 
                                     // GetR863ManualDialFrequencyForPosition(_r863ManualCockpitFreq4DialPos);
                                 }
-
+                                Debug.WriteLine("Frequency = " + frequencyAsString);
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesDefault(
                                     ref bytes,
                                     double.Parse(
-                                        _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'),
+                                        _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'),
                                         NumberFormatInfoFullDisplay),
                                     PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
@@ -2703,7 +2704,7 @@
                                 SetPZ69DisplayBytesDefault(
                                     ref bytes,
                                     double.Parse(
-                                        _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'),
+                                        _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'),
                                         NumberFormatInfoFullDisplay),
                                     PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
@@ -3037,7 +3038,8 @@
                                         this._r863ManualCockpitFreq1DialPos
                                         + _r863ManualCockpitFreq2DialPos
                                             .ToString()); // uint.Parse(_r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString() + _r863ManualCockpitFreq2DialPos.ToString());
-                                _r863ManualSavedCockpitSmallFrequency = uint.Parse(this._r863ManualCockpitFreq3DialPos + _r863ManualCockpitFreq4DialPos.ToString());
+                                _r863ManualSavedCockpitSmallFrequency = uint.Parse(this._r863ManualCockpitFreq3DialPos + _r863ManualCockpitFreq4DialPos.ToString().PadLeft(2 , '0'));
+                                Debug.WriteLine("_r863ManualCockpitFreq3DialPos = " + this._r863ManualCockpitFreq3DialPos + "  " + _r863ManualCockpitFreq4DialPos);
                             }
                         }
                     }
