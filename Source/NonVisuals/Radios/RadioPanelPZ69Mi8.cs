@@ -913,14 +913,10 @@
                         // #2 = 1   (position = value)
                         // #3 = 9   (position = value)
                         // #4 = 5
-                        Debug.WriteLine("Frequency = " + frequencyAsString);
                         desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2)); // Array.IndexOf(_r863ManualFreq1DialValues, int.Parse(xfrequencyAsString.Substring(0, 2)));
                         desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
                         desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
                         desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 2));
-                        Debug.WriteLine("Frequency = " + frequencyAsString);
-                        Debug.WriteLine("Desired 3 = " + desiredPositionDial3X);
-                        Debug.WriteLine("Desired 4 = " + desiredPositionDial4X);
                         do
                         {
                             if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-863 dial1Timeout"))
@@ -1006,7 +1002,6 @@
                             {
                                 lock (_lockR863ManualDialsObject3)
                                 {
-                                    Debug.WriteLine("Cockpit3 = " + _r863ManualCockpitFreq3DialPos + "  Desired3 = " + desiredPositionDial3X);
                                     if (_r863ManualCockpitFreq3DialPos != desiredPositionDial3X)
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
@@ -1028,7 +1023,6 @@
                             {
                                 lock (_lockR863ManualDialsObject4)
                                 {
-                                    Debug.WriteLine("Cockpit4 = " + _r863ManualCockpitFreq4DialPos + "  Desired4 = " + desiredPositionDial4X);
                                     if (_r863ManualCockpitFreq4DialPos < desiredPositionDial4X)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
