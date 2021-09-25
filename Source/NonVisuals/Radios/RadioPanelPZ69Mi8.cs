@@ -1615,14 +1615,7 @@
                                                     // Change faster
                                                     changeFaster = true;
                                                 }
-
-                                                // 100-149  220-399
-                                                if (_r863ManualBigFrequencyStandby.Equals(399))
-                                                {
-                                                    // @ max value
-                                                    break;
-                                                }
-
+                                                
                                                 if (changeFaster)
                                                 {
                                                     _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby + CHANGE_VALUE;
@@ -1635,6 +1628,12 @@
                                                 if (_r863ManualBigFrequencyStandby > 149 && _r863ManualBigFrequencyStandby < 220)
                                                 {
                                                     _r863ManualBigFrequencyStandby = 220;
+                                                }
+
+                                                // 100-399-100
+                                                if (_r863ManualBigFrequencyStandby > 399)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 100 + _r863ManualBigFrequencyStandby - 399;
                                                 }
 
                                                 break;
@@ -1664,15 +1663,17 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby + CHANGE_VALUE;
                                                 }
-
-                                                if (_yadro1ABigFrequencyStandby >= 179)
+                                                else
                                                 {
-                                                    // @ max value
-                                                    _yadro1ABigFrequencyStandby = 179;
-                                                    break;
+                                                    _yadro1ABigFrequencyStandby++;
                                                 }
 
-                                                _yadro1ABigFrequencyStandby++;
+                                                // 20-179-20
+                                                if (_yadro1ABigFrequencyStandby > 179)
+                                                {
+                                                    _yadro1ABigFrequencyStandby = 20 + _yadro1ABigFrequencyStandby - 179;
+                                                }
+                                                
                                                 break;
                                             }
 
@@ -1739,13 +1740,6 @@
                                                     changeFaster = true;
                                                 }
 
-                                                // 100-149  220-399
-                                                if (_r863ManualBigFrequencyStandby.Equals(100))
-                                                {
-                                                    // @ min value
-                                                    break;
-                                                }
-
                                                 if (changeFaster)
                                                 {
                                                     _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby - CHANGE_VALUE;
@@ -1760,6 +1754,12 @@
                                                     _r863ManualBigFrequencyStandby = 149;
                                                 }
 
+                                                // 100-399-100
+                                                if (_r863ManualBigFrequencyStandby < 100)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 399 - (100 - _r863ManualBigFrequencyStandby);
+                                                }
+                                                
                                                 break;
                                             }
 
@@ -1787,15 +1787,17 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby - CHANGE_VALUE;
                                                 }
-
-                                                if (_yadro1ABigFrequencyStandby <= 20)
+                                                else
                                                 {
-                                                    // @ max value
-                                                    _yadro1ABigFrequencyStandby = 20;
-                                                    break;
+                                                    _yadro1ABigFrequencyStandby--;
+                                                }
+                                                
+                                                // 20-179-20
+                                                if (_yadro1ABigFrequencyStandby < 20)
+                                                {
+                                                    _yadro1ABigFrequencyStandby = 179 - (20 - _yadro1ABigFrequencyStandby);
                                                 }
 
-                                                _yadro1ABigFrequencyStandby--;
                                                 break;
                                             }
 
@@ -2016,13 +2018,6 @@
                                                     changeFaster = true;
                                                 }
 
-                                                // 100-149  220-399
-                                                if (_r863ManualBigFrequencyStandby.Equals(399))
-                                                {
-                                                    // @ max value
-                                                    break;
-                                                }
-
                                                 if (changeFaster)
                                                 {
                                                     _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby + CHANGE_VALUE;
@@ -2035,6 +2030,12 @@
                                                 if (_r863ManualBigFrequencyStandby > 149 && _r863ManualBigFrequencyStandby < 220)
                                                 {
                                                     _r863ManualBigFrequencyStandby = 220;
+                                                }
+                                                
+                                                // 100-399-100
+                                                if (_r863ManualBigFrequencyStandby > 399)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 100 + _r863ManualBigFrequencyStandby - 399;
                                                 }
 
                                                 break;
@@ -2064,15 +2065,17 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby + CHANGE_VALUE;
                                                 }
-
-                                                if (_yadro1ABigFrequencyStandby >= 179)
+                                                else
                                                 {
-                                                    // @ max value
-                                                    _yadro1ABigFrequencyStandby = 179;
-                                                    break;
+                                                    _yadro1ABigFrequencyStandby++;
                                                 }
 
-                                                _yadro1ABigFrequencyStandby++;
+                                                // 20-179-20
+                                                if (_yadro1ABigFrequencyStandby > 179)
+                                                {
+                                                    _yadro1ABigFrequencyStandby = 20 + _yadro1ABigFrequencyStandby - 179;
+                                                }
+
                                                 break;
                                             }
 
@@ -2139,13 +2142,6 @@
                                                     changeFaster = true;
                                                 }
 
-                                                // 100-149  220-399
-                                                if (_r863ManualBigFrequencyStandby.Equals(100))
-                                                {
-                                                    // @ min value
-                                                    break;
-                                                }
-
                                                 if (changeFaster)
                                                 {
                                                     _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby - CHANGE_VALUE;
@@ -2158,6 +2154,12 @@
                                                 if (_r863ManualBigFrequencyStandby < 220 && _r863ManualBigFrequencyStandby > 149)
                                                 {
                                                     _r863ManualBigFrequencyStandby = 149;
+                                                }
+                                                
+                                                // 100-399-100
+                                                if (_r863ManualBigFrequencyStandby < 100)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 399 - (100 - _r863ManualBigFrequencyStandby);
                                                 }
 
                                                 break;
@@ -2187,15 +2189,17 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby - CHANGE_VALUE;
                                                 }
-
-                                                if (_yadro1ABigFrequencyStandby <= 20)
+                                                else
                                                 {
-                                                    // @ max value
-                                                    _yadro1ABigFrequencyStandby = 20;
-                                                    break;
+                                                    _yadro1ABigFrequencyStandby--;
                                                 }
 
-                                                _yadro1ABigFrequencyStandby--;
+                                                // 20-179-20
+                                                if (_yadro1ABigFrequencyStandby < 20)
+                                                {
+                                                    _yadro1ABigFrequencyStandby = 179 - (20 - _yadro1ABigFrequencyStandby);
+                                                }
+
                                                 break;
                                             }
 
