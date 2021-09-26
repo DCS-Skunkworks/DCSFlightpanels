@@ -883,7 +883,7 @@
                         var dial3SendCount = 0;
                         var dial4SendCount = 0;
 
-                        var frequencyAsString = this._r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(2, '0');
+                        var frequencyAsString = this._r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(3, '0');
                         frequencyAsString = frequencyAsString.PadRight(7, '0');
 
                         // Frequency selector 1      R863_FREQ1
@@ -917,6 +917,12 @@
                         desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
                         desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
                         desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 2));
+                        Debug.WriteLine("Frequency " + frequencyAsString);
+                        Debug.WriteLine("Desired1 " + desiredPositionDial1X);
+                        Debug.WriteLine("Desired2 " + desiredPositionDial2X);
+                        Debug.WriteLine("Desired3 " + desiredPositionDial3X);
+                        Debug.WriteLine("Desired4 " + desiredPositionDial4X);
+
                         do
                         {
                             if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-863 dial1Timeout"))
