@@ -1633,7 +1633,7 @@
                                                 // 100-399-100
                                                 if (_r863ManualBigFrequencyStandby > 399)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = 100 + _r863ManualBigFrequencyStandby - 399;
+                                                    _r863ManualBigFrequencyStandby = 100;
                                                 }
 
                                                 break;
@@ -1671,7 +1671,7 @@
                                                 // 20-179-20
                                                 if (_yadro1ABigFrequencyStandby > 179)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = 20 + _yadro1ABigFrequencyStandby - 179;
+                                                    _yadro1ABigFrequencyStandby = 20;
                                                 }
                                                 
                                                 break;
@@ -1757,7 +1757,7 @@
                                                 // 100-399-100
                                                 if (_r863ManualBigFrequencyStandby < 100)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = 399 - (100 - _r863ManualBigFrequencyStandby);
+                                                    _r863ManualBigFrequencyStandby = 399;
                                                 }
                                                 
                                                 break;
@@ -1795,7 +1795,7 @@
                                                 // 20-179-20
                                                 if (_yadro1ABigFrequencyStandby < 20)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = 179 - (20 - _yadro1ABigFrequencyStandby);
+                                                    _yadro1ABigFrequencyStandby = 179;
                                                 }
 
                                                 break;
@@ -2159,7 +2159,7 @@
                                                 // 100-399-100
                                                 if (_r863ManualBigFrequencyStandby < 100)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = 399 - (100 - _r863ManualBigFrequencyStandby);
+                                                    _r863ManualBigFrequencyStandby = 399;
                                                 }
 
                                                 break;
@@ -2197,7 +2197,7 @@
                                                 // 20-179-20
                                                 if (_yadro1ABigFrequencyStandby < 20)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = 179 - (20 - _yadro1ABigFrequencyStandby);
+                                                    _yadro1ABigFrequencyStandby = 179;
                                                 }
 
                                                 break;
