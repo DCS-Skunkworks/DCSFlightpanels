@@ -337,6 +337,8 @@
 
         private long _doUpdatePanelLCD;
 
+        private const int SKIP_CONSTANT = 0;
+
         public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
         {
@@ -3275,7 +3277,7 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.R863_PRESET || _currentLowerRadioMode == CurrentMi8RadioMode.R863_PRESET)
                 {
-                    if (_r863PresetDialSkipper > 2)
+                    if (_r863PresetDialSkipper > SKIP_CONSTANT)
                     {
                         _r863PresetDialSkipper = 0;
                         return false;
@@ -3299,7 +3301,7 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.R828_PRESETS || _currentLowerRadioMode == CurrentMi8RadioMode.R828_PRESETS)
                 {
-                    if (_r828PresetDialSkipper > 2)
+                    if (_r828PresetDialSkipper > SKIP_CONSTANT)
                     {
                         _r828PresetDialSkipper = 0;
                         return false;
@@ -3323,7 +3325,7 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
                 {
-                    if (_adfPresetDial1Skipper > 2)
+                    if (_adfPresetDial1Skipper > SKIP_CONSTANT)
                     {
                         _adfPresetDial1Skipper = 0;
                         return false;
@@ -3347,7 +3349,7 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
                 {
-                    if (_adfPresetDial2Skipper > 2)
+                    if (_adfPresetDial2Skipper > SKIP_CONSTANT)
                     {
                         _adfPresetDial2Skipper = 0;
                         return false;
@@ -3371,7 +3373,7 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.SPU7 || _currentLowerRadioMode == CurrentMi8RadioMode.SPU7)
                 {
-                    if (_spu7DialSkipper > 2)
+                    if (_spu7DialSkipper > SKIP_CONSTANT)
                     {
                         _spu7DialSkipper = 0;
                         return false;
@@ -3395,7 +3397,7 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD || _currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD)
                 {
-                    if (_arkUdPresetDialSkipper > 2)
+                    if (_arkUdPresetDialSkipper > SKIP_CONSTANT)
                     {
                         _arkUdPresetDialSkipper = 0;
                         return false;
@@ -3419,7 +3421,7 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD || _currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD)
                 {
-                    if (_arkUdModeDialSkipper > 2)
+                    if (_arkUdModeDialSkipper > SKIP_CONSTANT)
                     {
                         _arkUdModeDialSkipper = 0;
                         return false;
