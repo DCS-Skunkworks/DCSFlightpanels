@@ -358,12 +358,14 @@
                 Common.ShowErrorMessageBox( ex);
             }
         }
+
         private void RadioPanelPZ69UserControlMi8_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
                 ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
+                _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
                 UserControlLoaded = true;
             }
             catch (Exception ex)
