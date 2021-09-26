@@ -2041,7 +2041,7 @@
                                                 // 100-399-100
                                                 if (_r863ManualBigFrequencyStandby > 399)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = 100 + _r863ManualBigFrequencyStandby - 399;
+                                                    _r863ManualBigFrequencyStandby = 100;
                                                 }
 
                                                 break;
@@ -2079,7 +2079,7 @@
                                                 // 20-179-20
                                                 if (_yadro1ABigFrequencyStandby > 179)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = 20 + _yadro1ABigFrequencyStandby - 179;
+                                                    _yadro1ABigFrequencyStandby = 20;
                                                 }
 
                                                 break;
