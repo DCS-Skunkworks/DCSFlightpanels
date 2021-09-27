@@ -97,7 +97,7 @@
                 {
                     return;
                 }
-
+                
                 if (Settings.Default.RunMinimized)
                 {
                     WindowState = WindowState.Minimized;
@@ -1367,7 +1367,7 @@
             try
             {
                 MenuItemUseNS430.IsChecked = enable;
-                MenuItemUseNS430.IsEnabled = menuIsEnabled;
+                MenuItemUseNS430.IsEnabled = menuIsEnabled && DCSFPProfile.HasNS430();
             }
             catch (Exception ex)
             {

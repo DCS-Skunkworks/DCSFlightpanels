@@ -144,7 +144,7 @@
                     return;
                 }
 
-                if (!Common.IsEmulationModesFlagSet(EmulationMode.NS430Enabled))
+                if (!Common.IsEmulationModesFlagSet(EmulationMode.NS430Enabled) && DCSFPProfile.HasNS430())
                 {
                     if (DCSBIOSProfileLoadStatus.IsLoaded(DCSFPProfile.GetNS430().JSONFilename))
                     {

@@ -65,7 +65,7 @@
             // dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]]) -- ID = 5, ProperName = A-10C Thunderbolt II
             foreach (var s in stringArray)
             {
-                if (s.ToLower().Contains(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower()) && s.Contains("ProperName"))
+                if (!s.StartsWith("--") && s.ToLower().Contains(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower()) && s.Contains("ProperName"))
                 {
                     var parts = s.Split(new string[]{"--"}, StringSplitOptions.RemoveEmptyEntries);
 
@@ -167,6 +167,19 @@
         public static bool IsFlamingCliff(DCSFPProfile dcsfpModule)
         {
             return dcsfpModule.ID == 4;
+        }
+
+        public static bool HasNS430()
+        {
+            foreach (var dcsfpModule in Modules)
+            {
+                if (IsNS430(dcsfpModule))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static DCSFPProfile GetNS430()
