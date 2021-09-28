@@ -3277,14 +3277,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.R863_PRESET || _currentLowerRadioMode == CurrentMi8RadioMode.R863_PRESET)
                 {
-                    if (_r863PresetDialSkipper > SKIP_CONSTANT)
+                    /*if (_r863PresetDialSkipper > SKIP_CONSTANT)
                     {
                         _r863PresetDialSkipper = 0;
                         return false;
                     }
 
                     _r863PresetDialSkipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3301,14 +3301,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.R828_PRESETS || _currentLowerRadioMode == CurrentMi8RadioMode.R828_PRESETS)
                 {
-                    if (_r828PresetDialSkipper > SKIP_CONSTANT)
+                    /*if (_r828PresetDialSkipper > SKIP_CONSTANT)
                     {
                         _r828PresetDialSkipper = 0;
                         return false;
                     }
 
                     _r828PresetDialSkipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3325,14 +3325,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
                 {
-                    if (_adfPresetDial1Skipper > SKIP_CONSTANT)
+                    /*if (_adfPresetDial1Skipper > SKIP_CONSTANT)
                     {
                         _adfPresetDial1Skipper = 0;
                         return false;
                     }
 
                     _adfPresetDial1Skipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3349,14 +3349,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
                 {
-                    if (_adfPresetDial2Skipper > SKIP_CONSTANT)
+                    /*if (_adfPresetDial2Skipper > SKIP_CONSTANT)
                     {
                         _adfPresetDial2Skipper = 0;
                         return false;
                     }
 
                     _adfPresetDial2Skipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3373,14 +3373,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.SPU7 || _currentLowerRadioMode == CurrentMi8RadioMode.SPU7)
                 {
-                    if (_spu7DialSkipper > SKIP_CONSTANT)
+                    /*if (_spu7DialSkipper > SKIP_CONSTANT)
                     {
                         _spu7DialSkipper = 0;
                         return false;
                     }
 
                     _spu7DialSkipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3397,14 +3397,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD || _currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD)
                 {
-                    if (_arkUdPresetDialSkipper > SKIP_CONSTANT)
+                    /*if (_arkUdPresetDialSkipper > SKIP_CONSTANT)
                     {
                         _arkUdPresetDialSkipper = 0;
                         return false;
                     }
 
                     _arkUdPresetDialSkipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3421,14 +3421,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD || _currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD)
                 {
-                    if (_arkUdModeDialSkipper > SKIP_CONSTANT)
+                    /*if (_arkUdModeDialSkipper > SKIP_CONSTANT)
                     {
                         _arkUdModeDialSkipper = 0;
                         return false;
                     }
 
                     _arkUdModeDialSkipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
