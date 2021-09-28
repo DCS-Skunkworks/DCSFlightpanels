@@ -25,14 +25,16 @@
 
         private CurrentMi8RadioMode _currentLowerRadioMode = CurrentMi8RadioMode.R863_MANUAL;
 
-        /*Mi-8 VHF/UHF R-863 MANUAL COM1*/
-        // Large dial 100-149  -> 220 - 399 [step of 1]
-        // Small dial 0 - 95
+        /*
+         * Mi-8 VHF/UHF R-863 MANUAL COM1
+         * Large dial 100-149  -> 220 - 399 [step of 1]
+         * Small dial 0 - 95
+         */
         private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
 
         private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
 
-        const int CHANGE_VALUE = 10;
+        private const int CHANGE_VALUE = 10;
 
         // private int[] _r863ManualFreq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
         private volatile uint _r863ManualBigFrequencyStandby = 108;
@@ -83,10 +85,12 @@
 
         private long _r863ManualDial4WaitingForFeedback;
 
-        /*Mi-8 VHF/UHF R-863 PRESETS COM2*/
-        // Large dial 1-10 [step of 1]
-        // Small dial volume control
-        // ACT/STBY Unit Switch, DIAL/MEMORY
+        /*
+         * Mi-8 VHF/UHF R-863 PRESETS COM2
+         * Large dial 1-10 [step of 1]
+         * Small dial volume control
+         * ACT/STBY Unit Switch, DIAL/MEMORY
+         */
         private readonly object _lockR863Preset1DialObject1 = new object();
 
         private DCSBIOSOutput _r863Preset1DcsbiosOutputPresetDial;
@@ -97,7 +101,7 @@
 
         private const string R863_PRESET_COMMAND_DEC = "R863_CNL_SEL DEC\n";
 
-        private int _r863PresetDialSkipper;
+        // private int _r863PresetDialSkipper;
 
         private const string R863_PRESET_VOLUME_KNOB_COMMAND_INC = "R863_VOL +2500\n";
 
@@ -111,9 +115,11 @@
 
         private const string R863_UNIT_SWITCH_COMMAND_TOGGLE = "R863_UNIT_SWITCH TOGGLE\n";
 
-        /*Mi-8 YaDRO 1A NAV1*/
-        // Large dial 100-149  -> 20 - 179 [step of 1]
-        // Small dial 0 - 99
+        /*
+         * Mi-8 YaDRO 1A NAV1
+         * Large dial 100-149  -> 20 - 179 [step of 1]
+         * Small dial 0 - 99
+         */
         private readonly ClickSpeedDetector _yadro1ABigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
 
         private readonly ClickSpeedDetector _yadro1ABigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
@@ -166,10 +172,12 @@
 
         private long _yadro1ADial4WaitingForFeedback;
 
-        /*Mi-8 R-828 FM Radio PRESETS NAV2*/
-        // Large dial 1-10 [step of 1]
-        // Small dial volume control
-        // ACT/STBY AGC, automatic gain control
+        /*
+         * Mi-8 R-828 FM Radio PRESETS NAV2
+         * Large dial 1-10 [step of 1]
+         * Small dial volume control
+         * ACT/STBY AGC, automatic gain control
+         */
         private readonly object _lockR828Preset1DialObject1 = new object();
 
         private DCSBIOSOutput _r828Preset1DcsbiosOutputDial;
@@ -180,7 +188,7 @@
 
         private const string R828_PRESET_COMMAND_DEC = "R828_PRST_CHAN_SEL DEC\n";
 
-        private int _r828PresetDialSkipper;
+        // private int _r828PresetDialSkipper;
 
         private const string R828_PRESET_VOLUME_KNOB_COMMAND_INC = "R828_VOL +2500\n";
 
@@ -190,9 +198,11 @@
 
         private const string R828_GAIN_CONTROL_COMMAND_OFF = "R828_TUNER DEC\n";
 
-        /*Mi-8 ARK-9 ADF MAIN*/
-        // Large 100KHz 01 -> 12
-        // Small 10Khz 00 -> 90 (10 steps)
+        /*
+         * Mi-8 ARK-9 ADF MAIN
+         * Large 100KHz 01 -> 12
+         * Small 10Khz 00 -> 90 (10 steps)
+         */
         private readonly object _lockADFMainDialObject1 = new object();
 
         private readonly object _lockADFMainDialObject2 = new object();
@@ -236,12 +246,14 @@
 
         private const string ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC = "ARC_BCK_10KHZ DEC\n";
 
-        private int _adfPresetDial1Skipper;
+        // private int _adfPresetDial1Skipper;
 
-        private int _adfPresetDial2Skipper;
+        // private int _adfPresetDial2Skipper;
 
-        // 0 = Backup ADF
-        // 1 = Main ADF
+        /*
+         * 0 = Backup ADF
+         * 1 = Main ADF
+         */
         private readonly object _lockADFBackupMainDialObject = new object();
 
         private DCSBIOSOutput _adfBackupMainDcsbiosOutputPresetDial;
@@ -282,7 +294,7 @@
 
         private const string ARKUD_PRESET_COMMAND_DEC = "ARCUD_CHL DEC\n";
 
-        private int _arkUdPresetDialSkipper;
+        // private int _arkUdPresetDialSkipper;
 
         private readonly object _lockArkudModeDialObject = new object();
 
@@ -294,7 +306,7 @@
 
         private const string ARKUD_MODE_COMMAND_DEC = "ARCUD_MODE DEC\n";
 
-        private int _arkUdModeDialSkipper;
+        // private int _arkUdModeDialSkipper;
 
         private readonly object _lockArkudVhfUhfModeDialObject = new object();
 
@@ -304,18 +316,19 @@
 
         private const string ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE = "ARCUD_WAVE TOGGLE\n";
 
-        // XPDR
-        /*Mi-8 SPU-7 XPDR*/
-        // Large dial 0-5 [step of 1]
-        // Small dial volume control
-        // ACT/STBY Toggle Radio/ICS Switch
+        /* XPDR
+           Mi-8 SPU-7 XPDR
+           Large dial 0-5 [step of 1]
+           Small dial volume control
+           ACT/STBY Toggle Radio/ICS Switch
+        */
         private readonly object _lockSpu7DialObject1 = new object();
 
         private DCSBIOSOutput _spu7DcsbiosOutputPresetDial;
 
         private volatile uint _spu7CockpitDialPos;
 
-        private int _spu7DialSkipper;
+        // private int _spu7DialSkipper;
 
         private const string SPU7_COMMAND_INC = "RADIO_SEL_R INC\n";
 
@@ -337,7 +350,7 @@
 
         private long _doUpdatePanelLCD;
 
-        private const int SKIP_CONSTANT = 0;
+        // private const int SKIP_CONSTANT = 0;
 
         public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
