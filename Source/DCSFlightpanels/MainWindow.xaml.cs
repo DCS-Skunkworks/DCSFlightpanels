@@ -97,7 +97,7 @@
                 {
                     return;
                 }
-
+                
                 if (Settings.Default.RunMinimized)
                 {
                     WindowState = WindowState.Minimized;
@@ -167,7 +167,7 @@
 
                 CheckForNewDCSFPRelease();
 
-                if (Settings.Default.LoadStreamDeck == false && Process.GetProcessesByName("StreamDeck").Length >= 1)
+                if (Settings.Default.LoadStreamDeck == true && Process.GetProcessesByName("StreamDeck").Length >= 1 && this._hidHandler.HIDSkeletons.Any(o => o.GamingPanelSkeleton.VendorId == (int)GamingPanelVendorEnum.Elgato))
                 {
                     MessageBox.Show("StreamDeck's official software is running in the background.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
@@ -820,6 +820,15 @@
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
+                                    else if (DCSFPProfile.IsMi24P(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi24P(hidSkeleton, tabItem, this);
+                                        _panelUserControls.Add(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                        _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                    }
                                     else
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlGeneric(hidSkeleton, tabItem, this);
@@ -1358,7 +1367,7 @@
             try
             {
                 MenuItemUseNS430.IsChecked = enable;
-                MenuItemUseNS430.IsEnabled = menuIsEnabled;
+                MenuItemUseNS430.IsEnabled = menuIsEnabled && DCSFPProfile.HasNS430();
             }
             catch (Exception ex)
             {

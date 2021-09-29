@@ -198,6 +198,9 @@
     <Compile Include="PanelUserControls\FarmingPanelUserControl.xaml.cs">
       <DependentUpon>FarmingPanelUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMi24P.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlMi24P.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlP47D.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlP47D.xaml</DependentUpon>
     </Compile>
@@ -420,6 +423,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckUINormal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMi24P.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -951,6 +958,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Images\M2000C_new.png" />
+    <Resource Include="Images\Mi24P_Yadro.png" />
+    <Resource Include="Images\Mi24P_R828.png" />
+    <Resource Include="Images\Mi24P_R863.png" />
+    <Resource Include="Images\Mi24P_ARC15.png" />
+    <Resource Include="Images\Mi24P_SPU8.png" />
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

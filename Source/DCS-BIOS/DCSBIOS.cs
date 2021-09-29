@@ -297,7 +297,6 @@ namespace DCS_BIOS
                     asciiBytes.AddRange(Encoding.Convert(Encoding.Unicode, Encoding.ASCII, unicodeBytes));
                     result = _udpSendClient.Send(asciiBytes.ToArray(), asciiBytes.ToArray().Length, _ipEndPointSenderUdp);
                     //result = _udpSendClient.Send(bytes, bytes.Length, _ipEndPointSender);
-
                 }
                 catch (Exception e)
                 {

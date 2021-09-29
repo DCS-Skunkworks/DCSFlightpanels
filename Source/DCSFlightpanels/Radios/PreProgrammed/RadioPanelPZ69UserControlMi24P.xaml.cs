@@ -1,4 +1,4 @@
-﻿namespace DCSFlightpanels.Radios.PreProgrammed
+﻿namespace DCSFlightpanels.Radios.PreProgrammed 
 {
     using System;
     using System.Collections.Generic;
@@ -18,16 +18,16 @@
     using NonVisuals.Interfaces;
     using NonVisuals.Radios;
     using NonVisuals.Radios.Knobs;
+    using NonVisuals.Saitek;
 
     /// <summary>
-    /// Interaction logic for RadioPanelPZ69UserControlAJS37.xaml
+    /// Interaction logic for RadioPanelPZ69UserControlMi24P.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlAJS37 : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class RadioPanelPZ69UserControlMi24P : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
-        private readonly RadioPanelPZ69AJS37 _radioPanelPZ69;
-        private bool _userControlLoaded;
+        private readonly RadioPanelPZ69Mi24P _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlAJS37(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlMi24P(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -35,15 +35,17 @@
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             HideAllImages();
-            _radioPanelPZ69 = new RadioPanelPZ69AJS37(hidSkeleton);
+            _radioPanelPZ69 = new RadioPanelPZ69Mi24P(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
             _radioPanelPZ69.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
             GlobalHandler = globalHandler;
+
+            //LoadConfiguration();
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
+        {            
         }
 
         public override GamingPanel GetGamingPanel()
@@ -51,418 +53,62 @@
             return _radioPanelPZ69;
         }
 
-        public override GamingPanelEnum GetPanelType()
-        {
-            return GamingPanelEnum.PZ69RadioPanel;
-        }
-
         public string GetName()
         {
             return GetType().Name;
         }
 
-        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
-
-        public void SelectedProfile(object sender, AirframeEventArgs e) { }
-
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public override GamingPanelEnum GetPanelType()
         {
-            try
-            {
-                SetGraphicsState(e.Switches);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
+            return GamingPanelEnum.PZ69RadioPanel;
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
-
-        public void SettingsCleared(object sender, PanelEventArgs e) { }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
-
-        public void DeviceAttached(object sender, PanelEventArgs e) { }
-
-        public void SettingsApplied(object sender, PanelEventArgs e) { }
-
-        public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
-
-        public void DeviceDetached(object sender, PanelEventArgs e) { }
-
-        private void SetGraphicsState(HashSet<object> knobs)
-        {
-            try
-            {
-                foreach (var radioKnobO in knobs)
-                {
-                    var radioKnob = (RadioPanelKnobAJS37)radioKnobO;
-                    Dispatcher?.BeginInvoke((Action)delegate
-                    {
-                        /*if (radioKnob.IsOn)
-                        {
-                            SetGroupboxVisibility(radioKnob.RadioPanelPZ69Knob);
-                        }*/
-                    });
-                    switch (radioKnob.RadioPanelPZ69Knob)
-                    {
-                        case RadioPanelPZ69KnobsAJS37.UPPER_FR22:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        TopLeftCom1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_FR24:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        TopLeftCom2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_TILS:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        TopLeftNav1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE0:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        TopLeftNav2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE1:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        TopLeftADF.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE2:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        TopLeftDME.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE3:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        TopLeftXPDR.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_FR22:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerLeftCom1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_FR24:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerLeftCom2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_TILS:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerLeftNav1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE0:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerLeftNav2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE1:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerLeftADF.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE2:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerLeftDME.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE3:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerLeftXPDR.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_SMALL_FREQ_WHEEL_INC:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        UpperSmallerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_SMALL_FREQ_WHEEL_DEC:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        UpperSmallerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_LARGE_FREQ_WHEEL_INC:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        UpperLargerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_LARGE_FREQ_WHEEL_DEC:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        UpperLargerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_SMALL_FREQ_WHEEL_INC:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerSmallerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_SMALL_FREQ_WHEEL_DEC:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerSmallerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_LARGE_FREQ_WHEEL_INC:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerLargerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_LARGE_FREQ_WHEEL_DEC:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerLargerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_FREQ_SWITCH:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        UpperRightSwitch.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_FREQ_SWITCH:
-                            {
-                                var key = radioKnob;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LowerRightSwitch.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void RadioPanelPZ69UserControlAJS37_OnLoaded(object sender, RoutedEventArgs e)
+        private void RadioPanelPZ69UserControlMi24P_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
                 ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
                 _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                /*ComboBoxSynchSleepTime.SelectedValue = Settings.Default.BAKDialSynchSleepTime;
-                ComboBoxSynchResetTimeout.SelectedValue = Settings.Default.BAKDialResetSyncTimeout;
-                _radioPanelPZ69.ResetSyncTimeout = Settings.Default.BAKDialResetSyncTimeout;
-                _radioPanelPZ69.SynchSleepTime = Settings.Default.BAKDialSynchSleepTime;*/
-                _userControlLoaded = true;
+                UserControlLoaded = true;
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
-        private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
+
+
+        public void DeviceAttached(object sender, PanelEventArgs e) { }
+
+        public void DeviceDetached(object sender, PanelEventArgs e) { }
+
+
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
+
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) { }
+
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
+        public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
+        public void SelectedProfile(object sender, AirframeEventArgs e) { }
+        public void SettingsApplied(object sender, PanelEventArgs e) { }
+
+        public void SettingsCleared(object sender, PanelEventArgs e) { }
+
+        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                if (_radioPanelPZ69 != null)
-                {
-                    TextBoxLogPZ69.Text = string.Empty;
-                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstanceId;
-                    Clipboard.SetText(_radioPanelPZ69.HIDInstanceId);
-                    MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
-                }
+               SetGraphicsState(e.Switches);
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
-        private void ComboBoxSyncOKDelayTimeout_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (_userControlLoaded)
-                {
-                    Settings.Default.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                    _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                    Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void ComboBoxFreqKnobSensitivity_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (_userControlLoaded)
-                {
-                    Settings.Default.RadioFrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
-                    _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
-                    Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void ComboBoxSynchSleepTime_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (_userControlLoaded)
-                {
-                    /*Settings.Default.BAKDialSynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
-                    _radioPanelPZ69.SynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
-                    Settings.Default.Save();*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void ComboBoxSynchResetTimeout_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (_userControlLoaded)
-                {
-                    /*Settings.Default.BAKDialResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
-                    _radioPanelPZ69.ResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
-                    Settings.Default.Save();*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
         private void HideAllImages()
         {
@@ -492,11 +138,328 @@
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
         }
 
+        private void ComboBoxSyncOKDelayTimeout_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (UserControlLoaded)
+                {
+                    Settings.Default.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
+                    _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
+                    Settings.Default.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 _radioPanelPZ69.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_radioPanelPZ69 != null)
+                {
+                    TextBoxLogPZ69.Text = string.Empty;
+                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstanceId;
+                    Clipboard.SetText(_radioPanelPZ69.HIDInstanceId);
+                    MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ComboBoxFreqKnobSensitivity_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (UserControlLoaded)
+                {
+                    Settings.Default.RadioFrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
+                    _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
+                    Settings.Default.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void SetGraphicsState(HashSet<object> knobs)
+        {
+            try
+            {
+                foreach (var radioKnobO in knobs)
+                {
+                    var radioKnob = (RadioPanelKnobMi24P)radioKnobO;
+                    Dispatcher?.BeginInvoke((Action)delegate
+                    {
+                        /*if (radioKnob.IsOn)
+                        {
+                            SetGroupboxVisibility(radioKnob.RadioPanelPZ69Knob);
+                        }*/
+                    });
+                    switch (radioKnob.RadioPanelPZ69Knob)
+                    {
+                        case RadioPanelPZ69KnobsMi24P.UPPER_R863_MANUAL:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        TopLeftCom1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_R863_PRESET:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        TopLeftCom2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_YADRO1A:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        TopLeftNav1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_R828:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        TopLeftNav2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_ADF_ARK15:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        TopLeftADF.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_ARK_UD:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        TopLeftDME.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_SPU8:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        TopLeftXPDR.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_R863_MANUAL:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerLeftCom1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_R863_PRESET:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerLeftCom2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_YADRO1A:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerLeftNav1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_R828:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerLeftNav2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_ADF_ARK15:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerLeftADF.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_ARK_UD:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerLeftDME.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_SPU8:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerLeftXPDR.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_SMALL_FREQ_WHEEL_INC:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        UpperSmallerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_SMALL_FREQ_WHEEL_DEC:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        UpperSmallerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_INC:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        UpperLargerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_DEC:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        UpperLargerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_SMALL_FREQ_WHEEL_INC:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerSmallerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_SMALL_FREQ_WHEEL_DEC:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerSmallerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_LARGE_FREQ_WHEEL_INC:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerLargerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_LARGE_FREQ_WHEEL_DEC:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerLargerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_FREQ_SWITCH:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        UpperRightSwitch.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_FREQ_SWITCH:
+                            {
+                                var key = radioKnob;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LowerRightSwitch.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                    });
+                                break;
+                            }
+                    }
+                }
             }
             catch (Exception ex)
             {

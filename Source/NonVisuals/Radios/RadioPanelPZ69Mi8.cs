@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Threading;
 
@@ -24,14 +25,16 @@
 
         private CurrentMi8RadioMode _currentLowerRadioMode = CurrentMi8RadioMode.R863_MANUAL;
 
-        /*Mi-8 VHF/UHF R-863 MANUAL COM1*/
-        // Large dial 100-149  -> 220 - 399 [step of 1]
-        // Small dial 0 - 95
+        /*
+         * Mi-8 VHF/UHF R-863 MANUAL COM1
+         * Large dial 100-149  -> 220 - 399 [step of 1]
+         * Small dial 0 - 95
+         */
         private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
 
         private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
 
-        const int CHANGE_VALUE = 10;
+        private const int CHANGE_VALUE = 10;
 
         // private int[] _r863ManualFreq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
         private volatile uint _r863ManualBigFrequencyStandby = 108;
@@ -82,10 +85,12 @@
 
         private long _r863ManualDial4WaitingForFeedback;
 
-        /*Mi-8 VHF/UHF R-863 PRESETS COM2*/
-        // Large dial 1-10 [step of 1]
-        // Small dial volume control
-        // ACT/STBY Unit Switch, DIAL/MEMORY
+        /*
+         * Mi-8 VHF/UHF R-863 PRESETS COM2
+         * Large dial 1-10 [step of 1]
+         * Small dial volume control
+         * ACT/STBY Unit Switch, DIAL/MEMORY
+         */
         private readonly object _lockR863Preset1DialObject1 = new object();
 
         private DCSBIOSOutput _r863Preset1DcsbiosOutputPresetDial;
@@ -96,7 +101,7 @@
 
         private const string R863_PRESET_COMMAND_DEC = "R863_CNL_SEL DEC\n";
 
-        private int _r863PresetDialSkipper;
+        // private int _r863PresetDialSkipper;
 
         private const string R863_PRESET_VOLUME_KNOB_COMMAND_INC = "R863_VOL +2500\n";
 
@@ -110,9 +115,11 @@
 
         private const string R863_UNIT_SWITCH_COMMAND_TOGGLE = "R863_UNIT_SWITCH TOGGLE\n";
 
-        /*Mi-8 YaDRO 1A NAV1*/
-        // Large dial 100-149  -> 20 - 179 [step of 1]
-        // Small dial 0 - 99
+        /*
+         * Mi-8 YaDRO 1A NAV1
+         * Large dial 100-149  -> 20 - 179 [step of 1]
+         * Small dial 0 - 99
+         */
         private readonly ClickSpeedDetector _yadro1ABigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
 
         private readonly ClickSpeedDetector _yadro1ABigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
@@ -165,10 +172,12 @@
 
         private long _yadro1ADial4WaitingForFeedback;
 
-        /*Mi-8 R-828 FM Radio PRESETS NAV2*/
-        // Large dial 1-10 [step of 1]
-        // Small dial volume control
-        // ACT/STBY AGC, automatic gain control
+        /*
+         * Mi-8 R-828 FM Radio PRESETS NAV2
+         * Large dial 1-10 [step of 1]
+         * Small dial volume control
+         * ACT/STBY AGC, automatic gain control
+         */
         private readonly object _lockR828Preset1DialObject1 = new object();
 
         private DCSBIOSOutput _r828Preset1DcsbiosOutputDial;
@@ -179,7 +188,7 @@
 
         private const string R828_PRESET_COMMAND_DEC = "R828_PRST_CHAN_SEL DEC\n";
 
-        private int _r828PresetDialSkipper;
+        // private int _r828PresetDialSkipper;
 
         private const string R828_PRESET_VOLUME_KNOB_COMMAND_INC = "R828_VOL +2500\n";
 
@@ -189,9 +198,11 @@
 
         private const string R828_GAIN_CONTROL_COMMAND_OFF = "R828_TUNER DEC\n";
 
-        /*Mi-8 ARK-9 ADF MAIN*/
-        // Large 100KHz 01 -> 12
-        // Small 10Khz 00 -> 90 (10 steps)
+        /*
+         * Mi-8 ARK-9 ADF MAIN
+         * Large 100KHz 01 -> 12
+         * Small 10Khz 00 -> 90 (10 steps)
+         */
         private readonly object _lockADFMainDialObject1 = new object();
 
         private readonly object _lockADFMainDialObject2 = new object();
@@ -235,12 +246,14 @@
 
         private const string ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC = "ARC_BCK_10KHZ DEC\n";
 
-        private int _adfPresetDial1Skipper;
+        // private int _adfPresetDial1Skipper;
 
-        private int _adfPresetDial2Skipper;
+        // private int _adfPresetDial2Skipper;
 
-        // 0 = Backup ADF
-        // 1 = Main ADF
+        /*
+         * 0 = Backup ADF
+         * 1 = Main ADF
+         */
         private readonly object _lockADFBackupMainDialObject = new object();
 
         private DCSBIOSOutput _adfBackupMainDcsbiosOutputPresetDial;
@@ -281,7 +294,7 @@
 
         private const string ARKUD_PRESET_COMMAND_DEC = "ARCUD_CHL DEC\n";
 
-        private int _arkUdPresetDialSkipper;
+        // private int _arkUdPresetDialSkipper;
 
         private readonly object _lockArkudModeDialObject = new object();
 
@@ -293,7 +306,7 @@
 
         private const string ARKUD_MODE_COMMAND_DEC = "ARCUD_MODE DEC\n";
 
-        private int _arkUdModeDialSkipper;
+        // private int _arkUdModeDialSkipper;
 
         private readonly object _lockArkudVhfUhfModeDialObject = new object();
 
@@ -303,18 +316,19 @@
 
         private const string ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE = "ARCUD_WAVE TOGGLE\n";
 
-        // XPDR
-        /*Mi-8 SPU-7 XPDR*/
-        // Large dial 0-5 [step of 1]
-        // Small dial volume control
-        // ACT/STBY Toggle Radio/ICS Switch
+        /* XPDR
+           Mi-8 SPU-7 XPDR
+           Large dial 0-5 [step of 1]
+           Small dial volume control
+           ACT/STBY Toggle Radio/ICS Switch
+        */
         private readonly object _lockSpu7DialObject1 = new object();
 
         private DCSBIOSOutput _spu7DcsbiosOutputPresetDial;
 
         private volatile uint _spu7CockpitDialPos;
 
-        private int _spu7DialSkipper;
+        // private int _spu7DialSkipper;
 
         private const string SPU7_COMMAND_INC = "RADIO_SEL_R INC\n";
 
@@ -335,6 +349,8 @@
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
 
         private long _doUpdatePanelLCD;
+
+        // private const int SKIP_CONSTANT = 0;
 
         public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
@@ -429,7 +445,16 @@
                 {
                     // "100.000" - "399.975"
                     // Last digit not used in panel
-                    var tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
+                    double tmpFreq = 0;
+                    try
+                    {
+                        tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
+
                     if (!tmpFreq.Equals(_r863ManualCockpitFrequency))
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -440,7 +465,7 @@
                         // No need to process same data over and over
                         return;
                     }
-
+                    
                     _r863ManualCockpitFrequency = tmpFreq;
                     lock (_lockR863ManualDialsObject1)
                     {
@@ -874,7 +899,7 @@
                         var dial4SendCount = 0;
 
                         var frequencyAsString = this._r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(3, '0');
-                        frequencyAsString = frequencyAsString.PadRight(6, '0');
+                        frequencyAsString = frequencyAsString.PadRight(7, '0');
 
                         // Frequency selector 1      R863_FREQ1
                         // "10" "11" "12" "13" "14" "22" "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" "36" "37" "38" "39"
@@ -907,6 +932,12 @@
                         desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
                         desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
                         desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 2));
+                        Debug.WriteLine("Frequency " + frequencyAsString);
+                        Debug.WriteLine("Desired1 " + desiredPositionDial1X);
+                        Debug.WriteLine("Desired2 " + desiredPositionDial2X);
+                        Debug.WriteLine("Desired3 " + desiredPositionDial3X);
+                        Debug.WriteLine("Desired4 " + desiredPositionDial4X);
+
                         do
                         {
                             if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-863 dial1Timeout"))
@@ -942,7 +973,7 @@
                                     {
                                         dial1OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_1DIAL_COMMAND
-                                              + "DEC\n"; // TODO is this still a problem? 30.7.2018 Went into loop GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
+                                              + GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);// + "DEC\n"; // TODO is this still a problem? 30.7.2018 Went into loop GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
 
                                         /*
                                                                                     25.7.2018
@@ -1057,9 +1088,6 @@
                             Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                         }
                         while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
-
-                        SwapCockpitStandbyFrequencyR863Manual();
-                        ShowFrequenciesOnPanel();
                     }
                     catch (ThreadAbortException ex)
                     {
@@ -1082,6 +1110,8 @@
 
             // Refresh panel once this debacle is finished
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            SwapCockpitStandbyFrequencyR863Manual();
+            ShowFrequenciesOnPanel();
         }
 
         private void SwapCockpitStandbyFrequencyR863Manual()
@@ -1606,14 +1636,7 @@
                                                     // Change faster
                                                     changeFaster = true;
                                                 }
-
-                                                // 100-149  220-399
-                                                if (_r863ManualBigFrequencyStandby.Equals(399))
-                                                {
-                                                    // @ max value
-                                                    break;
-                                                }
-
+                                                
                                                 if (changeFaster)
                                                 {
                                                     _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby + CHANGE_VALUE;
@@ -1626,6 +1649,12 @@
                                                 if (_r863ManualBigFrequencyStandby > 149 && _r863ManualBigFrequencyStandby < 220)
                                                 {
                                                     _r863ManualBigFrequencyStandby = 220;
+                                                }
+
+                                                // 100-399-100
+                                                if (_r863ManualBigFrequencyStandby > 399)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 100;
                                                 }
 
                                                 break;
@@ -1655,15 +1684,17 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby + CHANGE_VALUE;
                                                 }
-
-                                                if (_yadro1ABigFrequencyStandby >= 179)
+                                                else
                                                 {
-                                                    // @ max value
-                                                    _yadro1ABigFrequencyStandby = 179;
-                                                    break;
+                                                    _yadro1ABigFrequencyStandby++;
                                                 }
 
-                                                _yadro1ABigFrequencyStandby++;
+                                                // 20-179-20
+                                                if (_yadro1ABigFrequencyStandby > 179)
+                                                {
+                                                    _yadro1ABigFrequencyStandby = 20;
+                                                }
+                                                
                                                 break;
                                             }
 
@@ -1730,13 +1761,6 @@
                                                     changeFaster = true;
                                                 }
 
-                                                // 100-149  220-399
-                                                if (_r863ManualBigFrequencyStandby.Equals(100))
-                                                {
-                                                    // @ min value
-                                                    break;
-                                                }
-
                                                 if (changeFaster)
                                                 {
                                                     _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby - CHANGE_VALUE;
@@ -1751,6 +1775,12 @@
                                                     _r863ManualBigFrequencyStandby = 149;
                                                 }
 
+                                                // 100-399-100
+                                                if (_r863ManualBigFrequencyStandby < 100)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 399;
+                                                }
+                                                
                                                 break;
                                             }
 
@@ -1778,15 +1808,17 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby - CHANGE_VALUE;
                                                 }
-
-                                                if (_yadro1ABigFrequencyStandby <= 20)
+                                                else
                                                 {
-                                                    // @ max value
-                                                    _yadro1ABigFrequencyStandby = 20;
-                                                    break;
+                                                    _yadro1ABigFrequencyStandby--;
+                                                }
+                                                
+                                                // 20-179-20
+                                                if (_yadro1ABigFrequencyStandby < 20)
+                                                {
+                                                    _yadro1ABigFrequencyStandby = 179;
                                                 }
 
-                                                _yadro1ABigFrequencyStandby--;
                                                 break;
                                             }
 
@@ -2007,13 +2039,6 @@
                                                     changeFaster = true;
                                                 }
 
-                                                // 100-149  220-399
-                                                if (_r863ManualBigFrequencyStandby.Equals(399))
-                                                {
-                                                    // @ max value
-                                                    break;
-                                                }
-
                                                 if (changeFaster)
                                                 {
                                                     _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby + CHANGE_VALUE;
@@ -2026,6 +2051,12 @@
                                                 if (_r863ManualBigFrequencyStandby > 149 && _r863ManualBigFrequencyStandby < 220)
                                                 {
                                                     _r863ManualBigFrequencyStandby = 220;
+                                                }
+                                                
+                                                // 100-399-100
+                                                if (_r863ManualBigFrequencyStandby > 399)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 100;
                                                 }
 
                                                 break;
@@ -2055,15 +2086,17 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby + CHANGE_VALUE;
                                                 }
-
-                                                if (_yadro1ABigFrequencyStandby >= 179)
+                                                else
                                                 {
-                                                    // @ max value
-                                                    _yadro1ABigFrequencyStandby = 179;
-                                                    break;
+                                                    _yadro1ABigFrequencyStandby++;
                                                 }
 
-                                                _yadro1ABigFrequencyStandby++;
+                                                // 20-179-20
+                                                if (_yadro1ABigFrequencyStandby > 179)
+                                                {
+                                                    _yadro1ABigFrequencyStandby = 20;
+                                                }
+
                                                 break;
                                             }
 
@@ -2130,13 +2163,6 @@
                                                     changeFaster = true;
                                                 }
 
-                                                // 100-149  220-399
-                                                if (_r863ManualBigFrequencyStandby.Equals(100))
-                                                {
-                                                    // @ min value
-                                                    break;
-                                                }
-
                                                 if (changeFaster)
                                                 {
                                                     _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby - CHANGE_VALUE;
@@ -2149,6 +2175,12 @@
                                                 if (_r863ManualBigFrequencyStandby < 220 && _r863ManualBigFrequencyStandby > 149)
                                                 {
                                                     _r863ManualBigFrequencyStandby = 149;
+                                                }
+                                                
+                                                // 100-399-100
+                                                if (_r863ManualBigFrequencyStandby < 100)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 399;
                                                 }
 
                                                 break;
@@ -2178,15 +2210,17 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby - CHANGE_VALUE;
                                                 }
-
-                                                if (_yadro1ABigFrequencyStandby <= 20)
+                                                else
                                                 {
-                                                    // @ max value
-                                                    _yadro1ABigFrequencyStandby = 20;
-                                                    break;
+                                                    _yadro1ABigFrequencyStandby--;
                                                 }
 
-                                                _yadro1ABigFrequencyStandby--;
+                                                // 20-179-20
+                                                if (_yadro1ABigFrequencyStandby < 20)
+                                                {
+                                                    _yadro1ABigFrequencyStandby = 179;
+                                                }
+
                                                 break;
                                             }
 
@@ -2328,7 +2362,7 @@
                                                     _r863ManualSmallFrequencyStandby = 975;
                                                     break;
                                                 }
-
+                                                
                                                 _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby - 25;
                                                 break;
                                             }
@@ -2396,7 +2430,7 @@
                     }
                 }
 
-                ShowFrequenciesOnPanel();
+                ShowFrequenciesOnPanel(true);
             }
             catch (Exception ex)
             {
@@ -2423,7 +2457,7 @@
                     _r863ManualBigFrequencyStandby = 399;
                 }
 
-                if (_r863ManualBigFrequencyStandby == 399 && _r863ManualSmallFrequencyStandby > 0)
+                /*if (_r863ManualBigFrequencyStandby == 399 && _r863ManualSmallFrequencyStandby > 0)
                 {
                     _r863ManualSmallFrequencyStandby = 0;
                 }
@@ -2431,7 +2465,7 @@
                 if (_r863ManualBigFrequencyStandby == 149 && _r863ManualSmallFrequencyStandby > 0)
                 {
                     _r863ManualSmallFrequencyStandby = 0;
-                }
+                }*/
             }
             catch (Exception ex)
             {
@@ -2439,13 +2473,13 @@
             }
         }
 
-        private void ShowFrequenciesOnPanel()
+        private void ShowFrequenciesOnPanel(bool force = false)
         {
             try
             {
                 lock (_lockShowFrequenciesOnPanelObject)
                 {
-                    if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
+                    if (!force && Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
                         return;
                     }
@@ -3028,7 +3062,7 @@
                                         this._r863ManualCockpitFreq1DialPos
                                         + _r863ManualCockpitFreq2DialPos
                                             .ToString()); // uint.Parse(_r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString() + _r863ManualCockpitFreq2DialPos.ToString());
-                                _r863ManualSavedCockpitSmallFrequency = uint.Parse(this._r863ManualCockpitFreq3DialPos + _r863ManualCockpitFreq4DialPos.ToString());
+                                _r863ManualSavedCockpitSmallFrequency = uint.Parse(this._r863ManualCockpitFreq3DialPos + _r863ManualCockpitFreq4DialPos.ToString().PadLeft(2 , '0'));
                             }
                         }
                     }
@@ -3093,6 +3127,7 @@
                  * Min is 10
                  * Max is 39
                  */
+
                 // count up
                 var tmpActualDialPositionUp = actualDialPosition;
                 var upCount = actualDialPosition;
@@ -3255,14 +3290,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.R863_PRESET || _currentLowerRadioMode == CurrentMi8RadioMode.R863_PRESET)
                 {
-                    if (_r863PresetDialSkipper > 2)
+                    /*if (_r863PresetDialSkipper > SKIP_CONSTANT)
                     {
                         _r863PresetDialSkipper = 0;
                         return false;
                     }
 
                     _r863PresetDialSkipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3279,14 +3314,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.R828_PRESETS || _currentLowerRadioMode == CurrentMi8RadioMode.R828_PRESETS)
                 {
-                    if (_r828PresetDialSkipper > 2)
+                    /*if (_r828PresetDialSkipper > SKIP_CONSTANT)
                     {
                         _r828PresetDialSkipper = 0;
                         return false;
                     }
 
                     _r828PresetDialSkipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3303,14 +3338,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
                 {
-                    if (_adfPresetDial1Skipper > 2)
+                    /*if (_adfPresetDial1Skipper > SKIP_CONSTANT)
                     {
                         _adfPresetDial1Skipper = 0;
                         return false;
                     }
 
                     _adfPresetDial1Skipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3327,14 +3362,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
                 {
-                    if (_adfPresetDial2Skipper > 2)
+                    /*if (_adfPresetDial2Skipper > SKIP_CONSTANT)
                     {
                         _adfPresetDial2Skipper = 0;
                         return false;
                     }
 
                     _adfPresetDial2Skipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3351,14 +3386,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.SPU7 || _currentLowerRadioMode == CurrentMi8RadioMode.SPU7)
                 {
-                    if (_spu7DialSkipper > 2)
+                    /*if (_spu7DialSkipper > SKIP_CONSTANT)
                     {
                         _spu7DialSkipper = 0;
                         return false;
                     }
 
                     _spu7DialSkipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3375,14 +3410,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD || _currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD)
                 {
-                    if (_arkUdPresetDialSkipper > 2)
+                    /*if (_arkUdPresetDialSkipper > SKIP_CONSTANT)
                     {
                         _arkUdPresetDialSkipper = 0;
                         return false;
                     }
 
                     _arkUdPresetDialSkipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)
@@ -3399,14 +3434,14 @@
             {
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD || _currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD)
                 {
-                    if (_arkUdModeDialSkipper > 2)
+                    /*if (_arkUdModeDialSkipper > SKIP_CONSTANT)
                     {
                         _arkUdModeDialSkipper = 0;
                         return false;
                     }
 
                     _arkUdModeDialSkipper++;
-                    return true;
+                    return true;*/
                 }
             }
             catch (Exception ex)

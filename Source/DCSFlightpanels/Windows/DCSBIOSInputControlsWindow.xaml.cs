@@ -10,6 +10,7 @@
 
     using DCS_BIOS;
 
+    using NonVisuals;
     using NonVisuals.Interfaces;
 
     /// <summary>
@@ -345,7 +346,8 @@
             try
             {
                 var dcsBIOSInput = DCSBIOSInputs[DataGridValues.SelectedIndex];
-                DCSBIOSInputs.Add(dcsBIOSInput);
+                var newDcsBIOSInput = dcsBIOSInput.DeepClone();
+                DCSBIOSInputs.Add(newDcsBIOSInput);
                 ShowItems();
             }
             catch (Exception ex)
