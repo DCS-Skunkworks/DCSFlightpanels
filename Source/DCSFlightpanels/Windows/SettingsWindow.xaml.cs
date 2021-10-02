@@ -20,21 +20,19 @@ namespace DCSFlightpanels.Windows
     public partial class SettingsWindow : Window
     {
 
-        private bool _generalChanged = false;
-        private bool _dcsbiosChanged = false;
-        private bool _srsChanged = false;
-
-        private string _ipAddressFromDCSBIOS;
-        private string _portFromDCSBIOS;
-        private string _ipAddressToDCSBIOS;
-        private string _portToDCSBIOS;
-        private string _dcsBiosJSONLocation;
-
-        private string _ipAddressFromSRS;
-        private string _portFromSRS;
-        private string _ipAddressToSRS;
-        private string _portToSRS;
-
+        public string IpAddressFromDCSBIOS { get; private set; }
+        public string PortFromDCSBIOS { get; private set; }
+        public string IpAddressToDCSBIOS { get; private set; }
+        public string PortToDCSBIOS { get; private set; }
+        public string DcsBiosJSONLocation { get; private set; }
+        public string IpAddressFromSRS { get; private set; }
+        public string PortFromSRS { get; private set; }
+        public string IpAddressToSRS { get; private set; }
+        public string PortToSRS { get; private set; }
+        public bool GeneralChanged { get; private set; } = false;
+        public bool DCSBIOSChanged { get; private set; } = false;
+        public bool SRSChanged { get; private set; } = false;
+        public bool StreamDeckChanged { get; private set; } = false;
 
         public SettingsWindow()
         {
@@ -58,7 +56,7 @@ namespace DCSFlightpanels.Windows
                 StackPanelGeneralSettings.Visibility = Visibility.Visible;
                 StackPanelDCSBIOSSettings.Visibility = Visibility.Collapsed;
                 StackPanelSRSSettings.Visibility = Visibility.Collapsed;
-                ActivateTriggers();
+                SetEventsHandlers();
             }
             catch (Exception exception)
             {
@@ -66,30 +64,32 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void ActivateTriggers()
+        private void SetEventsHandlers()
         {
-            RadioButtonBelowNormal.Checked += RadioButtonProcessPriority_OnChecked;
-            RadioButtonNormal.Checked += RadioButtonProcessPriority_OnChecked;
-            RadioButtonAboveNormal.Checked += RadioButtonProcessPriority_OnChecked;
-            RadioButtonHigh.Checked += RadioButtonProcessPriority_OnChecked;
-            RadioButtonRealtime.Checked += RadioButtonProcessPriority_OnChecked;
-            RadioButtonKeyBd.Checked += RadioButtonAPI_OnChecked;
-            RadioButtonSendInput.Checked += RadioButtonAPI_OnChecked;
-            TextBoxDcsBiosJSONLocation.TextChanged += TextBoxDcsBios_OnTextChanged;
-            TextBoxDCSBIOSFromIP.TextChanged += TextBoxDcsBios_OnTextChanged;
-            TextBoxDCSBIOSToIP.TextChanged += TextBoxDcsBios_OnTextChanged;
-            TextBoxDCSBIOSFromPort.TextChanged += TextBoxDcsBios_OnTextChanged;
-            TextBoxDCSBIOSToPort.TextChanged += TextBoxDcsBios_OnTextChanged;
-            TextBoxSRSFromIP.TextChanged += TextBoxSRS_OnTextChanged;
-            TextBoxSRSToIP.TextChanged += TextBoxSRS_OnTextChanged;
-            TextBoxSRSFromPort.TextChanged += TextBoxSRS_OnTextChanged;
-            TextBoxSRSToPort.TextChanged += TextBoxSRS_OnTextChanged;
-            CheckBoxMinimizeToTray.Checked += CheckBoxMinimizeToTray_OnChecked;
-            CheckBoxMinimizeToTray.Unchecked += CheckBoxMinimizeToTray_OnUnchecked;
-            CheckBoxEnablePluginSupport.Checked += CheckBoxMinimizeToTray_OnChecked;
-            CheckBoxEnablePluginSupport.Unchecked += this.CheckBoxMinimizeToTray_OnUnchecked;
-            CheckBoxDisableKeyboardAPI.Checked += CheckBoxMinimizeToTray_OnChecked;
-            CheckBoxDisableKeyboardAPI.Unchecked += this.CheckBoxMinimizeToTray_OnUnchecked;
+            RadioButtonBelowNormal.Checked += GeneralDirty;
+            RadioButtonNormal.Checked += GeneralDirty;
+            RadioButtonAboveNormal.Checked += GeneralDirty;
+            RadioButtonHigh.Checked += GeneralDirty;
+            RadioButtonRealtime.Checked += GeneralDirty;
+            RadioButtonKeyBd.Checked += GeneralDirty;
+            RadioButtonSendInput.Checked += GeneralDirty;
+            CheckBoxMinimizeToTray.Checked += GeneralDirty;
+            CheckBoxMinimizeToTray.Unchecked += GeneralDirty;
+            CheckBoxEnablePluginSupport.Checked += GeneralDirty;
+            CheckBoxEnablePluginSupport.Unchecked += GeneralDirty;
+            CheckBoxDisableKeyboardAPI.Checked += GeneralDirty;
+            CheckBoxDisableKeyboardAPI.Unchecked += GeneralDirty;
+
+            TextBoxDcsBiosJSONLocation.TextChanged += DcsBiosDirty;
+            TextBoxDCSBIOSFromIP.TextChanged += DcsBiosDirty;
+            TextBoxDCSBIOSToIP.TextChanged += DcsBiosDirty;
+            TextBoxDCSBIOSFromPort.TextChanged += DcsBiosDirty;
+            TextBoxDCSBIOSToPort.TextChanged += DcsBiosDirty;
+            
+            TextBoxSRSFromIP.TextChanged += SrsDirty;
+            TextBoxSRSToIP.TextChanged += SrsDirty;
+            TextBoxSRSFromPort.TextChanged += SrsDirty;
+            TextBoxSRSToPort.TextChanged += SrsDirty;
         }
 
         private void LoadSettings()
@@ -154,23 +154,17 @@ namespace DCSFlightpanels.Windows
 
         private void GeneralSettings_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            StackPanelGeneralSettings.Visibility = Visibility.Visible;
-            StackPanelDCSBIOSSettings.Visibility = Visibility.Collapsed;
-            StackPanelSRSSettings.Visibility = Visibility.Collapsed;
+            CollapseAllSettingsPanelExcept(StackPanelGeneralSettings);
         }
 
         private void DCSBIOS_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            StackPanelGeneralSettings.Visibility = Visibility.Collapsed;
-            StackPanelDCSBIOSSettings.Visibility = Visibility.Visible;
-            StackPanelSRSSettings.Visibility = Visibility.Collapsed;
+            CollapseAllSettingsPanelExcept(StackPanelDCSBIOSSettings);
         }
 
         private void SRS_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            StackPanelGeneralSettings.Visibility = Visibility.Collapsed;
-            StackPanelDCSBIOSSettings.Visibility = Visibility.Collapsed;
-            StackPanelSRSSettings.Visibility = Visibility.Visible;
+            CollapseAllSettingsPanelExcept(StackPanelSRSSettings);
         }
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
@@ -186,7 +180,7 @@ namespace DCSFlightpanels.Windows
                 CheckValuesDCSBIOS();
                 CheckValuesSRS();
 
-                if (_generalChanged)
+                if (GeneralChanged)
                 {
                     if (RadioButtonKeyBd.IsChecked == true)
                     {
@@ -239,7 +233,7 @@ namespace DCSFlightpanels.Windows
                     Settings.Default.Save();
                 }
 
-                if (_dcsbiosChanged)
+                if (DCSBIOSChanged)
                 {
                     Settings.Default.DCSBiosJSONLocation = TextBoxDcsBiosJSONLocation.Text;
                     Settings.Default.DCSBiosIPFrom = IpAddressFromDCSBIOS;
@@ -249,7 +243,7 @@ namespace DCSFlightpanels.Windows
                     Settings.Default.Save();
                 }
 
-                if (_srsChanged)
+                if (SRSChanged)
                 {
                     Settings.Default.SRSIpFrom = IpAddressFromSRS;
                     Settings.Default.SRSPortFrom = int.Parse(PortFromSRS);
@@ -257,12 +251,17 @@ namespace DCSFlightpanels.Windows
                     Settings.Default.SRSPortTo = int.Parse(PortToSRS);
                     Settings.Default.Save();
                 }
+
+                if (StreamDeckChanged)
+                {
+                    Settings.Default.Save();
+                }
                 DialogResult = true;
                 Close();
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message + Environment.NewLine + exception.StackTrace);
+                MessageBox.Show($"{exception.Message}{Environment.NewLine}{exception.StackTrace}");
             }
         }
 
@@ -348,7 +347,7 @@ namespace DCSFlightpanels.Windows
                     {
                         throw new Exception();
                     }
-                    _ipAddressFromDCSBIOS = TextBoxDCSBIOSFromIP.Text;
+                    IpAddressFromDCSBIOS = TextBoxDCSBIOSFromIP.Text;
                 }
                 catch (Exception e)
                 {
@@ -360,7 +359,7 @@ namespace DCSFlightpanels.Windows
                     {
                         throw new Exception();
                     }
-                    _ipAddressToDCSBIOS = TextBoxDCSBIOSToIP.Text;
+                    IpAddressToDCSBIOS = TextBoxDCSBIOSToIP.Text;
                 }
                 catch (Exception e)
                 {
@@ -369,7 +368,7 @@ namespace DCSFlightpanels.Windows
                 try
                 {
                     var test = Convert.ToInt32(TextBoxDCSBIOSFromPort.Text);
-                    _portFromDCSBIOS = TextBoxDCSBIOSFromPort.Text;
+                    PortFromDCSBIOS = TextBoxDCSBIOSFromPort.Text;
                 }
                 catch (Exception e)
                 {
@@ -378,7 +377,7 @@ namespace DCSFlightpanels.Windows
                 try
                 {
                     var test = Convert.ToInt32(TextBoxDCSBIOSFromPort.Text);
-                    _portToDCSBIOS = TextBoxDCSBIOSToPort.Text;
+                    PortToDCSBIOS = TextBoxDCSBIOSToPort.Text;
                 }
                 catch (Exception e)
                 {
@@ -387,7 +386,7 @@ namespace DCSFlightpanels.Windows
                 try
                 {
                     var directoryInfo = new DirectoryInfo(TextBoxDcsBiosJSONLocation.Text);
-                    _dcsBiosJSONLocation = TextBoxDcsBiosJSONLocation.Text;
+                    DcsBiosJSONLocation = TextBoxDcsBiosJSONLocation.Text;
                 }
                 catch (Exception e)
                 {
@@ -427,7 +426,7 @@ namespace DCSFlightpanels.Windows
                     {
                         throw new Exception();
                     }
-                    _ipAddressFromSRS = TextBoxSRSFromIP.Text;
+                    IpAddressFromSRS = TextBoxSRSFromIP.Text;
                 }
                 catch (Exception e)
                 {
@@ -439,7 +438,7 @@ namespace DCSFlightpanels.Windows
                     {
                         throw new Exception();
                     }
-                    _ipAddressToSRS = TextBoxSRSToIP.Text;
+                    IpAddressToSRS = TextBoxSRSToIP.Text;
                 }
                 catch (Exception e)
                 {
@@ -448,7 +447,7 @@ namespace DCSFlightpanels.Windows
                 try
                 {
                     var test = Convert.ToInt32(TextBoxSRSFromPort.Text);
-                    _portFromSRS = TextBoxSRSFromPort.Text;
+                    PortFromSRS = TextBoxSRSFromPort.Text;
                 }
                 catch (Exception e)
                 {
@@ -457,7 +456,7 @@ namespace DCSFlightpanels.Windows
                 try
                 {
                     var test = Convert.ToInt32(TextBoxSRSFromPort.Text);
-                    _portToSRS = TextBoxSRSToPort.Text;
+                    PortToSRS = TextBoxSRSToPort.Text;
                 }
                 catch (Exception e)
                 {
@@ -470,65 +469,15 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-
-        public string IpAddressFromDCSBIOS => _ipAddressFromDCSBIOS;
-
-        public string PortFromDCSBIOS => _portFromDCSBIOS;
-
-        public string IpAddressToDCSBIOS => _ipAddressToDCSBIOS;
-
-        public string PortToDCSBIOS => _portToDCSBIOS;
-
-        public string DcsBiosJSONLocation => _dcsBiosJSONLocation;
-
-        public string IpAddressFromSRS => _ipAddressFromSRS;
-
-        public string PortFromSRS => _portFromSRS;
-
-        public string IpAddressToSRS => _ipAddressToSRS;
-
-        public string PortToSRS => _portToSRS;
-
-        public bool GeneralChanged => _generalChanged;
-
-        public bool DCSBIOSChanged => _dcsbiosChanged;
-
-        public bool SRSChanged => _srsChanged;
-
-
-        private void TextBoxDcsBios_OnTextChanged(object sender, TextChangedEventArgs e)
+        private void DcsBiosDirty(object sender, TextChangedEventArgs e)
         {
-            _dcsbiosChanged = true;
+            DCSBIOSChanged = true;
             ButtonOk.IsEnabled = true;
         }
 
-        private void TextBoxSRS_OnTextChanged(object sender, TextChangedEventArgs e)
+        private void SrsDirty(object sender, TextChangedEventArgs e)
         {
-            _srsChanged = true;
-            ButtonOk.IsEnabled = true;
-        }
-
-        private void RadioButtonProcessPriority_OnChecked(object sender, RoutedEventArgs e)
-        {
-            _generalChanged = true;
-            ButtonOk.IsEnabled = true;
-        }
-
-        private void CheckBoxDebug_OnChecked(object sender, RoutedEventArgs e)
-        {
-            _generalChanged = true;
-            ButtonOk.IsEnabled = true;
-        }
-
-        private void RadioButtonAPI_OnChecked(object sender, RoutedEventArgs e)
-        {
-            _generalChanged = true;
-            ButtonOk.IsEnabled = true;
-        }
-
-        private void CheckBoxDebug_OnUnchecked(object sender, RoutedEventArgs e)
-        {
-            _generalChanged = true;
+            SRSChanged = true;
             ButtonOk.IsEnabled = true;
         }
 
@@ -542,16 +491,19 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void CheckBoxMinimizeToTray_OnChecked(object sender, RoutedEventArgs e)
+        private void GeneralDirty(object sender, RoutedEventArgs e)
         {
-            _generalChanged = true;
+            GeneralChanged = true;
             ButtonOk.IsEnabled = true;
         }
 
-        private void CheckBoxMinimizeToTray_OnUnchecked(object sender, RoutedEventArgs e)
+        private void CollapseAllSettingsPanelExcept(StackPanel visibleStackPanel)
         {
-            _generalChanged = true;
-            ButtonOk.IsEnabled = true;
+            StackPanelGeneralSettings.Visibility = Visibility.Collapsed;
+            StackPanelDCSBIOSSettings.Visibility = Visibility.Collapsed;
+            StackPanelSRSSettings.Visibility = Visibility.Collapsed;
+        
+            visibleStackPanel.Visibility = Visibility.Visible;
         }
     }
 }
