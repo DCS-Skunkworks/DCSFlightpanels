@@ -91,6 +91,8 @@
         private const string ADF_MAIN100_KHZ_PRESET_COMMAND_DEC = "PLT_ARC_FREQ_L_100 DEC\n";
         private const string ADF_MAIN10_KHZ_PRESET_COMMAND_INC = "PLT_ARC_FREQ_L_10 INC\n";
         private const string ADF_MAIN10_KHZ_PRESET_COMMAND_DEC = "PLT_ARC_FREQ_L_10 DEC\n";
+        private string _ark15_HighFrequency = string.Empty;
+        private string _ark15_LowFrequency = string.Empty;
         /* ARK-15 ADF BACKUP */
         private readonly object _lockADFBackupDialObject1 = new object();
         private readonly object _lockADFBackupDialObject2 = new object();
@@ -105,6 +107,7 @@
         private int _adfPresetDial1Skipper;
         private int _adfPresetDial2Skipper;
         
+
         //0 = Backup ADF
         //1 = Main ADF
         private readonly object _lockADFBackupMainDialObject = new object();
@@ -1546,7 +1549,7 @@
                             {
                                 //Dial1 XX0..
                                 //Dial2 00X..
-                                var channelAsString = string.Empty;
+                               
                                 uint backupMain = 0;
                                 lock (_lockADFBackupMainDialObject)
                                 {
@@ -1555,32 +1558,32 @@
                                     {
                                         lock (_lockADFMainDialObject1)
                                         {
-                                            channelAsString = _adfMainCockpitPresetDial1Pos.ToString();
+                                            _ark15_HighFrequency = _adfMainCockpitPresetDial1Pos.ToString();
                                         }
                                     }
                                     else
                                     {
                                         lock (_lockADFBackupDialObject1)
                                         {
-                                            channelAsString = _adfBackupCockpitPresetDial1Pos.ToString();
+                                            _ark15_HighFrequency = _adfBackupCockpitPresetDial1Pos.ToString();
                                         }
                                     }
                                     if (_adfBackupMainCockpitDial1Pos == 1)
                                     {
                                         lock (_lockADFMainDialObject2)
                                         {
-                                            channelAsString += _adfMainCockpitPresetDial2Pos.ToString();
+                                            _ark15_HighFrequency += _adfMainCockpitPresetDial2Pos.ToString();
                                         }
                                     }
                                     else
                                     {
                                         lock (_lockADFBackupDialObject2)
                                         {
-                                            channelAsString += _adfBackupCockpitPresetDial2Pos.ToString();
+                                            _ark15_HighFrequency += _adfBackupCockpitPresetDial2Pos.ToString();
                                         }
                                     }
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, Ark15MergedFrequencies, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 //We'll set a +1 here so it matches the number on the switch. same for the other cases refering to ark-15
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, backupMain + 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
@@ -1590,7 +1593,6 @@
                                 //Large Dial1 X.X
                                 //      " 0" "0.5" "1.0" "1.5" "2.0" "2.5"... "9.5"
                                 //Pos     0     1     2     3     4     5 ...   19
-                                var channelAsString = string.Empty;
                                 uint backupMain = 0;
                                 lock (_lockADFBackupMainDialObject)
                                 {
@@ -1599,18 +1601,22 @@
                                     {
                                         lock (_lockDMEMainDialObject1)
                                         {
-                                            channelAsString = DivideBy2AndFormatForDisplay(_dmeMainCockpitPresetDial1Pos);
+                                            _ark15_LowFrequency = DivideBy2AndFormatForDisplay(_dmeMainCockpitPresetDial1Pos);
                                         }
                                     }
                                     else
                                     {
                                         lock (_lockADFBackupDialObject1)
                                         {
-                                            channelAsString = DivideBy2AndFormatForDisplay(_dmeBackupCockpitPresetDial1Pos);
+                                            _ark15_LowFrequency = DivideBy2AndFormatForDisplay(_dmeBackupCockpitPresetDial1Pos);
                                         }
                                     }
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, channelAsString, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _ark15_LowFrequency.PadLeft(6,' '), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                if (_currentLowerRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH)
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, Ark15MergedFrequencies, PZ69LCDPosition.LOWER_STBY_RIGHT); //update also the higher frequency display with the new value
+                                }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, backupMain + 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
@@ -1696,7 +1702,6 @@
                             {
                                 //Dial1 XX0
                                 //Dial2 00X
-                                var channelAsString = string.Empty;
                                 uint backupMain = 0;
                                 lock (_lockADFBackupMainDialObject)
                                 {
@@ -1705,39 +1710,38 @@
                                     {
                                         lock (_lockADFMainDialObject1)
                                         {
-                                            channelAsString = _adfMainCockpitPresetDial1Pos.ToString();
+                                            _ark15_HighFrequency = _adfMainCockpitPresetDial1Pos.ToString();
                                         }
                                     }
                                     else
                                     {
                                         lock (_lockADFBackupDialObject1)
                                         {
-                                            channelAsString = _adfBackupCockpitPresetDial1Pos.ToString();
+                                            _ark15_HighFrequency = _adfBackupCockpitPresetDial1Pos.ToString();
                                         }
                                     }
                                     if (_adfBackupMainCockpitDial1Pos == 1)
                                     {
                                         lock (_lockADFMainDialObject2)
                                         {
-                                            channelAsString += _adfMainCockpitPresetDial2Pos.ToString();
+                                            _ark15_HighFrequency += _adfMainCockpitPresetDial2Pos.ToString();
                                         }
                                     }
                                     else
                                     {
                                         lock (_lockADFBackupDialObject2)
                                         {
-                                            channelAsString += _adfBackupCockpitPresetDial2Pos.ToString();
+                                            _ark15_HighFrequency += _adfBackupCockpitPresetDial2Pos.ToString();
                                         }
                                     }
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, Ark15MergedFrequencies, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, backupMain + 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentMi24PRadioMode.DME_ARK15_LOW:
                             {
                                 //Large Dial1 X.X
-                                var channelAsString = string.Empty;
                                 uint backupMain = 0;
                                 lock (_lockADFBackupMainDialObject)
                                 {
@@ -1746,18 +1750,22 @@
                                     {
                                         lock (_lockDMEMainDialObject1)
                                         {
-                                            channelAsString = DivideBy2AndFormatForDisplay(_dmeMainCockpitPresetDial1Pos);
+                                            _ark15_LowFrequency = DivideBy2AndFormatForDisplay(_dmeMainCockpitPresetDial1Pos);
                                         }
                                     }
                                     else
                                     {
                                         lock (_lockADFBackupDialObject1)
                                         {
-                                            channelAsString = DivideBy2AndFormatForDisplay(_dmeBackupCockpitPresetDial1Pos);
+                                            _ark15_LowFrequency = DivideBy2AndFormatForDisplay(_dmeBackupCockpitPresetDial1Pos);
                                         }
                                     }
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, channelAsString, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _ark15_LowFrequency.PadLeft(6, ' '), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                if (_currentUpperRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH)
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, Ark15MergedFrequencies, PZ69LCDPosition.UPPER_STBY_RIGHT); //update also the higher frequency display with the new value
+                                }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, backupMain + 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
@@ -1798,7 +1806,7 @@
         private string DivideBy2AndFormatForDisplay(uint position)
         {
             double frequencyAsDouble = (double)position / 2;
-            return frequencyAsDouble.ToString("0.0", CultureInfo.InvariantCulture).PadLeft(6, ' ');
+            return frequencyAsDouble.ToString("0.0", CultureInfo.InvariantCulture);
         }
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
@@ -2148,6 +2156,13 @@
 
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
+        }
+
+        private string Ark15MergedFrequencies
+        {
+            get {
+                return (_ark15_HighFrequency + _ark15_LowFrequency).PadLeft(6,' '); 
+            }
         }
     }
 }
