@@ -4,24 +4,23 @@
 				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 				xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
-				mc:Ignorable="d"
-				d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlMi24P_OnLoaded">
-    <Grid Name="PZ69Grid" >
+				mc:Ignorable="d" Loaded="RadioPanelPZ69UserControlMi24P_OnLoaded" Height="764.333" Width="1011.334">
+    <Grid Name="PZ69Grid" Margin="0,0,21.667,0" >
         <Grid.RowDefinitions>
             <RowDefinition Height="240" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="35*" />
+            <RowDefinition Height="40*" />
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="37*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="102*" />
@@ -73,13 +72,13 @@
             <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="430" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
         </Canvas>
-        <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="7" Grid.ColumnSpan="3" Margin="0,0,0,0.333" >
+        <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="7" Grid.ColumnSpan="3" Margin="0,0,0,0.071" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold"><Run Text="COM 1 = "/><Run Text="Reserved- "/><Run Text="Not used"/><LineBreak/><Run Text="COM 2 = R-863 Presets"/><LineBreak/><Run Text="NAV 1 = "/><Run Text="Y"/><Run Text="aDRO 1"/><Run Text="I"/><LineBreak/><Run Text="NAV 2 = "/><Run Text="Eucalypt-M24 ("/><Run Text="R-828"/><Run Text=")"/><Run Text=" Preset Channels"/><LineBreak/><Run Text="ADF = ADF ARK-"/><Run Text="15"/><Run Text=" "/><Run Text="(100 &amp; 10 KHz "/><Run Text=" Frequencies"/><Run Text=")"/><LineBreak/><Run Text="("/><Run Text="1"/><Run Text=" = "/><Run Text="Main"/><Run Text=")"/><LineBreak/><Run Text="("/><Run Text="2"/><Run Text=" = "/><Run Text="Backup"/><Run Text=")"/><LineBreak/><Run Text="DME = ARK"/><Run Text="-"/><Run Text="15"/><Run Text=" (1 KHz Frequency)"/><LineBreak/><Run Text="XPDR = SPU-"/><Run Text="8"/><Run Text=" Radio, Volume, Radio/ICS"/><LineBreak/></TextBlock>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="7"  Grid.ColumnSpan="3" Grid.RowSpan="7" Margin="0,36.333,0,-0.333" >
+        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="7"  Grid.ColumnSpan="3" Grid.RowSpan="7" Margin="0,36.263,0,-0.929" >
             <StackPanel >
                 <Label Content="Frequency Knobs sensitivity"></Label>
                 <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChanged">
@@ -105,26 +104,26 @@
             </StackPanel>
         </GroupBox>
 
-        <StackPanel Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="13" Margin="102.333,0,10,-0.436">
-            <Label Content="Yadro-1I" FontWeight="Bold"/>
-            <Image Height="130" Source="/dcsfp;component/Images/Mi24P_Yadro.png" />
-            <Label Content="Eucalypt-M24 (R-828)" FontWeight="Bold"/>
-            <Image Height="160" Source="/dcsfp;component/Images/Mi24P_R828.png" />
+        <StackPanel Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="14" Margin="9,234,10.333,0">
+            <Label Content="Yadro-1I" FontWeight="Bold" Margin="0,0,-0.333,0"/>
+            <Image Height="130" Source="/dcsfp;component/Images/Mi24P_Yadro.png" Margin="0" UseLayoutRounding="False" />
+            <Label Content="Eucalypt-M24 (R-828)" FontWeight="Bold" HorizontalAlignment="Left" Width="224"/>
+            <Image Height="160" Source="/dcsfp;component/Images/Mi24P_R828.png" Margin="0" />
         </StackPanel>
-        <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="8" Margin="0.333,0,0.334,0.333">
+        <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="8" Margin="0,0,0.667,0.071">
             <Label Name="LabelAirframe" Content="Mi-24P" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
             <Label Content="ARC-15" FontWeight="Bold"/>
-            <Image Height="204" Source="/dcsfp;component/Images/Mi24P_ARC15.png" Margin="0,0,0.333,0" />
+            <Image Height="204" Source="/dcsfp;component/Images/Mi24P_ARC15.png" />
             <Label Content="SPU-8" FontWeight="Bold" Margin="0,0,0.333,0" Height="26"/>
-            <Image Height="204" Source="/dcsfp;component/Images/Mi24P_SPU8.png" Margin="0,0,0.333,0" />
+            <Image Height="204" Source="/dcsfp;component/Images/Mi24P_SPU8.png" Margin="0" />
         </StackPanel>
-        <DockPanel Grid.Column="6" Grid.Row="7" Grid.RowSpan="7" Grid.ColumnSpan="2" Margin="0.333,36.333,0.334,-0.333" >
+        <DockPanel Grid.Column="6" Grid.Row="7" Grid.RowSpan="7" Grid.ColumnSpan="2" Margin="0,36.263,0.667,-0.929" >
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0.333,-1" Height="236">
                 <TextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="120" />
             </GroupBox>
         </DockPanel>
-        <StackPanel Grid.Column="5" HorizontalAlignment="Left" Height="462" Grid.Row="1" Grid.RowSpan="12" VerticalAlignment="Bottom" Width="124" Margin="0,0,0,8.667">
-            <Label Content="R863" FontWeight="Bold"/>
+        <StackPanel Grid.Column="5" Grid.RowSpan="14" Margin="0,232,0.333,0.333" MinWidth="123">
+            <Label Content="R863" FontWeight="Bold" Height="27" Margin="0,0,-0.333,0"/>
             <Image Height="192" Source="/dcsfp;component/Images/Mi24P_R863.png" />
         </StackPanel>
     </Grid>
