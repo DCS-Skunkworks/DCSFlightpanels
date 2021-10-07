@@ -8,6 +8,7 @@
     using ClassLibraryCommon;
 
     using NonVisuals.EventArgs;
+    using NonVisuals.Radios.Misc;
     using NonVisuals.Saitek.Panels;
 
     public enum PZ69LCDPosition
@@ -46,6 +47,8 @@
         private long _resetSyncTimeout = 35000000;
 
         private long _syncOKDelayTimeout = 50000000; // 5s
+
+        private PZ69DisplayBytes _pZ69DisplayBytes = new PZ69DisplayBytes();
 
         protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton)
             : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
@@ -87,40 +90,12 @@
         */
         protected void SetPZ69DisplayBytesInteger(ref byte[] bytes, int digits, PZ69LCDPosition pz69LCDPosition)
         {
-            var arrayPosition = GetArrayPosition(pz69LCDPosition);
-            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 5;
-            var i = 0;
-            var digitsAsString = digits.ToString().PadLeft(5);
-
-            // D = DARK
-            // 116 should become DD116!
-            do
-            {
-                // 5 digits can be displayed
-                // 12345 -> 12345
-                // 116   -> DD116 
-                // 1     -> DDDD1
-                byte b;
-                b = digitsAsString[i].ToString().Equals(" ") ? (byte)0xFF : byte.Parse(digitsAsString[i].ToString());
-                bytes[arrayPosition] = b;
-
-                arrayPosition++;
-                i++;
-            }
-            while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
+            _pZ69DisplayBytes.Integer(ref bytes, digits, pz69LCDPosition);
         }
 
         protected void SetPZ69DisplayBlank(ref byte[] bytes, PZ69LCDPosition pz69LCDPosition)
         {
-            var arrayPosition = GetArrayPosition(pz69LCDPosition);
-            var i = 0;
-            do
-            {
-                bytes[arrayPosition] = 0xFF;
-                arrayPosition++;
-                i++;
-            }
-            while (i < 5);
+            _pZ69DisplayBytes.SetPositionBlank(ref bytes, pz69LCDPosition);
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e)
@@ -129,31 +104,7 @@
 
         protected void SetPZ69DisplayBytesUnsignedInteger(ref byte[] bytes, uint digits, PZ69LCDPosition pz69LCDPosition)
         {
-            var arrayPosition = GetArrayPosition(pz69LCDPosition);
-            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
-            var i = 0;
-            var digitsAsString = digits.ToString().PadLeft(5);
-
-            // Debug.WriteLine("LCD position is " + pz69LCDPosition);
-            // Debug.WriteLine("Array position = " + arrayPosition);
-            // Debug.WriteLine("Max array position = " + (maxArrayPosition));
-            // Debug.WriteLine("digitsAsString = >" + digitsAsString + "< length=" + digitsAsString.Length);
-            // D = DARK
-            // 116 should become DD116!
-            do
-            {
-                // 5 digits can be displayed
-                // 12345 -> 12345
-                // 116   -> DD116 
-                // 1     -> DDDD1
-                byte b;
-                b = digitsAsString[i].ToString().Equals(" ") ? (byte)0xFF : byte.Parse(digitsAsString[i].ToString());
-                bytes[arrayPosition] = b;
-
-                arrayPosition++;
-                i++;
-            }
-            while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
+            _pZ69DisplayBytes.UnsignedInteger(ref bytes, digits, pz69LCDPosition);
         }
 
         protected void SetPZ69DisplayBytes(ref byte[] bytes, double digits, int decimals, PZ69LCDPosition pz69LCDPosition)
