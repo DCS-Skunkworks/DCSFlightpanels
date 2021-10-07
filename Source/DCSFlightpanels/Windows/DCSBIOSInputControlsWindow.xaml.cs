@@ -336,7 +336,7 @@
         {
             if (e.OriginalSource is ScrollViewer)
             {
-                //Unselect when user presses any area not containing a row
+                // Unselect when user presses any area not containing a row
                 ((DataGrid)sender).UnselectAll();
             }
         }
