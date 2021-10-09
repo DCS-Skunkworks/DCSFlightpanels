@@ -183,6 +183,7 @@
     </Compile>
     <Compile Include="Radios\Knobs\RadioPanelKnobMi24P.cs" />
     <Compile Include="Radios\Knobs\RadiopanelKnobP47D.cs" />
+    <Compile Include="Radios\Misc\PZ69DisplayBytes.cs" />
     <Compile Include="Radios\RadioPanelPZ69Mi24P.cs" />
     <Compile Include="Radios\RadioPanelPZ69P47D.cs" />
     <Compile Include="RandomFactory.cs" />
@@ -364,7 +365,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Tests\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"
