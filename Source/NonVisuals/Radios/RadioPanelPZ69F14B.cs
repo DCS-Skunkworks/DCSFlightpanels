@@ -108,7 +108,6 @@
         private uint _vuhfCockpitDial2Frequency;
         private uint _vuhfCockpitDial3Frequency;
         private uint _vuhfCockpitDial4Frequency;
-        private uint _vuhfSavedCockpitBigFrequency;
         private uint _vuhfSavedCockpitDial1Frequency;
         private uint _vuhfSavedCockpitDial2Frequency;
         private uint _vuhfSavedCockpitDial3Frequency;
