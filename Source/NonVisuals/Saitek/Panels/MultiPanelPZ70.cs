@@ -108,7 +108,7 @@
                         dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(e.Data);
                         if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -122,7 +122,7 @@
                             dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
                             if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
                             {
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                             }
                         }
                     }
@@ -321,10 +321,10 @@
                 for (int i = 0; i < 40; i++)
                 {
                     var randomButton = (MultiPanelPZ70Knobs)buttonList.ToArray().GetValue(random.Next(buttonList.ToArray().Length));
-                    RandomDisplayValues();
                     _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, randomButton);
+                    RandomDisplayValues();
 
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                     UpdateLCD();
 
                     Thread.Sleep(50);
@@ -334,7 +334,7 @@
                 foreach (var multiPanelPZ70Knob in buttonList)
                 {
                     _lcdButtonByteListHandler.SetButtonOff(PZ70DialPosition, multiPanelPZ70Knob);
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                     UpdateLCD();
                 }
                
@@ -685,7 +685,7 @@
                         case MultiPanelPZ70Knobs.KNOB_ALT:
                             {
                                 _pz70DialPosition = PZ70DialPosition.ALT;
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 UpdateLCD();
                                 break;
                             }
@@ -693,7 +693,7 @@
                         case MultiPanelPZ70Knobs.KNOB_VS:
                             {
                                 _pz70DialPosition = PZ70DialPosition.VS;
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 UpdateLCD();
                                 break;
                             }
@@ -701,7 +701,7 @@
                         case MultiPanelPZ70Knobs.KNOB_IAS:
                             {
                                 _pz70DialPosition = PZ70DialPosition.IAS;
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 UpdateLCD();
                                 break;
                             }
@@ -709,7 +709,7 @@
                         case MultiPanelPZ70Knobs.KNOB_HDG:
                             {
                                 _pz70DialPosition = PZ70DialPosition.HDG;
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 UpdateLCD();
                                 break;
                             }
@@ -717,7 +717,7 @@
                         case MultiPanelPZ70Knobs.KNOB_CRS:
                             {
                                 _pz70DialPosition = PZ70DialPosition.CRS;
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 UpdateLCD();
                                 break;
                             }
@@ -725,56 +725,56 @@
                         case MultiPanelPZ70Knobs.AP_BUTTON:
                             {
                                 multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, MultiPanelPZ70Knobs.AP_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 break;
                             }
 
                         case MultiPanelPZ70Knobs.HDG_BUTTON:
                             {
                                 multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, MultiPanelPZ70Knobs.HDG_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 break;
                             }
 
                         case MultiPanelPZ70Knobs.NAV_BUTTON:
                             {
                                 multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, MultiPanelPZ70Knobs.NAV_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 break;
                             }
 
                         case MultiPanelPZ70Knobs.IAS_BUTTON:
                             {
                                 multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, MultiPanelPZ70Knobs.IAS_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 break;
                             }
 
                         case MultiPanelPZ70Knobs.ALT_BUTTON:
                             {
                                 multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, MultiPanelPZ70Knobs.ALT_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 break;
                             }
 
                         case MultiPanelPZ70Knobs.VS_BUTTON:
                             {
                                 multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, MultiPanelPZ70Knobs.VS_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 break;
                             }
 
                         case MultiPanelPZ70Knobs.APR_BUTTON:
                             {
                                 multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, MultiPanelPZ70Knobs.APR_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 break;
                             }
 
                         case MultiPanelPZ70Knobs.REV_BUTTON:
                             {
                                 multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, MultiPanelPZ70Knobs.REV_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Increment(ref _doUpdatePanelLCD);
                                 break;
                             }
                     }
@@ -792,17 +792,17 @@
                 var multiPanelKnob = (MultiPanelKnob)o;
 
                 /*
-                                 * IMPORTANT
-                                 * ---------
-                                 * The LCD buttons toggle between on and off. It is the toggle value that defines if the button is OFF, not the fact that the user releases the button.
-                                 * Therefore the fore-mentioned buttons cannot be used as usual in a loop with knobBinding.WhenTurnedOn
-                                 * Instead the buttons global bool value must be used!
-                                 * 
-                                 */
+                * IMPORTANT
+                * ---------
+                * The LCD buttons toggle between on and off. It is the toggle value that defines if the button is OFF, not the fact that the user releases the button.
+                * Therefore the fore-mentioned buttons cannot be used as usual in a loop with knobBinding.WhenTurnedOn
+                * Instead the buttons global bool value must be used!
+                * 
+                */
                 if (Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly)
                     && (multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC || multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC))
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                     LCDDialChangesHandle(multiPanelKnob);
                     UpdateLCD();
                 }
@@ -1349,7 +1349,7 @@
                 SendLEDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         public void SendLEDData(byte[] array)
@@ -1440,15 +1440,6 @@
         public PZ70LCDButtonByteList LCDButtonByteListHandler => _lcdButtonByteListHandler;
     }
 
-
-
-
-
-
-
-
-
-
     public enum PZ70DialPosition
     {
         ALT = 0,
@@ -1458,8 +1449,6 @@
         CRS = 16
     }
 
-
-
     public enum ControlListPZ70 : byte
     {
         ALL,
@@ -1468,5 +1457,4 @@
         BIPS,
         OSCOMMAND
     }
-
 }
