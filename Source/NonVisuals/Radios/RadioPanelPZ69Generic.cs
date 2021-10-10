@@ -54,8 +54,6 @@
 
         public RadioPanelPZ69Generic(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
-            VendorId = 0x6A3;
-            ProductId = 0xD05;
             CreateSwitchKeys();
             Startup();
         }

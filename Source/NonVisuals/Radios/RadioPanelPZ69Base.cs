@@ -47,8 +47,6 @@
                 throw new ArgumentException();
             }
 
-            VendorId = 0x6A3;
-            ProductId = 0xD05;
             NumberFormatInfoFullDisplay = new NumberFormatInfo();
             NumberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
             NumberFormatInfoFullDisplay.NumberDecimalDigits = 4;

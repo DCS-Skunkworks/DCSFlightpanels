@@ -137,9 +137,7 @@ namespace NonVisuals.Radios
         public RadioPanelPZ69FA18C(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
         {
-            VendorId = 0x6A3;
-            ProductId = 0xD05;
-            CreateRadioKnobs();
+             CreateRadioKnobs();
             Startup();
         }
 
