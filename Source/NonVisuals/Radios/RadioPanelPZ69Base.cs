@@ -28,7 +28,6 @@
         private volatile byte _frequencySensitivitySkipper;
         protected readonly object LockLCDUpdateObject = new object();
         protected bool DataHasBeenReceivedFromDCSBIOS;
-        private Guid _guid = Guid.NewGuid();
         /*
                  * IMPORTANT WHEN SYNCHING DIALS
                  */
