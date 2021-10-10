@@ -284,11 +284,29 @@
             }
         }
 
+        private void RandomDisplayValues()
+        {
+              var random = new Random();
+             _altLCDKeyEmulatorValue = random.Next(40000);
+             _vsLCDKeyEmulatorValue = random.Next(-6000, 6000);  
+             _iasLCDKeyEmulatorValue = random.Next(600);
+             _hdgLCDKeyEmulatorValue = random.Next(360);
+             _crsLCDKeyEmulatorValue = random.Next(360);
+        }
+
+        private void ResetDisplayValues()
+        {
+            _altLCDKeyEmulatorValue = default;
+            _vsLCDKeyEmulatorValue = default;
+            _iasLCDKeyEmulatorValue = default;
+            _hdgLCDKeyEmulatorValue = default;
+            _crsLCDKeyEmulatorValue = default;
+        }
+
         private void ShowIdentifyingValue()
         {
             try
             {
-                var spins = 40;
                 var random = new Random();
                 var buttonList = new List<MultiPanelPZ70Knobs>();
                 buttonList.Add(MultiPanelPZ70Knobs.AP_BUTTON);
@@ -300,23 +318,26 @@
                 buttonList.Add(MultiPanelPZ70Knobs.APR_BUTTON);
                 buttonList.Add(MultiPanelPZ70Knobs.REV_BUTTON);
 
-                while (spins > 0)
+                for (int i = 0; i < 40; i++)
                 {
                     var randomButton = (MultiPanelPZ70Knobs)buttonList.ToArray().GetValue(random.Next(buttonList.ToArray().Length));
-                    var onOrOff = random.Next(0, 1);
+                    RandomDisplayValues();
                     _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, randomButton);
 
                     Interlocked.Add(ref _doUpdatePanelLCD, 1);
                     UpdateLCD();
 
                     Thread.Sleep(50);
-                    spins--;
                 }
 
+                ResetDisplayValues();
                 foreach (var multiPanelPZ70Knob in buttonList)
                 {
                     _lcdButtonByteListHandler.SetButtonOff(PZ70DialPosition, multiPanelPZ70Knob);
+                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    UpdateLCD();
                 }
+               
             }
             catch (Exception)
             {
@@ -1284,7 +1305,7 @@
                     arrayPosition--;
                     i--;
                 }
- while (i > 0);
+                while (i > 0);
             }
 
             if (foundLowerValue)
@@ -1320,7 +1341,7 @@
                     arrayPosition--;
                     i--;
                 }
- while (i > 0);
+                while (i > 0);
             }
 
             lock (_lcdLockObject)
