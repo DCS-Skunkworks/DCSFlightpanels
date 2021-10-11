@@ -67,8 +67,6 @@
         {
             SRSListenerFactory.SetParams(portFrom, ipAddressTo, portTo);
             SRSListenerFactory.GetSRSListener().Attach(this);
-            VendorId = 0x6A3;
-            ProductId = 0xD05;
             CreateRadioKnobs();
             Startup();
         }

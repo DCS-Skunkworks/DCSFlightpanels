@@ -20,7 +20,6 @@
 
     public class RadioPanelPZ69A10C : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
-        private HashSet<RadioPanelKnobA10C> _radioPanelKnobs = new HashSet<RadioPanelKnobA10C>();
         private CurrentA10RadioMode _currentUpperRadioMode = CurrentA10RadioMode.UHF;
         private CurrentA10RadioMode _currentLowerRadioMode = CurrentA10RadioMode.UHF;
 
@@ -225,8 +224,6 @@
 
         public RadioPanelPZ69A10C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
-            VendorId = 0x6A3;
-            ProductId = 0xD05;
             CreateRadioKnobs();
             Startup();
         }

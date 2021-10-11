@@ -28,7 +28,6 @@
         private volatile byte _frequencySensitivitySkipper;
         protected readonly object LockLCDUpdateObject = new object();
         protected bool DataHasBeenReceivedFromDCSBIOS;
-        private Guid _guid = Guid.NewGuid();
         /*
                  * IMPORTANT WHEN SYNCHING DIALS
                  */
@@ -47,8 +46,6 @@
                 throw new ArgumentException();
             }
 
-            VendorId = 0x6A3;
-            ProductId = 0xD05;
             NumberFormatInfoFullDisplay = new NumberFormatInfo();
             NumberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
             NumberFormatInfoFullDisplay.NumberDecimalDigits = 4;

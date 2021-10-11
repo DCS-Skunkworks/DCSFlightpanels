@@ -21,8 +21,6 @@
     {
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
         private readonly HashSet<BIPLinkPZ69> _bipLinks = new HashSet<BIPLinkPZ69>();
-        private readonly byte[] _oldRadioPanelValue = { 0, 0, 0 };
-        private readonly byte[] _newRadioPanelValue = { 0, 0, 0 };
         private readonly object _dcsBiosDataReceivedLock = new object();
 
         private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new List<RadioPanelPZ69KnobsEmulator> { RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR };
@@ -39,8 +37,6 @@
 
         public RadioPanelPZ69Emulator(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
-            VendorId = 0x6A3;
-            ProductId = 0xD05;
             CreateSwitchKeys();
             Startup();
         }

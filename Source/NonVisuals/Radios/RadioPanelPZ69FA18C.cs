@@ -105,8 +105,6 @@ namespace NonVisuals.Radios
 
         private long _comm2DialWaitingForFeedback;
 
-        private readonly ClickSpeedDetector _uhfChannelClickSpeedDetector = new ClickSpeedDetector(8);
-
         /*FA-18C ILS*/
         private uint _ilsChannelStandby = 10;
 
@@ -117,10 +115,6 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _ilsDcsbiosOutputChannel;
 
         private volatile uint _ilsCockpitChannel = 1;
-
-        private const string ILS_CHANNEL_INC = "COM_ILS_CHANNEL_SW INC\n";
-
-        private const string ILS_CHANNEL_DEC = "COM_ILS_CHANNEL_SW DEC\n";
 
         private const string ILS_CHANNEL_COMMAND = "COM_ILS_CHANNEL_SW ";
 
@@ -137,9 +131,7 @@ namespace NonVisuals.Radios
         public RadioPanelPZ69FA18C(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
         {
-            VendorId = 0x6A3;
-            ProductId = 0xD05;
-            CreateRadioKnobs();
+             CreateRadioKnobs();
             Startup();
         }
 

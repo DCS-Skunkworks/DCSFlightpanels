@@ -105,8 +105,6 @@
 
         public RadioPanelPZ69Bf109(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
-            VendorId = 0x6A3;
-            ProductId = 0xD05;
             CreateRadioKnobs();
             Startup();
         }
