@@ -148,5 +148,9 @@ namespace NonVisuals.Radios.SRS
             return LastUpdate > Environment.TickCount - 10000;
         }
 
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(name, pos, radios, control, unit, unitId);
+        }
     }
 }
