@@ -4,14 +4,14 @@
     using System.Diagnostics;
     using System.Media;
     using System.Threading;
-
-    using ClassLibraryCommon;
-
+    using NLog;
     using NonVisuals.Saitek;
 
     [Serializable]
     public class OSCommand
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
+
         private string _file;
         private string _arguments;
         private string _name;
@@ -112,8 +112,8 @@
             catch (Exception ex)
             {
                 SystemSounds.Beep.Play();
-                result = "Failed to start " + _file + " with arguments " + _arguments + "." + ex.Message + "\n" + ex.StackTrace;
-                Common.LogError(result);
+                result = $"Failed to start {_file} with arguments {_arguments}.{ex.Message}\n{ex.StackTrace}";
+                logger.Error(ex, result);
             }
 
             return result;

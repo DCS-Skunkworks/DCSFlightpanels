@@ -10,7 +10,6 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
@@ -47,7 +46,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -57,9 +56,9 @@
             {
                 Closed = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 

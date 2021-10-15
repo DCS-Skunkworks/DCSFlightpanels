@@ -11,8 +11,7 @@
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.PanelUserControls.StreamDeck;
     using DCSFlightpanels.Windows.StreamDeck;
-
-
+    using NLog;
     using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
@@ -24,6 +23,7 @@
     /// </summary>
     public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, INvStreamDeckListener
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly UserControlStreamDeckUIBase _uiButtonGrid;
         
@@ -563,7 +563,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -578,7 +578,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -593,7 +593,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -608,7 +608,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -623,7 +623,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -645,7 +645,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -659,7 +659,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
         
@@ -674,7 +674,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 

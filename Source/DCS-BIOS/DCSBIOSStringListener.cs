@@ -8,13 +8,14 @@ namespace DCS_BIOS
     using System.Collections.Generic;
     using System.Text;
 
-    using ClassLibraryCommon;
-
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
+    using NLog;
 
     public class DCSBIOSStringListener : IDcsBiosDataListener
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
+
         public delegate void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e);
         public event DCSBIOSStringReceived OnDCSBIOSStringReceived;
 
@@ -164,7 +165,7 @@ namespace DCS_BIOS
                             }
                             catch (Exception ex)
                             {
-                                Common.LogError( "**********Received (0x" + data.ToString("x") + ") Exception = " + ex.Message + Environment.NewLine + ex.StackTrace);
+                                logger.Error(ex, $"**********Received (0x{data.ToString("x")})");
                             }
                         }
                     }

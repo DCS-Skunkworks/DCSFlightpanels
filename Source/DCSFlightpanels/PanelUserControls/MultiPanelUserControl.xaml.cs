@@ -19,7 +19,6 @@
 
 
     using MEF;
-
     using NonVisuals;
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;

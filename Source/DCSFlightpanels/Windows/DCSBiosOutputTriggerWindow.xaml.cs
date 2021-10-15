@@ -166,9 +166,9 @@
                         {
                             var f = int.Parse(TextBoxTriggerValue.Text);
                         }
-                        catch (Exception e)
+                        catch (Exception ex)
                         {
-                            throw new Exception("Error while checking Trigger value. Only integers are allowed : " + e.Message);
+                            throw new Exception($"Error while checking Trigger value. Only integers are allowed : {ex.Message}");
                         }
                         if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
                         {
@@ -176,18 +176,18 @@
                         }
                         else
                         {
-                            throw new Exception("Error, DCSBIOSOutput can only have a Integer type output. This has String : " + _dcsBiosOutput.ControlId);
+                            throw new Exception($"Error, DCSBIOSOutput can only have a Integer type output. This has String : {_dcsBiosOutput.ControlId}");
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception("Error while checking Value format : " + e.Message);
+                    throw new Exception($"Error while checking Value format : {ex.Message}");
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( e, "Error in CopyValues() : ");
+                Common.ShowErrorMessageBox(ex, "Error in CopyValues()");
             }
         }
 

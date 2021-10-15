@@ -159,12 +159,12 @@
                                         LabelResult.Content = "Result : " + result;
                                     });
                             }
-                            catch (Exception e)
+                            catch (Exception ex)
                             {
                                 Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        LabelErrors.Content = e.Message;
+                                        LabelErrors.Content = ex.Message;
                                     });
                             }
                         }

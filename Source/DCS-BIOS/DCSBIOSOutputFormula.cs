@@ -4,9 +4,11 @@
     using System.Collections.Generic;
 
     using ClassLibraryCommon;
+    using NLog;
 
     public class DCSBIOSOutputFormula
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new List<DCSBIOSOutput>();
         private readonly Dictionary<string, double> _variables = new Dictionary<string, double>();
         private readonly JaceExtended _jaceExtended = new JaceExtended();
@@ -48,7 +50,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex, "ExtractDCSBIOSOutputsInFormula() function");
+                logger.Error(ex, "ExtractDCSBIOSOutputsInFormula() function");
                 throw;
             }
         }
@@ -78,7 +80,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex, "CheckForMatch() function");
+                logger.Error(ex, "CheckForMatch() function");
                 throw;
             }
         }
@@ -97,7 +99,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex, "Evaluate() function");
+                logger.Error(ex, "Evaluate() function");
             }
 
             return 99;

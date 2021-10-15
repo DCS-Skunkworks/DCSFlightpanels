@@ -6,7 +6,6 @@
     using System.Threading;
 
     using ClassLibraryCommon;
-
     using NonVisuals.EventArgs;
     using NonVisuals.Radios.Misc;
     using NonVisuals.Saitek.Panels;
@@ -217,9 +216,9 @@
             {
                 _pZ69DisplayBytes.BytesStringAsItOrPadLeftBlanks(ref bytes, digitString, pz69LCDPosition);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e, "SetPZ69DisplayBytesString()");
+                logger.Error(ex, "SetPZ69DisplayBytesString()");
             }
         }
 
@@ -234,9 +233,9 @@
             {
                 _pZ69DisplayBytes.DefaultStringAsIt(ref bytes, digits, pz69LCDPosition);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e, "SetPZ69DisplayBytesDefault()");
+                logger.Error(ex, "SetPZ69DisplayBytesDefault()");
             }
         }
 
@@ -270,9 +269,9 @@
                     bytes[arrayPosition] = b;
                     // Debug.WriteLine("Current string char is " + tmp + " from i = " + i + ", writing byte " + b + " to array position " + arrayPosition);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Common.LogError(e, "SetPZ69DisplayBytesDefault() digitsAsString.Length = " + digitsAsString.Length);
+                    logger.Error(ex, $"SetPZ69DisplayBytesDefault() digitsAsString.Length = {digitsAsString.Length}");
                 }
 
                 if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')
@@ -326,9 +325,9 @@
 
                 // }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 
@@ -407,9 +406,9 @@
                 thread.Start();
                 Thread.Sleep(200);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 
@@ -419,9 +418,9 @@
             {
                 // HIDSkeletonBase = null;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 

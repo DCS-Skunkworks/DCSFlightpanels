@@ -296,9 +296,9 @@ namespace DCSFlightpanels.Windows
                         }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("1003351 Error in CopyValues() : " + e.Message);
+                throw new Exception($"1003351 Error in CopyValues() : {ex.Message}");
             }
         }
 

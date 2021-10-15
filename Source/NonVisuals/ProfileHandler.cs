@@ -363,16 +363,16 @@
                         {
                             OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs { PanelBinding = genericPanelBinding });
                         }
-                        catch (Exception e)
+                        catch (Exception ex)
                         {
-                            Common.ShowErrorMessageBox(e, "Error reading settings. Panel : " + genericPanelBinding.PanelType);
+                            Common.ShowErrorMessageBox(ex, $"Error reading settings. Panel : {genericPanelBinding.PanelType}");
                         }
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(e);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -391,16 +391,16 @@
                                 OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs { PanelBinding = genericPanelBinding });
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception ex)
                         {
-                            Common.ShowErrorMessageBox(e, "Error reading settings. Panel : " + genericPanelBinding.PanelType);
+                            Common.ShowErrorMessageBox(ex, $"Error reading settings. Panel : {genericPanelBinding.PanelType}");
                         }
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(e);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 

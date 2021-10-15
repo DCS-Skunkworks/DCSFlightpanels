@@ -9,13 +9,11 @@
     using System.Reflection;
     using System.Text;
 
-    using ClassLibraryCommon;
-
     using MEF;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
-
+    using NLog;
     using NonVisuals.StreamDeck.Events;
 
     using OpenMacroBoard.SDK;
@@ -24,6 +22,8 @@
 
     public class StreamDeckLayerHandler
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly StreamDeckPanel _streamDeckPanel;
         private volatile List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
         private const string HOME_LAYER_ID = "*";
@@ -47,7 +47,7 @@
                                                                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                                                         Error = (sender, args) =>
                                                                             {
-                                                                                Common.LogError("JSON Error.\n" + args.ErrorContext.Error.Message);
+                                                                                logger.Error($"JSON Error.{args.ErrorContext.Error.Message}");
                                                                             }
                                                                     };
 

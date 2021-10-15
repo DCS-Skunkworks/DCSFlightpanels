@@ -4,15 +4,14 @@
     using System.Collections.Generic;
     using System.Threading;
 
-    using ClassLibraryCommon;
-
     using DCS_BIOS;
-
     using Newtonsoft.Json;
+    using NLog;
 
     [Serializable]
     public abstract class DCSBIOSActionBindingBase
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private bool _whenOnTurnedOn = true;
         private string _description;
         [NonSerialized] private Thread _sendDCSBIOSCommandsThread;
@@ -103,7 +102,7 @@
             { }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
 

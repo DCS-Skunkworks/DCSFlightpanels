@@ -12,7 +12,6 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
@@ -61,7 +60,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -71,9 +70,9 @@
             {
                 Closed = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 
@@ -334,7 +333,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "SetLandingGearLedsManually");
+                logger.Error(ex, "SetLandingGearLedsManually");
                 throw;
             }
         }
@@ -492,7 +491,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "CheckDcsDataForColorChangeHook(uint address, uint data)");
+                logger.Error(ex, "CheckDcsDataForColorChangeHook(uint address, uint data)");
                 throw;
             }
         }
@@ -865,9 +864,9 @@
                 this.LedLightChanged(new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
                 SetLandingGearLED(_ledUpperColor | _ledLeftColor | _ledRightColor);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 
@@ -890,9 +889,9 @@
                 // Common.DebugP("Write ending");
                 // }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 

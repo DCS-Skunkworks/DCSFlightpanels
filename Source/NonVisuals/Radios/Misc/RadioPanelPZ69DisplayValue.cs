@@ -52,9 +52,9 @@
                 _radioPanelPZ69Display = (RadioPanelPZ69Display)Enum.Parse(typeof(RadioPanelPZ69Display), array[1]);
                 _radioPanelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), array[0]);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("Failed to import setting for RadioPanelPZ69Display \n" + e.Message + "\n " + e.StackTrace);
+                throw new Exception($"Failed to import setting for RadioPanelPZ69Display{Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
 

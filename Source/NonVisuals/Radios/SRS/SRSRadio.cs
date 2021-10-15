@@ -8,11 +8,10 @@
     using System.Text;
     using System.Threading;
 
-    using ClassLibraryCommon;
-
     using MEF;
 
     using Newtonsoft.Json;
+    using NLog;
 
     public enum SRSRadioMode
     {
@@ -31,9 +30,6 @@
         private static string _srsSendToIPUdp = "127.0.0.1";
         private static int _srsReceivePortUdp = 7082;
         private static int _srsSendPortUdp = 9040;
-
-
-
 
         public static void SetParams(int portFrom, string ipAddressTo, int portTo)
         {
@@ -68,13 +64,11 @@
         }
 
         public static bool IsRunning => _srsListener != null && _srsListener.IsRunning;
-
-
-
     }
 
     public class SRSRadio
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private UdpClient _udpReceiveClient;
         private UdpClient _udpSendClient;
         private Thread _srsListeningThread;
@@ -87,17 +81,6 @@
         private readonly object _sendSRSDataLockObject = new object();
         private readonly object _readSRSDataLockObject = new object();
         public bool IsRunning;
-
-
-
-
-
-
-
-
-
-
-
 
 
         public SRSRadio(int portFrom, string ipAddressTo, int portTo)
@@ -134,16 +117,16 @@
                             OnSRSDataReceived?.Invoke(this);
                         }
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        Common.LogError( e, "SRSListener.ReceiveDataUdp()");
+                        logger.Error(ex, "SRSListener.ReceiveDataUdp()");
                     }
                 }
             }
             catch (ThreadAbortException) { }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError( e, "SRSListener.ReceiveDataUdp()");
+                logger.Error(ex, "SRSListener.ReceiveDataUdp()");
             }
 
             IsRunning = false;
@@ -162,9 +145,9 @@
                     asciiBytes.AddRange(Encoding.Convert(Encoding.Unicode, Encoding.ASCII, unicodeBytes));
                     result = _udpSendClient.Send(asciiBytes.ToArray(), asciiBytes.ToArray().Length, ipEndPointSenderUdp);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Common.LogError( e, "Error sending data to SRS. " + e.Message + Environment.NewLine + e.StackTrace);
+                    logger.Error(ex, $"Error sending data to SRS. {ex.Message}{Environment.NewLine}{ex.StackTrace}");
                 }
             }
 
@@ -206,9 +189,9 @@
 
                 _started = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError( e, "SRSListener.StartupRP()");
+                logger.Error(ex, "SRSListener.StartupRP()");
                 if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
                 {
                     _udpReceiveClient.Close();
@@ -724,7 +707,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex, "SRSListener.ShutdownRP()");
+                logger.Error(ex, "SRSListener.ShutdownRP()");
             }
         }
 

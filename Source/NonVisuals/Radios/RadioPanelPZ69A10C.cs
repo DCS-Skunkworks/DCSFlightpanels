@@ -4088,9 +4088,9 @@
             {
                 ShutdownBase();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 

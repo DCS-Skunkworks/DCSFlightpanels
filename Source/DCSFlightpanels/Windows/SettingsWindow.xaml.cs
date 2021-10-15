@@ -349,9 +349,9 @@ namespace DCSFlightpanels.Windows
                     }
                     IpAddressFromDCSBIOS = TextBoxDCSBIOSFromIP.Text;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception("DCS-BIOS Error while checking IP from : " + e.Message);
+                    throw new Exception($"DCS-BIOS Error while checking IP from : {ex.Message}");
                 }
                 try
                 {
@@ -361,41 +361,41 @@ namespace DCSFlightpanels.Windows
                     }
                     IpAddressToDCSBIOS = TextBoxDCSBIOSToIP.Text;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception("DCS-BIOS Error while checking IP to : " + e.Message);
+                    throw new Exception($"DCS-BIOS Error while checking IP to : {ex.Message}");
                 }
                 try
                 {
                     var test = Convert.ToInt32(TextBoxDCSBIOSFromPort.Text);
                     PortFromDCSBIOS = TextBoxDCSBIOSFromPort.Text;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception("DCS-BIOS Error while Port from : " + e.Message);
+                    throw new Exception($"DCS-BIOS Error while Port from : {ex.Message}");
                 }
                 try
                 {
                     var test = Convert.ToInt32(TextBoxDCSBIOSFromPort.Text);
                     PortToDCSBIOS = TextBoxDCSBIOSToPort.Text;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception("DCS-BIOS Error while Port to : " + e.Message);
+                    throw new Exception($"DCS-BIOS Error while Port to : {ex.Message}");
                 }
                 try
                 {
                     var directoryInfo = new DirectoryInfo(TextBoxDcsBiosJSONLocation.Text);
                     DcsBiosJSONLocation = TextBoxDcsBiosJSONLocation.Text;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception("DCS-BIOS Error while checking DCS-BIOS location : " + e.Message);
+                    throw new Exception($"DCS-BIOS Error while checking DCS-BIOS location : {ex.Message}");
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("DCS-BIOS Error checking values : " + Environment.NewLine + e.Message);
+                throw new Exception($"DCS-BIOS Error checking values : {Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -428,9 +428,9 @@ namespace DCSFlightpanels.Windows
                     }
                     IpAddressFromSRS = TextBoxSRSFromIP.Text;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception("SRS Error while checking IP from : " + e.Message);
+                    throw new Exception($"SRS Error while checking IP from : {ex.Message}");
                 }
                 try
                 {
@@ -440,32 +440,32 @@ namespace DCSFlightpanels.Windows
                     }
                     IpAddressToSRS = TextBoxSRSToIP.Text;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception("SRS Error while checking IP to : " + e.Message);
+                    throw new Exception($"SRS Error while checking IP to : {ex.Message}");
                 }
                 try
                 {
                     var test = Convert.ToInt32(TextBoxSRSFromPort.Text);
                     PortFromSRS = TextBoxSRSFromPort.Text;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception("SRS Error while Port from : " + e.Message);
+                    throw new Exception($"SRS Error while Port from : {ex.Message}");
                 }
                 try
                 {
                     var test = Convert.ToInt32(TextBoxSRSFromPort.Text);
                     PortToSRS = TextBoxSRSToPort.Text;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception("SRS Error while Port to : " + e.Message);
+                    throw new Exception($"SRS Error while Port to : {ex.Message}");
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("SRS Error checking values : " + Environment.NewLine + e.Message);
+                throw new Exception($"SRS Error checking values : {Environment.NewLine}{ex.Message}");
             }
         }
 

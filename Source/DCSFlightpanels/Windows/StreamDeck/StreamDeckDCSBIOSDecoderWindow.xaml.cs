@@ -252,9 +252,9 @@
                                 SetRawDCSBIOSValue(_dcsbiosDecoder.StringDcsBiosValue);
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception ex)
                         {
-                            SetFormulaError(e.Message);
+                            SetFormulaError(ex.Message);
                         }
                     }
                     Thread.Sleep(10);

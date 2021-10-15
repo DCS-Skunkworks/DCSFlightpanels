@@ -14,7 +14,7 @@
     using DCSFlightpanels.Windows;
 
     using MEF;
-
+    using NLog;
     using NonVisuals;
     using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
@@ -26,6 +26,7 @@
     /// </summary>
     public partial class UserControlStreamDeckButtonAction : UserControlBase, IIsDirty, INvStreamDeckListener
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private List<StreamDeckActionTextBox> _textBoxes = new List<StreamDeckActionTextBox>();
 
         private StreamDeckButton _streamDeckButton;
@@ -1079,7 +1080,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1094,7 +1095,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1110,7 +1111,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1127,7 +1128,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1142,7 +1143,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1158,7 +1159,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1177,7 +1178,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1205,7 +1206,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1218,7 +1219,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 

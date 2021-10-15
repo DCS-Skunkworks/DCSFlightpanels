@@ -14,7 +14,6 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
@@ -44,10 +43,6 @@
         private readonly IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
         private GamingPanelEnum _panelType;
-
-
-
-
 
         public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
         {
@@ -203,7 +198,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -572,7 +567,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -587,7 +582,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -600,7 +595,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -613,7 +608,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -626,7 +621,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -639,7 +634,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -653,7 +648,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -668,7 +663,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
     }

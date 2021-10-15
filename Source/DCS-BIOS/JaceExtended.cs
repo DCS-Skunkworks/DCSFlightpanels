@@ -1,11 +1,12 @@
 ﻿using System;
-using ClassLibraryCommon;
 using Jace;
+using NLog;
 
 namespace DCS_BIOS
 {
     public class JaceExtended
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly CalculationEngine _calculationEngine = new CalculationEngine();
 
         public JaceExtended()
@@ -21,7 +22,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                Common.LogError( ex, "JaceExtended.Evaluate() function");
+                logger.Error(ex, "JaceExtended.Evaluate() function");
                 throw;
             }
         }

@@ -11,7 +11,6 @@
     using DCS_BIOS.Interfaces;
 
     using MEF;
-
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
@@ -20,7 +19,6 @@
     public class RadioPanelPZ69P47D : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
         private CurrentP47DRadioMode _currentUpperRadioMode = CurrentP47DRadioMode.HFRADIO;
-
         private CurrentP47DRadioMode _currentLowerRadioMode = CurrentP47DRadioMode.HFRADIO;
 
         /*
@@ -244,7 +242,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -384,7 +382,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -671,7 +669,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -817,7 +815,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
@@ -849,7 +847,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -859,9 +857,9 @@
             {
                 ShutdownBase();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 
@@ -896,7 +894,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -910,7 +908,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -932,7 +930,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -956,7 +954,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
             return false;
         }
@@ -978,7 +976,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
             return false;
         }
@@ -1001,7 +999,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             return false;

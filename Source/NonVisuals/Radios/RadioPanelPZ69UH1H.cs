@@ -13,7 +13,6 @@ namespace NonVisuals.Radios
     using DCS_BIOS.Interfaces;
 
     using MEF;
-
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
@@ -22,7 +21,6 @@ namespace NonVisuals.Radios
     public class RadioPanelPZ69UH1H : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
         private CurrentUH1HRadioMode _currentUpperRadioMode = CurrentUH1HRadioMode.UHF;
-
         private CurrentUH1HRadioMode _currentLowerRadioMode = CurrentUH1HRadioMode.UHF;
 
         /*UH-1H INTERCOMM*/
@@ -876,7 +874,7 @@ namespace NonVisuals.Radios
             { }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
         */
@@ -998,7 +996,7 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex);
+                    logger.Error(ex);
                 }
             }
             finally
@@ -1171,7 +1169,7 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex);
+                    logger.Error(ex);
                 }
             }
             finally
@@ -1302,7 +1300,7 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex);
+                    logger.Error(ex);
                 }
             }
             finally
@@ -1680,7 +1678,7 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex);
+                    logger.Error(ex);
                 }
             }
             finally
@@ -1720,7 +1718,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -3140,7 +3138,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -3150,9 +3148,9 @@ namespace NonVisuals.Radios
             {
                 ShutdownBase();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 

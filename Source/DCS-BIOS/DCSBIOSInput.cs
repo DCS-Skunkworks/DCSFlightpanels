@@ -6,9 +6,8 @@ namespace DCS_BIOS
     using System;
     using System.Collections.Generic;
 
-    using ClassLibraryCommon;
-
     using Newtonsoft.Json;
+    using NLog;
 
     public enum DCSBIOSFixedStepInput
     {
@@ -27,6 +26,7 @@ namespace DCS_BIOS
     [Serializable]
     public class DCSBIOSInput
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         // These are loaded and saved, all the rest are fetched from DCS-BIOS
         private string _controlId;
 
@@ -163,7 +163,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                Common.LogError( ex, "Error in DCSBIOSInput.ToString(), ControlId = " + _controlId);
+                logger.Error(ex, $"Error in DCSBIOSInput.ToString(), ControlId = {_controlId}");
                 throw;
             }
 
