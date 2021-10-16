@@ -292,8 +292,6 @@ namespace Tests.NonVisuals
             yield return new object[] { "00-01-02-D3-04-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.40"*/, 123.40, 2, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-02-D3-04-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.40"*/, 123.4, 2, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
             yield return new object[] { "00-01-D2-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.345"*/, 12.345, 3, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-
-            //  yield return new object[] { "00-FF-FF-01-D2-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", 12, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
         }
 
         [Theory]
@@ -302,6 +300,20 @@ namespace Tests.NonVisuals
         {
             var bytes = StringToBytes(inputArray);
             _dp.DoubleWithSpecifiedDecimalsPlaces(ref bytes, digits, decimals, lcdPosition);
+            Assert.Equal(expected, BitConverter.ToString(bytes));
+        }
+
+        public static IEnumerable<object[]> DoubleData()
+        {
+            yield return new object[] { "00-D1-00-00-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"1.0000"*/, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
+        }
+
+        [Theory]
+        [MemberData(nameof(DoubleData))]
+        public void Double_ShouldReturn_ExpectedValue(string expected, double digits, string inputArray, PZ69LCDPosition lcdPosition)
+        {
+            var bytes = StringToBytes(inputArray);
+            _dp.Double(ref bytes, digits, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
         }
     }
