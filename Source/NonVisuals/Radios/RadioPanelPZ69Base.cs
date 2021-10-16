@@ -22,7 +22,6 @@
     {
         private byte _ignoreSwitchButtonCounter = 3;
         protected NumberFormatInfo NumberFormatInfoFullDisplay;
-        protected NumberFormatInfo NumberFormatInfoEmpty;
         private int _frequencyKnobSensitivity;
         private volatile byte _frequencySensitivitySkipper;
         protected readonly object LockLCDUpdateObject = new object();
@@ -49,10 +48,6 @@
             NumberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
             NumberFormatInfoFullDisplay.NumberDecimalDigits = 4;
             NumberFormatInfoFullDisplay.NumberGroupSeparator = string.Empty;
-
-            NumberFormatInfoEmpty = new NumberFormatInfo();
-            NumberFormatInfoEmpty.NumberDecimalSeparator = ".";
-            NumberFormatInfoEmpty.NumberGroupSeparator = string.Empty;
         }
 
         /*         
@@ -108,7 +103,13 @@
             var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
             var i = 0;
             var formatString = "0.".PadRight(decimals + 2, '0');
-            var digitsAsString = digits.ToString(formatString, NumberFormatInfoEmpty).PadLeft(6);
+
+            var numberFormatInfoEmpty = new NumberFormatInfo() {
+                NumberDecimalSeparator = ".",
+                NumberGroupSeparator = string.Empty
+            };
+
+            var digitsAsString = digits.ToString(formatString, numberFormatInfoEmpty).PadLeft(6);
 
             do
             {
