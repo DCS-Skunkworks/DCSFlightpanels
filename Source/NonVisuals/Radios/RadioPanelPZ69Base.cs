@@ -99,38 +99,7 @@
 
         protected void SetPZ69DisplayBytes(ref byte[] bytes, double digits, int decimals, PZ69LCDPosition pz69LCDPosition)
         {
-            var arrayPosition = GetArrayPosition(pz69LCDPosition);
-            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
-            var i = 0;
-            var formatString = "0.".PadRight(decimals + 2, '0');
-
-            var numberFormatInfoEmpty = new NumberFormatInfo() {
-                NumberDecimalSeparator = ".",
-                NumberGroupSeparator = string.Empty
-            };
-
-            var digitsAsString = digits.ToString(formatString, numberFormatInfoEmpty).PadLeft(6);
-
-            do
-            {
-                if (digitsAsString[i] == '.')
-                {
-                    // skip to next position, this has already been dealt with
-                    i++;
-                }
-
-                byte b;
-                b = digitsAsString[i].ToString().Equals(" ") ? (byte)0xFF : byte.Parse(digitsAsString[i].ToString());
-                bytes[arrayPosition] = b;
-                if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')
-                {
-                    bytes[arrayPosition] = (byte)(bytes[arrayPosition] + 0xd0);
-                }
-
-                arrayPosition++;
-                i++;
-            }
-            while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
+            _pZ69DisplayBytes.DoubleWithForcedDecimals(ref bytes, digits, decimals, pz69LCDPosition);
         }
 
         /// <summary>
