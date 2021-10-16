@@ -211,35 +211,7 @@
 
         protected void SetPZ69DisplayBytesDefault(ref byte[] bytes, double digits, PZ69LCDPosition pz69LCDPosition)
         {
-            _pZ69DisplayBytes.Double(ref bytes, digits, pz69LCDPosition);
-        }
-
-        private int GetArrayPosition(PZ69LCDPosition pz69LCDPosition)
-        {
-            switch (pz69LCDPosition)
-            {
-                case PZ69LCDPosition.UPPER_ACTIVE_LEFT:
-                    {
-                        return 1;
-                    }
-
-                case PZ69LCDPosition.UPPER_STBY_RIGHT:
-                    {
-                        return 6;
-                    }
-
-                case PZ69LCDPosition.LOWER_ACTIVE_LEFT:
-                    {
-                        return 11;
-                    }
-
-                case PZ69LCDPosition.LOWER_STBY_RIGHT:
-                    {
-                        return 16;
-                    }
-            }
-
-            return 1;
+            _pZ69DisplayBytes.DoubleJustifyLeft(ref bytes, digits, pz69LCDPosition);
         }
 
         public void SendLCDData(byte[] array)

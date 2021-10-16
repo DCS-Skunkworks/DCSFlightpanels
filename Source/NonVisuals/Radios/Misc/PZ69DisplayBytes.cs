@@ -237,7 +237,7 @@
             while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
         }
 
-        public void Double(ref byte[] bytes, double digits, PZ69LCDPosition pz69LCDPosition)
+        public void DoubleJustifyLeft(ref byte[] bytes, double digits, PZ69LCDPosition pz69LCDPosition)
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
