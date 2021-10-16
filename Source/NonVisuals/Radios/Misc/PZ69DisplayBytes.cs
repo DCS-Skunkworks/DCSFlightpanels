@@ -1,11 +1,13 @@
-﻿
-using System;
-using System.Globalization;
-
-namespace NonVisuals.Radios.Misc
+﻿namespace NonVisuals.Radios.Misc
 {
+    using NLog;
+    using System;
+    using System.Globalization;
+
     public class PZ69DisplayBytes
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Right justify, pad left with blanks.
         /// </summary>
@@ -227,6 +229,61 @@ namespace NonVisuals.Radios.Misc
                 if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')
                 {
                     bytes[arrayPosition] = (byte)(bytes[arrayPosition] + 0xd0);
+                }
+
+                arrayPosition++;
+                i++;
+            }
+            while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
+        }
+
+        public void Double(ref byte[] bytes, double digits, PZ69LCDPosition pz69LCDPosition)
+        {
+            var arrayPosition = GetArrayPosition(pz69LCDPosition);
+            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
+
+            // Debug.WriteLine("LCD position is " + pz69LCDPosition);
+            // Debug.WriteLine("Array position = " + arrayPosition);
+            // Debug.WriteLine("Max array position = " + (maxArrayPosition));
+            var i = 0;
+            NumberFormatInfo numberFormatInfoFullDisplay = new NumberFormatInfo()
+            {
+                NumberDecimalSeparator = ".",
+                NumberDecimalDigits = 4,
+                NumberGroupSeparator = string.Empty
+            };
+
+            var digitsAsString = digits.ToString("0.0000", numberFormatInfoFullDisplay);
+            // 116 should become 116.00!
+            do
+            {
+                // 5 digits can be displayed
+                // 1.00000011241 -> 1.0000
+                // 116.0434      -> 116.04 
+                // 1199330.12449 -> 11993
+                if (digitsAsString[i] == '.')
+                {
+                    // skip to next position, this has already been dealt with
+                    i++;
+                }
+
+                try
+                {
+                    var tmp = digitsAsString[i].ToString();
+                    var b = byte.Parse(tmp);
+                    bytes[arrayPosition] = b;
+                    // Debug.WriteLine("Current string char is " + tmp + " from i = " + i + ", writing byte " + b + " to array position " + arrayPosition);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, $"SetPZ69DisplayBytesDefault() digitsAsString.Length = {digitsAsString.Length}");
+                }
+
+                if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')
+                {
+                    // Add decimal marker
+                    bytes[arrayPosition] = (byte)(bytes[arrayPosition] + 0xd0);
+                    // Debug.WriteLine("Writing decimal marker to array position " + arrayPosition);
                 }
 
                 arrayPosition++;
