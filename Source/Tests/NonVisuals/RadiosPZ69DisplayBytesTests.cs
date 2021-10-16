@@ -239,5 +239,70 @@ namespace Tests.NonVisuals
             _dp.BytesStringAsItOrPadLeftBlanks(ref bytes, inputString, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
         }
+
+
+        public static IEnumerable<object[]> DoubleWithSpecifiedDecimalsPlacesData()
+        {
+            yield return new object[] { "00-FF-FF-FF-FF-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"     "*/, 1, 0, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //??
+            yield return new object[] { "00-FF-FF-FF-FF-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"    1"*/, 12, 0, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };//??
+            yield return new object[] { "00-FF-FF-FF-01-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"   12"*/, 123, 0, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };//??
+            yield return new object[] { "00-FF-FF-01-02-03-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"  123"*/, 1234, 0, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };//??
+            yield return new object[] { "00-FF-01-02-03-04-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*" 1234"*/, 12345, 0, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };//??
+            yield return new object[] { "00-01-02-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12345"*/, 123456, 0, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };//??
+            yield return new object[] { "00-01-02-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12345"*/, 1234567, 0, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };//??
+
+            yield return new object[] { "00-FF-FF-FF-D1-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"   1.0"*/, 1, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-FF-01-D2-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"  12.0"*/, 12, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-01-02-D3-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*" 123.0"*/, 123, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-02-03-D4-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"1234.0"*/, 1234, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-02-03-04-D5-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12345."*/, 12345, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-02-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12345"*/, 123456, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+
+            yield return new object[] { "00-FF-FF-FF-FF-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"      "*/, 1.2, 0, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //??
+            yield return new object[] { "00-FF-FF-FF-D1-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"   1.2"*/, 1.2, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-FF-D1-02-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"  1.20"*/, 1.2, 2, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-D1-02-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*" 1.200"*/, 1.2, 3, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-D1-02-00-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"1.2000"*/, 1.2, 4, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-D1-02-00-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"1.2000"*/, 1.2, 5, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+
+            yield return new object[] { "00-FF-FF-FF-FF-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"      "*/, 1.23, 0, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //??
+            yield return new object[] { "00-FF-FF-FF-D1-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"   1.2"*/, 1.23, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-FF-D1-02-03-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"  1.23"*/, 1.23, 2, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-D1-02-03-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*" 1.230"*/, 1.23, 3, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
+            yield return new object[] { "00-D1-02-03-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"1.2300"*/, 1.23, 4, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
+            yield return new object[] { "00-D1-02-03-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"1.2300"*/, 1.23, 5, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //??
+            
+            yield return new object[] { "00-FF-FF-FF-FF-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"      "*/, 1.01, 0, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //??
+            yield return new object[] { "00-FF-FF-FF-D1-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"   1.2"*/, 1.23456, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
+            yield return new object[] { "00-FF-FF-D1-02-03-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"  1.23"*/, 1.23456, 2, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
+            yield return new object[] { "00-FF-D1-02-03-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*" 1.235"*/, 1.23456, 3, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //????
+            yield return new object[] { "00-D1-02-03-04-06-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"1.2346"*/, 1.23456, 4, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //????
+            yield return new object[] { "00-D1-02-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"1.2345"*/, 1.23456, 5, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-D1-02-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"1.2345"*/, 1.23456, 6, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+
+            //More or less good frequencies to display with realistic number of digits and decimals
+            yield return new object[] { "00-01-02-D3-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.00"*/, 123.00, 2, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
+            yield return new object[] { "00-01-02-D3-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.00"*/, 123, 2, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
+            yield return new object[] { "00-01-D2-00-05-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.050"*/, 12.050, 3, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-D2-00-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.000"*/, 12, 3, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
+            yield return new object[] { "00-01-D2-00-00-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.005"*/, 12.005, 3, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-D2-00-05-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.050"*/, 12.05, 3, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-D2-05-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.500"*/, 12.5, 3, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-02-D3-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.45"*/, 123.45, 2, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-02-D3-04-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.40"*/, 123.40, 2, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-02-D3-04-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.40"*/, 123.4, 2, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
+            yield return new object[] { "00-01-D2-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.345"*/, 12.345, 3, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+
+            //  yield return new object[] { "00-FF-FF-01-D2-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", 12, 1, _deights, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+        }
+
+        [Theory]
+        [MemberData(nameof(DoubleWithSpecifiedDecimalsPlacesData))]
+        public void DoubleWithSpecifiedDecimalsPlaces_ShouldReturn_ExpectedValue(string expected, double digits, int decimals, string inputArray, PZ69LCDPosition lcdPosition)
+        {
+            var bytes = StringToBytes(inputArray);
+            _dp.DoubleWithSpecifiedDecimalsPlaces(ref bytes, digits, decimals, lcdPosition);
+            Assert.Equal(expected, BitConverter.ToString(bytes));
+        }
     }
 }

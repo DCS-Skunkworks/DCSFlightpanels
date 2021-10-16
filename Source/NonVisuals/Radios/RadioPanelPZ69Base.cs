@@ -99,7 +99,7 @@
 
         protected void SetPZ69DisplayBytes(ref byte[] bytes, double digits, int decimals, PZ69LCDPosition pz69LCDPosition)
         {
-            _pZ69DisplayBytes.DoubleWithForcedDecimals(ref bytes, digits, decimals, pz69LCDPosition);
+            _pZ69DisplayBytes.DoubleWithSpecifiedDecimalsPlaces(ref bytes, digits, decimals, pz69LCDPosition);
         }
 
         /// <summary>

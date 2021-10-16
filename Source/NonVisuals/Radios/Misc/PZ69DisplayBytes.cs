@@ -198,7 +198,7 @@ namespace NonVisuals.Radios.Misc
             while (i < digits.Length && arrayPosition < maxArrayPosition + 1);
         }
 
-        public void DoubleWithForcedDecimals(ref byte[] bytes, double digits, int decimals, PZ69LCDPosition pz69LCDPosition)
+        public void DoubleWithSpecifiedDecimalsPlaces(ref byte[] bytes, double digits, int decimals, PZ69LCDPosition pz69LCDPosition)
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
