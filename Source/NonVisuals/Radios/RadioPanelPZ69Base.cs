@@ -21,7 +21,7 @@
     public abstract class RadioPanelPZ69Base : SaitekPanel
     {
         private byte _ignoreSwitchButtonCounter = 3;
-        protected NumberFormatInfo NumberFormatInfoFullDisplay;
+        private NumberFormatInfo _numberFormatInfoFullDisplay;
         private int _frequencyKnobSensitivity;
         private volatile byte _frequencySensitivitySkipper;
         protected readonly object LockLCDUpdateObject = new object();
@@ -44,10 +44,10 @@
                 throw new ArgumentException();
             }
 
-            NumberFormatInfoFullDisplay = new NumberFormatInfo();
-            NumberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
-            NumberFormatInfoFullDisplay.NumberDecimalDigits = 4;
-            NumberFormatInfoFullDisplay.NumberGroupSeparator = string.Empty;
+            _numberFormatInfoFullDisplay = new NumberFormatInfo();
+            _numberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
+            _numberFormatInfoFullDisplay.NumberDecimalDigits = 4;
+            _numberFormatInfoFullDisplay.NumberGroupSeparator = string.Empty;
         }
 
         /*         
@@ -218,7 +218,14 @@
             // Debug.WriteLine("Array position = " + arrayPosition);
             // Debug.WriteLine("Max array position = " + (maxArrayPosition));
             var i = 0;
-            var digitsAsString = digits.ToString("0.0000", NumberFormatInfoFullDisplay);
+            NumberFormatInfo numberFormatInfoFullDisplay = new NumberFormatInfo()
+            {
+                NumberDecimalSeparator = ".",
+                NumberDecimalDigits = 4,
+                NumberGroupSeparator = string.Empty
+            };
+
+            var digitsAsString = digits.ToString("0.0000", numberFormatInfoFullDisplay);
             // 116 should become 116.00!
             do
             {
@@ -455,10 +462,9 @@
             set => _syncOKDelayTimeout = value * 10000;
         }
 
-        public NumberFormatInfo NumberFormatInfo
+        public NumberFormatInfo NumberFormatInfoFullDisplay
         {
             get => NumberFormatInfoFullDisplay;
-            set => NumberFormatInfoFullDisplay = value;
         }
 
         public int FrequencyKnobSensitivity
