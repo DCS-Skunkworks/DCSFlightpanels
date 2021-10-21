@@ -84,9 +84,9 @@
             {
                 Closed = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 
@@ -1359,9 +1359,9 @@
                 // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
                 HIDSkeletonBase.HIDWriteDevice?.WriteFeatureData(array);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 

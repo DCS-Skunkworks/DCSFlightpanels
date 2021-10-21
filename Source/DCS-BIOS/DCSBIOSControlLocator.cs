@@ -4,13 +4,16 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-
+    using System.Text;
     using ClassLibraryCommon;
 
     using Newtonsoft.Json;
+    using NLog;
 
     public static class DCSBIOSControlLocator
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
+
         private static readonly List<DCSBIOSControl> DCSBIOSControls = new List<DCSBIOSControl>();
         private static readonly object LockObject = new object();
         private static DCSFPProfile _dcsfpProfile;
@@ -191,9 +194,9 @@
                         controlObject.identifier.Equals("_UPDATE_SKIP_COUNTER")));
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + _jsonDirectory + "]<==", e);
+                throw new Exception($"{DCSBIOSNotFoundErrorMessage} ==>[{_jsonDirectory}]<==", ex);
             }
         }
 
@@ -231,16 +234,13 @@
 
             if (dupes.Count > 0)
             {
-                var message = "Below is a list of duplicate identifiers found in the " + Profile.JSONFilename + " profile (DCS-BIOS)\n";
-                message = message + "The identifier must be unique, please correct the profile " + Profile.JSONFilename + " in the DCS-BIOS lib folder\n";
-                message = message + "---------------------------------------------\n";
-                foreach (var dupe in dupes)
-                {
-                    message = message + dupe + "\n";
-                }
-
-                message = message + "---------------------------------------------\n";
-                Common.LogError(message);
+                var message = new StringBuilder();
+                message.AppendLine($"Below is a list of duplicate identifiers found in the {Profile.JSONFilename} profile (DCS-BIOS)");
+                message.AppendLine($"The identifier must be unique, please correct the profile {Profile.JSONFilename} in the DCS-BIOS lib folder");
+                message.AppendLine("---------------------------------------------");
+                dupes.ForEach(dupe => message.AppendLine(dupe));
+                message.AppendLine("---------------------------------------------");
+                logger.Error(message);
             }
         }
         

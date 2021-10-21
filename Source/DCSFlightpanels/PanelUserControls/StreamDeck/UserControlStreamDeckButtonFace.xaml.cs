@@ -16,7 +16,7 @@
     using DCSFlightpanels.Windows.StreamDeck;
 
     using MEF;
-
+    using NLog;
     using NonVisuals;
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck;
@@ -30,6 +30,7 @@
     /// </summary>
     public partial class UserControlStreamDeckButtonFace : UserControlStreamDeckButtonAction.IStreamDeckButtonActionListener, IIsDirty, INvStreamDeckListener
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
         private readonly List<RadioButton> _radioButtonList = new List<RadioButton>();
         private bool _isDirty = false;
@@ -700,7 +701,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -715,7 +716,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -731,7 +732,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -748,7 +749,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -763,7 +764,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -784,7 +785,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 

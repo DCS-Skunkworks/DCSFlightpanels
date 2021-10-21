@@ -4,14 +4,11 @@
     using System.Collections.Generic;
     using System.Threading;
 
-    using ClassLibraryCommon;
-
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
 
     using MEF;
-
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
@@ -783,7 +780,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
 
@@ -793,9 +790,9 @@
             {
                 ShutdownBase();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 

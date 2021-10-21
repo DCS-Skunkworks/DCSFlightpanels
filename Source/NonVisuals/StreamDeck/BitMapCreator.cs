@@ -9,15 +9,14 @@
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
-    using ClassLibraryCommon;
-
     using MEF;
-
+    using NLog;
     using Color = System.Drawing.Color;
     using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
     public static class BitMapCreator
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
         {
             using (var outStream = new MemoryStream())
@@ -191,9 +190,9 @@
                     return bitmapimage;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e, "Failed to convert bitmap to bitmapimage.");
+                logger.Error(ex, "Failed to convert bitmap to bitmapimage.");
             }
 
             return null;

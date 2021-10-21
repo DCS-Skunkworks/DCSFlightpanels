@@ -9,19 +9,18 @@
     using System.Threading;
     using System.Windows.Media.Imaging;
 
-    using ClassLibraryCommon;
-
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
 
     using Newtonsoft.Json;
-
+    using NLog;
     using NonVisuals.StreamDeck.Events;
 
     [Serializable]
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener, IDisposable
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private DCSBIOSOutput _dcsbiosOutput;
         private string _formula = string.Empty;
         private bool _useFormula;
@@ -167,7 +166,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "DcsBiosDataReceived()");
+                logger.Error(ex, "DcsBiosDataReceived()");
             }
         }
 
@@ -217,7 +216,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "DCSBIOSStringReceived()");
+                logger.Error(ex, "DCSBIOSStringReceived()");
             }
         }
 

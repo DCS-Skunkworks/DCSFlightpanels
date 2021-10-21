@@ -33,7 +33,9 @@
     using DCSFlightpanels.Windows;
 
     using Microsoft.Win32;
-
+    using NLog;
+    using NLog.Targets;
+    using NLog.Targets.Wrappers;
     using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
@@ -54,6 +56,8 @@
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable, IHardwareConflictResolver
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
         private readonly List<GamingPanel> _gamingPanels = new List<GamingPanel>();
         private readonly string _windowName = "DCSFlightpanels ";
@@ -64,8 +68,6 @@
         private readonly List<string> _statusMessages = new List<string>();
         private readonly object _lockObjectStatusMessages = new object();
         private readonly List<UserControl> _panelUserControls = new List<UserControl>();
-        private readonly string _debugLogFile = AppDomain.CurrentDomain.BaseDirectory + "DCSFlightpanels_debug_log.txt";
-        private readonly string _errorLogFile = AppDomain.CurrentDomain.BaseDirectory + "DCSFlightpanels_error_log.txt";
 
         private readonly bool _doSearchForPanels = true;
         private HIDHandler _hidHandler;
@@ -105,20 +107,7 @@
 
                 LoadSettings();
 
-                if (!File.Exists(_debugLogFile))
-                {
-                    var stream = File.Create(_debugLogFile);
-                    stream.Close();
-                }
-
-                if (!File.Exists(_errorLogFile))
-                {
-                    var stream = File.Create(_errorLogFile);
-                    stream.Close();
-                }
-
-                Common.SetErrorLog(_errorLogFile);
-
+            
                 DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 CheckErrorLogAndDCSBIOSLocation();
@@ -162,7 +151,6 @@
                 {
                     StartupDCSBIOS();
                 }
-
                 SendEventRegardingForwardingOfKeys();
 
                 CheckForNewDCSFPRelease();
@@ -208,18 +196,67 @@
             }
         }
 
+        /// <summary>
+        /// Try to find the path of the log with a file target given as parameter
+        /// See NLog.config in the main folder of the application for configured log targets
+        /// </summary>
+        private string GetLogFilePathByTarget(string targetName)
+        {
+            string fileName = null;
+            if (LogManager.Configuration != null && LogManager.Configuration.ConfiguredNamedTargets.Count != 0)
+            {
+                Target target = LogManager.Configuration.FindTargetByName(targetName);
+                if (target == null)
+                {
+                    throw new Exception($"Could not find log with a target named: [{targetName}]. See NLog.config for configured targets");
+                }
+
+                FileTarget fileTarget = null;
+                WrapperTargetBase wrapperTarget = target as WrapperTargetBase;
+
+                // Unwrap the target if necessary.
+                if (wrapperTarget == null)
+                {
+                    fileTarget = target as FileTarget;
+                }
+                else
+                {
+                    fileTarget = wrapperTarget.WrappedTarget as FileTarget;
+                }
+
+                if (fileTarget == null)
+                {
+                    throw new Exception($"Could not get a FileTarget type log from {target.GetType()}");
+                }
+
+                var logEventInfo = new LogEventInfo { TimeStamp = DateTime.Now };
+                fileName = fileTarget.FileName.Render(logEventInfo);
+            }
+            else
+            {
+                throw new Exception("LogManager contains no configuration or there are no named targets. See NLog.config file to configure the logs.");
+            }
+            return fileName;
+        }
+
         private void CheckErrorLogAndDCSBIOSLocation()
         {
             // FUGLY, I know but something quick to help the users
             try
             {
-                var loggerText = File.ReadAllText(_errorLogFile);
+                string errorLogFilePath = GetLogFilePathByTarget("error_logfile");
+                if (errorLogFilePath == null || !File.Exists(errorLogFilePath))
+                {
+                    return;
+                }
+
+                var loggerText = File.ReadAllText(errorLogFilePath);
                 if (loggerText.Contains(DCSBIOSControlLocator.DCSBIOSNotFoundErrorMessage))
                 {
                     var window = new DCSBIOSNotFoundWindow(Settings.Default.DCSBiosJSONLocation);
                     window.ShowDialog();
                     MessageBox.Show(
-                        "This warning will be shown as long as there are error messages in error log stating that DCS-BIOS can not be found. Delete or clear the error log once you have fixed the problem.",
+                        $"This warning will be shown as long as there are error messages in error log stating that DCS-BIOS can not be found. Delete or clear the error log{Environment.NewLine}{errorLogFilePath}{Environment.NewLine} once you have fixed the problem.",
                         "Delete Error Log",
                         MessageBoxButton.OK,
                         MessageBoxImage.Warning);
@@ -396,9 +433,9 @@
         {
             try
             {
-                var str = "DCS-BIOS UPDATES MISSED = " + e.GamingPanelEnum + "  " + e.Count;
-                ShowStatusBarMessage(str);
-                Common.LogError(str);
+                var message = $"DCS-BIOS UPDATES MISSED = {e.GamingPanelEnum} {e.Count}";
+                ShowStatusBarMessage(message);
+                logger.Error(message);
             }
             catch (Exception ex)
             {
@@ -1154,7 +1191,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError("Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
+                logger.Error(ex, "Error checking for newer releases.");
                 LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
                 LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + Settings.Default.LastDCSBIOSRelease;
             }
@@ -1240,7 +1277,7 @@
             try
             {
                 Shutdown();
-
+                LogManager.Shutdown();
                 // Wtf is hanging?
                 Application.Current.Shutdown();
                 Environment.Exit(0);
@@ -1407,10 +1444,11 @@
                 SetWindowState();
                 SendEventRegardingForwardingOfKeys();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e);
-                Common.LogError(e.InnerException);
+                logger.Error(ex);
+                if (ex.InnerException != null)
+                    logger.Error(ex.InnerException);
                 throw;
             }
 
@@ -1692,16 +1730,17 @@
             }
         }
 
-        private void MenuItemErrorLog_OnClick(object sender, RoutedEventArgs e)
+        private void TryOpenLogFileWithTarget(string targetName)
         {
             try
             {
-                if (!File.Exists(_errorLogFile))
+                string errorLogFilePath = GetLogFilePathByTarget(targetName);
+                if (errorLogFilePath == null || !File.Exists(errorLogFilePath))
                 {
-                    File.Create(_errorLogFile);
+                    MessageBox.Show($"No log file found {errorLogFilePath}", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
                 }
-
-                Process.Start(_errorLogFile);
+                Process.Start(errorLogFilePath);
             }
             catch (Exception ex)
             {
@@ -1709,21 +1748,14 @@
             }
         }
 
+        private void MenuItemErrorLog_OnClick(object sender, RoutedEventArgs e)
+        {
+            TryOpenLogFileWithTarget("error_logfile");
+        }
+
         private void MenuItemDebugLog_OnClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (!File.Exists(_debugLogFile))
-                {
-                    File.Create(_debugLogFile);
-                }
-
-                Process.Start(_debugLogFile);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            TryOpenLogFileWithTarget("debug_logfile");            
         }
 
         private void LoadProcessPriority()

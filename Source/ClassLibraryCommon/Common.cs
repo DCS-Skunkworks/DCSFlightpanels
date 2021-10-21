@@ -1,14 +1,13 @@
 ﻿namespace ClassLibraryCommon
 {
+    using NLog;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Net;
     using System.Net.Sockets;
-    using System.Reflection;
     using System.Security.Cryptography;
     using System.Text;
     using System.Windows;
@@ -27,6 +26,7 @@
 
     public static class Common
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         public static void PlaySoundFile(bool showException, string soundFile, double volume) //Volume 0 - 100
         {
             try
@@ -257,127 +257,16 @@
         }
 
         public static APIModeEnum APIMode = 0;
-        private static readonly object ErrorLogLockObject = new object();
-        private static string _errorLog = string.Empty;
-
-        public static void SetErrorLog(string filename)
-        {
-            lock (ErrorLogLockObject)
-            {
-                _errorLog = filename;
-            }
-        }
-
-        public static void Log(string message)
-        {
-            try
-            {
-                lock (ErrorLogLockObject)
-                {
-                    var assembly = Assembly.GetExecutingAssembly();
-                    var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                    var version = fileVersionInfo.FileVersion;
-
-                    if (!File.Exists(_errorLog))
-                    {
-                        var fileStream = File.Create(_errorLog);
-                        fileStream.Close();
-                    }
-
-                    var tempFile = Path.GetTempFileName();
-                    using (var streamWriter = new StreamWriter(tempFile))
-                    using (var streamReader = File.OpenText(_errorLog))
-                    {
-                        streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
-                        streamWriter.Write(message + Environment.NewLine);
-                        while (!streamReader.EndOfStream)
-                        {
-                            streamWriter.WriteLine(streamReader.ReadLine());
-                        }
-                    }
-
-                    File.Copy(tempFile, _errorLog, true);
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error writing to error log. Please restart DCSFP. " + e.Message);
-            }
-        }
-
-        public static void LogError(string message)
-        {
-            Log(Environment.NewLine + message);
-        }
-
-        public static void LogError(Exception ex, string message = null)
-        {
-            string innerMessage = string.Empty;
-
-            if (ex.InnerException != null)
-            {
-                innerMessage = ex.InnerException.Message + Environment.NewLine + ex.InnerException.StackTrace;
-            }
-
-            Log(Environment.NewLine +
-                (string.IsNullOrEmpty(message) ? string.Empty : " Custom message = [" + message + "]") +
-                Environment.NewLine +
-                ex.GetBaseException().GetType() +
-                Environment.NewLine +
-                ex.Message +
-                Environment.NewLine +
-                ex.StackTrace +
-                Environment.NewLine +
-                innerMessage);
-        }
 
         public static void ShowErrorMessageBox(Exception ex, string message = null)
         {
-            LogError(ex, message);
-            MessageBox.Show(ex.Message, "Details logged to error log.\n" + ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+            logger.Error(ex, message);
+            MessageBox.Show(ex.Message, $"Details logged to error log.{Environment.NewLine}{ex.Source}", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public static void ShowMessageBox(string text, string header = "Information")
         {
             MessageBox.Show(text, header, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        private static string GetStackTrace(string[] traceLineMustInclude, string header = "Stacktrace")
-        {
-            var stacktrace = Environment.StackTrace;
-            var lines = stacktrace.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            var result = new StringBuilder();
-
-            foreach (var line in lines)
-            {
-                var found = false;
-                foreach (var mustIncludeProject in traceLineMustInclude)
-                {
-                    if (line.Contains(mustIncludeProject))
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (found && !line.Contains("LogStackTrace") && !line.Contains("GetStackTrace") && !line.Contains("ShowStackTraceBox"))
-                {
-                    result.Append(line);
-                }
-            }
-
-            return result.ToString();
-        }
-
-        public static void LogStackTrace(string[] traceLineMustInclude, string header = "Stacktrace")
-        {
-            var stackTrace = GetStackTrace(traceLineMustInclude, header);
-            Log("  This is a logged Stacktrace\n" + stackTrace);
-        }
-
-        public static void ShowStackTraceBox(string[] traceLineMustInclude, string header = "Stacktrace")
-        {
-            MessageBox.Show(GetStackTrace(traceLineMustInclude, header), header, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public static string PrintBitStrings(byte[] array)

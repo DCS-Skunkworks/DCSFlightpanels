@@ -11,10 +11,9 @@ namespace DCS_BIOS
     using System.Linq;
     using System.Threading;
 
-    using ClassLibraryCommon;
-
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
+    using NLog;
 
     public enum DCSBiosStateEnum
     {
@@ -29,6 +28,7 @@ namespace DCS_BIOS
 
     internal class DCSBIOSProtocolParser : IDisposable
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         public delegate void DcsDataAddressValueEventHandler(object sender, DCSBIOSDataEventArgs e);
         public event DcsDataAddressValueEventHandler OnDcsDataAddressValue;
 
@@ -148,17 +148,17 @@ namespace DCS_BIOS
                         
                         interval++;
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        Common.LogError( e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
+                        logger.Error(ex, $"DCSBIOSProtocolParser.ProcessArrays(), arrays to process : {_arraysToProcess.Count}");
                     }
                     _autoResetEvent?.WaitOne();
                 }
             }
             catch (ThreadAbortException) { }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError( e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
+                logger.Error(ex, $"DCSBIOSProtocolParser.ProcessArrays(), arrays to process : {_arraysToProcess.Count}");
             }
         }
 
@@ -254,12 +254,12 @@ namespace DCS_BIOS
                                     Debug.WriteLine("OnDcsDataAddressValue : " + OnDcsDataAddressValue.GetInvocationList().Length);
                                 }*/
                             }
-                            catch (Exception e)
+                            catch (Exception ex)
                             {
-                                if (!_errorsLogged.Contains(e.Message))
+                                if (!_errorsLogged.Contains(ex.Message))
                                 {
-                                    Common.LogError(e, "Error in DCS-BIOS stream. This error will be logged *just once*.");
-                                    _errorsLogged.Add(e.Message);
+                                    logger.Error(ex, "Error in DCS-BIOS stream. This error will be logged *just once*.");
+                                    _errorsLogged.Add(ex.Message);
                                 }
                             }
                         }
@@ -288,9 +288,9 @@ namespace DCS_BIOS
                     _syncByteCount = 0;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError( e, "DCSBIOSProtocolParser.ProcessByte()");
+                logger.Error(ex, "DCSBIOSProtocolParser.ProcessByte()");
             }
         }
     }

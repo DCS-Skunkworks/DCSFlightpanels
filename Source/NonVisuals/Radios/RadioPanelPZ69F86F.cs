@@ -11,7 +11,6 @@
     using DCS_BIOS.Interfaces;
 
     using MEF;
-
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
@@ -1222,7 +1221,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
 
@@ -1232,9 +1231,9 @@
             {
                 ShutdownBase();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 
@@ -1262,7 +1261,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
 
@@ -1277,7 +1276,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
 
@@ -1300,7 +1299,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -1324,7 +1323,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -1348,7 +1347,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -1372,7 +1371,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -1396,7 +1395,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
 
             return false;

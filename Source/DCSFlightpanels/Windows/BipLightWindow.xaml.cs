@@ -70,9 +70,9 @@ namespace DCSFlightpanels.Windows
                 _bipLight.DelayBefore = (BIPLightDelays)ComboBoxDelay.SelectedValue;
                 _bipLight.BindingHash = (string)ComboBoxBIPPanel.SelectedValue;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("1003351 Error in CopyValues() : " + e.Message);
+                throw new Exception($"1003351 Error in CopyValues() : {ex.Message}");
             }
         }
 

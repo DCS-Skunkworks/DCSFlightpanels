@@ -2,14 +2,14 @@
 {
     using System;
 
-    using ClassLibraryCommon;
-
     using MEF;
-
+    using NLog;
     using NonVisuals.Saitek.Panels;
 
     public class PZ70LCDButtonByteList
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
+
         /*
             LCD Button Byte
             00000000
@@ -61,9 +61,9 @@
             {
                 return FlipButton(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob));
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e, "Flipbutton()");
+                logger.Error(ex, "Flipbutton()");
                 throw;
             }
         }
@@ -84,9 +84,9 @@
 
                 throw new Exception("Multipanel IsOn : Failed to find Mask for dial position " + pz70DialPosition + " knob " + multiPanelPZ70Knobs);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e, "IsOn()");
+                logger.Error(ex, "IsOn()");
                 throw;
             }
         }
@@ -125,9 +125,9 @@
                 }
                 throw new Exception("Multipanel : Failed to find Mask for dial position " + pz70DialPosition);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e);
+                logger.Error(ex);
                 throw;
             }
         }
@@ -180,9 +180,9 @@
                 }
                 throw new Exception("Multipanel : Failed to find Mask for button " + multiPanelPZ70Knob);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e);
+                logger.Error(ex);
                 throw;
             }
         }
@@ -202,9 +202,9 @@
 
                 throw new Exception("Multipanel FlipButton : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e);
+                logger.Error(ex);
                 throw;
             }
         }
@@ -244,9 +244,9 @@
 
                 throw new Exception("Multipanel ButtonOff : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e);
+                logger.Error(ex);
                 throw;
             }
         }
@@ -271,9 +271,9 @@
 
                 throw new Exception("Multipanel ButtonOn : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e);
+                logger.Error(ex);
                 throw;
             }
         }
@@ -294,9 +294,9 @@
 
                 throw new Exception("Multipanel : Failed to find button byte for " + pz70DialPosition);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e);
+                logger.Error(ex);
                 throw;
             }
         }
@@ -315,9 +315,9 @@
 
                 throw new Exception("Multipanel GetButtonByte : Failed to find Mask for dial " + buttonDialMask);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(e);
+                logger.Error(ex);
                 throw;
             }
         }

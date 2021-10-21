@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Radios.SRS
+﻿using System;
+
+namespace NonVisuals.Radios.SRS
 {
     // ReSharper disable All
     /*
@@ -120,6 +122,11 @@
             // return false;
             // }
             return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(name, freq, modulation, secFreq);
         }
     }
 }

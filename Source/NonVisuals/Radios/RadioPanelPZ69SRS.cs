@@ -11,7 +11,6 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
@@ -93,9 +92,9 @@
                 ShutdownBase();
                 SRSListenerFactory.Shutdown();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 
@@ -116,9 +115,9 @@
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 ShowFrequenciesOnPanel();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError( e);
+                logger.Error(ex);
             }
         }
 
@@ -337,7 +336,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
 
@@ -578,7 +577,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
 
@@ -654,7 +653,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
 
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
@@ -690,7 +689,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
 
@@ -705,7 +704,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
 
@@ -724,7 +723,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -745,7 +744,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -770,7 +769,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                logger.Error(ex);
             }
         }
 

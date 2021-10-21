@@ -119,9 +119,9 @@ namespace DCSFlightpanels.Windows
                     _dcsBiosOutput.Consume(_dcsbiosControl);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("Error while creating DCSBIOSOutput object : " + e.Message);
+                throw new Exception($"Error while creating DCSBIOSOutput object : {ex.Message}");
             }
         }
 

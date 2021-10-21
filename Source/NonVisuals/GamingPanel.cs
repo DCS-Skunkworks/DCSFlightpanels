@@ -9,12 +9,13 @@
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
-
+    using NLog;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
 
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
         private readonly Guid _guid = Guid.NewGuid();
         private static readonly object UpdateCounterLockObject = new object();
@@ -193,7 +194,7 @@
                     return;
                 }
 
-                Common.LogError(ex, "Via GamingPanel.SetLastException()");
+                logger.Error(ex, "Via GamingPanel.SetLastException()");
                 lock (_exceptionLockObject)
                 {
                     _lastException = new Exception(ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);

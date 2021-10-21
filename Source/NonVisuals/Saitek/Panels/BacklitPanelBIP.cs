@@ -11,7 +11,6 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-
     using NonVisuals.EventArgs;
 
     public class BacklitPanelBIP : SaitekPanel
@@ -95,9 +94,9 @@
                 BipFactory.DeRegisterBip(this);
                 Closed = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 
@@ -316,7 +315,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             return PanelLEDColor.RED;
@@ -598,9 +597,9 @@
             {
                 HIDSkeletonBase.HIDWriteDevice?.WriteFeatureData(array);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 

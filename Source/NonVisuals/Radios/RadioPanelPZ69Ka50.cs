@@ -11,7 +11,6 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
@@ -20,7 +19,6 @@
     public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base, IRadioPanel
     {
         private CurrentKa50RadioMode _currentUpperRadioMode = CurrentKa50RadioMode.VHF1_R828;
-
         private CurrentKa50RadioMode _currentLowerRadioMode = CurrentKa50RadioMode.VHF1_R828;
 
         /*COM1 Ka-50 VHF 1 R-828*/
@@ -400,7 +398,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -495,7 +493,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -516,7 +514,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -751,7 +749,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             // Refresh panel once this debacle is finished
@@ -767,7 +765,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1032,7 +1030,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1591,7 +1589,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1626,7 +1624,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -1648,7 +1646,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -1672,7 +1670,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -1696,7 +1694,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -1720,7 +1718,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             return false;
@@ -1773,11 +1771,13 @@
                                     {
                                         frequencyAsString = _r800L1Freq1DialValues[_r800L1CockpitFreq1DialPos].ToString();
                                     }
-                                    catch (Exception e)
+                                    catch (Exception ex)
                                     {
                                         throw new Exception(
-                                            "Failed to get dial position from array _r800l1Freq1DialValues based on index " + _r800L1CockpitFreq1DialPos + ". Max array pos is "
-                                            + _r800L1Freq1DialValues.Length + "\n" + e.Message + "\n" + e.StackTrace);
+                                            $"Failed to get dial position from array _r800l1Freq1DialValues based on index {_r800L1CockpitFreq1DialPos}. " +
+                                            $"Max array pos is {_r800L1Freq1DialValues.Length}" +
+                                            $"{Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}"
+                                            );
                                     }
                                 }
 
@@ -2020,7 +2020,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
@@ -2061,7 +2061,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -2071,9 +2071,9 @@
             {
                 ShutdownBase();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
+                SetLastException(ex);
             }
         }
 
@@ -2103,7 +2103,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -2118,7 +2118,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -2184,7 +2184,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
         }
 
@@ -2247,7 +2247,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             return inc;
@@ -2604,7 +2604,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             throw new Exception(
@@ -2642,7 +2642,7 @@
             }
             catch (Exception ex)
             {
-                Common.LogError(ex);
+                logger.Error(ex);
             }
 
             return string.Empty;

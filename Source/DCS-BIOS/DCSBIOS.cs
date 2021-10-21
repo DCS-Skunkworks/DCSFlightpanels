@@ -4,6 +4,8 @@
  * Do not adhere to naming standard in DCS-BIOS code, standard are based on DCS-BIOS json files and byte streamnaming
  */
 
+using NLog;
+
 namespace DCS_BIOS
 {
     using System;
@@ -12,10 +14,6 @@ namespace DCS_BIOS
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
-    using System.Windows.Forms;
-
-    using ClassLibraryCommon;
-
     using DCS_BIOS.Interfaces;
 
     [Flags]
@@ -28,6 +26,7 @@ namespace DCS_BIOS
 
     public class DCSBIOS : IDisposable
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         //public delegate void DcsDataReceivedEventHandler(byte[] bytes);
         //public event DcsDataReceivedEventHandler OnDcsDataReceived;
 
@@ -138,12 +137,12 @@ namespace DCS_BIOS
                 
             }
             catch (ThreadAbortException) { }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (!e.Message.Contains("WSACancelBlockingCall"))
+                if (!ex.Message.Contains("WSACancelBlockingCall"))
                 {
-                    SetLastException(e);
-                    Common.LogError(e, "DCSBIOS.ReceiveData()");
+                    SetLastException(ex);
+                    logger.Error(ex, "DCSBIOS.ReceiveData()");
                 }
             }
         }
@@ -161,10 +160,10 @@ namespace DCS_BIOS
                 _dcsProtocolParser.Startup();
                 _dcsbiosListeningThread.Start();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetLastException(e);
-                Common.LogError(e, "DCSBIOS.Startup()");
+                SetLastException(ex);
+                logger.Error(ex, "DCSBIOS.Startup()");
                 if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
                 {
                     _udpReceiveClient.Close();
@@ -195,7 +194,7 @@ namespace DCS_BIOS
             catch (Exception ex)
             {
                 SetLastException(ex);
-                Common.LogError(ex, "DCSBIOS.Shutdown()");
+                logger.Error(ex, "DCSBIOS.Shutdown()");
             }
         }
 
@@ -298,10 +297,10 @@ namespace DCS_BIOS
                     result = _udpSendClient.Send(asciiBytes.ToArray(), asciiBytes.ToArray().Length, _ipEndPointSenderUdp);
                     //result = _udpSendClient.Send(bytes, bytes.Length, _ipEndPointSender);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    SetLastException(e);
-                    Common.LogError(e, "DCSBIOS.SendDataFunction()");
+                    SetLastException(ex);
+                    logger.Error(ex, "DCSBIOS.SendDataFunction()");
                 }
             }
             return result;
@@ -329,7 +328,7 @@ namespace DCS_BIOS
                 {
                     return;
                 }
-                Common.LogError(ex, "Via DCSBIOS.SetLastException()");
+                logger.Error(ex, "Via DCSBIOS.SetLastException()");
                 var message = ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace;
                 lock (_lockExceptionObject)
                 {
@@ -393,8 +392,4 @@ namespace DCS_BIOS
             set { _dcsbiosReceiveFromIPUdp = value; }
         }
     }
-
-
-
-
 }

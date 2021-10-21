@@ -1,11 +1,13 @@
 ﻿namespace ClassLibraryCommon
 {
+    using NLog;
     using System;
     using System.Collections.Generic;
     using System.IO;
 
     public class DCSFPProfile
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private static readonly List<DCSFPProfile> ModulesList = new List<DCSFPProfile>();
 
         private DCSFPProfile(int id, string description, string jsonFilename)
@@ -96,19 +98,19 @@
                     return dcsfpModule;
                 }
             }
-
-            Common.Log("Failed to determine airplane/helicopter in your bindings file.\nPlease check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
-            throw new Exception("Failed to determine airplane/helicopter in your bindings file.\nPlease check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
+            string message = "Failed to determine airplane/helicopter in your bindings file. Please check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.";
+            logger.Info(message);
+            throw new Exception(message);
         }
         
         public static bool IsNoFrameLoadedYet(DCSFPProfile dcsfpModule)
         {
             if (dcsfpModule == null)
             {
-                Common.LogError("DCSFPProfile : Parameter dcsfpModule is null.");
-                throw new Exception("DCSFPProfile : Parameter dcsfpModule is null.");
+                string message = "DCSFPProfile : Parameter dcsfpModule is null.";
+                logger.Error(message);
+                throw new Exception(message);
             }
-
             return dcsfpModule.ID == 1;
         }
 
@@ -121,9 +123,9 @@
                     return dcsfpModule;
                 }
             }
-
-            Common.LogError("DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : " + Modules.Count);
-            throw new Exception("DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : " + Modules.Count);
+            string message = $"DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}";
+            logger.Error(message);
+            throw new Exception(message);
         }
 
         public static bool IsKeyEmulator(DCSFPProfile dcsfpModule)
@@ -140,9 +142,9 @@
                     return dcsfpModule;
                 }
             }
-
-            Common.LogError("DCSFPProfile : Failed to find internal module KeyEmulator. Modules loaded : " + Modules.Count);
-            throw new Exception("DCSFPProfile : Failed to find internal module KeyEmulator. Modules loaded : " + Modules.Count);
+            string message = $"DCSFPProfile : Failed to find internal module KeyEmulator. Modules loaded : {Modules.Count}";
+            logger.Error(message);
+            throw new Exception(message);
         }
         
         public static bool IsKeyEmulatorSRS(DCSFPProfile dcsfpModule)
@@ -159,9 +161,9 @@
                     return dcsfpModule;
                 }
             }
-
-            Common.LogError("DCSFPProfile : Failed to find internal module KeyEmulatorSRS. Modules loaded : " + Modules.Count);
-            throw new Exception("DCSFPProfile : Failed to find internal module KeyEmulatorSRS. Modules loaded : " + Modules.Count);
+            string message = $"DCSFPProfile : Failed to find internal module KeyEmulatorSRS. Modules loaded : {Modules.Count}";
+            logger.Error(message);
+            throw new Exception(message);
         }
         
         public static bool IsFlamingCliff(DCSFPProfile dcsfpModule)
@@ -178,7 +180,6 @@
                     return true;
                 }
             }
-
             return false;
         }
 
@@ -191,7 +192,6 @@
                     return dcsfpModule;
                 }
             }
-
             return null;
         }
 
@@ -566,8 +566,9 @@
             {
                 return Modules.Find(o => o.ID == 39);
             }
-
-            throw new Exception("Failed to determine airplane/helicopter in your bindings file.\nPlease check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
+            string message = "Failed to determine airplane/ helicopter in your bindings file. Please check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile = 5 equals A-10C.";
+            logger.Info(message);
+            throw new Exception(message);
         }
     }
 }
