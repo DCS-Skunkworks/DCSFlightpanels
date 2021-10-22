@@ -3102,11 +3102,6 @@ namespace NonVisuals.Radios
             {
                 StartupBase("UH-1H");
 
-                NumberFormatInfoFullDisplay = new NumberFormatInfo();
-                NumberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
-                NumberFormatInfoFullDisplay.NumberDecimalDigits = 4;
-                NumberFormatInfoFullDisplay.NumberGroupSeparator = string.Empty;
-
                 // VHF COMM
                 _vhfCommDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFCOMM_FREQ");
                 DCSBIOSStringManager.AddListener(_vhfCommDcsbiosOutputCockpitFrequency, this);

@@ -116,7 +116,7 @@
                     lock (_lockVUHFPresetFreqObject)
                     {
                         var tmp = _vhfPresetCockpitFrequency;
-                        _vhfPresetCockpitFrequency = (double.Parse(e.StringData) / 100).ToString(NumberFormatInfo);
+                        _vhfPresetCockpitFrequency = (double.Parse(e.StringData) / 100).ToString(NumberFormatInfoFullDisplay);
                         if (!string.IsNullOrEmpty(_vhfPresetCockpitFrequency) && tmp != _vhfPresetCockpitFrequency)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 5);
@@ -130,7 +130,7 @@
                     lock (_lockUHFPresetFreqObject)
                     {
                         var tmp = _uhfPresetCockpitFrequency;
-                        _uhfPresetCockpitFrequency = (double.Parse(e.StringData) / 100).ToString(NumberFormatInfo);
+                        _uhfPresetCockpitFrequency = (double.Parse(e.StringData) / 100).ToString(NumberFormatInfoFullDisplay);
                         if (!string.IsNullOrEmpty(_uhfPresetCockpitFrequency) && tmp != _uhfPresetCockpitFrequency)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 5);
