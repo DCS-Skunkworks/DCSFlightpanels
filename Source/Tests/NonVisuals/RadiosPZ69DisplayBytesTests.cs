@@ -188,6 +188,9 @@ namespace Tests.NonVisuals
             Assert.Throws<FormatException>(() => _dp.DefaultStringAsIt(ref bytes, inputString, PZ69LCDPosition.UPPER_ACTIVE_LEFT));            
         }
 
+        /// <summary>
+        /// THIS FUNCTION WILL BE REMOVED
+        /// </summary>
         public static IEnumerable<object[]> BytesStringData()
         {
             yield return new object[] { "00-FF-FF-FF-FF-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //diff. than DefaultStringAsIt
@@ -229,6 +232,9 @@ namespace Tests.NonVisuals
             yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", "123456", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
         }
 
+        /// <summary>
+        /// THIS FUNCTION WILL BE REMOVED
+        /// </summary>
         [Theory]
         [MemberData(nameof(BytesStringData))]
         public void BytesStringAsItOrPadLeftBlanks_ShouldReturn_ExpectedValue(string expected, string inputString, string inputArray, PZ69LCDPosition lcdPosition)
@@ -338,6 +344,34 @@ namespace Tests.NonVisuals
             var bytes = StringToBytes(inputArray);
             _dp.DoubleJustifyLeft(ref bytes, digits, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
+        }
+
+        public static IEnumerable<object[]> ReplaceTestData()
+        {
+            yield return new object[] { "1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "12", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "123", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00000", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00001", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "10001", DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "12345", DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "123.45", DEIGHTS, PZ69LCDPosition.UPPER_STBY_RIGHT };
+            yield return new object[] { "0123.4", DEIGHTS, PZ69LCDPosition.UPPER_STBY_RIGHT };
+            yield return new object[] { "00123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { " 0123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+        }
+
+        [Theory]
+        [MemberData(nameof(ReplaceTestData))]
+        public void ReplaceTest_NewFunctionShouldBehaveLikeOld(string value, string inputArray, PZ69LCDPosition lcdPosition)
+        {
+            var oldBytes = StringToBytes(inputArray);
+            var newBytes = StringToBytes(inputArray);
+            _dp.BytesStringAsItOrPadLeftBlanks(ref oldBytes, value, lcdPosition); //this function will be removed
+            _dp.DefaultStringAsIt(ref newBytes, value.PadLeft(5, ' '), lcdPosition);
+          
+            Assert.Equal(oldBytes, newBytes);
         }
     }
 }

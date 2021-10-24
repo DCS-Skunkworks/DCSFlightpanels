@@ -176,7 +176,8 @@
         }
 
         /// <summary>
-        /// Expect a string of max 5 chars that are going to be dispaleyd as it.
+        /// THIS FUNCTION WILL BE REMOVED
+        /// Expect a string of max 5 chars that are going to be displayed as it.
         /// If size does not match 5, justify the value right and pad left with blanks.
         /// </summary>        
         protected void SetPZ69DisplayBytesString(ref byte[] bytes, string digitString, PZ69LCDPosition pz69LCDPosition)
