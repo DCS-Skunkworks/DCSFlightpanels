@@ -387,7 +387,7 @@
 
         public NumberFormatInfo NumberFormatInfoFullDisplay
         {
-            get => NumberFormatInfoFullDisplay;
+            get => _numberFormatInfoFullDisplay;
         }
 
         public int FrequencyKnobSensitivity
