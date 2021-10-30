@@ -1773,15 +1773,15 @@
                                         lock (_lockRioLink4OnesDial)
                                         {
                                             frequencyAsString =
-                                                this._rioLink4HundredsCockpitFrequency +
+                                                _rioLink4HundredsCockpitFrequency +
                                                 _rioLink4TensCockpitFrequency.ToString() +
                                                 _rioLink4OnesCockpitFrequency;
                                         }
                                     }
                                 }
 
-                                SetPZ69DisplayBytesString(ref bytes, frequencyAsString, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesString(ref bytes, this._rioLink4HundredsFrequencyStandby + _rioLink4TensAndOnesFrequencyStandby.ToString().PadLeft(2, '0'), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, frequencyAsString.PadLeft(5,' '), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _rioLink4HundredsFrequencyStandby + _rioLink4TensAndOnesFrequencyStandby.ToString().PadLeft(2, '0'), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
 
                             break;
@@ -1923,15 +1923,15 @@
                                         lock (_lockRioLink4OnesDial)
                                         {
                                             frequencyAsString =
-                                                this._rioLink4HundredsCockpitFrequency +
+                                                _rioLink4HundredsCockpitFrequency +
                                                 _rioLink4TensCockpitFrequency.ToString() +
                                                 _rioLink4OnesCockpitFrequency;
                                         }
                                     }
                                 }
 
-                                SetPZ69DisplayBytesString(ref bytes, frequencyAsString, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesString(ref bytes, this._rioLink4HundredsFrequencyStandby + _rioLink4TensAndOnesFrequencyStandby.ToString().PadLeft(2, '0'), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, frequencyAsString.PadLeft(5, ' '), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _rioLink4HundredsFrequencyStandby + _rioLink4TensAndOnesFrequencyStandby.ToString().PadLeft(2, '0'), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
 
                             break;

@@ -132,15 +132,15 @@
                 bytes[0] = 0x0;
                 var random = new Random();
                 var lcdPositionArray = Enum.GetValues(typeof(PZ69LCDPosition));
-                var lcdValueArray = new[] { "00000", "11111", "22222", "33333", "44444", "55555", "66666", "77777", "88888", "99999" };
-                var spins = 8;
+                var lcdValueArray = new[] { "00000", "11111", "22222", "33333", "44444", "55555", "66666", "77777", "88888", "99999", "12345", "1.2.3.4.5." };
+                var spins = 12;
 
                 while (spins > 0)
                 {
                     var position = (PZ69LCDPosition)lcdPositionArray.GetValue(random.Next(lcdPositionArray.Length));
                     var value = (string)lcdValueArray.GetValue(random.Next(lcdValueArray.Length));
 
-                    SetPZ69DisplayBytesString(ref bytes, value, position);
+                    SetPZ69DisplayBytesDefault(ref bytes, value, position);
                     SendLCDData(bytes);
 
                     Thread.Sleep(500);
@@ -176,7 +176,8 @@
         }
 
         /// <summary>
-        /// Expect a string of max 5 chars that are going to be dispaleyd as it.
+        /// THIS FUNCTION WILL BE REMOVED
+        /// Expect a string of max 5 chars that are going to be displayed as it.
         /// If size does not match 5, justify the value right and pad left with blanks.
         /// </summary>        
         protected void SetPZ69DisplayBytesString(ref byte[] bytes, string digitString, PZ69LCDPosition pz69LCDPosition)
