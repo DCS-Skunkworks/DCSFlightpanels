@@ -97,7 +97,7 @@
                     Console.WriteLine("variable : " + variable.Key + " = " + variable.Value);
                 }*/
 
-                //Debug.WriteLine(_jaceExtended.CalculationEngine.Calculate(_formula, _variables));
+                // Debug.WriteLine(_jaceExtended.CalculationEngine.Calculate(_formula, _variables));
                 return _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
             }
             catch (Exception ex)
