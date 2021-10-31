@@ -505,7 +505,7 @@ namespace NonVisuals.Radios
 
                                 // SetPZ69DisplayBytesDefault(ref bytes, _COMM1BigFrequencyStandby + _COMM1SmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 // SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_comm1CockpitChannel, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _comm1CockpitChannel, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
 
                             break;
@@ -532,7 +532,7 @@ namespace NonVisuals.Radios
 
                                 // SetPZ69DisplayBytesDefault(ref bytes, _COMM1BigFrequencyStandby + _COMM1SmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 // SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_comm2CockpitChannel, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _comm2CockpitChannel, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
 
                             break;
@@ -563,8 +563,8 @@ namespace NonVisuals.Radios
                                 ilsChannel = _ilsCockpitChannel;
                             }
 
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)ilsChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)_ilsChannelStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, ilsChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _ilsChannelStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
 
@@ -613,7 +613,7 @@ namespace NonVisuals.Radios
 
                                 // SetPZ69DisplayBytesDefault(ref bytes, _COMM1BigFrequencyStandby + _COMM1SmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 // SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_comm1CockpitChannel, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _comm1CockpitChannel, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
 
                             break;
@@ -640,7 +640,7 @@ namespace NonVisuals.Radios
 
                                 // SetPZ69DisplayBytesDefault(ref bytes, _COMM1BigFrequencyStandby + _COMM1SmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 // SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_comm2CockpitChannel, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _comm2CockpitChannel, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
 
                             break;
@@ -663,8 +663,8 @@ namespace NonVisuals.Radios
                                 ilsChannel = _ilsCockpitChannel;
                             }
 
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)ilsChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)_ilsChannelStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, ilsChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _ilsChannelStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
 

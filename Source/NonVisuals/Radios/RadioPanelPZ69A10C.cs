@@ -2036,12 +2036,12 @@
                         {
                             if (_upperButtonPressed)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfAmCockpitMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfAmCockpitFreqMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitFreqMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             else if (_vhfAmCockpitMode != 0 && VhfAmPresetSelected())
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfAmCockpitPresetChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitPresetChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             else
@@ -2065,12 +2065,12 @@
                         {
                             if (_upperButtonPressed)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitFreqMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitFreqMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             else if (_uhfCockpitMode != 0 && UhfPresetSelected())
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitPresetChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitPresetChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             else
@@ -2094,12 +2094,12 @@
                         {
                             if (_upperButtonPressed)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfFmCockpitMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfFmCockpitFreqMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfFmCockpitMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfFmCockpitFreqMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             else if (_vhfFmCockpitMode != 0 && VhfFmPresetSelected())
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfFmCockpitPresetChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfFmCockpitPresetChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             else
@@ -2214,12 +2214,12 @@
                         {
                             if (_lowerButtonPressed)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfAmCockpitMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfAmCockpitFreqMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitFreqMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else if (_vhfAmCockpitMode != 0 && VhfAmPresetSelected())
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfAmCockpitPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else
@@ -2243,12 +2243,12 @@
                         {
                             if (_lowerButtonPressed)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitFreqMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitFreqMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else if (_uhfCockpitMode != 0 && UhfPresetSelected())
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else
@@ -2272,13 +2272,13 @@
                         {
                             if (_lowerButtonPressed)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfFmCockpitMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfFmCockpitFreqMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfFmCockpitMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfFmCockpitFreqMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else
                             if (_vhfFmCockpitMode != 0 && VhfFmPresetSelected())
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_vhfFmCockpitPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfFmCockpitPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else

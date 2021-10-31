@@ -601,7 +601,7 @@
                         {
                             if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)Math.Floor(_upperMainFreq), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, (uint)Math.Floor(_upperMainFreq), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             else
                             {
@@ -626,7 +626,7 @@
                         {
                             if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)Math.Floor(_lowerMainFreq), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, (uint)Math.Floor(_lowerMainFreq), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else
                             {

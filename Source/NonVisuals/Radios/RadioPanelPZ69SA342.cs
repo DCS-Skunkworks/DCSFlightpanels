@@ -849,7 +849,7 @@
                                 preset = _fmRadioPresetCockpitDialPos + 1;
                             }
 
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)preset, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, preset, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
@@ -874,7 +874,7 @@
                             }
 
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValue, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, tmpValue, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
 
@@ -888,8 +888,8 @@
                                 tmpValueDopper = _nadirDopplerModeCockpitValue + 1;
                             }
 
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValueMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValueDopper, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, tmpValueMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, tmpValueDopper, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
 
@@ -959,7 +959,7 @@
                                 preset = _fmRadioPresetCockpitDialPos + 1;
                             }
 
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)preset, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, preset, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
@@ -984,7 +984,7 @@
                             }
 
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValue, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, tmpValue, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
 
@@ -998,8 +998,8 @@
                                 tmpValueDopper = _nadirDopplerModeCockpitValue + 1;
                             }
 
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValueMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValueDopper, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, tmpValueMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, tmpValueDopper, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
 

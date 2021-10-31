@@ -1915,7 +1915,7 @@ namespace NonVisuals.Radios
 
                             lock (_lockAdfSignalStrengthObject)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, Convert.ToInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
 
                             break;
@@ -2058,7 +2058,7 @@ namespace NonVisuals.Radios
 
                             lock (_lockAdfSignalStrengthObject)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, Convert.ToInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
 
                             break;

@@ -932,12 +932,12 @@
                         {
                             if (_upperButtonPressed)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitFunction, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitFreqMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitFunction, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitFreqMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             else if (_uhfCockpitFunction != 0 && UhfPresetSelected())
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitPresetChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitPresetChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             else
@@ -1051,12 +1051,12 @@
                         {
                             if (_lowerButtonPressed)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitFunction, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitFreqMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitFunction, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitFreqMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else if (_uhfCockpitFunction != 0 && UhfPresetSelected())
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)_uhfCockpitPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _uhfCockpitPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else
