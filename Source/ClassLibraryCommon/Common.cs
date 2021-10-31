@@ -179,10 +179,12 @@
         {
             if (_pz69NumberFormatInfoFullDisplay == null)
             {
-                _pz69NumberFormatInfoFullDisplay = new NumberFormatInfo();
-                _pz69NumberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
-                _pz69NumberFormatInfoFullDisplay.NumberDecimalDigits = 4;
-                _pz69NumberFormatInfoFullDisplay.NumberGroupSeparator = string.Empty;
+                _pz69NumberFormatInfoFullDisplay = new NumberFormatInfo
+                {
+                    NumberDecimalSeparator = ".",
+                    NumberDecimalDigits = 4,
+                    NumberGroupSeparator = string.Empty
+                };
             }
             return _pz69NumberFormatInfoFullDisplay;
         }
@@ -225,9 +227,11 @@
         {
             if (_pz69NumberFormatInfoEmpty == null)
             {
-                _pz69NumberFormatInfoEmpty = new NumberFormatInfo();
-                _pz69NumberFormatInfoEmpty.NumberDecimalSeparator = ".";
-                _pz69NumberFormatInfoEmpty.NumberGroupSeparator = string.Empty;
+                _pz69NumberFormatInfoEmpty = new NumberFormatInfo
+                {
+                    NumberDecimalSeparator = ".",
+                    NumberGroupSeparator = string.Empty
+                };
             }
             return _pz69NumberFormatInfoEmpty;
         }

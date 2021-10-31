@@ -171,7 +171,7 @@
             // Debug.WriteLine("Array position = " + arrayPosition);
             // Debug.WriteLine("Max array position = " + (maxArrayPosition));
             var i = 0;
-            NumberFormatInfo numberFormatInfoFullDisplay = new NumberFormatInfo()
+            var numberFormatInfoFullDisplay = new NumberFormatInfo()
             {
                 NumberDecimalSeparator = ".",
                 NumberDecimalDigits = 4,

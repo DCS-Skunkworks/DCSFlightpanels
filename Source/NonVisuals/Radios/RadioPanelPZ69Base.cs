@@ -21,7 +21,7 @@
     public abstract class RadioPanelPZ69Base : SaitekPanel
     {
         private byte _ignoreSwitchButtonCounter = 3;
-        private NumberFormatInfo _numberFormatInfoFullDisplay;
+        private readonly NumberFormatInfo _numberFormatInfoFullDisplay;
         private int _frequencyKnobSensitivity;
         private volatile byte _frequencySensitivitySkipper;
         protected readonly object LockLCDUpdateObject = new object();
@@ -44,10 +44,12 @@
                 throw new ArgumentException();
             }
 
-            _numberFormatInfoFullDisplay = new NumberFormatInfo();
-            _numberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
-            _numberFormatInfoFullDisplay.NumberDecimalDigits = 4;
-            _numberFormatInfoFullDisplay.NumberGroupSeparator = string.Empty;
+            _numberFormatInfoFullDisplay = new NumberFormatInfo
+            {
+                NumberDecimalSeparator = ".",
+                NumberDecimalDigits = 4,
+                NumberGroupSeparator = string.Empty
+            };
         }
 
         /*         

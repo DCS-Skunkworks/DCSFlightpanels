@@ -435,10 +435,12 @@
             {
                 if (UserControlLoaded)
                 {
-                    var numberFormat = new NumberFormatInfo();
-                    numberFormat.NumberDecimalSeparator = ".";
-                    numberFormat.NumberDecimalDigits = 3;
-                    numberFormat.NumberGroupSeparator = string.Empty;
+                    var numberFormat = new NumberFormatInfo
+                    {
+                        NumberDecimalSeparator = ".",
+                        NumberDecimalDigits = 3,
+                        NumberGroupSeparator = string.Empty
+                    };
                     Settings.Default.SRSSmallFreqStepping = double.Parse(ComboBoxSmallFreqStepping.SelectedValue.ToString(), numberFormat);
                     _radioPanelPZ69SRS.SmallFreqStepping = double.Parse(ComboBoxSmallFreqStepping.SelectedValue.ToString(), numberFormat);
                     Settings.Default.Save();
