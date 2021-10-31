@@ -148,6 +148,16 @@ namespace Tests.NonVisuals
             yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-D8-D8", "123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
             yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", "12345", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
             yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", "123456", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+
+            //Mig 21bis special Tests
+            yield return new object[] { "00-FF-01-FF-FF-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", " 1  1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-FF-01-FF-FF-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", " 1  2", DEIGHTS, PZ69LCDPosition.UPPER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-02-FF-FF-01-D8-D8-D8-D8-D8", " 2  1", DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-02-FF-FF-02", " 2  2", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-FF-03-FF-FF-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", " 3  1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-FF-03-FF-FF-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", " 3  2", DEIGHTS, PZ69LCDPosition.UPPER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-04-FF-FF-01-D8-D8-D8-D8-D8", " 4  1", DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-04-FF-FF-02", " 4  2", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
         }
 
         [Theory]
