@@ -188,63 +188,6 @@ namespace Tests.NonVisuals
             Assert.Throws<FormatException>(() => _dp.DefaultStringAsIt(ref bytes, inputString, PZ69LCDPosition.UPPER_ACTIVE_LEFT));            
         }
 
-        /// <summary>
-        /// THIS FUNCTION WILL BE REMOVED
-        /// </summary>
-        public static IEnumerable<object[]> BytesStringData()
-        {
-            yield return new object[] { "00-FF-FF-FF-FF-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //diff. than DefaultStringAsIt
-            yield return new object[] { "00-FF-FF-FF-01-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "12", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //diff. than DefaultStringAsIt
-            yield return new object[] { "00-FF-FF-01-02-03-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "123", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //diff. than DefaultStringAsIt
-            yield return new object[] { "00-01-02-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "12345", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-02-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "123456", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-FF-FF-01-FF-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1 2", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //diff. than DefaultStringAsIt
-            yield return new object[] { "00-01-FF-02-FF-03-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1 2 3", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-FF-01-FF-02-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", " 1 2 3", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-FF-02-FF-03-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1 2 34", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-FF-FF-FF-FF-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "     ", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-FF-FF-FF-FF-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "    1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-FF-FF-FF-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1   2", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-           
-            yield return new object[] { "00-FF-FF-FF-FF-D1-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1.", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-FF-FF-FF-D1-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1. ", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //diff. than DefaultStringAsIt
-            yield return new object[] { "00-FF-FF-FF-FF-D1-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "    1.", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-00-00-00-00-D1-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "00001.", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-00-00-00-D2-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "0002.1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-D1-02-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1.2345", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-02-03-04-D5-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "12345.", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-02-03-04-D5-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "12345.6", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-FF-FF-FF-D0-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "   0.1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-
-            //IndexOutOfRangeException
-            //yield return new object[] { "00-D1-D2-D3-D4-D5-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1.2.3.4.5.", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-
-            //IndexOutOfRangeException
-            //yield return new object[] { "00-D1-02-03-D4-D5-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1.234.5.", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-
-            //Not what I expect, should return 01-D2-D3-04-05
-            yield return new object[] { "00-01-D2-D3-04-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "12.3.45", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-FF-01", "1", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-01-02", "12", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-01-02-03", "123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", "12345", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", "123456", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-        }
-
-        /// <summary>
-        /// THIS FUNCTION WILL BE REMOVED
-        /// </summary>
-        [Theory]
-        [MemberData(nameof(BytesStringData))]
-        public void BytesStringAsItOrPadLeftBlanks_ShouldReturn_ExpectedValue(string expected, string inputString, string inputArray, PZ69LCDPosition lcdPosition)
-        {
-            var bytes = StringToBytes(inputArray);
-            _dp.BytesStringAsItOrPadLeftBlanks(ref bytes, inputString, lcdPosition);
-            Assert.Equal(expected, BitConverter.ToString(bytes));
-        }
-
-
         public static IEnumerable<object[]> DoubleWithSpecifiedDecimalsPlacesData()
         {
             yield return new object[] { "00-FF-FF-FF-FF-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"     "*/, 1, 0, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; //??
@@ -344,34 +287,6 @@ namespace Tests.NonVisuals
             var bytes = StringToBytes(inputArray);
             _dp.DoubleJustifyLeft(ref bytes, digits, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
-        }
-
-        public static IEnumerable<object[]> ReplaceTestData()
-        {
-            yield return new object[] { "1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "12", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "123", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00000", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00001", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "10001", DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            yield return new object[] { "12345", DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            yield return new object[] { "123.45", DEIGHTS, PZ69LCDPosition.UPPER_STBY_RIGHT };
-            yield return new object[] { "0123.4", DEIGHTS, PZ69LCDPosition.UPPER_STBY_RIGHT };
-            yield return new object[] { "00123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { " 0123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-        }
-
-        [Theory]
-        [MemberData(nameof(ReplaceTestData))]
-        public void ReplaceTest_NewFunctionShouldBehaveLikeOld(string value, string inputArray, PZ69LCDPosition lcdPosition)
-        {
-            var oldBytes = StringToBytes(inputArray);
-            var newBytes = StringToBytes(inputArray);
-            _dp.BytesStringAsItOrPadLeftBlanks(ref oldBytes, value, lcdPosition); //this function will be removed
-            _dp.DefaultStringAsIt(ref newBytes, value.PadLeft(5, ' '), lcdPosition);
-          
-            Assert.Equal(oldBytes, newBytes);
         }
     }
 }

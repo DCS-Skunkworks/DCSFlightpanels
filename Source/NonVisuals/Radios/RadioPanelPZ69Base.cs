@@ -103,7 +103,7 @@
         }
 
         /// <summary>
-        /// Inject the preformatted 5 bytes at position in the array.
+        /// Inject the pre-formatted 5 bytes at position in the array.
         /// </summary>
         protected void SetPZ69DisplayBytesCustom1(ref byte[] bytes, byte[] bytesToBeInjected, PZ69LCDPosition pz69LCDPosition)
         {
@@ -176,25 +176,7 @@
         }
 
         /// <summary>
-        /// THIS FUNCTION WILL BE REMOVED
-        /// Expect a string of max 5 chars that are going to be displayed as it.
-        /// If size does not match 5, justify the value right and pad left with blanks.
-        /// </summary>        
-        protected void SetPZ69DisplayBytesString(ref byte[] bytes, string digitString, PZ69LCDPosition pz69LCDPosition)
-        {
-            // Todo: 5 references only, maybe change the F14 radio to use DefaultStringAsIt() instead ?
-            try
-            {
-                _pZ69DisplayBytes.BytesStringAsItOrPadLeftBlanks(ref bytes, digitString, pz69LCDPosition);
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "SetPZ69DisplayBytesString()");
-            }
-        }
-
-        /// <summary>
-        /// Expect a string of 5 chars that are going to be dispaleyd as it.
+        /// Expect a string of 5 chars that are going to be displayed as it.
         /// Can deal with multiple '.' chars.
         /// If size does not match 5, it will NOT replace previous characters in the array (no padding left or right).
         /// </summary>

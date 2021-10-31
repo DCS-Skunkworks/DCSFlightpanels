@@ -65,7 +65,7 @@
         }
         
         /// <summary>
-        /// Inject the preformatted 5 bytes at position in the array.
+        /// Inject the pre-formatted 5 bytes at position in the array.
         /// </summary>
         public void Custom5Bytes(ref byte[] bytes, byte[] bytesToBeInjected, PZ69LCDPosition pz69LCDPosition)
         {
@@ -86,7 +86,7 @@
         }
 
         /// <summary>
-        /// Expect a string of 5 chars that are going to be dispaleyd as it.
+        /// Expect a string of 5 chars that are going to be displayed as it.
         /// Can deal with multiple '.' chars.
         /// If size does not match 5, it will NOT replace previous characters in the array (no padding left or right).
         /// </summary>
@@ -124,83 +124,7 @@
             }
             while (i < digits.Length && arrayPosition < maxArrayPosition + 1);
         }
-
-        /// <summary>
-        /// THIS FUNCTION WILL BE REMOVED
-        /// Expect a string of max 5 chars that are going to be displayed as it.
-        /// If size does not match 5, justify the value right and pad left with blanks.
-        /// </summary>
-        public void BytesStringAsItOrPadLeftBlanks(ref byte[] bytes, string digitString, PZ69LCDPosition pz69LCDPosition)
-        {
-            var arrayPosition = GetArrayPosition(pz69LCDPosition);
-            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
-            var i = 0;
-            var digits = string.Empty;
-            if (digitString.Length > 5)
-            {
-                if (digitString.Contains("."))
-                {
-                    digits = digitString.Substring(0, 6);
-                }
-                else
-                {
-                    digits = digitString.Substring(0, 5);
-                }
-            }
-            else if (digitString.Length < 5)
-            {
-                if (digitString.Contains("."))
-                {
-                    digits = digitString.PadLeft(6, ' ');
-                }
-                else
-                {
-                    digits = digitString.PadLeft(5, ' ');
-                }
-            }
-            else if (digitString.Length == 5)
-            {
-                if (digitString.Contains("."))
-                {
-                    digits = digitString.PadLeft(1, ' ');
-                }
-                else
-                {
-                    digits = digitString;
-                }
-            }
-
-            do
-            {
-                if (digits[i] == '.')
-                {
-                    // skip to next position, this has already been dealt with
-                    i++;
-                }
-
-                if (digits[i] == ' ')
-                {
-                    bytes[arrayPosition] = 0xff;
-                }
-                else
-                {
-                    var b = byte.Parse(digits[i].ToString());
-                    bytes[arrayPosition] = b;
-                }
-
-
-                if (digits.Length > i + 1 && digits[i + 1] == '.')
-                {
-                    // Add decimal marker
-                    bytes[arrayPosition] = (byte)(bytes[arrayPosition] + 0xd0);
-                }
-
-                arrayPosition++;
-                i++;
-            }
-            while (i < digits.Length && arrayPosition < maxArrayPosition + 1);
-        }
-
+       
         public void DoubleWithSpecifiedDecimalsPlaces(ref byte[] bytes, double digits, int decimals, PZ69LCDPosition pz69LCDPosition)
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
