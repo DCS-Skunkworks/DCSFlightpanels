@@ -35,9 +35,10 @@
             }
             while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
         }
-        
+
         /// <summary>
         /// Right justify, pad left with blanks.
+        /// This function will be removed later
         /// </summary>
         public void Integer(ref byte[] bytes, int digits, PZ69LCDPosition pz69LCDPosition)
         {

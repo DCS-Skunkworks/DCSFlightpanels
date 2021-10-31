@@ -63,6 +63,25 @@ namespace Tests.NonVisuals
             yield return new object[] { "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-01-00-00-00-00", 10000, ZEROES, PZ69LCDPosition.LOWER_STBY_RIGHT };
             yield return new object[] { "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-01-02-03-04-05", 12345, ZEROES, PZ69LCDPosition.LOWER_STBY_RIGHT };
             yield return new object[] { "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-06-01-02-03-04", 612345, ZEROES, PZ69LCDPosition.LOWER_STBY_RIGHT };
+
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-FF-01", 1, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-01-02", 12, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-01-02-03", 123, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-01-02-03-04", 1234, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", 12345, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-00", 10000, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05", 10005, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05", 100056, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-FF-01-D8-D8-D8-D8-D8", 1, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-01-02-D8-D8-D8-D8-D8", 12, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-01-02-03-D8-D8-D8-D8-D8", 123, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-01-02-03-04-D8-D8-D8-D8-D8", 1234, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05-D8-D8-D8-D8-D8", 12345, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-00-D8-D8-D8-D8-D8", 10000, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05-D8-D8-D8-D8-D8", 10005, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05-D8-D8-D8-D8-D8", 100056, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-09-09-09-09-09-D8-D8-D8-D8-D8", 99999, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
         }
 
         [Theory]
@@ -79,7 +98,7 @@ namespace Tests.NonVisuals
             yield return new object[] { "00-FF-FF-FF-FF-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 1, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT};
             yield return new object[] { "00-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 10000, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-02-03-04-05-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 12345, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-
+            
             //no sign managed?
             //yield return new object[] { "00-FF-FF-FF-FF-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", -1, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT  };
 
@@ -287,6 +306,55 @@ namespace Tests.NonVisuals
             var bytes = StringToBytes(inputArray);
             _dp.DoubleJustifyLeft(ref bytes, digits, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
+        }
+
+        /// <summary>
+        /// This function will be removed later
+        /// </summary>
+        public static IEnumerable<object[]> ReplaceTestData()
+        {
+            yield return new object[] { "00-FF-FF-FF-FF-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 1, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 10000, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-01-02-03-04-05-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 12345, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            // Bug Overflow on integer, no problem on UnsignedInteger
+            //yield return new object[] { "00-06-01-02-03-04-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 612345, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            //yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05-D8-D8-D8-D8-D8", 100056, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-FF-01", 1, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-01-02", 12, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-01-02-03", 123, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-01-02-03-04", 1234, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", 12345, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-00", 10000, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05", 10005, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-FF-01-D8-D8-D8-D8-D8", 1, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-01-02-D8-D8-D8-D8-D8", 12, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-01-02-03-D8-D8-D8-D8-D8", 123, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-01-02-03-04-D8-D8-D8-D8-D8", 1234, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05-D8-D8-D8-D8-D8", 12345, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-00-D8-D8-D8-D8-D8", 10000, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05-D8-D8-D8-D8-D8", 10005, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-09-09-09-09-09-D8-D8-D8-D8-D8", 99999, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            // Bug Index out of bound on integer, no problem on UnsignedInteger
+            // yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05", 100056, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+        }
+
+        /// <summary>
+        /// This function will be removed later
+        /// </summary>
+        [Theory]
+        [MemberData(nameof(ReplaceTestData))]
+        public void ReplaceTest_Integer_Should_Behave_Like_UnsignedInteger(string expected, int digits, string inputArray, PZ69LCDPosition lcdPosition)
+        {
+            var bytesInteger = StringToBytes(inputArray);
+            var bytesUnsignedInteger = StringToBytes(inputArray);
+
+            _dp.Integer(ref bytesInteger, digits, lcdPosition);
+            _dp.UnsignedInteger(ref bytesUnsignedInteger, (uint)digits, lcdPosition);
+
+            Assert.Equal(expected, BitConverter.ToString(bytesInteger));
+            Assert.Equal(expected, BitConverter.ToString(bytesUnsignedInteger));
         }
     }
 }
