@@ -37,35 +37,6 @@
         }
 
         /// <summary>
-        /// Right justify, pad left with blanks.
-        /// This function will be removed later
-        /// </summary>
-        public void Integer(ref byte[] bytes, int digits, PZ69LCDPosition pz69LCDPosition)
-        {
-            var arrayPosition = GetArrayPosition(pz69LCDPosition);
-            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 5;
-            var i = 0;
-            var digitsAsString = digits.ToString().PadLeft(5);
-
-            // D = DARK
-            // 116 should become DD116!
-            do
-            {
-                // 5 digits can be displayed
-                // 12345 -> 12345
-                // 116   -> DD116 
-                // 1     -> DDDD1
-                byte b;
-                b = digitsAsString[i].ToString().Equals(" ") ? (byte)0xFF : byte.Parse(digitsAsString[i].ToString());
-                bytes[arrayPosition] = b;
-
-                arrayPosition++;
-                i++;
-            }
-            while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
-        }
-        
-        /// <summary>
         /// Inject the pre-formatted 5 bytes at position in the array.
         /// </summary>
         public void Custom5Bytes(ref byte[] bytes, byte[] bytesToBeInjected, PZ69LCDPosition pz69LCDPosition)

@@ -72,15 +72,6 @@
         */
 
         /// <summary>
-        /// Right justify, pad left with blanks.
-        /// This function will be removed later
-        /// </summary>
-        protected void SetPZ69DisplayBytesInteger(ref byte[] bytes, int digits, PZ69LCDPosition pz69LCDPosition)
-        {
-            _pZ69DisplayBytes.Integer(ref bytes, digits, pz69LCDPosition);
-        }
-
-        /// <summary>
         /// Sets the given position to blank without modifying the other positions in the array
         /// </summary>
         protected void SetPZ69DisplayBlank(ref byte[] bytes, PZ69LCDPosition pz69LCDPosition)

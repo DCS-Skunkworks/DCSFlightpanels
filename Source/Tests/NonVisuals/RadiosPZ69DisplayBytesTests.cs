@@ -93,40 +93,6 @@ namespace Tests.NonVisuals
             Assert.Equal(expected, BitConverter.ToString(bytes));
         }
 
-        public static IEnumerable<object[]> IntegerData()
-        {
-            yield return new object[] { "00-FF-FF-FF-FF-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 1, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT};
-            yield return new object[] { "00-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 10000, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-02-03-04-05-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 12345, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            
-            //no sign managed?
-            //yield return new object[] { "00-FF-FF-FF-FF-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", -1, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT  };
-
-            //no sign managed ?
-            //yield return new object[] { "00-06-01-02-03-04-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", -12345, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-
-            //Overflow of 1 char to the right (looks like a bug)
-            yield return new object[] { "00-01-02-03-04-05-06-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 123456, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-
-            //Overflow of 1 char to the right (not 2) (looks like a bug)
-            yield return new object[] { "00-01-02-03-04-05-06-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 1234567, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-
-            //IndexOutOfRangeException. Overflow of 1 char to the right (looks like a bug)
-            //yield return new object[] { "00-01-02-03-04-05-06-00-00-00-00-00-00-00-00-00-01-02-03-04-05", 123456, ZEROES, PZ69LCDPosition.LOWER_STBY_RIGHT };
-        }
-
-        /// <summary>
-        /// Todo: Replace Integer by UnsignedInteger since they seems to react the same way. Is there a use for sign ?
-        /// </summary>
-        [Theory]
-        [MemberData(nameof(IntegerData))]
-        public void Integer_ShouldReturn_ExpectedValue(string expected, int inputInt, string inputArray, PZ69LCDPosition lcdPosition)
-        {
-            var bytes = StringToBytes(inputArray);
-            _dp.Integer(ref bytes, inputInt, lcdPosition);
-            Assert.Equal(expected, BitConverter.ToString(bytes));
-        }
-
         public static IEnumerable<object[]> CustomData()
         {
             yield return new object[] { "00-D1-D2-D3-D4-D5-06-07-08-09-01-02-03-04-05-06-07-08-09-01-02", "D1-D2-D3-D4-D5", VALUES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
@@ -306,55 +272,6 @@ namespace Tests.NonVisuals
             var bytes = StringToBytes(inputArray);
             _dp.DoubleJustifyLeft(ref bytes, digits, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
-        }
-
-        /// <summary>
-        /// This function will be removed later
-        /// </summary>
-        public static IEnumerable<object[]> ReplaceTestData()
-        {
-            yield return new object[] { "00-FF-FF-FF-FF-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 1, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 10000, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-02-03-04-05-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 12345, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            // Bug Overflow on integer, no problem on UnsignedInteger
-            //yield return new object[] { "00-06-01-02-03-04-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00", 612345, ZEROES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            //yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05-D8-D8-D8-D8-D8", 100056, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-FF-01", 1, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-01-02", 12, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-01-02-03", 123, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-01-02-03-04", 1234, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", 12345, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-00", 10000, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05", 10005, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-FF-01-D8-D8-D8-D8-D8", 1, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-01-02-D8-D8-D8-D8-D8", 12, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-01-02-03-D8-D8-D8-D8-D8", 123, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-01-02-03-04-D8-D8-D8-D8-D8", 1234, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05-D8-D8-D8-D8-D8", 12345, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-00-D8-D8-D8-D8-D8", 10000, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05-D8-D8-D8-D8-D8", 10005, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-09-09-09-09-09-D8-D8-D8-D8-D8", 99999, DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            // Bug Index out of bound on integer, no problem on UnsignedInteger
-            // yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-00-00-00-05", 100056, DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-        }
-
-        /// <summary>
-        /// This function will be removed later
-        /// </summary>
-        [Theory]
-        [MemberData(nameof(ReplaceTestData))]
-        public void ReplaceTest_Integer_Should_Behave_Like_UnsignedInteger(string expected, int digits, string inputArray, PZ69LCDPosition lcdPosition)
-        {
-            var bytesInteger = StringToBytes(inputArray);
-            var bytesUnsignedInteger = StringToBytes(inputArray);
-
-            _dp.Integer(ref bytesInteger, digits, lcdPosition);
-            _dp.UnsignedInteger(ref bytesUnsignedInteger, (uint)digits, lcdPosition);
-
-            Assert.Equal(expected, BitConverter.ToString(bytesInteger));
-            Assert.Equal(expected, BitConverter.ToString(bytesUnsignedInteger));
         }
     }
 }
