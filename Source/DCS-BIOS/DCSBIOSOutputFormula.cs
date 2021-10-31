@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Globalization;
 
     using ClassLibraryCommon;
     using NLog;
@@ -85,7 +87,7 @@
             }
         }
 
-        public int Evaluate()
+        public double Evaluate()
         {
             try
             {
@@ -94,8 +96,9 @@
                 {
                     Console.WriteLine("variable : " + variable.Key + " = " + variable.Value);
                 }*/
-                var a = _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
-                return Convert.ToInt32(a);
+
+                //Debug.WriteLine(_jaceExtended.CalculationEngine.Calculate(_formula, _variables));
+                return _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
             }
             catch (Exception ex)
             {

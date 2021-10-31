@@ -215,10 +215,10 @@
                     {
                         var tmp = dcsbiosBindingLCD.CurrentValue;
                         dcsbiosBindingLCD.CurrentValue = (int)dcsbiosBindingLCD.DCSBIOSOutputObject.GetUIntValue(e.Data);
-                        if (tmp != dcsbiosBindingLCD.CurrentValue && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
+                        if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
                         {
                             // Update only if this LCD binding is in current use
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Add(ref _doUpdatePanelLCD, 2);
                         }
                     }
                 }
@@ -230,10 +230,10 @@
                         {
                             var tmp = dcsbiosBindingLCD.CurrentValue;
                             dcsbiosBindingLCD.CurrentValue = dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate();
-                            if (tmp != dcsbiosBindingLCD.CurrentValue && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
+                            if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
                             {
                                 // Update only if this LCD binding is in current use
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Add(ref _doUpdatePanelLCD, 2);
                             }
                         }
                     }
@@ -514,14 +514,14 @@
                     {
                         if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
                         {
-                            if (_upperActive.ToString(CultureInfo.InvariantCulture).Length > 5)
+                            /*if (_upperActive.ToString(CultureInfo.InvariantCulture).Length > 5)
                             {
                                 _upperActive = int.Parse(dcsbiosBindingLCDPZ69.CurrentValue.ToString().Substring(0, 5));
                             }
                             else
-                            {
+                            {*/
                                 _upperActive = dcsbiosBindingLCDPZ69.CurrentValue;
-                            }
+                            //}
                         }
 
                         if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
