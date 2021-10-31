@@ -37,27 +37,6 @@
         }
 
         /// <summary>
-        /// Inject the pre-formatted 5 bytes at position in the array.
-        /// </summary>
-        public void Custom5Bytes(ref byte[] bytes, byte[] bytesToBeInjected, PZ69LCDPosition pz69LCDPosition)
-        {
-            var arrayPosition = GetArrayPosition(pz69LCDPosition);
-            var i = 0;
-            do
-            {
-                // 5 digits can be displayed
-                // 12345 -> 12345
-                // 116   -> DD116 
-                // 1     -> DDDD1
-                bytes[arrayPosition] = bytesToBeInjected[i];
-
-                arrayPosition++;
-                i++;
-            }
-            while (i < bytesToBeInjected.Length && i < 5);
-        }
-
-        /// <summary>
         /// Expect a string of 5 chars that are going to be displayed as it.
         /// Can deal with multiple '.' chars.
         /// If size does not match 5, it will NOT replace previous characters in the array (no padding left or right).
