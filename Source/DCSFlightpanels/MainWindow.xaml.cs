@@ -45,7 +45,6 @@
     using Octokit;
 
     using Application = System.Windows.Application;
-    using Button = System.Windows.Controls.Button;
     using Cursors = System.Windows.Input.Cursors;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
     using MenuItem = System.Windows.Controls.MenuItem;

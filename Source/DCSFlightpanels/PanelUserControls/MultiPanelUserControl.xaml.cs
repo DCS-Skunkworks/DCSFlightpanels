@@ -565,6 +565,7 @@
                         break;
                     }
                 }
+
                 if (dcsBiosOutputFormulaWindow == null)
                 {
                     dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description);
@@ -585,7 +586,7 @@
                     }
                     else
                     {
-                        //Delete config
+                        // Delete config
                         UpdateDCSBIOSBindingLCD(false, true, null, null, button);
                     }
                 }
@@ -775,6 +776,7 @@
                         ImageLcdUpperRow.Visibility = Visibility.Hidden;
                         _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition.UpperLCD);
                     }
+
                     if (button.Equals(ButtonLcdLower))
                     {
                         ImageLcdLowerRow.Visibility = Visibility.Hidden;
@@ -789,12 +791,14 @@
                         ImageLcdUpperRow.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
                         _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.UpperLCD);
                     }
+
                     if (button.Equals(ButtonLcdLower))
                     {
                         ImageLcdLowerRow.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
                         _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.LowerLCD);
                     }
                 }
+
                 if (useFormula)
                 {
                     if (button.Equals(ButtonLcdUpper))
@@ -802,6 +806,7 @@
                         ImageLcdUpperRow.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
                         _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ70LCDPosition.UpperLCD);
                     }
+
                     if (button.Equals(ButtonLcdLower))
                     {
                         ImageLcdLowerRow.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;

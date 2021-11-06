@@ -13,16 +13,21 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
+
+    using NLog;
 
     /// <summary>
     /// Interaction logic for DCSBiosOutputFormulaWindow.xaml
     /// </summary>
-    public partial class DCSBiosOutputFormulaWindow : Window
+    public partial class DCSBiosOutputFormulaWindow : Window, IDcsBiosDataListener
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private readonly string _description;
         private readonly bool _userEditsDescription;
-        private readonly JaceExtended _jaceExtended = new JaceExtended();
+        // private readonly JaceExtended _jaceExtended = new JaceExtended();
         private DCSBIOSOutput _dcsBiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula;
         private bool _formLoaded;
@@ -71,7 +76,7 @@
             {
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
-                _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));
+                _dataGridValues = (DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues");
                 LabelDescription.Content = _description;
                 ShowValues2();
                 _formLoaded = true;
@@ -81,6 +86,24 @@
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
+            }
+        }
+
+        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
+        {
+            try
+            {
+                if (_dcsbiosOutputFormula == null)
+                {
+                    return;
+                }
+
+                _dcsbiosOutputFormula.CheckForMatch(e.Address, e.Data);
+                LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "DcsBiosDataReceived()");
             }
         }
 
@@ -113,11 +136,12 @@
 
             GroupBoxFormula.Visibility = Visibility.Visible;
 
-            LabelFormula.IsEnabled = (CheckBoxUseFormula.IsChecked.HasValue && CheckBoxUseFormula.IsChecked.Value);
+            LabelFormula.IsEnabled = CheckBoxUseFormula.IsChecked.HasValue && CheckBoxUseFormula.IsChecked.Value;
             TextBoxFormula.IsEnabled = LabelFormula.IsEnabled;
             LabelResult.IsEnabled = LabelFormula.IsEnabled;
             ButtonTestFormula.IsEnabled = LabelFormula.IsEnabled;
             ButtonOk.IsEnabled = (_dcsbiosControl == null && _dcsBiosOutput == null) || (_dcsbiosControl != null || (!string.IsNullOrWhiteSpace(TextBoxFormula.Text) && CheckBoxUseFormula.IsChecked == true));
+
             if (_userEditsDescription && string.IsNullOrEmpty(TextBoxUserDescription.Text))
             {
                 ButtonOk.IsEnabled = false;
@@ -136,7 +160,7 @@
         {
             if (CheckBoxUseFormula.IsChecked.HasValue && CheckBoxUseFormula.IsChecked.Value)
             {
-                //Use formula
+                // Use formula
                 try
                 {
                     _dcsbiosOutputFormula = new DCSBIOSOutputFormula(TextBoxFormula.Text);
@@ -148,8 +172,8 @@
             }
             else
             {
-                //Use single DCSBIOSOutput
-                //This is were DCSBiosOutput (subset of DCSBIOSControl) get populated from DCSBIOSControl
+                // Use single DCSBIOSOutput
+                // This is were DCSBiosOutput (subset of DCSBIOSControl) get populated from DCSBIOSControl
                 try
                 {
                     if (_dcsbiosControl == null && !string.IsNullOrWhiteSpace(TextBoxControlId.Text))
@@ -257,16 +281,16 @@
         {
             try
             {
-                if (TextBoxSearchWord.Text == "")
+                if (TextBoxSearchWord.Text == string.Empty)
                 {
                     // Create an ImageBrush.
                     var textImageBrush = new ImageBrush();
                     textImageBrush.ImageSource =
                         new BitmapImage(
-                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)
-                        );
+                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute));
                     textImageBrush.AlignmentX = AlignmentX.Left;
                     textImageBrush.Stretch = Stretch.Uniform;
+
                     // Use the brush to paint the button's background.
                     TextBoxSearchWord.Background = textImageBrush;
                 }
@@ -334,6 +358,7 @@
                     ShowValues2();
 
                 }
+
                 _popupSearch.IsOpen = false;
                 SetFormState();
             }
@@ -347,8 +372,10 @@
         {
             try
             {
+                CheckFormula();
+                CopyValues();
                 TextBlockFormulaErrors.Text = string.Empty;
-                LabelResult.Content = "Result : " + _jaceExtended.Evaluate(TextBoxFormula.Text);
+                LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate();
                 SetFormState();
             }
             catch (Exception ex)
@@ -462,6 +489,7 @@
         {
             get { return TextBoxUserDescription.Text; }
         }
+
 
     }
 }
