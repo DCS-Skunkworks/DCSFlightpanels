@@ -96,15 +96,6 @@
             _pZ69DisplayBytes.DoubleWithSpecifiedDecimalsPlaces(ref bytes, digits, decimals, pz69LCDPosition);
         }
 
-        /// <summary>
-        /// Inject the pre-formatted 5 bytes at position in the array.
-        /// </summary>
-        protected void SetPZ69DisplayBytesCustom1(ref byte[] bytes, byte[] bytesToBeInjected, PZ69LCDPosition pz69LCDPosition)
-        {
-            // Todo: 2 references only, maybe change the Mig21 radio to use another function instead like DefaultStringAsIt ?
-            _pZ69DisplayBytes.Custom5Bytes(ref bytes, bytesToBeInjected, pz69LCDPosition);
-        }
-
         public override void Identify()
         {
             try

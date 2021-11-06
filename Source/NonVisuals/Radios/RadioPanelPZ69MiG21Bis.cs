@@ -294,7 +294,7 @@
                         {
                             lock (_lockARCSectorObject)
                             {
-                                SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, GetARCSectorStringForDisplay(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
 
                             lock (_lockARCPresetChannelObject)
@@ -337,7 +337,7 @@
                         {
                             lock (_lockARCSectorObject)
                             {
-                                SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, GetARCSectorStringForDisplay(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
 
                             lock (_lockARCPresetChannelObject)
@@ -817,85 +817,41 @@
             SaitekPanelKnobs = RadioPanelKnobMiG21Bis.GetRadioPanelKnobs();
         }
 
-        private byte[] GetARCSectorBytesForDisplay()
+        /// <summary>
+        /// Returns a string of length 5 formatted as this:
+        /// First pos: Blank
+        /// Second pos: Integer [1-4]
+        /// Third pos: Blank
+        /// Fourth pos: Blank
+        /// Fifth pos: Integer [1-2]
+        /// </summary>
+        private string GetARCSectorStringForDisplay()
         {
-            var result = new byte[5];
-            for (var i = 0; i < result.Length; i++)
-            {
-                result[i] = 0xff;
-            }
-
             lock (_lockARCSectorObject)
             {
                 switch (_arcSectorCockpit)
                 {
                     case 0:
-                        {
-                            // 1  1 
-                            result[0] = 1;
-                            result[4] = 1;
-                            break;
-                        }
-
+                        return " 1  1";
                     case 1:
-                        {
-                            // 1  2
-                            result[0] = 1;
-                            result[4] = 2;
-                            break;
-                        }
-
+                        return " 1  2";
                     case 2:
-                        {
-                            // 2  1
-                            result[0] = 2;
-                            result[4] = 1;
-                            break;
-                        }
-
+                        return " 2  1";
                     case 3:
-                        {
-                            // 2  2
-                            result[0] = 2;
-                            result[4] = 2;
-                            break;
-                        }
-
+                        return " 2  2";
                     case 4:
-                        {
-                            // 3  1
-                            result[0] = 3;
-                            result[4] = 1;
-                            break;
-                        }
-
+                        return " 3  1";
                     case 5:
-                        {
-                            // 3  2
-                            result[0] = 3;
-                            result[4] = 2;
-                            break;
-                        }
-
+                        return " 3  2";
                     case 6:
-                        {
-                            // 4  1
-                            result[0] = 4;
-                            result[4] = 1;
-                            break;
-                        }
-
+                        return " 4  1";
                     case 7:
-                        {
-                            // 4  2
-                            result[0] = 4;
-                            result[4] = 2;
-                            break;
-                        }
+                        return " 4  2";
+                    default:
+                        logger.Error("Unexpected value for _arcSectorCockpit");
+                        return " 0  0";
                 }
             }
-
-            return result;
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
