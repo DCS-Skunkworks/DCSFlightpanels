@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     using NLog;
 
@@ -12,6 +13,8 @@
         private readonly Dictionary<string, double> _variables = new Dictionary<string, double>();
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private string _formula;
+
+        private object _jaceLockObject = new object();
 
         public DCSBIOSOutputFormula()
         {
@@ -61,17 +64,20 @@
             try
             {
                 var result = false;
-                foreach (var dcsbiosOutput in _dcsbiosOutputs)
+                lock (_jaceLockObject)
                 {
-                    if (dcsbiosOutput.Address == address)
+                    foreach (var dcsbiosOutput in _dcsbiosOutputs)
                     {
-                        dcsbiosOutput.CheckForValueMatchAndChange(data);
-                        result = true;
+                        if (dcsbiosOutput.Address == address)
+                        {
+                            dcsbiosOutput.CheckForValueMatchAndChange(data);
+                            result = true;
 
-                        // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
-                        _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                            // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
+                            _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
 
-                        //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                            //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                        }
                     }
                 }
 
@@ -95,7 +101,10 @@
                 }*/
 
                 // Debug.WriteLine(_jaceExtended.CalculationEngine.Calculate(_formula, _variables));
-                return _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
+                lock (_jaceLockObject)
+                {
+                    return _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
+                }
             }
             catch (Exception ex)
             {

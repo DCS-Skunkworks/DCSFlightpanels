@@ -216,6 +216,14 @@ namespace DCS_BIOS
             }
         }
 
+        public static void DetachDataReceivedListenerSO(IDcsBiosDataListener dcsBiosDataListener)
+        {
+            if (_dcsBIOSInstance != null)
+            {
+                _dcsBIOSInstance._dcsProtocolParser.OnDcsDataAddressValue -= dcsBiosDataListener.DcsBiosDataReceived;
+            }
+        }
+
         public void AttachDataReceivedListener(IDcsBiosDataListener iDcsBiosDataListener)
         {
             if (_dcsProtocolParser == null)

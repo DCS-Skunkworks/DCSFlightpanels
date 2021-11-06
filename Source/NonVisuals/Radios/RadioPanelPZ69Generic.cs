@@ -225,9 +225,9 @@
                     }
                     else if (dcsbiosBindingLCD.UseFormula)
                     {
-                        if (dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
+                        lock (_lcdDataVariablesLockObject)
                         {
-                            lock (_lcdDataVariablesLockObject)
+                            if (dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
                             {
                                 var tmp = dcsbiosBindingLCD.CurrentValue;
                                 dcsbiosBindingLCD.CurrentValue = dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate();
@@ -240,7 +240,7 @@
                         }
                     }
                 }
-                
+
                 ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
