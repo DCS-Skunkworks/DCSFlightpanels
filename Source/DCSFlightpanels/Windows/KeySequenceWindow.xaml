@@ -32,7 +32,8 @@
             SelectionChanged="DataGridSequencesSelectionChanged" 
             CanUserReorderColumns="False" 
             CanUserResizeRows="False" 
-            CanUserSortColumns="False" 
+            CanUserSortColumns="False"
+            SelectionMode="Single"
             MouseDoubleClick="DataGridSequences_OnMouseDoubleClick"
             MouseUp="DataGridSequences_OnMouseUp">
 

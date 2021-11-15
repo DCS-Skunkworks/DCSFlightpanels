@@ -138,7 +138,7 @@
         {
             try
             {
-                var value = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
+                var value = (KeyValuePair<int, IKeyPressInfo>)DataGridSequences.SelectedItem;
                 _sortedList.Remove(value.Key);
                 DataGridSequences.Items.Refresh();
                 SetIsDirty();
@@ -163,8 +163,8 @@
 
         private void EditKeyPress()
         {
-            var keyValuePair = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
-            var keyPressWindow = new KeyPressWindow(keyValuePair.Value);
+            var keyValuePair = (KeyValuePair<int, IKeyPressInfo>)DataGridSequences.SelectedItem;
+            var keyPressWindow = new KeyPressWindow((KeyPressInfo)keyValuePair.Value);
             keyPressWindow.ShowDialog();
             if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
             {
@@ -189,7 +189,7 @@
         {
             try
             {
-                var value = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
+                var value = (KeyValuePair<int, IKeyPressInfo>)DataGridSequences.SelectedItem;
                 MoveItemUp(value.Key);
             }
             catch (Exception ex)
@@ -202,7 +202,7 @@
         {
             try
             {
-                var value = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
+                var value = (KeyValuePair<int, IKeyPressInfo>)DataGridSequences.SelectedItem;
                 MoveItemDown(value.Key);
             }
             catch (Exception ex)
