@@ -14,7 +14,8 @@
         Loaded="StreamDeckDCSBIOSDecoderWindow_OnLoaded" 
         Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
         d:DataContext="{d:DesignInstance streamDeck:DCSBIOSDecoder}"
-        KeyDown="StreamDeckDCSBIOSDecoderWindow_OnKeyDown">
+        KeyDown="StreamDeckDCSBIOSDecoderWindow_OnKeyDown"
+        Closing="StreamDeckDCSBIOSDecoderWindow_OnClosing">
 
 
     <Window.Resources>

@@ -106,13 +106,15 @@
 
                 lock (_formulaLockObject)
                 {
-                    _dcsbiosOutputFormula.CheckForMatch(e.Address, e.Data);
-                    try
+                    if (_dcsbiosOutputFormula.CheckForMatch(e.Address, e.Data))
                     {
-                        Dispatcher?.BeginInvoke((Action)(() => LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate()));
+                        try
+                        {
+                            Dispatcher?.BeginInvoke((Action)(() => LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate()));
+                        }
+                        catch (Exception)
+                        { }
                     }
-                    catch (Exception)
-                    { }
                 }
             }
             catch (Exception ex)

@@ -1,4 +1,9 @@
-﻿namespace DCSFlightpanels.Windows.StreamDeck
+﻿using System.ComponentModel;
+using DCS_BIOS.EventArgs;
+using DCS_BIOS.Interfaces;
+using NLog;
+
+namespace DCSFlightpanels.Windows.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -37,8 +42,9 @@
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.
     /// </summary>
-    public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty, IDisposable
+    public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty, IDisposable, IDcsBiosDataListener
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
         private readonly StreamDeckPanel _streamDeckPanel;
@@ -53,8 +59,8 @@
 
         private DCSBIOSDecoder _dcsbiosDecoder = null;
         private bool _exitThread;
-
-
+        private bool _closing = false;
+        private object _formulaLockObject = new object();
 
 
 
@@ -109,6 +115,7 @@
                     return;
                 }
 
+                DCSBIOS.AttachDataReceivedListenerSO(this);
                 ShowDecoder();
                 _dcsbiosDecoder.IsVisible = true;
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
@@ -170,6 +177,34 @@
             ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
         }
 
+        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
+        {
+            try
+            {
+                if (_dcsbiosDecoder.FormulaInstance == null || _closing)
+                {
+                    return;
+                }
+
+                lock (_formulaLockObject)
+                {
+                    if (_dcsbiosDecoder.FormulaInstance.CheckForMatch(e.Address, e.Data))
+                    {
+                        try
+                        {
+                            Dispatcher?.BeginInvoke((Action)(() => LabelResult.Content = "Result : " + _dcsbiosDecoder.FormulaInstance.Evaluate()));
+                        }
+                        catch (Exception)
+                        { }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "DcsBiosDataReceived()");
+            }
+        }
+
         private void SetInfoTextBoxes()
         {
             TextBoxFontInfo.TargetFont = _dcsbiosDecoder.RawTextFont;
@@ -216,7 +251,10 @@
             if (_dcsbiosDecoder.UseFormula)
             {
                 CheckBoxUseFormula.IsChecked = true;
-                TextBoxFormula.Text = string.IsNullOrEmpty(_dcsbiosDecoder.Formula) ? string.Empty : _dcsbiosDecoder.Formula;
+                if (_dcsbiosDecoder.FormulaInstance != null)
+                {
+                    TextBoxFormula.Text = string.IsNullOrEmpty(_dcsbiosDecoder.FormulaInstance.Formula) ? string.Empty : _dcsbiosDecoder.FormulaInstance.Formula;
+                }
             }
 
             if (_dcsbiosDecoder.DCSBIOSOutput != null)
@@ -738,7 +776,7 @@
         {
             try
             {
-                _dcsbiosDecoder.Formula = TextBoxFormula.Text.Replace(Environment.NewLine, string.Empty);
+                _dcsbiosDecoder.SetFormula(TextBoxFormula.Text.Replace(Environment.NewLine, string.Empty));
                 SetIsDirty();
                 SetFormState();
             }
@@ -974,6 +1012,12 @@
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void StreamDeckDCSBIOSDecoderWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            _closing = true;
+            DCSBIOS.DetachDataReceivedListenerSO(this);
         }
     }
 }

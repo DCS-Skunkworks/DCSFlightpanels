@@ -22,7 +22,8 @@
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private DCSBIOSOutput _dcsbiosOutput;
-        private string _formula = string.Empty;
+        private DCSBIOSOutputFormula _dcsbiosOutputFormula;
+        private string _formulaObsolete = string.Empty;
         private bool _useFormula;
         private double _formulaResult = double.MaxValue;
         private string _lastFormulaError = string.Empty;
@@ -370,7 +371,7 @@
 
         public void Clear()
         {
-            _formula = string.Empty;
+            _dcsbiosOutputFormula = null;
             _dcsbiosOutput = null;
             _dcsbiosConverters.Clear();
             _valueUpdated = false;
@@ -380,18 +381,38 @@
 
         private double EvaluateFormula()
         {
-            // 360 - floor((HSI_HDG / 65535) * 360)
-            var variables = new Dictionary<string, double>();
-            variables.Add(_dcsbiosOutput.ControlId, 0);
-            variables[_dcsbiosOutput.ControlId] = UintDcsBiosValue;
-            return JaceExtendedFactory.Instance(ref _jaceId).CalculationEngine.Calculate(_formula, variables);
+            double result = 0;
+
+            if (_dcsbiosOutputFormula != null)
+            {
+                return _dcsbiosOutputFormula.Evaluate();
+            }
+
+            return result;
         }
 
-        [JsonProperty("Formula", Required = Required.Default)]
-        public string Formula
+        [JsonProperty("FormulaInstance", Required = Required.Default)]
+        public DCSBIOSOutputFormula FormulaInstance
         {
-            get => _formula;
-            set => _formula = value;
+            get => _dcsbiosOutputFormula;
+            set => _dcsbiosOutputFormula = value;
+        }
+        
+        public void SetFormula(string formula)
+        {
+            if (string.IsNullOrEmpty(formula))
+            {
+                return;
+            }
+            _dcsbiosOutputFormula = new DCSBIOSOutputFormula(formula);
+        }
+
+        [Obsolete]
+        [JsonProperty("Formula", Required = Required.Default)]
+        public string FormulaObsolete
+        {
+            get => _formulaObsolete;
+            set => _formulaObsolete = value;
         }
 
         [JsonProperty("DCSBIOSOutput", Required = Required.Default)]
@@ -564,7 +585,7 @@
          */
         public bool DecoderConfigurationOK()
         {
-            var formulaIsOK = !_useFormula || !string.IsNullOrEmpty(_formula);
+            var formulaIsOK = !_useFormula || _dcsbiosOutputFormula != null;
             var sourceIsOK = _dcsbiosOutput != null;
             var convertersOK = _dcsbiosConverters.FindAll(o => o.FaceConfigurationIsOK == false).Count == 0;
 
@@ -600,7 +621,7 @@
                         _dcsbiosConverters.Clear();
                         if (!_useFormula)
                         {
-                            _formula = string.Empty;
+                            _dcsbiosOutputFormula = null;
                         }
 
                         break;

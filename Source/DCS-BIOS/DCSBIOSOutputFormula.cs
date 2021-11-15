@@ -1,4 +1,6 @@
-﻿namespace DCS_BIOS
+﻿using Newtonsoft.Json;
+
+namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
@@ -6,14 +8,19 @@
 
     using NLog;
 
+    [Serializable]
     public class DCSBIOSOutputFormula
     {
+        [NonSerialized]
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new List<DCSBIOSOutput>();
         private readonly Dictionary<string, double> _variables = new Dictionary<string, double>();
+
+        [NonSerialized]
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private string _formula;
-
+        
+        [NonSerialized]
         private object _jaceLockObject = new object();
 
         public DCSBIOSOutputFormula()
@@ -30,6 +37,7 @@
         {
             try
             {
+                _dcsbiosOutputs.Clear();
                 var found = false;
                 var controls = DCSBIOSControlLocator.GetControls();
                 foreach (var dcsbiosControl in controls)
@@ -135,12 +143,23 @@
 
             ExtractDCSBIOSOutputsInFormula();
         }
-
+        
         public override string ToString()
         {
             return "DCSBiosOutputFormula{" + _formula + "}";
         }
 
-        public string Formula => _formula;
+        public string Formula
+        {
+            get => _formula; 
+            set
+            {
+                _formula = value;
+                if (!string.IsNullOrEmpty(_formula))
+                {
+                    ExtractDCSBIOSOutputsInFormula();
+                }
+            }
+        }
     }
 }
