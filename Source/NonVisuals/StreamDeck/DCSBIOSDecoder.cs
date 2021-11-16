@@ -77,7 +77,11 @@
             {
                 var stringBuilder = new StringBuilder(100);
                 stringBuilder.Append("Face DCS-BIOS Decoder");
-                if (_dcsbiosOutput != null)
+                if (FormulaSelectedAndOk())
+                {
+                    stringBuilder.Append(" ").Append(_dcsbiosOutputFormula.DCSBIOSOutputs()[0].ControlId);
+                }
+                else if (_dcsbiosOutput != null)
                 {
                     stringBuilder.Append(" ").Append(_dcsbiosOutput.ControlId);
                 }
@@ -156,7 +160,11 @@
                     return;
                 }
 
-                if (_dcsbiosOutput?.Address == e.Address)
+                if (FormulaSelectedAndOk() && _dcsbiosOutputFormula.CheckForMatchAndNewValue(e.Address, e.Data, 20))
+                {
+                    _valueUpdated = true;
+                }
+                else if (!_useFormula && _dcsbiosOutput?.Address == e.Address)
                 {
                     if (!Equals(UintDcsBiosValue, e.Data))
                     {
@@ -219,6 +227,11 @@
             {
                 logger.Error(ex, "DCSBIOSStringReceived()");
             }
+        }
+
+        public bool FormulaSelectedAndOk()
+        {
+            return _useFormula && _dcsbiosOutputFormula != null;
         }
 
         /*
@@ -397,7 +410,7 @@
             get => _dcsbiosOutputFormula;
             set => _dcsbiosOutputFormula = value;
         }
-        
+
         public void SetFormula(string formula)
         {
             if (string.IsNullOrEmpty(formula))
@@ -415,7 +428,7 @@
             set => _formulaObsolete = value;
         }
 
-        [JsonProperty("DCSBIOSOutput", Required = Required.Default)]
+        [JsonProperty("DCSBIOSOutput", Required = Required.AllowNull)]
         public DCSBIOSOutput DCSBIOSOutput
         {
             get => _dcsbiosOutput;
@@ -428,7 +441,7 @@
                 _dcsbiosOutput = value;
                 UintDcsBiosValue = uint.MaxValue;
                 StringDcsBiosValue = string.Empty;
-                if (_dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+                if (_dcsbiosOutput != null && _dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
                 {
                     DCSBIOSStringManager.AddListener(_dcsbiosOutput, this);
                 }
@@ -594,12 +607,22 @@
             {
                 case EnumDCSBIOSDecoderOutputType.Raw:
                     {
-                        return formulaIsOK && sourceIsOK && ConfigurationOK;
+                        if (_useFormula)
+                        {
+                            return formulaIsOK;
+                        }
+
+                        return sourceIsOK;
                     }
 
                 case EnumDCSBIOSDecoderOutputType.Converter:
                     {
-                        return formulaIsOK && sourceIsOK && convertersOK;
+                        if (_useFormula)
+                        {
+                            return formulaIsOK && convertersOK;
+                        }
+
+                        return sourceIsOK && convertersOK;
                     }
 
                 default:

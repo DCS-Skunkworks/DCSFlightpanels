@@ -174,7 +174,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 CheckBoxUseFormula.IsChecked = false;
             }
 
-            ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
+            ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && (!string.IsNullOrEmpty(TextBoxDCSBIOSId.Text) || !string.IsNullOrEmpty(TextBoxFormula.Text));
         }
 
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -188,7 +188,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                 lock (_formulaLockObject)
                 {
-                    if (_dcsbiosDecoder.FormulaInstance.CheckForMatch(e.Address, e.Data))
+                    if (_dcsbiosDecoder.FormulaInstance.CheckForMatchAndNewValue(e.Address, e.Data, 20))
                     {
                         try
                         {

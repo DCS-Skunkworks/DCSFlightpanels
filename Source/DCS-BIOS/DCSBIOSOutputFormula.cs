@@ -23,6 +23,9 @@ namespace DCS_BIOS
         [NonSerialized]
         private object _jaceLockObject = new object();
 
+        [NonSerialized]
+        private int _staticUpdateInterval = 0;
+
         public DCSBIOSOutputFormula()
         {
         }
@@ -31,6 +34,11 @@ namespace DCS_BIOS
         {
             _formula = formula;
             ExtractDCSBIOSOutputsInFormula();
+        }
+
+        public List<DCSBIOSOutput> DCSBIOSOutputs()
+        {
+            return _dcsbiosOutputs;
         }
 
         private void ExtractDCSBIOSOutputsInFormula()
@@ -64,6 +72,49 @@ namespace DCS_BIOS
                 throw;
             }
         }
+
+
+        public bool CheckForMatchAndNewValue(uint address, uint data, int staticUpdateInterval)
+        {
+            try
+            {
+                _staticUpdateInterval++;
+                var result = false;
+                lock (_jaceLockObject)
+                {
+                    foreach (var dcsbiosOutput in _dcsbiosOutputs)
+                    {
+                        if (dcsbiosOutput.Address == address)
+                        {
+                            if (dcsbiosOutput.LastIntValue != data)
+                            {
+                                dcsbiosOutput.CheckForValueMatchAndChange(data);
+                                result = true;
+                            }
+
+                            result = result || _staticUpdateInterval > staticUpdateInterval;
+
+                            if (result)
+                            {
+                                _staticUpdateInterval = 0;
+                            }
+                            // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
+                            _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                            
+                            //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                        }
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "CheckForMatch() function");
+                throw;
+            }
+        }
+
 
         // Returns true if address was found in formula
         // If true do a subsequent call to Evaluate() to get new value
