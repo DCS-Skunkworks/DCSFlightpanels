@@ -140,12 +140,26 @@
             {
                 var value = (KeyValuePair<int, IKeyPressInfo>)DataGridSequences.SelectedItem;
                 _sortedList.Remove(value.Key);
+                ReassignSortedListKeys();
                 DataGridSequences.Items.Refresh();
                 SetIsDirty();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
+            }
+        }
+
+        private void ReassignSortedListKeys()
+        {
+            int newkey = 0;
+            for (int i = 0; i< _sortedList.Count; i++)
+            {
+                var kvp = _sortedList.ElementAt(i);
+                int oldKey = kvp.Key;
+                var val = kvp.Value;
+                _sortedList.Remove(oldKey);
+                _sortedList.Add(newkey++, val);
             }
         }
 
