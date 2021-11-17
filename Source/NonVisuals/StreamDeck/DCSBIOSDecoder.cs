@@ -398,7 +398,7 @@
 
             if (_dcsbiosOutputFormula != null)
             {
-                return _dcsbiosOutputFormula.Evaluate();
+                return _dcsbiosOutputFormula.Evaluate(true);
             }
 
             return result;

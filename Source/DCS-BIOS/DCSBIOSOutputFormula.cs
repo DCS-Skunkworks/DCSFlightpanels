@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Jace.Execution;
+using Newtonsoft.Json;
 
 namespace DCS_BIOS
 {
@@ -46,7 +47,6 @@ namespace DCS_BIOS
             try
             {
                 _dcsbiosOutputs.Clear();
-                var found = false;
                 var controls = DCSBIOSControlLocator.GetControls();
                 foreach (var dcsbiosControl in controls)
                 {
@@ -57,14 +57,9 @@ namespace DCS_BIOS
                         var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControl.identifier);
                         _dcsbiosOutputs.Add(dcsbiosOutput);
                         DCSBIOSProtocolParser.RegisterAddressToBroadCast(dcsbiosOutput.Address);
-                        found = true;
                     }
                 }
-
-                if (!found)
-                {
-                    throw new Exception("Could not find any DCS-BIOS Controls in formula expression.");
-                }
+                
             }
             catch (Exception ex)
             {
@@ -149,7 +144,7 @@ namespace DCS_BIOS
             }
         }
 
-        public double Evaluate()
+        public double Evaluate(bool throwException)
         {
             try
             {
@@ -162,15 +157,20 @@ namespace DCS_BIOS
                 // Debug.WriteLine(_jaceExtended.CalculationEngine.Calculate(_formula, _variables));
                 lock (_jaceLockObject)
                 {
+                    //TestCalculation();
                     return _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
                 }
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "Evaluate() function");
+                if (throwException)
+                {
+                    throw;
+                }
             }
 
-            return 99;
+            return -99;
         }
 
         public void ImportString(string str)

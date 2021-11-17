@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows.Threading;
 using DCS_BIOS.EventArgs;
 using DCS_BIOS.Interfaces;
 using NLog;
@@ -61,7 +62,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private bool _exitThread;
         private bool _closing = false;
         private object _formulaLockObject = new object();
-
+        private System.Windows.Threading.DispatcherTimer _dispatcherTimer;
 
 
 
@@ -72,8 +73,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
             _streamDeckPanel = streamDeckPanel;
-            var thread = new Thread(ThreadLoop);
-            thread.Start();
         }
 
         public StreamDeckDCSBIOSDecoderWindow(StreamDeckPanel streamDeckPanel)
@@ -87,9 +86,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
             _dcsbiosDecoder.StreamDeckButtonName = streamDeckPanel.SelectedButtonName;
-            
-            var thread = new Thread(ThreadLoop);
-            thread.Start();
         }
 
         protected virtual void Dispose(bool disposing)
@@ -124,6 +120,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 _formLoaded = true;
                 SetFormState();
                 TextBoxSearchWord.Focus();
+
+                _dispatcherTimer = new System.Windows.Threading.DispatcherTimer(DispatcherPriority.Send);
+                _dispatcherTimer.Tick += new EventHandler(DispatcherTimerTick);
+                _dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
+                _dispatcherTimer.Start();
             }
             catch (Exception ex)
             {
@@ -177,6 +178,31 @@ namespace DCSFlightpanels.Windows.StreamDeck
             ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && (!string.IsNullOrEmpty(TextBoxDCSBIOSId.Text) || !string.IsNullOrEmpty(TextBoxFormula.Text));
         }
 
+        private void DispatcherTimerTick(object sender, EventArgs e)
+        {
+            try
+            {
+                LabelErrors.Content = _dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : string.Empty;
+                LabelResult.Content = _dcsbiosDecoder.HasErrors ? "-" : _dcsbiosDecoder.FormulaResult.ToString(CultureInfo.InvariantCulture);
+                
+                if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
+                {
+                    LabelSourceRawValue.Content = _dcsbiosDecoder.UintDcsBiosValue;
+                }
+                else
+                {
+                    LabelSourceRawValue.Content = _dcsbiosDecoder.StringDcsBiosValue;
+                }
+            }
+            catch (Exception ex)
+            {
+                LabelErrors.Content = ex.Message;
+            }
+
+            // Forcing the CommandManager to raise the RequerySuggested event
+            CommandManager.InvalidateRequerySuggested();
+        }
+
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
@@ -186,18 +212,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     return;
                 }
 
-                lock (_formulaLockObject)
-                {
-                    if (_dcsbiosDecoder.FormulaInstance.CheckForMatchAndNewValue(e.Address, e.Data, 20))
-                    {
-                        try
-                        {
-                            Dispatcher?.BeginInvoke((Action)(() => LabelResult.Content = "Result : " + _dcsbiosDecoder.FormulaInstance.Evaluate()));
-                        }
-                        catch (Exception)
-                        { }
-                    }
-                }
+                _dcsbiosDecoder.FormulaInstance.CheckForMatchAndNewValue(e.Address, e.Data, 20);
             }
             catch (Exception ex)
             {
@@ -262,46 +277,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 TextBoxDCSBIOSId.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
             }
 
-            
+
 
             ShowConverters();
             TextBoxFontInfo.UpdateFontInfo();
             _populatingData = false;
-        }
-
-        private void ThreadLoop()
-        {
-            try
-            {
-                while (!_exitThread)
-                {
-                    if (_dcsbiosDecoder.ValueUpdated)
-                    {
-                        try
-                        {
-                            SetFormulaError(_dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : string.Empty);
-                            SetFormulaResult(_dcsbiosDecoder.FormulaResult);
-                            if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
-                            {
-                                SetRawDCSBIOSValue(_dcsbiosDecoder.UintDcsBiosValue);
-                            }
-                            else
-                            {
-                                SetRawDCSBIOSValue(_dcsbiosDecoder.StringDcsBiosValue);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            SetFormulaError(ex.Message);
-                        }
-                    }
-                    Thread.Sleep(10);
-                }
-            }
-            catch (Exception ex)
-            {
-                LabelErrors.Content = "Failed to start thread " + ex.Message;
-            }
         }
 
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -736,42 +716,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 });
         }
         */
-        private void SetFormulaError(string error)
-        {
-            Dispatcher?.BeginInvoke(
-                (Action)delegate
-                {
-                    LabelErrors.Content = error;
-                });
-        }
-
-        private void SetRawDCSBIOSValue(uint value)
-        {
-            Dispatcher?.BeginInvoke(
-                (Action)delegate
-                {
-                    LabelSourceRawValue.Content = value;
-                });
-        }
-
-        private void SetRawDCSBIOSValue(string value)
-        {
-            Dispatcher?.BeginInvoke(
-                (Action)delegate
-                {
-                    LabelSourceRawValue.Content = value;
-                });
-        }
-
-        private void SetFormulaResult(double result)
-        {
-            Dispatcher?.BeginInvoke(
-                (Action)delegate
-                {
-                    LabelResult.Content = result.ToString(CultureInfo.InvariantCulture);
-                });
-        }
-
+        
+        
         private void TextBoxFormula_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
@@ -1001,7 +947,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void TextBoxOutputTextRaw_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             try

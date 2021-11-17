@@ -230,7 +230,7 @@
                             if (dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
                             {
                                 var tmp = dcsbiosBindingLCD.CurrentValue;
-                                dcsbiosBindingLCD.CurrentValue = dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate();
+                                dcsbiosBindingLCD.CurrentValue = dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate(false);
                                 if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
                                 {
                                     // Update only if this LCD binding is in current use

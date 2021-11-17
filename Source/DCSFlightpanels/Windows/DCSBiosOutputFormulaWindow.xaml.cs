@@ -110,10 +110,13 @@
                     {
                         try
                         {
-                            Dispatcher?.BeginInvoke((Action)(() => LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate()));
+                            Dispatcher?.BeginInvoke((Action) (() =>
+                                LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate(true)));
                         }
-                        catch (Exception)
-                        { }
+                        catch (Exception ex)
+                        {
+                            Dispatcher?.BeginInvoke((Action) (() => TextBlockFormulaErrors.Text = ex.Message));
+                        }
                     }
                 }
             }
@@ -396,7 +399,7 @@
                 TextBlockFormulaErrors.Text = string.Empty;
                 lock (_formulaLockObject)
                 {
-                    LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate();
+                    LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate(true);
                 }
 
                 SetFormState();
