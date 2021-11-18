@@ -160,6 +160,12 @@
             }
         }
 
+        /*
+         * 18 Nov 2021
+         * Issue with DCSBIOSDecoder not updating a button's text. Adding this helped.
+         */
+        [NonSerialized] private int _refreshIntervalLimit = 20;
+        [NonSerialized] private int _refreshInterval = 0;
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
@@ -175,8 +181,10 @@
                 }
                 else if (!_useFormula && _dcsbiosOutput?.Address == e.Address)
                 {
-                    if (!Equals(UintDcsBiosValue, e.Data))
+                    _refreshInterval++;
+                    if (!Equals(UintDcsBiosValue, e.Data) || _refreshInterval > _refreshIntervalLimit)
                     {
+                        _refreshInterval = 0;
                         UintDcsBiosValue = _dcsbiosOutput.GetUIntValue(e.Data);
                         _valueUpdated = true;
                     }
