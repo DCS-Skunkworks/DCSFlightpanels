@@ -93,26 +93,6 @@ namespace Tests.NonVisuals
             Assert.Equal(expected, BitConverter.ToString(bytes));
         }
 
-        public static IEnumerable<object[]> CustomData()
-        {
-            yield return new object[] { "00-D1-D2-D3-D4-D5-06-07-08-09-01-02-03-04-05-06-07-08-09-01-02", "D1-D2-D3-D4-D5", VALUES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-D1-D2-D3-D4-05-06-07-08-09-01-02-03-04-05-06-07-08-09-01-02", "D1-D2-D3-D4", VALUES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-D1-D2-D3-D4-D5-06-07-08-09-01-02-03-04-05-06-07-08-09-01-02", "D1-D2-D3-D4-D5-D6", VALUES, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-02-03-04-05-D1-D2-D3-D4-D5-02-03-04-05-06-07-08-09-01-02", "D1-D2-D3-D4-D5", VALUES, PZ69LCDPosition.UPPER_STBY_RIGHT };
-            yield return new object[] { "00-01-02-03-04-05-06-07-08-09-01-D1-D2-D3-D4-D5-07-08-09-01-02", "D1-D2-D3-D4-D5", VALUES, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-02-03-04-05-06-07-08-09-01-02-03-04-05-06-D1-D2-D3-D4-D5", "D1-D2-D3-D4-D5", VALUES, PZ69LCDPosition.LOWER_STBY_RIGHT };
-        }
-
-        [Theory]
-        [MemberData(nameof(CustomData))]
-        public void Custom5Bytes_ShouldInject_TheGiven5BytesMax_AtPosition(string expected, string inputBytes, string inputArray, PZ69LCDPosition lcdPosition)
-        {
-            var bytes = StringToBytes(inputArray);
-            var bytesToInject = StringToBytes(inputBytes);
-            _dp.Custom5Bytes(ref bytes, bytesToInject, lcdPosition);
-            Assert.Equal(expected, BitConverter.ToString(bytes));
-        }
-
         public static IEnumerable<object[]> DefaultStringAsItData()
         {
             yield return new object[] { "00-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
@@ -148,6 +128,16 @@ namespace Tests.NonVisuals
             yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-D8-D8", "123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
             yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", "12345", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
             yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", "123456", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+
+            //Mig 21bis special Tests
+            yield return new object[] { "00-FF-01-FF-FF-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", " 1  1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-FF-01-FF-FF-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", " 1  2", DEIGHTS, PZ69LCDPosition.UPPER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-02-FF-FF-01-D8-D8-D8-D8-D8", " 2  1", DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-02-FF-FF-02", " 2  2", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-FF-03-FF-FF-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", " 3  1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-FF-03-FF-FF-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", " 3  2", DEIGHTS, PZ69LCDPosition.UPPER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-04-FF-FF-01-D8-D8-D8-D8-D8", " 4  1", DEIGHTS, PZ69LCDPosition.LOWER_ACTIVE_LEFT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-04-FF-FF-02", " 4  2", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
         }
 
         [Theory]

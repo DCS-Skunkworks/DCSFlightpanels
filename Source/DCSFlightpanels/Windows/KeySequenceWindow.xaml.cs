@@ -138,14 +138,28 @@
         {
             try
             {
-                var value = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
+                var value = (KeyValuePair<int, IKeyPressInfo>)DataGridSequences.SelectedItem;
                 _sortedList.Remove(value.Key);
+                ReassignSortedListKeys();
                 DataGridSequences.Items.Refresh();
                 SetIsDirty();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
+            }
+        }
+
+        private void ReassignSortedListKeys()
+        {
+            int newkey = 0;
+            for (int i = 0; i< _sortedList.Count; i++)
+            {
+                var kvp = _sortedList.ElementAt(i);
+                int oldKey = kvp.Key;
+                var val = kvp.Value;
+                _sortedList.Remove(oldKey);
+                _sortedList.Add(newkey++, val);
             }
         }
 
@@ -163,8 +177,8 @@
 
         private void EditKeyPress()
         {
-            var keyValuePair = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
-            var keyPressWindow = new KeyPressWindow(keyValuePair.Value);
+            var keyValuePair = (KeyValuePair<int, IKeyPressInfo>)DataGridSequences.SelectedItem;
+            var keyPressWindow = new KeyPressWindow((KeyPressInfo)keyValuePair.Value);
             keyPressWindow.ShowDialog();
             if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
             {
@@ -189,7 +203,7 @@
         {
             try
             {
-                var value = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
+                var value = (KeyValuePair<int, IKeyPressInfo>)DataGridSequences.SelectedItem;
                 MoveItemUp(value.Key);
             }
             catch (Exception ex)
@@ -202,7 +216,7 @@
         {
             try
             {
-                var value = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
+                var value = (KeyValuePair<int, IKeyPressInfo>)DataGridSequences.SelectedItem;
                 MoveItemDown(value.Key);
             }
             catch (Exception ex)
