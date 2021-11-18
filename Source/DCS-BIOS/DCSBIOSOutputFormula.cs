@@ -1,4 +1,5 @@
-﻿using Jace.Execution;
+﻿using System.Globalization;
+using Jace.Execution;
 using Newtonsoft.Json;
 
 namespace DCS_BIOS
@@ -26,6 +27,7 @@ namespace DCS_BIOS
 
         [NonSerialized]
         private int _staticUpdateInterval = 0;
+        
 
         public DCSBIOSOutputFormula()
         {
@@ -37,6 +39,7 @@ namespace DCS_BIOS
             ExtractDCSBIOSOutputsInFormula();
         }
 
+        
         public List<DCSBIOSOutput> DCSBIOSOutputs()
         {
             return _dcsbiosOutputs;
@@ -158,6 +161,7 @@ namespace DCS_BIOS
                 lock (_jaceLockObject)
                 {
                     //TestCalculation();
+                    
                     return _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
                 }
             }
@@ -195,11 +199,7 @@ namespace DCS_BIOS
             ExtractDCSBIOSOutputsInFormula();
         }
         
-        public override string ToString()
-        {
-            return "DCSBiosOutputFormula{" + _formula + "}";
-        }
-
+        [JsonProperty("Formula", Required = Required.Default)]
         public string Formula
         {
             get => _formula; 
@@ -211,6 +211,11 @@ namespace DCS_BIOS
                     ExtractDCSBIOSOutputsInFormula();
                 }
             }
+        }
+        
+        public override string ToString()
+        {
+            return "DCSBiosOutputFormula{" + _formula + "}";
         }
     }
 }

@@ -39,6 +39,15 @@
 
         private Bitmap _converterBitmap;
 
+        private bool _limitDecimalPlaces = false;
+        private NumberFormatInfo _numberFormatInfoFormula;
+
+        /*[NonSerialized]
+        private List<string> _listDecimalFormatters = new List<string>()
+        {
+            "0", "0.0", "0.00", "0.000", "0.0000", "0.00000"
+        };*/
+
         public DCSBIOSDecoder(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
         {
             _jaceId = RandomFactory.Get();
@@ -253,26 +262,13 @@
                  * 2) Use converter    (formula / no formula)
                  * 3) show blank image
                  */
-                var showImage = false;
 
                 /*   1) Use decoder raw(formula / no formula)  */
                 if (_dcsbiosConverters.Count == 0)
                 {
-                    if (UseFormula)
-                    {
-                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _formulaResult.ToString(CultureInfo.InvariantCulture));
-                        showImage = true;
-                    }
-                    else if (DecoderSourceType == DCSBiosOutputType.STRING_TYPE && !TreatStringAsNumber)
-                    {
-                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, string.IsNullOrWhiteSpace(StringDcsBiosValue) ? string.Empty : StringDcsBiosValue);
-                        showImage = true;
-                    }
-                    else if (!string.IsNullOrEmpty(ButtonTextTemplate))
-                    {
-                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, UintDcsBiosValue.ToString(CultureInfo.InvariantCulture));
-                        showImage = true;
-                    }
+                    ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, GetResultString());
+
+                    var showImage = !string.IsNullOrEmpty(ButtonTextTemplate);
 
                     if (IsVisible)
                     {
@@ -330,6 +326,25 @@
             }
         }
 
+        public string GetResultString()
+        {
+            if (_useFormula && _limitDecimalPlaces)
+            {
+                return string.Format(_numberFormatInfoFormula, "{0:N}", _formulaResult);
+            }
+
+            if (_useFormula)
+            {
+                return _formulaResult.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (DecoderSourceType == DCSBiosOutputType.STRING_TYPE && !TreatStringAsNumber)
+            {
+                return string.IsNullOrWhiteSpace(StringDcsBiosValue) ? string.Empty : StringDcsBiosValue;
+            }
+
+            return UintDcsBiosValue.ToString(CultureInfo.InvariantCulture);
+        }
 
         [JsonProperty("UseFormula", Required = Required.Default)]
         public bool UseFormula
@@ -686,6 +701,33 @@
             {
                 var notUsedAnymoreDefaultImageFilePath = value;
             }
+        }
+
+        public void SetNumberOfDecimals(bool limitDecimals, int decimalPlaces = 0)
+        {
+            if (!UseFormula || FormulaInstance == null)
+            {
+                return;
+            }
+
+            LimitDecimalPlaces = limitDecimals;
+            _numberFormatInfoFormula = new NumberFormatInfo();
+            _numberFormatInfoFormula.NumberDecimalSeparator = ".";
+            _numberFormatInfoFormula.NumberDecimalDigits = decimalPlaces;
+        }
+
+        [JsonProperty("LimitDecimalPlaces", Required = Required.Default)]
+        public bool LimitDecimalPlaces
+        {
+            get => _limitDecimalPlaces;
+            set => _limitDecimalPlaces = value;
+        }
+
+        [JsonProperty("NumberFormatInfoFormula", Required = Required.Default)]
+        public NumberFormatInfo NumberFormatInfoFormula
+        {
+            get => _numberFormatInfoFormula;
+            set => _numberFormatInfoFormula = value;
         }
     }
 

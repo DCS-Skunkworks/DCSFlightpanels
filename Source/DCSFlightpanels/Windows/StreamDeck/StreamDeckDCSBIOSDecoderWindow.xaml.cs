@@ -59,10 +59,10 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private bool _populatingData = false;
 
         private DCSBIOSDecoder _dcsbiosDecoder = null;
-        private bool _exitThread;
         private bool _closing = false;
         private object _formulaLockObject = new object();
         private System.Windows.Threading.DispatcherTimer _dispatcherTimer;
+
 
 
 
@@ -116,7 +116,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 _dcsbiosDecoder.IsVisible = true;
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
-                _popupDataGrid = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "PopupDataGrid"));
+                _popupDataGrid = (DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "PopupDataGrid");
                 _formLoaded = true;
                 SetFormState();
                 TextBoxSearchWord.Focus();
@@ -176,6 +176,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
 
             ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && (!string.IsNullOrEmpty(TextBoxDCSBIOSId.Text) || !string.IsNullOrEmpty(TextBoxFormula.Text));
+
+            ComboBoxDecimals.IsEnabled = CheckBoxLimitDecimals.IsChecked == true;
         }
 
         private void DispatcherTimerTick(object sender, EventArgs e)
@@ -183,15 +185,22 @@ namespace DCSFlightpanels.Windows.StreamDeck
             try
             {
                 LabelErrors.Content = _dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : string.Empty;
-                LabelResult.Content = _dcsbiosDecoder.HasErrors ? "-" : _dcsbiosDecoder.FormulaResult.ToString(CultureInfo.InvariantCulture);
-                
+                LabelFormulaResult.Content = _dcsbiosDecoder.HasErrors ? "-" : _dcsbiosDecoder.GetResultString();
+
                 if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
                 {
-                    LabelSourceRawValue.Content = _dcsbiosDecoder.UintDcsBiosValue;
+                    if (_dcsbiosDecoder.UseFormula)
+                    {
+                        LabelSourceRawDCSBIOSValue.Content = "-";
+                    }
+                    else
+                    {
+                        LabelSourceRawDCSBIOSValue.Content = _dcsbiosDecoder.UintDcsBiosValue;
+                    }
                 }
                 else
                 {
-                    LabelSourceRawValue.Content = _dcsbiosDecoder.StringDcsBiosValue;
+                    LabelSourceRawDCSBIOSValue.Content = _dcsbiosDecoder.StringDcsBiosValue;
                 }
             }
             catch (Exception ex)
@@ -263,12 +272,23 @@ namespace DCSFlightpanels.Windows.StreamDeck
             CheckBoxTreatStringAsNumber.IsChecked = _dcsbiosDecoder.TreatStringAsNumber;
 
             CheckBoxUseFormula.IsChecked = _dcsbiosDecoder.UseFormula;
-            if (_dcsbiosDecoder.UseFormula)
+            if (_dcsbiosDecoder.UseFormula && _dcsbiosDecoder.FormulaInstance != null)
             {
                 CheckBoxUseFormula.IsChecked = true;
-                if (_dcsbiosDecoder.FormulaInstance != null)
+
+                TextBoxFormula.Text = string.IsNullOrEmpty(_dcsbiosDecoder.FormulaInstance.Formula) ? string.Empty : _dcsbiosDecoder.FormulaInstance.Formula;
+
+                if (_dcsbiosDecoder.LimitDecimalPlaces && _dcsbiosDecoder.NumberFormatInfoFormula != null)
                 {
-                    TextBoxFormula.Text = string.IsNullOrEmpty(_dcsbiosDecoder.FormulaInstance.Formula) ? string.Empty : _dcsbiosDecoder.FormulaInstance.Formula;
+                    CheckBoxLimitDecimals.Checked -= CheckBoxLimitDecimals_CheckedChanged;
+                    CheckBoxLimitDecimals.Unchecked -= CheckBoxLimitDecimals_CheckedChanged;
+                    CheckBoxLimitDecimals.IsChecked = _dcsbiosDecoder.LimitDecimalPlaces;
+                    CheckBoxLimitDecimals.Checked += CheckBoxLimitDecimals_CheckedChanged;
+                    CheckBoxLimitDecimals.Unchecked += CheckBoxLimitDecimals_CheckedChanged;
+
+                    ComboBoxDecimals.SelectionChanged -= ComboBoxDecimals_OnSelectionChanged;
+                    ComboBoxDecimals.SelectedIndex = _dcsbiosDecoder.NumberFormatInfoFormula.NumberDecimalDigits;
+                    ComboBoxDecimals.SelectionChanged += ComboBoxDecimals_OnSelectionChanged;
                 }
             }
 
@@ -276,8 +296,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
             {
                 TextBoxDCSBIOSId.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
             }
-
-
 
             ShowConverters();
             TextBoxFontInfo.UpdateFontInfo();
@@ -444,8 +462,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
             try
             {
                 TextBoxDCSBIOSId.Text = string.Empty;
-                LabelSourceRawValue.Content = string.Empty;
-                LabelResult.Content = string.Empty;
+                LabelSourceRawDCSBIOSValue.Content = string.Empty;
+                LabelFormulaResult.Content = string.Empty;
                 LabelErrors.Content = string.Empty;
                 TextBoxSearchWord.Text = string.Empty;
                 TextBoxSearchWord.Foreground = new SolidColorBrush(Colors.Gainsboro);
@@ -716,8 +734,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 });
         }
         */
-        
-        
+
+
         private void TextBoxFormula_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
@@ -790,7 +808,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private void CloseWindow()
         {
             _dcsbiosDecoder.Clean();
-            _exitThread = true;
             Close();
         }
 
@@ -964,6 +981,42 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             _closing = true;
             DCSBIOS.DetachDataReceivedListenerSO(this);
+        }
+
+        private void CheckBoxLimitDecimals_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_dcsbiosDecoder == null)
+                {
+                    return;
+                }
+                
+                _dcsbiosDecoder.SetNumberOfDecimals(CheckBoxLimitDecimals.IsChecked == true, Convert.ToInt32(ComboBoxDecimals.SelectedValue.ToString()));
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ComboBoxDecimals_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                SetFormState();
+                if (_dcsbiosDecoder == null)
+                {
+                    return;
+                }
+
+                _dcsbiosDecoder.SetNumberOfDecimals(true, Convert.ToInt32(ComboBoxDecimals.SelectedValue.ToString()));
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }

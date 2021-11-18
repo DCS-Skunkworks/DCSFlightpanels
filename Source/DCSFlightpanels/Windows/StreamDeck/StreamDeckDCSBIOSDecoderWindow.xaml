@@ -9,7 +9,7 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
         Title="DCS-BIOS Decoder" 
-        Height="500" Width="1200" 
+        Height="550" Width="1200" 
         WindowStartupLocation="CenterScreen" 
         Loaded="StreamDeckDCSBIOSDecoderWindow_OnLoaded" 
         Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
@@ -98,7 +98,7 @@
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="10,10,10,10">
-                        <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/system.math(v=vs.110).aspx" RequestNavigate="Hyperlink_OnRequestNavigate">
+                        <Hyperlink NavigateUri="https://github.com/pieterderycke/Jace/wiki/Standard-Functions" RequestNavigate="Hyperlink_OnRequestNavigate">
                             Click here for a list of Math functions
                         </Hyperlink>
                         </TextBlock>
@@ -115,8 +115,24 @@
 
                     <StackPanel Orientation="Horizontal">
                         <DockPanel>
+                            <Label Content="Decimals to show :"  Margin="10,0,10,0" />
+                            <CheckBox Name="CheckBoxLimitDecimals" VerticalAlignment="Center" Content="Limit decimals"   Margin="0,0,10,0" Checked="CheckBoxLimitDecimals_CheckedChanged" Unchecked="CheckBoxLimitDecimals_CheckedChanged"></CheckBox>
+                            <ComboBox Name="ComboBoxDecimals" Width="50" SelectedIndex="0" SelectedValuePath="Content"  SelectionChanged="ComboBoxDecimals_OnSelectionChanged">
+                                <ComboBoxItem>0</ComboBoxItem>
+                                <ComboBoxItem>1</ComboBoxItem>
+                                <ComboBoxItem>2</ComboBoxItem>
+                                <ComboBoxItem>3</ComboBoxItem>
+                                <ComboBoxItem>4</ComboBoxItem>
+                                <ComboBoxItem>5</ComboBoxItem>
+                            </ComboBox>
+                            <Label Name="LabelFormulaDecimalsValue" Content="" Margin="10,0,10,0"/>
+                        </DockPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <DockPanel>
                             <Label Content="DCS-BIOS value :"  Margin="10,0,10,0" />
-                            <Label Name="LabelSourceRawValue" Content="" Margin="10,0,10,0"/>
+                            <Label Name="LabelSourceRawDCSBIOSValue" Content="" Margin="10,0,10,0"/>
                         </DockPanel>
                     </StackPanel>
 
@@ -129,7 +145,7 @@
                     <StackPanel Orientation="Horizontal">
                         <DockPanel>
                             <Label Content="Formula result :" Margin="10,0,10,0"/>
-                            <Label Name="LabelResult" Margin="10,0,10,0"/>
+                            <Label Name="LabelFormulaResult" Margin="10,0,10,0"/>
                         </DockPanel>
                     </StackPanel>
                 </StackPanel>
