@@ -727,7 +727,7 @@
                     }
                 }
 
-                SetTextBoxBackgroundColors(Brushes.White);
+                SetTextBoxBackgroundColors(Brushes.White); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
                 foreach (var bipLink in _farmingSidePanel.BIPLinkHashSet)
                 {
                     var textBox = (FarmingPanelTextBox)GetTextBox(bipLink.FarmingPanelKey, bipLink.WhenTurnedOn);
@@ -747,7 +747,10 @@
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                textBox.Background = brush;
+                if (!textBox.IsFocused && textBox.Background != Brushes.Yellow)
+                {
+                    textBox.Background = brush;
+                }
             }
             _textBoxBillsSet = true;
         }
