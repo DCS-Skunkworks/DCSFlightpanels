@@ -147,7 +147,19 @@
             set
             {
                 _dcsbiosDecoder = value;
-                TextBox.Text = _dcsbiosDecoder?.DCSBIOSOutput != null ? _dcsbiosDecoder.DCSBIOSOutput.ControlId : string.Empty;
+                if (_dcsbiosDecoder == null)
+                {
+                    TextBox.Text = string.Empty;
+                    return;
+                }
+                if (!_dcsbiosDecoder.UseFormula && _dcsbiosDecoder.DCSBIOSOutput != null)
+                {
+                    TextBox.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
+                }
+                else if (_dcsbiosDecoder.UseFormula)
+                {
+                    TextBox.Text = "formula";
+                }
             }
         }
         

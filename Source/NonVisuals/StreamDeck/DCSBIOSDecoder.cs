@@ -22,7 +22,8 @@
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private DCSBIOSOutput _dcsbiosOutput;
-        private string _formula = string.Empty;
+        private DCSBIOSOutputFormula _dcsbiosOutputFormula;
+        private string _formulaObsolete = string.Empty;
         private bool _useFormula;
         private double _formulaResult = double.MaxValue;
         private string _lastFormulaError = string.Empty;
@@ -37,6 +38,15 @@
         private bool _shutdown;
 
         private Bitmap _converterBitmap;
+
+        private bool _limitDecimalPlaces = false;
+        private NumberFormatInfo _numberFormatInfoFormula;
+
+        /*[NonSerialized]
+        private List<string> _listDecimalFormatters = new List<string>()
+        {
+            "0", "0.0", "0.00", "0.000", "0.0000", "0.00000"
+        };*/
 
         public DCSBIOSDecoder(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
         {
@@ -76,7 +86,11 @@
             {
                 var stringBuilder = new StringBuilder(100);
                 stringBuilder.Append("Face DCS-BIOS Decoder");
-                if (_dcsbiosOutput != null)
+                if (FormulaSelectedAndOk())
+                {
+                    stringBuilder.Append(" ").Append(_dcsbiosOutputFormula.DCSBIOSOutputs()[0].ControlId);
+                }
+                else if (_dcsbiosOutput != null)
                 {
                     stringBuilder.Append(" ").Append(_dcsbiosOutput.ControlId);
                 }
@@ -146,6 +160,12 @@
             }
         }
 
+        /*
+         * 18 Nov 2021
+         * Issue with DCSBIOSDecoder not updating a button's text. Adding this helped.
+         */
+        [NonSerialized] private int _refreshIntervalLimit = 20;
+        [NonSerialized] private int _refreshInterval = 0;
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
@@ -155,10 +175,16 @@
                     return;
                 }
 
-                if (_dcsbiosOutput?.Address == e.Address)
+                if (FormulaSelectedAndOk() && _dcsbiosOutputFormula.CheckForMatchAndNewValue(e.Address, e.Data, 20))
                 {
-                    if (!Equals(UintDcsBiosValue, e.Data))
+                    _valueUpdated = true;
+                }
+                else if (!_useFormula && _dcsbiosOutput?.Address == e.Address)
+                {
+                    _refreshInterval++;
+                    if (!Equals(UintDcsBiosValue, e.Data) || _refreshInterval > _refreshIntervalLimit)
                     {
+                        _refreshInterval = 0;
                         UintDcsBiosValue = _dcsbiosOutput.GetUIntValue(e.Data);
                         _valueUpdated = true;
                     }
@@ -220,6 +246,11 @@
             }
         }
 
+        public bool FormulaSelectedAndOk()
+        {
+            return _useFormula && _dcsbiosOutputFormula != null;
+        }
+
         /*
          * 1) integer
          * 2) string but treat as integer
@@ -239,26 +270,13 @@
                  * 2) Use converter    (formula / no formula)
                  * 3) show blank image
                  */
-                var showImage = false;
 
                 /*   1) Use decoder raw(formula / no formula)  */
                 if (_dcsbiosConverters.Count == 0)
                 {
-                    if (UseFormula)
-                    {
-                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _formulaResult.ToString(CultureInfo.InvariantCulture));
-                        showImage = true;
-                    }
-                    else if (DecoderSourceType == DCSBiosOutputType.STRING_TYPE && !TreatStringAsNumber)
-                    {
-                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, string.IsNullOrWhiteSpace(StringDcsBiosValue) ? string.Empty : StringDcsBiosValue);
-                        showImage = true;
-                    }
-                    else if (!string.IsNullOrEmpty(ButtonTextTemplate))
-                    {
-                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, UintDcsBiosValue.ToString(CultureInfo.InvariantCulture));
-                        showImage = true;
-                    }
+                    ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, GetResultString());
+
+                    var showImage = !string.IsNullOrEmpty(ButtonTextTemplate);
 
                     if (IsVisible)
                     {
@@ -316,6 +334,25 @@
             }
         }
 
+        public string GetResultString()
+        {
+            if (_useFormula && _limitDecimalPlaces)
+            {
+                return string.Format(_numberFormatInfoFormula, "{0:N}", _formulaResult);
+            }
+
+            if (_useFormula)
+            {
+                return _formulaResult.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (DecoderSourceType == DCSBiosOutputType.STRING_TYPE && !TreatStringAsNumber)
+            {
+                return string.IsNullOrWhiteSpace(StringDcsBiosValue) ? string.Empty : StringDcsBiosValue;
+            }
+
+            return UintDcsBiosValue.ToString(CultureInfo.InvariantCulture);
+        }
 
         [JsonProperty("UseFormula", Required = Required.Default)]
         public bool UseFormula
@@ -370,7 +407,7 @@
 
         public void Clear()
         {
-            _formula = string.Empty;
+            _dcsbiosOutputFormula = null;
             _dcsbiosOutput = null;
             _dcsbiosConverters.Clear();
             _valueUpdated = false;
@@ -380,21 +417,41 @@
 
         private double EvaluateFormula()
         {
-            // 360 - floor((HSI_HDG / 65535) * 360)
-            var variables = new Dictionary<string, double>();
-            variables.Add(_dcsbiosOutput.ControlId, 0);
-            variables[_dcsbiosOutput.ControlId] = UintDcsBiosValue;
-            return JaceExtendedFactory.Instance(ref _jaceId).CalculationEngine.Calculate(_formula, variables);
+            double result = 0;
+
+            if (_dcsbiosOutputFormula != null)
+            {
+                return _dcsbiosOutputFormula.Evaluate(true);
+            }
+
+            return result;
         }
 
-        [JsonProperty("Formula", Required = Required.Default)]
-        public string Formula
+        [JsonProperty("FormulaInstance", Required = Required.Default)]
+        public DCSBIOSOutputFormula FormulaInstance
         {
-            get => _formula;
-            set => _formula = value;
+            get => _dcsbiosOutputFormula;
+            set => _dcsbiosOutputFormula = value;
         }
 
-        [JsonProperty("DCSBIOSOutput", Required = Required.Default)]
+        public void SetFormula(string formula)
+        {
+            if (string.IsNullOrEmpty(formula))
+            {
+                return;
+            }
+            _dcsbiosOutputFormula = new DCSBIOSOutputFormula(formula);
+        }
+
+        [Obsolete]
+        [JsonProperty("Formula", Required = Required.Default)]
+        public string FormulaObsolete
+        {
+            get => _formulaObsolete;
+            set => _formulaObsolete = value;
+        }
+
+        [JsonProperty("DCSBIOSOutput", Required = Required.AllowNull)]
         public DCSBIOSOutput DCSBIOSOutput
         {
             get => _dcsbiosOutput;
@@ -407,7 +464,7 @@
                 _dcsbiosOutput = value;
                 UintDcsBiosValue = uint.MaxValue;
                 StringDcsBiosValue = string.Empty;
-                if (_dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+                if (_dcsbiosOutput != null && _dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
                 {
                     DCSBIOSStringManager.AddListener(_dcsbiosOutput, this);
                 }
@@ -564,7 +621,7 @@
          */
         public bool DecoderConfigurationOK()
         {
-            var formulaIsOK = !_useFormula || !string.IsNullOrEmpty(_formula);
+            var formulaIsOK = !_useFormula || _dcsbiosOutputFormula != null;
             var sourceIsOK = _dcsbiosOutput != null;
             var convertersOK = _dcsbiosConverters.FindAll(o => o.FaceConfigurationIsOK == false).Count == 0;
 
@@ -573,12 +630,22 @@
             {
                 case EnumDCSBIOSDecoderOutputType.Raw:
                     {
-                        return formulaIsOK && sourceIsOK && ConfigurationOK;
+                        if (_useFormula)
+                        {
+                            return formulaIsOK;
+                        }
+
+                        return sourceIsOK;
                     }
 
                 case EnumDCSBIOSDecoderOutputType.Converter:
                     {
-                        return formulaIsOK && sourceIsOK && convertersOK;
+                        if (_useFormula)
+                        {
+                            return formulaIsOK && convertersOK;
+                        }
+
+                        return sourceIsOK && convertersOK;
                     }
 
                 default:
@@ -600,7 +667,7 @@
                         _dcsbiosConverters.Clear();
                         if (!_useFormula)
                         {
-                            _formula = string.Empty;
+                            _dcsbiosOutputFormula = null;
                         }
 
                         break;
@@ -642,6 +709,33 @@
             {
                 var notUsedAnymoreDefaultImageFilePath = value;
             }
+        }
+
+        public void SetNumberOfDecimals(bool limitDecimals, int decimalPlaces = 0)
+        {
+            if (!UseFormula || FormulaInstance == null)
+            {
+                return;
+            }
+
+            LimitDecimalPlaces = limitDecimals;
+            _numberFormatInfoFormula = new NumberFormatInfo();
+            _numberFormatInfoFormula.NumberDecimalSeparator = ".";
+            _numberFormatInfoFormula.NumberDecimalDigits = decimalPlaces;
+        }
+
+        [JsonProperty("LimitDecimalPlaces", Required = Required.Default)]
+        public bool LimitDecimalPlaces
+        {
+            get => _limitDecimalPlaces;
+            set => _limitDecimalPlaces = value;
+        }
+
+        [JsonProperty("NumberFormatInfoFormula", Required = Required.Default)]
+        public NumberFormatInfo NumberFormatInfoFormula
+        {
+            get => _numberFormatInfoFormula;
+            set => _numberFormatInfoFormula = value;
         }
     }
 

@@ -119,7 +119,7 @@
                         lock (_lcdDataVariablesLockObject)
                         {
                             var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
-                            dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
+                            dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate(false);
                             if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
                             {
                                 Interlocked.Increment(ref _doUpdatePanelLCD);

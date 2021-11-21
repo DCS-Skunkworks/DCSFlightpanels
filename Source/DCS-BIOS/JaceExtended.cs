@@ -7,6 +7,8 @@ namespace DCS_BIOS
     public class JaceExtended
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
+
+        private object _lockObject = new object();
         private readonly CalculationEngine _calculationEngine = new CalculationEngine();
 
         public JaceExtended()
@@ -18,7 +20,10 @@ namespace DCS_BIOS
         {
             try
             {
-                return _calculationEngine.Calculate(expression);
+                lock (_lockObject)
+                {
+                    return _calculationEngine.Calculate(expression);
+                }
             }
             catch (Exception ex)
             {

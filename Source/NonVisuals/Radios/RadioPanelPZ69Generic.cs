@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Globalization;
     using System.Threading;
 
     using ClassLibraryCommon;
@@ -206,30 +205,17 @@
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            UpdateCounter(e.Address, e.Data);
-            foreach (var dcsbiosBindingLCD in _dcsBiosLcdBindings)
+            try
             {
-                if (!dcsbiosBindingLCD.UseFormula && e.Address == dcsbiosBindingLCD.DCSBIOSOutputObject.Address)
+                UpdateCounter(e.Address, e.Data);
+                foreach (var dcsbiosBindingLCD in _dcsBiosLcdBindings)
                 {
-                    lock (_lcdDataVariablesLockObject)
-                    {
-                        var tmp = dcsbiosBindingLCD.CurrentValue;
-                        dcsbiosBindingLCD.CurrentValue = (int)dcsbiosBindingLCD.DCSBIOSOutputObject.GetUIntValue(e.Data);
-                        if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
-                        {
-                            // Update only if this LCD binding is in current use
-                            Interlocked.Add(ref _doUpdatePanelLCD, 2);
-                        }
-                    }
-                }
-                else if (dcsbiosBindingLCD.UseFormula)
-                {
-                    if (dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
+                    if (!dcsbiosBindingLCD.UseFormula && e.Address == dcsbiosBindingLCD.DCSBIOSOutputObject.Address)
                     {
                         lock (_lcdDataVariablesLockObject)
                         {
                             var tmp = dcsbiosBindingLCD.CurrentValue;
-                            dcsbiosBindingLCD.CurrentValue = dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate();
+                            dcsbiosBindingLCD.CurrentValue = (int)dcsbiosBindingLCD.DCSBIOSOutputObject.GetUIntValue(e.Data);
                             if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
                             {
                                 // Update only if this LCD binding is in current use
@@ -237,10 +223,31 @@
                             }
                         }
                     }
+                    else if (dcsbiosBindingLCD.UseFormula)
+                    {
+                        lock (_lcdDataVariablesLockObject)
+                        {
+                            if (dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
+                            {
+                                var tmp = dcsbiosBindingLCD.CurrentValue;
+                                dcsbiosBindingLCD.CurrentValue = dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate(false);
+                                if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
+                                {
+                                    // Update only if this LCD binding is in current use
+                                    Interlocked.Add(ref _doUpdatePanelLCD, 2);
+                                }
+                            }
+                        }
+                    }
                 }
+
+                ShowFrequenciesOnPanel();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "DcsBiosDataReceived()");
             }
 
-            ShowFrequenciesOnPanel();
         }
 
         public override void ClearSettings(bool setIsDirty = false)

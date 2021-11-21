@@ -1,20 +1,35 @@
-﻿namespace DCS_BIOS
+﻿using System.Globalization;
+using Jace.Execution;
+using Newtonsoft.Json;
+
+namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+
     using System.Globalization;
 
-    using ClassLibraryCommon;
     using NLog;
 
+    [Serializable]
     public class DCSBIOSOutputFormula
     {
+        [NonSerialized]
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new List<DCSBIOSOutput>();
         private readonly Dictionary<string, double> _variables = new Dictionary<string, double>();
+
+        [NonSerialized]
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private string _formula;
+        
+        [NonSerialized]
+        private object _jaceLockObject = new object();
+
+        [NonSerialized]
+        private int _staticUpdateInterval = 0;
+        
 
         public DCSBIOSOutputFormula()
         {
@@ -26,11 +41,17 @@
             ExtractDCSBIOSOutputsInFormula();
         }
 
+        
+        public List<DCSBIOSOutput> DCSBIOSOutputs()
+        {
+            return _dcsbiosOutputs;
+        }
+
         private void ExtractDCSBIOSOutputsInFormula()
         {
             try
             {
-                var found = false;
+                _dcsbiosOutputs.Clear();
                 var controls = DCSBIOSControlLocator.GetControls();
                 foreach (var dcsbiosControl in controls)
                 {
@@ -41,14 +62,9 @@
                         var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControl.identifier);
                         _dcsbiosOutputs.Add(dcsbiosOutput);
                         DCSBIOSProtocolParser.RegisterAddressToBroadCast(dcsbiosOutput.Address);
-                        found = true;
                     }
                 }
-
-                if (!found)
-                {
-                    throw new Exception("Could not find any DCS-BIOS Controls in formula expression.");
-                }
+                
             }
             catch (Exception ex)
             {
@@ -57,24 +73,36 @@
             }
         }
 
-        // Returns true if address was found in formula
-        // If true do a subsequent call to Evaluate() to get new value
-        public bool CheckForMatch(uint address, uint data)
+
+        public bool CheckForMatchAndNewValue(uint address, uint data, int staticUpdateInterval)
         {
             try
             {
+                _staticUpdateInterval++;
                 var result = false;
-                foreach (var dcsbiosOutput in _dcsbiosOutputs)
+                lock (_jaceLockObject)
                 {
-                    if (dcsbiosOutput.Address == address)
+                    foreach (var dcsbiosOutput in _dcsbiosOutputs)
                     {
-                        dcsbiosOutput.CheckForValueMatchAndChange(data);
-                        result = true;
+                        if (dcsbiosOutput.Address == address)
+                        {
+                            if (dcsbiosOutput.LastIntValue != data)
+                            {
+                                dcsbiosOutput.CheckForValueMatchAndChange(data);
+                                result = true;
+                            }
 
-                        // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
-                        _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                            result = result || _staticUpdateInterval > staticUpdateInterval;
 
-                        //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                            if (result)
+                            {
+                                _staticUpdateInterval = 0;
+                            }
+                            // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
+                            _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                            
+                            //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                        }
                     }
                 }
 
@@ -87,7 +115,41 @@
             }
         }
 
-        public double Evaluate()
+
+        // Returns true if address was found in formula
+        // If true do a subsequent call to Evaluate() to get new value
+        public bool CheckForMatch(uint address, uint data)
+        {
+            try
+            {
+                var result = false;
+                lock (_jaceLockObject)
+                {
+                    foreach (var dcsbiosOutput in _dcsbiosOutputs)
+                    {
+                        if (dcsbiosOutput.Address == address)
+                        {
+                            dcsbiosOutput.CheckForValueMatchAndChange(data);
+                            result = true;
+
+                            // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
+                            _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+
+                            //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                        }
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "CheckForMatch() function");
+                throw;
+            }
+        }
+
+        public double Evaluate(bool throwException)
         {
             try
             {
@@ -98,14 +160,24 @@
                 }*/
 
                 // Debug.WriteLine(_jaceExtended.CalculationEngine.Calculate(_formula, _variables));
-                return _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
+
+                lock (_jaceLockObject)
+                {
+                    //TestCalculation();
+                    
+                    return _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
+                }
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "Evaluate() function");
+                if (throwException)
+                {
+                    throw;
+                }
             }
 
-            return 99;
+            return -99;
         }
 
         public void ImportString(string str)
@@ -129,12 +201,24 @@
 
             ExtractDCSBIOSOutputsInFormula();
         }
-
+        
+        [JsonProperty("Formula", Required = Required.Default)]
+        public string Formula
+        {
+            get => _formula; 
+            set
+            {
+                _formula = value;
+                if (!string.IsNullOrEmpty(_formula))
+                {
+                    ExtractDCSBIOSOutputsInFormula();
+                }
+            }
+        }
+        
         public override string ToString()
         {
             return "DCSBiosOutputFormula{" + _formula + "}";
         }
-
-        public string Formula => _formula;
     }
 }

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -13,23 +14,32 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
+
+    using NLog;
 
     /// <summary>
     /// Interaction logic for DCSBiosOutputFormulaWindow.xaml
     /// </summary>
-    public partial class DCSBiosOutputFormulaWindow : Window
+    public partial class DCSBiosOutputFormulaWindow : Window, IDcsBiosDataListener
     {
+        internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private readonly string _description;
         private readonly bool _userEditsDescription;
-        private readonly JaceExtended _jaceExtended = new JaceExtended();
+        // private readonly JaceExtended _jaceExtended = new JaceExtended();
         private DCSBIOSOutput _dcsBiosOutput;
+
+        private object _formulaLockObject = new object();
         private DCSBIOSOutputFormula _dcsbiosOutputFormula;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
         private DCSFPProfile _dcsfpProfile;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
+
+        private bool _closing = false;
 
         public DCSBiosOutputFormulaWindow(DCSFPProfile dcsfpProfile, string description, bool userEditsDescription = false)
         {
@@ -69,9 +79,10 @@
         {
             try
             {
+                DCSBIOS.AttachDataReceivedListenerSO(this);
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
-                _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));
+                _dataGridValues = (DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues");
                 LabelDescription.Content = _description;
                 ShowValues2();
                 _formLoaded = true;
@@ -80,7 +91,38 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
+        {
+            try
+            {
+                if (_dcsbiosOutputFormula == null || _closing)
+                {
+                    return;
+                }
+
+                lock (_formulaLockObject)
+                {
+                    if (_dcsbiosOutputFormula.CheckForMatch(e.Address, e.Data))
+                    {
+                        try
+                        {
+                            Dispatcher?.BeginInvoke((Action) (() =>
+                                LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate(true)));
+                        }
+                        catch (Exception ex)
+                        {
+                            Dispatcher?.BeginInvoke((Action) (() => TextBlockFormulaErrors.Text = ex.Message));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "DcsBiosDataReceived()");
             }
         }
 
@@ -106,18 +148,19 @@
             {
                 return;
             }
-            
+
             LabelDescription.Visibility = !_userEditsDescription ? Visibility.Visible : Visibility.Collapsed;
             LabelUserDescription.Visibility = _userEditsDescription ? Visibility.Visible : Visibility.Collapsed;
             TextBoxUserDescription.Visibility = _userEditsDescription ? Visibility.Visible : Visibility.Collapsed;
 
             GroupBoxFormula.Visibility = Visibility.Visible;
 
-            LabelFormula.IsEnabled = (CheckBoxUseFormula.IsChecked.HasValue && CheckBoxUseFormula.IsChecked.Value);
+            LabelFormula.IsEnabled = CheckBoxUseFormula.IsChecked.HasValue && CheckBoxUseFormula.IsChecked.Value;
             TextBoxFormula.IsEnabled = LabelFormula.IsEnabled;
             LabelResult.IsEnabled = LabelFormula.IsEnabled;
             ButtonTestFormula.IsEnabled = LabelFormula.IsEnabled;
             ButtonOk.IsEnabled = (_dcsbiosControl == null && _dcsBiosOutput == null) || (_dcsbiosControl != null || (!string.IsNullOrWhiteSpace(TextBoxFormula.Text) && CheckBoxUseFormula.IsChecked == true));
+
             if (_userEditsDescription && string.IsNullOrEmpty(TextBoxUserDescription.Text))
             {
                 ButtonOk.IsEnabled = false;
@@ -136,10 +179,13 @@
         {
             if (CheckBoxUseFormula.IsChecked.HasValue && CheckBoxUseFormula.IsChecked.Value)
             {
-                //Use formula
+                // Use formula
                 try
                 {
-                    _dcsbiosOutputFormula = new DCSBIOSOutputFormula(TextBoxFormula.Text);
+                    lock (_formulaLockObject)
+                    {
+                        _dcsbiosOutputFormula = new DCSBIOSOutputFormula(TextBoxFormula.Text);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -148,8 +194,8 @@
             }
             else
             {
-                //Use single DCSBIOSOutput
-                //This is were DCSBiosOutput (subset of DCSBIOSControl) get populated from DCSBIOSControl
+                // Use single DCSBIOSOutput
+                // This is were DCSBiosOutput (subset of DCSBIOSControl) get populated from DCSBIOSControl
                 try
                 {
                     if (_dcsbiosControl == null && !string.IsNullOrWhiteSpace(TextBoxControlId.Text))
@@ -191,7 +237,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -205,7 +251,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -249,24 +295,24 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void TextBoxSearchWord_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
-                if (TextBoxSearchWord.Text == "")
+                if (TextBoxSearchWord.Text == string.Empty)
                 {
                     // Create an ImageBrush.
                     var textImageBrush = new ImageBrush();
                     textImageBrush.ImageSource =
                         new BitmapImage(
-                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)
-                        );
+                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute));
                     textImageBrush.AlignmentX = AlignmentX.Left;
                     textImageBrush.Stretch = Stretch.Uniform;
+
                     // Use the brush to paint the button's background.
                     TextBoxSearchWord.Background = textImageBrush;
                 }
@@ -298,7 +344,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -317,7 +363,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -334,12 +380,13 @@
                     ShowValues2();
 
                 }
+
                 _popupSearch.IsOpen = false;
                 SetFormState();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -347,8 +394,14 @@
         {
             try
             {
+                CheckFormula();
+                CopyValues();
                 TextBlockFormulaErrors.Text = string.Empty;
-                LabelResult.Content = "Result : " + _jaceExtended.Evaluate(TextBoxFormula.Text);
+                lock (_formulaLockObject)
+                {
+                    LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate(true);
+                }
+
                 SetFormState();
             }
             catch (Exception ex)
@@ -431,7 +484,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -444,7 +497,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -463,5 +516,17 @@
             get { return TextBoxUserDescription.Text; }
         }
 
+        private void DCSBiosOutputFormulaWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            try
+            {
+                _closing = true;
+                DCSBIOS.DetachDataReceivedListenerSO(this);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }
