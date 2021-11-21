@@ -8,6 +8,8 @@ namespace DCS_BIOS
     using System.Collections.Generic;
     using System.Diagnostics;
 
+    using System.Globalization;
+
     using NLog;
 
     [Serializable]
@@ -158,6 +160,7 @@ namespace DCS_BIOS
                 }*/
 
                 // Debug.WriteLine(_jaceExtended.CalculationEngine.Calculate(_formula, _variables));
+
                 lock (_jaceLockObject)
                 {
                     //TestCalculation();

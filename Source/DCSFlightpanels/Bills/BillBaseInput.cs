@@ -733,7 +733,10 @@
         private void DeleteBIPLink()
         {
             BipLink?.BIPLights?.Clear();
-            TextBox.Background = Brushes.White;
+            if (!TextBox.IsFocused && TextBox.Background != Brushes.Yellow)
+            {
+                TextBox.Background = Brushes.White;
+            }
             UpdateBIPLinkBindings();
         }
 

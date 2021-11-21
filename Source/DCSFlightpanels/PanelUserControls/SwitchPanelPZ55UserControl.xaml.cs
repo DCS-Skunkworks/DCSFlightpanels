@@ -814,7 +814,7 @@
                     }
                 }
 
-                SetTextBoxBackgroundColors(Brushes.White);
+                SetTextBoxBackgroundColors(Brushes.White); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
                 foreach (var bipLinkPZ55 in _switchPanelPZ55.BIPLinkHashSet)
                 {
                     var textBox = (PZ55TextBox)GetTextBox(bipLinkPZ55.SwitchPanelPZ55Key, bipLinkPZ55.WhenTurnedOn);
@@ -837,7 +837,10 @@
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                textBox.Background = brush;
+                if (!textBox.IsFocused && textBox.Background != Brushes.Yellow)
+                {
+                    textBox.Background = brush;
+                }
             }
             _textBoxBillsSet = true;
         }

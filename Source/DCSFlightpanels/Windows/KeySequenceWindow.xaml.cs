@@ -143,6 +143,7 @@
                 ReassignSortedListKeys();
                 DataGridSequences.Items.Refresh();
                 SetIsDirty();
+                SetFormState();
             }
             catch (Exception ex)
             {
