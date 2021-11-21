@@ -21,7 +21,7 @@
          * 
          * The comparison part of the DCSBIOSOutput is ignored for DCSBIOSBindingLCDPZ70, all data will be shown
          */
-        private int _currentValue;
+        private double _currentValue;
         private PZ70DialPosition _pz70DialPosition;
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula; // If this is set to !null value then ignore the _dcsbiosOutput
@@ -84,7 +84,7 @@
             set => _pz70DialPosition = value;
         }
 
-        public int CurrentValue
+        public double CurrentValue
         {
             get => _currentValue;
             set => _currentValue = value;

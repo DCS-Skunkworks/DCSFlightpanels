@@ -1273,13 +1273,13 @@
                         if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.UpperLCD)
                         {
                             foundUpperValue = true;
-                            upperValue = dcsbiosBindingLCDPZ70.CurrentValue;
+                            upperValue = Convert.ToInt32(dcsbiosBindingLCDPZ70.CurrentValue);
                         }
 
                         if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.LowerLCD)
                         {
                             foundLowerValue = true;
-                            lowerValue = dcsbiosBindingLCDPZ70.CurrentValue;
+                            lowerValue = Convert.ToInt32(dcsbiosBindingLCDPZ70.CurrentValue);
                         }
                     }
                 }

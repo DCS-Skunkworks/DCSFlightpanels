@@ -215,10 +215,10 @@
                     {
                         var tmp = dcsbiosBindingLCD.CurrentValue;
                         dcsbiosBindingLCD.CurrentValue = (int)dcsbiosBindingLCD.DCSBIOSOutputObject.GetUIntValue(e.Data);
-                        if (tmp != dcsbiosBindingLCD.CurrentValue && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
+                        if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
                         {
                             // Update only if this LCD binding is in current use
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Add(ref _doUpdatePanelLCD, 2);
                         }
                     }
                 }
@@ -230,10 +230,10 @@
                         {
                             var tmp = dcsbiosBindingLCD.CurrentValue;
                             dcsbiosBindingLCD.CurrentValue = dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate();
-                            if (tmp != dcsbiosBindingLCD.CurrentValue && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
+                            if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
                             {
                                 // Update only if this LCD binding is in current use
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                Interlocked.Add(ref _doUpdatePanelLCD, 2);
                             }
                         }
                     }
@@ -382,14 +382,14 @@
                                 {
                                     keyBinding.OSKeyPress.Execute(new CancellationToken());
                                 }
-                                
+
                                 if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                                 {
                                     PluginManager.DoEvent(
-                                        ProfileHandler.SelectedProfile().Description, 
-                                        HIDInstanceId, 
-                                        (int)PluginGamingPanelEnum.PZ69RadioPanel, 
-                                        (int)radioPanelKey.RadioPanelPZ69Knob, 
+                                        ProfileHandler.SelectedProfile().Description,
+                                        HIDInstanceId,
+                                        (int)PluginGamingPanelEnum.PZ69RadioPanel,
+                                        (int)radioPanelKey.RadioPanelPZ69Knob,
                                         radioPanelKey.IsOn,
                                         keyBinding.OSKeyPress.KeyPressSequence);
                                 }
@@ -514,26 +514,12 @@
                     {
                         if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
                         {
-                            if (_upperActive.ToString(CultureInfo.InvariantCulture).Length > 5)
-                            {
-                                _upperActive = int.Parse(dcsbiosBindingLCDPZ69.CurrentValue.ToString().Substring(0, 5));
-                            }
-                            else
-                            {
-                                _upperActive = dcsbiosBindingLCDPZ69.CurrentValue;
-                            }
+                            _upperActive = dcsbiosBindingLCDPZ69.CurrentValue;
                         }
 
                         if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
                         {
-                            if (_upperStandby.ToString(CultureInfo.InvariantCulture).Length > 5)
-                            {
-                                _upperStandby = int.Parse(dcsbiosBindingLCDPZ69.CurrentValue.ToString().Substring(0, 5));
-                            }
-                            else
-                            {
-                                _upperStandby = dcsbiosBindingLCDPZ69.CurrentValue;
-                            }
+                            _upperStandby = dcsbiosBindingLCDPZ69.CurrentValue;
                         }
                     }
 
@@ -541,26 +527,12 @@
                     {
                         if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT)
                         {
-                            if (_lowerActive.ToString(CultureInfo.InvariantCulture).Length > 5)
-                            {
-                                _lowerActive = int.Parse(dcsbiosBindingLCDPZ69.CurrentValue.ToString().Substring(0, 5));
-                            }
-                            else
-                            {
-                                _lowerActive = dcsbiosBindingLCDPZ69.CurrentValue;
-                            }
+                            _lowerActive = dcsbiosBindingLCDPZ69.CurrentValue;
                         }
 
                         if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                         {
-                            if (_lowerStandby.ToString(CultureInfo.InvariantCulture).Length > 5)
-                            {
-                                _lowerStandby = int.Parse(dcsbiosBindingLCDPZ69.CurrentValue.ToString().Substring(0, 5));
-                            }
-                            else
-                            {
-                                _lowerStandby = dcsbiosBindingLCDPZ69.CurrentValue;
-                            }
+                            _lowerStandby = dcsbiosBindingLCDPZ69.CurrentValue;
                         }
                     }
                 }
@@ -661,7 +633,7 @@
 
         public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
         {
-            var radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff) panelSwitchOnOff;
+            var radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
             var pz69DialPosition = GetDial(radioPanelPZ69KeyOnOff.Switch);
             if (string.IsNullOrEmpty(keyPress))
             {
@@ -800,7 +772,7 @@
         public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
         {
             var radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
-            var bipLinkPZ69 = (BIPLinkPZ69) bipLink;
+            var bipLinkPZ69 = (BIPLinkPZ69)bipLink;
 
             if (bipLinkPZ69.BIPLights.Count == 0)
             {
@@ -808,7 +780,7 @@
                 SetIsDirty();
                 return;
             }
-            
+
             var found = false;
 
             foreach (var tmpBipLink in _bipLinks)
@@ -832,7 +804,7 @@
 
             SetIsDirty();
         }
-        
+
         public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, PZ69LCDPosition pz69LCDPosition)
         {
             var found = false;
@@ -903,7 +875,7 @@
             {
                 pz69DialPosition = _pz69LowerDialPosition;
             }
-            
+
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
                 if (dcsBiosBindingLCD.DialPosition == pz69DialPosition && dcsBiosBindingLCD.PZ69LcdPosition == pz69LCDPosition)
@@ -925,7 +897,7 @@
                 SetIsDirty();
                 return;
             }
-            
+
             var found = false;
             var pz69DialPosition = GetDial(radioPanelPZ69KeyOnOff.Switch);
             foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -973,7 +945,7 @@
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
             var pz69SwitchOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
-            var controlListPZ69 = (ControlListPZ69) controlList;
+            var controlListPZ69 = (ControlListPZ69)controlList;
 
             var found = false;
             var pz69DialPosition = GetDial(pz69SwitchOnOff.Switch);
