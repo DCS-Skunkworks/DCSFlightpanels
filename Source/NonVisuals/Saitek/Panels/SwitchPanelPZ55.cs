@@ -41,6 +41,13 @@
         private PanelLEDColor _manualLandingGearLedsColorTrans = PanelLEDColor.RED;
         private Thread _manualLandingGearThread;
 
+        private enum ManualGearsStatus
+        {
+            Down,
+            Up,
+            Trans
+        }
+
         public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton)
         {
             if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
@@ -281,6 +288,21 @@
             set => _operatingSystemCommandBindings = value;
         }
 
+        private PanelLEDColor GetManualGearsColorForStatus(ManualGearsStatus status)
+        {
+            switch (status)
+            {
+                case ManualGearsStatus.Down:
+                    return _manualLandingGearLedsColorDown;
+                case ManualGearsStatus.Up:
+                    return _manualLandingGearLedsColorUp;
+                case ManualGearsStatus.Trans:
+                    return _manualLandingGearLedsColorTrans;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(status));
+            }
+        }
+
         private void SetLandingGearLedsManually(PanelLEDColor panelLEDColor)
         {
             try
@@ -298,9 +320,9 @@
                 // Now when the gear knob selection is changed, just like a real aircraft
                 // the lights go to their 'Transit' state showing RED.
                 // Then afterwards they change to their final colour (GREEN = DOWN, DARK = UP)
-                SetLandingGearLED(SwitchPanelPZ55LEDPosition.UP, PanelLEDColor.RED);
-                SetLandingGearLED(SwitchPanelPZ55LEDPosition.RIGHT, PanelLEDColor.RED);
-                SetLandingGearLED(SwitchPanelPZ55LEDPosition.LEFT, PanelLEDColor.RED);
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.UP, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.RIGHT, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.LEFT, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
 
                 while (true)
                 {
@@ -365,13 +387,13 @@
                         _manualLandingGearThread?.Abort();
 
                         // Changed Lights to go DARK when gear level is selected to UP, instead of RED.
-                        _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(PanelLEDColor.DARK));
+                        _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(GetManualGearsColorForStatus(ManualGearsStatus.Up)));
                         _manualLandingGearThread.Start();
                     }
                     else if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN && switchPanelKey.IsOn)
                     {
                         _manualLandingGearThread?.Abort();
-                        _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(PanelLEDColor.GREEN));
+                        _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(GetManualGearsColorForStatus(ManualGearsStatus.Down)));
                         _manualLandingGearThread.Start();
                     }
                 }
