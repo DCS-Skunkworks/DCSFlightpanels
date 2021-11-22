@@ -133,12 +133,30 @@
                     {
                         _manualLandingGearLeds = setting.Contains("True");
                     }
+                    else if (setting.StartsWith("ManualLandingGearLedsColorDown{"))
+                    {
+                        _manualLandingGearLedsColorDown = GetSettingPanelLEDColor(setting);
+                    }
+                    else if (setting.StartsWith("ManualLandingGearLedsColorUp{"))
+                    {
+                        _manualLandingGearLedsColorUp = GetSettingPanelLEDColor(setting);
+                    }
+                    else if (setting.StartsWith("ManualLandingGearLedsColorTrans{"))
+                    {
+                        _manualLandingGearLedsColorTrans = GetSettingPanelLEDColor(setting);
+                    }
                 }
             }
 
             SettingsApplied();
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
 
+        }
+        private PanelLEDColor GetSettingPanelLEDColor(string setting)
+        {
+            int pos = setting.IndexOf('{');
+            string settingValue = setting.Substring(pos+1, setting.LastIndexOf('}') - pos - 1);
+            return (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), settingValue);
         }
 
         public override List<string> ExportSettings()
