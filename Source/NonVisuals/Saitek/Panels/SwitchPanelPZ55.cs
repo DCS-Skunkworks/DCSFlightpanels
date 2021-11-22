@@ -36,6 +36,9 @@
         private SwitchPanelPZ55LEDs _ledLeftColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledRightColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private bool _manualLandingGearLeds;
+        private PanelLEDColor _manualLandingGearLedsColorDown = PanelLEDColor.GREEN;
+        private PanelLEDColor _manualLandingGearLedsColorUp = PanelLEDColor.DARK;
+        private PanelLEDColor _manualLandingGearLedsColorTrans = PanelLEDColor.RED;
         private Thread _manualLandingGearThread;
 
         public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton)
@@ -178,6 +181,9 @@
             }
 
             result.Add("ManualLandingGearLEDs{" + _manualLandingGearLeds + "}");
+            result.Add("ManualLandingGearLedsColorUp{" + _manualLandingGearLedsColorUp + "}");
+            result.Add("ManualLandingGearLedsColorDown{" + _manualLandingGearLedsColorDown + "}");
+            result.Add("ManualLandingGearLedsColorTrans{" + _manualLandingGearLedsColorTrans + "}");
             return result;
         }
 
@@ -1015,6 +1021,36 @@
             set
             {
                 _manualLandingGearLeds = value;
+                SetIsDirty();
+            }
+        }
+
+        public PanelLEDColor ManualLandingGearLedsColorDown
+        {
+            get => _manualLandingGearLedsColorDown;
+            set
+            {
+                _manualLandingGearLedsColorDown = value;
+                SetIsDirty();
+            }
+        }
+
+        public PanelLEDColor ManualLandingGearLedsColorUp
+        {
+            get => _manualLandingGearLedsColorUp;
+            set
+            {
+                _manualLandingGearLedsColorUp = value;
+                SetIsDirty();
+            }
+        }
+
+        public PanelLEDColor ManualLandingGearLedsColorTrans
+        {
+            get => _manualLandingGearLedsColorTrans;
+            set
+            {
+                _manualLandingGearLedsColorTrans = value;
                 SetIsDirty();
             }
         }
