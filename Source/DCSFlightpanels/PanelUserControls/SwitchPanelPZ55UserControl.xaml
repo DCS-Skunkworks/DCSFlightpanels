@@ -170,6 +170,23 @@
                     <Label Content="Gear Down (on)" FontSize="10" Height="23"  />
                     <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxGearDown"  />
                     <CheckBox x:Name="CheckBoxManualLeDs" Content="Manual LEDs (via LG lever)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="CheckBoxManualLEDs_OnClick"/>
+                    <Grid Height="61">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="15*"/>
+
+                            <ColumnDefinition Width="32*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="1">
+                            <ComboBox x:Name="ManualLedUpCombo" SelectionChanged="ManualLedUpCombo_SelectionChanged" Width="87"/>
+                            <ComboBox x:Name="ManualLedTransCombo" SelectionChanged="ManualLedTransCombo_SelectionChanged" Width="87"/>
+                            <ComboBox x:Name="ManualLedDownCombo" SelectionChanged="ManualLedDownCombo_SelectionChanged" Width="87"/>
+                        </StackPanel>
+                        <StackPanel Grid.ColumnSpan="2" Margin="0,0,89,0">
+                            <Label x:Name="ManualLedUpLabel" Content="Up" Padding="5,3,5,3"/>
+                            <Label x:Name="ManualLedTransLabel" Content="Trans" Padding="5,3,5,3"/>
+                            <Label x:Name="ManualLedDownLabel" Content="Down" Padding="5,3,5,3"/>
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Master Bat. Off" FontSize="10" Height="23"   />

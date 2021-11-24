@@ -81,9 +81,21 @@
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxBills();
+            LoadComboBoxesManualLeds();
             SetContextMenuClickHandlers();
             UserControlLoaded = true;
             ShowGraphicConfiguration();
+        }
+
+        private void LoadComboBoxesManualLeds()
+        {
+            ManualLedUpCombo.ItemsSource = Enum.GetValues(typeof(PanelLEDColor));
+            ManualLedDownCombo.ItemsSource = Enum.GetValues(typeof(PanelLEDColor));
+            ManualLedTransCombo.ItemsSource = Enum.GetValues(typeof(PanelLEDColor));
+
+            ManualLedUpCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorUp;
+            ManualLedDownCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorDown;
+            ManualLedTransCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorTrans;
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
@@ -825,6 +837,7 @@
                 }
 
                 CheckBoxManualLeDs.IsChecked = _switchPanelPZ55.ManualLandingGearLeds;
+                SetManualLedColorsSelectionVisibility(_switchPanelPZ55.ManualLandingGearLeds);
                 SetConfigExistsImageVisibility();
             }
             catch (Exception ex)
@@ -1244,6 +1257,33 @@
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void ManualLedUpCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _switchPanelPZ55.ManualLandingGearLedsColorUp = (PanelLEDColor)((ComboBox)sender).SelectedValue;
+        }
+
+        private void ManualLedTransCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _switchPanelPZ55.ManualLandingGearLedsColorTrans = (PanelLEDColor)((ComboBox)sender).SelectedValue;
+        }
+
+        private void ManualLedDownCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _switchPanelPZ55.ManualLandingGearLedsColorDown = (PanelLEDColor)((ComboBox)sender).SelectedValue;
+        }
+
+        private void SetManualLedColorsSelectionVisibility(bool isVisible)
+        {
+            var visibility = isVisible ? Visibility.Visible : Visibility.Hidden;
+            ManualLedUpCombo.Visibility = visibility;
+            ManualLedTransCombo.Visibility = visibility;
+            ManualLedDownCombo.Visibility = visibility;
+
+            ManualLedUpLabel.Visibility = visibility;
+            ManualLedTransLabel.Visibility = visibility;
+            ManualLedDownLabel.Visibility = visibility;
         }
     }
 }

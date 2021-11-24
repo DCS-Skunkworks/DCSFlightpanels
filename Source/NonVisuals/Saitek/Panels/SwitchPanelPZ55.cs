@@ -36,7 +36,17 @@
         private SwitchPanelPZ55LEDs _ledLeftColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledRightColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private bool _manualLandingGearLeds;
+        private PanelLEDColor _manualLandingGearLedsColorDown = PanelLEDColor.GREEN;
+        private PanelLEDColor _manualLandingGearLedsColorUp = PanelLEDColor.DARK;
+        private PanelLEDColor _manualLandingGearLedsColorTrans = PanelLEDColor.RED;
         private Thread _manualLandingGearThread;
+
+        private enum ManualGearsStatus
+        {
+            Down,
+            Up,
+            Trans
+        }
 
         public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton)
         {
@@ -123,12 +133,30 @@
                     {
                         _manualLandingGearLeds = setting.Contains("True");
                     }
+                    else if (setting.StartsWith("ManualLandingGearLedsColorDown{"))
+                    {
+                        _manualLandingGearLedsColorDown = GetSettingPanelLEDColor(setting);
+                    }
+                    else if (setting.StartsWith("ManualLandingGearLedsColorUp{"))
+                    {
+                        _manualLandingGearLedsColorUp = GetSettingPanelLEDColor(setting);
+                    }
+                    else if (setting.StartsWith("ManualLandingGearLedsColorTrans{"))
+                    {
+                        _manualLandingGearLedsColorTrans = GetSettingPanelLEDColor(setting);
+                    }
                 }
             }
 
             SettingsApplied();
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
 
+        }
+        private PanelLEDColor GetSettingPanelLEDColor(string setting)
+        {
+            int pos = setting.IndexOf('{');
+            string settingValue = setting.Substring(pos+1, setting.LastIndexOf('}') - pos - 1);
+            return (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), settingValue);
         }
 
         public override List<string> ExportSettings()
@@ -178,6 +206,9 @@
             }
 
             result.Add("ManualLandingGearLEDs{" + _manualLandingGearLeds + "}");
+            result.Add("ManualLandingGearLedsColorUp{" + _manualLandingGearLedsColorUp + "}");
+            result.Add("ManualLandingGearLedsColorDown{" + _manualLandingGearLedsColorDown + "}");
+            result.Add("ManualLandingGearLedsColorTrans{" + _manualLandingGearLedsColorTrans + "}");
             return result;
         }
 
@@ -275,6 +306,21 @@
             set => _operatingSystemCommandBindings = value;
         }
 
+        private PanelLEDColor GetManualGearsColorForStatus(ManualGearsStatus status)
+        {
+            switch (status)
+            {
+                case ManualGearsStatus.Down:
+                    return _manualLandingGearLedsColorDown;
+                case ManualGearsStatus.Up:
+                    return _manualLandingGearLedsColorUp;
+                case ManualGearsStatus.Trans:
+                    return _manualLandingGearLedsColorTrans;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(status));
+            }
+        }
+
         private void SetLandingGearLedsManually(PanelLEDColor panelLEDColor)
         {
             try
@@ -292,9 +338,9 @@
                 // Now when the gear knob selection is changed, just like a real aircraft
                 // the lights go to their 'Transit' state showing RED.
                 // Then afterwards they change to their final colour (GREEN = DOWN, DARK = UP)
-                SetLandingGearLED(SwitchPanelPZ55LEDPosition.UP, PanelLEDColor.RED);
-                SetLandingGearLED(SwitchPanelPZ55LEDPosition.RIGHT, PanelLEDColor.RED);
-                SetLandingGearLED(SwitchPanelPZ55LEDPosition.LEFT, PanelLEDColor.RED);
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.UP, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.RIGHT, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.LEFT, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
 
                 while (true)
                 {
@@ -359,13 +405,13 @@
                         _manualLandingGearThread?.Abort();
 
                         // Changed Lights to go DARK when gear level is selected to UP, instead of RED.
-                        _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(PanelLEDColor.DARK));
+                        _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(GetManualGearsColorForStatus(ManualGearsStatus.Up)));
                         _manualLandingGearThread.Start();
                     }
                     else if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN && switchPanelKey.IsOn)
                     {
                         _manualLandingGearThread?.Abort();
-                        _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(PanelLEDColor.GREEN));
+                        _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(GetManualGearsColorForStatus(ManualGearsStatus.Down)));
                         _manualLandingGearThread.Start();
                     }
                 }
@@ -1015,6 +1061,36 @@
             set
             {
                 _manualLandingGearLeds = value;
+                SetIsDirty();
+            }
+        }
+
+        public PanelLEDColor ManualLandingGearLedsColorDown
+        {
+            get => _manualLandingGearLedsColorDown;
+            set
+            {
+                _manualLandingGearLedsColorDown = value;
+                SetIsDirty();
+            }
+        }
+
+        public PanelLEDColor ManualLandingGearLedsColorUp
+        {
+            get => _manualLandingGearLedsColorUp;
+            set
+            {
+                _manualLandingGearLedsColorUp = value;
+                SetIsDirty();
+            }
+        }
+
+        public PanelLEDColor ManualLandingGearLedsColorTrans
+        {
+            get => _manualLandingGearLedsColorTrans;
+            set
+            {
+                _manualLandingGearLedsColorTrans = value;
                 SetIsDirty();
             }
         }
