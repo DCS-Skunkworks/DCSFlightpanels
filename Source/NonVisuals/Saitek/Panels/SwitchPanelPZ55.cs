@@ -39,6 +39,7 @@
         private PanelLEDColor _manualLandingGearLedsColorDown = PanelLEDColor.GREEN;
         private PanelLEDColor _manualLandingGearLedsColorUp = PanelLEDColor.DARK;
         private PanelLEDColor _manualLandingGearLedsColorTrans = PanelLEDColor.RED;
+        private int _manualLandingGearTransTimeSeconds = 5;
         private Thread _manualLandingGearThread;
 
         private enum ManualGearsStatus
@@ -145,18 +146,26 @@
                     {
                         _manualLandingGearLedsColorTrans = GetSettingPanelLEDColor(setting);
                     }
+                    else if (setting.StartsWith("ManualLandingGearTransTimeSeconds{"))
+                    {
+                        _manualLandingGearTransTimeSeconds = Convert.ToInt16(GetValueFromSetting(setting));
+                    }
                 }
             }
 
             SettingsApplied();
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
-
         }
-        private PanelLEDColor GetSettingPanelLEDColor(string setting)
+
+        private string GetValueFromSetting(string setting)
         {
             int pos = setting.IndexOf('{');
-            string settingValue = setting.Substring(pos+1, setting.LastIndexOf('}') - pos - 1);
-            return (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), settingValue);
+            return setting.Substring(pos + 1, setting.LastIndexOf('}') - pos - 1);
+        }
+
+        private PanelLEDColor GetSettingPanelLEDColor(string setting)
+        {
+            return (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), GetValueFromSetting(setting));
         }
 
         public override List<string> ExportSettings()
@@ -209,6 +218,7 @@
             result.Add("ManualLandingGearLedsColorUp{" + _manualLandingGearLedsColorUp + "}");
             result.Add("ManualLandingGearLedsColorDown{" + _manualLandingGearLedsColorDown + "}");
             result.Add("ManualLandingGearLedsColorTrans{" + _manualLandingGearLedsColorTrans + "}");
+            result.Add("ManualLandingGearTransTimeSeconds{" + _manualLandingGearTransTimeSeconds + "}");
             return result;
         }
 
@@ -229,7 +239,6 @@
             }
 
         }
-
 
         public override void Identify()
         {
@@ -329,15 +338,21 @@
                 var upSet = false;
                 var rightSet = false;
                 var leftSet = false;
-                var delayUp = random.Next(1500, 10000);
-                var delayRight = random.Next(1500, 10000);
-                var delayLeft = random.Next(1500, 10000);
+
+                int transitionMs = _manualLandingGearTransTimeSeconds * 1000;
+                int randomTransitionDeviation = 3000;
+                var delayUp = random.Next(transitionMs, transitionMs + randomTransitionDeviation);
+                var delayRight = random.Next(transitionMs, transitionMs + randomTransitionDeviation);
+                var delayLeft = random.Next(transitionMs, transitionMs + randomTransitionDeviation);
                 var millisecsStart = DateTime.Now.Ticks / 10000;
 
                 // Corrected the 'Manual LEDS' operation.
                 // Now when the gear knob selection is changed, just like a real aircraft
                 // the lights go to their 'Transit' state showing RED.
                 // Then afterwards they change to their final colour (GREEN = DOWN, DARK = UP)
+                //
+                // Update 2021-11: Now the user can select which color to display for the 3 phases.
+                // By default it's configured as the description above.
                 SetLandingGearLED(SwitchPanelPZ55LEDPosition.UP, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
                 SetLandingGearLED(SwitchPanelPZ55LEDPosition.RIGHT, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
                 SetLandingGearLED(SwitchPanelPZ55LEDPosition.LEFT, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
@@ -1091,6 +1106,16 @@
             set
             {
                 _manualLandingGearLedsColorTrans = value;
+                SetIsDirty();
+            }
+        }
+
+        public int ManualLandingGearTransTimeSeconds
+        {
+            get => _manualLandingGearTransTimeSeconds;
+            set
+            {
+                _manualLandingGearTransTimeSeconds = value;
                 SetIsDirty();
             }
         }

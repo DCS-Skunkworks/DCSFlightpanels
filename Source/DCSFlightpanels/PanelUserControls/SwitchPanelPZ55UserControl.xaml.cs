@@ -92,10 +92,15 @@
             ManualLedUpCombo.ItemsSource = Enum.GetValues(typeof(PanelLEDColor));
             ManualLedDownCombo.ItemsSource = Enum.GetValues(typeof(PanelLEDColor));
             ManualLedTransCombo.ItemsSource = Enum.GetValues(typeof(PanelLEDColor));
+            for (int i = 1; i <= 30; i++)
+            {
+                ManualLedTransSecondsCombo.Items.Add(i);
+            }
 
             ManualLedUpCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorUp;
             ManualLedDownCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorDown;
             ManualLedTransCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorTrans;
+            ManualLedTransSecondsCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearTransTimeSeconds;
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
@@ -1274,16 +1279,23 @@
             _switchPanelPZ55.ManualLandingGearLedsColorDown = (PanelLEDColor)((ComboBox)sender).SelectedValue;
         }
 
+        private void ManualLedTransSecondsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _switchPanelPZ55.ManualLandingGearTransTimeSeconds = (int)((ComboBox)sender).SelectedValue;
+        }
+
         private void SetManualLedColorsSelectionVisibility(bool isVisible)
         {
             var visibility = isVisible ? Visibility.Visible : Visibility.Hidden;
             ManualLedUpCombo.Visibility = visibility;
             ManualLedTransCombo.Visibility = visibility;
             ManualLedDownCombo.Visibility = visibility;
+            ManualLedTransSecondsCombo.Visibility = visibility;
 
             ManualLedUpLabel.Visibility = visibility;
             ManualLedTransLabel.Visibility = visibility;
             ManualLedDownLabel.Visibility = visibility;
+            ManualLedTransSecondsLabel.Visibility = visibility;
         }
     }
 }

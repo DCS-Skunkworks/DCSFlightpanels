@@ -6,8 +6,7 @@
              xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
              xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
-             mc:Ignorable="d" 
-             d:DesignHeight="650" d:DesignWidth="1000" Loaded="SwitchPanelPZ55UserControl_OnLoaded">
+             mc:Ignorable="d" Loaded="SwitchPanelPZ55UserControl_OnLoaded" Height="687" Width="975">
     <UserControl.Resources>
         <ContextMenu x:Key="PZ55LEDContextMenu" x:Shared="False">
             <MenuItem Header="Configure" Name="ContextConfigureLandingGearLED" Click="ContextConfigureLandingGearLEDClick"/>
@@ -176,15 +175,17 @@
 
                             <ColumnDefinition Width="32*"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="1">
-                            <ComboBox x:Name="ManualLedUpCombo" SelectionChanged="ManualLedUpCombo_SelectionChanged" Width="87"/>
-                            <ComboBox x:Name="ManualLedTransCombo" SelectionChanged="ManualLedTransCombo_SelectionChanged" Width="87"/>
-                            <ComboBox x:Name="ManualLedDownCombo" SelectionChanged="ManualLedDownCombo_SelectionChanged" Width="87"/>
+                        <StackPanel Grid.ColumnSpan="2" Margin="45,0,0,-25">
+                            <ComboBox x:Name="ManualLedUpCombo" SelectionChanged="ManualLedUpCombo_SelectionChanged" Width="87" HorizontalAlignment="Right" />
+                            <ComboBox x:Name="ManualLedTransCombo" SelectionChanged="ManualLedTransCombo_SelectionChanged" Width="87" HorizontalAlignment="Right"/>
+                            <ComboBox x:Name="ManualLedDownCombo" SelectionChanged="ManualLedDownCombo_SelectionChanged" Width="87" HorizontalAlignment="Right"/>
+                            <ComboBox x:Name="ManualLedTransSecondsCombo" SelectionChanged="ManualLedTransSecondsCombo_SelectionChanged" Width="57" HorizontalAlignment="Right"/>
                         </StackPanel>
-                        <StackPanel Grid.ColumnSpan="2" Margin="0,0,89,0">
-                            <Label x:Name="ManualLedUpLabel" Content="Up" Padding="5,3,5,3"/>
-                            <Label x:Name="ManualLedTransLabel" Content="Trans" Padding="5,3,5,3"/>
-                            <Label x:Name="ManualLedDownLabel" Content="Down" Padding="5,3,5,3"/>
+                        <StackPanel Grid.ColumnSpan="2" Margin="0,0,0,-25">
+                            <Label x:Name="ManualLedUpLabel" Content="Up" Padding="5,3,5,3" HorizontalAlignment="Left" Width="52"/>
+                            <Label x:Name="ManualLedTransLabel" Content="Trans." Padding="5,3,5,3" HorizontalAlignment="Left" Width="52"/>
+                            <Label x:Name="ManualLedDownLabel" Content="Down" Padding="5,3,5,3" HorizontalAlignment="Left" Width="52"/>
+                            <Label x:Name="ManualLedTransSecondsLabel" Content="Trans. seconds" Padding="5,3,5,3" HorizontalAlignment="Left" Width="80"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
