@@ -97,10 +97,20 @@
                 ManualLedTransSecondsCombo.Items.Add(i);
             }
 
+            ManualLedUpCombo.SelectionChanged -= ManualLedUpCombo_SelectionChanged;
+            ManualLedTransCombo.SelectionChanged -= ManualLedTransCombo_SelectionChanged;
+            ManualLedDownCombo.SelectionChanged -= ManualLedDownCombo_SelectionChanged;
+            ManualLedTransSecondsCombo.SelectionChanged -= ManualLedTransSecondsCombo_SelectionChanged;
+
             ManualLedUpCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorUp;
             ManualLedDownCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorDown;
             ManualLedTransCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorTrans;
             ManualLedTransSecondsCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearTransTimeSeconds;
+
+            ManualLedUpCombo.SelectionChanged += ManualLedUpCombo_SelectionChanged;
+            ManualLedTransCombo.SelectionChanged += ManualLedTransCombo_SelectionChanged;
+            ManualLedDownCombo.SelectionChanged += ManualLedDownCombo_SelectionChanged;
+            ManualLedTransSecondsCombo.SelectionChanged += ManualLedTransSecondsCombo_SelectionChanged;
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
