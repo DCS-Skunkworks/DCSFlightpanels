@@ -6,7 +6,8 @@
              xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
              xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
-             mc:Ignorable="d" Loaded="SwitchPanelPZ55UserControl_OnLoaded" Height="687" Width="975">
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="1000" Loaded="SwitchPanelPZ55UserControl_OnLoaded">
     <UserControl.Resources>
         <ContextMenu x:Key="PZ55LEDContextMenu" x:Shared="False">
             <MenuItem Header="Configure" Name="ContextConfigureLandingGearLED" Click="ContextConfigureLandingGearLEDClick"/>
@@ -16,6 +17,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="26" />
             <RowDefinition Height="240" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
@@ -77,7 +80,7 @@
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="560" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
         </Canvas>
 
-        <GroupBox Header="Knob Position"  FontSize="10" Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Grid.ColumnSpan="2">
+        <GroupBox Header="Knob Position"  FontSize="10" Grid.Column="0" Grid.Row="2" Grid.RowSpan="6" Grid.ColumnSpan="2">
             <StackPanel MouseDown="MouseDownFocusLogTextBox">
                 <Label Content="OFF" Height="23"  FontSize="10" />
                 <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobOff" IsReadOnly="True" FontSize="10" />
@@ -92,7 +95,7 @@
                 <!--<Button Name="ButtonTEXT" Height="30" Click="ButtonTEXT_OnClick" Visibility="Collapsed"></Button>-->
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="Lower Row"  FontSize="10" Grid.Column="2" Grid.Row="2" Grid.RowSpan="4">
+        <GroupBox Header="Lower Row"  FontSize="10" Grid.Column="2" Grid.Row="2" Grid.RowSpan="6">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -143,11 +146,11 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Log"  FontSize="10"  Grid.Column="4" Grid.Row="4" Grid.RowSpan="2" Margin="0,0.5,0,-1">
+        <GroupBox Header="Log"  FontSize="10"  Grid.Column="4" Grid.Row="5" Grid.RowSpan="3" Margin="0,0.5,0,-1">
             <TextBox Name="TextBoxLogPZ55" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" />
         </GroupBox>
 
-        <GroupBox Header="Upper Row + Gear Knob"  FontSize="10"  Grid.Column="4" Grid.Row="1" Grid.RowSpan="4" Margin="0,0,0,137">
+        <GroupBox Header="Upper Row + Gear Knob"  FontSize="10"  Grid.Column="4" Grid.Row="1" Grid.RowSpan="6" Margin="0,0,0,137">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -169,6 +172,7 @@
                     <Label Content="Gear Down (on)" FontSize="10" Height="23"  />
                     <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxGearDown"  />
                     <CheckBox x:Name="CheckBoxManualLeDs" Content="Manual LEDs (via LG lever)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="CheckBoxManualLEDs_OnClick"/>
+
                     <Grid Height="61">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="15*"/>
