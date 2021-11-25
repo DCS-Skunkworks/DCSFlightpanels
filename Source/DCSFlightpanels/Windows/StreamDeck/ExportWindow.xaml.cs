@@ -29,8 +29,18 @@ namespace DCSFlightpanels.Windows.StreamDeck
             _streamDeckPanel = streamDeckPanel;
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _streamDeckPanel?.Dispose();
+            }
+        }
+
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         private void ExportWindow_OnLoaded(object sender, RoutedEventArgs e)

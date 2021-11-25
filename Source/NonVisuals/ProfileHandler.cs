@@ -658,10 +658,10 @@
 
         public event ClearPanelSettingsEventHandler OnClearPanelSettings;
 
-        public delegate void UserMessageEventHandler(object sender, UserMessageEventArgs e);
+        /*public delegate void UserMessageEventHandler(object sender, UserMessageEventArgs e);
 
         public event UserMessageEventHandler OnUserMessageEventHandler;
-
+        */
         public void Attach(GamingPanel gamingPanel)
         {
             OnSettingsReadFromFile += gamingPanel.PanelBindingReadFromFile;
@@ -691,7 +691,7 @@
             OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelBindingReadFromFile;
             OnAirframeSelected -= gamingPanelSettingsListener.SelectedProfile;
         }
-
+/*
         public void AttachUserMessageHandler(IUserMessageHandler userMessageHandler)
         {
             OnUserMessageEventHandler += userMessageHandler.UserMessage;
@@ -701,7 +701,7 @@
         {
             OnUserMessageEventHandler -= userMessageHandler.UserMessage;
         }
-
+*/
         public void StateSaved()
         {
             _isDirty = false;

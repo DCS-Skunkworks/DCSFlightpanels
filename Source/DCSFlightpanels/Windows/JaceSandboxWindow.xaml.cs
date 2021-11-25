@@ -74,7 +74,7 @@
             if (disposing)
             {
                 // dispose managed resources
-                _autoResetEvent?.Close();
+                _autoResetEvent?.Dispose();
             }
             // free native resources
         }

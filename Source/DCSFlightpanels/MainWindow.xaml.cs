@@ -131,7 +131,7 @@
                 _profileHandler.Init();
                 SearchForPanels();
                 _profileHandler.Attach(this);
-                _profileHandler.AttachUserMessageHandler(this);
+                //_profileHandler.AttachUserMessageHandler(this);
                 if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed, this))
                 {
                     CreateNewProfile();
@@ -1436,7 +1436,7 @@
                 _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
                 _profileHandler.Init();
                 _profileHandler.Attach(this);
-                _profileHandler.AttachUserMessageHandler(this);
+                //_profileHandler.AttachUserMessageHandler(this);
                 _dcsfpProfile = _profileHandler.Profile;
                 SetApplicationMode(_dcsfpProfile);
                 SetWindowTitle();

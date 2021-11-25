@@ -45,8 +45,18 @@
             _bindingHash = bindingHash;
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+
+            }
+        }
+
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         private void ImportWindow_OnLoaded(object sender, RoutedEventArgs e)
