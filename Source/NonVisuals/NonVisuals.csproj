@@ -164,7 +164,6 @@
     <Compile Include="EventArgs\DCSBIOSUpdatesMissedEventArgs.cs" />
     <Compile Include="EventArgs\ForwardPanelEventArgs.cs" />
     <Compile Include="EventArgs\PanelBindingReadFromFileEventArgs.cs" />
-    <Compile Include="EventArgs\PanelDataToDCSBIOSEventEventArgs.cs" />
     <Compile Include="EventArgs\PanelEventArgs.cs" />
     <Compile Include="EventArgs\SwitchesChangedEventArgs.cs" />
     <Compile Include="Extensions.cs" />

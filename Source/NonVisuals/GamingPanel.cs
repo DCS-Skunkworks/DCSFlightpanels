@@ -252,11 +252,7 @@
         public delegate void SwitchesHasBeenChangedEventHandler(object sender, SwitchesChangedEventArgs e);
 
         public event SwitchesHasBeenChangedEventHandler OnSwitchesChangedA;
-
-        public delegate void PanelDataToDcsAvailableEventHandler(object sender, PanelDataToDCSBIOSEventEventArgs e);
-
-        public event PanelDataToDcsAvailableEventHandler OnPanelDataAvailableA;
-
+        
         public delegate void DeviceAttachedEventHandler(object sender, PanelEventArgs e);
 
         public event DeviceAttachedEventHandler OnDeviceAttachedA;
@@ -286,7 +282,6 @@
         {
             OnDeviceAttachedA += gamingPanelListener.DeviceAttached;
             OnSwitchesChangedA += gamingPanelListener.UISwitchesChanged;
-            OnPanelDataAvailableA += gamingPanelListener.PanelDataAvailable;
             OnSettingsAppliedA += gamingPanelListener.SettingsApplied;
             OnSettingsClearedA += gamingPanelListener.SettingsCleared;
             OnUpdatesHasBeenMissed += gamingPanelListener.UpdatesHasBeenMissed;
@@ -298,7 +293,6 @@
         {
             OnDeviceAttachedA -= gamingPanelListener.DeviceAttached;
             OnSwitchesChangedA -= gamingPanelListener.UISwitchesChanged;
-            OnPanelDataAvailableA -= gamingPanelListener.PanelDataAvailable;
             OnSettingsAppliedA -= gamingPanelListener.SettingsApplied;
             OnSettingsClearedA -= gamingPanelListener.SettingsCleared;
             OnUpdatesHasBeenMissed -= gamingPanelListener.UpdatesHasBeenMissed;
@@ -322,13 +316,7 @@
         {
             OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs { HidInstance = HIDInstanceId, GamingPanelEnum = this.TypeOfPanel, Switches = hashSet });
         }
-
-        // Used by any but descendants that wants to see buttons that have changed, UI for example
-        protected virtual void PanelDataAvailable(string stringData)
-        {
-            OnPanelDataAvailableA?.Invoke(this, new PanelDataToDCSBIOSEventEventArgs { StringData = stringData });
-        }
-
+        
         protected virtual void DeviceAttached()
         {
             // IsAttached = true;

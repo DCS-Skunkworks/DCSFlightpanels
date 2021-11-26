@@ -177,17 +177,7 @@
         {
 
         }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
+        
 
         public void DeviceAttached(object sender, PanelEventArgs e)
         {

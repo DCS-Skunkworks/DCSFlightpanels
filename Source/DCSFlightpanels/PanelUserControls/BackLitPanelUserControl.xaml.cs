@@ -127,9 +127,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
-
+        
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try

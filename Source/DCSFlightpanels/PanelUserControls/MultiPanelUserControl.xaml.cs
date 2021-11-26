@@ -206,9 +206,7 @@
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
-
+        
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try

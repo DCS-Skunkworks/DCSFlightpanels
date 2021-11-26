@@ -221,19 +221,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try

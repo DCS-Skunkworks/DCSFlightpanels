@@ -11,9 +11,7 @@
         void SettingsCleared(object sender, PanelEventArgs e);
 
         void PanelSettingsChanged(object sender, PanelEventArgs e);
-
-        void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e);
-
+        
         void LedLightChanged(object sender, LedLightChangeEventArgs e);
 
         void DeviceAttached(object sender, PanelEventArgs e);

@@ -113,11 +113,7 @@
         public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
         }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-        }
-
+        
         public void DeviceAttached(object sender, PanelEventArgs e)
         {
         }
