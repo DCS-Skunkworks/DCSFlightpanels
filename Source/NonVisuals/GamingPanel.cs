@@ -247,32 +247,90 @@
         }
         */
         protected bool Closed { get; set; }
-
-        // These events can be raised by the descendants of this class.
+        
+        /*
+         * Used by UserControls to show switches that has been manipulated.
+         * Shows the actions in the Log textbox of the UserControl.
+         */
         public delegate void SwitchesHasBeenChangedEventHandler(object sender, SwitchesChangedEventArgs e);
 
         public event SwitchesHasBeenChangedEventHandler OnSwitchesChangedA;
         
+        protected virtual void UISwitchesChanged(HashSet<object> hashSet)
+        {
+            OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs { HidInstance = HIDInstanceId, GamingPanelEnum = this.TypeOfPanel, Switches = hashSet });
+        }
+
+        /*
+         * Used for notifying when a device has been attached.
+         * Not used atm.
+         */
         public delegate void DeviceAttachedEventHandler(object sender, PanelEventArgs e);
 
         public event DeviceAttachedEventHandler OnDeviceAttachedA;
+        protected virtual void DeviceAttached()
+        {
+            // IsAttached = true;
+            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
+        }
 
+
+        /*
+         * Used for notifying when a device has been detached.
+         * Not used atm.
+         */
         public delegate void DeviceDetachedEventHandler(object sender, PanelEventArgs e);
 
         public event DeviceDetachedEventHandler OnDeviceDetachedA;
+        protected virtual void DeviceDetached()
+        {
+            // IsAttached = false;
+            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
+        }
 
+
+        /*
+         * Used by ProfileHandler to detect changes in panel configurations.
+         * Used by some UserControls to show panel's updated configurations.
+         */
         public delegate void SettingsHasChangedEventHandler(object sender, PanelEventArgs e);
 
         public event SettingsHasChangedEventHandler OnSettingsChangedA;
+        protected virtual void SettingsChanged()
+        {
+            OnSettingsChangedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
+        }
+        
 
+        /*
+         * Used by some UserControls to know when panels have loaded their configurations.
+         * Used by MainWindow to SetFormstate().
+         */
         public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelEventArgs e);
 
         public event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
+        protected virtual void SettingsApplied()
+        {
+            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
+        }
 
+
+        /*
+         * Used by some UserControls refresh UI when panel has cleared all its settings.
+         */
         public delegate void SettingsClearedEventHandler(object sender, PanelEventArgs e);
 
         public event SettingsClearedEventHandler OnSettingsClearedA;
+        protected virtual void SettingsCleared()
+        {
+            OnSettingsClearedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
+        }
 
+
+        /*
+         * DCS-BIOS has a feature to detect if any updates has been missed.
+         * It is not used as such since DCS-BIOS has been working so well.
+         */
         public delegate void UpdatesHasBeenMissedEventHandler(object sender, DCSBIOSUpdatesMissedEventArgs e);
 
         public event UpdatesHasBeenMissedEventHandler OnUpdatesHasBeenMissed;
@@ -310,39 +368,11 @@
         {
             OnSettingsChangedA -= profileHandlerListener.PanelSettingsChanged;
         }
-
-        // Used by any but descendants that wants to see buttons that have changed, UI for example
-        protected virtual void UISwitchesChanged(HashSet<object> hashSet)
-        {
-            OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs { HidInstance = HIDInstanceId, GamingPanelEnum = this.TypeOfPanel, Switches = hashSet });
-        }
         
-        protected virtual void DeviceAttached()
-        {
-            // IsAttached = true;
-            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
-        }
 
-        protected virtual void DeviceDetached()
-        {
-            // IsAttached = false;
-            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
-        }
 
-        protected virtual void SettingsChanged()
-        {
-            OnSettingsChangedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
-        }
 
-        protected virtual void SettingsApplied()
-        {
-            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
-        }
 
-        protected virtual void SettingsCleared()
-        {
-            OnSettingsClearedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
-        }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {

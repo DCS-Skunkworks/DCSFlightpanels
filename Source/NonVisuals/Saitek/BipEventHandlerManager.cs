@@ -100,6 +100,10 @@
             _backlitPanels.Remove(backlitPanelBip);
         }
 
+
+        /*
+         * Not sure about this one, I think it can be removed.
+         */
         private void OnPanelRegistered(BacklitPanelBIP backlitPanelBip)
         {
             OnBipPanelRegistered?.Invoke(this, new BipPanelRegisteredEventArgs { UniqueId = backlitPanelBip.HIDInstanceId, BacklitPanelBip = backlitPanelBip });

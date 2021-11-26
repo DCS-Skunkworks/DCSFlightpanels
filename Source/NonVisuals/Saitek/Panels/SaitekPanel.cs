@@ -226,6 +226,10 @@
 
 
 
+        /*
+         * Used by those UserControls who's panels can show LED lights.
+         * Used to show the same color in the UserControl as the physical panels.
+         */
         public delegate void LedLightChangedEventHandler(object sender, LedLightChangeEventArgs e);
 
         public event LedLightChangedEventHandler OnLedLightChangedA;
