@@ -49,19 +49,27 @@
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);
 
             _farmingSidePanel.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_farmingSidePanel);
-            GlobalHandler = globalHandler;
             HideAllImages();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!_disposed)
             {
-                _farmingSidePanel.Dispose();
-            }
-        }
+                if (disposing)
+                {
+                    _farmingSidePanel.Dispose();
+                }
 
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+        
 
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -92,7 +100,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -225,7 +233,7 @@
             }
         }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void PanelSettingsModified(object sender, PanelEventArgs e)
         {
             try
             {

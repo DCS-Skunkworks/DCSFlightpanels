@@ -70,6 +70,25 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    SRSListenerFactory.GetSRSListener().Detach(this);
+                    SRSListenerFactory.Shutdown();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public sealed override void Startup()
         {
             try
@@ -82,22 +101,7 @@
                 SetLastException(ex);
             }
         }
-
-
-        public override void Dispose()
-        {
-            try
-            {
-                SRSListenerFactory.GetSRSListener().Detach(this);
-                ShutdownBase();
-                SRSListenerFactory.Shutdown();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public double SmallFreqStepping
         {
             get => _smallFreqStepping;

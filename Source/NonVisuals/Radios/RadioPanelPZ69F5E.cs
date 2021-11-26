@@ -121,11 +121,24 @@
             CreateRadioKnobs();
             Startup();
         }
-
-        ~RadioPanelPZ69F5E()
+        
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _uhfSyncThread?.Abort();
-            _tacanSyncThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _uhfSyncThread?.Abort();
+                    _tacanSyncThread?.Abort();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)

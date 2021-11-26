@@ -256,9 +256,22 @@
             Startup();
         }
 
-        ~RadioPanelPZ69F14B()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _pilotTacanSyncThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _pilotTacanSyncThread?.Abort();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -3288,19 +3301,7 @@
                 SetLastException(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

@@ -53,15 +53,14 @@ namespace DCS_BIOS
         private Exception _lastException;
         private DCSBIOSProtocolParser _dcsProtocolParser;
         private readonly DcsBiosNotificationMode _dcsBiosNotificationMode;
-        private readonly IDcsBiosConnectionListener _dcsBiosConnectionListener;
         private readonly object _lockObjectForSendingData = new object();
         private Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
         private bool _isRunning;
 
-        public DCSBIOS(IDcsBiosConnectionListener dcsBiosConnectionListener, string ipFromUdp, string ipToUdp, int portFromUdp, int portToUdp, DcsBiosNotificationMode dcsNoficationMode)
+        public DCSBIOS(string ipFromUdp, string ipToUdp, int portFromUdp, int portToUdp, DcsBiosNotificationMode dcsNoficationMode)
         {
             IPAddress ipAddress;
-            this._dcsBiosConnectionListener = dcsBiosConnectionListener;
+
             if (!string.IsNullOrEmpty(ipFromUdp) && IPAddress.TryParse(ipFromUdp, out ipAddress))
             {
                 _dcsbiosReceiveFromIPUdp = ipFromUdp;
@@ -81,8 +80,7 @@ namespace DCS_BIOS
             _dcsBiosNotificationMode = dcsNoficationMode;
             
             _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
-            _dcsProtocolParser.AttachConnectionStateListener(this._dcsBiosConnectionListener);
-
+            
             _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePort);
             _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIp), SendPort);
 
@@ -98,28 +96,22 @@ namespace DCS_BIOS
             //_tcpIpPort = tcpIpPort;
             _dcsBIOSInstance = this;
         }
-
-        ~DCSBIOS()
-        {
-            // Finalizer calls Dispose(false)  
-            Dispose(false);
-        }
-
+        
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {
-                // dispose managed resources
-                _udpSendClient?.Close();
-                _udpReceiveClient?.Close();
+                _udpReceiveClient?.Dispose();
+                _udpSendClient?.Dispose();
+                _dcsProtocolParser?.Dispose();
+                Shutdown();
             }
-            // free native resources
         }
 
         public void ReceiveDataUdp()
@@ -183,7 +175,6 @@ namespace DCS_BIOS
             {
                 _udpReceiveClient?.Close();
                 _udpReceiveClient?.Close();
-                _dcsProtocolParser?.DetachConnectionStateListener(this._dcsBiosConnectionListener);
                 _dcsProtocolParser?.Shutdown();
 
                 _udpReceiveClient = null;
@@ -207,63 +198,7 @@ namespace DCS_BIOS
         {
             return _dcsBIOSInstance;
         }
-
-        public static void AttachDataReceivedListenerSO(IDcsBiosDataListener dcsBiosDataListener)
-        {
-            if (_dcsBIOSInstance != null)
-            {
-                _dcsBIOSInstance._dcsProtocolParser.OnDcsDataAddressValue += dcsBiosDataListener.DcsBiosDataReceived;
-            }
-        }
-
-        public static void DetachDataReceivedListenerSO(IDcsBiosDataListener dcsBiosDataListener)
-        {
-            if (_dcsBIOSInstance != null)
-            {
-                _dcsBIOSInstance._dcsProtocolParser.OnDcsDataAddressValue -= dcsBiosDataListener.DcsBiosDataReceived;
-            }
-        }
-
-        public void AttachDataReceivedListener(IDcsBiosDataListener iDcsBiosDataListener)
-        {
-            if (_dcsProtocolParser == null)
-            {
-                return;
-            }
-            
-            _dcsProtocolParser.OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
-        }
-
-        public void DetachDataReceivedListener(IDcsBiosDataListener iDcsBiosDataListener)
-        {
-            if (_dcsProtocolParser == null)
-            {
-                return;
-            }
-
-            _dcsProtocolParser.OnDcsDataAddressValue -= iDcsBiosDataListener.DcsBiosDataReceived;
-        }
-
-        public void AttachConnectionListener(IDcsBiosConnectionListener connectionListener)
-        {
-            if (_dcsProtocolParser == null)
-            {
-                return;
-            }
-
-            _dcsProtocolParser.OnDcsConnectionActive += connectionListener.DcsBiosConnectionActive;
-        }
-
-        public void DetachConnectionListener(IDcsBiosConnectionListener connectionListener)
-        {
-            if (_dcsProtocolParser == null)
-            {
-                return;
-            }
-
-            _dcsProtocolParser.OnDcsConnectionActive -= connectionListener.DcsBiosConnectionActive;
-        }
-
+        
         public static int Send(string stringData)
         {
             return _dcsBIOSInstance.SendDataFunction(stringData);
@@ -313,21 +248,7 @@ namespace DCS_BIOS
             }
             return result;
         }
-        /*
-        private static byte[] GetBytes(string str)
-        {
-            var bytes = new byte[str.Length * sizeof(char)];
-            Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
 
-        private static string GetString(byte[] bytes)
-        {
-            var chars = new char[bytes.Length / sizeof(char)];
-            Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
-            return new string(chars);
-        }
-        */
         private void SetLastException(Exception ex)
         {
             try

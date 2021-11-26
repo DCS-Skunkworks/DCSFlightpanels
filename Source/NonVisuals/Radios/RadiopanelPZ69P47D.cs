@@ -72,23 +72,6 @@
 
         private int _hfRadioModePresetDialSkipper;
 
-        /* 
-                *  COM2 Large IFF Circuit D
-                *  COM2 Small IFF Circuit B
-                *  COM2 ACT/STBY IFF Destruction
-                */
-        /*private readonly object _lockIFFDialObject1 = new object();
-        private DCSBIOSOutput _iffBiffDcsbiosOutputDial;
-        private DCSBIOSOutput _iffDiffDcsbiosOutputDial;
-        private volatile uint _iffBiffCockpitDialPos = 1;
-        private volatile uint _iffDiffCockpitDialPos = 0;
-        private int _iffBiffDialSkipper;
-        private int _iffDiffDialSkipper;
-        private const string IFFB_COMMAND_INC = "IFF_B INC\n";
-        private const string IFFB_COMMAND_DEC = "IFF_B DEC\n";
-        private const string IFFD_COMMAND_INC = "IFF_D INC\n";
-        private const string IFFD_COMMAND_DEC = "IFF_D DEC\n";
-        */
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
 
         private long _doUpdatePanelLCD;
@@ -98,6 +81,23 @@
         {
             CreateRadioKnobs();
             Startup();
+        }
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -850,19 +850,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false)
         {
         }

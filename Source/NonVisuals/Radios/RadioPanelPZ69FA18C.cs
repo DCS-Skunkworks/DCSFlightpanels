@@ -135,10 +135,24 @@ namespace NonVisuals.Radios
             Startup();
         }
 
-        ~RadioPanelPZ69FA18C()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _ilsSyncThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _ilsSyncThread?.Abort();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
+        
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {

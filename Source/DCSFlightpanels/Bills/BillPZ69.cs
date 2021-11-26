@@ -18,7 +18,7 @@
     {
         private BIPLinkPZ69 _bipLinkPZ69;
 
-        public BillPZ69(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
+        public BillPZ69(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
             SetContextMenu();
         }

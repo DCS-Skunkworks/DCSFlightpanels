@@ -81,6 +81,23 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
@@ -899,19 +916,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

@@ -22,7 +22,7 @@
     /// <summary>
     /// Interaction logic for DCSBiosOutputFormulaWindow.xaml
     /// </summary>
-    public partial class DCSBiosOutputFormulaWindow : Window, IDcsBiosDataListener
+    public partial class DCSBiosOutputFormulaWindow : Window, IDcsBiosDataListener, IDisposable
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
@@ -50,6 +50,12 @@
             _dcsBiosOutput = new DCSBIOSOutput();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            BIOSEventHandler.AttachDataListener(this);
+        }
+
+        public void Dispose()
+        {
+            BIOSEventHandler.DetachDataListener(this);
         }
 
         public DCSBiosOutputFormulaWindow(DCSFPProfile dcsfpProfile, string description, DCSBIOSOutput dcsBiosOutput, bool userEditsDescription = false)
@@ -79,7 +85,6 @@
         {
             try
             {
-                DCSBIOS.AttachDataReceivedListenerSO(this);
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
                 _dataGridValues = (DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues");
@@ -521,7 +526,6 @@
             try
             {
                 _closing = true;
-                DCSBIOS.DetachDataReceivedListenerSO(this);
             }
             catch (Exception ex)
             {

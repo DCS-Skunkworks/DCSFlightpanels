@@ -47,18 +47,26 @@
 
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
             _multiPanelPZ70.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_multiPanelPZ70);
-            GlobalHandler = globalHandler;
 
             HideAllImages();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!_disposed)
             {
-                _multiPanelPZ70.Dispose();
+                if (disposing)
+                {
+                    _multiPanelPZ70.Dispose();
+                }
+
+                _disposed = true;
             }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
         
         private void MultiPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
@@ -92,7 +100,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -205,7 +213,7 @@
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
+        public void PanelSettingsModified(object sender, PanelEventArgs e) { }
         
         public void SettingsApplied(object sender, PanelEventArgs e)
         {

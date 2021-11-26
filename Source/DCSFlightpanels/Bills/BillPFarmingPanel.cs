@@ -18,7 +18,7 @@
         private DCSBIOSActionBindingFarmingPanel _dcsbiosBinding;
         private BIPLinkFarmingPanel _bipLink;
 
-        public BillPFarmingPanel(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
+        public BillPFarmingPanel(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
             SetContextMenu();
         }

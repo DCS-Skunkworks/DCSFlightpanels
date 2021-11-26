@@ -160,6 +160,7 @@
     <Compile Include="CopyPackage.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingFarmingPanel.cs" />
     <Compile Include="DCSBIOSModule.cs" />
+    <Compile Include="EventArgs\AppEventClass.cs" />
     <Compile Include="EventArgs\BipPanelRegisteredEventArgs.cs" />
     <Compile Include="EventArgs\DCSBIOSUpdatesMissedEventArgs.cs" />
     <Compile Include="EventArgs\ForwardPanelEventArgs.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Interfaces\IFontFace.cs" />
     <Compile Include="Interfaces\IHardwareConflictResolver.cs" />
     <Compile Include="Interfaces\IOledImageListener.cs" />
+    <Compile Include="Interfaces\ISettingsModifiedListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />
     <Compile Include="Interfaces\IIsDirty.cs" />
     <Compile Include="Interfaces\ISRSHandler.cs" />
@@ -235,7 +237,6 @@
     <Compile Include="Interfaces\IRadioPanel.cs" />
     <Compile Include="Interfaces\ISaitekPanelKnob.cs" />
     <Compile Include="Interfaces\IGamingPanelListener.cs" />
-    <Compile Include="Interfaces\IUserMessageHandler.cs" />
     <Compile Include="Saitek\KeyBinding.cs" />
     <Compile Include="Saitek\KeyBindingPZ69DialPosition.cs" />
     <Compile Include="Saitek\KeyBindingPZ69.cs" />
@@ -332,7 +333,6 @@
     <Compile Include="Saitek\OSCommandBindingPZ69FullEmulator.cs" />
     <Compile Include="Saitek\OSCommandBindingPZ70.cs" />
     <Compile Include="Saitek\OSCommandBindingTPM.cs" />
-    <Compile Include="EventArgs\UserMessageEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="flightpanels02_8Rc_icon.ico" />

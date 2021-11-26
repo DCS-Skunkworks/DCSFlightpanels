@@ -26,7 +26,6 @@
     {
         private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
         private readonly string _typeToSearch = "Type to search control";
-        private readonly DCSBIOS _dcsbios;
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private DCSBIOSOutput _dcsbiosOutput1 = null;
@@ -52,21 +51,14 @@
         private DCSBIOSControl _dcsbiosControl5;
         private Dictionary<string, double> _variables = new Dictionary<string, double>();
 
-        public JaceSandboxWindow(DCSBIOS dcsbios)
+        public JaceSandboxWindow()
         {
-            _dcsbios = dcsbios;
-            _dcsbios.AttachDataReceivedListener(this);
+            BIOSEventHandler.AttachDataListener(this);
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
             var thread = new Thread(ThreadLoop);
             thread.Start();
             InitializeComponent();
-        }
-
-        ~JaceSandboxWindow()
-        {
-            // Finalizer calls Dispose(false)  
-            Dispose(true);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -75,6 +67,7 @@
             {
                 // dispose managed resources
                 _autoResetEvent?.Dispose();
+                BIOSEventHandler.DetachDataListener(this);
             }
             // free native resources
         }
@@ -599,7 +592,6 @@
 
         private void JaceSandboxWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            _dcsbios.DetachDataReceivedListener(this);
             _exitThread = true;
             _isLooping = false;
             _autoResetEvent.Set();

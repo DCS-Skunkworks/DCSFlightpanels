@@ -15,7 +15,7 @@
     using NonVisuals.Interfaces;
     using NonVisuals.Saitek.Switches;
 
-    public abstract class SaitekPanel : GamingPanel
+    public abstract class SaitekPanel : GamingPanel, IDisposable
     {
         public abstract void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff);
 
@@ -48,6 +48,23 @@
         protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton) : base(typeOfGamingPanel, hidSkeleton)
         {
             hidSkeleton.PanelHasBeenInstantiated = true;
+        }
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         protected override void StartListeningForPanelChanges()

@@ -87,17 +87,22 @@
             }
         }
 
-        public override void Dispose()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            try
+            if (!_disposed)
             {
-                BipFactory.DeRegisterBip(this);
-                Closed = true;
+                if (disposing)
+                {
+                    BipFactory.DeRegisterBip(this);
+                }
+
+                _disposed = true;
             }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)

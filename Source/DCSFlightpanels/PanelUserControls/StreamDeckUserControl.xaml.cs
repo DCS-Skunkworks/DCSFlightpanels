@@ -36,8 +36,6 @@
 
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
             _streamDeckPanel.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_streamDeckPanel);
-            GlobalHandler = globalHandler;
 
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
@@ -78,27 +76,36 @@
             EventHandlers.AttachStreamDeckListener(_uiButtonGrid);
             EventHandlers.AttachStreamDeckConfigListener(_uiButtonGrid);
             EventHandlers.AttachStreamDeckListener(this);
-
-            UCStreamDeckButtonAction.GlobalHandler = GlobalHandler;
-            UCStreamDeckButtonFace.GlobalHandler = GlobalHandler;
-
+            
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
         }
 
-        protected override void Dispose(bool dispose)
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            if (dispose)
+            if (!_disposed)
             {
-                StackPanelButtonUI.Children.Clear();
-                EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonAction);
-                EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonFace);
-                EventHandlers.DetachStreamDeckListener(_uiButtonGrid);
-                EventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
-                EventHandlers.DetachStreamDeckListener(this);
-                _streamDeckPanel.Dispose();
+                if (disposing)
+                {
+                    StackPanelButtonUI.Children.Clear();
+                    EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonAction);
+                    EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonFace);
+                    EventHandlers.DetachStreamDeckListener(_uiButtonGrid);
+                    EventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
+                    EventHandlers.DetachStreamDeckListener(this);
+                    _streamDeckPanel.Dispose();
+                }
+
+                _disposed = true;
             }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
+        
 
         private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -156,7 +163,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -210,7 +217,7 @@
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void PanelSettingsModified(object sender, PanelEventArgs e)
         {
             try
             {

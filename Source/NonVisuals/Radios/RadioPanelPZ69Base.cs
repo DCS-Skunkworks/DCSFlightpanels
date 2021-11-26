@@ -52,6 +52,23 @@
             };
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         /*         
             1 byte (header byte 0x0) [0]
             5 bytes upper left LCD   [1 - 5]
@@ -262,35 +279,7 @@
                 SetLastException(ex);
             }
         }
-
-        protected void ShutdownBase()
-        {
-            try
-            {
-                Closed = true;
-                // Damn hanging problems. Trying threading this shit now.
-                var thread = new Thread(ShutdownBaseThreaded);
-                thread.Start();
-                Thread.Sleep(200);
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
-        private void ShutdownBaseThreaded()
-        {
-            try
-            {
-                // HIDSkeletonBase = null;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
             e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());

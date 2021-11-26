@@ -244,10 +244,6 @@
 
         private const string ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC = "ARC_BCK_10KHZ DEC\n";
 
-        // private int _adfPresetDial1Skipper;
-
-        // private int _adfPresetDial2Skipper;
-
         /*
          * 0 = Backup ADF
          * 1 = Main ADF
@@ -259,24 +255,6 @@
         private volatile uint _adfBackupMainCockpitDial1Pos;
 
         private const string ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND = "ARC9_MAIN_BACKUP TOGGLE\n";
-
-        /*Mi-8 ARK-9 ADF (DME)*/
-        // Large Tuning
-        // Radio Volume
-        /*private const string ADFTuneKnobCommandInc = "ARC9_MAIN_TUNE +500\n";
-        private const string ADFTuneKnobCommandDec = "ARC9_MAIN_TUNE -500\n";
-        private const string ADFVolumeKnobCommandInc = "ARC9_VOL +2500\n";
-        private const string ADFVolumeKnobCommandDec = "ARC9_VOL -2500\n";*/
-
-        /*
-         *  ACT/STBY Toggling ADF mode
-         */
-        /*private readonly object _lockADFModeDialObject = new object();
-        private DCSBIOSOutput _adfModeDcsbiosOutputPresetDial;
-        private volatile uint _adfModeCockpitDial1Pos = 0;
-        private const string ADFModeCommandInc = "ARC9_MODE INC\n";
-        private const string ADFModeCommandDec = "ARC9_MODE DEC\n";
-        private bool _adfModeSwitchUpwards = false;*/
 
         /*Mi-8 ARK-UD VHF Homing (DME)*/
         // Large Frequency 1-6
@@ -357,10 +335,24 @@
             Startup();
         }
 
-        ~RadioPanelPZ69Mi8()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _r863ManualSyncThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _r863ManualSyncThread?.Abort();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
+        
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
@@ -2957,19 +2949,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false)
         {
         }

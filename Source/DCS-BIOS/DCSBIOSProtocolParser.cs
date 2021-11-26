@@ -29,40 +29,9 @@ namespace DCS_BIOS
     internal class DCSBIOSProtocolParser : IDisposable
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-        public delegate void DcsDataAddressValueEventHandler(object sender, DCSBIOSDataEventArgs e);
-        public event DcsDataAddressValueEventHandler OnDcsDataAddressValue;
-
-        public delegate void DcsConnectionActiveEventHandler(object sender, DCSBIOSConnectionEventArgs e);
-        public event DcsConnectionActiveEventHandler OnDcsConnectionActive;
 
         private List<string> _errorsLogged = new List<string>(10);
-
-        public void AttachDataListener(IDcsBiosDataListener iDcsBiosDataListener)
-        {
-            //Try to remove it first so not to get duplicate
-            OnDcsDataAddressValue -= iDcsBiosDataListener.DcsBiosDataReceived;
-
-            OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
-        }
-
-        public void DetachDataListener(IDcsBiosDataListener iDcsBiosDataListener)
-        {
-            OnDcsDataAddressValue -= iDcsBiosDataListener.DcsBiosDataReceived;
-        }
         
-        public void AttachConnectionStateListener(IDcsBiosConnectionListener connectionListener)
-        {
-            //Try to remove it first so not to get duplicate
-            OnDcsConnectionActive -= connectionListener.DcsBiosConnectionActive;
-
-            OnDcsConnectionActive += connectionListener.DcsBiosConnectionActive;
-        }
-
-        public void DetachConnectionStateListener(IDcsBiosConnectionListener connectionListener)
-        {
-            OnDcsConnectionActive -= connectionListener.DcsBiosConnectionActive;
-        }
-
         private DCSBiosStateEnum _state;
         private uint _address;
         private uint _count;
@@ -237,9 +206,9 @@ namespace DCS_BIOS
                         _count--;
                         //_iDcsBiosDataListener.DcsBiosDataReceived(_address, _data);
 
-                        OnDcsConnectionActive?.Invoke(this, new DCSBIOSConnectionEventArgs()); // Informs main UI that data is coming
+                        BIOSEventHandler.ConnectionActive(this);
 
-                        if (OnDcsDataAddressValue != null && IsBroadcastable(_address) && _data != 0x55)
+                        if (IsBroadcastable(_address) && _data != 0x55)
                         {
                             /*if (_address == 25332)
                             {
@@ -247,7 +216,7 @@ namespace DCS_BIOS
                             }*/
                             try
                             {
-                                OnDcsDataAddressValue?.Invoke(this, new DCSBIOSDataEventArgs() { Address = _address, Data = _data });
+                                BIOSEventHandler.DCSBIOSDataAvailable(this, _address, _data);
 
                                 /*if (OnDcsDataAddressValue != null)
                                 {

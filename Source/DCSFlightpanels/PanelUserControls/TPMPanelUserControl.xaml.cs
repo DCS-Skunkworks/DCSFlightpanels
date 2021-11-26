@@ -45,19 +45,27 @@
             _tpmPanel = new TPMPanel(hidSkeleton);
 
             _tpmPanel.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_tpmPanel);
-            GlobalHandler = globalHandler;
         }
 
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!_disposed)
             {
-                _tpmPanel.Dispose();
-                _tpmPanel.Dispose();
-            }
-        }
+                if (disposing)
+                {
+                    _tpmPanel.Dispose();
+                }
 
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+        
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             if (!_once)
@@ -109,7 +117,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
         }
 
@@ -191,7 +199,7 @@
             }
         }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void PanelSettingsModified(object sender, PanelEventArgs e)
         {
             try
             {

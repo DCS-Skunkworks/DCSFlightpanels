@@ -30,6 +30,23 @@ namespace DCSFlightpanels.Radios.PreProgrammed
             InitializeComponent();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
         }
@@ -51,7 +68,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e) { }
+        public void ProfileSelected(object sender, AirframeEventArgs e) { }
 
         public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
@@ -75,7 +92,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
 
         public void SettingsApplied(object sender, PanelEventArgs e) { }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
+        public void PanelSettingsModified(object sender, PanelEventArgs e) { }
 
         public void DeviceDetached(object sender, PanelEventArgs e) { }
 

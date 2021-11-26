@@ -19,7 +19,7 @@
         private BIPLinkPZ69 _bipLinkPZ69;
         private DCSBIOSActionBindingPZ69 _dcsbiosBindingPZ69;
 
-        public BillPZ69Full(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
+        public BillPZ69Full(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
             SetContextMenu();
         }

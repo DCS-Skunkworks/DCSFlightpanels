@@ -83,36 +83,27 @@
             EventHandlers.AttachStreamDeckConfigListener(this);
             StreamDeckPanels.Add(this);
         }
+        
 
-        private void ReleaseUnmanagedResources()
+        private bool _disposed;
+        protected override void Dispose(bool disposing)
         {
-            // TODO release unmanaged resources here
-        }
-
-        private void Dispose(bool disposing)
-        {
-            ReleaseUnmanagedResources();
-            if (disposing)
+            if (!_disposed)
             {
-                StreamDeckButton.DisposeAll();
-                _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
-                _streamDeckBoard?.Dispose();
-                StreamDeckPanels.Remove(this);
-                EventHandlers.DetachStreamDeckListener(this);
-                EventHandlers.DetachStreamDeckConfigListener(this);
-                Closed = true;
+                if (disposing)
+                {
+                    StreamDeckButton.DisposeAll();
+                    _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
+                    _streamDeckBoard?.Dispose();
+                    StreamDeckPanels.Remove(this);
+                    EventHandlers.DetachStreamDeckListener(this);
+                    EventHandlers.DetachStreamDeckConfigListener(this);
+                    _disposed = true;
+                }
             }
-        }
 
-        public override void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~StreamDeckPanel()
-        {
-            Dispose(false);
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public static StreamDeckPanel GetInstance(string bindingHash)
@@ -217,7 +208,7 @@
             _streamDeckLayerHandler.Export(compressedFilenameAndPath, buttonExports);
         }
 
-        public override void SelectedProfile(object sender, AirframeEventArgs e)
+        public override void ProfileSelected(object sender, AirframeEventArgs e)
         {
             _streamDeckLayerHandler.ClearSettings();
         }

@@ -73,6 +73,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
             _streamDeckPanel = streamDeckPanel;
+            
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         public StreamDeckDCSBIOSDecoderWindow(StreamDeckPanel streamDeckPanel)
@@ -86,6 +88,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
             _dcsbiosDecoder.StreamDeckButtonName = streamDeckPanel.SelectedButtonName;
+            
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -93,6 +97,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             if (disposing)
             {
                 _dcsbiosDecoder?.Dispose();
+                BIOSEventHandler.DetachDataListener(this);
             }
         }
 
@@ -110,8 +115,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 {
                     return;
                 }
-
-                DCSBIOS.AttachDataReceivedListenerSO(this);
+                
                 ShowDecoder();
                 _dcsbiosDecoder.IsVisible = true;
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
@@ -980,7 +984,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private void StreamDeckDCSBIOSDecoderWindow_OnClosing(object sender, CancelEventArgs e)
         {
             _closing = true;
-            DCSBIOS.DetachDataReceivedListenerSO(this);
         }
 
         private void CheckBoxLimitDecimals_CheckedChanged(object sender, RoutedEventArgs e)

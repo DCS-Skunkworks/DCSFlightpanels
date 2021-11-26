@@ -41,6 +41,25 @@
             InitializeComponent();
         }
 
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
+
         internal void SetStreamDeckPanel(StreamDeckPanel streamDeckPanel)
         {
             _streamDeckPanel = streamDeckPanel;

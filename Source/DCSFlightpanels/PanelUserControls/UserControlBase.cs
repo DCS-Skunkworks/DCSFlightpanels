@@ -17,9 +17,31 @@ namespace DCSFlightpanels.PanelUserControls
         public UserControlBase()
         {}
         
+
+        private bool _disposed;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+            }
+
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+        }
+
         public void DeviceRemovedHandler()
         {
-            GlobalHandler.Detach(GetGamingPanel());
+            Dispose();
         }
 
         public virtual GamingPanel GetGamingPanel()
@@ -31,20 +53,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             return GamingPanelEnum.Unknown;
         }
-
-        public IGlobalHandler GlobalHandler
-        {
-            set => _globalHandler = value;
-            get => _globalHandler;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        { }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        
 
         public TabItem ParentTabItem
         {

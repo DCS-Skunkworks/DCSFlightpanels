@@ -53,12 +53,11 @@
     using Timer = System.Timers.Timer;
     using UserControl = System.Windows.Controls.UserControl;
 
-    public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable, IHardwareConflictResolver
+    public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, IGlobalHandler, ISettingsModifiedListener , IProfileHandlerListener, IDisposable, IHardwareConflictResolver
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
-        private readonly List<GamingPanel> _gamingPanels = new List<GamingPanel>();
         private readonly string _windowName = "DCSFlightpanels ";
         private readonly Timer _exceptionTimer = new Timer(1000);
         private readonly Timer _statusMessagesTimer = new Timer(1000);
@@ -84,11 +83,53 @@
 
             // Stop annoying "Cannot find source for binding with reference .... " from being shown
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
+
+            AppEventClass.AttachSettingsMonitoringListener(this);
+        }
+        
+        #region IDisposable Support
+        private bool _hasBeenCalledAlready = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_hasBeenCalledAlready)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                    _dcsCheckDcsBiosStatusTimer.Dispose();
+                    _dcsStopGearTimer.Dispose();
+                    _exceptionTimer.Dispose();
+                    _statusMessagesTimer.Dispose();
+                    _exceptionTimer.Dispose();
+                    _dcsBios?.Dispose();
+                    AppEventClass.DetachSettingsMonitoringListener(this);
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+
+                // TODO: set large fields to null.
+                _hasBeenCalledAlready = true;
+            }
         }
 
-        public delegate void ForwardKeyPressesChangedEventHandler(object sender, ForwardPanelEventArgs e);
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~MainWindow() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
 
-        public event ForwardKeyPressesChangedEventHandler OnForwardKeyPressesChanged;
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
+
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
@@ -130,7 +171,7 @@
                 _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
                 _profileHandler.Init();
                 SearchForPanels();
-                _profileHandler.Attach(this);
+                
                 //_profileHandler.AttachUserMessageHandler(this);
                 if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed, this))
                 {
@@ -182,19 +223,7 @@
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
         }
-
-        public void UserMessage(object sender, UserMessageEventArgs e)
-        {
-            try
-            {
-                Dispatcher?.BeginInvoke((Action)(() => MessageBox.Show(e.UserMessage, "Information")));
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         /// <summary>
         /// Try to find the path of the log with a file target given as parameter
         /// See NLog.config in the main folder of the application for configured log targets
@@ -448,25 +477,11 @@
          */
         public void Attach(GamingPanel gamingPanel)
         {
-            _gamingPanels.Add(gamingPanel);
-
-            OnForwardKeyPressesChanged += gamingPanel.SetForwardKeyPresses;
-            _profileHandler.Attach(gamingPanel);
-            gamingPanel.Attach(_profileHandler);
-            gamingPanel.Attach((IProfileHandlerListener)this);
-            _dcsBios?.AttachDataReceivedListener(gamingPanel);
+            AppEventClass.AttachSettingsModified(this);
         }
 
         public void Detach(GamingPanel gamingPanel)
         {
-            _gamingPanels.Remove(gamingPanel);
-
-            OnForwardKeyPressesChanged -= gamingPanel.SetForwardKeyPresses;
-            _profileHandler.Detach(gamingPanel);
-            gamingPanel.Detach(_profileHandler);
-            gamingPanel.Detach((IProfileHandlerListener)this);
-            _dcsBios?.DetachDataReceivedListener(gamingPanel);
-
             Dispatcher?.BeginInvoke((Action)(() => CloseTabItem(gamingPanel.HIDInstanceId)));
         }
 
@@ -477,7 +492,7 @@
                 return;
             }
 
-            _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
+            _dcsBios = new DCSBIOS(Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
             if (!_dcsBios.HasLastException())
             {
                 RotateGear(2000);
@@ -494,17 +509,13 @@
             }
 
             _dcsBios?.Startup();
-
-            _dcsBios?.DetachConnectionListener(this);
-            _dcsBios?.AttachConnectionListener(this);
-            AttachGamingPanelsToDCSBIOS();
+            
             _dcsStopGearTimer.Start();
             _dcsCheckDcsBiosStatusTimer.Start();
         }
 
         private void ShutdownDCSBIOS()
         {
-            DetachGamingPanelsFromDCSBIOS();
             _dcsBios?.Shutdown();
             _dcsBios = null;
 
@@ -512,23 +523,7 @@
             _dcsCheckDcsBiosStatusTimer.Stop();
             ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
         }
-
-        private void AttachGamingPanelsToDCSBIOS()
-        {
-            foreach (var gamingPanel in _gamingPanels)
-            {
-                _dcsBios?.AttachDataReceivedListener(gamingPanel);
-            }
-        }
-
-        private void DetachGamingPanelsFromDCSBIOS()
-        {
-            foreach (var gamingPanel in _gamingPanels)
-            {
-                _dcsBios?.DetachDataReceivedListener(gamingPanel);
-            }
-        }
-
+        
         public DCSFPProfile GetProfile()
         {
             return _dcsfpProfile;
@@ -554,7 +549,6 @@
                                     var tabItem = new TabItem { Header = "PZ55" };
                                     var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton, tabItem, this);
                                     _panelUserControls.Add(switchPanelPZ55UserControl);
-                                    _profileHandler.Attach(switchPanelPZ55UserControl);
                                     tabItem.Content = switchPanelPZ55UserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                     _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -566,7 +560,6 @@
                                     var tabItem = new TabItem { Header = "PZ70" };
                                     var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this);
                                     _panelUserControls.Add(multiPanelUserControl);
-                                    _profileHandler.Attach(multiPanelUserControl);
                                     tabItem.Content = multiPanelUserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                     _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -578,7 +571,6 @@
                                     var tabItem = new TabItem { Header = "B.I.P." };
                                     var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton);
                                     _panelUserControls.Add(backLitPanelUserControl);
-                                    _profileHandler.Attach(backLitPanelUserControl);
                                     tabItem.Content = backLitPanelUserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                     _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -590,7 +582,6 @@
                                     var tabItem = new TabItem { Header = "TPM" };
                                     var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this);
                                     _panelUserControls.Add(tpmPanelUserControl);
-                                    _profileHandler.Attach(tpmPanelUserControl);
                                     tabItem.Content = tpmPanelUserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                     _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -608,7 +599,6 @@
                                         var tabItemStreamDeck = new TabItem { Header = hidSkeleton.PanelInfo.GamingPanelType.GetDescription() };
                                         var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck, this);
                                         _panelUserControls.Add(streamDeckUserControl);
-                                        _profileHandler.Attach(streamDeckUserControl);
                                         tabItemStreamDeck.Content = streamDeckUserControl;
                                         TabControlPanels.Items.Add(tabItemStreamDeck);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.InstanceId, hidSkeleton.PanelInfo.GamingPanelType));
@@ -631,7 +621,6 @@
                                     var tabItem = new TabItem { Header = "Side Panel" };
                                     var farmingSidePanelUserControl = new FarmingPanelUserControl(hidSkeleton, tabItem, this);
                                     _panelUserControls.Add(farmingSidePanelUserControl);
-                                    _profileHandler.Attach(farmingSidePanelUserControl);
                                     tabItem.Content = farmingSidePanelUserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                     _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -680,7 +669,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -689,7 +677,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -698,7 +685,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -707,7 +693,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlUH1H(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -716,7 +701,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMiG21Bis(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -725,7 +709,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlKa50(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -734,7 +717,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi8(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -743,7 +725,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlBf109(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -752,7 +733,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFw190(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -761,7 +741,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP51D(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -770,7 +749,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF86F(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -779,7 +757,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSpitfireLFMkIX(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -788,7 +765,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAJS37(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -797,7 +773,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSA342(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -806,7 +781,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFA18C(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -815,7 +789,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlM2000C(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -824,7 +797,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF5E(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -833,7 +805,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF14B(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -842,7 +813,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAV8BNA(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -851,7 +821,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP47D(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -860,7 +829,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi24P(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -869,7 +837,6 @@
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlGeneric(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -1005,7 +972,7 @@
         {
         }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void PanelSettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
@@ -1017,7 +984,7 @@
             }
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -1431,7 +1398,6 @@
                 CloseTabItems();
                 _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
                 _profileHandler.Init();
-                _profileHandler.Attach(this);
                 //_profileHandler.AttachUserMessageHandler(this);
                 _dcsfpProfile = _profileHandler.Profile;
                 SetApplicationMode(_dcsfpProfile);
@@ -1619,7 +1585,7 @@
         private void SendEventRegardingForwardingOfKeys()
         {
             // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-            OnForwardKeyPressesChanged?.Invoke(this, new ForwardPanelEventArgs() { Forward = !_disablePanelEventsFromBeingRouted });
+            AppEventClass.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
         }
 
         private void OpenProfileInNotepad()
@@ -2053,47 +2019,6 @@
             this.Cursor = Cursors.Arrow;
         }
 
-        #region IDisposable Support
-        private bool _hasBeenCalledAlready = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_hasBeenCalledAlready)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                    _dcsCheckDcsBiosStatusTimer.Dispose();
-                    _dcsStopGearTimer.Dispose();
-                    _exceptionTimer.Dispose();
-                    _statusMessagesTimer.Dispose();
-                    _exceptionTimer.Dispose();
-                    _dcsBios?.Dispose();
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-
-                // TODO: set large fields to null.
-                _hasBeenCalledAlready = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~MainWindow() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {

@@ -37,8 +37,24 @@
             _radioPanelPZ69 = new RadioPanelPZ69F86F(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
             _radioPanelPZ69.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_radioPanelPZ69);
-            GlobalHandler = globalHandler;
+        }
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _radioPanelPZ69.Dispose();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
@@ -62,7 +78,7 @@
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e) { }
+        public void ProfileSelected(object sender, AirframeEventArgs e) { }
 
         public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
@@ -86,7 +102,7 @@
 
         public void SettingsApplied(object sender, PanelEventArgs e) { }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
+        public void PanelSettingsModified(object sender, PanelEventArgs e) { }
 
         public void DeviceDetached(object sender, PanelEventArgs e) { }
 

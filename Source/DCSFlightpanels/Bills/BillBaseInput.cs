@@ -26,7 +26,6 @@
         private readonly SaitekPanel _saitekPanel;
         private KeyPress _keyPress;
         private OSCommand _operatingSystemCommand;
-        private IGlobalHandler _globalHandler;
         private IPanelUI _panelUI;
         private TextBox _textBox;
         private ContextMenuPanelTextBox _contextMenu;
@@ -48,9 +47,8 @@
 
 
 
-        protected BillBaseInput(IGlobalHandler globalHandler, TextBox textBox, IPanelUI panelUI, SaitekPanel saitekPanel)
+        protected BillBaseInput(TextBox textBox, IPanelUI panelUI, SaitekPanel saitekPanel)
         {
-            _globalHandler = globalHandler;
             _textBox = textBox;
             _panelUI = panelUI;
             _saitekPanel = saitekPanel;

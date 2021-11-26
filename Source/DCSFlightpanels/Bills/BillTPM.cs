@@ -19,7 +19,7 @@
         private DCSBIOSActionBindingTPM _dcsbiosBindingTPM;
         private BIPLinkTPM _bipLinkTPM;
         
-        public BillTPM(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
+        public BillTPM(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
             SetContextMenu();
         }

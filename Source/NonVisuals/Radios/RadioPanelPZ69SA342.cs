@@ -252,10 +252,24 @@
             Startup();
         }
 
-        ~RadioPanelPZ69SA342()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _vhfAmSyncThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _vhfAmSyncThread?.Abort();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
+        
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -1890,19 +1904,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false)
         {
         }

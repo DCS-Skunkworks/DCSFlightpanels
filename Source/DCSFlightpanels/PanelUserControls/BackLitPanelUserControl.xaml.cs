@@ -36,7 +36,7 @@
         private DCSFPProfile _dcsfpProfile;
 
 
-        public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
+        public BackLitPanelUserControl(TabItem parentTabItem, HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -45,9 +45,26 @@
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             _backlitPanelBIP.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_backlitPanelBIP);
-            GlobalHandler = globalHandler;
         }
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _backlitPanelBIP.Dispose();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+        
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -56,14 +73,6 @@
             SetContextMenuClickHandlers();
             SetAllBlack();
             ShowGraphicConfiguration();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _backlitPanelBIP.Dispose();
-            }
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
@@ -85,7 +94,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             _dcsfpProfile = e.Profile;
         }
@@ -144,7 +153,7 @@
             }
         }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void PanelSettingsModified(object sender, PanelEventArgs e)
         {
             try
             {

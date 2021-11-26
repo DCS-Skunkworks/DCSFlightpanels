@@ -13,7 +13,7 @@
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
 
-    public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty
+    public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty, IDisposable
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
@@ -34,9 +34,7 @@
         public abstract void Startup();
 
         public abstract void Identify();
-
-        public abstract void Dispose();
-
+        
         public abstract void ClearSettings(bool setIsDirty = false);
 
         public abstract void ImportSettings(GenericPanelBinding genericPanelBinding);
@@ -83,6 +81,37 @@
             {
                 hidSkeleton.HIDReadDevice.Inserted += DeviceInsertedHandler;
             }
+
+            AppEventClass.AttachForwardPanelEventListener(this);
+            AppEventClass.AttachSettingsConsumerListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+        }
+
+        private bool _disposed;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                Closed = true; // Don't know if this is necessary atm. (2021)
+                AppEventClass.DetachForwardPanelEventListener(this);
+                AppEventClass.DetachSettingsConsumerListener(this);
+                BIOSEventHandler.DetachDataListener(this);
+            }
+
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
         }
 
         public void DeviceInsertedHandler()
@@ -130,16 +159,16 @@
         
         public void SetIsDirty()
         {
-            SettingsChanged();
+            AppEventClass.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
             IsDirty = true;
         }
 
-        public virtual void SelectedProfile(object sender, AirframeEventArgs e)
+        public virtual void ProfileSelected(object sender, AirframeEventArgs e)
         {
         }
 
         // User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
-        public void SetForwardKeyPresses(object sender, ForwardPanelEventArgs e)
+        public void SetForwardPanelEvent(object sender, ForwardPanelEventArgs e)
         {
             ForwardPanelEvent = e.Forward;
         }
@@ -287,21 +316,7 @@
             // IsAttached = false;
             OnDeviceDetachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
         }
-
-
-        /*
-         * Used by ProfileHandler to detect changes in panel configurations.
-         * Used by some UserControls to show panel's updated configurations.
-         */
-        public delegate void SettingsHasChangedEventHandler(object sender, PanelEventArgs e);
-
-        public event SettingsHasChangedEventHandler OnSettingsChangedA;
-        protected virtual void SettingsChanged()
-        {
-            OnSettingsChangedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
-        }
         
-
         /*
          * Used by some UserControls to know when panels have loaded their configurations.
          * Used by MainWindow to SetFormstate().
@@ -343,7 +358,6 @@
             OnSettingsAppliedA += gamingPanelListener.SettingsApplied;
             OnSettingsClearedA += gamingPanelListener.SettingsCleared;
             OnUpdatesHasBeenMissed += gamingPanelListener.UpdatesHasBeenMissed;
-            OnSettingsChangedA += gamingPanelListener.PanelSettingsChanged;
         }
 
         // For those that wants to listen to this panel
@@ -354,19 +368,6 @@
             OnSettingsAppliedA -= gamingPanelListener.SettingsApplied;
             OnSettingsClearedA -= gamingPanelListener.SettingsCleared;
             OnUpdatesHasBeenMissed -= gamingPanelListener.UpdatesHasBeenMissed;
-            OnSettingsChangedA -= gamingPanelListener.PanelSettingsChanged;
-        }
-
-        // For those that wants to listen to this panel when it's settings change
-        public void Attach(IProfileHandlerListener profileHandlerListener)
-        {
-            OnSettingsChangedA += profileHandlerListener.PanelSettingsChanged;
-        }
-
-        // For those that wants to listen to this panel
-        public void Detach(IProfileHandlerListener profileHandlerListener)
-        {
-            OnSettingsChangedA -= profileHandlerListener.PanelSettingsChanged;
         }
         
 
@@ -374,7 +375,7 @@
 
 
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void PanelSettingsModified(object sender, PanelEventArgs e)
         {
         }
 

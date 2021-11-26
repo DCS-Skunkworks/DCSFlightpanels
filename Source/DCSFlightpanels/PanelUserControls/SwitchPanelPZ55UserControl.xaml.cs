@@ -51,8 +51,6 @@
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
             _switchPanelPZ55.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_switchPanelPZ55);
-            GlobalHandler = globalHandler;
             _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
             _imageArrayUpper[1] = ImagePZ55LEDGreenUpper;
             _imageArrayUpper[2] = ImagePZ55LEDYellowUpper;
@@ -69,15 +67,25 @@
             _imageArrayRight[3] = ImagePZ55LEDRedRight;
         }
 
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!_disposed)
             {
-                _switchPanelPZ55.Dispose();
+                if (disposing)
+                {
+                    _switchPanelPZ55.Dispose();
+                }
+
+                _disposed = true;
             }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
-
-
+        
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxBills();
@@ -134,7 +142,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -355,7 +363,7 @@
             }
         }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void PanelSettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
@@ -410,7 +418,7 @@
                     continue;
                 }
 
-                textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox);
+                textBox.Bill = new BillPZ55(this, _switchPanelPZ55, textBox);
             }
             _textBoxBillsSet = true;
         }

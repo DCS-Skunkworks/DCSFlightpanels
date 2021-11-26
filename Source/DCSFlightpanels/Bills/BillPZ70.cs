@@ -19,7 +19,7 @@
         private DCSBIOSActionBindingPZ70 _dcsbiosBindingPZ70;
         private BIPLinkPZ70 _bipLinkPZ70;
 
-        public BillPZ70(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
+        public BillPZ70(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
             SetContextMenu();
         }

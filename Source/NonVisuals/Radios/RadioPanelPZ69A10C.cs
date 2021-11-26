@@ -228,13 +228,26 @@
             Startup();
         }
 
-        ~RadioPanelPZ69A10C()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _vhfAmSyncThread?.Abort();
-            _vhfFmSyncThread?.Abort();
-            _uhfSyncThread?.Abort();
-            _ilsSyncThread?.Abort();
-            _tacanSyncThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _vhfAmSyncThread?.Abort();
+                    _vhfFmSyncThread?.Abort();
+                    _uhfSyncThread?.Abort();
+                    _ilsSyncThread?.Abort();
+                    _tacanSyncThread?.Abort();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)

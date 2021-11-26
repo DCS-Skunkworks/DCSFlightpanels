@@ -37,6 +37,24 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    Closed = true;
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public sealed override void Startup()
         {
             try
@@ -46,18 +64,6 @@
             catch (Exception ex)
             {
                 logger.Error(ex);
-            }
-        }
-
-        public override void Dispose()
-        {
-            try
-            {
-                Closed = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
             }
         }
 

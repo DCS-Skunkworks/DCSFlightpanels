@@ -25,7 +25,7 @@
          * Used by ProfileHandler to detect changes in panel configurations.
          * Used by some UserControls to show panel's updated configurations.
          */
-        void PanelSettingsChanged(object sender, PanelEventArgs e);
+        void PanelSettingsModified(object sender, PanelEventArgs e);
 
         /*
          * Used by those UserControls who's panels can show LED lights.
