@@ -332,7 +332,7 @@
                         if (tmp != _vhfAmCockpitDecimal10SFrequencyValue)
                         {
                             // Debug.Print("RECEIVE _vhfAmCockpitDecimal10sFrequencyValue " + _vhfAmCockpitDecimal10sFrequencyValue);
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _vhfAmValue3WaitingForFeedback, 0);
                         }
                     }
@@ -351,7 +351,7 @@
                         if (tmp != _vhfAmCockpitDecimal100SFrequencyValue)
                         {
                             // Debug.Print("RECEIVE _vhfAmCockpitDecimal100sFrequencyValue " + _vhfAmCockpitDecimal100sFrequencyValue);
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _vhfAmValue4WaitingForFeedback, 0);
                         }
                     }
@@ -367,7 +367,7 @@
                     _fmRadioPresetCockpitDialPos = _fmRadioPresetDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _fmRadioPresetCockpitDialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -381,7 +381,7 @@
                     _adfCockpitSelectedUnitValue = _adfSwitchUnitDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _adfCockpitSelectedUnitValue)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -395,7 +395,7 @@
                     _nadirModeCockpitValue = _nadirModeDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _nadirModeCockpitValue)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -409,7 +409,7 @@
                     _nadirDopplerModeCockpitValue = _nadirDopplerModeDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _nadirDopplerModeCockpitValue)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -662,7 +662,7 @@
                 Interlocked.Exchange(ref _vhfAmThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendUhfToDCSBIOS()
@@ -1026,7 +1026,7 @@
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
@@ -1665,7 +1665,7 @@
         {
             lock (LockLCDUpdateObject)
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 foreach (var radioPanelKnobObject in hashSet)
                 {
                     var radioPanelKnob = (RadioPanelKnobSA342)radioPanelKnobObject;

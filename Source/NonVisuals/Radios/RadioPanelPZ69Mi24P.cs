@@ -192,7 +192,7 @@
                     var tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     if (!tmpFreq.Equals(_yadro1ACockpitFrequency))
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                     if (tmpFreq.Equals(_yadro1ACockpitFrequency))
                     {
@@ -207,7 +207,7 @@
                         _yadro1ACockpitFreq1DialPos = uint.Parse(e.StringData.Substring(0, 2));
                         if (tmp != _yadro1ACockpitFreq1DialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 0);
                         }
                     }
@@ -218,7 +218,7 @@
                         _yadro1ACockpitFreq2DialPos = uint.Parse(e.StringData.Substring(2, 1));
                         if (tmp != _yadro1ACockpitFreq2DialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 0);
                         }
                     }
@@ -229,7 +229,7 @@
                         _yadro1ACockpitFreq3DialPos = uint.Parse(e.StringData.Substring(3, 1));
                         if (tmp != _yadro1ACockpitFreq3DialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 0);
                         }
                     }
@@ -240,7 +240,7 @@
                         _yadro1ACockpitFreq4DialPos = uint.Parse(e.StringData.Substring(4, 1));
                         if (tmp != _yadro1ACockpitFreq4DialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 0);
                         }
                     }
@@ -276,7 +276,7 @@
                         _r863PresetCockpitDialPos = _r863Preset1DcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _r863PresetCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -291,7 +291,7 @@
                         _r828PresetCockpitDialPos = _r828Preset1DcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _r828PresetCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -305,7 +305,7 @@
                         _adfMainCockpitPresetDial1Pos = _adfMainDcsbiosOutputPresetDial1.GetUIntValue(e.Data);
                         if (tmp != _adfMainCockpitPresetDial1Pos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -319,7 +319,7 @@
                         _adfMainCockpitPresetDial2Pos = _adfMainDcsbiosOutputPresetDial2.GetUIntValue(e.Data);
                         if (tmp != _adfMainCockpitPresetDial2Pos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -333,7 +333,7 @@
                         _adfBackupCockpitPresetDial1Pos = _adfBackupDcsbiosOutputPresetDial1.GetUIntValue(e.Data);
                         if (tmp != _adfBackupCockpitPresetDial1Pos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -347,7 +347,7 @@
                         _adfBackupCockpitPresetDial2Pos = _adfBackupDcsbiosOutputPresetDial2.GetUIntValue(e.Data);
                         if (tmp != _adfBackupCockpitPresetDial2Pos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -361,7 +361,7 @@
                         _adfBackupMainCockpitDial1Pos = _adfBackupMainDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _adfBackupMainCockpitDial1Pos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -375,7 +375,7 @@
                         _dmeMainCockpitPresetDial1Pos = _dmeMainDcsbiosOutputPresetDial1.GetUIntValue(e.Data);
                         if (tmp != _dmeMainCockpitPresetDial1Pos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -389,7 +389,7 @@
                         _dmeBackupCockpitPresetDial1Pos = _dmeBackupDcsbiosOutputPresetDial1.GetUIntValue(e.Data);
                         if (tmp != _dmeBackupCockpitPresetDial1Pos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -403,7 +403,7 @@
                         _spu8CockpitDialPos = _spu8DcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _spu8CockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -417,7 +417,7 @@
                         _spu8ICSSwitchCockpitDialPos = _spu8ICSSwitchDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _spu8ICSSwitchCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -720,7 +720,7 @@
                 logger.Error(ex);
             }
             //Refresh panel once this debacle is finished
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SwapCockpitStandbyFrequencyYaDRO1A()
@@ -740,7 +740,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -1810,7 +1810,7 @@
             {
                 Common.ShowErrorMessageBox(ex);
             }
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private string DivideBy2AndFormatForDisplay(uint position)

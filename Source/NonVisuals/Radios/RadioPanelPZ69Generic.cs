@@ -501,7 +501,7 @@
                         }
                     }
 
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                     ShowFrequenciesOnPanel();
                 }
             }
@@ -588,7 +588,7 @@
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 

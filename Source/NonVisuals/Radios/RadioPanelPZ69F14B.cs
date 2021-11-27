@@ -939,7 +939,7 @@
                 Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
         
         private void SendVUHFToDCSBIOS()
@@ -1137,7 +1137,7 @@
                 Interlocked.Exchange(ref _vuhfThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
 
@@ -1288,7 +1288,7 @@
                 Interlocked.Exchange(ref _rioLink4ThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
 
@@ -1457,7 +1457,7 @@
                 Interlocked.Exchange(ref _pilotTacanThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
 
@@ -1610,7 +1610,7 @@
                 Interlocked.Exchange(ref _rioTacanThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void ShowFrequenciesOnPanel()
@@ -1943,7 +1943,7 @@
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private string GetUHFCockpitFrequencyAsString()
@@ -2816,7 +2816,7 @@
                 }
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             ShowFrequenciesOnPanel();
         }
 
@@ -3016,7 +3016,7 @@
         {
             lock (LockLCDUpdateObject)
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 foreach (var radioPanelKnobObject in hashSet)
                 {
                     var radioPanelKnob = (RadioPanelKnobF14B)radioPanelKnobObject;

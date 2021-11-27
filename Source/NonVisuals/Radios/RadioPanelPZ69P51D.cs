@@ -86,7 +86,7 @@
 
                         if (tmp != _vhf1CockpitPresetActiveButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -105,7 +105,7 @@
 
                         if (tmp != _vhf1CockpitPresetActiveButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -124,7 +124,7 @@
 
                         if (tmp != _vhf1CockpitPresetActiveButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -143,7 +143,7 @@
 
                         if (tmp != _vhf1CockpitPresetActiveButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -162,7 +162,7 @@
 
                         if (tmp != _vhf1CockpitPresetActiveButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -181,7 +181,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -542,12 +542,12 @@
                 logger.Error(ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private void SendIncVHFPresetCommand()
         {
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             lock (_lockVhf1DialObject1)
             {
                 switch (_vhf1CockpitPresetActiveButton)
@@ -586,7 +586,7 @@
 
         private void SendDecVHFPresetCommand()
         {
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             lock (_lockVhf1DialObject1)
             {
                 switch (_vhf1CockpitPresetActiveButton)

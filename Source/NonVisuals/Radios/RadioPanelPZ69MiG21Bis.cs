@@ -112,7 +112,7 @@
                     var tmp = _radioFreqSelectorPositionCockpit;
                     if (tmp != _radioFreqSelectorPositionCockpit)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         _radioFreqSelectorPositionCockpit = _radioDcsbiosOutputFreqSelectorPosition.GetUIntValue(e.Data);
 
                     }
@@ -130,7 +130,7 @@
                     _rsbnNavChannelCockpit = _rsbnNavChannelCockpitOutput.GetUIntValue(e.Data);
                     if (tmp != _rsbnNavChannelCockpit)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -146,7 +146,7 @@
                     _rsbnILSChannelCockpit = _rsbnILSChannelCockpitOutput.GetUIntValue(e.Data);
                     if (tmp != _rsbnILSChannelCockpit)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -162,7 +162,7 @@
                     _arcSectorCockpit = _arcSectorCockpitOutput.GetUIntValue(e.Data);
                     if (tmp != _arcSectorCockpit)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -178,7 +178,7 @@
                     _arcPresetChannelCockpit = _arcPresetChannelCockpitOutput.GetUIntValue(e.Data) + 1;
                     if (tmp != _arcPresetChannelCockpit)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -368,7 +368,7 @@
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
@@ -596,7 +596,7 @@
         {
             lock (LockLCDUpdateObject)
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 foreach (var radioPanelKnobObject in hashSet)
                 {
                     var radioPanelKnob = (RadioPanelKnobMiG21Bis)radioPanelKnobObject;

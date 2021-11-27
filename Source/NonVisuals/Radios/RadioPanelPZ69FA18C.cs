@@ -176,7 +176,7 @@ namespace NonVisuals.Radios
                     _comm1CockpitFreq = _comm1DcsbiosOutputFreq.GetUIntValue(e.Data);
                     if (tmp != _comm1CockpitFreq)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _comm1DialWaitingForFeedback, 0);
                     }
                 }
@@ -188,7 +188,7 @@ namespace NonVisuals.Radios
                 _comm1CockpitChannel = _comm1DcsbiosOutputChannel.GetUIntValue(e.Data);
                 if (tmp != _comm1CockpitChannel)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -201,7 +201,7 @@ namespace NonVisuals.Radios
                     _comm2CockpitFreq = _comm2DcsbiosOutputFreq.GetUIntValue(e.Data);
                     if (tmp != _comm2CockpitFreq)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _comm2DialWaitingForFeedback, 0);
                     }
                 }
@@ -213,7 +213,7 @@ namespace NonVisuals.Radios
                 _comm2CockpitChannel = _comm2DcsbiosOutputChannel.GetUIntValue(e.Data);
                 if (tmp != _comm2CockpitChannel)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -228,7 +228,7 @@ namespace NonVisuals.Radios
                     _ilsCockpitChannel = _ilsDcsbiosOutputChannel.GetUIntValue(e.Data) + 1;
                     if (tmp != _ilsCockpitChannel)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 0);
                     }
                 }
@@ -470,7 +470,7 @@ namespace NonVisuals.Radios
                 Interlocked.Exchange(ref _ilsThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void ShowFrequenciesOnPanel()
@@ -694,7 +694,7 @@ namespace NonVisuals.Radios
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
@@ -1080,7 +1080,7 @@ namespace NonVisuals.Radios
         {
             lock (LockLCDUpdateObject)
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 foreach (var radioPanelKnobObject in hashSet)
                 {
                     var radioPanelKnob = (RadioPanelKnobFA18C)radioPanelKnobObject;

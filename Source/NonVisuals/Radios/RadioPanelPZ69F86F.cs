@@ -154,7 +154,7 @@
                         _arc27PresetCockpitDialPos = _arc27PresetDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _arc27PresetCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -168,7 +168,7 @@
                         _arc27ModeCockpitDialPos = _arc27ModeDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _arc27ModeCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -182,7 +182,7 @@
                         _arn6CockpitFrequency = _arn6ManualDcsbiosOutputCockpitFrequency.GetUIntValue(e.Data);
                         if (tmp != _arn6CockpitFrequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -196,7 +196,7 @@
                         _arn6CockpitBand = _arn6BandDcsbiosOutputCockpit.GetUIntValue(e.Data);
                         if (tmp != _arn6CockpitBand)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -210,7 +210,7 @@
                         _arn6ModeCockpitDialPos = _arn6ModeDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _arn6ModeCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -224,7 +224,7 @@
                         _apx6ModeCockpitDialPos = _apx6ModeDcsbiosOutputCockpit.GetUIntValue(e.Data);
                         if (tmp != _apx6ModeCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -339,7 +339,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -1201,7 +1201,7 @@
                 Common.ShowErrorMessageBox( ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 

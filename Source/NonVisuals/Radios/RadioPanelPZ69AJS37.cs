@@ -142,7 +142,7 @@
                         _tilsChannelCockpitValue = _tilsChannelSelectorDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _tilsChannelCockpitValue)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -156,7 +156,7 @@
                         _tilsChannelLayerSelectorCockpitValue = _tilsChannelLayerSelectorDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _tilsChannelLayerSelectorCockpitValue)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -170,7 +170,7 @@
                         _masterModeSelectorCockpitValue = _masterModeSelectorDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _masterModeSelectorCockpitValue)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -275,7 +275,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -878,7 +878,7 @@
                 Common.ShowErrorMessageBox( ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 
