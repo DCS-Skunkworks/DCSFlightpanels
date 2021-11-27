@@ -408,10 +408,9 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref dialTimeout, ResetSyncTimeout, "ILS dial1Timeout"))
+                        if (IsTimedOut(ref dialTimeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _ilsDialWaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _ilsDialWaitingForFeedback) == 0)
@@ -1352,18 +1351,6 @@ namespace NonVisuals.Radios
                 StartListeningForPanelChanges();
 
                 // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
             }
             catch (Exception ex)
             {

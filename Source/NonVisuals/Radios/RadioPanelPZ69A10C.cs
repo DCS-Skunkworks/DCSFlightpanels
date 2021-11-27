@@ -900,28 +900,24 @@
                     var dial4SendCount = 0;
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF AM dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfAmDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfAmDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF AM dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfAmDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfAmDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "VHF AM dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfAmDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfAmDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "VHF AM dial4Timeout"))
+                        if (IsTimedOut(ref dial4Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfAmDial4WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfAmDial4WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         string str;
@@ -1223,34 +1219,29 @@
                     var dial5SendCount = 0;
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "UHF dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "UHF dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "UHF dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "UHF dial4Timeout"))
+                        if (IsTimedOut(ref dial4Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial4WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial5Timeout, ResetSyncTimeout, "UHF dial5Timeout"))
+                        if (IsTimedOut(ref dial5Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial5WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         // Frequency selector 1     
@@ -1552,28 +1543,24 @@
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF FM dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF FM dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "VHF FM dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "VHF FM dial4Timeout"))
+                        if (IsTimedOut(ref dial4Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial4WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _vhfFmDial1WaitingForFeedback) == 0)
@@ -1755,16 +1742,14 @@
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "ILS dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _ilsDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _ilsDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "ILS dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _ilsDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _ilsDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _ilsDial1WaitingForFeedback) == 0)
@@ -1907,22 +1892,19 @@
                     do
                     {
 
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "TACAN dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _tacanDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _tacanDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _tacanDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _tacanDial1WaitingForFeedback) == 0)
@@ -4095,17 +4077,6 @@
             }
         }
 
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
 
         public override void ClearSettings(bool setIsDirty = false)
         {

@@ -594,28 +594,24 @@
 
                         do
                         {
-                            if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-800L1 dial1Timeout"))
+                            if (IsTimedOut(ref dial1Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r800L1Dial1WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "R-800L1 dial2Timeout"))
+                            if (IsTimedOut(ref dial2Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r800L1Dial2WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "R-800L1 dial3Timeout"))
+                            if (IsTimedOut(ref dial3Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r800L1Dial3WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "R-800L1 dial4Timeout"))
+                            if (IsTimedOut(ref dial4Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r800L1Dial4WaitingForFeedback); // Lets do an ugly reset
                             }
 
                             string str;

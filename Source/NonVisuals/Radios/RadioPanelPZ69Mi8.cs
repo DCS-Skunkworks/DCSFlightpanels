@@ -928,28 +928,24 @@
 
                         do
                         {
-                            if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-863 dial1Timeout"))
+                            if (IsTimedOut(ref dial1Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r863ManualDial1WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r863ManualDial1WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "R-863 dial2Timeout"))
+                            if (IsTimedOut(ref dial2Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r863ManualDial2WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r863ManualDial2WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "R-863 dial3Timeout"))
+                            if (IsTimedOut(ref dial3Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r863ManualDial3WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r863ManualDial3WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "R-863 dial4Timeout"))
+                            if (IsTimedOut(ref dial4Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r863ManualDial4WaitingForFeedback); // Lets do an ugly reset
                             }
 
                             string str;
@@ -1198,28 +1194,24 @@
 
                         do
                         {
-                            if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "YaDRO-1A dial1Timeout"))
+                            if (IsTimedOut(ref dial1Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _yadro1ADial1WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "YaDRO-1A dial2Timeout"))
+                            if (IsTimedOut(ref dial2Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _yadro1ADial2WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "YaDRO-1A dial3Timeout"))
+                            if (IsTimedOut(ref dial3Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _yadro1ADial3WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "YaDRO-1A dial4Timeout"))
+                            if (IsTimedOut(ref dial4Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _yadro1ADial4WaitingForFeedback); // Lets do an ugly reset
                             }
 
                             string str;

@@ -846,8 +846,7 @@ namespace NonVisuals.Radios
                     {
                         if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "INTERCOMM dial1Timeout"))
                         {
-                            //Lets do an ugly reset
-                            Interlocked.Exchange(ref _intercommDialWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _intercommDialWaitingForFeedback); //Lets do an ugly reset
                             Common.DebugP("Resetting SYNC for INTERCOMM");
                         }
 
@@ -890,7 +889,7 @@ namespace NonVisuals.Radios
                 }
                 finally
                 {
-                    Interlocked.Exchange(ref _intercommThreadNowSynching, 0);
+                    ResetWaitingForFeedBack(ref _intercommThreadNowSynching);
                 }
             }
             catch (ThreadAbortException)
@@ -944,16 +943,14 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF COMM dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfCommDial1FreqWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfCommDial1FreqWaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF COMM dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfCommDial2FreqWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfCommDial2FreqWaitingForFeedback); // Lets do an ugly reset
                         }
 
                         string str;
@@ -1089,22 +1086,19 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "UHF dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "UHF dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "UHF dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         string str;
@@ -1246,16 +1240,14 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF NAV dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfNavDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfNavDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF NAV dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfNavDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfNavDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         string str;
@@ -1406,28 +1398,24 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF FM dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF FM dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial2WaitingForFeedback);  // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "VHF FM dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "VHF FM dial4Timeout"))
+                        if (IsTimedOut(ref dial4Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial4WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _vhfFmDial1WaitingForFeedback) == 0)
@@ -1640,10 +1628,9 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref freqBandDialTimeout, ResetSyncTimeout, "ADF Frequency Band Selector dial1Timeout"))
+                        if (IsTimedOut(ref freqBandDialTimeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _adfFrequencyBandWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _adfFrequencyBandWaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _adfFrequencyBandWaitingForFeedback) == 0)
