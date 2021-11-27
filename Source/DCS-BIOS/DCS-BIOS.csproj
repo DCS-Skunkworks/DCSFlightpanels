@@ -38,6 +38,12 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	<AllowedReferenceRelatedFileExtensions>
+		<!-- Prevent default XML and PDB files copied to output in RELEASE. 
+        Only *.allowedextension files will be included, which doesn't exist in my case.
+    -->
+		.allowedextension
+	</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
