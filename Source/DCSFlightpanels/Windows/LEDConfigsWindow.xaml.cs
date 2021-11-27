@@ -19,12 +19,10 @@ namespace DCSFlightpanels.Windows
         private readonly string _description;
         private readonly SaitekPanel _callingPanel;
         private readonly SaitekPanelLEDPosition _saitekPanelLEDPosition;
-        private readonly DCSFPProfile _dcsfpProfile;
 
-        public LEDConfigsWindow(DCSFPProfile dcsfpProfile, string description, SaitekPanelLEDPosition saitekPanelLEDPosition, List<DcsOutputAndColorBinding> colorOutputBindings, SaitekPanel callingPanel)
+        public LEDConfigsWindow(string description, SaitekPanelLEDPosition saitekPanelLEDPosition, List<DcsOutputAndColorBinding> colorOutputBindings, SaitekPanel callingPanel)
         {
             InitializeComponent();
-            _dcsfpProfile = dcsfpProfile;
             _saitekPanelLEDPosition = saitekPanelLEDPosition;
             _callingPanel = callingPanel;
             if (colorOutputBindings != null)
@@ -103,7 +101,7 @@ namespace DCSFlightpanels.Windows
                     panelColor = PanelLEDColor.RED;
                 }
 
-                var dcsBiosOutputTriggerWindow = new DCSBiosOutputTriggerWindow(_dcsfpProfile, "Set hook for color " + panelColor);
+                var dcsBiosOutputTriggerWindow = new DCSBiosOutputTriggerWindow("Set hook for color " + panelColor);
                 if (dcsBiosOutputTriggerWindow.ShowDialog() == true)
                 {
                     _colorOutputBindings.Add(_callingPanel.CreateDcsOutputAndColorBinding(_saitekPanelLEDPosition, panelColor, dcsBiosOutputTriggerWindow.DCSBiosOutput));
@@ -123,7 +121,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 var dcsOutputAndColorBinding = (DcsOutputAndColorBinding)DataGridValues.SelectedItem;
-                var dcsBiosOutputTriggerWindow = new DCSBiosOutputTriggerWindow(_dcsfpProfile, "Set hook for color " + dcsOutputAndColorBinding.LEDColor, dcsOutputAndColorBinding.DCSBiosOutputLED);
+                var dcsBiosOutputTriggerWindow = new DCSBiosOutputTriggerWindow("Set hook for color " + dcsOutputAndColorBinding.LEDColor, dcsOutputAndColorBinding.DCSBiosOutputLED);
                 if (dcsBiosOutputTriggerWindow.ShowDialog() == true)
                 {
                     ((DcsOutputAndColorBinding) DataGridValues.SelectedItem).DCSBiosOutputLED.Copy(dcsBiosOutputTriggerWindow.DCSBiosOutput);

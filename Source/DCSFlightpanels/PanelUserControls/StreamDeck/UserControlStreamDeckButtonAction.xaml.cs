@@ -657,7 +657,7 @@
 
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetProfile(),
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(
                         textBox.Name.Replace("TextBox", string.Empty),
                         textBox.Bill.DCSBIOSBinding.DCSBIOSInputs,
                         textBox.Text,
@@ -667,7 +667,7 @@
                 }
                 else
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetProfile(), textBox.Name.Replace("TextBox", string.Empty), null, true);
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(textBox.Name.Replace("TextBox", string.Empty), null, true);
                 }
 
                 dcsbiosControlsConfigsWindow.ShowDialog();

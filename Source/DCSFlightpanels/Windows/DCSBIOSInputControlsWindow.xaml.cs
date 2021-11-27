@@ -21,15 +21,13 @@
         private readonly string _header;
         private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();
         private string _description;
-        private DCSFPProfile _dcsfpProfile;
         private bool _isDirty = false;
         private bool _showSequenced = false;
         private bool _isSequenced = false;
 
-        public DCSBIOSInputControlsWindow(DCSFPProfile dcsfpProfile, string header, string description, bool showSequenced = false)
+        public DCSBIOSInputControlsWindow(string header, string description, bool showSequenced = false)
         {
             InitializeComponent();
-            _dcsfpProfile = dcsfpProfile;
             _header = header;
             _description = description;
             TextBoxDescription.Text = _description;
@@ -37,10 +35,9 @@
             ShowItems();
         }
 
-        public DCSBIOSInputControlsWindow(DCSFPProfile dcsfpProfile, string header, List<DCSBIOSInput> dcsbiosInputs, string description, bool showSequenced = false)
+        public DCSBIOSInputControlsWindow(string header, List<DCSBIOSInput> dcsbiosInputs, string description, bool showSequenced = false)
         {
             InitializeComponent();
-            _dcsfpProfile = dcsfpProfile;
             if (dcsbiosInputs != null)
             {
                 _dcsbiosInputs = dcsbiosInputs;
@@ -55,7 +52,7 @@
 
         private void DCSBIOSInputControlsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            TextBoxHeader.Text = _header + Environment.NewLine + _dcsfpProfile.Description;
+            TextBoxHeader.Text = _header + Environment.NewLine + DCSFPProfile.ActiveDCSFPProfile.Description;
             SetFormState();
         }
 
@@ -154,7 +151,7 @@
         private void EditControl()
         {
             var dcsBIOSInput = (DCSBIOSInput)DataGridValues.SelectedItem;
-            var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, _header, dcsBIOSInput);
+            var dcsBiosInputWindow = new DCSBiosInputWindow(_header, dcsBIOSInput);
             if (dcsBiosInputWindow.ShowDialog() == true)
             {
                 _dcsbiosInputs.Remove(dcsBIOSInput);
@@ -181,7 +178,7 @@
 
         private void AddNewControl()
         {
-            var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, string.Empty);
+            var dcsBiosInputWindow = new DCSBiosInputWindow(string.Empty);
             dcsBiosInputWindow.ShowDialog();
             if (dcsBiosInputWindow.DialogResult.HasValue && dcsBiosInputWindow.DialogResult.Value)
             {

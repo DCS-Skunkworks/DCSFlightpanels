@@ -35,16 +35,14 @@
         private DCSBIOSOutputFormula _dcsbiosOutputFormula;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
-        private DCSFPProfile _dcsfpProfile;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
 
         private bool _closing = false;
 
-        public DCSBiosOutputFormulaWindow(DCSFPProfile dcsfpProfile, string description, bool userEditsDescription = false)
+        public DCSBiosOutputFormulaWindow(string description, bool userEditsDescription = false)
         {
             InitializeComponent();
-            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _userEditsDescription = userEditsDescription;
             _dcsBiosOutput = new DCSBIOSOutput();
@@ -58,10 +56,9 @@
             BIOSEventHandler.DetachDataListener(this);
         }
 
-        public DCSBiosOutputFormulaWindow(DCSFPProfile dcsfpProfile, string description, DCSBIOSOutput dcsBiosOutput, bool userEditsDescription = false)
+        public DCSBiosOutputFormulaWindow(string description, DCSBIOSOutput dcsBiosOutput, bool userEditsDescription = false)
         {
             InitializeComponent();
-            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _userEditsDescription = userEditsDescription;
             _dcsBiosOutput = dcsBiosOutput;
@@ -70,10 +67,9 @@
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
         }
 
-        public DCSBiosOutputFormulaWindow(DCSFPProfile dcsfpProfile, string description, DCSBIOSOutputFormula dcsBiosOutputFormula, bool userEditsDescription = false)
+        public DCSBiosOutputFormulaWindow(string description, DCSBIOSOutputFormula dcsBiosOutputFormula, bool userEditsDescription = false)
         {
             InitializeComponent();
-            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _userEditsDescription = userEditsDescription;
             _dcsbiosOutputFormula = dcsBiosOutputFormula;

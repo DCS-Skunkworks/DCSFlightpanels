@@ -26,7 +26,7 @@
     {
         private readonly RadioPanelPZ69MiG21Bis _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlMiG21Bis(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlMiG21Bis(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
 

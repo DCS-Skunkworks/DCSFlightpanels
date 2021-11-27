@@ -27,7 +27,7 @@
     {
         private readonly RadioPanelPZ69SRS _radioPanelPZ69SRS;
 
-        public RadioPanelPZ69UserControlSRS(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlSRS(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
 

@@ -33,7 +33,7 @@
         private bool _userControlLoaded;
         private bool _textBoxBillsSet;
 
-        public RadioPanelPZ69UserControlEmulator(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlEmulator(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -192,7 +192,7 @@
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ69(GlobalHandler, this, _radioPanelPZ69, textBox);
+                textBox.Bill = new BillPZ69(this, _radioPanelPZ69, textBox);
             }
             _textBoxBillsSet = true;
         }

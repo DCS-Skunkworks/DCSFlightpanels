@@ -26,7 +26,7 @@
     {
         private readonly RadioPanelPZ69SA342 _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlSA342(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlSA342(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -37,7 +37,7 @@
             _radioPanelPZ69 = new RadioPanelPZ69SA342(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
             _radioPanelPZ69.Attach((IGamingPanelListener)this);
-            LabelAirframe.Content = GlobalHandler.GetProfile() + " Gazelle";
+            LabelAirframe.Content = DCSFPProfile.ActiveDCSFPProfile + " Gazelle";
             //LoadConfiguration();
         }
 

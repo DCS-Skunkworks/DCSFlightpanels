@@ -26,7 +26,7 @@
     {
         private readonly RadioPanelPZ69Ka50 _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlKa50(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlKa50(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;

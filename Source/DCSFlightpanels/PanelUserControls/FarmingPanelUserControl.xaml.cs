@@ -40,7 +40,7 @@
 
 
 
-        public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
@@ -288,7 +288,7 @@
                     continue;
                 }
 
-                textBox.Bill = new BillPFarmingPanel(GlobalHandler, this, _farmingSidePanel, textBox);
+                textBox.Bill = new BillPFarmingPanel(this, _farmingSidePanel, textBox);
             }
             _textBoxBillsSet = true;
         }

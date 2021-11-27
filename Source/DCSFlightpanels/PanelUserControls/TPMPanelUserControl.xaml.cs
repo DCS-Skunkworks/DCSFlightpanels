@@ -35,7 +35,7 @@
 
 
 
-        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -257,7 +257,7 @@
                     continue;
                 }
 
-                textBox.Bill = new BillTPM(GlobalHandler, this, _tpmPanel, textBox);
+                textBox.Bill = new BillTPM(this, _tpmPanel, textBox);
             }
             _textBoxBillsSet = true;
         }

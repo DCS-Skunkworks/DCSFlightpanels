@@ -28,26 +28,23 @@
         private DCSBIOSOutput _dcsBiosOutput;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
-        private DCSFPProfile _dcsfpProfile;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
 
-        public DCSBiosOutputTriggerWindow(DCSFPProfile dcsfpProfile, string description, bool showCriteria = true)
+        public DCSBiosOutputTriggerWindow(string description, bool showCriteria = true)
         {
             InitializeComponent();
             _showCriteria = showCriteria;
-            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _dcsBiosOutput = new DCSBIOSOutput();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
         }
 
-        public DCSBiosOutputTriggerWindow(DCSFPProfile dcsfpProfile, string description, DCSBIOSOutput dcsBiosOutput, bool showCriteria = true)
+        public DCSBiosOutputTriggerWindow(string description, DCSBIOSOutput dcsBiosOutput, bool showCriteria = true)
         {
             InitializeComponent();
             _showCriteria = showCriteria;
-            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _dcsBiosOutput = dcsBiosOutput;
             DCSBIOSControlLocator.LoadControls();

@@ -38,7 +38,7 @@
         private bool _textBoxBillsSet;
 
 
-        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -204,7 +204,7 @@
             {
                 if (textBox.Bill == null && !textBox.Equals(TextBoxLogPZ70))
                 {
-                    textBox.Bill = new BillPZ70(GlobalHandler, this, _multiPanelPZ70, textBox);
+                    textBox.Bill = new BillPZ70(this, _multiPanelPZ70, textBox);
                 }
                 _textBoxBillsSet = true;
             }
@@ -564,17 +564,17 @@
                     {
                         if (dcsbiosBindingLCDPZ70.UseFormula)
                         {
-                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
+                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
                             break;
                         }
-                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
+                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
                         break;
                     }
                 }
 
                 if (dcsBiosOutputFormulaWindow == null)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description);
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description);
                 }
 
                 dcsBiosOutputFormulaWindow.ShowDialog();

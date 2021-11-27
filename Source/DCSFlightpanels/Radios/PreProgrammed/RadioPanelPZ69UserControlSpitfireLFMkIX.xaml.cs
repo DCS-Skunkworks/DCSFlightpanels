@@ -26,7 +26,7 @@
     {
         private readonly RadioPanelPZ69SpitfireLFMkIX _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlSpitfireLFMkIX(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlSpitfireLFMkIX(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
