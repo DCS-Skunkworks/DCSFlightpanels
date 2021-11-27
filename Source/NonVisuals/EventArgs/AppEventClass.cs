@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClassLibraryCommon;
 using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 namespace NonVisuals.EventArgs
 {
@@ -65,7 +66,7 @@ namespace NonVisuals.EventArgs
 
         public static void SettingsReadFromFile(object sender, GenericPanelBinding genericPanelBinding)
         {
-            OnSettingsReadFromFile(sender, new PanelBindingReadFromFileEventArgs { PanelBinding = genericPanelBinding });
+            OnSettingsReadFromFile?.Invoke(sender, new PanelBindingReadFromFileEventArgs { PanelBinding = genericPanelBinding });
         }
 
         public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
@@ -135,6 +136,136 @@ namespace NonVisuals.EventArgs
         {
             OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelBindingReadFromFile;
             OnAirframeSelected -= gamingPanelSettingsListener.ProfileSelected;
+        }
+
+
+
+        /*
+         * GamingPanel triggered events
+         */
+
+        /*
+         * Used by UserControls to show switches that has been manipulated.
+         * Shows the actions in the Log textbox of the UserControl.
+         */
+        public delegate void SwitchesHasBeenChangedEventHandler(object sender, SwitchesChangedEventArgs e);
+
+        public static event SwitchesHasBeenChangedEventHandler OnSwitchesChangedA;
+
+        public static void SwitchesChanged(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum, HashSet<object> hashSet)
+        {
+            OnSwitchesChangedA?.Invoke(sender, new SwitchesChangedEventArgs { HidInstance = hidInstanceId, GamingPanelEnum = gamingPanelEnum, Switches = hashSet });
+        }
+
+        /*
+         * Used for notifying when a device has been attached.
+         * Not used atm.
+         */
+        public delegate void DeviceAttachedEventHandler(object sender, PanelEventArgs e);
+
+        public static event DeviceAttachedEventHandler OnDeviceAttachedA;
+        public static void DeviceAttached(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
+        {
+            // IsAttached = true;
+            OnDeviceAttachedA?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
+        }
+
+
+        /*
+         * Used for notifying when a device has been detached.
+         * Not used atm.
+         */
+        public delegate void DeviceDetachedEventHandler(object sender, PanelEventArgs e);
+
+        public static event DeviceDetachedEventHandler OnDeviceDetachedA;
+        public static void DeviceDetached(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
+        {
+            // IsAttached = false;
+            OnDeviceDetachedA?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
+        }
+
+        /*
+         * Used by some UserControls to know when panels have loaded their configurations.
+         * Used by MainWindow to SetFormstate().
+         */
+        public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelEventArgs e);
+
+        public static event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
+        public static void SettingsApplied(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
+        {
+            OnSettingsAppliedA?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
+        }
+
+
+        /*
+         * Used by some UserControls refresh UI when panel has cleared all its settings.
+         */
+        public delegate void SettingsClearedEventHandler(object sender, PanelEventArgs e);
+
+        public static event SettingsClearedEventHandler OnSettingsClearedA;
+        public static void SettingsCleared(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
+        {
+            OnSettingsClearedA?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
+        }
+
+
+        /*
+         * DCS-BIOS has a feature to detect if any updates has been missed.
+         * It is not used as such since DCS-BIOS has been working so well.
+         */
+        public delegate void UpdatesHasBeenMissedEventHandler(object sender, DCSBIOSUpdatesMissedEventArgs e);
+
+        public static event UpdatesHasBeenMissedEventHandler OnUpdatesHasBeenMissed;
+
+        public static void UpdatesMissed(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum, int missedUpdateCount)
+        {
+            OnUpdatesHasBeenMissed?.Invoke(
+                sender,
+                new DCSBIOSUpdatesMissedEventArgs { HidInstance = hidInstanceId, GamingPanelEnum = gamingPanelEnum, Count = missedUpdateCount });
+        }
+
+        // For those that wants to listen to this panel
+        public static void AttachGamingPanelListener(IGamingPanelListener gamingPanelListener)
+        {
+            OnDeviceAttachedA += gamingPanelListener.DeviceAttached;
+            OnSwitchesChangedA += gamingPanelListener.SwitchesChanged;
+            OnSettingsAppliedA += gamingPanelListener.SettingsApplied;
+            OnSettingsClearedA += gamingPanelListener.SettingsCleared;
+            OnUpdatesHasBeenMissed += gamingPanelListener.UpdatesHasBeenMissed;
+        }
+        
+        public static void DetachGamingPanelListener(IGamingPanelListener gamingPanelListener)
+        {
+            OnDeviceAttachedA -= gamingPanelListener.DeviceAttached;
+            OnSwitchesChangedA -= gamingPanelListener.SwitchesChanged;
+            OnSettingsAppliedA -= gamingPanelListener.SettingsApplied;
+            OnSettingsClearedA -= gamingPanelListener.SettingsCleared;
+            OnUpdatesHasBeenMissed -= gamingPanelListener.UpdatesHasBeenMissed;
+        }
+
+
+
+        /*
+         * Used by those UserControls who's panels can show LED lights.
+         * Used to show the same color in the UserControl as the physical panels.
+         */
+        public delegate void LedLightChangedEventHandler(object sender, LedLightChangeEventArgs e);
+
+        public static event LedLightChangedEventHandler OnLedLightChangedA;
+
+        public static void LedLightChanged(object sender, string hidInstanceId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        {
+            OnLedLightChangedA?.Invoke(sender, new LedLightChangeEventArgs { UniqueId = hidInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
+        }
+
+        public static void AttachLEDLightListener(IGamingPanelListener gamingPanelListener)
+        {
+            OnLedLightChangedA += gamingPanelListener.LedLightChanged;
+        }
+
+        public static void DetachLEDLightListener(IGamingPanelListener gamingPanelListener)
+        {
+            OnLedLightChangedA -= gamingPanelListener.LedLightChanged;
         }
     }
 }

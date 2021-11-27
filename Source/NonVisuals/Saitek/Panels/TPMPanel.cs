@@ -108,7 +108,7 @@
             }
 
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-            SettingsApplied();
+            AppEventClass.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()

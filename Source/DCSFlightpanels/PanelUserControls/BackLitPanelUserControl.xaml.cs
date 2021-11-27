@@ -44,7 +44,7 @@
 
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
-            _backlitPanelBIP.Attach((IGamingPanelListener)this);
+            AppEventClass.AttachGamingPanelListener(this);
         }
 
         private bool _disposed;
@@ -55,7 +55,8 @@
             {
                 if (disposing)
                 {
-                    _backlitPanelBIP.Dispose();
+                    _backlitPanelBIP.Dispose(); 
+                    AppEventClass.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
@@ -104,7 +105,7 @@
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
 
         public void SettingsCleared(object sender, PanelEventArgs e)
         {

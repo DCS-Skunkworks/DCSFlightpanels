@@ -111,7 +111,7 @@
             }
 
             _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
-            SettingsApplied();
+            AppEventClass.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()

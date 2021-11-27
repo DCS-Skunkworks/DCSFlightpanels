@@ -85,6 +85,7 @@
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
 
             AppEventClass.AttachSettingsMonitoringListener(this);
+            AppEventClass.AttachSettingsModified(this);
         }
         
         #region IDisposable Support
@@ -104,6 +105,7 @@
                     _exceptionTimer.Dispose();
                     _dcsBios?.Dispose();
                     AppEventClass.DetachSettingsMonitoringListener(this);
+                    AppEventClass.DetachSettingsModified(this);
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -477,7 +479,6 @@
          */
         public void Attach(GamingPanel gamingPanel)
         {
-            AppEventClass.AttachSettingsModified(this);
         }
 
         public void Detach(GamingPanel gamingPanel)
@@ -944,7 +945,7 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {

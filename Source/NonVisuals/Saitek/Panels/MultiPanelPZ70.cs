@@ -186,7 +186,7 @@
 
             SettingsLoading = false;
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
-            SettingsApplied();
+            AppEventClass.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()

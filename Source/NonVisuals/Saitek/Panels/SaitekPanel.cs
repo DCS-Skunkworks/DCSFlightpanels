@@ -93,7 +93,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    UISwitchesChanged(hashSet);
+                    AppEventClass.SwitchesChanged(this, HIDSkeletonBase.InstanceId, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
@@ -106,7 +106,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    UISwitchesChanged(hashSet);
+                    AppEventClass.SwitchesChanged(this, HIDSkeletonBase.InstanceId, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
@@ -119,7 +119,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    UISwitchesChanged(hashSet);
+                    AppEventClass.SwitchesChanged(this, HIDSkeletonBase.InstanceId, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
@@ -239,35 +239,6 @@
         private static bool FlagValue(byte[] currentValue, ISaitekPanelKnob saitekPanelKnob)
         {
             return (currentValue[saitekPanelKnob.Group] & saitekPanelKnob.Mask) > 0;
-        }
-
-
-
-        /*
-         * Used by those UserControls who's panels can show LED lights.
-         * Used to show the same color in the UserControl as the physical panels.
-         */
-        public delegate void LedLightChangedEventHandler(object sender, LedLightChangeEventArgs e);
-
-        public event LedLightChangedEventHandler OnLedLightChangedA;
-
-        protected virtual void LedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
-        {
-            OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs { UniqueId = HIDInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
-        }
-         
-        // For those that wants to listen to this panel
-        public override void Attach(IGamingPanelListener gamingPanelListener)
-        {
-            OnLedLightChangedA += gamingPanelListener.LedLightChanged;
-            base.Attach(gamingPanelListener);
-        }
-
-        // For those that wants to listen to this panel
-        public override void Detach(IGamingPanelListener gamingPanelListener)
-        {
-            OnLedLightChangedA -= gamingPanelListener.LedLightChanged;
-            base.Detach(gamingPanelListener);
         }
     }
 

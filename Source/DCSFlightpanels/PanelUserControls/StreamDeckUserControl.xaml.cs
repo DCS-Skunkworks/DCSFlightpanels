@@ -35,8 +35,7 @@
             // no worky worky for this library hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
-            _streamDeckPanel.Attach((IGamingPanelListener)this);
-
+            
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
 
@@ -76,7 +75,7 @@
             EventHandlers.AttachStreamDeckListener(_uiButtonGrid);
             EventHandlers.AttachStreamDeckConfigListener(_uiButtonGrid);
             EventHandlers.AttachStreamDeckListener(this);
-            
+            AppEventClass.AttachGamingPanelListener(this);
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
         }
@@ -96,6 +95,7 @@
                     EventHandlers.DetachStreamDeckListener(_uiButtonGrid);
                     EventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
                     EventHandlers.DetachStreamDeckListener(this);
+                    AppEventClass.DetachGamingPanelListener(this);
                     _streamDeckPanel.Dispose();
                 }
 
@@ -174,7 +174,7 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {

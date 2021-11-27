@@ -40,7 +40,7 @@
             _radioPanelPZ69SRS = new RadioPanelPZ69SRS(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo, hidSkeleton);
             _radioPanelPZ69SRS.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
             _radioPanelPZ69SRS.SmallFreqStepping = Settings.Default.SRSSmallFreqStepping;
-            _radioPanelPZ69SRS.Attach((IGamingPanelListener)this);
+            AppEventClass.AttachGamingPanelListener(this);
         }
 
         private bool _disposed;
@@ -52,6 +52,7 @@
                 if (disposing)
                 {
                     _radioPanelPZ69SRS.Dispose();
+                    AppEventClass.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
@@ -84,7 +85,7 @@
 
         public void ProfileSelected(object sender, AirframeEventArgs e) { }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {

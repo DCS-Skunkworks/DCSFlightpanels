@@ -158,7 +158,7 @@
                 }
             }
 
-            SettingsApplied();
+            AppEventClass.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
         }
 

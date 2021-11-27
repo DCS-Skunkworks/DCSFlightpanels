@@ -50,7 +50,7 @@
             ParentTabItem = parentTabItem;
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
-            _switchPanelPZ55.Attach((IGamingPanelListener)this);
+            AppEventClass.AttachGamingPanelListener(this);
             _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
             _imageArrayUpper[1] = ImagePZ55LEDGreenUpper;
             _imageArrayUpper[2] = ImagePZ55LEDYellowUpper;
@@ -77,6 +77,7 @@
                 if (disposing)
                 {
                     _switchPanelPZ55.Dispose();
+                    AppEventClass.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
@@ -181,7 +182,7 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
