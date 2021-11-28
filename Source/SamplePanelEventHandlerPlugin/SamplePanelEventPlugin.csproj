@@ -29,8 +29,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-	<AllowedReferenceRelatedFileExtensions>
-		<!-- Prevent default XML and PDB files copied to output in RELEASE. 
+    <AllowedReferenceRelatedFileExtensions>
+      <!-- Prevent default XML and PDB files copied to output in RELEASE. 
         Only *.allowedextension files will be included, which doesn't exist in my case.
     -->
 		.allowedextension
@@ -53,8 +53,8 @@
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-	<AllowedReferenceRelatedFileExtensions>
-		<!-- Prevent default XML and PDB files copied to output in RELEASE. 
+    <AllowedReferenceRelatedFileExtensions>
+      <!-- Prevent default XML and PDB files copied to output in RELEASE. 
         Only *.allowedextension files will be included, which doesn't exist in my case.
     -->
 		.allowedextension
@@ -87,13 +87,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MEF\MEF.csproj">
       <Project>{0c0196b3-2442-4838-a587-c51660136f9c}</Project>
       <Name>MEF</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
