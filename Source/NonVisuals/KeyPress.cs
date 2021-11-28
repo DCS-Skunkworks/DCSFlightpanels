@@ -173,9 +173,9 @@
             var breakLengthConsumed = 0;
 
             /*
-                            //keybd_event
-                            http://msdn.microsoft.com/en-us/library/windows/desktop/ms646304%28v=vs.85%29.aspx
-                        */
+                //keybd_event
+                http://msdn.microsoft.com/en-us/library/windows/desktop/ms646304%28v=vs.85%29.aspx
+            */
             while (breakLengthConsumed < (int)breakLength)
             {
                 Thread.Sleep(SLEEP_VALUE);
@@ -206,6 +206,10 @@
                         }
                     }
                 }
+
+                // Delay between modifiers and normal keys
+                // Added 2021-11-28 to fix problem with combination of certain keypresses like lShift + G in IL-2
+                Thread.Sleep(millisecondsTimeout: 32); 
 
                 // Press normal keys
                 for (var i = 0; i < virtualKeyCodes.Count(); i++)
