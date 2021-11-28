@@ -12,62 +12,21 @@
 
     public class BillStreamDeckAction : BillBaseInputStreamDeck
     {
-        private StreamDeckButtonOnOff _button;
         private ActionTypeDCSBIOS _dcsbiosBindingStreamDeck;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
-        private ActionTypeLayer _actionTypeLayer;
         private StreamDeckPanel _streamDeckPanel;
 
+        public StreamDeckButtonOnOff Key { get; set; }
+        public ActionTypeLayer StreamDeckLayerTarget { get; set; }
 
-        public override void Clear()
+        public BIPLinkStreamDeck BIPLink
         {
-            KeyPress = null;
-            OSCommandObject = null;
-            _button = null;
-            _dcsbiosBindingStreamDeck = null;
-            _bipLinkStreamDeck = null;
-            TextBox.Background = Brushes.LightSteelBlue;
-            TextBox.Text = string.Empty;
-        }
-
-        public BillStreamDeckAction(TextBox textBox, StreamDeckButtonOnOff button, StreamDeckPanel streamDeckPanel)
-        {
-            TextBox = textBox;
-            _button = button;
-            _streamDeckPanel = streamDeckPanel;
-        }
-
-        public override bool ContainsDCSBIOS()
-        {
-            return _dcsbiosBindingStreamDeck != null;// && _dcsbiosInputs.Count > 0;
-        }
-
-        public bool ContainsStreamDeckLayer()
-        {
-            return _actionTypeLayer != null;
-        }
-
-        public override bool ContainsBIPLink()
-        {
-            return _bipLinkStreamDeck != null && _bipLinkStreamDeck.BIPLights.Count > 0;
-        }
-
-        public override bool IsEmpty()
-        {
-            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && 
-                   (_dcsbiosBindingStreamDeck?.DCSBIOSInputs == null || _dcsbiosBindingStreamDeck.DCSBIOSInputs.Count == 0) && 
-                   (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) &&
-                   _actionTypeLayer == null;
-        }
-
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
-        {
-            if (_dcsbiosBindingStreamDeck == null)
+            get => _bipLinkStreamDeck;
+            set
             {
-                _dcsbiosBindingStreamDeck = new ActionTypeDCSBIOS(_streamDeckPanel);
+                _bipLinkStreamDeck = value;
+                TextBox.Background = _bipLinkStreamDeck != null ? Brushes.Bisque : Brushes.White;
             }
-
-            _dcsbiosBindingStreamDeck.DCSBIOSInputs = dcsBiosInputs;
         }
 
         public ActionTypeDCSBIOS DCSBIOSBinding
@@ -82,14 +41,7 @@
                 _dcsbiosBindingStreamDeck = value;
                 if (_dcsbiosBindingStreamDeck != null)
                 {
-                    if (string.IsNullOrEmpty(_dcsbiosBindingStreamDeck.Description))
-                    {
-                        TextBox.Text = "DCS-BIOS";
-                    }
-                    else
-                    {
-                        TextBox.Text = _dcsbiosBindingStreamDeck.Description;
-                    }
+                    TextBox.Text = string.IsNullOrEmpty(_dcsbiosBindingStreamDeck.Description) ? "DCS-BIOS" : _dcsbiosBindingStreamDeck.Description;
                 }
                 else
                 {
@@ -98,33 +50,55 @@
             }
         }
 
-        public BIPLinkStreamDeck BIPLink
+        public BillStreamDeckAction(TextBox textBox, StreamDeckButtonOnOff button, StreamDeckPanel streamDeckPanel)
         {
-            get => _bipLinkStreamDeck;
-            set
-            {
-                _bipLinkStreamDeck = value;
-                if (_bipLinkStreamDeck != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.LightSteelBlue;
-                }
-            }
-        }
-        
-        public StreamDeckButtonOnOff Key
-        {
-            get => _button;
-            set => _button = value;
+            TextBox = textBox;
+            Key = button;
+            _streamDeckPanel = streamDeckPanel;
         }
 
-        public ActionTypeLayer StreamDeckLayerTarget
+        public override void Clear()
         {
-            get => _actionTypeLayer;
-            set => _actionTypeLayer = value;
+            KeyPress = null;
+            OSCommandObject = null;
+            Key = null;
+            _dcsbiosBindingStreamDeck = null;
+            _bipLinkStreamDeck = null;
+            TextBox.Background = Brushes.LightSteelBlue;
+            TextBox.Text = string.Empty;
+        }
+
+        public override bool ContainsDCSBIOS()
+        {
+            return _dcsbiosBindingStreamDeck != null;
+        }
+
+        public bool ContainsStreamDeckLayer()
+        {
+            return StreamDeckLayerTarget != null;
+        }
+
+        public override bool ContainsBIPLink()
+        {
+            return _bipLinkStreamDeck != null && _bipLinkStreamDeck.BIPLights.Count > 0;
+        }
+
+        public override bool IsEmpty()
+        {
+            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && 
+                   (_dcsbiosBindingStreamDeck?.DCSBIOSInputs == null || _dcsbiosBindingStreamDeck.DCSBIOSInputs.Count == 0) && 
+                   (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) &&
+                   StreamDeckLayerTarget == null;
+        }
+
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        {
+            if (_dcsbiosBindingStreamDeck == null)
+            {
+                _dcsbiosBindingStreamDeck = new ActionTypeDCSBIOS(_streamDeckPanel);
+            }
+
+            _dcsbiosBindingStreamDeck.DCSBIOSInputs = dcsBiosInputs;
         }
     }
 }

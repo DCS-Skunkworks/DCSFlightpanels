@@ -24,82 +24,15 @@
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor; 
         private DCSBIOSDecoder _dcsbiosDecoder;
         private string _imageFileRelativePath;
-        private StreamDeckPanel _streamDeckPanel;
+        
+        public string BackgroundHex 
+        { 
+            get { return $"#{_backgroundColor.R:X2}{_backgroundColor.G:X2}{_backgroundColor.B:X2}"; } 
+        }
 
         public BitmapImage SelectedImage { get; set; }
-
         public BitmapImage DeselectedImage { get; set; }
-
-        public override void Clear()
-        {
-            _streamDeckTargetLayer = null;
-            _bipLinkStreamDeck = null;
-            Button = null;
-            _textFont = SettingsManager.DefaultFont;
-            _fontColor = SettingsManager.DefaultFontColor;
-            _backgroundColor = SettingsManager.DefaultBackgroundColor;
-            _dcsbiosDecoder = null;
-            _textFont = SettingsManager.DefaultFont;
-
-            if (TextBox != null)
-            {
-                TextBox.Background = Brushes.LightSteelBlue;
-                TextBox.Text = string.Empty;
-            }
-            _imageFileRelativePath = string.Empty;
-        }
-
-        public override bool IsEmpty()
-        {
-            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && _streamDeckTargetLayer == null;
-        }
-
-
-        public bool ContainsTextFace()
-        {
-            return _textFont != null && !string.IsNullOrEmpty(TextBox.Text);
-        }
-
-        public bool ContainsImageFace()
-        {
-            return !string.IsNullOrEmpty(ImageFileRelativePath);
-        }
-
-        public override bool ContainsDCSBIOS()
-        {
-            return _dcsbiosDecoder != null;
-        }
-
-        public Font TextFont
-        {
-            get => _textFont;
-            set
-            {
-                _textFont = value;
-                if (_textFont == null)
-                {
-                    return;
-                }
-                TextBox.FontFamily = new System.Windows.Media.FontFamily(_textFont.Name);
-                TextBox.FontWeight = _textFont.Bold ? FontWeights.Bold : FontWeights.Regular;
-                TextBox.FontSize = _textFont.Size * 96.0 / 72.0;
-                TextBox.FontStyle = _textFont.Italic ? FontStyles.Italic : FontStyles.Normal;
-                var textDecorationCollection = new TextDecorationCollection();
-                if (_textFont.Underline) textDecorationCollection.Add(TextDecorations.Underline);
-                if (_textFont.Strikeout) textDecorationCollection.Add(TextDecorations.Strikethrough);
-                TextBox.TextDecorations = textDecorationCollection;
-            }
-        }
-
-        public bool ContainsStreamDeckLayer()
-        {
-            return _streamDeckTargetLayer != null;
-        }
-
-        public override bool ContainsBIPLink()
-        {
-            return _bipLinkStreamDeck != null && _bipLinkStreamDeck.BIPLights.Count > 0;
-        }
+        public StreamDeckPanel StreamDeckPanelInstance { get; set; }
 
         public Color FontColor
         {
@@ -125,21 +58,26 @@
 
         public int OffsetY { get; set; } = SettingsManager.OffsetX;
 
-
-        public int ButtonNumber()
+        public Font TextFont
         {
-            if (StreamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            get => _textFont;
+            set
             {
-                return 0;
+                _textFont = value;
+                if (_textFont == null)
+                {
+                    return;
+                }
+                TextBox.FontFamily = new System.Windows.Media.FontFamily(_textFont.Name);
+                TextBox.FontWeight = _textFont.Bold ? FontWeights.Bold : FontWeights.Regular;
+                TextBox.FontSize = _textFont.Size * 96.0 / 72.0;
+                TextBox.FontStyle = _textFont.Italic ? FontStyles.Italic : FontStyles.Normal;
+                var textDecorationCollection = new TextDecorationCollection();
+                if (_textFont.Underline) textDecorationCollection.Add(TextDecorations.Underline);
+                if (_textFont.Strikeout) textDecorationCollection.Add(TextDecorations.Strikethrough);
+                TextBox.TextDecorations = textDecorationCollection;
             }
-
-            return int.Parse(StreamDeckButtonName.ToString().Replace("BUTTON", string.Empty));
-
         }
-        
-        public string BackgroundHex => "#" + _backgroundColor.R.ToString("X2") + _backgroundColor.G.ToString("X2") + _backgroundColor.B.ToString("X2");
-
-
 
         public DCSBIOSDecoder DCSBIOSDecoder
         {
@@ -162,7 +100,7 @@
                 }
             }
         }
-        
+
         public string ImageFileRelativePath
         {
             get => _imageFileRelativePath;
@@ -173,11 +111,62 @@
             }
         }
 
-        public StreamDeckPanel StreamDeckPanelInstance
+        public override void Clear()
         {
-            get => _streamDeckPanel;
-            set => _streamDeckPanel = value;
+            _streamDeckTargetLayer = null;
+            _bipLinkStreamDeck = null;
+            Button = null;
+            _textFont = SettingsManager.DefaultFont;
+            _fontColor = SettingsManager.DefaultFontColor;
+            _backgroundColor = SettingsManager.DefaultBackgroundColor;
+            _dcsbiosDecoder = null;
+            _textFont = SettingsManager.DefaultFont;
+
+            if (TextBox != null)
+            {
+                TextBox.Background = Brushes.LightSteelBlue;
+                TextBox.Text = string.Empty;
+            }
+            _imageFileRelativePath = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && _streamDeckTargetLayer == null;
+        }
+
+        public bool ContainsTextFace()
+        {
+            return _textFont != null && !string.IsNullOrEmpty(TextBox.Text);
+        }
+
+        public bool ContainsImageFace()
+        {
+            return !string.IsNullOrEmpty(ImageFileRelativePath);
+        }
+
+        public override bool ContainsDCSBIOS()
+        {
+            return _dcsbiosDecoder != null;
+        }
+
+        public bool ContainsStreamDeckLayer()
+        {
+            return _streamDeckTargetLayer != null;
+        }
+
+        public override bool ContainsBIPLink()
+        {
+            return _bipLinkStreamDeck != null && _bipLinkStreamDeck.BIPLights.Count > 0;
+        }
+
+        public int ButtonNumber()
+        {
+            if (StreamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            {
+                return 0;
+            }
+            return int.Parse(StreamDeckButtonName.ToString().Replace("BUTTON", string.Empty));
         }
     }
-
 }

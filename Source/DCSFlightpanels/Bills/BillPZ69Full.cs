@@ -8,9 +8,7 @@
     using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
 
-
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
 
@@ -19,30 +17,13 @@
         private BIPLinkPZ69 _bipLinkPZ69;
         private DCSBIOSActionBindingPZ69 _dcsbiosBindingPZ69;
 
-        public BillPZ69Full(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
-        {
-            SetContextMenu();
-        }
-
-        protected override void ClearDCSBIOSFromBill()
-        {
-            DCSBIOSBinding = null;
-        }
-
         public override BIPLink BipLink
         {
             get => _bipLinkPZ69;
             set
             {
                 _bipLinkPZ69 = (BIPLinkPZ69)value;
-                if (_bipLinkPZ69 != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.White;
-                }
+                TextBox.Background = _bipLinkPZ69 != null ? Brushes.Bisque : Brushes.White;
             }
         }
 
@@ -50,12 +31,7 @@
         {
             get
             {
-                if (ContainsDCSBIOS())
-                {
-                    return _dcsbiosBindingPZ69.DCSBIOSInputs;
-                }
-
-                return null;
+                return ContainsDCSBIOS() ? _dcsbiosBindingPZ69.DCSBIOSInputs : null;
             }
             set
             {
@@ -78,14 +54,7 @@
                 _dcsbiosBindingPZ69 = (DCSBIOSActionBindingPZ69)value;
                 if (_dcsbiosBindingPZ69 != null)
                 {
-                    if (string.IsNullOrEmpty(_dcsbiosBindingPZ69.Description))
-                    {
-                        TextBox.Text = "DCS-BIOS";
-                    }
-                    else
-                    {
-                        TextBox.Text = _dcsbiosBindingPZ69.Description;
-                    }
+                    TextBox.Text = string.IsNullOrEmpty(_dcsbiosBindingPZ69.Description) ? "DCS-BIOS" : _dcsbiosBindingPZ69.Description;
                 }
                 else
                 {
@@ -94,9 +63,19 @@
             }
         }
 
+        public BillPZ69Full(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
+        {
+            SetContextMenu();
+        }
+
+        protected override void ClearDCSBIOSFromBill()
+        {
+            DCSBIOSBinding = null;
+        }
+
         public override bool ContainsDCSBIOS()
         {
-            return _dcsbiosBindingPZ69 != null;// && _dcsbiosInputs.Count > 0;
+            return _dcsbiosBindingPZ69 != null;
         }
 
         public override bool ContainsBIPLink()
