@@ -806,28 +806,24 @@
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "UHF dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "UHF dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "UHF dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "UHF dial4Timeout"))
+                        if (IsTimedOut(ref dial4Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial4WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _uhfDial1WaitingForFeedback) == 0)
@@ -943,7 +939,7 @@
                 Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
         
         private void SendVUHFToDCSBIOS()
@@ -1008,28 +1004,24 @@
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VUHF dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vuhfDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vuhfDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VUHF dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vuhfDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vuhfDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "VUHF dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vuhfDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vuhfDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "VUHF dial4Timeout"))
+                        if (IsTimedOut(ref dial4Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vuhfDial4WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vuhfDial4WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _vuhfDial1WaitingForFeedback) == 0)
@@ -1145,7 +1137,7 @@
                 Interlocked.Exchange(ref _vuhfThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
 
@@ -1189,22 +1181,19 @@
                     do
                     {
 
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "TACAN dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _rioLinkHundredsWaitingForFeedback, 0);
+                           ResetWaitingForFeedBack(ref _rioLinkHundredsWaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _rioLinkTensWaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _rioLinkOnesWaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _rioLinkHundredsWaitingForFeedback) == 0)
@@ -1299,7 +1288,7 @@
                 Interlocked.Exchange(ref _rioLink4ThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
 
@@ -1356,22 +1345,19 @@
                     do
                     {
 
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "TACAN dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _pilotTacanTensWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _pilotTacanTensWaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _pilotTacanOnesWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _pilotTacanOnesWaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _pilotTacanXYWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _pilotTacanXYWaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _pilotTacanTensWaitingForFeedback) == 0)
@@ -1471,7 +1457,7 @@
                 Interlocked.Exchange(ref _pilotTacanThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
 
@@ -1512,22 +1498,19 @@
                     do
                     {
 
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "TACAN dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _rioTacanTensWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _rioTacanTensWaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _rioTacanOnesWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _rioTacanOnesWaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _rioTacanXYWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _rioTacanXYWaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _rioTacanTensWaitingForFeedback) == 0)
@@ -1627,7 +1610,7 @@
                 Interlocked.Exchange(ref _rioTacanThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void ShowFrequenciesOnPanel()
@@ -1960,7 +1943,7 @@
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private string GetUHFCockpitFrequencyAsString()
@@ -2833,7 +2816,7 @@
                 }
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             ShowFrequenciesOnPanel();
         }
 
@@ -3033,7 +3016,7 @@
         {
             lock (LockLCDUpdateObject)
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 foreach (var radioPanelKnobObject in hashSet)
                 {
                     var radioPanelKnob = (RadioPanelKnobF14B)radioPanelKnobObject;

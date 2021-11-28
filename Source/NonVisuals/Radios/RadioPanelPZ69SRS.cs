@@ -116,7 +116,7 @@
                 _upperGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentUpperRadioMode, true);
                 _lowerMainFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentLowerRadioMode);
                 _lowerGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentLowerRadioMode, true);
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
@@ -660,7 +660,7 @@
                 logger.Error(ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 

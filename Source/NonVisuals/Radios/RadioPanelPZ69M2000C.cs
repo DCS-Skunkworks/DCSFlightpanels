@@ -192,7 +192,7 @@
                         if (tmp != _vhfPresetCockpitDialPos)
                         {
                             Debug.WriteLine(_vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data));
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -206,7 +206,7 @@
                         _uhfPresetCockpitDialPos = _uhfDcsbiosOutputPresetDial.GetUIntValue(e.Data) + 1;
                         if (tmp != _uhfPresetCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -220,7 +220,7 @@
                         _tacanTensCockpitDialPos = _tacanDcsbiosOutputDialTens.GetUIntValue(e.Data);
                         if (tmp != _tacanTensCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -234,7 +234,7 @@
                         _tacanOnesCockpitDialPos = _tacanDcsbiosOutputDialOnes.GetUIntValue(e.Data);
                         if (tmp != _tacanOnesCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -248,7 +248,7 @@
                         _tacanModeSelectCockpitDialPos = _tacanDcsbiosOutputDialModeSelect.GetUIntValue(e.Data);
                         if (tmp != _tacanModeSelectCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -262,7 +262,7 @@
                         _tacanXYSelectCockpitDialPos = _tacanDcsbiosOutputDialXYSelect.GetUIntValue(e.Data);
                         if (tmp != _tacanXYSelectCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -276,7 +276,7 @@
                         _vorDecimalsCockpitDialPos = _vorDcsbiosOutputDialDecimals.GetUIntValue(e.Data);
                         if (tmp != _vorDecimalsCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -290,7 +290,7 @@
                         _vorOnesCockpitDialPos = _vorDcsbiosOutputDialOnes.GetUIntValue(e.Data);
                         if (tmp != _vorOnesCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -304,7 +304,7 @@
                         _vorPowerCockpitDialPos = _vorDcsbiosOutputDialPower.GetUIntValue(e.Data);
                         if (tmp != _vorPowerCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -318,7 +318,7 @@
                         _vorTestCockpitDialPos = _vorDcsbiosOutputDialTest.GetUIntValue(e.Data);
                         if (tmp != _vorTestCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -414,7 +414,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -1201,7 +1201,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 
