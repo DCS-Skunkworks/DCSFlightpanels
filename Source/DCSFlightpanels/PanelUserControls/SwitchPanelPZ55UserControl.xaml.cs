@@ -42,7 +42,7 @@
 
 
 
-        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
@@ -50,7 +50,7 @@
             ParentTabItem = parentTabItem;
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
-            _switchPanelPZ55.Attach((IGamingPanelListener)this);
+            AppEventClass.AttachGamingPanelListener(this);
             _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
             _imageArrayUpper[1] = ImagePZ55LEDGreenUpper;
             _imageArrayUpper[2] = ImagePZ55LEDYellowUpper;
@@ -77,6 +77,7 @@
                 if (disposing)
                 {
                     _switchPanelPZ55.Dispose();
+                    AppEventClass.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
@@ -181,7 +182,7 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
@@ -462,7 +463,7 @@
                 {
                     position = SwitchPanelPZ55LEDPosition.RIGHT;
                 }
-                var ledConfigsWindow = new LEDConfigsWindow(GlobalHandler.GetProfile(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
+                var ledConfigsWindow = new LEDConfigsWindow( "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position

@@ -26,7 +26,7 @@
     {
         private readonly RadioPanelPZ69SA342 _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlSA342(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlSA342(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -36,8 +36,8 @@
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69SA342(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
-            _radioPanelPZ69.Attach((IGamingPanelListener)this);
-            LabelAirframe.Content = GlobalHandler.GetProfile() + " Gazelle";
+            AppEventClass.AttachGamingPanelListener(this);
+            LabelAirframe.Content = DCSFPProfile.ActiveDCSFPProfile + " Gazelle";
             //LoadConfiguration();
         }
 
@@ -50,6 +50,7 @@
                 if (disposing)
                 {
                     _radioPanelPZ69.Dispose();
+                    AppEventClass.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
@@ -82,7 +83,7 @@
 
         public void ProfileSelected(object sender, AirframeEventArgs e) { }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {

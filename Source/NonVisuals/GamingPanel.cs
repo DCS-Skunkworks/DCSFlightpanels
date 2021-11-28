@@ -34,7 +34,7 @@
         public abstract void Startup();
 
         public abstract void Identify();
-        
+
         public abstract void ClearSettings(bool setIsDirty = false);
 
         public abstract void ImportSettings(GenericPanelBinding genericPanelBinding);
@@ -145,18 +145,13 @@
                     else if (newCount - _count != 1)
                     {
                         // Not good
-                        if (OnUpdatesHasBeenMissed != null)
-                        {
-                            OnUpdatesHasBeenMissed(
-                                this,
-                                new DCSBIOSUpdatesMissedEventArgs { HidInstance = HIDSkeletonBase.InstanceId, GamingPanelEnum = this.TypeOfPanel, Count = (int)(newCount - _count) });
-                            _count = newCount;
-                        }
+                        AppEventClass.UpdatesMissed(this, HIDSkeletonBase.InstanceId, TypeOfPanel, (int)(newCount - _count));
+                        _count = newCount;
                     }
                 }
             }
         }
-        
+
         public void SetIsDirty()
         {
             AppEventClass.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
@@ -276,108 +271,7 @@
         }
         */
         protected bool Closed { get; set; }
-        
-        /*
-         * Used by UserControls to show switches that has been manipulated.
-         * Shows the actions in the Log textbox of the UserControl.
-         */
-        public delegate void SwitchesHasBeenChangedEventHandler(object sender, SwitchesChangedEventArgs e);
 
-        public event SwitchesHasBeenChangedEventHandler OnSwitchesChangedA;
-        
-        protected virtual void UISwitchesChanged(HashSet<object> hashSet)
-        {
-            OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs { HidInstance = HIDInstanceId, GamingPanelEnum = this.TypeOfPanel, Switches = hashSet });
-        }
-
-        /*
-         * Used for notifying when a device has been attached.
-         * Not used atm.
-         */
-        public delegate void DeviceAttachedEventHandler(object sender, PanelEventArgs e);
-
-        public event DeviceAttachedEventHandler OnDeviceAttachedA;
-        protected virtual void DeviceAttached()
-        {
-            // IsAttached = true;
-            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
-        }
-
-
-        /*
-         * Used for notifying when a device has been detached.
-         * Not used atm.
-         */
-        public delegate void DeviceDetachedEventHandler(object sender, PanelEventArgs e);
-
-        public event DeviceDetachedEventHandler OnDeviceDetachedA;
-        protected virtual void DeviceDetached()
-        {
-            // IsAttached = false;
-            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
-        }
-        
-        /*
-         * Used by some UserControls to know when panels have loaded their configurations.
-         * Used by MainWindow to SetFormstate().
-         */
-        public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelEventArgs e);
-
-        public event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
-        protected virtual void SettingsApplied()
-        {
-            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
-        }
-
-
-        /*
-         * Used by some UserControls refresh UI when panel has cleared all its settings.
-         */
-        public delegate void SettingsClearedEventHandler(object sender, PanelEventArgs e);
-
-        public event SettingsClearedEventHandler OnSettingsClearedA;
-        protected virtual void SettingsCleared()
-        {
-            OnSettingsClearedA?.Invoke(this, new PanelEventArgs { HidInstance = HIDInstanceId, PanelType = this.TypeOfPanel });
-        }
-
-
-        /*
-         * DCS-BIOS has a feature to detect if any updates has been missed.
-         * It is not used as such since DCS-BIOS has been working so well.
-         */
-        public delegate void UpdatesHasBeenMissedEventHandler(object sender, DCSBIOSUpdatesMissedEventArgs e);
-
-        public event UpdatesHasBeenMissedEventHandler OnUpdatesHasBeenMissed;
-
-        // For those that wants to listen to this panel
-        public virtual void Attach(IGamingPanelListener gamingPanelListener)
-        {
-            OnDeviceAttachedA += gamingPanelListener.DeviceAttached;
-            OnSwitchesChangedA += gamingPanelListener.UISwitchesChanged;
-            OnSettingsAppliedA += gamingPanelListener.SettingsApplied;
-            OnSettingsClearedA += gamingPanelListener.SettingsCleared;
-            OnUpdatesHasBeenMissed += gamingPanelListener.UpdatesHasBeenMissed;
-        }
-
-        // For those that wants to listen to this panel
-        public virtual void Detach(IGamingPanelListener gamingPanelListener)
-        {
-            OnDeviceAttachedA -= gamingPanelListener.DeviceAttached;
-            OnSwitchesChangedA -= gamingPanelListener.UISwitchesChanged;
-            OnSettingsAppliedA -= gamingPanelListener.SettingsApplied;
-            OnSettingsClearedA -= gamingPanelListener.SettingsCleared;
-            OnUpdatesHasBeenMissed -= gamingPanelListener.UpdatesHasBeenMissed;
-        }
-        
-
-
-
-
-
-        public void PanelSettingsModified(object sender, PanelEventArgs e)
-        {
-        }
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
         {
@@ -390,7 +284,7 @@
         public void ClearPanelSettings(object sender)
         {
             ClearSettings();
-            SettingsCleared();
+            AppEventClass.SettingsCleared(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
     }
 }

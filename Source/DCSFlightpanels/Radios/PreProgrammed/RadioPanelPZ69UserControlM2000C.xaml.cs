@@ -26,7 +26,7 @@
     {
         private readonly RadioPanelPZ69M2000C _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlM2000C(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlM2000C(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -36,7 +36,7 @@
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69M2000C(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
-            _radioPanelPZ69.Attach((IGamingPanelListener)this);
+            AppEventClass.AttachGamingPanelListener(this);
 
             //LoadConfiguration();
         }
@@ -50,6 +50,7 @@
                 if (disposing)
                 {
                     _radioPanelPZ69.Dispose();
+                    AppEventClass.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
@@ -102,7 +103,7 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {

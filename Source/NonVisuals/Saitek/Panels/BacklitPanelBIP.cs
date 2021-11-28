@@ -131,7 +131,7 @@
                 }
             }
 
-            SettingsApplied();
+            AppEventClass.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -611,17 +611,13 @@
         private void DeviceAttachedHandler()
         {
             Startup();
-
-            // IsAttached = true;
-            DeviceAttached();
+            AppEventClass.DeviceAttached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         private void DeviceRemovedHandler()
         {
-            Dispose();
-
-            // IsAttached = false;
-            DeviceDetached();
+            Dispose(); 
+            AppEventClass.DeviceDetached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         private void SetLedStrength()

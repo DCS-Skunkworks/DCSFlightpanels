@@ -8,7 +8,7 @@
          * Used by UserControls to show switches that has been manipulated.
          * Shows the actions in the Log textbox of the UserControl.
          */
-        void UISwitchesChanged(object sender, SwitchesChangedEventArgs e);
+        void SwitchesChanged(object sender, SwitchesChangedEventArgs e);
 
         /*
          * Used by some UserControls refresh UI to know when panels have loaded their configurations.

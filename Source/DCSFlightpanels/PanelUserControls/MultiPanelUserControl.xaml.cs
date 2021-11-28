@@ -38,7 +38,7 @@
         private bool _textBoxBillsSet;
 
 
-        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -46,7 +46,7 @@
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
-            _multiPanelPZ70.Attach((IGamingPanelListener)this);
+            AppEventClass.AttachGamingPanelListener(this);
 
             HideAllImages();
         }
@@ -60,6 +60,7 @@
                 if (disposing)
                 {
                     _multiPanelPZ70.Dispose();
+                    AppEventClass.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
@@ -126,7 +127,7 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
@@ -204,7 +205,7 @@
             {
                 if (textBox.Bill == null && !textBox.Equals(TextBoxLogPZ70))
                 {
-                    textBox.Bill = new BillPZ70(GlobalHandler, this, _multiPanelPZ70, textBox);
+                    textBox.Bill = new BillPZ70(this, _multiPanelPZ70, textBox);
                 }
                 _textBoxBillsSet = true;
             }
@@ -564,17 +565,17 @@
                     {
                         if (dcsbiosBindingLCDPZ70.UseFormula)
                         {
-                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
+                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
                             break;
                         }
-                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
+                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
                         break;
                     }
                 }
 
                 if (dcsBiosOutputFormulaWindow == null)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description);
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description);
                 }
 
                 dcsBiosOutputFormulaWindow.ShowDialog();

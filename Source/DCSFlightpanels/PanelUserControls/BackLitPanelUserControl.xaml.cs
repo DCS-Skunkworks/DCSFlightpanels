@@ -44,7 +44,7 @@
 
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
-            _backlitPanelBIP.Attach((IGamingPanelListener)this);
+            AppEventClass.AttachGamingPanelListener(this);
         }
 
         private bool _disposed;
@@ -55,7 +55,8 @@
             {
                 if (disposing)
                 {
-                    _backlitPanelBIP.Dispose();
+                    _backlitPanelBIP.Dispose(); 
+                    AppEventClass.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
@@ -104,7 +105,7 @@
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
 
         public void SettingsCleared(object sender, PanelEventArgs e)
         {
@@ -257,7 +258,7 @@
                 var imageName = contextMenu.Tag.ToString();
                 var position = GetLedPosition(imageName);
 
-                var ledConfigsWindow = new LEDConfigsWindow(GlobalHandler.GetProfile(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
+                var ledConfigsWindow = new LEDConfigsWindow("Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position

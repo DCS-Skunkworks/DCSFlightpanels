@@ -8,7 +8,6 @@ namespace DCSFlightpanels.PanelUserControls
 {
     public class UserControlBase : UserControl, IDisposable
     {
-        private IGlobalHandler _globalHandler;
         private TabItem _parentTabItem;
         private string _parentTabItemHeader;
         private bool _userControlLoaded;

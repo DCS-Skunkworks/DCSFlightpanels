@@ -35,7 +35,7 @@
 
 
 
-        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -44,7 +44,7 @@
 
             _tpmPanel = new TPMPanel(hidSkeleton);
 
-            _tpmPanel.Attach((IGamingPanelListener)this);
+            AppEventClass.AttachGamingPanelListener(this);
         }
 
 
@@ -57,6 +57,7 @@
                 if (disposing)
                 {
                     _tpmPanel.Dispose();
+                    AppEventClass.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
@@ -125,7 +126,7 @@
         {
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
@@ -257,7 +258,7 @@
                     continue;
                 }
 
-                textBox.Bill = new BillTPM(GlobalHandler, this, _tpmPanel, textBox);
+                textBox.Bill = new BillTPM(this, _tpmPanel, textBox);
             }
             _textBoxBillsSet = true;
         }

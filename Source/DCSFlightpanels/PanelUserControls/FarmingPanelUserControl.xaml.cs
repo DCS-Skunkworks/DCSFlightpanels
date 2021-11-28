@@ -40,7 +40,7 @@
 
 
 
-        public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
@@ -48,7 +48,7 @@
             ParentTabItem = parentTabItem;
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);
 
-            _farmingSidePanel.Attach((IGamingPanelListener)this);
+            AppEventClass.AttachGamingPanelListener(this);
             HideAllImages();
         }
 
@@ -61,6 +61,7 @@
                 if (disposing)
                 {
                     _farmingSidePanel.Dispose();
+                    AppEventClass.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
@@ -123,7 +124,7 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
@@ -288,7 +289,7 @@
                     continue;
                 }
 
-                textBox.Bill = new BillPFarmingPanel(GlobalHandler, this, _farmingSidePanel, textBox);
+                textBox.Bill = new BillPFarmingPanel(this, _farmingSidePanel, textBox);
             }
             _textBoxBillsSet = true;
         }

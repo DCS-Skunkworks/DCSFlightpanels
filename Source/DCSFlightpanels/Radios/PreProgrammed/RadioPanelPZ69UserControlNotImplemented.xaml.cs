@@ -25,7 +25,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
     /// </summary>
     public partial class RadioPanelPZ69UserControlNotImplemented : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
-        public RadioPanelPZ69UserControlNotImplemented(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlNotImplemented(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
         }
@@ -70,7 +70,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
 
         public void ProfileSelected(object sender, AirframeEventArgs e) { }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {

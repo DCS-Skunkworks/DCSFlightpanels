@@ -516,11 +516,11 @@
             DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
             if (ContainsDCSBIOS())
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", string.Empty), DCSBIOSInputs, TextBox.Text);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(TextBox.Name.Replace("TextBox", string.Empty), DCSBIOSInputs, TextBox.Text);
             }
             else
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", string.Empty), null);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow( TextBox.Name.Replace("TextBox", string.Empty), null);
             }
 
             dcsBIOSInputControlsWindow.ShowDialog();
@@ -815,13 +815,7 @@
             get => _operatingSystemCommand;
             set => _operatingSystemCommand = value;
         }
-
-        public IGlobalHandler GlobalHandler
-        {
-            get => _globalHandler;
-            set => _globalHandler = value;
-        }
-
+        
         public IPanelUI PanelUIParent
         {
             get => _panelUI;

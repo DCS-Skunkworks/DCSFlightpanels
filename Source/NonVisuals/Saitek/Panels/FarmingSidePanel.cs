@@ -107,7 +107,7 @@
                 }
             }
 
-            SettingsApplied();
+            AppEventClass.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
             _keyBindings = KeyBindingFarmingPanel.SetNegators(_keyBindings);
 
         }
@@ -595,13 +595,13 @@
         private void DeviceAttachedHandler()
         {
             Startup();
-            DeviceAttached();
+            AppEventClass.DeviceAttached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         private void DeviceRemovedHandler()
         {
             Dispose();
-            DeviceDetached();
+            AppEventClass.DeviceDetached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
 

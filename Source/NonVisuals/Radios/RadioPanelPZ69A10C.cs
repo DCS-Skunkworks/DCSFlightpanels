@@ -4077,7 +4077,6 @@
             }
         }
 
-
         public override void ClearSettings(bool setIsDirty = false)
         {
             // ignore
