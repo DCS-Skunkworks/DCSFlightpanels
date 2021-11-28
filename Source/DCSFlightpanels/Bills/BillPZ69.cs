@@ -8,15 +8,35 @@
     using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
 
-
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
 
     public class BillPZ69 : BillBaseInput
     {
         private BIPLinkPZ69 _bipLinkPZ69;
+
+        public override BIPLink BipLink
+        {
+            get => _bipLinkPZ69;
+            set
+            {
+                _bipLinkPZ69 = (BIPLinkPZ69)value;
+                TextBox.Background = _bipLinkPZ69 != null ? Brushes.Bisque : Brushes.White;
+            }
+        }
+
+        public override List<DCSBIOSInput> DCSBIOSInputs
+        {
+            get => null;
+            set {}
+        }
+
+        public override DCSBIOSActionBindingBase DCSBIOSBinding
+        {
+            get => null;
+            set {}
+        }
 
         public BillPZ69(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
@@ -25,39 +45,6 @@
 
         protected override void ClearDCSBIOSFromBill()
         {
-        }
-
-        public override BIPLink BipLink
-        {
-            get => _bipLinkPZ69;
-            set
-            {
-                _bipLinkPZ69 = (BIPLinkPZ69)value;
-                if (_bipLinkPZ69 != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.White;
-                }
-            }
-        }
-
-        public override List<DCSBIOSInput> DCSBIOSInputs
-        {
-            get => null;
-            set
-            {
-            }
-        }
-
-        public override DCSBIOSActionBindingBase DCSBIOSBinding
-        {
-            get => null;
-            set
-            {
-            }
         }
 
         public override bool ContainsDCSBIOS()

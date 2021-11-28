@@ -9,7 +9,6 @@
     using DCSFlightpanels.Interfaces;
     
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
 
@@ -18,30 +17,13 @@
         private DCSBIOSActionBindingFarmingPanel _dcsbiosBinding;
         private BIPLinkFarmingPanel _bipLink;
 
-        public BillPFarmingPanel(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
-        {
-            SetContextMenu();
-        }
-
-        protected override void ClearDCSBIOSFromBill()
-        {
-            DCSBIOSBinding = null;
-        }
-
         public override BIPLink BipLink
         {
             get => _bipLink;
             set
             {
                 _bipLink = (BIPLinkFarmingPanel)value;
-                if (_bipLink != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.White;
-                }
+                TextBox.Background = _bipLink != null ? Brushes.Bisque : Brushes.White;
             }
         }
 
@@ -49,12 +31,7 @@
         {
             get
             {
-                if (ContainsDCSBIOS())
-                {
-                    return _dcsbiosBinding.DCSBIOSInputs;
-                }
-
-                return null;
+                return ContainsDCSBIOS() ? _dcsbiosBinding.DCSBIOSInputs : null;
             }
             set
             {
@@ -77,14 +54,7 @@
                 _dcsbiosBinding = (DCSBIOSActionBindingFarmingPanel)value;
                 if (_dcsbiosBinding != null)
                 {
-                    if (string.IsNullOrEmpty(_dcsbiosBinding.Description))
-                    {
-                        TextBox.Text = "DCS-BIOS";
-                    }
-                    else
-                    {
-                        TextBox.Text = _dcsbiosBinding.Description;
-                    }
+                    TextBox.Text = string.IsNullOrEmpty(_dcsbiosBinding.Description) ? "DCS-BIOS" : _dcsbiosBinding.Description;
                 }
                 else
                 {
@@ -93,9 +63,19 @@
             }
         }
 
+        public BillPFarmingPanel(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
+        {
+            SetContextMenu();
+        }
+
+        protected override void ClearDCSBIOSFromBill()
+        {
+            DCSBIOSBinding = null;
+        }
+
         public override bool ContainsDCSBIOS()
         {
-            return _dcsbiosBinding != null;// && _dcsbiosInputs.Count > 0;
+            return _dcsbiosBinding != null;
         }
 
         public override bool ContainsBIPLink()
