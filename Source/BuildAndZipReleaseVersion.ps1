@@ -24,6 +24,10 @@ $file_version = (Get-Command $scriptPath\DCSFlightpanels\bin\x64\Release\dcsfp.e
 $file_version = $file_version.Remove($file_version.LastIndexOf('.'))
 
 Write-Host "Zip release folder & Copy to destination" -foregroundcolor "Green"
-Compress-Archive -Force -Path $scriptPath\DCSFlightpanels\bin\x64\Release\* -DestinationPath $destinationFolderPath"\DCSFlightpanels_x64_$file_version.zip"
+Write-Host "Destination for zip file" -foregroundcolor "Green" $env:dcsfpReleaseDestinationFolderPath"\DCSFlightpanels_x64_$file_version.zip"
+#Delete debug and error log before compression
+Remove-Item $scriptPath\DCSFlightpanels\bin\x64\Release\DCSFlightpanels_debug_log.txt
+Remove-Item $scriptPath\DCSFlightpanels\bin\x64\Release\DCSFlightpanels_error_log.txt
+Compress-Archive -Force -Path $scriptPath\DCSFlightpanels\bin\x64\Release\* -DestinationPath $env:dcsfpReleaseDestinationFolderPath"\DCSFlightpanels_x64_$file_version.zip"
 
 Write-Host "Script end" -foregroundcolor "Green"

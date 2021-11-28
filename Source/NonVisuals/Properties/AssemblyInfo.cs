@@ -32,6 +32,6 @@ using System.Runtime.InteropServices;
 
 
 
-[assembly: AssemblyVersion("2.1.1241.7446")]
-[assembly: AssemblyFileVersion("2.1.1241.7446")]
+[assembly: AssemblyVersion("2.1.1245.6144")]
+[assembly: AssemblyFileVersion("2.1.1245.6144")]
 
