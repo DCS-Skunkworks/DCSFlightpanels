@@ -1,7 +1,13 @@
 #declaring & setting some variables
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+$releasePath = $scriptPath+"\DCSFlightpanels\bin\x64\Release\"
 $msBuildExePath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
-$destinationFolderPath = 'F:\My Drive\DCSFlightpanels Dev Test Folder\'
+
+#Checking destination folder first
+if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env:dcsfpReleaseDestinationFolderPath))){
+	Write-Host "Destination folder does not exists. Please set environment variable 'dcsfpReleaseDestinationFolderPath' to a valid value" -foregroundcolor "Red"
+	exit
+}
 
 Write-Host "Latest MsBuild path found is: $msBuildExePath"  -foregroundcolor "Green"
 Write-Host "Building release version " -foregroundcolor "Green"
@@ -17,23 +23,29 @@ if ( 0 -ne $buildLastExitCode )
   exit
 }
 
+#Getting file info & remove revision from file_version
 Write-Host "Getting file info" -foregroundcolor "Green"
-$file_version = (Get-Command $scriptPath\DCSFlightpanels\bin\x64\Release\dcsfp.exe).FileVersionInfo.FileVersion
-
-#Remove revision from file_version
+$file_version = (Get-Command $releasePath\dcsfp.exe).FileVersionInfo.FileVersion
 $file_version = $file_version.Remove($file_version.LastIndexOf('.'))
 
-Write-Host "Zip release folder & Copy to destination" -foregroundcolor "Green"
-Write-Host "Destination for zip file" -foregroundcolor "Green" $env:dcsfpReleaseDestinationFolderPath"\DCSFlightpanels_x64_$file_version.zip"
-#Delete debug and error log before compression
-if(Test-Path -Path $scriptPath\DCSFlightpanels\bin\x64\Release\DCSFlightpanels_debug_log.txt -PathType Leaf)
-{
-	Remove-Item $scriptPath\DCSFlightpanels\bin\x64\Release\DCSFlightpanels_debug_log.txt
+#Delete eventual debug and error log before compression
+#Add in the array any other files you want to remove from release version
+$ArrayOfExtraFiles = 
+@(
+'DCSFlightpanels_debug_log.txt',
+'DCSFlightpanels_error_log.txt'
+)
+foreach ($extraFile in $ArrayOfExtraFiles)
+{  
+	$fileToCheckAndDelete = $releasePath+$extraFile
+	if (Test-Path $fileToCheckAndDelete){
+		Write-Host "Deleteing extra file:" $fileToCheckAndDelete -foregroundcolor "Green"
+		Remove-Item $fileToCheckAndDelete
+	}
 }
-if(Test-Path -Path $scriptPath\DCSFlightpanels\bin\x64\Release\DCSFlightpanels_error_log.txt -PathType Leaf)
-{
-	Remove-Item $scriptPath\DCSFlightpanels\bin\x64\Release\DCSFlightpanels_error_log.txt
-}
-Compress-Archive -Force -Path $scriptPath\DCSFlightpanels\bin\x64\Release\* -DestinationPath $env:dcsfpReleaseDestinationFolderPath"\DCSFlightpanels_x64_$file_version.zip"
+
+#Compressing release folder to destination
+Write-Host "Destination for zip file:" $env:dcsfpReleaseDestinationFolderPath"\DCSFlightpanels_x64_$file_version.zip" -foregroundcolor "Green"
+Compress-Archive -Force -Path $releasePath\* -DestinationPath $env:dcsfpReleaseDestinationFolderPath"\DCSFlightpanels_x64_$file_version.zip"
 
 Write-Host "Script end" -foregroundcolor "Green"
