@@ -1271,17 +1271,17 @@
                     if (dcsBiosOutputFormulaWindow.UseFormula())
                     {
                         var dcsBiosOutputFormula = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
-                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, pz69LCDPosition);x
+                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, pz69LCDPosition, dcsBiosOutputFormulaWindow.LimitDecimalPlaces, dcsBiosOutputFormulaWindow.DecimalPlaces);
                     }
                     else if (dcsBiosOutputFormulaWindow.UseSingleDCSBiosControl())
                     {
                         var dcsBiosOutput = dcsBiosOutputFormulaWindow.DCSBiosOutput;
-                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, pz69LCDPosition);x
+                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, pz69LCDPosition, dcsBiosOutputFormulaWindow.LimitDecimalPlaces, dcsBiosOutputFormulaWindow.DecimalPlaces);
                     }
                     else
                     {
                         //Delete config
-                        UpdateDCSBIOSBindingLCD(false, true, null, null, pz69LCDPosition);x
+                        UpdateDCSBIOSBindingLCD(false, true, null, null, pz69LCDPosition, dcsBiosOutputFormulaWindow.LimitDecimalPlaces, dcsBiosOutputFormulaWindow.DecimalPlaces);
                     }
                 }
             }
@@ -1292,7 +1292,13 @@
         }
 
 
-        private void UpdateDCSBIOSBindingLCD(bool useFormula, bool deleteConfig, DCSBIOSOutput dcsbiosOutput, DCSBIOSOutputFormula dcsbiosOutputFormula, PZ69LCDPosition pz69LCDPosition)
+        private void UpdateDCSBIOSBindingLCD(bool useFormula, 
+            bool deleteConfig, 
+            DCSBIOSOutput dcsbiosOutput, 
+            DCSBIOSOutputFormula dcsbiosOutputFormula, 
+            PZ69LCDPosition pz69LCDPosition,
+            bool limitDecimalPlaces,
+            int decimalPlaces)
         {
             try
             {
@@ -1328,22 +1334,22 @@
                     if (pz69LCDPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
                     {
                         DotTopLeftLcd.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.UPPER_ACTIVE_LEFT, limitDecimalPlaces, decimalPlaces);
                     }
                     if (pz69LCDPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT)
                     {
                         DotBottomLeftLcd.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.LOWER_ACTIVE_LEFT, limitDecimalPlaces, decimalPlaces);
                     }
                     if (pz69LCDPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
                     {
                         DotTopRightLcd.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.UPPER_STBY_RIGHT, limitDecimalPlaces, decimalPlaces);
                     }
                     if (pz69LCDPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                     {
                         DotBottomRightLcd.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.LOWER_STBY_RIGHT, limitDecimalPlaces, decimalPlaces);
                     }
                 }
 
@@ -1352,22 +1358,22 @@
                     if (pz69LCDPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
                     {
                         DotTopLeftLcd.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.UPPER_ACTIVE_LEFT, limitDecimalPlaces, decimalPlaces);
                     }
                     if (pz69LCDPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT)
                     {
                         DotBottomLeftLcd.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.LOWER_ACTIVE_LEFT, limitDecimalPlaces, decimalPlaces);
                     }
                     if (pz69LCDPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
                     {
                         DotTopRightLcd.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.UPPER_STBY_RIGHT, limitDecimalPlaces, decimalPlaces);
                     }
                     if (pz69LCDPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                     {
                         DotBottomRightLcd.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.LOWER_STBY_RIGHT, limitDecimalPlaces, decimalPlaces);
                     }
                 }
             }

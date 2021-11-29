@@ -43,7 +43,7 @@ namespace NonVisuals.DCSBIOSBindings
                 throw new ArgumentException("Import string empty. (DCSBIOSBindingPZ69)");
             }
 
-            if (settings.StartsWith("RadioPanelDCSBIOSLCD{") && settings.Contains("DCSBiosOutput{"))
+            if (settings.StartsWith("RadioPanelDCSBIOSLCD{"))
             {
                 // RadioPanelDCSBIOSLCD{COM1}\o/{LowerLCD}\o/DCSBiosOutput{ANT_EGIHQTOD|Equals|0}\o/{False|0}
                 // RadioPanelDCSBIOSLCD{COM1}\o/{UpperLCD}\o/DCSBiosOutputFormula{ANT_EGIHQTOD+10}\o/{False|0}
@@ -79,7 +79,7 @@ namespace NonVisuals.DCSBIOSBindings
                 /*
                  * This is a new setting so it may not exist in user's current configuration
                  */
-                if (!string.IsNullOrEmpty(parameters[3]))
+                if (parameters.Length == 4 && !string.IsNullOrEmpty(parameters[3]))
                 {
                     var decimalSettings = parameters[3].Replace("{", String.Empty).Replace("}", String.Empty);
                     var decimalSettingValues = decimalSettings.Split('|');

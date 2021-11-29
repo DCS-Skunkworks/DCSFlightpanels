@@ -34,7 +34,7 @@
     public partial class MultiPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
-        
+
         private bool _textBoxBillsSet;
 
 
@@ -60,7 +60,7 @@
                 _multiPanelPZ70.Dispose();
             }
         }
-        
+
         private void MultiPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
@@ -100,7 +100,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -129,7 +129,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -144,7 +144,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -160,7 +160,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -170,14 +170,14 @@
             {
                 foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
                 {
-                      if (textBox == TextBoxLogPZ70 || textBox.Bill == null)
-                      {
-                          continue;
-                      }
-                      textBox.Bill.ClearAll();                 
+                    if (textBox == TextBoxLogPZ70 || textBox.Bill == null)
+                    {
+                        continue;
+                    }
+                    textBox.Bill.ClearAll();
                 }
             }
-            
+
             if (clearAlsoProfile)
             {
                 _multiPanelPZ70.ClearSettings(true);
@@ -221,7 +221,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -243,7 +243,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -485,7 +485,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -539,7 +539,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -577,23 +577,23 @@
                     if (dcsBiosOutputFormulaWindow.UseFormula())
                     {
                         var dcsBiosOutputFormula = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
-                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, button);x
+                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, button, dcsBiosOutputFormulaWindow.LimitDecimalPlaces, dcsBiosOutputFormulaWindow.DecimalPlaces); 
                     }
                     else if (dcsBiosOutputFormulaWindow.UseSingleDCSBiosControl())
                     {
                         var dcsBiosOutput = dcsBiosOutputFormulaWindow.DCSBiosOutput;
-                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, button);x
+                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, button, dcsBiosOutputFormulaWindow.LimitDecimalPlaces, dcsBiosOutputFormulaWindow.DecimalPlaces); 
                     }
                     else
                     {
                         // Delete config
-                        UpdateDCSBIOSBindingLCD(false, true, null, null, button);x
+                        UpdateDCSBIOSBindingLCD(false, true, null, null, button, dcsBiosOutputFormulaWindow.LimitDecimalPlaces, dcsBiosOutputFormulaWindow.DecimalPlaces); 
                     }
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -637,7 +637,7 @@
                             textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
                         }
                 }
-            
+
                 foreach (var dcsBiosBinding in _multiPanelPZ70.DCSBiosBindings)
                 {
                     var textBox = (PZ70TextBox)GetTextBox(dcsBiosBinding.MultiPanelPZ70Knob, dcsBiosBinding.WhenTurnedOn);
@@ -702,10 +702,10 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void MouseDownFocusLogTextBox(object sender, MouseButtonEventArgs e)
         {
             try
@@ -714,7 +714,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -749,7 +749,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -761,11 +761,17 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
-        
-        private void UpdateDCSBIOSBindingLCD(bool useFormula, bool deleteConfig, DCSBIOSOutput dcsbiosOutput, DCSBIOSOutputFormula dcsbiosOutputFormula, Button button)
+
+        private void UpdateDCSBIOSBindingLCD(bool useFormula,
+            bool deleteConfig,
+            DCSBIOSOutput dcsbiosOutput,
+            DCSBIOSOutputFormula dcsbiosOutputFormula,
+            Button button,
+            bool limitDecimalPlaces,
+            int decimalPlaces)
         {
             try
             {
@@ -789,13 +795,13 @@
                     if (button.Equals(ButtonLcdUpper))
                     {
                         ImageLcdUpperRow.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.UpperLCD);
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.UpperLCD, limitDecimalPlaces, decimalPlaces);
                     }
 
                     if (button.Equals(ButtonLcdLower))
                     {
                         ImageLcdLowerRow.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.LowerLCD);
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.LowerLCD, limitDecimalPlaces, decimalPlaces);
                     }
                 }
 
@@ -804,19 +810,19 @@
                     if (button.Equals(ButtonLcdUpper))
                     {
                         ImageLcdUpperRow.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ70LCDPosition.UpperLCD);
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ70LCDPosition.UpperLCD, limitDecimalPlaces, decimalPlaces);
                     }
 
                     if (button.Equals(ButtonLcdLower))
                     {
                         ImageLcdLowerRow.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ70LCDPosition.LowerLCD);
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ70LCDPosition.LowerLCD, limitDecimalPlaces, decimalPlaces);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -885,7 +891,7 @@
                     (Action)
                     (() =>
                      TextBoxLogPZ70.Text = TextBoxLogPZ70.Text.Insert(0, "0x16" + ex.Message + ".\n")));
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -906,7 +912,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -926,7 +932,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -939,7 +945,7 @@
                 {
                     return;
                 }
-                UpdateDCSBIOSBindingLCD(false, true, null, null, button);
+                UpdateDCSBIOSBindingLCD(false, true, null, null, button, false, 0);
                 switch (button.Name)
                 {
                     case "ButtonLcdUpper":
@@ -956,7 +962,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -974,7 +980,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1087,7 +1093,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
             throw new Exception("Failed to find MultiPanel knob for TextBox " + textBox.Name);
         }
@@ -1095,7 +1101,7 @@
 
         public TextBox GetTextBox(object panelSwitch, bool whenTurnedOn)
         {
-            var knob = (MultiPanelPZ70Knobs) panelSwitch;
+            var knob = (MultiPanelPZ70Knobs)panelSwitch;
             try
             {
                 if (knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC && whenTurnedOn)
@@ -1197,11 +1203,11 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
             throw new Exception("Failed to find TextBox from MultiPanel Knob : " + knob);
         }
-        
+
         private void ButtonIdentify_OnClick(object sender, RoutedEventArgs e)
         {
             try

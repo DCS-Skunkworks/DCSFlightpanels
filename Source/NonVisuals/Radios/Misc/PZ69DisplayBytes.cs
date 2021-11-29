@@ -46,6 +46,7 @@
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
             var i = 0;
+
             do
             {
                 if (digits[i] == '.')

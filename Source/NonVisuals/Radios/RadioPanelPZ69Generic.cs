@@ -51,6 +51,8 @@ namespace NonVisuals.Radios
         private PZ69DialPosition _pz69LowerDialPosition = PZ69DialPosition.LowerCOM1;
         private long _doUpdatePanelLCD;
 
+        private bool _settingsAreBeingImported;
+
         public RadioPanelPZ69Generic(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             CreateSwitchKeys();
@@ -86,6 +88,8 @@ namespace NonVisuals.Radios
             ClearSettings();
 
             BindingHash = genericPanelBinding.BindingHash;
+
+            _settingsAreBeingImported = true;
 
             var settings = genericPanelBinding.Settings;
             foreach (var setting in settings)
@@ -132,6 +136,7 @@ namespace NonVisuals.Radios
                 }
 
                 _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
+                _settingsAreBeingImported = false;
                 SettingsApplied();
             }
         }
@@ -207,6 +212,11 @@ namespace NonVisuals.Radios
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
+            if (_settingsAreBeingImported)
+            {
+                return;
+            }
+
             try
             {
                 UpdateCounter(e.Address, e.Data);
@@ -222,6 +232,22 @@ namespace NonVisuals.Radios
                             {
                                 // Update only if this LCD binding is in current use
                                 Interlocked.Add(ref _doUpdatePanelLCD, 2);
+                            }
+                        }
+                    }
+                    else if (dcsbiosBindingLCD.UseFormula)
+                    {
+                        lock (_lcdDataVariablesLockObject)
+                        {
+                            if (dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
+                            {
+                                var tmp = dcsbiosBindingLCD.CurrentValue;
+                                dcsbiosBindingLCD.CurrentValue = (int)dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate(false);
+                                if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
+                                {
+                                    // Update only if this LCD binding is in current use
+                                    Interlocked.Add(ref _doUpdatePanelLCD, 2);
+                                }
                             }
                         }
                     }
@@ -498,13 +524,25 @@ namespace NonVisuals.Radios
             lock (_lcdDataVariablesLockObject)
             {
                 var bytes = new byte[21];
-                bytes[0] = 0x0;
+                
+                for (var j = 0; j < bytes.Length; j++)
+                {
+                    bytes[j] = 0xFF;
+                }
 
+                /*
+                 * Here we have a situation where the value to be displayed can be either just a dumb value
+                 * or something from DCS-BIOS.
+                 */
                 var upperActiveString = _upperActive < 0 ? "" : _upperActive.ToString(CultureInfo.InvariantCulture);
                 var upperStandbyString = _upperStandby < 0 ? "" : _upperStandby.ToString(CultureInfo.InvariantCulture);
                 var lowerActiveString = _lowerActive < 0 ? "" : _lowerActive.ToString(CultureInfo.InvariantCulture);
                 var lowerStandbyString = _lowerStandby < 0 ? "" : _lowerStandby.ToString(CultureInfo.InvariantCulture);
 
+                var upperActiveFound = false;
+                var upperStandbyFound = false;
+                var lowerActiveFound = false;
+                var lowerStandbyFound = false;
                 // Find upper left => lower right data from the DCS-BIOS LCD holders
                 foreach (var dcsbiosBindingLCDPZ69 in LCDBindings)
                 {
@@ -513,11 +551,13 @@ namespace NonVisuals.Radios
                         if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
                         {
                             SetPZ69DisplayBytesDefault(ref bytes, dcsbiosBindingLCDPZ69.CurrentValueAsString, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            upperActiveFound = true;
                         }
 
                         if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
                         {
                             SetPZ69DisplayBytesDefault(ref bytes, dcsbiosBindingLCDPZ69.CurrentValueAsString, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            upperStandbyFound = true;
                         }
                     }
 
@@ -526,49 +566,67 @@ namespace NonVisuals.Radios
                         if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT)
                         {
                             SetPZ69DisplayBytesDefault(ref bytes, dcsbiosBindingLCDPZ69.CurrentValueAsString, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            lowerActiveFound = true;
                         }
 
                         if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                         {
                             SetPZ69DisplayBytesDefault(ref bytes, dcsbiosBindingLCDPZ69.CurrentValueAsString, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            lowerStandbyFound = true;
                         }
                     }
                 }
 
-                if (string.IsNullOrEmpty(upperActiveString))
+                /*
+                 * this is crap, must be refactored in the future
+                 */
+                if (!upperActiveFound)
                 {
-                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                }
-                else
-                {
-                    SetPZ69DisplayBytesDefault(ref bytes, upperActiveString, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                }
-
-                if (string.IsNullOrEmpty(upperStandbyString))
-                {
-                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                }
-                else
-                {
-                    SetPZ69DisplayBytesDefault(ref bytes, upperStandbyString, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                    if (string.IsNullOrEmpty(upperActiveString))
+                    {
+                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                    }
+                    else
+                    {
+                        SetPZ69DisplayBytesDefault(ref bytes, upperActiveString, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                    }
                 }
 
-                if (string.IsNullOrEmpty(lowerActiveString))
+                if (!upperStandbyFound)
                 {
-                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                }
-                else
-                {
-                    SetPZ69DisplayBytesDefault(ref bytes, lowerActiveString, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+
+                    if (string.IsNullOrEmpty(upperStandbyString))
+                    {
+                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                    }
+                    else
+                    {
+                        SetPZ69DisplayBytesDefault(ref bytes, upperStandbyString, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                    }
                 }
 
-                if (string.IsNullOrEmpty(lowerStandbyString))
+                if (!lowerActiveFound)
                 {
-                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                    if (string.IsNullOrEmpty(lowerActiveString))
+                    {
+                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                    }
+                    else
+                    {
+                        SetPZ69DisplayBytesDefault(ref bytes, lowerActiveString, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                    }
                 }
-                else
+
+                if (!lowerStandbyFound)
                 {
-                    SetPZ69DisplayBytesDefault(ref bytes, lowerStandbyString, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                    if (string.IsNullOrEmpty(lowerStandbyString))
+                    {
+                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                    }
+                    else
+                    {
+                        SetPZ69DisplayBytesDefault(ref bytes, lowerStandbyString, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                    }
                 }
 
                 SendLCDData(bytes);
@@ -803,7 +861,7 @@ namespace NonVisuals.Radios
             SetIsDirty();
         }
 
-        public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, PZ69LCDPosition pz69LCDPosition)
+        public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, PZ69LCDPosition pz69LCDPosition, bool limitDecimals, int decimalPlaces)
         {
             var found = false;
             var pz69DialPosition = _pz69UpperDialPosition;
@@ -817,6 +875,7 @@ namespace NonVisuals.Radios
                 if (dcsBiosBindingLCD.DialPosition == pz69DialPosition && dcsBiosBindingLCD.PZ69LcdPosition == pz69LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
+                    dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                     found = true;
                     break;
                 }
@@ -828,13 +887,14 @@ namespace NonVisuals.Radios
                 dcsBiosBindingLCD.DialPosition = pz69DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                 dcsBiosBindingLCD.PZ69LcdPosition = pz69LCDPosition;
+                dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
 
             SetIsDirty();
         }
 
-        public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ69LCDPosition pz69LCDPosition)
+        public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ69LCDPosition pz69LCDPosition, bool limitDecimals, int decimalPlaces)
         {
             var found = false;
             var pz69DialPosition = _pz69UpperDialPosition;
@@ -848,6 +908,7 @@ namespace NonVisuals.Radios
                 if (dcsBiosBindingLCD.DialPosition == pz69DialPosition && dcsBiosBindingLCD.PZ69LcdPosition == pz69LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
+                    dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                     Debug.Print("3 found");
                     found = true;
                     break;
@@ -860,6 +921,7 @@ namespace NonVisuals.Radios
                 dcsBiosBindingLCD.DialPosition = pz69DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                 dcsBiosBindingLCD.PZ69LcdPosition = pz69LCDPosition;
+                dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
 

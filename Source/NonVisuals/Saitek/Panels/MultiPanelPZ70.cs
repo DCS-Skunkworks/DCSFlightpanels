@@ -476,7 +476,7 @@
             SetIsDirty();
         }
 
-        public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, PZ70LCDPosition pz70LCDPosition)
+        public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, PZ70LCDPosition pz70LCDPosition, bool limitDecimals, int decimalPlaces)
         {
             var found = false;
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
@@ -484,6 +484,7 @@
                 if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
+                    dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                     found = true;
                     break;
                 }
@@ -495,13 +496,14 @@
                 dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
+                dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
 
             SetIsDirty();
         }
 
-        public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ70LCDPosition pz70LCDPosition)
+        public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ70LCDPosition pz70LCDPosition, bool limitDecimals, int decimalPlaces)
         {
             var found = false;
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
@@ -509,6 +511,7 @@
                 if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
+                    dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                     found = true;
                     break;
                 }
@@ -520,6 +523,7 @@
                 dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
+                dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
 
