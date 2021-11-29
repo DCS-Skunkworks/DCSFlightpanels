@@ -12,7 +12,7 @@ namespace NonVisuals.DCSBIOSBindings
     using NonVisuals.Saitek;
 
     [Serializable]
-    public class DCSBIOSOutputBindingPZ69
+    public class DCSBIOSOutputBindingPZ69 : DCSBIOSOutputBindingBase
     {
         /*
          * This class binds a LCD on the PZ69 with a DCSBIOSOutput
@@ -20,17 +20,23 @@ namespace NonVisuals.DCSBIOSBindings
          * 
          * The comparison part of the DCSBIOSOutput is ignored for DCSBIOSBindingLCDPZ69, all data will be shown
          */
-        private double _currentValue;
         private PZ69DialPosition _pz69DialPosition;
-        private DCSBIOSOutput _dcsbiosOutput;
-        private DCSBIOSOutputFormula _dcsbiosOutputFormula; // If this is set to !null value then ignore the _dcsbiosOutput
         private PZ69LCDPosition _pz69LCDPosition;
+        
 
-        private bool _limitDecimalPlaces = false;
-        private NumberFormatInfo _numberFormatInfoDecimals;
+        public PZ69DialPosition DialPosition
+        {
+            get => _pz69DialPosition;
+            set => _pz69DialPosition = value;
+        }
 
+        public PZ69LCDPosition PZ69LcdPosition
+        {
+            get => _pz69LCDPosition;
+            set => _pz69LCDPosition = value;
+        }
 
-        internal void ImportSettings(string settings)
+        public override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))
             {
@@ -57,15 +63,15 @@ namespace NonVisuals.DCSBIOSBindings
                 {
                     // [2]
                     // DCSBiosOutputFormula{ANT_EGIHQTOD+10}
-                    _dcsbiosOutputFormula = new DCSBIOSOutputFormula();
-                    _dcsbiosOutputFormula.ImportString(parameters[2]);
+                    DCSBIOSOutputFormulaObject = new DCSBIOSOutputFormula();
+                    DCSBIOSOutputFormulaObject.ImportString(parameters[2]);
                 }
                 else
                 {
                     // [2]
                     // DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
-                    _dcsbiosOutput = new DCSBIOSOutput();
-                    _dcsbiosOutput.ImportString(parameters[2]);
+                    DCSBIOSOutputObject = new DCSBIOSOutput();
+                    DCSBIOSOutputObject.ImportString(parameters[2]);
                 }
                 
                 // [3]
@@ -77,78 +83,18 @@ namespace NonVisuals.DCSBIOSBindings
                 {
                     var decimalSettings = parameters[3].Replace("{", String.Empty).Replace("}", String.Empty);
                     var decimalSettingValues = decimalSettings.Split('|');
-                    _limitDecimalPlaces = bool.Parse(decimalSettingValues[0]);
-                    if (_limitDecimalPlaces)
+                    LimitDecimalPlaces = bool.Parse(decimalSettingValues[0]);
+                    if (LimitDecimalPlaces)
                     {
-                        _numberFormatInfoDecimals = new NumberFormatInfo();
-                        _numberFormatInfoDecimals.NumberDecimalSeparator = ".";
-                        _numberFormatInfoDecimals.NumberDecimalDigits = int.Parse(decimalSettingValues[1]);
+                        NumberFormatInfoDecimals = new NumberFormatInfo();
+                        NumberFormatInfoDecimals.NumberDecimalSeparator = ".";
+                        NumberFormatInfoDecimals.NumberDecimalDigits = int.Parse(decimalSettingValues[1]);
                     }
                 }
             }
         }
 
-        public PZ69DialPosition DialPosition
-        {
-            get => _pz69DialPosition;
-            set => _pz69DialPosition = value;
-        }
-        
-        public void SetNumberOfDecimals(bool limitDecimals, int decimalPlaces = 0)
-        {
-            _limitDecimalPlaces = limitDecimals;
-            _numberFormatInfoDecimals = new NumberFormatInfo();
-            _numberFormatInfoDecimals.NumberDecimalSeparator = ".";
-            _numberFormatInfoDecimals.NumberDecimalDigits = decimalPlaces;
-        }
-        
-        public double CurrentValue
-        {
-            get => _currentValue;
-            set
-            {
-                _currentValue = value;
-                if (UseFormula)
-                {
-                    _currentValue = DCSBIOSOutputFormulaObject.Evaluate(false);
-                }
-            }
-        }
-
-        public string CurrentValueAsString
-        {
-            get
-            {
-                if (_limitDecimalPlaces)
-                {
-                    return string.Format(_numberFormatInfoDecimals, "{0:N}", _currentValue);
-                }
-                return _currentValue.ToString(CultureInfo.InvariantCulture);
-            }
-        }
-
-        public DCSBIOSOutput DCSBIOSOutputObject
-        {
-            get => _dcsbiosOutput;
-            set
-            {
-                _dcsbiosOutput = value;
-                _dcsbiosOutputFormula = null;
-            }
-        }
-
-        public DCSBIOSOutputFormula DCSBIOSOutputFormulaObject
-        {
-            get => _dcsbiosOutputFormula;
-            set
-            {
-                _dcsbiosOutputFormula = value;
-                _dcsbiosOutput = null;
-            }
-        }
-
-
-        public string ExportSettings()
+        public override string ExportSettings()
         {
             if (DCSBIOSOutputObject == null && DCSBIOSOutputFormulaObject == null)
             {
@@ -160,31 +106,21 @@ namespace NonVisuals.DCSBIOSBindings
                 throw new Exception("Unknown dial position in DCSBIOSBindingLCDPZ69 for LCD " + _pz69LCDPosition + ". Cannot export.");
             }
 
-            if (_dcsbiosOutputFormula != null)
+            if (DCSBIOSOutputFormulaObject != null)
             {
                 // RadioPanelDCSBIOSLCD{COM1}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}\o/{True|1}
                 // RadioPanelDCSBIOSLCD{COM1}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}\o/{False|0}
                 return "RadioPanelDCSBIOSLCD{" +
                     Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" +
                     SaitekConstants.SEPARATOR_SYMBOL + "{" + _pz69LCDPosition + "}" +
-                    SaitekConstants.SEPARATOR_SYMBOL + _dcsbiosOutputFormula +
-                    SaitekConstants.SEPARATOR_SYMBOL + "{" + _limitDecimalPlaces + "|" + (_numberFormatInfoDecimals == null ? "0" : _numberFormatInfoDecimals.NumberDecimalDigits.ToString()) + "}";
+                    SaitekConstants.SEPARATOR_SYMBOL + DCSBIOSOutputFormulaObject +
+                    SaitekConstants.SEPARATOR_SYMBOL + "{" + LimitDecimalPlaces + "|" + (NumberFormatInfoDecimals == null ? "0" : NumberFormatInfoDecimals.NumberDecimalDigits.ToString()) + "}";
             }
 
             return "RadioPanelDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + 
                    SaitekConstants.SEPARATOR_SYMBOL + "{" + _pz69LCDPosition + "}" + 
-                   SaitekConstants.SEPARATOR_SYMBOL + _dcsbiosOutput +
-                   SaitekConstants.SEPARATOR_SYMBOL + "{" + _limitDecimalPlaces + "|" + (_numberFormatInfoDecimals == null ? "0" : _numberFormatInfoDecimals.NumberDecimalDigits.ToString()) + "}";
+                   SaitekConstants.SEPARATOR_SYMBOL + DCSBIOSOutputObject +
+                   SaitekConstants.SEPARATOR_SYMBOL + "{" + LimitDecimalPlaces + "|" + (NumberFormatInfoDecimals == null ? "0" : NumberFormatInfoDecimals.NumberDecimalDigits.ToString()) + "}";
         }
-
-        public PZ69LCDPosition PZ69LcdPosition
-        {
-            get => _pz69LCDPosition;
-            set => _pz69LCDPosition = value;
-        }
-
-        public bool HasBinding => _dcsbiosOutput != null || _dcsbiosOutputFormula != null;
-
-        public bool UseFormula => _dcsbiosOutputFormula != null;
     }
 }

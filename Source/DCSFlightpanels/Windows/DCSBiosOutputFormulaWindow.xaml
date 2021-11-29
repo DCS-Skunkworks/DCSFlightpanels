@@ -64,6 +64,23 @@
                         <ImageBrush ImageSource="/Images/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Uniform" />
                     </TextBox.Background>
                 </TextBox>
+
+                <GroupBox Name="GroupBoxDecimals" Header="Decimals">
+                    <StackPanel Orientation="Horizontal">
+                        <DockPanel>
+                            <Label Content="Decimals to show :"  Margin="10,0,10,0" />
+                            <CheckBox Name="CheckBoxLimitDecimals" VerticalAlignment="Center" Content="Limit decimals"   Margin="0,0,10,0" Checked="CheckBoxLimitDecimals_CheckedChanged" Unchecked="CheckBoxLimitDecimals_CheckedChanged"></CheckBox>
+                            <ComboBox Name="ComboBoxDecimals" Width="50" SelectedIndex="0" SelectedValuePath="Content"  SelectionChanged="ComboBoxDecimals_OnSelectionChanged">
+                                <ComboBoxItem>0</ComboBoxItem>
+                                <ComboBoxItem>1</ComboBoxItem>
+                                <ComboBoxItem>2</ComboBoxItem>
+                                <ComboBoxItem>3</ComboBoxItem>
+                                <ComboBoxItem>4</ComboBoxItem>
+                            </ComboBox>
+                        </DockPanel>
+                    </StackPanel>
+                </GroupBox>
+
                 <GroupBox Name="GroupBoxFormula" Header="Formula">
                     <StackPanel>
                         <CheckBox Name="CheckBoxUseFormula" Content="Use formula for final output" Margin="10,10,10,0" Unchecked="CheckBoxUseFormula_OnUnchecked" Checked="CheckBoxUseFormula_OnChecked"/>

@@ -558,17 +558,17 @@
                     {
                         if (dcsbiosBindingLCDPZ70.UseFormula)
                         {
-                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
+                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject, dcsbiosBindingLCDPZ70.LimitDecimalPlaces, dcsbiosBindingLCDPZ70.DecimalPlaces);
                             break;
                         }
-                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
+                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject, dcsbiosBindingLCDPZ70.LimitDecimalPlaces, dcsbiosBindingLCDPZ70.DecimalPlaces);
                         break;
                     }
                 }
 
                 if (dcsBiosOutputFormulaWindow == null)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description);
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description);
                 }
 
                 dcsBiosOutputFormulaWindow.ShowDialog();
@@ -577,17 +577,17 @@
                     if (dcsBiosOutputFormulaWindow.UseFormula())
                     {
                         var dcsBiosOutputFormula = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
-                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, button);
+                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, button);x
                     }
                     else if (dcsBiosOutputFormulaWindow.UseSingleDCSBiosControl())
                     {
                         var dcsBiosOutput = dcsBiosOutputFormulaWindow.DCSBiosOutput;
-                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, button);
+                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, button);x
                     }
                     else
                     {
                         // Delete config
-                        UpdateDCSBIOSBindingLCD(false, true, null, null, button);
+                        UpdateDCSBIOSBindingLCD(false, true, null, null, button);x
                     }
                 }
             }

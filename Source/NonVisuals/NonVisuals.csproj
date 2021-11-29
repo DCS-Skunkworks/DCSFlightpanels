@@ -160,6 +160,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingBase.cs" />
     <Compile Include="EventArgs\AirframeEventArgs.cs" />
     <Compile Include="BindingMappingManager.cs" />
     <Compile Include="Constants.cs" />

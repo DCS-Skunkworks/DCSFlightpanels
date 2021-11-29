@@ -1005,13 +1005,14 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                SetFormState();
                 if (_dcsbiosDecoder == null)
                 {
                     return;
                 }
 
                 _dcsbiosDecoder.SetNumberOfDecimals(true, Convert.ToInt32(ComboBoxDecimals.SelectedValue.ToString()));
+
+                SetFormState();
             }
             catch (Exception ex)
             {

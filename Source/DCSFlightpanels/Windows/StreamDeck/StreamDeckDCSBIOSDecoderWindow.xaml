@@ -125,7 +125,6 @@
                                 <ComboBoxItem>4</ComboBoxItem>
                                 <ComboBoxItem>5</ComboBoxItem>
                             </ComboBox>
-                            <Label Name="LabelFormulaDecimalsValue" Content="" Margin="10,0,10,0"/>
                         </DockPanel>
                     </StackPanel>
 
