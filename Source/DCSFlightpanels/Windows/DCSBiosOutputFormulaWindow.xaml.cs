@@ -28,7 +28,7 @@
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private readonly string _description;
         private readonly bool _userEditsDescription;
-        
+
         private DCSBIOSOutput _dcsBiosOutput;
 
         private object _formulaLockObject = new object();
@@ -43,22 +43,25 @@
         private int _decimalPlaces;
 
         private bool _closing = false;
+        private bool _showDecimalSetting;
 
-        public DCSBiosOutputFormulaWindow(string description, bool userEditsDescription = false)
+        public DCSBiosOutputFormulaWindow(string description, bool userEditsDescription = false, bool showDecimalSetting = false)
         {
             InitializeComponent();
             _description = description;
             _userEditsDescription = userEditsDescription;
+            _showDecimalSetting = showDecimalSetting;
             _dcsBiosOutput = new DCSBIOSOutput();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
         }
 
-        public DCSBiosOutputFormulaWindow(string description,  DCSBIOSOutput dcsBiosOutput, bool limitDecimals, int decimalPlaces, bool userEditsDescription = false)
+        public DCSBiosOutputFormulaWindow(string description, DCSBIOSOutput dcsBiosOutput, bool limitDecimals, int decimalPlaces, bool userEditsDescription = false, bool showDecimalSetting = false)
         {
             InitializeComponent();
             _description = description;
             _userEditsDescription = userEditsDescription;
+            _showDecimalSetting = showDecimalSetting;
             _dcsBiosOutput = dcsBiosOutput;
             _limitDecimals = limitDecimals;
             _decimalPlaces = decimalPlaces;
@@ -67,11 +70,12 @@
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
         }
 
-        public DCSBiosOutputFormulaWindow(string description, DCSBIOSOutputFormula dcsBiosOutputFormula, bool limitDecimals, int decimalPlaces, bool userEditsDescription = false)
+        public DCSBiosOutputFormulaWindow(string description, DCSBIOSOutputFormula dcsBiosOutputFormula, bool limitDecimals, int decimalPlaces, bool userEditsDescription = false, bool showDecimalSetting = false)
         {
             InitializeComponent();
             _description = description;
             _userEditsDescription = userEditsDescription;
+            _showDecimalSetting = showDecimalSetting;
             _dcsbiosOutputFormula = dcsBiosOutputFormula;
             _limitDecimals = limitDecimals;
             _decimalPlaces = decimalPlaces;
@@ -114,12 +118,12 @@
                     {
                         try
                         {
-                            Dispatcher?.BeginInvoke((Action) (() =>
-                                LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate(true)));
+                            Dispatcher?.BeginInvoke((Action)(() =>
+                               LabelResult.Content = "Result : " + _dcsbiosOutputFormula.Evaluate(true)));
                         }
                         catch (Exception ex)
                         {
-                            Dispatcher?.BeginInvoke((Action) (() => TextBlockFormulaErrors.Text = ex.Message));
+                            Dispatcher?.BeginInvoke((Action)(() => TextBlockFormulaErrors.Text = ex.Message));
                         }
                     }
                 }
@@ -150,7 +154,7 @@
             CheckBoxLimitDecimals.IsChecked = _limitDecimals == true;
             CheckBoxLimitDecimals.Checked += CheckBoxLimitDecimals_CheckedChanged;
             CheckBoxLimitDecimals.Unchecked += CheckBoxLimitDecimals_CheckedChanged;
-            
+
             ComboBoxDecimals.SelectionChanged -= ComboBoxDecimals_OnSelectionChanged;
             ComboBoxDecimals.SelectedIndex = _decimalPlaces;
             ComboBoxDecimals.SelectionChanged += ComboBoxDecimals_OnSelectionChanged;
@@ -188,7 +192,16 @@
                 TextBoxControlDescription.Text = string.Empty;
             }
 
-            ComboBoxDecimals.IsEnabled = CheckBoxLimitDecimals.IsChecked == true;
+            if (_showDecimalSetting)
+            {
+                GroupBoxDecimals.Visibility = Visibility.Visible;
+                ComboBoxDecimals.IsEnabled = CheckBoxLimitDecimals.IsChecked == true;
+            }
+            else
+            {
+                GroupBoxDecimals.Visibility = Visibility.Collapsed;
+            }
+
         }
 
         private void CopyValues()
@@ -551,11 +564,12 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void CheckBoxLimitDecimals_CheckedChanged(object sender, RoutedEventArgs e)
         {
             try
             {
+                _limitDecimals = CheckBoxLimitDecimals.IsChecked == true;
                 _decimalPlaces = Convert.ToInt32(ComboBoxDecimals.SelectedValue.ToString());
                 SetFormState();
             }
@@ -569,6 +583,7 @@
         {
             try
             {
+                _limitDecimals = CheckBoxLimitDecimals.IsChecked == true;
                 _decimalPlaces = Convert.ToInt32(ComboBoxDecimals.SelectedValue.ToString());
                 SetFormState();
             }

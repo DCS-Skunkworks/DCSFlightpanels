@@ -577,17 +577,17 @@
                     if (dcsBiosOutputFormulaWindow.UseFormula())
                     {
                         var dcsBiosOutputFormula = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
-                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, button, dcsBiosOutputFormulaWindow.LimitDecimalPlaces, dcsBiosOutputFormulaWindow.DecimalPlaces); 
+                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, button, false, 0); 
                     }
                     else if (dcsBiosOutputFormulaWindow.UseSingleDCSBiosControl())
                     {
                         var dcsBiosOutput = dcsBiosOutputFormulaWindow.DCSBiosOutput;
-                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, button, dcsBiosOutputFormulaWindow.LimitDecimalPlaces, dcsBiosOutputFormulaWindow.DecimalPlaces); 
+                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, button, false, 0); 
                     }
                     else
                     {
                         // Delete config
-                        UpdateDCSBIOSBindingLCD(false, true, null, null, button, dcsBiosOutputFormulaWindow.LimitDecimalPlaces, dcsBiosOutputFormulaWindow.DecimalPlaces); 
+                        UpdateDCSBIOSBindingLCD(false, true, null, null, button, false, 0); 
                     }
                 }
             }

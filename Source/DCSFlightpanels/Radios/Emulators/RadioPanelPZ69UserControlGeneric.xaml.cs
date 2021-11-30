@@ -1253,16 +1253,16 @@
                     {
                         if (dcsbiosBindingLCDPZ69.UseFormula)
                         {
-                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, dcsbiosBindingLCDPZ69.DCSBIOSOutputFormulaObject, dcsbiosBindingLCDPZ69.LimitDecimalPlaces, dcsbiosBindingLCDPZ69.DecimalPlaces);
+                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, dcsbiosBindingLCDPZ69.DCSBIOSOutputFormulaObject, dcsbiosBindingLCDPZ69.LimitDecimalPlaces, dcsbiosBindingLCDPZ69.DecimalPlaces, false, true);
                             break;
                         }
-                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, dcsbiosBindingLCDPZ69.DCSBIOSOutputObject, dcsbiosBindingLCDPZ69.LimitDecimalPlaces, dcsbiosBindingLCDPZ69.DecimalPlaces);
+                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, dcsbiosBindingLCDPZ69.DCSBIOSOutputObject, dcsbiosBindingLCDPZ69.LimitDecimalPlaces, dcsbiosBindingLCDPZ69.DecimalPlaces, false, true);
                         break;
                     }
                 }
                 if (dcsBiosOutputFormulaWindow == null)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description);
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, false, true);
                 }
 
                 dcsBiosOutputFormulaWindow.ShowDialog();

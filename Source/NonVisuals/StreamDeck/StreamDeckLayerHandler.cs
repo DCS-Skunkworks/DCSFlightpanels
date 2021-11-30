@@ -89,11 +89,9 @@
 
             jsonText = JSONFixer.Fix(jsonText);
             _jsonSettings.MissingMemberHandling = MissingMemberHandling.Error;
-
-            Debug.WriteLine("Count #1 is " + StreamDeckButton.WarningGetStaticButtons().Count);
+            
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, _jsonSettings);
             RegisterButtons();
-            Debug.WriteLine("Count #2 is " + StreamDeckButton.WarningGetStaticButtons().Count);
             _layerList.SetPanel(_streamDeckPanel);
             _jsonImported = true;
             SetStreamDeckPanelInstance(_streamDeckPanel);

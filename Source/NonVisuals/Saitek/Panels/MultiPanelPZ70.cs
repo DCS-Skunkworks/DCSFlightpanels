@@ -100,6 +100,10 @@
             UpdateCounter(e.Address, e.Data);
             foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
             {
+                if (!dcsbiosBindingLCDPZ70.HasBinding)
+                {
+                    return;
+                }
                 if (!dcsbiosBindingLCDPZ70.UseFormula && dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && e.Address == dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.Address)
                 {
                     lock (_lcdDataVariablesLockObject)
@@ -538,6 +542,7 @@
                 if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = null;
+                    dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = null;
                     break;
                 }
             }
