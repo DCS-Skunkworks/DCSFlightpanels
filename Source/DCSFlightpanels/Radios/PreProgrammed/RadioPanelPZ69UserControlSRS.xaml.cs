@@ -89,7 +89,6 @@
         {
             try
             {
-                SetGraphicsState(e.Switches);
             }
             catch (Exception ex)
             {

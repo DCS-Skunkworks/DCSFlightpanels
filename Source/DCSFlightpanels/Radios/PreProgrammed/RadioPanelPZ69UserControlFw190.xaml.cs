@@ -84,7 +84,10 @@
         {
             try
             {
-                SetGraphicsState(e.Switches);
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId))
+                {
+                    SetGraphicsState(e.Switches);
+                }
             }
             catch (Exception ex)
             {

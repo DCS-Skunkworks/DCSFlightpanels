@@ -74,7 +74,6 @@ namespace DCSFlightpanels.Radios.PreProgrammed
         {
             try
             {
-                SetGraphicsState(e.Switches);
             }
             catch (Exception ex)
             {

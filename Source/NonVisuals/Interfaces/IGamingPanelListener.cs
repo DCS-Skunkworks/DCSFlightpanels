@@ -22,7 +22,6 @@
         void SettingsCleared(object sender, PanelEventArgs e);
 
         /*
-         * Used by ProfileHandler to detect changes in panel configurations.
          * Used by some UserControls to show panel's updated configurations.
          */
         void PanelSettingsModified(object sender, PanelEventArgs e);

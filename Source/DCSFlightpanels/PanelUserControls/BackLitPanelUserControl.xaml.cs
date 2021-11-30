@@ -146,7 +146,12 @@
                 {
                     return;
                 }
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+
+                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel &&
+                    e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
+                {
+                    Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
+                }
             }
             catch (Exception ex)
             {
