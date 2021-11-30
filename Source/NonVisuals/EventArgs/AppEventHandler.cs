@@ -9,7 +9,7 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.EventArgs
 {
-    public static class AppEventClass
+    public static class AppEventHandler
     {
 
         /*

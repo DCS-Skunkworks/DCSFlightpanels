@@ -135,7 +135,7 @@
                 }
 
                 _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
-                AppEventClass.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+                AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
             }
         }
 

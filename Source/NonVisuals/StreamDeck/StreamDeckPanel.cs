@@ -318,7 +318,7 @@
             }
 
             SettingsLoading = false;
-            AppEventClass.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         private string ExportJSONSettings()

@@ -84,8 +84,8 @@
             // Stop annoying "Cannot find source for binding with reference .... " from being shown
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
 
-            AppEventClass.AttachSettingsMonitoringListener(this);
-            AppEventClass.AttachSettingsModified(this);
+            AppEventHandler.AttachSettingsMonitoringListener(this);
+            AppEventHandler.AttachSettingsModified(this);
         }
         
         #region IDisposable Support
@@ -104,8 +104,8 @@
                     _statusMessagesTimer.Dispose();
                     _exceptionTimer.Dispose();
                     _dcsBios?.Dispose();
-                    AppEventClass.DetachSettingsMonitoringListener(this);
-                    AppEventClass.DetachSettingsModified(this);
+                    AppEventHandler.DetachSettingsMonitoringListener(this);
+                    AppEventHandler.DetachSettingsModified(this);
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -1586,7 +1586,7 @@
         private void SendEventRegardingForwardingOfKeys()
         {
             // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-            AppEventClass.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
+            AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
         }
 
         private void OpenProfileInNotepad()

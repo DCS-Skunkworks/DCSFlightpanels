@@ -48,7 +48,7 @@
             ParentTabItem = parentTabItem;
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);
 
-            AppEventClass.AttachGamingPanelListener(this);
+            AppEventHandler.AttachGamingPanelListener(this);
             HideAllImages();
         }
 
@@ -61,7 +61,7 @@
                 if (disposing)
                 {
                     _farmingSidePanel.Dispose();
-                    AppEventClass.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;

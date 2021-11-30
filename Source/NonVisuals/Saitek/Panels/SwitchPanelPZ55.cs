@@ -158,7 +158,7 @@
                 }
             }
 
-            AppEventClass.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
         }
 
@@ -879,13 +879,11 @@
         private void DeviceAttachedHandler()
         {
             Startup();
-            DeviceAttached();
         }
 
         private void DeviceRemovedHandler()
         {
             Dispose();
-            DeviceDetached();
         }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
@@ -927,7 +925,7 @@
                             break;
                         }
                 }
-                this.LedLightChanged(new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
+                AppEventHandler.LedLightChanged(this, HIDSkeletonBase.InstanceId, new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
                 SetLandingGearLED(_ledUpperColor | _ledLeftColor | _ledRightColor);
             }
             catch (Exception ex)

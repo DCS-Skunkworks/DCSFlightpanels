@@ -108,7 +108,7 @@
             }
 
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-            AppEventClass.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -624,13 +624,11 @@
         private void DeviceAttachedHandler()
         {
             Startup();
-            DeviceAttached();
         }
 
         private void DeviceRemovedHandler()
         {
             Dispose();
-            DeviceDetached();
         }
 
         private void CreateSwitchKeys()

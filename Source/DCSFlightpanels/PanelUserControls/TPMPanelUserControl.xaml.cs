@@ -44,7 +44,7 @@
 
             _tpmPanel = new TPMPanel(hidSkeleton);
 
-            AppEventClass.AttachGamingPanelListener(this);
+            AppEventHandler.AttachGamingPanelListener(this);
         }
 
 
@@ -57,7 +57,7 @@
                 if (disposing)
                 {
                     _tpmPanel.Dispose();
-                    AppEventClass.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;

@@ -36,8 +36,8 @@
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69SA342(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
-            AppEventClass.AttachGamingPanelListener(this);
-            LabelAirframe.Content = DCSFPProfile.ActiveDCSFPProfile + " Gazelle";
+            AppEventHandler.AttachGamingPanelListener(this);
+            LabelAirframe.Content = ProfileHandler.ActiveDCSFPProfile + " Gazelle";
             //LoadConfiguration();
         }
 
@@ -50,7 +50,7 @@
                 if (disposing)
                 {
                     _radioPanelPZ69.Dispose();
-                    AppEventClass.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;

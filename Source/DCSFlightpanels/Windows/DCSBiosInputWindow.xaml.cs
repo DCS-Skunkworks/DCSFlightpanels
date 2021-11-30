@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals;
 
 namespace DCSFlightpanels.Windows
 {
@@ -57,7 +58,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                LabelProfileDescription.Content = DCSFPProfile.ActiveDCSFPProfile.Description;
+                LabelProfileDescription.Content = ProfileHandler.ActiveDCSFPProfile.Description;
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
                 _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));

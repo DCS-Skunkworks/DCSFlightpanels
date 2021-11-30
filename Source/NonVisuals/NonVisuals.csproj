@@ -160,7 +160,7 @@
     <Compile Include="CopyPackage.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingFarmingPanel.cs" />
     <Compile Include="DCSBIOSModule.cs" />
-    <Compile Include="EventArgs\AppEventClass.cs" />
+    <Compile Include="EventArgs\AppEventHandler.cs" />
     <Compile Include="EventArgs\BipPanelRegisteredEventArgs.cs" />
     <Compile Include="EventArgs\DCSBIOSUpdatesMissedEventArgs.cs" />
     <Compile Include="EventArgs\ForwardPanelEventArgs.cs" />

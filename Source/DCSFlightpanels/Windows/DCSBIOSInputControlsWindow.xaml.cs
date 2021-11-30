@@ -52,7 +52,7 @@
 
         private void DCSBIOSInputControlsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            TextBoxHeader.Text = _header + Environment.NewLine + DCSFPProfile.ActiveDCSFPProfile.Description;
+            TextBoxHeader.Text = _header + Environment.NewLine + ProfileHandler.ActiveDCSFPProfile.Description;
             SetFormState();
         }
 

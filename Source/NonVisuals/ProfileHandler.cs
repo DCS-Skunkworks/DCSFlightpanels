@@ -42,11 +42,15 @@
 
         private IHardwareConflictResolver _hardwareConflictResolver;
 
+        public static DCSFPProfile ActiveDCSFPProfile
+        {
+            get => _dcsfpProfile;
+        }
 
         public ProfileHandler(string dcsbiosJSONDirectory)
         {
             _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
-            AppEventClass.AttachSettingsModified(this);
+            AppEventHandler.AttachSettingsModified(this);
         }
 
         public ProfileHandler(string dcsbiosJSONDirectory, string lastProfileUsed)
@@ -59,7 +63,7 @@
         {
             if (disposing)
             {
-                AppEventClass.DetachSettingsModified(this);
+                AppEventHandler.DetachSettingsModified(this);
             }
         }
 
@@ -123,7 +127,7 @@
             Profile = DCSFPProfile.GetNoFrameLoadedYet(); // Just a default that doesn't remove non emulation panels from the GUI
 
             // This sends info to all to clear their settings
-            AppEventClass.ClearPanelSettings(this);
+            AppEventHandler.ClearPanelSettings(this);
         }
 
         public void ClearAll()
@@ -366,13 +370,13 @@
         {
             try
             {
-                AppEventClass.AirframeSelected(this, _dcsfpProfile);
+                AppEventHandler.AirframeSelected(this, _dcsfpProfile);
 
                 foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                 {
                     try
                     {
-                        AppEventClass.SettingsReadFromFile(this, genericPanelBinding);
+                        AppEventHandler.SettingsReadFromFile(this, genericPanelBinding);
                     }
                     catch (Exception ex)
                     {
@@ -396,7 +400,7 @@
                     {
                         if (genericPanelBinding.PanelType == GamingPanelEnum.PZ69RadioPanel)
                         {
-                            AppEventClass.SettingsReadFromFile(this, genericPanelBinding);
+                            AppEventHandler.SettingsReadFromFile(this, genericPanelBinding);
                         }
                     }
                     catch (Exception ex)
@@ -434,8 +438,8 @@
 
         public void SendEventRegardingSavingPanelConfigurations()
         {
-            AppEventClass.SavePanelSettings(this);
-            AppEventClass.SavePanelSettingsJSON(this);
+            AppEventHandler.SavePanelSettings(this);
+            AppEventHandler.SavePanelSettingsJSON(this);
         }
 
         public bool IsNewProfile => _isNewProfile;
@@ -606,7 +610,7 @@
                 Common.ResetEmulationModesFlag();
                 SetEmulationModeFlag();
                 DCSBIOSControlLocator.Profile = Profile;
-                AppEventClass.AirframeSelected(this, _dcsfpProfile);
+                AppEventHandler.AirframeSelected(this, _dcsfpProfile);
             }
         }
 

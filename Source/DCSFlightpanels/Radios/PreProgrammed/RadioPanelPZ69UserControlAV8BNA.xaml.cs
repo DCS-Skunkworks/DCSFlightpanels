@@ -37,7 +37,7 @@
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69AV8BNA(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = -1;//doesn't work with 0 value Settings.Default.RadioFrequencyKnobSensitivity;
-            AppEventClass.AttachGamingPanelListener(this);
+            AppEventHandler.AttachGamingPanelListener(this);
         }
 
         private bool _disposed;
@@ -49,7 +49,7 @@
                 if (disposing)
                 {
                     _radioPanelPZ69.Dispose();
-                    AppEventClass.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;

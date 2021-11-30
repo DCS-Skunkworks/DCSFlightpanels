@@ -82,8 +82,8 @@
                 hidSkeleton.HIDReadDevice.Inserted += DeviceInsertedHandler;
             }
 
-            AppEventClass.AttachForwardPanelEventListener(this);
-            AppEventClass.AttachSettingsConsumerListener(this);
+            AppEventHandler.AttachForwardPanelEventListener(this);
+            AppEventHandler.AttachSettingsConsumerListener(this);
             BIOSEventHandler.AttachDataListener(this);
         }
 
@@ -98,8 +98,8 @@
             if (disposing)
             {
                 Closed = true; // Don't know if this is necessary atm. (2021)
-                AppEventClass.DetachForwardPanelEventListener(this);
-                AppEventClass.DetachSettingsConsumerListener(this);
+                AppEventHandler.DetachForwardPanelEventListener(this);
+                AppEventHandler.DetachSettingsConsumerListener(this);
                 BIOSEventHandler.DetachDataListener(this);
             }
 
@@ -145,7 +145,7 @@
                     else if (newCount - _count != 1)
                     {
                         // Not good
-                        AppEventClass.UpdatesMissed(this, HIDSkeletonBase.InstanceId, TypeOfPanel, (int)(newCount - _count));
+                        AppEventHandler.UpdatesMissed(this, HIDSkeletonBase.InstanceId, TypeOfPanel, (int)(newCount - _count));
                         _count = newCount;
                     }
                 }
@@ -154,7 +154,7 @@
 
         public void SetIsDirty()
         {
-            AppEventClass.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
+            AppEventHandler.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
             IsDirty = true;
         }
 
@@ -284,7 +284,7 @@
         public void ClearPanelSettings(object sender)
         {
             ClearSettings();
-            AppEventClass.SettingsCleared(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsCleared(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
     }
 }

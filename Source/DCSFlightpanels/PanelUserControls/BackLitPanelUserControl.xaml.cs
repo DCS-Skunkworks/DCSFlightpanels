@@ -44,7 +44,7 @@
 
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
-            AppEventClass.AttachGamingPanelListener(this);
+            AppEventHandler.AttachGamingPanelListener(this);
         }
 
         private bool _disposed;
@@ -56,7 +56,7 @@
                 if (disposing)
                 {
                     _backlitPanelBIP.Dispose(); 
-                    AppEventClass.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;

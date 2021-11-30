@@ -46,7 +46,7 @@
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
-            AppEventClass.AttachGamingPanelListener(this);
+            AppEventHandler.AttachGamingPanelListener(this);
 
             HideAllImages();
         }
@@ -60,7 +60,7 @@
                 if (disposing)
                 {
                     _multiPanelPZ70.Dispose();
-                    AppEventClass.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;

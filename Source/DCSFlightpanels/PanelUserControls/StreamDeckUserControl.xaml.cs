@@ -75,7 +75,7 @@
             EventHandlers.AttachStreamDeckListener(_uiButtonGrid);
             EventHandlers.AttachStreamDeckConfigListener(_uiButtonGrid);
             EventHandlers.AttachStreamDeckListener(this);
-            AppEventClass.AttachGamingPanelListener(this);
+            AppEventHandler.AttachGamingPanelListener(this);
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
         }
@@ -95,7 +95,7 @@
                     EventHandlers.DetachStreamDeckListener(_uiButtonGrid);
                     EventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
                     EventHandlers.DetachStreamDeckListener(this);
-                    AppEventClass.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachGamingPanelListener(this);
                     _streamDeckPanel.Dispose();
                 }
 

@@ -49,7 +49,7 @@
 
             _radioPanelPZ69 = new RadioPanelPZ69Generic(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
-            AppEventClass.AttachGamingPanelListener(this);
+            AppEventHandler.AttachGamingPanelListener(this);
         }
 
         private bool _disposed;
@@ -61,7 +61,7 @@
                 if (disposing)
                 {
                     _radioPanelPZ69.Dispose();
-                    AppEventClass.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachGamingPanelListener(this);
                 }
 
                 _disposed = true;
