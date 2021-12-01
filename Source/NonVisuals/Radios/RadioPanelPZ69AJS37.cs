@@ -907,7 +907,7 @@
                 // ADF
 
                 // XPDR
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }

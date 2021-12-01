@@ -55,7 +55,7 @@
 
         protected abstract void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet);
 
-        protected abstract void StartListeningForPanelChanges();
+        protected abstract void StartListeningForHidPanelChanges();
 
         private string _randomBindingHash = string.Empty;
 

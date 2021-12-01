@@ -78,7 +78,7 @@ namespace NonVisuals.Radios
         {
             try
             {
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {

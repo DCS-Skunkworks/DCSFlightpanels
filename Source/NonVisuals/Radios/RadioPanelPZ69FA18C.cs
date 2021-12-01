@@ -1348,7 +1348,7 @@ namespace NonVisuals.Radios
                 _ilsDcsbiosOutputChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("COM_ILS_CHANNEL_SW");
 
                 // TACAN
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }

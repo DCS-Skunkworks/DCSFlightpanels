@@ -185,7 +185,7 @@
         {
             try
             {
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {
@@ -237,7 +237,7 @@
             }
         }
 
-        protected override void StartListeningForPanelChanges()
+        protected override void StartListeningForHidPanelChanges()
         { }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)

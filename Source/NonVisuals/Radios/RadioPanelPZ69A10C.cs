@@ -4067,7 +4067,7 @@
                 _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
                 DCSBIOSStringManager.AddListener(_tacanDcsbiosOutputFreqChannel, this); // _tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }

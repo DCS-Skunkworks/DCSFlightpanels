@@ -67,7 +67,7 @@
             base.Dispose(disposing);
         }
 
-        protected override void StartListeningForPanelChanges()
+        protected override void StartListeningForHidPanelChanges()
         {
             try
             {
@@ -125,7 +125,7 @@
                 FirstReportHasBeenRead = true;
             }
 
-            StartListeningForPanelChanges();
+            StartListeningForHidPanelChanges();
         }
 
         private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)

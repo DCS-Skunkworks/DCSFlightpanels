@@ -94,7 +94,7 @@
             try
             {
                 StartupBase("SRS");
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {

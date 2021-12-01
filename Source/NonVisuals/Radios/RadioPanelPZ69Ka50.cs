@@ -2065,7 +2065,7 @@
                 _datalinkSelfIdDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DLNK_SELF_ID");
                 _datalinkPowerOnOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PVI_POWER");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }

@@ -716,7 +716,7 @@
                 _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM2_STRING_FREQ");
                 DCSBIOSStringManager.AddListener(_comm2DcsbiosOutputFreq, this);
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }

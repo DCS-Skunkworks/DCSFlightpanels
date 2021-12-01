@@ -842,7 +842,7 @@
                 // COM2
                 // _iffBiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_B");
                 // _iffDiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_D");
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
                 // IsAttached = true;
             }
             catch (Exception ex)
