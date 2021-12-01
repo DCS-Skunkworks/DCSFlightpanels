@@ -17,7 +17,6 @@
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
-        private readonly Guid _guid = Guid.NewGuid();
         private static readonly object UpdateCounterLockObject = new object();
         private static readonly object LockObject = new object();
         private readonly object _exceptionLockObject = new object();
@@ -200,9 +199,6 @@
                 }
             }
         }
-
-        // public string Hash => _hash;
-        public string GuidString => _guid.ToString();
 
         protected void SetLastException(Exception ex)
         {

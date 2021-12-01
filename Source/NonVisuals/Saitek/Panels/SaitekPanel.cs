@@ -73,7 +73,7 @@
             {
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
-                    // Debug.Write("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType + " " + GuidString + "\n");
+                    // Debug.Write("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType\n");
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
                 }
             }
