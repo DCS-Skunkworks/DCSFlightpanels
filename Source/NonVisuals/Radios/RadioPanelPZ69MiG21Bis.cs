@@ -778,8 +778,6 @@
         {
             try
             {
-                StartupBase("MiG21-Bis");
-
                 // Radio
                 _radioDcsbiosOutputFreqSelectorPosition = DCSBIOSControlLocator.GetDCSBIOSOutput("RAD_CHAN");
 

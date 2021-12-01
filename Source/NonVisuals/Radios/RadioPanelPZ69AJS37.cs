@@ -891,7 +891,6 @@
         {
             try
             {
-                StartupBase("AJS-37");
 
                 // COM1
 

@@ -4013,8 +4013,6 @@
         {
             try
             {
-                StartupBase("A-10C");
-
                 // VHF AM
                 _vhfAmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ1");
 

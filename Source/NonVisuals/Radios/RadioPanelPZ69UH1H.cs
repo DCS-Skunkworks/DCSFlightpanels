@@ -3110,8 +3110,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                StartupBase("UH-1H");
-
                 // VHF COMM
                 _vhfCommDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFCOMM_FREQ");
                 DCSBIOSStringManager.AddListener(_vhfCommDcsbiosOutputCockpitFrequency, this);

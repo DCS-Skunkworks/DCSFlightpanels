@@ -706,8 +706,6 @@
         {
             try
             {
-                StartupBase("AV-8B NA");
-
                 // V/UHF COMM1
                 _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_STRING_FREQ");
                 DCSBIOSStringManager.AddListener(_comm1DcsbiosOutputFreq, this);

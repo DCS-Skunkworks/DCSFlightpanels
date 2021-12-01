@@ -1935,8 +1935,6 @@
         {
             try
             {
-                StartupBase("F-5E");
-
                 // UHF
                 _uhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_100MHZ_SEL");
                 _uhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_10MHZ_SEL");

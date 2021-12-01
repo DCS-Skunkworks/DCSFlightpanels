@@ -3237,8 +3237,6 @@
         {
             try
             {
-                StartupBase("F-14B");
-
                 // UHF
                 _uhfDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF1_FREQ_MODE");
                 _uhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_HIGH_FREQ");

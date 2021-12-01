@@ -269,17 +269,6 @@
 
             return false;
         }
-
-        protected void StartupBase(string id)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
         
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {

@@ -846,8 +846,6 @@
         {
             try
             {
-                StartupBase("Fw 190");
-
                 // COM1
                 _fug16ZyPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_MODE");
                 _fug16ZyFineTuneDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("FUG16_TUNING");

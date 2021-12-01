@@ -1326,8 +1326,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                StartupBase("FA-18C_hornet");
-
                 // COMM 1
                 _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_FREQ");
                 _comm1DcsbiosOutputChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_CHANNEL_NUMERIC");

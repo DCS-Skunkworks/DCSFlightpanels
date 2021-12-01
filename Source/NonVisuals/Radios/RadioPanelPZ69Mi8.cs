@@ -2899,8 +2899,6 @@
         {
             try
             {
-                StartupBase("Mi-8");
-
                 // COM1
                 _r863ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_FREQ");
                 DCSBIOSStringManager.AddListener(_r863ManualDcsbiosOutputCockpitFrequency, this);

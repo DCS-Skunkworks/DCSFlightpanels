@@ -2045,8 +2045,6 @@
         {
             try
             {
-                StartupBase("Ka-50");
-
                 // VHF1
                 _vhf1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R828_CHANNEL");
 

@@ -830,8 +830,6 @@
         {
             try
             {
-                StartupBase("P-47D");
-
                 // COM1
                 _hfRadioOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_OFF");
                 _hfRadioChannelAPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_A");

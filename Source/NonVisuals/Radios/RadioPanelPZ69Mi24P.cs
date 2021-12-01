@@ -1828,8 +1828,6 @@
         {
             try
             {
-                StartupBase("Mi-24P");
-
                 //COM1
 
                 //COM2

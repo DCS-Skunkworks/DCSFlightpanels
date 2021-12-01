@@ -93,7 +93,6 @@
         {
             try
             {
-                StartupBase("SRS");
                 StartListeningForHidPanelChanges();
             }
             catch (Exception ex)

@@ -870,8 +870,6 @@
         {
             try
             {
-                StartupBase("Spitfire LF Mk. IX");
-
                 // COM1
                 _hfRadioOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_OFF");
                 _hfRadioChannelAPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_A");

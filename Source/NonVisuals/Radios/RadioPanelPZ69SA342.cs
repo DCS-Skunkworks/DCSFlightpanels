@@ -1875,8 +1875,6 @@
         {
             try
             {
-                StartupBase("A-10C");
-
                 // VHF AM
                 _vhfAmDcsbiosOutputReading10S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_10s");
                 _vhfAmDcsbiosOutputReading1S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_1s");
