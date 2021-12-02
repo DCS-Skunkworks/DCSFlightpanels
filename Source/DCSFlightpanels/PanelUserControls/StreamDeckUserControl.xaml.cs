@@ -178,7 +178,7 @@
         {
             try
             {
-                if (e.GamingPanelEnum == _streamDeckPanel.TypeOfPanel && e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId))
+                if (e.PanelType == _streamDeckPanel.TypeOfPanel && e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId))
                 {
                     NotifyButtonChanges(e.Switches);
                 }

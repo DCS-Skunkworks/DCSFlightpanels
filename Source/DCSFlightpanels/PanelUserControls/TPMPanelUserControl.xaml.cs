@@ -130,7 +130,7 @@
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.HidInstance.Equals(_tpmPanel.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.TPM && e.HidInstance.Equals(_tpmPanel.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }

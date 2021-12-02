@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ClassLibraryCommon;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
@@ -34,31 +30,38 @@ namespace NonVisuals.EventArgs
         }
 
         /*
+         * Done from MainWindow
          * Used when user disables action (e.g. key press) forwarding so that panels knows not to do the actual action
          */
 
         public delegate void ForwardPanelActionChangedEventHandler(object sender, ForwardPanelEventArgs e);
 
-        public static event ForwardPanelActionChangedEventHandler ForwardPanelEventChanged;
+        public static event ForwardPanelActionChangedEventHandler OnForwardPanelEventChanged;
 
         public static void ForwardKeyPressEvent(object sender, bool doForwardActions)
         {
-            ForwardPanelEventChanged?.Invoke(sender, new ForwardPanelEventArgs() { Forward = !doForwardActions });
+            OnForwardPanelEventChanged?.Invoke(sender, new ForwardPanelEventArgs() { Forward = doForwardActions });
         }
 
         public static void AttachForwardPanelEventListener(GamingPanel gamingPanel)
         {
-            ForwardPanelEventChanged += gamingPanel.SetForwardPanelEvent;
+            OnForwardPanelEventChanged += gamingPanel.SetForwardPanelEvent;
         }
 
         public static void DetachForwardPanelEventListener(GamingPanel gamingPanel)
         {
-            ForwardPanelEventChanged -= gamingPanel.SetForwardPanelEvent;
+            OnForwardPanelEventChanged -= gamingPanel.SetForwardPanelEvent;
         }
 
 
+
         /*
-         * Events triggered by ProfileHandler
+            ____             _____ __     __  __                ____             __       _                                __                        __      
+           / __ \_________  / __(_) /__  / / / /___ _____  ____/ / /__  _____   / /______(_)___ _____ ____  ________  ____/ /  ___ _   _____  ____  / /______
+          / /_/ / ___/ __ \/ /_/ / / _ \/ /_/ / __ `/ __ \/ __  / / _ \/ ___/  / __/ ___/ / __ `/ __ `/ _ \/ ___/ _ \/ __  /  / _ \ | / / _ \/ __ \/ __/ ___/
+         / ____/ /  / /_/ / __/ / /  __/ __  / /_/ / / / / /_/ / /  __/ /     / /_/ /  / / /_/ / /_/ /  __/ /  /  __/ /_/ /  /  __/ |/ /  __/ / / / /_(__  ) 
+        /_/   /_/   \____/_/ /_/_/\___/_/ /_/\__,_/_/ /_/\__,_/_/\___/_/      \__/_/  /_/\__, /\__, /\___/_/   \___/\__,_/   \___/|___/\___/_/ /_/\__/____/  
+                                                                                /____//____/                                                         
          */
         public delegate void ProfileReadFromFileEventHandler(object sender, PanelBindingReadFromFileEventArgs e);
 
@@ -75,7 +78,7 @@ namespace NonVisuals.EventArgs
 
         public static void SavePanelSettings(ProfileHandler profileHandler)
         {
-            OnSavePanelSettings?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerEA = profileHandler });
+            OnSavePanelSettings?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
         }
 
         public delegate void SavePanelSettingsEventHandlerJSON(object sender, ProfileHandlerEventArgs e);
@@ -84,7 +87,7 @@ namespace NonVisuals.EventArgs
 
         public static void SavePanelSettingsJSON(ProfileHandler profileHandler)
         {
-            OnSavePanelSettingsJSON?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerEA = profileHandler });
+            OnSavePanelSettingsJSON?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
         }
 
         public delegate void AirframeSelectedEventHandler(object sender, AirframeEventArgs e);
@@ -105,9 +108,6 @@ namespace NonVisuals.EventArgs
             OnClearPanelSettings?.Invoke(sender);
         }
 
-        /*
-         * Events triggered by the ProfileHandler regarding read configurations and saving them
-         */
         public static void AttachSettingsConsumerListener(GamingPanel gamingPanel)
         {
             OnSettingsReadFromFile += gamingPanel.PanelBindingReadFromFile;
@@ -141,8 +141,13 @@ namespace NonVisuals.EventArgs
 
 
         /*
-         * GamingPanel triggered events
-         */
+           ______                   _                ____                       __   __         _                                      __                            __       
+          / ____/____ _ ____ ___   (_)____   ____ _ / __ \ ____ _ ____   ___   / /  / /_ _____ (_)____ _ ____ _ ___   _____ ___   ____/ /  ___  _   __ ___   ____   / /_ _____
+         / / __ / __ `// __ `__ \ / // __ \ / __ `// /_/ // __ `// __ \ / _ \ / /  / __// ___// // __ `// __ `// _ \ / ___// _ \ / __  /  / _ \| | / // _ \ / __ \ / __// ___/
+        / /_/ // /_/ // / / / / // // / / // /_/ // ____// /_/ // / / //  __// /  / /_ / /   / // /_/ // /_/ //  __// /   /  __// /_/ /  /  __/| |/ //  __// / / // /_ (__  ) 
+        \____/ \__,_//_/ /_/ /_//_//_/ /_/ \__, //_/     \__,_//_/ /_/ \___//_/   \__//_/   /_/ \__, / \__, / \___//_/    \___/ \__,_/   \___/ |___/ \___//_/ /_/ \__//____/  
+                                          /____/                                               /____/ /____/                                                                  
+        */
 
         /*
          * Used by UserControls to show switches that has been manipulated.
@@ -154,7 +159,7 @@ namespace NonVisuals.EventArgs
 
         public static void SwitchesChanged(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum, HashSet<object> hashSet)
         {
-            OnSwitchesChangedA?.Invoke(sender, new SwitchesChangedEventArgs { HidInstance = hidInstanceId, GamingPanelEnum = gamingPanelEnum, Switches = hashSet });
+            OnSwitchesChangedA?.Invoke(sender, new SwitchesChangedEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum, Switches = hashSet });
         }
 
         /*
@@ -231,6 +236,7 @@ namespace NonVisuals.EventArgs
             OnSwitchesChangedA += gamingPanelListener.SwitchesChanged;
             OnSettingsAppliedA += gamingPanelListener.SettingsApplied;
             OnSettingsClearedA += gamingPanelListener.SettingsCleared;
+            OnSettingsModified += gamingPanelListener.PanelSettingsModified;
             OnUpdatesHasBeenMissed += gamingPanelListener.UpdatesHasBeenMissed;
         }
         
@@ -240,6 +246,7 @@ namespace NonVisuals.EventArgs
             OnSwitchesChangedA -= gamingPanelListener.SwitchesChanged;
             OnSettingsAppliedA -= gamingPanelListener.SettingsApplied;
             OnSettingsClearedA -= gamingPanelListener.SettingsCleared;
+            OnSettingsModified -= gamingPanelListener.PanelSettingsModified;
             OnUpdatesHasBeenMissed -= gamingPanelListener.UpdatesHasBeenMissed;
         }
 

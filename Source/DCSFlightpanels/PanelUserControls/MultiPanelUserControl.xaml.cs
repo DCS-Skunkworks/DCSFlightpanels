@@ -131,7 +131,7 @@
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel && e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ70MultiPanel && e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId))
                 {
                     NotifyKnobChanges(e.Switches);
                 }

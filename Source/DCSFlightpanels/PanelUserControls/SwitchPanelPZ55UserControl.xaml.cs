@@ -186,7 +186,7 @@
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }

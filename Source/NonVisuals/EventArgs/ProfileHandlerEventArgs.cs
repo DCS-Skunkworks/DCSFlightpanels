@@ -4,6 +4,6 @@
 
     public class ProfileHandlerEventArgs : EventArgs
     {
-        public ProfileHandler ProfileHandlerEA { get; set; }
+        public ProfileHandler ProfileHandlerCaller { get; set; }
     }
 }

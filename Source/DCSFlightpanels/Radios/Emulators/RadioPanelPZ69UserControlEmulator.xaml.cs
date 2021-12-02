@@ -108,7 +108,7 @@
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }

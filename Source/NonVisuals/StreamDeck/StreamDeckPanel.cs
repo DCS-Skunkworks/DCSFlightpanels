@@ -350,7 +350,7 @@
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterJSONProfileData(this, ExportJSONSettings());
+            e.ProfileHandlerCaller.RegisterJSONProfileData(this, ExportJSONSettings());
         }
 
         public override void ClearSettings(bool setIsDirty = false)

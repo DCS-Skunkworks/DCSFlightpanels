@@ -193,7 +193,9 @@
                 {
                     StartupDCSBIOS();
                 }
-                SendEventRegardingForwardingOfKeys();
+
+                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
+                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
 
                 CheckForNewDCSFPRelease();
 
@@ -305,7 +307,8 @@
             {
                 _profileHandler.NewProfile();
                 _profileHandler.Profile = chooseProfileModuleWindow.Profile;
-                SendEventRegardingForwardingOfKeys();
+                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
+                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
             }
 
             SetWindowState();
@@ -993,7 +996,8 @@
                 {
                     _dcsfpProfile = e.Profile;
                     SetApplicationMode(_dcsfpProfile);
-                    SendEventRegardingForwardingOfKeys();
+                    // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
+                    AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
                 }
 
                 if (Common.KeyEmulationOnly())
@@ -1404,7 +1408,8 @@
                 SetApplicationMode(_dcsfpProfile);
                 SetWindowTitle();
                 SetWindowState();
-                SendEventRegardingForwardingOfKeys();
+                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
+                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
             }
             catch (Exception ex)
             {
@@ -1573,20 +1578,14 @@
             {
                 var forwardKeys = bool.Parse(ButtonImageDisable.Tag.ToString());
                 forwardKeys = !forwardKeys;
-                this.ButtonImageDisable.Tag = forwardKeys ? "True" : "False";
-
-                SendEventRegardingForwardingOfKeys();
+                ButtonImageDisable.Tag = forwardKeys ? "True" : "False";
+                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
+                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
-        }
-
-        private void SendEventRegardingForwardingOfKeys()
-        {
-            // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-            AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
         }
 
         private void OpenProfileInNotepad()
@@ -2001,7 +2000,8 @@
                     ButtonDisablePanelEventsFromBeingRouted.ToolTip = "Panel events are routed";
                 }
 
-                SendEventRegardingForwardingOfKeys();
+                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
+                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
                 SetWindowState();
             }
             catch (Exception ex)

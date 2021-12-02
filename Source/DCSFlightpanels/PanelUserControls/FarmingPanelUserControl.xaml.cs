@@ -128,7 +128,7 @@
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }

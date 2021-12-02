@@ -57,6 +57,7 @@
         {
             _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
             _lastProfileUsed = lastProfileUsed;
+            AppEventHandler.AttachSettingsModified(this);
         }
 
         protected void Dispose(bool disposing)

@@ -152,11 +152,6 @@
             }
         }
 
-        public void SetIsDirty()
-        {
-            AppEventHandler.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
-            IsDirty = true;
-        }
 
         public virtual void ProfileSelected(object sender, AirframeEventArgs e)
         {
@@ -245,10 +240,23 @@
             return result;
         }
 
+
+        public void SetIsDirty()
+        {
+            IsDirty = true;
+        }
+
         public bool IsDirty
         {
             get => _isDirty;
-            set => _isDirty = value;
+            set
+            {
+                _isDirty = value;
+                if (_isDirty)
+                {
+                    AppEventHandler.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
+                }
+            }
         }
 
         public void StateSaved()
