@@ -18,7 +18,6 @@
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
         private static readonly object UpdateCounterLockObject = new object();
-        private static readonly object LockObject = new object();
         private readonly object _exceptionLockObject = new object();
         public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); // TODO REMOVE PUBLIC
 
