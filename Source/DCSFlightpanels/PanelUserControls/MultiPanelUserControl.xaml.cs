@@ -157,22 +157,6 @@
             }
         }
 
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.PZ70MultiPanel && _multiPanelPZ70.HIDInstanceId == e.HidInstance)
-                {
-                    ClearAll(false);
-                    ShowGraphicConfiguration();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
         private void ClearAll(bool clearAlsoProfile)
         {
             if (_textBoxBillsSet)
@@ -201,6 +185,7 @@
             {
                 return;
             }
+
             foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
             {
                 if (textBox.Bill == null && !textBox.Equals(TextBoxLogPZ70))
@@ -210,11 +195,18 @@
                 _textBoxBillsSet = true;
             }
             _textBoxBillsSet = true;
+            
         }
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void PanelSettingsModified(object sender, PanelEventArgs e) { }
+        public void SettingsModified(object sender, PanelEventArgs e)
+        {
+            if (e.HidInstance == _multiPanelPZ70.HIDInstanceId)
+            {
+                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+            }
+        }
         
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
@@ -632,6 +624,10 @@
                         {
                             textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                         }
+                        else
+                        {
+                            textBox.Bill.KeyPress = null;
+                        }
                     }
                 }
 
@@ -643,6 +639,10 @@
                         {
                             textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
                         }
+                        else
+                        {
+                            textBox.Bill.OSCommandObject = null;
+                        }
                 }
             
                 foreach (var dcsBiosBinding in _multiPanelPZ70.DCSBiosBindings)
@@ -651,6 +651,10 @@
                     if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
+                    }
+                    else
+                    {
+                        textBox.Bill.DCSBIOSBinding = null;
                     }
                 }
 
@@ -661,6 +665,10 @@
                     if (bipLink.DialPosition == _multiPanelPZ70.PZ70DialPosition && bipLink.BIPLights.Count > 0)
                     {
                         textBox.Bill.BipLink = bipLink;
+                    }
+                    else
+                    {
+                        textBox.Bill.BipLink = null;
                     }
                 }
 
@@ -675,6 +683,7 @@
                 {
                     ButtonLcdLower.Visibility = Visibility.Visible;
                 }
+
                 foreach (var dcsBiosBindingLCD in _multiPanelPZ70.LCDBindings)
                 {
                     if (dcsBiosBindingLCD.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.UpperLCD && dcsBiosBindingLCD.HasBinding)

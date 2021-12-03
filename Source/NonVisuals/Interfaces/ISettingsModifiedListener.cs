@@ -12,6 +12,6 @@ namespace NonVisuals.Interfaces
         /*
          * Used by ProfileHandler to detect changes in panel configurations.
          */
-        void PanelSettingsModified(object sender, PanelEventArgs e); 
+        void SettingsModified(object sender, PanelEventArgs e); 
     }
 }

@@ -118,89 +118,19 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) {}
 
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void SettingsCleared(object sender, PanelEventArgs e){}
 
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e){}
         
-        public void DeviceAttached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void DeviceAttached(object sender, PanelEventArgs e){}
 
-        public void SettingsApplied(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void SettingsApplied(object sender, PanelEventArgs e){}
 
-        public void PanelSettingsModified(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo nada?
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void SettingsModified(object sender, PanelEventArgs e){}
 
-        public void DeviceDetached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void DeviceDetached(object sender, PanelEventArgs e){}
 
         private void SetGraphicsState(HashSet<object> knobs)
         {

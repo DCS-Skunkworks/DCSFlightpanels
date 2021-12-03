@@ -106,22 +106,7 @@
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
-
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.BackLitPanel && _backlitPanelBIP.HIDInstanceId == e.HidInstance)
-                {
-                    ShowGraphicConfiguration();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
@@ -159,7 +144,7 @@
             }
         }
 
-        public void PanelSettingsModified(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
@@ -167,7 +152,11 @@
                 {
                     return;
                 }
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+
+                if (_backlitPanelBIP.HIDInstanceId == e.HidInstance)
+                {
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                }
             }
             catch (Exception ex)
             {

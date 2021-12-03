@@ -103,11 +103,11 @@
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) { }
         
-        public void PanelSettingsModified(object sender, PanelEventArgs e) { }
+        public void SettingsModified(object sender, PanelEventArgs e) { }
         public void ProfileSelected(object sender, AirframeEventArgs e) { }
         public void SettingsApplied(object sender, PanelEventArgs e) { }
 
-        public void SettingsCleared(object sender, PanelEventArgs e) { }
+        
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {

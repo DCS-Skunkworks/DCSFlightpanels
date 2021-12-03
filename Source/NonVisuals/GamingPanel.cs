@@ -292,7 +292,8 @@
         public void ClearPanelSettings(object sender)
         {
             ClearSettings();
-            AppEventHandler.SettingsCleared(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
+            //AppEventHandler.SettingsCleared(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
     }
 }

@@ -154,22 +154,6 @@
             }
         }
 
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.FarmingPanel && _farmingSidePanel.HIDInstanceId == e.HidInstance)
-                {
-                    ClearAll(false);
-                    ShowGraphicConfiguration();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
@@ -234,11 +218,14 @@
             }
         }
 
-        public void PanelSettingsModified(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                if (_farmingSidePanel.HIDInstanceId == e.HidInstance)
+                {
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                }
             }
             catch (Exception ex)
             {
@@ -706,6 +693,10 @@
                     {
                         textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                     }
+                    else
+                    {
+                        textBox.Bill.KeyPress = null;
+                    }
                 }
 
                 foreach (var operatingSystemCommand in _farmingSidePanel.OSCommandList)
@@ -714,6 +705,10 @@
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
                         textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                    }
+                    else
+                    {
+                        textBox.Bill.OSCommandObject = null;
                     }
                 }
 
@@ -724,6 +719,10 @@
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
                     }
+                    else
+                    {
+                        textBox.Bill.DCSBIOSBinding = null;
+                    }
                 }
 
                 SetTextBoxBackgroundColors(Brushes.White); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
@@ -733,6 +732,10 @@
                     if (bipLink.BIPLights.Count > 0)
                     {
                         textBox.Bill.BipLink = bipLink;
+                    }
+                    else
+                    {
+                        textBox.Bill.BipLink = null;
                     }
                 }
             }

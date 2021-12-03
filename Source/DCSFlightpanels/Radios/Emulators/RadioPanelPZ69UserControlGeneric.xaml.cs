@@ -126,25 +126,13 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
-        {
-        }
-
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-        }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
-        {
-        }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) { }
         
-        public void DeviceAttached(object sender, PanelEventArgs e)
-        {
-        }
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
+        
+        public void DeviceAttached(object sender, PanelEventArgs e) { }
 
-        public void DeviceDetached(object sender, PanelEventArgs e)
-        {
-        }
+        public void DeviceDetached(object sender, PanelEventArgs e) { }
 
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
@@ -162,11 +150,14 @@
             }
         }
 
-        public void PanelSettingsModified(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)ShowGraphicConfiguration);
+                if (_radioPanelPZ69.HIDInstanceId == e.HidInstance)
+                {
+                    Dispatcher?.BeginInvoke((Action)ShowGraphicConfiguration);
+                }
             }
             catch (Exception ex)
             {
@@ -362,7 +353,7 @@
 
         private void ClearAllDisplayValues()
         {
-            foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
                 if (textBox.Name.EndsWith("Numbers"))
                 {
@@ -506,6 +497,8 @@
                     return;
                 }
                 HideButtonImages();
+
+                ClearAllDisplayValues();
 
                 foreach (var displayValue in _radioPanelPZ69.DisplayValueHashSet)
                 {

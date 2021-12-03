@@ -21,12 +21,12 @@ namespace NonVisuals.EventArgs
 
         public static void AttachSettingsModified(ISettingsModifiedListener settingsModifiedListener)
         {
-            OnSettingsModified += settingsModifiedListener.PanelSettingsModified;
+            OnSettingsModified += settingsModifiedListener.SettingsModified;
         }
 
         public static void DetachSettingsModified(ISettingsModifiedListener settingsModifiedListener)
         {
-            OnSettingsModified -= settingsModifiedListener.PanelSettingsModified;
+            OnSettingsModified -= settingsModifiedListener.SettingsModified;
         }
 
         /*
@@ -205,13 +205,13 @@ namespace NonVisuals.EventArgs
         /*
          * Used by some UserControls refresh UI when panel has cleared all its settings.
          */
-        public delegate void SettingsClearedEventHandler(object sender, PanelEventArgs e);
+        /*public delegate void SettingsClearedEventHandler(object sender, PanelEventArgs e);
 
         public static event SettingsClearedEventHandler OnSettingsClearedA;
         public static void SettingsCleared(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
         {
             OnSettingsClearedA?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
-        }
+        }*/
 
 
         /*
@@ -235,8 +235,8 @@ namespace NonVisuals.EventArgs
             OnDeviceAttachedA += gamingPanelListener.DeviceAttached;
             OnSwitchesChangedA += gamingPanelListener.SwitchesChanged;
             OnSettingsAppliedA += gamingPanelListener.SettingsApplied;
-            OnSettingsClearedA += gamingPanelListener.SettingsCleared;
-            OnSettingsModified += gamingPanelListener.PanelSettingsModified;
+            //OnSettingsClearedA += gamingPanelListener.SettingsCleared;
+            OnSettingsModified += gamingPanelListener.SettingsModified;
             OnUpdatesHasBeenMissed += gamingPanelListener.UpdatesHasBeenMissed;
         }
         
@@ -245,8 +245,8 @@ namespace NonVisuals.EventArgs
             OnDeviceAttachedA -= gamingPanelListener.DeviceAttached;
             OnSwitchesChangedA -= gamingPanelListener.SwitchesChanged;
             OnSettingsAppliedA -= gamingPanelListener.SettingsApplied;
-            OnSettingsClearedA -= gamingPanelListener.SettingsCleared;
-            OnSettingsModified -= gamingPanelListener.PanelSettingsModified;
+            //OnSettingsClearedA -= gamingPanelListener.SettingsCleared;
+            OnSettingsModified -= gamingPanelListener.SettingsModified;
             OnUpdatesHasBeenMissed -= gamingPanelListener.UpdatesHasBeenMissed;
         }
 

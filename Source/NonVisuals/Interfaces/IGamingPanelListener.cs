@@ -19,12 +19,12 @@
         /*
          * Used by some UserControls refresh UI when panel has cleared all its settings.
          */
-        void SettingsCleared(object sender, PanelEventArgs e);
+        //void SettingsCleared(object sender, PanelEventArgs e);
 
         /*
          * Used by some UserControls to show panel's updated configurations.
          */
-        void PanelSettingsModified(object sender, PanelEventArgs e);
+        void SettingsModified(object sender, PanelEventArgs e);
 
         /*
          * Used by those UserControls who's panels can show LED lights.

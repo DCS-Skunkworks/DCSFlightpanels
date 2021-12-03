@@ -104,7 +104,7 @@
             return null;
         }
 
-        public void PanelSettingsModified(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {

@@ -99,7 +99,7 @@
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
-        public void SettingsCleared(object sender, PanelEventArgs e) { }
+        
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
         
@@ -107,7 +107,7 @@
 
         public void SettingsApplied(object sender, PanelEventArgs e) { }
 
-        public void PanelSettingsModified(object sender, PanelEventArgs e) { }
+        public void SettingsModified(object sender, PanelEventArgs e) { }
 
         public void DeviceDetached(object sender, PanelEventArgs e) { }
 

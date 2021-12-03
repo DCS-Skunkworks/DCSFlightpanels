@@ -204,20 +204,9 @@
             }
         }
 
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void PanelSettingsModified(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
