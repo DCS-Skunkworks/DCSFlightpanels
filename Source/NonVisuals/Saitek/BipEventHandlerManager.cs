@@ -70,17 +70,7 @@
                 }
             }
         }
-
-        public void AddBipListener(IGamingPanelListener iGamingPanelListener)
-        {
-            OnBipPanelRegistered += iGamingPanelListener.BipPanelRegisterEvent;
-        }
-
-        public void RemoveBipListener(IGamingPanelListener iGamingPanelListener)
-        {
-            OnBipPanelRegistered -= iGamingPanelListener.BipPanelRegisterEvent;
-        }
-
+        
         public void BroadcastRegisteredBips()
         {
             foreach (var backlitPanelBip in _backlitPanels)

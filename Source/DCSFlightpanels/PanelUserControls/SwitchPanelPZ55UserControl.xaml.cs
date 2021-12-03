@@ -121,12 +121,7 @@
             ManualLedDownCombo.SelectionChanged += ManualLedDownCombo_SelectionChanged;
             ManualLedTransSecondsCombo.SelectionChanged += ManualLedTransSecondsCombo_SelectionChanged;
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-            var now = DateTime.Now.Ticks;
-            SetContextMenuClickHandlers();
-        }
+        
 
         public override GamingPanel GetGamingPanel()
         {

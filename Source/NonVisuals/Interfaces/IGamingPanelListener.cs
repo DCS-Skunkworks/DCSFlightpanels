@@ -44,10 +44,5 @@
          * It is not used as such since DCS-BIOS has been working so well.
          */
         void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e);
-
-        /*
-         * Not sure about this one, I think it can be removed.
-         */
-        void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e);
     }
 }

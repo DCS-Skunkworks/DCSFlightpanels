@@ -86,11 +86,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-            var now = DateTime.Now.Ticks;
-        }
+        
 
         public override GamingPanel GetGamingPanel()
         {

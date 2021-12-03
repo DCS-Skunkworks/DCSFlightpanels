@@ -80,11 +80,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-        }
-
+        
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;

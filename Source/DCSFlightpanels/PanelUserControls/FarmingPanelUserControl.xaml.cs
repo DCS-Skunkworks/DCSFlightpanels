@@ -75,16 +75,10 @@
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxBills();
-            SetContextMenuClickHandlers();
             UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-            var now = DateTime.Now.Ticks;
-            SetContextMenuClickHandlers();
-        }
+        
 
         public override GamingPanel GetGamingPanel()
         {
@@ -280,25 +274,7 @@
             }
             _textBoxBillsSet = true;
         }
-
-        private void SetContextMenuClickHandlers()
-        {
-            if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
-            {
-                foreach (var image in Common.FindVisualChildren<Image>(this))
-                {
-                    if (image.ContextMenu == null && image.Name.StartsWith("ImagePZ55LED"))
-                    {
-                        image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
-                        if (image.ContextMenu != null)
-                        {
-                            image.ContextMenu.Tag = image.Name;
-                        }
-                    }
-                }
-            }
-        }
-
+        
         private FarmingPanelTextBox GetTextBoxInFocus()
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
@@ -310,8 +286,7 @@
             }
             return null;
         }
-
-
+        
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
         {
             try

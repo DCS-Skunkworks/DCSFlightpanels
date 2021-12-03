@@ -75,11 +75,7 @@
             SetAllBlack();
             ShowGraphicConfiguration();
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-        }
-
+        
         public override GamingPanel GetGamingPanel()
         {
             return _backlitPanelBIP;

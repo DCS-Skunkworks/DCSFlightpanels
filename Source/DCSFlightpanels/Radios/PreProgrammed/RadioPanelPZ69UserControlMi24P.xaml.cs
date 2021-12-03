@@ -57,10 +57,7 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {            
-        }
+        
 
         public override GamingPanel GetGamingPanel()
         {

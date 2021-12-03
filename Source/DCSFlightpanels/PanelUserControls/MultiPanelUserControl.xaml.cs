@@ -78,11 +78,7 @@
             UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-            var now = DateTime.Now.Ticks;
-        }
+        
 
         public override GamingPanel GetGamingPanel()
         {

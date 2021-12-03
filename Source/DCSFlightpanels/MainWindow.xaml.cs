@@ -225,10 +225,6 @@
             _statusMessagesTimer.Elapsed += TimerStatusMessagesTimer;
             _statusMessagesTimer.Start();
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-        }
         
         /// <summary>
         /// Try to find the path of the log with a file target given as parameter
