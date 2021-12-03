@@ -86,6 +86,7 @@
 
             AppEventHandler.AttachSettingsMonitoringListener(this);
             AppEventHandler.AttachSettingsModified(this);
+            BIOSEventHandler.AttachConnectionListener(this);
         }
         
         #region IDisposable Support
@@ -106,6 +107,7 @@
                     _dcsBios?.Dispose();
                     AppEventHandler.DetachSettingsMonitoringListener(this);
                     AppEventHandler.DetachSettingsModified(this);
+                    BIOSEventHandler.DetachConnectionListener(this);
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
