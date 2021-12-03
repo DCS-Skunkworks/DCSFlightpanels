@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Radios
+﻿using NonVisuals.Saitek.Panels;
+
+namespace NonVisuals.Radios
 {
     using System;
     using System.Collections.Generic;
@@ -472,7 +474,7 @@
             var pz69SwitchOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
             if (keySequence.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ69.KEYS, pz69SwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, pz69SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -521,7 +523,7 @@
 
             if (bipLinkPZ69.BIPLights.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ69.BIPS, pz69SwitchOnOff);
+                RemoveSwitchFromList(ControlList.BIPS, pz69SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -599,10 +601,10 @@
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
-            var controlListPZ69 = (ControlListPZ69) controlList;
+            var controlListPZ69 = (ControlList) controlList;
             var pz69SwitchOnOff = (PZ69SwitchOnOff) panelSwitchOnOff;
             var found = false;
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.KEYS)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.KEYS)
             {
                 foreach (var keyBindingPZ55 in _keyBindings)
                 {
@@ -616,7 +618,7 @@
                 }
             }
 
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.BIPS)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
@@ -630,7 +632,7 @@
                 }
             }
 
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.OSCOMMAND)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.OSCOMMANDS)
             {
                 OSCommandBindingPZ69Emulator operatingSystemCommandBindingPZ69 = null;
                 for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
@@ -689,15 +691,6 @@
         }
 
     }
-
-    public enum ControlListPZ69 : byte
-    {
-        ALL,
-        KEYS,
-        BIPS,
-        DCSBIOS,
-        LCD,
-        OSCOMMAND
-    }
+    
 
 }

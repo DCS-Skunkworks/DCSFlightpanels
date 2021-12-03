@@ -246,7 +246,7 @@
         {
             try
             {
-                EditBIPLink(GamingPanelEnum.PZ55SwitchPanel);
+                EditBIPLink(_saitekPanel.TypeOfPanel);
             }
             catch (Exception ex)
             {
@@ -708,7 +708,7 @@
         private void DeleteDCSBIOS()
         {
             TextBox.Text = string.Empty;
-            _saitekPanel.RemoveSwitchFromList(ControlListPZ55.DCSBIOS, PanelUIParent.GetSwitch(TextBox));
+            _saitekPanel.RemoveSwitchFromList(ControlList.DCSBIOS, PanelUIParent.GetSwitch(TextBox));
             ClearDCSBIOSFromBill();
         }
 
@@ -725,7 +725,7 @@
         private void DeleteOSCommand()
         {
             TextBox.Text = string.Empty;
-            _saitekPanel.RemoveSwitchFromList(ControlListPZ55.OSCOMMANDS, PanelUIParent.GetSwitch(TextBox));
+            _saitekPanel.RemoveSwitchFromList(ControlList.OSCOMMANDS, PanelUIParent.GetSwitch(TextBox));
             OSCommandObject = null;
         }
 

@@ -362,7 +362,7 @@
             var pz70SwitchOnOff = (PZ70SwitchOnOff) panelSwitchOnOff;
             if (string.IsNullOrEmpty(keyPress))
             {
-                RemoveSwitchFromList(ControlListPZ70.KEYS, pz70SwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -406,7 +406,7 @@
 
             if (keySequence.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ70.KEYS, pz70SwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -450,7 +450,7 @@
 
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ70.DCSBIOS, pz70SwitchOnOff);
+                RemoveSwitchFromList(ControlList.DCSBIOS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -553,7 +553,7 @@
 
             if (bipLinkPZ70.BIPLights.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ70.BIPS, pz70SwitchOnOff);
+                RemoveSwitchFromList(ControlList.BIPS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -613,10 +613,10 @@
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
             var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
-            var controlListPZ70 = (ControlListPZ70) controlList;
+            var controlListPZ70 = (ControlList) controlList;
 
             var found = false;
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.KEYS)
+            if (controlListPZ70 == ControlList.ALL || controlListPZ70 == ControlList.KEYS)
             {
                 foreach (var knobBindingPZ70 in _knobBindings)
                 {
@@ -628,7 +628,7 @@
                 }
             }
 
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.DCSBIOS)
+            if (controlListPZ70 == ControlList.ALL || controlListPZ70 == ControlList.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
@@ -640,7 +640,7 @@
                 }
             }
 
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.BIPS)
+            if (controlListPZ70 == ControlList.ALL || controlListPZ70 == ControlList.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
@@ -652,7 +652,7 @@
                 }
             }
 
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.OSCOMMAND)
+            if (controlListPZ70 == ControlList.ALL || controlListPZ70 == ControlList.OSCOMMANDS)
             {
                 OSCommandBindingPZ70 operatingSystemCommandBindingPZ70 = null;
                 for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
@@ -1453,13 +1453,5 @@
         HDG = 8,
         CRS = 16
     }
-
-    public enum ControlListPZ70 : byte
-    {
-        ALL,
-        DCSBIOS,
-        KEYS,
-        BIPS,
-        OSCOMMAND
-    }
+    
 }

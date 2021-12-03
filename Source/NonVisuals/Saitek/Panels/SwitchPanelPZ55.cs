@@ -582,7 +582,7 @@
 
             if (string.IsNullOrEmpty(keyPress))
             {
-                RemoveSwitchFromList(ControlListPZ55.KEYS, pz55SwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -623,7 +623,7 @@
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             if (keySequence.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ55.KEYS, pz55SwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -698,7 +698,7 @@
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ55.DCSBIOS, pz55SwitchOnOff);
+                RemoveSwitchFromList(ControlList.DCSBIOS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -738,7 +738,7 @@
             var bipLinkPZ55 = (BIPLinkPZ55)bipLink;
             if (bipLinkPZ55.BIPLights.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ55.BIPS, pz55SwitchOnOff);
+                RemoveSwitchFromList(ControlList.BIPS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -769,11 +769,11 @@
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
-            var controlListPZ55 = (ControlListPZ55) controlList;
+            var controlListPZ55 = (ControlList) controlList;
             var pz55SwitchOnOff = (PZ55SwitchOnOff) panelSwitchOnOff;
 
             var  found = false;
-            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.KEYS)
+            if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.KEYS)
             {
                 foreach (var keyBindingPZ55 in _keyBindings)
                 {
@@ -785,7 +785,7 @@
                 }
             }
 
-            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.DCSBIOS)
+            if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
@@ -797,7 +797,7 @@
                 }
             }
 
-            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.BIPS)
+            if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
@@ -809,7 +809,7 @@
                 }
             }
             
-            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.OSCOMMANDS)
+            if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.OSCOMMANDS)
             {
                 OSCommandBindingPZ55 operatingSystemCommandBindingPZ55  = null;
                 for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
@@ -1123,14 +1123,6 @@
             }
         }
     }
-
-    public enum ControlListPZ55 : byte
-    {
-        ALL,
-        DCSBIOS,
-        KEYS,
-        BIPS,
-        OSCOMMANDS
-    }
+    
 }
 

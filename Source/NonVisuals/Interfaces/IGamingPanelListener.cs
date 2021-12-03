@@ -12,15 +12,10 @@
 
         /*
          * Used by some UserControls refresh UI to know when panels have loaded their configurations.
-         * Used by MainWindow to SetFormstate().
+         * Used by MainWindow to SetFormState().
          */
         void SettingsApplied(object sender, PanelEventArgs e);
-
-        /*
-         * Used by some UserControls refresh UI when panel has cleared all its settings.
-         */
-        //void SettingsCleared(object sender, PanelEventArgs e);
-
+        
         /*
          * Used by some UserControls to show panel's updated configurations.
          */

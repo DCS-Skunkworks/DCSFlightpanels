@@ -201,19 +201,6 @@ namespace NonVisuals.EventArgs
             OnSettingsAppliedA?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
         }
 
-
-        /*
-         * Used by some UserControls refresh UI when panel has cleared all its settings.
-         */
-        /*public delegate void SettingsClearedEventHandler(object sender, PanelEventArgs e);
-
-        public static event SettingsClearedEventHandler OnSettingsClearedA;
-        public static void SettingsCleared(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
-        {
-            OnSettingsClearedA?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
-        }*/
-
-
         /*
          * DCS-BIOS has a feature to detect if any updates has been missed.
          * It is not used as such since DCS-BIOS has been working so well.

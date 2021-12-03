@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Radios
+﻿using NonVisuals.Saitek.Panels;
+
+namespace NonVisuals.Radios
 {
     using System;
     using System.Collections.Generic;
@@ -743,7 +745,7 @@
 
             if (keySequence.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ69.KEYS, radioPanelPZ69KeyOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, radioPanelPZ69KeyOnOff);
                 SetIsDirty();
                 return;
             }
@@ -788,7 +790,7 @@
 
             if (bipLinkPZ69.BIPLights.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ69.BIPS, radioPanelPZ69KeyOnOff);
+                RemoveSwitchFromList(ControlList.BIPS, radioPanelPZ69KeyOnOff);
                 SetIsDirty();
                 return;
             }
@@ -905,7 +907,7 @@
             var radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ69.DCSBIOS, radioPanelPZ69KeyOnOff);
+                RemoveSwitchFromList(ControlList.DCSBIOS, radioPanelPZ69KeyOnOff);
                 SetIsDirty();
                 return;
             }
@@ -957,11 +959,11 @@
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
             var pz69SwitchOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
-            var controlListPZ69 = (ControlListPZ69)controlList;
+            var controlListPZ69 = (ControlList)controlList;
 
             var found = false;
             var pz69DialPosition = GetDial(pz69SwitchOnOff.Switch);
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.KEYS)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.KEYS)
             {
                 foreach (var keyBinding in _keyBindings)
                 {
@@ -975,7 +977,7 @@
                 }
             }
 
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.DCSBIOS)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
@@ -989,7 +991,7 @@
                 }
             }
 
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.BIPS)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
@@ -1003,7 +1005,7 @@
                 }
             }
 
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.OSCOMMAND)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.OSCOMMANDS)
             {
                 OSCommandBindingPZ69FullEmulator operatingSystemCommandBindingPZ69 = null;
                 for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)

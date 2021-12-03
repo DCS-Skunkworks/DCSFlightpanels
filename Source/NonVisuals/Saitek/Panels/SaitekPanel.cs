@@ -243,4 +243,12 @@
     }
 
 
+    public enum ControlList : byte
+    {
+        ALL,
+        DCSBIOS,
+        KEYS,
+        BIPS,
+        OSCOMMANDS
+    }
 }
