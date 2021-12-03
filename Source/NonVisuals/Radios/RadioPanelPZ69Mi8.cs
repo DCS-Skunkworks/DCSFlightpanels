@@ -18,7 +18,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69Mi8 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
+    public class RadioPanelPZ69Mi8 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentMi8RadioMode _currentUpperRadioMode = CurrentMi8RadioMode.R863_MANUAL;
         private CurrentMi8RadioMode _currentLowerRadioMode = CurrentMi8RadioMode.R863_MANUAL;

@@ -18,7 +18,7 @@ namespace NonVisuals.Radios
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69UH1H : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
+    public class RadioPanelPZ69UH1H : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentUH1HRadioMode _currentUpperRadioMode = CurrentUH1HRadioMode.UHF;
         private CurrentUH1HRadioMode _currentLowerRadioMode = CurrentUH1HRadioMode.UHF;

@@ -21,7 +21,7 @@ namespace NonVisuals.Radios
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69FA18C : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
+    public class RadioPanelPZ69FA18C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentFA18CRadioMode _currentUpperRadioMode = CurrentFA18CRadioMode.COMM1;
 

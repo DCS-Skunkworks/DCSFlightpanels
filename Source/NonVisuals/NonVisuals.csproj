@@ -233,7 +233,6 @@
     <Compile Include="HIDHandler.cs" />
     <Compile Include="HIDSkeleton.cs" />
     <Compile Include="Interfaces\IProfileHandlerListener.cs" />
-    <Compile Include="Interfaces\IRadioPanel.cs" />
     <Compile Include="Interfaces\ISaitekPanelKnob.cs" />
     <Compile Include="Interfaces\IGamingPanelListener.cs" />
     <Compile Include="Saitek\KeyBinding.cs" />

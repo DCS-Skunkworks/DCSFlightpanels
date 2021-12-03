@@ -25,7 +25,7 @@
         public const double Fifty = 0.050;
     }
 
-    public class RadioPanelPZ69SRS : RadioPanelPZ69Base, IRadioPanel, ISRSDataListener
+    public class RadioPanelPZ69SRS : RadioPanelPZ69Base, ISRSDataListener
     {
         private CurrentSRSRadioMode _currentUpperRadioMode = CurrentSRSRadioMode.COM1;
         private CurrentSRSRadioMode _currentLowerRadioMode = CurrentSRSRadioMode.COM1;

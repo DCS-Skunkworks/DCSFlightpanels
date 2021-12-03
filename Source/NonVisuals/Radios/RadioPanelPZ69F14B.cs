@@ -18,7 +18,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69F14B : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
+    public class RadioPanelPZ69F14B : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentF14RadioMode _currentUpperRadioMode = CurrentF14RadioMode.UHF;
         private CurrentF14RadioMode _currentLowerRadioMode = CurrentF14RadioMode.UHF;
