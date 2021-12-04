@@ -24,8 +24,6 @@
 
     using StreamDeckSharp;
 
-    using Theraot.Core;
-
     public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
         private readonly Color[] _colors =
@@ -455,7 +453,7 @@
 
         public string GetLayerHandlerInformation()
         {
-            return "StreamDeckLayerHandler Instance ID = ".Append(_streamDeckLayerHandler.InstanceId.ToString()).Append(" Counter = ").Append(StreamDeckLayerHandler.InstanceIdCounter.ToString());
+            return $"StreamDeckLayerHandler Instance ID = {_streamDeckLayerHandler.InstanceId} Counter = {StreamDeckLayerHandler.InstanceIdCounter}";
         }
 
         public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName, string layerName)
