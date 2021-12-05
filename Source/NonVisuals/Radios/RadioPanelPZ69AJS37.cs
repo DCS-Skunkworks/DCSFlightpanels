@@ -891,7 +891,6 @@
         {
             try
             {
-                StartupBase("AJS-37");
 
                 // COM1
 
@@ -907,7 +906,7 @@
                 // ADF
 
                 // XPDR
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }

@@ -2899,8 +2899,6 @@
         {
             try
             {
-                StartupBase("Mi-8");
-
                 // COM1
                 _r863ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_FREQ");
                 DCSBIOSStringManager.AddListener(_r863ManualDcsbiosOutputCockpitFrequency, this);
@@ -2932,7 +2930,7 @@
                 _spu7DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_SEL_L");
                 _spu7ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("SPU7_L_ICS");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }

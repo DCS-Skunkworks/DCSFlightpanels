@@ -67,13 +67,13 @@
             base.Dispose(disposing);
         }
 
-        protected override void StartListeningForPanelChanges()
+        protected override void StartListeningForHidPanelChanges()
         {
             try
             {
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
-                    // Debug.Write("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType + " " + GuidString + "\n");
+                    // Debug.Write("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType\n");
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
                 }
             }
@@ -125,7 +125,7 @@
                 FirstReportHasBeenRead = true;
             }
 
-            StartListeningForPanelChanges();
+            StartListeningForHidPanelChanges();
         }
 
         private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)

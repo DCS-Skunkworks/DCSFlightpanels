@@ -3110,8 +3110,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                StartupBase("UH-1H");
-
                 // VHF COMM
                 _vhfCommDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFCOMM_FREQ");
                 DCSBIOSStringManager.AddListener(_vhfCommDcsbiosOutputCockpitFrequency, this);
@@ -3139,7 +3137,7 @@ namespace NonVisuals.Radios
                 _adfDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_FREQ");
                 _adfDcsbiosOutputSignalStrength = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_SIGNAL");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {

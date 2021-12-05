@@ -4013,8 +4013,6 @@
         {
             try
             {
-                StartupBase("A-10C");
-
                 // VHF AM
                 _vhfAmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ1");
 
@@ -4067,7 +4065,7 @@
                 _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
                 DCSBIOSStringManager.AddListener(_tacanDcsbiosOutputFreqChannel, this); // _tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }

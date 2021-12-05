@@ -2,22 +2,34 @@
 using System.Windows.Controls;
 using ClassLibraryCommon;
 using NonVisuals;
-using NonVisuals.Interfaces;
+
 
 namespace DCSFlightpanels.PanelUserControls
 {
     public class UserControlBase : UserControl, IDisposable
     {
         private TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private bool _userControlLoaded;
-        
+        private bool _disposed;
+
+        public string ParentTabItemHeader { get; set; }  //unused except in 6 commented lines and I think those lines could be deleted, not very clear in my head.
+        public bool UserControlLoaded { get; set; }
+
+        public TabItem ParentTabItem
+        {
+            get => _parentTabItem;
+            set
+            {
+                _parentTabItem = value;
+                if (_parentTabItem != null && _parentTabItem.Header != null)
+                {
+                    ParentTabItemHeader = ParentTabItem.Header.ToString();
+                }
+            }
+        }
 
         public UserControlBase()
         {}
         
-
-        private bool _disposed;
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
@@ -52,33 +64,5 @@ namespace DCSFlightpanels.PanelUserControls
         {
             return GamingPanelEnum.Unknown;
         }
-        
-
-        public TabItem ParentTabItem
-        {
-            get => _parentTabItem;
-            set
-            {
-                _parentTabItem = value;
-                if (_parentTabItem != null && _parentTabItem.Header != null)
-                {
-                    ParentTabItemHeader = ParentTabItem.Header.ToString();
-                }
-            }
-        }
-
-        public string ParentTabItemHeader
-        {
-            get => _parentTabItemHeader;
-            set => _parentTabItemHeader = value;
-        }
-
-        public bool UserControlLoaded
-        {
-            get => _userControlLoaded;
-            set => _userControlLoaded = value;
-        }
-
-
     }
 }

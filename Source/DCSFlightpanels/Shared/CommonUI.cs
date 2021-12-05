@@ -9,19 +9,14 @@ namespace DCSFlightpanels.Shared
             return DoDiscardAfterMessage(isDirty, "Discard changes?");
         }
 
-        public static bool DoDiscardAfterMessage(bool isDirty, string question, string caption = "Confirm")
+        public static bool DoDiscardAfterMessage(bool isDirty, string question)
         {
-            /*
-             * Defaults to true so only if "is dirty" and "do not discard" will result change
-             */
-            var result = true;
-
+            // Defaults to true so only if "is dirty" and "do not discard" will result change
             if (isDirty)
             {
-                result = MessageBox.Show(question, caption, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+                return(MessageBox.Show(question, "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes);
             }
-
-            return result;
+            return true;
         }
 
     }

@@ -16,48 +16,87 @@
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty, IDisposable
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
-        private readonly Guid _guid = Guid.NewGuid();
-        private static readonly object UpdateCounterLockObject = new object();
-        private static readonly object LockObject = new object();
-        private readonly object _exceptionLockObject = new object();
-        public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); // TODO REMOVE PUBLIC
-
-        private Exception _lastException;
-
-        private bool _isDirty;
-
-        private uint _count;
-
-        private bool _synchedOnce;
 
         public abstract void Startup();
-
         public abstract void Identify();
-
         public abstract void ClearSettings(bool setIsDirty = false);
-
         public abstract void ImportSettings(GenericPanelBinding genericPanelBinding);
-
         public abstract List<string> ExportSettings();
-
         public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
-
         public abstract void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e);
-
         public abstract void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
-
-        protected readonly HIDSkeleton HIDSkeletonBase;
-
-        public long ReportCounter = 0;
-
-        protected bool FirstReportHasBeenRead = false;
-
         protected abstract void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet);
+        protected abstract void StartListeningForHidPanelChanges();
 
-        protected abstract void StartListeningForPanelChanges();
-
+        private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
+        private static readonly object UpdateCounterLockObject = new object();
+        private readonly object _exceptionLockObject = new object();
+        private Exception _lastException;
         private string _randomBindingHash = string.Empty;
+        private uint _count;
+        private bool _synchedOnce;
+        protected bool Closed { get; set; }
+        protected bool FirstReportHasBeenRead = false;
+        protected readonly HIDSkeleton HIDSkeletonBase;
+        public bool IsDirty { get; set; }
+        public bool SettingsLoading { get; set; }
+        public GamingPanelEnum TypeOfPanel { get; set; }
+        public bool ForwardPanelEvent { get; set; }
+        public int VendorId { get; set; }
+        public int ProductId { get; set; }
+        public long ReportCounter = 0;
+        public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); // TODO REMOVE PUBLIC
+
+        public string HIDInstanceId
+        {
+            get => HIDSkeletonBase.InstanceId;
+            set => HIDSkeletonBase.InstanceId = value;
+        }
+
+        public string BindingHash
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_randomBindingHash))
+                {
+                    _randomBindingHash = Common.GetRandomMd5Hash();
+                }
+
+                return _randomBindingHash;
+            }
+
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    _randomBindingHash = Common.GetRandomMd5Hash();
+                    SetIsDirty();
+                }
+                else
+                {
+                    _randomBindingHash = value;
+                }
+            }
+        }
+
+        private bool _disposed;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                Closed = true; // Don't know if this is necessary atm. (2021)
+                AppEventHandler.DetachForwardPanelEventListener(this);
+                AppEventHandler.DetachSettingsConsumerListener(this);
+                BIOSEventHandler.DetachDataListener(this);
+            }
+
+            _disposed = true;
+        }
 
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
@@ -85,25 +124,6 @@
             AppEventHandler.AttachForwardPanelEventListener(this);
             AppEventHandler.AttachSettingsConsumerListener(this);
             BIOSEventHandler.AttachDataListener(this);
-        }
-
-        private bool _disposed;
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                Closed = true; // Don't know if this is necessary atm. (2021)
-                AppEventHandler.DetachForwardPanelEventListener(this);
-                AppEventHandler.DetachSettingsConsumerListener(this);
-                BIOSEventHandler.DetachDataListener(this);
-            }
-
-            _disposed = true;
         }
 
         public void Dispose()
@@ -152,6 +172,11 @@
             }
         }
 
+        public void SetIsDirty()
+        {
+            AppEventHandler.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
+            IsDirty = true;
+        }
 
         public virtual void ProfileSelected(object sender, AirframeEventArgs e)
         {
@@ -162,47 +187,6 @@
         {
             ForwardPanelEvent = e.Forward;
         }
-
-        public bool ForwardPanelEvent { get; set; }
-
-        public int VendorId { get; set; }
-
-        public int ProductId { get; set; }
-
-        public string HIDInstanceId
-        {
-            get => HIDSkeletonBase.InstanceId;
-            set => HIDSkeletonBase.InstanceId = value;
-        }
-
-        public string BindingHash
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_randomBindingHash))
-                {
-                    _randomBindingHash = Common.GetRandomMd5Hash();
-                }
-
-                return _randomBindingHash;
-            }
-
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    _randomBindingHash = Common.GetRandomMd5Hash();
-                    SetIsDirty();
-                }
-                else
-                {
-                    _randomBindingHash = value;
-                }
-            }
-        }
-
-        // public string Hash => _hash;
-        public string GuidString => _guid.ToString();
 
         protected void SetLastException(Exception ex)
         {
@@ -240,46 +224,10 @@
             return result;
         }
 
-
-        public void SetIsDirty()
-        {
-            IsDirty = true;
-        }
-
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set
-            {
-                _isDirty = value;
-                if (_isDirty)
-                {
-                    AppEventHandler.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
-                }
-            }
-        }
-
         public void StateSaved()
         {
-            _isDirty = false;
+            IsDirty = false;
         }
-
-        public bool SettingsLoading { get; set; }
-
-        public GamingPanelEnum TypeOfPanel { get; set; }
-
-        // TODO fixa att man kan koppla in/ur panelerna?
-        /*
-         * 
-        
-        public bool IsAttached
-        {
-            get { return _isAttached; }
-            set { _isAttached = value; }
-        }
-        */
-        protected bool Closed { get; set; }
-
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
         {

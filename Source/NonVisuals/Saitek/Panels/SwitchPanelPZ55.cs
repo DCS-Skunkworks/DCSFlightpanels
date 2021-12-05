@@ -84,7 +84,7 @@
         {
             try
             {
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {
@@ -943,7 +943,7 @@
                 {
                     var array = new[] { (byte)0x0, (byte)switchPanelPZ55LEDs };
 
-                    // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
+                    // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel);
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(new byte[] { 0, 0 });
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
                 }

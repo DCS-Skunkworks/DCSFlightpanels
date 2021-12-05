@@ -1828,8 +1828,6 @@
         {
             try
             {
-                StartupBase("Mi-24P");
-
                 //COM1
 
                 //COM2
@@ -1857,7 +1855,7 @@
                 _spu8DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_SPU8_MODE");
                 _spu8ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_SPU8_ICS");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {

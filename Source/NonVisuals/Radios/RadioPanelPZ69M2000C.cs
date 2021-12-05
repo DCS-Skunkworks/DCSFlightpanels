@@ -1214,8 +1214,6 @@
         {
             try
             {
-                StartupBase("M2000C");
-
                 // COM1
                 _vhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_FREQUENCY");
                 DCSBIOSStringManager.AddListener(_vhfDcsbiosOutputPresetFreqString, this);
@@ -1238,7 +1236,7 @@
                 _vorDcsbiosOutputDialPower = DCSBIOSControlLocator.GetDCSBIOSOutput("VORILS_PWR_DIAL");
                 _vorDcsbiosOutputDialTest = DCSBIOSControlLocator.GetDCSBIOSOutput("VORILS_TEST_DIAL");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }

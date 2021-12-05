@@ -172,7 +172,7 @@
             {
                 if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
                 {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (connected)"));
                 }
             }
             catch (Exception ex)
@@ -187,7 +187,7 @@
             {
                 if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
                 {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (disconnected)"));
                 }
             }
             catch (Exception ex)

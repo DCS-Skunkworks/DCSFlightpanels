@@ -87,7 +87,7 @@
         {
             try
             {
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {
@@ -1361,7 +1361,7 @@
         {
             try
             {
-                // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
+                // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel);
                 HIDSkeletonBase.HIDWriteDevice?.WriteFeatureData(array);
             }
             catch (Exception ex)

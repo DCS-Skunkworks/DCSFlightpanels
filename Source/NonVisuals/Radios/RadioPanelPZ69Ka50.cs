@@ -2045,8 +2045,6 @@
         {
             try
             {
-                StartupBase("Ka-50");
-
                 // VHF1
                 _vhf1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R828_CHANNEL");
 
@@ -2065,7 +2063,7 @@
                 _datalinkSelfIdDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DLNK_SELF_ID");
                 _datalinkPowerOnOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PVI_POWER");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }

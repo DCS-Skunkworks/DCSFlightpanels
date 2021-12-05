@@ -706,8 +706,6 @@
         {
             try
             {
-                StartupBase("AV-8B NA");
-
                 // V/UHF COMM1
                 _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_STRING_FREQ");
                 DCSBIOSStringManager.AddListener(_comm1DcsbiosOutputFreq, this);
@@ -716,7 +714,7 @@
                 _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM2_STRING_FREQ");
                 DCSBIOSStringManager.AddListener(_comm2DcsbiosOutputFreq, this);
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }
