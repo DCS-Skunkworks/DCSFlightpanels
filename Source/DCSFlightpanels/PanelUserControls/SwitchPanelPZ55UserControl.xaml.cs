@@ -42,7 +42,7 @@
 
 
 
-        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
@@ -50,9 +50,7 @@
             ParentTabItem = parentTabItem;
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
-            _switchPanelPZ55.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_switchPanelPZ55);
-            GlobalHandler = globalHandler;
+            AppEventHandler.AttachGamingPanelListener(this);
             _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
             _imageArrayUpper[1] = ImagePZ55LEDGreenUpper;
             _imageArrayUpper[2] = ImagePZ55LEDYellowUpper;
@@ -69,15 +67,26 @@
             _imageArrayRight[3] = ImagePZ55LEDRedRight;
         }
 
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!_disposed)
             {
-                _switchPanelPZ55.Dispose();
+                if (disposing)
+                {
+                    _switchPanelPZ55.Dispose();
+                    AppEventHandler.DetachGamingPanelListener(this);
+                }
+
+                _disposed = true;
             }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
-
-
+        
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxBills();
@@ -112,12 +121,7 @@
             ManualLedDownCombo.SelectionChanged += ManualLedDownCombo_SelectionChanged;
             ManualLedTransSecondsCombo.SelectionChanged += ManualLedTransSecondsCombo_SelectionChanged;
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-            var now = DateTime.Now.Ticks;
-            SetContextMenuClickHandlers();
-        }
+        
 
         public override GamingPanel GetGamingPanel()
         {
@@ -134,7 +138,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -173,11 +177,11 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -194,22 +198,6 @@
             {
                 if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.HIDInstanceId == e.PanelBinding.HIDInstance)
                 {
-                    ShowGraphicConfiguration();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.HIDInstanceId == e.HidInstance)
-                {
-                    ClearAll(false);
                     ShowGraphicConfiguration();
                 }
             }
@@ -308,25 +296,14 @@
                 Dispatcher?.BeginInvoke((Action)(() => image1.Visibility = Visibility.Collapsed));
             }
         }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         public void DeviceAttached(object sender, PanelEventArgs e)
         {
             try
             {
                 if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (connected)"));
                 }
             }
             catch (Exception ex)
@@ -341,7 +318,7 @@
             {
                 if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (disconnected)"));
                 }
             }
             catch (Exception ex)
@@ -366,11 +343,14 @@
             }
         }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                if (_switchPanelPZ55.HIDInstanceId == e.HidInstance)
+                {
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                }
             }
             catch (Exception ex)
             {
@@ -421,7 +401,7 @@
                     continue;
                 }
 
-                textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox);
+                textBox.Bill = new BillPZ55(this, _switchPanelPZ55, textBox);
             }
             _textBoxBillsSet = true;
         }
@@ -465,7 +445,7 @@
                 {
                     position = SwitchPanelPZ55LEDPosition.RIGHT;
                 }
-                var ledConfigsWindow = new LEDConfigsWindow(GlobalHandler.GetProfile(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
+                var ledConfigsWindow = new LEDConfigsWindow( "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position
@@ -821,6 +801,10 @@
                     {
                         textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                     }
+                    else
+                    {
+                        textBox.Bill.KeyPress = null;
+                    }
                 }
 
                 foreach (var operatingSystemCommand in _switchPanelPZ55.OSCommandList)
@@ -829,6 +813,10 @@
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
                         textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                    }
+                    else
+                    {
+                        textBox.Bill.OSCommandObject = null;
                     }
                 }
 
@@ -839,6 +827,10 @@
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
                     }
+                    else
+                    {
+                        textBox.Bill.DCSBIOSBinding = null;
+                    }
                 }
 
                 SetTextBoxBackgroundColors(Brushes.White); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
@@ -848,6 +840,10 @@
                     if (bipLinkPZ55.BIPLights.Count > 0)
                     {
                         textBox.Bill.BipLink = bipLinkPZ55;
+                    }
+                    else
+                    {
+                        textBox.Bill.BipLink = null;
                     }
                 }
 

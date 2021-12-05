@@ -8,9 +8,7 @@
     using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
 
-
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
 
@@ -18,46 +16,35 @@
     {
         private BIPLinkPZ69 _bipLinkPZ69;
 
-        public BillPZ69(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
-        {
-            SetContextMenu();
-        }
-
-        protected override void ClearDCSBIOSFromBill()
-        {
-        }
-
         public override BIPLink BipLink
         {
             get => _bipLinkPZ69;
             set
             {
                 _bipLinkPZ69 = (BIPLinkPZ69)value;
-                if (_bipLinkPZ69 != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.White;
-                }
+                TextBox.Background = _bipLinkPZ69 != null ? Brushes.Bisque : Brushes.White;
             }
         }
 
         public override List<DCSBIOSInput> DCSBIOSInputs
         {
             get => null;
-            set
-            {
-            }
+            set {}
         }
 
         public override DCSBIOSActionBindingBase DCSBIOSBinding
         {
             get => null;
-            set
-            {
-            }
+            set {}
+        }
+
+        public BillPZ69(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
+        {
+            SetContextMenu();
+        }
+
+        protected override void ClearDCSBIOSFromBill()
+        {
         }
 
         public override bool ContainsDCSBIOS()

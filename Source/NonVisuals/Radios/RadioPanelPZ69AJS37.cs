@@ -16,7 +16,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
+    public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentAJS37RadioMode _currentUpperRadioMode = CurrentAJS37RadioMode.FR22;
         private CurrentAJS37RadioMode _currentLowerRadioMode = CurrentAJS37RadioMode.FR22;
@@ -81,6 +81,23 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
@@ -125,7 +142,7 @@
                         _tilsChannelCockpitValue = _tilsChannelSelectorDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _tilsChannelCockpitValue)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -139,7 +156,7 @@
                         _tilsChannelLayerSelectorCockpitValue = _tilsChannelLayerSelectorDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _tilsChannelLayerSelectorCockpitValue)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -153,7 +170,7 @@
                         _masterModeSelectorCockpitValue = _masterModeSelectorDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _masterModeSelectorCockpitValue)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -258,7 +275,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -861,7 +878,7 @@
                 Common.ShowErrorMessageBox( ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 
@@ -874,7 +891,6 @@
         {
             try
             {
-                StartupBase("AJS-37");
 
                 // COM1
 
@@ -890,7 +906,7 @@
                 // ADF
 
                 // XPDR
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }
@@ -899,19 +915,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

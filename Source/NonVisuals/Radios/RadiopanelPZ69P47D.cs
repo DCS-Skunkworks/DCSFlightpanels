@@ -16,7 +16,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69P47D : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
+    public class RadioPanelPZ69P47D : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentP47DRadioMode _currentUpperRadioMode = CurrentP47DRadioMode.HFRADIO;
         private CurrentP47DRadioMode _currentLowerRadioMode = CurrentP47DRadioMode.HFRADIO;
@@ -72,23 +72,6 @@
 
         private int _hfRadioModePresetDialSkipper;
 
-        /* 
-                *  COM2 Large IFF Circuit D
-                *  COM2 Small IFF Circuit B
-                *  COM2 ACT/STBY IFF Destruction
-                */
-        /*private readonly object _lockIFFDialObject1 = new object();
-        private DCSBIOSOutput _iffBiffDcsbiosOutputDial;
-        private DCSBIOSOutput _iffDiffDcsbiosOutputDial;
-        private volatile uint _iffBiffCockpitDialPos = 1;
-        private volatile uint _iffDiffCockpitDialPos = 0;
-        private int _iffBiffDialSkipper;
-        private int _iffDiffDialSkipper;
-        private const string IFFB_COMMAND_INC = "IFF_B INC\n";
-        private const string IFFB_COMMAND_DEC = "IFF_B DEC\n";
-        private const string IFFD_COMMAND_INC = "IFF_D INC\n";
-        private const string IFFD_COMMAND_DEC = "IFF_D DEC\n";
-        */
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
 
         private long _doUpdatePanelLCD;
@@ -98,6 +81,23 @@
         {
             CreateRadioKnobs();
             Startup();
+        }
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -133,7 +133,7 @@
                         _hfRadioOffCockpitButton = _hfRadioOffDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioOffCockpitButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -147,7 +147,7 @@
                         _hfRadioChannelACockpitButton = _hfRadioChannelAPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioChannelACockpitButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -161,7 +161,7 @@
                         _hfRadioChannelBCockpitButton = _hfRadioChannelBPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioChannelBCockpitButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -175,7 +175,7 @@
                         _hfRadioChannelCCockpitButton = _hfRadioChannelCPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioChannelCCockpitButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -189,7 +189,7 @@
                         _hfRadioChannelDCockpitButton = _hfRadioChannelDPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioChannelDCockpitButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -203,7 +203,7 @@
                         _hfRadioModeCockpitDialPosition = _hfRadioModeDialPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioModeCockpitDialPosition)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -217,7 +217,7 @@
                         _iffBiffCockpitDialPos = _iffBiffDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _iffBiffCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -231,7 +231,7 @@
                         _iffDiffCockpitDialPos = _iffDiffDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _iffDiffCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }*/
@@ -250,7 +250,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -818,7 +818,7 @@
                 logger.Error(ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
@@ -830,8 +830,6 @@
         {
             try
             {
-                StartupBase("P-47D");
-
                 // COM1
                 _hfRadioOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_OFF");
                 _hfRadioChannelAPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_A");
@@ -842,7 +840,7 @@
                 // COM2
                 // _iffBiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_B");
                 // _iffDiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_D");
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
                 // IsAttached = true;
             }
             catch (Exception ex)
@@ -850,19 +848,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false)
         {
         }

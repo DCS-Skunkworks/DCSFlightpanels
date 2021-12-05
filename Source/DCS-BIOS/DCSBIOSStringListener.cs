@@ -12,12 +12,9 @@ namespace DCS_BIOS
     using DCS_BIOS.Interfaces;
     using NLog;
 
-    public class DCSBIOSStringListener : IDcsBiosDataListener
+    public class DCSBIOSStringListener : IDcsBiosDataListener, IDisposable
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-
-        public delegate void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e);
-        public event DCSBIOSStringReceived OnDCSBIOSStringReceived;
 
         private readonly List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new List<KeyValuePair<uint, DCSBIOSString>>();
         private readonly object _lockObject = new object();
@@ -27,18 +24,23 @@ namespace DCS_BIOS
         //For those that wants to listen to Strings received from DCS-BIOS
         public void Attach(IDCSBIOSStringListener iDCSBIOSStringListener)
         {
-            OnDCSBIOSStringReceived += iDCSBIOSStringListener.DCSBIOSStringReceived;
+            BIOSEventHandler.AttachStringListener(iDCSBIOSStringListener);
         }
 
         //For those that wants to listen to this panel
         public void Detach(IDCSBIOSStringListener iDCSBIOSStringListener)
         {
-            OnDCSBIOSStringReceived -= iDCSBIOSStringListener.DCSBIOSStringReceived;
+            BIOSEventHandler.DetachStringListener(iDCSBIOSStringListener);
         }
 
         public DCSBIOSStringListener()
         {
-            DCSBIOS.AttachDataReceivedListenerSO(this);
+            BIOSEventHandler.AttachDataListener(this);
+        }
+
+        public void Dispose()
+        {
+            BIOSEventHandler.DetachDataListener(this);
         }
 
         public void AddStringAddress(uint address, int length)
@@ -94,16 +96,13 @@ namespace DCS_BIOS
                 {
                     //end of update cycle, clear all existing values.
                     //broadcast every string now
-                    if (OnDCSBIOSStringReceived != null)
+                    foreach (var kvp in _dcsBiosStrings)
                     {
-                        foreach (var kvp in _dcsBiosStrings)
+                        //kvp.Value.Address == start address for the string
+                        if (kvp.Value.IsComplete)
                         {
-                            //kvp.Value.Address == start address for the string
-                            if (kvp.Value.IsComplete)
-                            {
-                                //Once it is "complete" then just send it each time, do not reset it as there will be no updates from DCS-BIOS unless cockpit value changes.
-                                OnDCSBIOSStringReceived(this, new DCSBIOSStringDataEventArgs() { Address = kvp.Value.Address, StringData = kvp.Value.StringValue });
-                            }
+                            //Once it is "complete" then just send it each time, do not reset it as there will be no updates from DCS-BIOS unless cockpit value changes.
+                            BIOSEventHandler.DCSBIOSStringAvailable(this, kvp.Value.Address, kvp.Value.StringValue);
                         }
                     }
                 }
@@ -137,7 +136,7 @@ namespace DCS_BIOS
                                 var secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
                                 var firstChar = string.Empty;
                                 byte[] firstByte = new byte[10];
-                                if (hex.Length == 3) 
+                                if (hex.Length == 3)
                                 {
                                     //this is really ugly, will it work ?? keep geting 0x730 from MI-8 R863 where I would except last digit (uneven 7 long frequency)
                                     //so let's try and just ignore the for number, in this case the 7.

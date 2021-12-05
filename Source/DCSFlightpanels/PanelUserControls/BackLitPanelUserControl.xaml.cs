@@ -36,7 +36,7 @@
         private DCSFPProfile _dcsfpProfile;
 
 
-        public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
+        public BackLitPanelUserControl(TabItem parentTabItem, HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -44,10 +44,28 @@
 
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
-            _backlitPanelBIP.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_backlitPanelBIP);
-            GlobalHandler = globalHandler;
+            AppEventHandler.AttachGamingPanelListener(this);
         }
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _backlitPanelBIP.Dispose(); 
+                    AppEventHandler.DetachGamingPanelListener(this);
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+        
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -57,19 +75,7 @@
             SetAllBlack();
             ShowGraphicConfiguration();
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _backlitPanelBIP.Dispose();
-            }
-        }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-        }
-
+        
         public override GamingPanel GetGamingPanel()
         {
             return _backlitPanelBIP;
@@ -85,7 +91,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             _dcsfpProfile = e.Profile;
         }
@@ -95,23 +101,8 @@
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
-
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.BackLitPanel && _backlitPanelBIP.HIDInstanceId == e.HidInstance)
-                {
-                    ShowGraphicConfiguration();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
+        
         public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
@@ -127,9 +118,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
-
+        
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try
@@ -138,7 +127,12 @@
                 {
                     return;
                 }
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+
+                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel &&
+                    e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
+                {
+                    Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
+                }
             }
             catch (Exception ex)
             {
@@ -146,7 +140,7 @@
             }
         }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
@@ -154,7 +148,11 @@
                 {
                     return;
                 }
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+
+                if (_backlitPanelBIP.HIDInstanceId == e.HidInstance)
+                {
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                }
             }
             catch (Exception ex)
             {
@@ -168,7 +166,7 @@
             {
                 if (e.PanelType == GamingPanelEnum.BackLitPanel && e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
                 {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (connected)"));
                 }
             }
             catch (Exception ex)
@@ -183,7 +181,7 @@
             {
                 if (e.PanelType == GamingPanelEnum.BackLitPanel && e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
                 {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (disconnected)"));
                 }
             }
             catch (Exception ex)
@@ -250,7 +248,7 @@
                 var imageName = contextMenu.Tag.ToString();
                 var position = GetLedPosition(imageName);
 
-                var ledConfigsWindow = new LEDConfigsWindow(GlobalHandler.GetProfile(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
+                var ledConfigsWindow = new LEDConfigsWindow("Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position

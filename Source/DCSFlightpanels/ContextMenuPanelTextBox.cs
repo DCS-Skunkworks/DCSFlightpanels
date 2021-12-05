@@ -28,11 +28,11 @@
         private MenuItem _contextMenuItemDeleteSettings;
         
         private TextBox _textBox;
-
+        
         public ContextMenuPanelTextBox(bool keyboardEmulationOnly)
         {
             _keyboardEmulationOnly = keyboardEmulationOnly;
-
+            
             _contextMenuItemAddNullKey = new MenuItem() { Header = "Add VK_NULL key" };
             Items.Add(_contextMenuItemAddNullKey);
             _contextMenuItemEditSequence = new MenuItem() { Header = "Edit Key Sequence" };

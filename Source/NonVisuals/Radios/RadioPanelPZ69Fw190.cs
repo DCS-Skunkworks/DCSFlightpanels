@@ -16,7 +16,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69Fw190 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
+    public class RadioPanelPZ69Fw190 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentFw190RadioMode _currentUpperRadioMode = CurrentFw190RadioMode.FUG16ZY;
         private CurrentFw190RadioMode _currentLowerRadioMode = CurrentFw190RadioMode.FUG16ZY;
@@ -104,6 +104,22 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
@@ -139,7 +155,7 @@
                         _fug16ZyPresetCockpitDialPos = _fug16ZyPresetDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _fug16ZyPresetCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -153,7 +169,7 @@
                         _fug16ZyFineTuneCockpitDialPos = _fug16ZyFineTuneDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _fug16ZyFineTuneCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -167,7 +183,7 @@
                         _fug25AIFFCockpitDialPos = _fug25AIFFDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _fug25AIFFCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -181,7 +197,7 @@
                         _homingCockpitDialPos = _homingDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _homingCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -201,7 +217,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -816,7 +832,7 @@
                 logger.Error(ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 
@@ -830,8 +846,6 @@
         {
             try
             {
-                StartupBase("Fw 190");
-
                 // COM1
                 _fug16ZyPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_MODE");
                 _fug16ZyFineTuneDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("FUG16_TUNING");
@@ -842,7 +856,7 @@
                 // NAV1
                 _homingDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("FT_ZF_SWITCH");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }
@@ -851,19 +865,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

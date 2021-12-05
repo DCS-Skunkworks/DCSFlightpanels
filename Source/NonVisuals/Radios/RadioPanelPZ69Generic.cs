@@ -59,30 +59,35 @@ namespace NonVisuals.Radios
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public sealed override void Startup()
         {
             try
             {
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {
                 SetLastException(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                Closed = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
             ClearSettings();
@@ -138,6 +143,7 @@ namespace NonVisuals.Radios
                 _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
                 _settingsAreBeingImported = false;
                 SettingsApplied();
+                AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
             }
         }
 
@@ -207,7 +213,7 @@ namespace NonVisuals.Radios
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
+            e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -505,7 +511,7 @@ namespace NonVisuals.Radios
                         }
                     }
 
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                     ShowFrequenciesOnPanel();
                 }
             }
@@ -629,7 +635,7 @@ namespace NonVisuals.Radios
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 
@@ -784,7 +790,7 @@ namespace NonVisuals.Radios
 
             if (keySequence.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ69.KEYS, radioPanelPZ69KeyOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, radioPanelPZ69KeyOnOff);
                 SetIsDirty();
                 return;
             }
@@ -829,7 +835,7 @@ namespace NonVisuals.Radios
 
             if (bipLinkPZ69.BIPLights.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ69.BIPS, radioPanelPZ69KeyOnOff);
+                RemoveSwitchFromList(ControlList.BIPS, radioPanelPZ69KeyOnOff);
                 SetIsDirty();
                 return;
             }
@@ -969,7 +975,7 @@ namespace NonVisuals.Radios
             var radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ69.DCSBIOS, radioPanelPZ69KeyOnOff);
+                RemoveSwitchFromList(ControlList.DCSBIOS, radioPanelPZ69KeyOnOff);
                 SetIsDirty();
                 return;
             }
@@ -1021,11 +1027,11 @@ namespace NonVisuals.Radios
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
             var pz69SwitchOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
-            var controlListPZ69 = (ControlListPZ69)controlList;
+            var controlListPZ69 = (ControlList)controlList;
 
             var found = false;
             var pz69DialPosition = GetDial(pz69SwitchOnOff.Switch);
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.KEYS)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.KEYS)
             {
                 foreach (var keyBinding in _keyBindings)
                 {
@@ -1039,7 +1045,7 @@ namespace NonVisuals.Radios
                 }
             }
 
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.DCSBIOS)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
@@ -1053,7 +1059,7 @@ namespace NonVisuals.Radios
                 }
             }
 
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.BIPS)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
@@ -1067,7 +1073,7 @@ namespace NonVisuals.Radios
                 }
             }
 
-            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.OSCOMMAND)
+            if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.OSCOMMANDS)
             {
                 OSCommandBindingPZ69FullEmulator operatingSystemCommandBindingPZ69 = null;
                 for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)

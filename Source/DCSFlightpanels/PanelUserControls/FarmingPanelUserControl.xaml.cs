@@ -40,7 +40,7 @@
 
 
 
-        public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
@@ -48,34 +48,37 @@
             ParentTabItem = parentTabItem;
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);
 
-            _farmingSidePanel.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_farmingSidePanel);
-            GlobalHandler = globalHandler;
+            AppEventHandler.AttachGamingPanelListener(this);
             HideAllImages();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!_disposed)
             {
-                _farmingSidePanel.Dispose();
-            }
-        }
+                if (disposing)
+                {
+                    _farmingSidePanel.Dispose();
+                    AppEventHandler.DetachGamingPanelListener(this);
+                }
 
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+        
 
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxBills();
-            SetContextMenuClickHandlers();
             UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-            var now = DateTime.Now.Ticks;
-            SetContextMenuClickHandlers();
-        }
+        
 
         public override GamingPanel GetGamingPanel()
         {
@@ -92,7 +95,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -115,11 +118,11 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -145,22 +148,6 @@
             }
         }
 
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.FarmingPanel && _farmingSidePanel.HIDInstanceId == e.HidInstance)
-                {
-                    ClearAll(false);
-                    ShowGraphicConfiguration();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
@@ -177,17 +164,7 @@
         {
 
         }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
+        
 
         public void DeviceAttached(object sender, PanelEventArgs e)
         {
@@ -195,7 +172,7 @@
             {
                 if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
                 {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (connected)"));
                 }
             }
             catch (Exception ex)
@@ -210,7 +187,7 @@
             {
                 if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
                 {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (disconnected)"));
                 }
             }
             catch (Exception ex)
@@ -235,11 +212,14 @@
             }
         }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                if (_farmingSidePanel.HIDInstanceId == e.HidInstance)
+                {
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                }
             }
             catch (Exception ex)
             {
@@ -290,29 +270,11 @@
                     continue;
                 }
 
-                textBox.Bill = new BillPFarmingPanel(GlobalHandler, this, _farmingSidePanel, textBox);
+                textBox.Bill = new BillPFarmingPanel(this, _farmingSidePanel, textBox);
             }
             _textBoxBillsSet = true;
         }
-
-        private void SetContextMenuClickHandlers()
-        {
-            if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
-            {
-                foreach (var image in Common.FindVisualChildren<Image>(this))
-                {
-                    if (image.ContextMenu == null && image.Name.StartsWith("ImagePZ55LED"))
-                    {
-                        image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
-                        if (image.ContextMenu != null)
-                        {
-                            image.ContextMenu.Tag = image.Name;
-                        }
-                    }
-                }
-            }
-        }
-
+        
         private FarmingPanelTextBox GetTextBoxInFocus()
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
@@ -324,8 +286,7 @@
             }
             return null;
         }
-
-
+        
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
         {
             try
@@ -707,6 +668,10 @@
                     {
                         textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                     }
+                    else
+                    {
+                        textBox.Bill.KeyPress = null;
+                    }
                 }
 
                 foreach (var operatingSystemCommand in _farmingSidePanel.OSCommandList)
@@ -715,6 +680,10 @@
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
                         textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                    }
+                    else
+                    {
+                        textBox.Bill.OSCommandObject = null;
                     }
                 }
 
@@ -725,6 +694,10 @@
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
                     }
+                    else
+                    {
+                        textBox.Bill.DCSBIOSBinding = null;
+                    }
                 }
 
                 SetTextBoxBackgroundColors(Brushes.White); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
@@ -734,6 +707,10 @@
                     if (bipLink.BIPLights.Count > 0)
                     {
                         textBox.Bill.BipLink = bipLink;
+                    }
+                    else
+                    {
+                        textBox.Bill.BipLink = null;
                     }
                 }
             }

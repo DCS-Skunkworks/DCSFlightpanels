@@ -17,7 +17,6 @@
 
     using NonVisuals;
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
 
@@ -25,53 +24,52 @@
     {
         private readonly SaitekPanel _saitekPanel;
         private KeyPress _keyPress;
-        private OSCommand _operatingSystemCommand;
-        private IGlobalHandler _globalHandler;
-        private IPanelUI _panelUI;
-        private TextBox _textBox;
         private ContextMenuPanelTextBox _contextMenu;
 
-
         public abstract bool ContainsDCSBIOS();
-
         public abstract bool ContainsBIPLink();
-
         public abstract bool IsEmpty();
-
         public abstract bool IsEmptyNoCareBipLink();
-
         public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs);
-
         public abstract void ClearAll();
-
         protected abstract void ClearDCSBIOSFromBill();
+        public abstract BIPLink BipLink { get; set; }
+        public abstract List<DCSBIOSInput> DCSBIOSInputs { get; set; }
+        public abstract DCSBIOSActionBindingBase DCSBIOSBinding { get; set; }
 
+        protected TextBox TextBox { get; set; }
+        private OSCommand OSCommand { get; set; }
+        public IPanelUI PanelUIParent { get; set; }
 
-
-        protected BillBaseInput(IGlobalHandler globalHandler, TextBox textBox, IPanelUI panelUI, SaitekPanel saitekPanel)
+        public OSCommand OSCommandObject
         {
-            _globalHandler = globalHandler;
-            _textBox = textBox;
-            _panelUI = panelUI;
+            get => OSCommand;
+            set
+            {
+                OSCommand = value;
+                TextBox.Text = OSCommand != null ? OSCommand.Name : string.Empty;
+            }
+        }
+
+        public KeyPress KeyPress
+        {
+            get => _keyPress;
+            set
+            {
+                if (value != null && ContainsDCSBIOS())
+                {
+                    throw new Exception("Cannot insert KeyPress, Bill already contains DCSBIOSInputs");
+                }
+                _keyPress = value;
+                TextBox.Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : string.Empty;
+            }
+        }
+
+        protected BillBaseInput(TextBox textBox, IPanelUI panelUI, SaitekPanel saitekPanel)
+        {
+            TextBox = textBox;
+            PanelUIParent = panelUI;
             _saitekPanel = saitekPanel;
-        }
-
-        public abstract BIPLink BipLink
-        {
-            get;
-            set;
-        }
-
-        public abstract List<DCSBIOSInput> DCSBIOSInputs
-        {
-            get;
-            set;
-        }
-
-        public abstract DCSBIOSActionBindingBase DCSBIOSBinding
-        {
-            get;
-            set;
         }
 
         private void CopySetting(CopyContentType copyContentType)
@@ -143,7 +141,6 @@
                         {
                             AddKeyStroke((KeyPressInfo)copyPackage.Content);
                         }
-
                         break;
                     }
 
@@ -153,7 +150,6 @@
                         {
                             AddKeySequence(copyPackage.Description, (SortedList<int, IKeyPressInfo>)copyPackage.Content);
                         }
-
                         break;
                     }
 
@@ -163,7 +159,6 @@
                         {
                             AddDCSBIOS(copyPackage.Description, (List<DCSBIOSInput>)copyPackage.Content);
                         }
-
                         break;
                     }
 
@@ -182,11 +177,9 @@
                         {
                             AddOSCommand((OSCommand)copyPackage.Content);
                         }
-
                         break;
                     }
             }
-
         }
 
         protected void SetContextMenu()
@@ -253,7 +246,7 @@
         {
             try
             {
-                EditBIPLink(GamingPanelEnum.PZ55SwitchPanel);
+                EditBIPLink(_saitekPanel.TypeOfPanel);
             }
             catch (Exception ex)
             {
@@ -291,7 +284,6 @@
                     ContainsDCSBIOS(),
                     ContainsBIPLink(),
                     ContainsOSCommand());
-
             }
             catch (Exception ex)
             {
@@ -396,8 +388,7 @@
                 return;
             }
 
-            var keyPress = new KeyPress(virtualKeyNull, KeyPressLength.ThirtyTwoMilliSec);
-            KeyPress = keyPress;
+            KeyPress = new KeyPress(virtualKeyNull, KeyPressLength.ThirtyTwoMilliSec);
             KeyPress.Description = "VK_NULL";
             TextBox.Text = virtualKeyNull;
             UpdateKeyBindingKeyStroke();
@@ -435,8 +426,7 @@
                 }
                 else
                 {
-                    var keyPress = new KeyPress(keyPressReadingWindow.VirtualKeyCodesAsString, keyPressReadingWindow.LengthOfKeyPress);
-                    KeyPress = keyPress;
+                    KeyPress = new KeyPress(keyPressReadingWindow.VirtualKeyCodesAsString, keyPressReadingWindow.LengthOfKeyPress);
                     KeyPress.Description = string.Empty;
                     TextBox.Text = keyPressReadingWindow.VirtualKeyCodesAsString;
                 }
@@ -446,18 +436,16 @@
 
         private void AddKeyStroke(KeyPressInfo keyStroke)
         {
-            var keyPress = new KeyPress();
-            keyPress.KeyPressSequence.Add(0, keyStroke);
-            keyPress.Description = string.Empty;
-            KeyPress = keyPress;
+            KeyPress = new KeyPress();
+            KeyPress.KeyPressSequence.Add(0, keyStroke);
+            KeyPress.Description = string.Empty;
             TextBox.Text = keyStroke.VirtualKeyCodesAsString;
             UpdateKeyBindingKeyStroke();
         }
 
         private void AddKeySequence(string description, SortedList<int, IKeyPressInfo> keySequence)
         {
-            var keyPress = new KeyPress("Key stroke sequence", keySequence);
-            KeyPress = keyPress;
+            KeyPress = new KeyPress("Key stroke sequence", keySequence);
             KeyPress.Description = description;
             if (!string.IsNullOrEmpty(description))
             {
@@ -493,8 +481,7 @@
                 else if (sequenceList.Count == 1)
                 {
                     // If only one press was created treat it as a simple keypress
-                    var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                    KeyPress = keyPress;
+                    KeyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                     KeyPress.Description = keySequenceWindow.Description;
                     TextBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                     UpdateKeyBindingKeyStroke();
@@ -518,11 +505,11 @@
             DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
             if (ContainsDCSBIOS())
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", string.Empty), DCSBIOSInputs, TextBox.Text);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(TextBox.Name.Replace("TextBox", string.Empty), DCSBIOSInputs, TextBox.Text);
             }
             else
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", string.Empty), null);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow( TextBox.Name.Replace("TextBox", string.Empty), null);
             }
 
             dcsBIOSInputControlsWindow.ShowDialog();
@@ -557,35 +544,30 @@
                         bipLinkWindow = new BIPLinkWindow(bipLink);
                         break;
                     }
-
                 case GamingPanelEnum.PZ55SwitchPanel:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkPZ55();
                         bipLinkWindow = new BIPLinkWindow(bipLink);
                         break;
                     }
-
                 case GamingPanelEnum.PZ70MultiPanel:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkPZ70();
                         bipLinkWindow = new BIPLinkWindow(bipLink);
                         break;
                     }
-
                 case GamingPanelEnum.PZ69RadioPanel:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkPZ69();
                         bipLinkWindow = new BIPLinkWindow(bipLink);
                         break;
                     }
-
                 case GamingPanelEnum.TPM:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkTPM();
                         bipLinkWindow = new BIPLinkWindow(bipLink);
                         break;
                     }
-
                 default:
                     {
                         return;
@@ -647,7 +629,7 @@
                     keyPressLength = KeyPress.GetLengthOfKeyPress();
                 }
 
-                _saitekPanel.AddOrUpdateKeyStrokeBinding(_panelUI.GetSwitch(TextBox), TextBox.Text, keyPressLength);
+                _saitekPanel.AddOrUpdateKeyStrokeBinding(PanelUIParent.GetSwitch(TextBox), TextBox.Text, keyPressLength);
             }
             catch (Exception ex)
             {
@@ -661,7 +643,7 @@
             {
                 if (_keyPress != null)
                 {
-                    _saitekPanel.AddOrUpdateSequencedKeyBinding(_panelUI.GetSwitch(TextBox), TextBox.Text, _keyPress.KeyPressSequence);
+                    _saitekPanel.AddOrUpdateSequencedKeyBinding(PanelUIParent.GetSwitch(TextBox), TextBox.Text, _keyPress.KeyPressSequence);
                 }
             }
             catch (Exception ex)
@@ -674,7 +656,7 @@
         {
             try
             {
-                _saitekPanel.AddOrUpdateDCSBIOSBinding(_panelUI.GetSwitch(TextBox), DCSBIOSInputs, TextBox.Text);
+                _saitekPanel.AddOrUpdateDCSBIOSBinding(PanelUIParent.GetSwitch(TextBox), DCSBIOSInputs, TextBox.Text);
             }
             catch (Exception ex)
             {
@@ -688,7 +670,7 @@
             {
                 if (BipLink != null)
                 {
-                    _saitekPanel.AddOrUpdateBIPLinkBinding(_panelUI.GetSwitch(TextBox), BipLink);
+                    _saitekPanel.AddOrUpdateBIPLinkBinding(PanelUIParent.GetSwitch(TextBox), BipLink);
                 }
             }
             catch (Exception ex)
@@ -701,7 +683,7 @@
         {
             try
             {
-                _saitekPanel.AddOrUpdateOSCommandBinding(_panelUI.GetSwitch(TextBox), OSCommandObject);
+                _saitekPanel.AddOrUpdateOSCommandBinding(PanelUIParent.GetSwitch(TextBox), OSCommandObject);
             }
             catch (Exception ex)
             {
@@ -726,7 +708,7 @@
         private void DeleteDCSBIOS()
         {
             TextBox.Text = string.Empty;
-            _saitekPanel.RemoveSwitchFromList(ControlListPZ55.DCSBIOS, _panelUI.GetSwitch(TextBox));
+            _saitekPanel.RemoveSwitchFromList(ControlList.DCSBIOS, PanelUIParent.GetSwitch(TextBox));
             ClearDCSBIOSFromBill();
         }
 
@@ -743,13 +725,13 @@
         private void DeleteOSCommand()
         {
             TextBox.Text = string.Empty;
-            _saitekPanel.RemoveSwitchFromList(ControlListPZ55.OSCOMMANDS, _panelUI.GetSwitch(_textBox));
+            _saitekPanel.RemoveSwitchFromList(ControlList.OSCOMMANDS, PanelUIParent.GetSwitch(TextBox));
             OSCommandObject = null;
         }
 
         public bool ContainsOSCommand()
         {
-            return _operatingSystemCommand != null;
+            return OSCommand != null;
         }
 
         public bool ContainsKeyPress()
@@ -767,20 +749,6 @@
             return _keyPress != null && !_keyPress.IsMultiSequenced() && _keyPress.KeyPressSequence.Count > 0;
         }
 
-        public KeyPress KeyPress
-        {
-            get => _keyPress;
-            set
-            {
-                if (value != null && ContainsDCSBIOS())
-                {
-                    throw new Exception("Cannot insert KeyPress, Bill already contains DCSBIOSInputs");
-                }
-                _keyPress = value;
-                _textBox.Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : string.Empty;
-            }
-        }
-
         private IKeyPressInfo GetKeyPress()
         {
             return _keyPress.KeyPressSequence[0];
@@ -795,40 +763,5 @@
         {
             return _keyPress.KeyPressSequence;
         }
-
-        public OSCommand OSCommandObject
-        {
-            get => _operatingSystemCommand;
-            set
-            {
-                _operatingSystemCommand = value;
-                _textBox.Text = _operatingSystemCommand != null ? _operatingSystemCommand.Name : string.Empty;
-            }
-        }
-
-        protected TextBox TextBox
-        {
-            get => _textBox;
-            set => _textBox = value;
-        }
-
-        private OSCommand OSCommand
-        {
-            get => _operatingSystemCommand;
-            set => _operatingSystemCommand = value;
-        }
-
-        public IGlobalHandler GlobalHandler
-        {
-            get => _globalHandler;
-            set => _globalHandler = value;
-        }
-
-        public IPanelUI PanelUIParent
-        {
-            get => _panelUI;
-            set => _panelUI = value;
-        }
     }
-
 }

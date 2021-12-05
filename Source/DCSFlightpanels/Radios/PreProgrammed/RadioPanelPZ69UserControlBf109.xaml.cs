@@ -27,7 +27,7 @@
         private readonly RadioPanelPZ69Bf109 _radioPanelPZ69;
         private bool _userControlLoaded;
 
-        public RadioPanelPZ69UserControlBf109(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlBf109(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -37,15 +37,28 @@
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69Bf109(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
-            _radioPanelPZ69.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_radioPanelPZ69);
-            GlobalHandler = globalHandler;
+            AppEventHandler.AttachGamingPanelListener(this);
         }
 
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-        }
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _radioPanelPZ69.Dispose();
+                    AppEventHandler.DetachGamingPanelListener(this);
+                }
 
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+        
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
@@ -63,13 +76,16 @@
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e) { }
+        public void ProfileSelected(object sender, AirframeEventArgs e) { }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                SetGraphicsState(e.Switches);
+                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId))
+                {
+                    SetGraphicsState(e.Switches);
+                }
             }
             catch (Exception ex)
             {
@@ -79,17 +95,15 @@
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
-        public void SettingsCleared(object sender, PanelEventArgs e) { }
+        
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
-
+        
         public void DeviceAttached(object sender, PanelEventArgs e) { }
 
         public void SettingsApplied(object sender, PanelEventArgs e) { }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
+        public void SettingsModified(object sender, PanelEventArgs e) { }
 
         public void DeviceDetached(object sender, PanelEventArgs e) { }
 

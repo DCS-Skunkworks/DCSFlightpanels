@@ -27,7 +27,7 @@
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly UserControlStreamDeckUIBase _uiButtonGrid;
         
-        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -35,10 +35,7 @@
             // no worky worky for this library hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
-            _streamDeckPanel.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_streamDeckPanel);
-            GlobalHandler = globalHandler;
-
+            
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
 
@@ -78,27 +75,37 @@
             EventHandlers.AttachStreamDeckListener(_uiButtonGrid);
             EventHandlers.AttachStreamDeckConfigListener(_uiButtonGrid);
             EventHandlers.AttachStreamDeckListener(this);
-
-            UCStreamDeckButtonAction.GlobalHandler = GlobalHandler;
-            UCStreamDeckButtonFace.GlobalHandler = GlobalHandler;
-
+            AppEventHandler.AttachGamingPanelListener(this);
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
         }
 
-        protected override void Dispose(bool dispose)
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            if (dispose)
+            if (!_disposed)
             {
-                StackPanelButtonUI.Children.Clear();
-                EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonAction);
-                EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonFace);
-                EventHandlers.DetachStreamDeckListener(_uiButtonGrid);
-                EventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
-                EventHandlers.DetachStreamDeckListener(this);
-                _streamDeckPanel.Dispose();
+                if (disposing)
+                {
+                    StackPanelButtonUI.Children.Clear();
+                    EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonAction);
+                    EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonFace);
+                    EventHandlers.DetachStreamDeckListener(_uiButtonGrid);
+                    EventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
+                    EventHandlers.DetachStreamDeckListener(this);
+                    AppEventHandler.DetachGamingPanelListener(this);
+                    _streamDeckPanel.Dispose();
+                }
+
+                _disposed = true;
             }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
+        
 
         private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -131,13 +138,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-            var now = DateTime.Now.Ticks;
-            //RemoveContextMenuClickHandlers();
-            //SetContextMenuClickHandlers();
-        }
+        
 
         public override GamingPanel GetGamingPanel()
         {
@@ -156,7 +157,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -167,11 +168,11 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                if (e.GamingPanelEnum == _streamDeckPanel.TypeOfPanel && e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId))
+                if (e.PanelType == _streamDeckPanel.TypeOfPanel && e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId))
                 {
                     NotifyButtonChanges(e.Switches);
                 }
@@ -197,20 +198,9 @@
             }
         }
 
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
@@ -221,19 +211,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try

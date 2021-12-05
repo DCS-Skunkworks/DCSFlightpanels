@@ -25,7 +25,7 @@
         public const double Fifty = 0.050;
     }
 
-    public class RadioPanelPZ69SRS : RadioPanelPZ69Base, IRadioPanel, ISRSDataListener
+    public class RadioPanelPZ69SRS : RadioPanelPZ69Base, ISRSDataListener
     {
         private CurrentSRSRadioMode _currentUpperRadioMode = CurrentSRSRadioMode.COM1;
         private CurrentSRSRadioMode _currentLowerRadioMode = CurrentSRSRadioMode.COM1;
@@ -70,34 +70,37 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    SRSListenerFactory.GetSRSListener().Detach(this);
+                    SRSListenerFactory.Shutdown();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public sealed override void Startup()
         {
             try
             {
-                StartupBase("SRS");
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {
                 SetLastException(ex);
             }
         }
-
-
-        public override void Dispose()
-        {
-            try
-            {
-                SRSListenerFactory.GetSRSListener().Detach(this);
-                ShutdownBase();
-                SRSListenerFactory.Shutdown();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public double SmallFreqStepping
         {
             get => _smallFreqStepping;
@@ -112,7 +115,7 @@
                 _upperGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentUpperRadioMode, true);
                 _lowerMainFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentLowerRadioMode);
                 _lowerGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentLowerRadioMode, true);
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
@@ -656,7 +659,7 @@
                 logger.Error(ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 

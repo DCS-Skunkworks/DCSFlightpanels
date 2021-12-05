@@ -38,7 +38,7 @@
         private bool _textBoxBillsSet;
 
 
-        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -46,19 +46,28 @@
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
-            _multiPanelPZ70.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_multiPanelPZ70);
-            GlobalHandler = globalHandler;
+            AppEventHandler.AttachGamingPanelListener(this);
 
             HideAllImages();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!_disposed)
             {
-                _multiPanelPZ70.Dispose();
+                if (disposing)
+                {
+                    _multiPanelPZ70.Dispose();
+                    AppEventHandler.DetachGamingPanelListener(this);
+                }
+
+                _disposed = true;
             }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         private void MultiPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
@@ -69,11 +78,7 @@
             UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-            var now = DateTime.Now.Ticks;
-        }
+        
 
         public override GamingPanel GetGamingPanel()
         {
@@ -92,7 +97,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -118,11 +123,11 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel && e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ70MultiPanel && e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId))
                 {
                     NotifyKnobChanges(e.Switches);
                 }
@@ -139,22 +144,6 @@
             {
                 if (e.PanelBinding.PanelType == GamingPanelEnum.PZ70MultiPanel && _multiPanelPZ70.HIDInstanceId == e.PanelBinding.HIDInstance)
                 {
-                    ShowGraphicConfiguration();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.PZ70MultiPanel && _multiPanelPZ70.HIDInstanceId == e.HidInstance)
-                {
-                    ClearAll(false);
                     ShowGraphicConfiguration();
                 }
             }
@@ -192,23 +181,29 @@
             {
                 return;
             }
+
             foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
             {
                 if (textBox.Bill == null && !textBox.Equals(TextBoxLogPZ70))
                 {
-                    textBox.Bill = new BillPZ70(GlobalHandler, this, _multiPanelPZ70, textBox);
+                    textBox.Bill = new BillPZ70(this, _multiPanelPZ70, textBox);
                 }
                 _textBoxBillsSet = true;
             }
             _textBoxBillsSet = true;
+            
         }
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
-
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
-
+        public void SettingsModified(object sender, PanelEventArgs e)
+        {
+            if (e.HidInstance == _multiPanelPZ70.HIDInstanceId)
+            {
+                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+            }
+        }
+        
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try
@@ -625,6 +620,10 @@
                         {
                             textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                         }
+                        else
+                        {
+                            textBox.Bill.KeyPress = null;
+                        }
                     }
                 }
 
@@ -636,6 +635,10 @@
                         {
                             textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
                         }
+                        else
+                        {
+                            textBox.Bill.OSCommandObject = null;
+                        }
                 }
 
                 foreach (var dcsBiosBinding in _multiPanelPZ70.DCSBiosBindings)
@@ -644,6 +647,10 @@
                     if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
+                    }
+                    else
+                    {
+                        textBox.Bill.DCSBIOSBinding = null;
                     }
                 }
 
@@ -654,6 +661,10 @@
                     if (bipLink.DialPosition == _multiPanelPZ70.PZ70DialPosition && bipLink.BIPLights.Count > 0)
                     {
                         textBox.Bill.BipLink = bipLink;
+                    }
+                    else
+                    {
+                        textBox.Bill.BipLink = null;
                     }
                 }
 
@@ -668,6 +679,7 @@
                 {
                     ButtonLcdLower.Visibility = Visibility.Visible;
                 }
+
                 foreach (var dcsBiosBindingLCD in _multiPanelPZ70.LCDBindings)
                 {
                     if (dcsBiosBindingLCD.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.UpperLCD && dcsBiosBindingLCD.HasBinding)

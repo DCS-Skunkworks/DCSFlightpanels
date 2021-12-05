@@ -18,7 +18,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69A10C : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
+    public class RadioPanelPZ69A10C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentA10RadioMode _currentUpperRadioMode = CurrentA10RadioMode.UHF;
         private CurrentA10RadioMode _currentLowerRadioMode = CurrentA10RadioMode.UHF;
@@ -228,13 +228,26 @@
             Startup();
         }
 
-        ~RadioPanelPZ69A10C()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _vhfAmSyncThread?.Abort();
-            _vhfFmSyncThread?.Abort();
-            _uhfSyncThread?.Abort();
-            _ilsSyncThread?.Abort();
-            _tacanSyncThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _vhfAmSyncThread?.Abort();
+                    _vhfFmSyncThread?.Abort();
+                    _uhfSyncThread?.Abort();
+                    _ilsSyncThread?.Abort();
+                    _tacanSyncThread?.Abort();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -257,7 +270,7 @@
                     _vhfAmCockpitFreq1DialPos = _vhfAmDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
                     if (tmp != _vhfAmCockpitFreq1DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _vhfAmDial1WaitingForFeedback, 0);
                     }
                 }
@@ -271,7 +284,7 @@
                     _vhfAmCockpitFreq2DialPos = _vhfAmDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                     if (tmp != _vhfAmCockpitFreq2DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _vhfAmDial2WaitingForFeedback, 0);
                     }
                 }
@@ -285,7 +298,7 @@
                     _vhfAmCockpitFreq3DialPos = _vhfAmDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
                     if (tmp != _vhfAmCockpitFreq3DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _vhfAmDial3WaitingForFeedback, 0);
                     }
                 }
@@ -299,7 +312,7 @@
                     _vhfAmCockpitFreq4DialPos = _vhfAmDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
                     if (tmp != _vhfAmCockpitFreq4DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _vhfAmDial4WaitingForFeedback, 0);
                     }
                 }
@@ -311,7 +324,7 @@
                 _vhfAmCockpitFreqMode = _vhfAmDcsbiosOutputChannelFreqMode.GetUIntValue(e.Data);
                 if (tmp != _vhfAmCockpitFreqMode)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -321,7 +334,7 @@
                 _vhfAmCockpitPresetChannel = _vhfAmDcsbiosOutputSelectedChannel.GetUIntValue(e.Data) + 1;
                 if (tmp != _vhfAmCockpitPresetChannel)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -331,7 +344,7 @@
                 _vhfAmCockpitMode = _vhfAmDcsbiosOutputMode.GetUIntValue(e.Data);
                 if (tmp != _vhfAmCockpitMode)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -344,7 +357,7 @@
                     _uhfCockpitFreq1DialPos = _uhfDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
                     if (tmp != _uhfCockpitFreq1DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
                     }
                 }
@@ -358,7 +371,7 @@
                     _uhfCockpitFreq2DialPos = _uhfDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                     if (tmp != _uhfCockpitFreq2DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
                     }
                 }
@@ -372,7 +385,7 @@
                     _uhfCockpitFreq3DialPos = _uhfDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
                     if (tmp != _uhfCockpitFreq3DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
                     }
                 }
@@ -386,7 +399,7 @@
                     _uhfCockpitFreq4DialPos = _uhfDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
                     if (tmp != _uhfCockpitFreq4DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 0);
                     }
                 }
@@ -400,7 +413,7 @@
                     _uhfCockpitFreq5DialPos = _uhfDcsbiosOutputFreqDial5.GetUIntValue(e.Data);
                     if (tmp != _uhfCockpitFreq5DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 0);
                     }
                 }
@@ -412,7 +425,7 @@
                 _uhfCockpitFreqMode = _uhfDcsbiosOutputFreqMode.GetUIntValue(e.Data);
                 if (tmp != _uhfCockpitFreqMode)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -422,7 +435,7 @@
                 _uhfCockpitPresetChannel = _uhfDcsbiosOutputSelectedChannel.GetUIntValue(e.Data) + 1;
                 if (tmp != _uhfCockpitPresetChannel)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -432,7 +445,7 @@
                 _uhfCockpitMode = _uhfDcsbiosOutputFunction.GetUIntValue(e.Data);
                 if (tmp != _uhfCockpitMode)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -445,7 +458,7 @@
                     _vhfFmCockpitFreq1DialPos = _vhfFmDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq1DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 0);
                     }
                 }
@@ -459,7 +472,7 @@
                     _vhfFmCockpitFreq2DialPos = _vhfFmDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq2DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 0);
                     }
                 }
@@ -473,7 +486,7 @@
                     _vhfFmCockpitFreq3DialPos = _vhfFmDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq3DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 0);
                     }
                 }
@@ -487,7 +500,7 @@
                     _vhfFmCockpitFreq4DialPos = _vhfFmDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq4DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 0);
                     }
                 }
@@ -499,7 +512,7 @@
                 _vhfFmCockpitFreqMode = _vhfFmDcsbiosOutputFreqMode.GetUIntValue(e.Data);
                 if (tmp != _vhfFmCockpitFreqMode)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -509,7 +522,7 @@
                 _vhfFmCockpitPresetChannel = _vhfFmDcsbiosOutputSelectedChannel.GetUIntValue(e.Data) + 1;
                 if (tmp != _vhfFmCockpitPresetChannel)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -519,7 +532,7 @@
                 _vhfFmCockpitMode = _vhfFmDcsbiosOutputMode.GetUIntValue(e.Data);
                 if (tmp != _vhfFmCockpitMode)
                 {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -532,7 +545,7 @@
                     _ilsCockpitFreq1DialPos = _ilsDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
                     if (tmp != _ilsCockpitFreq1DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _ilsDial1WaitingForFeedback, 0);
                     }
                 }
@@ -546,7 +559,7 @@
                     _ilsCockpitFreq2DialPos = _ilsDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                     if (tmp != _ilsCockpitFreq2DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         Interlocked.Exchange(ref _ilsDial2WaitingForFeedback, 0);
                     }
                 }
@@ -619,19 +632,19 @@
                         if ((changeCount & 2) > 0)
                         {
                             Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 0);
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
 
                         if ((changeCount & 4) > 0)
                         {
                             Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 0);
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
 
                         if ((changeCount & 8) > 0)
                         {
                             Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 0);
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                     catch (Exception)
@@ -887,28 +900,24 @@
                     var dial4SendCount = 0;
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF AM dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfAmDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfAmDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF AM dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfAmDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfAmDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "VHF AM dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfAmDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfAmDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "VHF AM dial4Timeout"))
+                        if (IsTimedOut(ref dial4Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfAmDial4WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfAmDial4WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         string str;
@@ -1033,7 +1042,7 @@
                 Interlocked.Exchange(ref _vhfAmThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendUhfToDCSBIOS()
@@ -1210,34 +1219,29 @@
                     var dial5SendCount = 0;
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "UHF dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "UHF dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "UHF dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "UHF dial4Timeout"))
+                        if (IsTimedOut(ref dial4Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial4WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial5Timeout, ResetSyncTimeout, "UHF dial5Timeout"))
+                        if (IsTimedOut(ref dial5Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial5WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         // Frequency selector 1     
@@ -1431,7 +1435,7 @@
                 Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendVhfFmToDCSBIOS()
@@ -1539,28 +1543,24 @@
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF FM dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF FM dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "VHF FM dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "VHF FM dial4Timeout"))
+                        if (IsTimedOut(ref dial4Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial4WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _vhfFmDial1WaitingForFeedback) == 0)
@@ -1687,7 +1687,7 @@
                 Interlocked.Exchange(ref _vhfFmThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendILSToDCSBIOS()
@@ -1742,16 +1742,14 @@
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "ILS dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _ilsDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _ilsDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "ILS dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _ilsDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _ilsDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _ilsDial1WaitingForFeedback) == 0)
@@ -1839,7 +1837,7 @@
                 Interlocked.Exchange(ref _ilsThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendTacanToDCSBIOS()
@@ -1894,22 +1892,19 @@
                     do
                     {
 
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "TACAN dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _tacanDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _tacanDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _tacanDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _tacanDial1WaitingForFeedback) == 0)
@@ -2009,7 +2004,7 @@
                 Interlocked.Exchange(ref _tacanThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void ShowFrequenciesOnPanel()
@@ -2368,7 +2363,7 @@
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private string GetVhfAmFrequencyAsString()
@@ -3800,7 +3795,7 @@
         {
             lock (LockLCDUpdateObject)
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 foreach (var radioPanelKnobObject in hashSet)
                 {
                     var radioPanelKnob = (RadioPanelKnobA10C)radioPanelKnobObject;
@@ -4018,8 +4013,6 @@
         {
             try
             {
-                StartupBase("A-10C");
-
                 // VHF AM
                 _vhfAmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ1");
 
@@ -4072,21 +4065,9 @@
                 _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
                 DCSBIOSStringManager.AddListener(_tacanDcsbiosOutputFreqChannel, this); // _tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
             }
             catch (Exception ex)
             {

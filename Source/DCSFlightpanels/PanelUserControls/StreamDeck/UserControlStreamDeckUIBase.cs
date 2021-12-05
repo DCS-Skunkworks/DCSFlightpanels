@@ -89,7 +89,7 @@
                  */
                 if (newlySelectedImage.Bill.Button != _streamDeckPanel.SelectedButton && EventHandlers.AreThereDirtyListeners(this))
                 {
-                    if (CommonUI.DoDiscardAfterMessage(true, "Discard Changes to " + SelectedButtonName + " ?"))
+                    if (CommonUI.DoDiscardAfterMessage(true, $"Discard Changes to {SelectedButtonName} ?"))
                     {
                         SetFormState();
                     }

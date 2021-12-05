@@ -10,28 +10,9 @@
 
     public class RadioPanelPZ69DisplayValue
     {
-        private RadioPanelPZ69Display _radioPanelPZ69Display;
-        private RadioPanelPZ69KnobsEmulator _radioPanelPZ69Knob;
-        private string _value;
-        
-
-        public RadioPanelPZ69Display RadioPanelDisplay
-        {
-            get => _radioPanelPZ69Display;
-            set => _radioPanelPZ69Display = value;
-        }
-
-        public string Value
-        {
-            get => _value;
-            set => _value = value;
-        }
-
-        public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Knob
-        {
-            get => _radioPanelPZ69Knob;
-            set => _radioPanelPZ69Knob = value;
-        }
+        public RadioPanelPZ69Display RadioPanelDisplay { get; set; }
+        public string Value { get; set; }
+        public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Knob { get; set; }
 
         public void ImportSettings(string settings)
         {
@@ -48,9 +29,9 @@
             var array = tmp.Split('|');
             try
             {
-                _value = array[2];
-                _radioPanelPZ69Display = (RadioPanelPZ69Display)Enum.Parse(typeof(RadioPanelPZ69Display), array[1]);
-                _radioPanelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), array[0]);
+                Value = array[2];
+                RadioPanelDisplay = (RadioPanelPZ69Display)Enum.Parse(typeof(RadioPanelPZ69Display), array[1]);
+                RadioPanelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), array[0]);
             }
             catch (Exception ex)
             {
@@ -60,9 +41,9 @@
 
         public string ExportSettings()
         {
-            if (!string.IsNullOrEmpty(_value) && double.Parse(_value, Common.GetPZ69FullDisplayNumberFormat()) >= 0)
+            if (!string.IsNullOrEmpty(Value) && double.Parse(Value, Common.GetPZ69FullDisplayNumberFormat()) >= 0)
             {
-                return "PZ69DisplayValue{" + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), _radioPanelPZ69Knob) + "|" + Enum.GetName(typeof(RadioPanelPZ69Display), _radioPanelPZ69Display) + "|" + _value + "}";
+                return "PZ69DisplayValue{" + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) + "|" + Enum.GetName(typeof(RadioPanelPZ69Display), RadioPanelDisplay) + "|" + Value + "}";
             }
 
             return null;

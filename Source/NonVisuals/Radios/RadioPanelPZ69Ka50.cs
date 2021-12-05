@@ -16,7 +16,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base, IRadioPanel
+    public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base
     {
         private CurrentKa50RadioMode _currentUpperRadioMode = CurrentKa50RadioMode.VHF1_R828;
         private CurrentKa50RadioMode _currentLowerRadioMode = CurrentKa50RadioMode.VHF1_R828;
@@ -228,10 +228,24 @@
             Startup();
         }
 
-        ~RadioPanelPZ69Ka50()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _r800L1SyncThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _r800L1SyncThread?.Abort();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
+
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -256,7 +270,7 @@
                         _vhf1CockpitPresetDialPos = _vhf1DcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _vhf1CockpitPresetDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -271,7 +285,7 @@
                         if (tmp != _r800L1CockpitFreq1DialPos)
                         {
                             // Debug.WriteLine("_r800l1CockpitFreq1DialPos was " + tmp + ", is now " + _r800l1CockpitFreq1DialPos);
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 0);
                         }
                     }
@@ -286,7 +300,7 @@
                         _r800L1CockpitFreq2DialPos = _r800L1DcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                         if (tmp != _r800L1CockpitFreq2DialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 0);
                         }
                     }
@@ -301,7 +315,7 @@
                         _r800L1CockpitFreq3DialPos = _r800L1DcsbiosOutputFreqDial3.GetUIntValue(e.Data);
                         if (tmp != _r800L1CockpitFreq3DialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 0);
                         }
                     }
@@ -316,7 +330,7 @@
                         _r800L1CockpitFreq4DialPos = _r800L1DcsbiosOutputFreqDial4.GetUIntValue(e.Data);
                         if (tmp != _r800L1CockpitFreq4DialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 0);
                         }
                     }
@@ -331,7 +345,7 @@
                         _datalinkMasterModeCockpitPos = _datalinkMasterModeDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _datalinkMasterModeCockpitPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -345,7 +359,7 @@
                         _datalinkSelfIdCockpitPos = _datalinkSelfIdDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _datalinkSelfIdCockpitPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -359,7 +373,7 @@
                         _datalinkPowerOnOffCockpitPos = _datalinkPowerOnOffDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _datalinkPowerOnOffCockpitPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -373,7 +387,7 @@
                         _adfCockpitPresetDialPos = _adfDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _adfCockpitPresetDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -387,7 +401,7 @@
                         _adfModeCockpitPos = _adfModeDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _adfModeCockpitPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -580,28 +594,24 @@
 
                         do
                         {
-                            if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-800L1 dial1Timeout"))
+                            if (IsTimedOut(ref dial1Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r800L1Dial1WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "R-800L1 dial2Timeout"))
+                            if (IsTimedOut(ref dial2Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r800L1Dial2WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "R-800L1 dial3Timeout"))
+                            if (IsTimedOut(ref dial3Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r800L1Dial3WaitingForFeedback); // Lets do an ugly reset
                             }
 
-                            if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "R-800L1 dial4Timeout"))
+                            if (IsTimedOut(ref dial4Timeout))
                             {
-                                // Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 0);
+                                ResetWaitingForFeedBack(ref _r800L1Dial4WaitingForFeedback); // Lets do an ugly reset
                             }
 
                             string str;
@@ -753,7 +763,7 @@
             }
 
             // Refresh panel once this debacle is finished
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SwapCockpitStandbyFrequencyR800L1()
@@ -773,7 +783,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -2023,7 +2033,7 @@
                 logger.Error(ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
@@ -2035,8 +2045,6 @@
         {
             try
             {
-                StartupBase("Ka-50");
-
                 // VHF1
                 _vhf1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R828_CHANNEL");
 
@@ -2055,7 +2063,7 @@
                 _datalinkSelfIdDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DLNK_SELF_ID");
                 _datalinkPowerOnOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PVI_POWER");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }
@@ -2064,19 +2072,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false)
         {
         }

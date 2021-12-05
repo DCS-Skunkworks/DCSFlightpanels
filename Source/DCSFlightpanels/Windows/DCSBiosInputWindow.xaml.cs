@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals;
 
 namespace DCSFlightpanels.Windows
 {
@@ -21,7 +22,6 @@ namespace DCSFlightpanels.Windows
         private readonly string _description;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
-        private DCSFPProfile _dcsfpProfile;
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
@@ -37,18 +37,16 @@ namespace DCSFlightpanels.Windows
             }
         }*/
 
-        public DCSBiosInputWindow(DCSFPProfile dcsfpProfile, string description)
+        public DCSBiosInputWindow(string description)
         {
             InitializeComponent();
-            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _dcsbiosControls = DCSBIOSControlLocator.GetInputControls();
         }
 
-        public DCSBiosInputWindow(DCSFPProfile dcsfpProfile, string description, DCSBIOSInput dcsBiosInput)
+        public DCSBiosInputWindow(string description, DCSBIOSInput dcsBiosInput)
         {
             InitializeComponent();
-            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _dcsBiosInput = dcsBiosInput;
             _dcsbiosControl = DCSBIOSControlLocator.GetControl(_dcsBiosInput.ControlId);
@@ -60,7 +58,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                LabelProfileDescription.Content = _dcsfpProfile.Description;
+                LabelProfileDescription.Content = ProfileHandler.ActiveDCSFPProfile.Description;
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
                 _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));

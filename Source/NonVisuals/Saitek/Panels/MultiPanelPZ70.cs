@@ -66,23 +66,28 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public sealed override void Startup()
         {
             try
             {
-                StartListeningForPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
-        public override void Dispose()
-        {
-            try
-            {
-                Closed = true;
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {
@@ -185,7 +190,7 @@
 
             SettingsLoading = false;
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
-            SettingsApplied();
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -256,7 +261,7 @@
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
+            e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
@@ -361,7 +366,7 @@
             var pz70SwitchOnOff = (PZ70SwitchOnOff) panelSwitchOnOff;
             if (string.IsNullOrEmpty(keyPress))
             {
-                RemoveSwitchFromList(ControlListPZ70.KEYS, pz70SwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -405,7 +410,7 @@
 
             if (keySequence.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ70.KEYS, pz70SwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -449,7 +454,7 @@
 
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ70.DCSBIOS, pz70SwitchOnOff);
+                RemoveSwitchFromList(ControlList.DCSBIOS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -557,7 +562,7 @@
 
             if (bipLinkPZ70.BIPLights.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ70.BIPS, pz70SwitchOnOff);
+                RemoveSwitchFromList(ControlList.BIPS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -617,10 +622,10 @@
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
             var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
-            var controlListPZ70 = (ControlListPZ70) controlList;
+            var controlListPZ70 = (ControlList) controlList;
 
             var found = false;
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.KEYS)
+            if (controlListPZ70 == ControlList.ALL || controlListPZ70 == ControlList.KEYS)
             {
                 foreach (var knobBindingPZ70 in _knobBindings)
                 {
@@ -632,7 +637,7 @@
                 }
             }
 
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.DCSBIOS)
+            if (controlListPZ70 == ControlList.ALL || controlListPZ70 == ControlList.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
@@ -644,7 +649,7 @@
                 }
             }
 
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.BIPS)
+            if (controlListPZ70 == ControlList.ALL || controlListPZ70 == ControlList.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
@@ -656,7 +661,7 @@
                 }
             }
 
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.OSCOMMAND)
+            if (controlListPZ70 == ControlList.ALL || controlListPZ70 == ControlList.OSCOMMANDS)
             {
                 OSCommandBindingPZ70 operatingSystemCommandBindingPZ70 = null;
                 for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
@@ -1365,7 +1370,7 @@
         {
             try
             {
-                // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
+                // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel);
                 HIDSkeletonBase.HIDWriteDevice?.WriteFeatureData(array);
             }
             catch (Exception ex)
@@ -1457,13 +1462,5 @@
         HDG = 8,
         CRS = 16
     }
-
-    public enum ControlListPZ70 : byte
-    {
-        ALL,
-        DCSBIOS,
-        KEYS,
-        BIPS,
-        OSCOMMAND
-    }
+    
 }

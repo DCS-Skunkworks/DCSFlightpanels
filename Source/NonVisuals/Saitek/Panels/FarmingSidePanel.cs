@@ -37,27 +37,33 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    Closed = true;
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public sealed override void Startup()
         {
             try
             {
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
-            }
-        }
-
-        public override void Dispose()
-        {
-            try
-            {
-                Closed = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
             }
         }
 
@@ -101,7 +107,7 @@
                 }
             }
 
-            SettingsApplied();
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
             _keyBindings = KeyBindingFarmingPanel.SetNegators(_keyBindings);
 
         }
@@ -152,7 +158,7 @@
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
+            e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
@@ -322,7 +328,7 @@
 
             if (string.IsNullOrEmpty(keyPress))
             {
-                RemoveSwitchFromList(ControlListFarmingPanel.KEYS, farmingPanelSwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, farmingPanelSwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -363,7 +369,7 @@
             var farmingPanelOnOff = (FarmingPanelOnOff)panelSwitchOnOff;
             if (keySequence.Count == 0)
             {
-                RemoveSwitchFromList(ControlListFarmingPanel.KEYS, farmingPanelOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, farmingPanelOnOff);
                 SetIsDirty();
                 return;
             }
@@ -443,7 +449,7 @@
             var farmingPanelOnOff = (FarmingPanelOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveSwitchFromList(ControlListFarmingPanel.DCSBIOS, farmingPanelOnOff);
+                RemoveSwitchFromList(ControlList.DCSBIOS, farmingPanelOnOff);
                 SetIsDirty();
                 return;
             }
@@ -483,7 +489,7 @@
             var bipLinkFarmingPanel = (BIPLinkFarmingPanel)bipLink;
             if (bipLinkFarmingPanel.BIPLights.Count == 0)
             {
-                RemoveSwitchFromList(ControlListFarmingPanel.BIPS, farmingPanelOnOff);
+                RemoveSwitchFromList(ControlList.BIPS, farmingPanelOnOff);
                 SetIsDirty();
                 return;
             }
@@ -514,11 +520,11 @@
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
-            var controlListFarmingPanel = (ControlListFarmingPanel) controlList;
+            var controlListFarmingPanel = (ControlList) controlList;
             var farmingPanelOnOff = (FarmingPanelOnOff) panelSwitchOnOff;
 
             var  found = false;
-            if (controlListFarmingPanel == ControlListFarmingPanel.ALL || controlListFarmingPanel == ControlListFarmingPanel.KEYS)
+            if (controlListFarmingPanel == ControlList.ALL || controlListFarmingPanel == ControlList.KEYS)
             {
                 foreach (var keyBinding in _keyBindings)
                 {
@@ -530,7 +536,7 @@
                 }
             }
 
-            if (controlListFarmingPanel == ControlListFarmingPanel.ALL || controlListFarmingPanel == ControlListFarmingPanel.DCSBIOS)
+            if (controlListFarmingPanel == ControlList.ALL || controlListFarmingPanel == ControlList.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
@@ -542,7 +548,7 @@
                 }
             }
 
-            if (controlListFarmingPanel == ControlListFarmingPanel.ALL || controlListFarmingPanel == ControlListFarmingPanel.BIPS)
+            if (controlListFarmingPanel == ControlList.ALL || controlListFarmingPanel == ControlList.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
@@ -554,7 +560,7 @@
                 }
             }
             
-            if (controlListFarmingPanel == ControlListFarmingPanel.ALL || controlListFarmingPanel == ControlListFarmingPanel.OSCOMMANDS)
+            if (controlListFarmingPanel == ControlList.ALL || controlListFarmingPanel == ControlList.OSCOMMANDS)
             {
                 OSCommandBindingFarmingPanel operatingSystemCommandBindingFarmingPanel  = null;
                 for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
@@ -589,13 +595,13 @@
         private void DeviceAttachedHandler()
         {
             Startup();
-            DeviceAttached();
+            AppEventHandler.DeviceAttached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         private void DeviceRemovedHandler()
         {
             Dispose();
-            DeviceDetached();
+            AppEventHandler.DeviceDetached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
 
@@ -610,14 +616,6 @@
             set => _dcsBiosBindings = value;
         }
 
-        public enum ControlListFarmingPanel : byte
-        {
-            ALL,
-            DCSBIOS,
-            KEYS,
-            BIPS,
-            OSCOMMANDS
-        }
     }
 
     

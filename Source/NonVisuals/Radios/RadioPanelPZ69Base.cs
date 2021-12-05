@@ -26,13 +26,14 @@
         private volatile byte _frequencySensitivitySkipper;
         protected readonly object LockLCDUpdateObject = new object();
         protected bool DataHasBeenReceivedFromDCSBIOS;
-        /*
-                 * IMPORTANT WHEN SYNCHING DIALS
-                 */
 
-        // MSDN (DateTime.Now.Ticks : There are 10,000 ticks in a millisecond
-        private int _synchSleepTime = 300;
-        private long _resetSyncTimeout = 35000000;
+        /// <summary>
+        /// IMPORTANT WHEN SYNCHING DIALS
+        /// MSDN (DateTime.Now.Ticks : There are 10,000 ticks in a millisecond
+        /// </summary>
+        public int SynchSleepTime { get; set; } = 300;
+        public long ResetSyncTimeout { get; set; } = 35000000;
+
         private long _syncOKDelayTimeout = 50000000; // 5s
         private readonly PZ69DisplayBytes _pZ69DisplayBytes = new PZ69DisplayBytes();
 
@@ -50,6 +51,23 @@
                 NumberDecimalDigits = 4,
                 NumberGroupSeparator = string.Empty
             };
+        }
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         /*         
@@ -251,49 +269,10 @@
 
             return false;
         }
-
-        protected void StartupBase(string id)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
-        protected void ShutdownBase()
-        {
-            try
-            {
-                Closed = true;
-                // Damn hanging problems. Trying threading this shit now.
-                var thread = new Thread(ShutdownBaseThreaded);
-                thread.Start();
-                Thread.Sleep(200);
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
-        private void ShutdownBaseThreaded()
-        {
-            try
-            {
-                // HIDSkeletonBase = null;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
+            e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
 
         protected void DeviceAttachedHandler()
@@ -313,15 +292,19 @@
             syncVariable = DateTime.Now.Ticks;
         }
 
-        protected bool IsTimedOut(ref long syncVariable, long timeoutValue, string name)
+        protected bool IsTimedOut(ref long syncVariable)
         {
-            if (DateTime.Now.Ticks - syncVariable > timeoutValue)
+            if (DateTime.Now.Ticks - syncVariable > ResetSyncTimeout)
             {
                 syncVariable = DateTime.Now.Ticks;
                 return true;
             }
-
             return false;
+        }
+
+        protected void ResetWaitingForFeedBack(ref long syncVariable)
+        {
+            Interlocked.Exchange(ref syncVariable, 0);
         }
 
         protected bool IsTooShort(long dialOkTime)
@@ -332,18 +315,6 @@
             }
 
             return true; // wait more
-        }
-
-        public int SynchSleepTime
-        {
-            get => _synchSleepTime;
-            set => _synchSleepTime = value;
-        }
-
-        public long ResetSyncTimeout
-        {
-            get => _resetSyncTimeout;
-            set => _resetSyncTimeout = value;
         }
 
         public long SyncOKDelayTimeout

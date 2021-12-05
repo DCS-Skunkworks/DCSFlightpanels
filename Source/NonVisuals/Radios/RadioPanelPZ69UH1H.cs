@@ -18,7 +18,7 @@ namespace NonVisuals.Radios
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69UH1H : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
+    public class RadioPanelPZ69UH1H : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentUH1HRadioMode _currentUpperRadioMode = CurrentUH1HRadioMode.UHF;
         private CurrentUH1HRadioMode _currentLowerRadioMode = CurrentUH1HRadioMode.UHF;
@@ -291,6 +291,29 @@ namespace NonVisuals.Radios
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _vhfCommSyncThread?.Abort();
+                    _uhfSyncThread?.Abort();
+                    _vhfNavSyncThread?.Abort();
+                    _vhfFmSyncThread?.Abort();
+                    _adfSyncThread?.Abort();
+                    _vhfCommSyncThread?.Abort();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
@@ -317,7 +340,7 @@ namespace NonVisuals.Radios
                     var tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     if (!tmpFreq.Equals(_vhfCommCockpitFrequency))
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
 
                     if (tmpFreq.Equals(_vhfCommCockpitFrequency))
@@ -333,7 +356,7 @@ namespace NonVisuals.Radios
                         _vhfCommCockpitDial1Frequency = uint.Parse(e.StringData.Substring(0, 3));
                         if (tmp != _vhfCommCockpitDial1Frequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
 
                             Interlocked.Exchange(ref _vhfCommDial1FreqWaitingForFeedback, 0);
                         }
@@ -350,7 +373,7 @@ namespace NonVisuals.Radios
                         // Do not round this. Rounding means that the synch process thinks the frequency is OK which it isn't
                         if (tmp != _vhfCommCockpitDial2Frequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
 
                             Interlocked.Exchange(ref _vhfCommDial2FreqWaitingForFeedback, 0);
                         }
@@ -367,7 +390,7 @@ namespace NonVisuals.Radios
                     var tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     if (!tmpFreq.Equals(_uhfCockpitFrequency))
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
 
                     if (tmpFreq.Equals(_uhfCockpitFrequency))
@@ -383,7 +406,7 @@ namespace NonVisuals.Radios
                         _uhfCockpitDial1Frequency = uint.Parse(e.StringData.Substring(0, 2));
                         if (tmp != _uhfCockpitDial1Frequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
 
                             Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
                         }
@@ -395,7 +418,7 @@ namespace NonVisuals.Radios
                         _uhfCockpitDial2Frequency = uint.Parse(e.StringData.Substring(2, 1));
                         if (tmp != _uhfCockpitDial2Frequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
 
                             Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
                         }
@@ -407,7 +430,7 @@ namespace NonVisuals.Radios
                         _uhfCockpitDial3Frequency = uint.Parse(e.StringData.Substring(4, 2));
                         if (tmp != _uhfCockpitDial3Frequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
 
                             Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
                         }
@@ -422,7 +445,7 @@ namespace NonVisuals.Radios
                     var tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     if (!tmpFreq.Equals(_vhfNavCockpitFrequency))
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
 
                     if (tmpFreq.Equals(_vhfNavCockpitFrequency))
@@ -440,7 +463,7 @@ namespace NonVisuals.Radios
                         _vhfNavCockpitDial1Frequency = uint.Parse(e.StringData.Substring(0, 3));
                         if (tmp != _vhfNavCockpitDial1Frequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
 
                             Interlocked.Exchange(ref _vhfNavDial1WaitingForFeedback, 0);
                         }
@@ -452,7 +475,7 @@ namespace NonVisuals.Radios
                         _vhfNavCockpitDial2Frequency = uint.Parse(e.StringData.Substring(4, 2));
                         if (tmp != _vhfNavCockpitDial2Frequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
 
                             Interlocked.Exchange(ref _vhfNavDial2WaitingForFeedback, 0);
                         }
@@ -478,7 +501,7 @@ namespace NonVisuals.Radios
                     _intercommCockpitDial1Pos = _intercommDcsbiosOutputCockpitPos.GetUIntValue(e.Data);
                     if (tmp != _intercommCockpitDial1Pos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
 
                         Interlocked.Exchange(ref _intercommDialWaitingForFeedback, 0);
                     }
@@ -494,7 +517,7 @@ namespace NonVisuals.Radios
                     _vhfFmCockpitFreq1DialPos = _vhfFmDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq1DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
 
                         Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 0);
                     }
@@ -509,7 +532,7 @@ namespace NonVisuals.Radios
                     _vhfFmCockpitFreq2DialPos = _vhfFmDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq2DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
 
                         Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 0);
                     }
@@ -524,7 +547,7 @@ namespace NonVisuals.Radios
                     _vhfFmCockpitFreq3DialPos = _vhfFmDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq3DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
 
                         Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 0);
                     }
@@ -539,7 +562,7 @@ namespace NonVisuals.Radios
                     _vhfFmCockpitFreq4DialPos = _vhfFmDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq4DialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
 
                         Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 0);
                     }
@@ -555,7 +578,7 @@ namespace NonVisuals.Radios
                     _adfCockpitFrequencyBand = _adfDcsbiosOutputCockpitFrequencyBand.GetUIntValue(e.Data);
                     if (tmp != _adfCockpitFrequencyBand)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
 
                         Interlocked.Exchange(ref _adfFrequencyBandWaitingForFeedback, 0);
                     }
@@ -575,7 +598,7 @@ namespace NonVisuals.Radios
                     _adfSignalStrengthRaw = _adfDcsbiosOutputSignalStrength.GetUIntValue(e.Data);
                     if (tmp != _adfSignalStrengthRaw)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                         const float maxValue = 65535;
                         _adfSignalStrength = ((_adfSignalStrengthRaw / maxValue) * 100);
                     }
@@ -591,7 +614,7 @@ namespace NonVisuals.Radios
                     _uhfCockpitPresetChannel = _uhfDcsbiosOutputCockpitPresetChannel.GetUIntValue(e.Data) + 1;
                     if (!tmp.Equals(_uhfCockpitPresetChannel))
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -823,8 +846,7 @@ namespace NonVisuals.Radios
                     {
                         if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "INTERCOMM dial1Timeout"))
                         {
-                            //Lets do an ugly reset
-                            Interlocked.Exchange(ref _intercommDialWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _intercommDialWaitingForFeedback); //Lets do an ugly reset
                             Common.DebugP("Resetting SYNC for INTERCOMM");
                         }
 
@@ -867,7 +889,7 @@ namespace NonVisuals.Radios
                 }
                 finally
                 {
-                    Interlocked.Exchange(ref _intercommThreadNowSynching, 0);
+                    ResetWaitingForFeedBack(ref _intercommThreadNowSynching);
                 }
             }
             catch (ThreadAbortException)
@@ -921,16 +943,14 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF COMM dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfCommDial1FreqWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfCommDial1FreqWaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF COMM dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfCommDial2FreqWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfCommDial2FreqWaitingForFeedback); // Lets do an ugly reset
                         }
 
                         string str;
@@ -1004,7 +1024,7 @@ namespace NonVisuals.Radios
                 Interlocked.Exchange(ref _vhfCommThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendUhfToDCSBIOS()
@@ -1066,22 +1086,19 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "UHF dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "UHF dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "UHF dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _uhfDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         string str;
@@ -1177,7 +1194,7 @@ namespace NonVisuals.Radios
                 Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendVhfNavToDCSBIOS()
@@ -1223,16 +1240,14 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF NAV dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfNavDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfNavDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF NAV dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfNavDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfNavDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         string str;
@@ -1308,7 +1323,7 @@ namespace NonVisuals.Radios
                 Interlocked.Exchange(ref _vhfNavThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendVhfFmToDCSBIOS()
@@ -1383,28 +1398,24 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF FM dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF FM dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial2WaitingForFeedback);  // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "VHF FM dial3Timeout"))
+                        if (IsTimedOut(ref dial3Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "VHF FM dial4Timeout"))
+                        if (IsTimedOut(ref dial4Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfFmDial4WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _vhfFmDial1WaitingForFeedback) == 0)
@@ -1565,7 +1576,7 @@ namespace NonVisuals.Radios
                 Interlocked.Exchange(ref _vhfFmThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendAdfBandChangeToDCSBIOS()
@@ -1617,10 +1628,9 @@ namespace NonVisuals.Radios
 
                     do
                     {
-                        if (IsTimedOut(ref freqBandDialTimeout, ResetSyncTimeout, "ADF Frequency Band Selector dial1Timeout"))
+                        if (IsTimedOut(ref freqBandDialTimeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _adfFrequencyBandWaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _adfFrequencyBandWaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _adfFrequencyBandWaitingForFeedback) == 0)
@@ -1686,7 +1696,7 @@ namespace NonVisuals.Radios
                 Interlocked.Exchange(ref _adfThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendUhfPresetChannelChangeToDCSBIOS()
@@ -1714,7 +1724,7 @@ namespace NonVisuals.Radios
                 }
 
                 DCSBIOS.Send(_uhfIncreasePresetChannel ? UHF_PRESET_DIAL_COMMAND_INC : UHF_PRESET_DIAL_COMMAND_DEC);
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
             catch (Exception ex)
             {
@@ -2068,7 +2078,7 @@ namespace NonVisuals.Radios
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
@@ -2860,7 +2870,7 @@ namespace NonVisuals.Radios
 
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             lock (LockLCDUpdateObject)
             {
                 foreach (var radioPanelKnobObject in hashSet)
@@ -3100,8 +3110,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                StartupBase("UH-1H");
-
                 // VHF COMM
                 _vhfCommDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFCOMM_FREQ");
                 DCSBIOSStringManager.AddListener(_vhfCommDcsbiosOutputCockpitFrequency, this);
@@ -3129,26 +3137,14 @@ namespace NonVisuals.Radios
                 _adfDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_FREQ");
                 _adfDcsbiosOutputSignalStrength = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_SIGNAL");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false)
         {
         }

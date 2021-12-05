@@ -70,17 +70,7 @@
                 }
             }
         }
-
-        public void AddBipListener(IGamingPanelListener iGamingPanelListener)
-        {
-            OnBipPanelRegistered += iGamingPanelListener.BipPanelRegisterEvent;
-        }
-
-        public void RemoveBipListener(IGamingPanelListener iGamingPanelListener)
-        {
-            OnBipPanelRegistered -= iGamingPanelListener.BipPanelRegisterEvent;
-        }
-
+        
         public void BroadcastRegisteredBips()
         {
             foreach (var backlitPanelBip in _backlitPanels)
@@ -100,6 +90,10 @@
             _backlitPanels.Remove(backlitPanelBip);
         }
 
+
+        /*
+         * Not sure about this one, I think it can be removed.
+         */
         private void OnPanelRegistered(BacklitPanelBIP backlitPanelBip)
         {
             OnBipPanelRegistered?.Invoke(this, new BipPanelRegisteredEventArgs { UniqueId = backlitPanelBip.HIDInstanceId, BacklitPanelBip = backlitPanelBip });

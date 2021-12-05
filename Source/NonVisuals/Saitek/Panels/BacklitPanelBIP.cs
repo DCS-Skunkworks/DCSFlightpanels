@@ -87,17 +87,22 @@
             }
         }
 
-        public override void Dispose()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            try
+            if (!_disposed)
             {
-                BipFactory.DeRegisterBip(this);
-                Closed = true;
+                if (disposing)
+                {
+                    BipFactory.DeRegisterBip(this);
+                }
+
+                _disposed = true;
             }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
@@ -126,7 +131,7 @@
                 }
             }
 
-            SettingsApplied();
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -342,7 +347,7 @@
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
+            e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e)
@@ -606,17 +611,13 @@
         private void DeviceAttachedHandler()
         {
             Startup();
-
-            // IsAttached = true;
-            DeviceAttached();
+            AppEventHandler.DeviceAttached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         private void DeviceRemovedHandler()
         {
-            Dispose();
-
-            // IsAttached = false;
-            DeviceDetached();
+            Dispose(); 
+            AppEventHandler.DeviceDetached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         private void SetLedStrength()

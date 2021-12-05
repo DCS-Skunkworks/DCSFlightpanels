@@ -136,16 +136,6 @@
             </Grid>
         </GroupBox>
 
-
-        <GroupBox FontSize="10" Grid.Column="3" Grid.Row="2" Margin="0,0,0,137" Grid.RowSpan="4">
-            <StackPanel>
-
-                <TextBlock HorizontalAlignment="Stretch"  Text="Double-click in the key command boxes to erase them. Right-click to set timings." TextWrapping="Wrap" Background="#FFF5ECEC"></TextBlock>
-                <Button Content="Clear all" Height="23" HorizontalAlignment="Center" x:Name="ButtonClearAll" Width="75" Click="ButtonClearAllClick" Margin="0,20,0,0" />
-                <Button Content="DEV" Height="25" HorizontalAlignment="Center" Name="ButtonDEV" Width="75" Visibility="Collapsed" Click="ButtonDEV_OnClick" Margin="5,0" />
-            </StackPanel>
-        </GroupBox>
-
         <GroupBox Header="Log"  FontSize="10"  Grid.Column="4" Grid.Row="5" Grid.RowSpan="3" Margin="0,0.5,0,-1">
             <TextBox Name="TextBoxLogPZ55" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" />
         </GroupBox>

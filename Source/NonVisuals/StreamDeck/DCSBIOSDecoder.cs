@@ -53,7 +53,7 @@
             _jaceId = RandomFactory.Get();
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();
-            DCSBIOS.GetInstance().AttachDataReceivedListener(this);
+            BIOSEventHandler.AttachDataListener(this);
             EventHandlers.AttachDCSBIOSDecoder(this);
         }
 
@@ -61,7 +61,7 @@
         {
             EventHandlers.DetachDCSBIOSDecoder(this);
             DCSBIOSStringManager.DetachListener(this);
-            DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
+            BIOSEventHandler.DetachDataListener(this);
             _shutdown = true;
 
             try
@@ -115,9 +115,6 @@
 
         public override void AfterClone()
         {
-            DCSBIOS.GetInstance().AttachDataReceivedListener(this);
-
-            // _autoResetEvent = new AutoResetEvent(false);
             if (_imageUpdateTread != null)
             {
                 try

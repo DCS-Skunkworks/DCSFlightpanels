@@ -21,7 +21,7 @@
 
     using Theraot.Core;
 
-    public class ProfileHandler : IProfileHandlerListener, IIsDirty
+    public class ProfileHandler : ISettingsModifiedListener, IIsDirty, IDisposable
     {
         private const string OPEN_FILE_DIALOG_FILE_NAME = "*.bindings";
         private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
@@ -42,16 +42,36 @@
 
         private IHardwareConflictResolver _hardwareConflictResolver;
 
+        public static DCSFPProfile ActiveDCSFPProfile
+        {
+            get => _dcsfpProfile;
+        }
 
         public ProfileHandler(string dcsbiosJSONDirectory)
         {
             _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
+            AppEventHandler.AttachSettingsModified(this);
         }
 
         public ProfileHandler(string dcsbiosJSONDirectory, string lastProfileUsed)
         {
             _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
             _lastProfileUsed = lastProfileUsed;
+            AppEventHandler.AttachSettingsModified(this);
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                AppEventHandler.DetachSettingsModified(this);
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public void Init()
@@ -84,9 +104,7 @@
             return null;
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) { }
-
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
@@ -110,7 +128,7 @@
             Profile = DCSFPProfile.GetNoFrameLoadedYet(); // Just a default that doesn't remove non emulation panels from the GUI
 
             // This sends info to all to clear their settings
-            OnClearPanelSettings?.Invoke(this);
+            AppEventHandler.ClearPanelSettings(this);
         }
 
         public void ClearAll()
@@ -353,20 +371,17 @@
         {
             try
             {
-                if (OnSettingsReadFromFile != null)
-                {
-                    OnAirframeSelected?.Invoke(this, new AirframeEventArgs { Profile = _dcsfpProfile });
+                AppEventHandler.AirframeSelected(this, _dcsfpProfile);
 
-                    foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
+                foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
+                {
+                    try
                     {
-                        try
-                        {
-                            OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs { PanelBinding = genericPanelBinding });
-                        }
-                        catch (Exception ex)
-                        {
-                            Common.ShowErrorMessageBox(ex, $"Error reading settings. Panel : {genericPanelBinding.PanelType}");
-                        }
+                        AppEventHandler.SettingsReadFromFile(this, genericPanelBinding);
+                    }
+                    catch (Exception ex)
+                    {
+                        Common.ShowErrorMessageBox(ex, $"Error reading settings. Panel : {genericPanelBinding.PanelType}");
                     }
                 }
             }
@@ -380,21 +395,18 @@
         {
             try
             {
-                if (OnSettingsReadFromFile != null)
+                foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                 {
-                    foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
+                    try
                     {
-                        try
+                        if (genericPanelBinding.PanelType == GamingPanelEnum.PZ69RadioPanel)
                         {
-                            if (genericPanelBinding.PanelType == GamingPanelEnum.PZ69RadioPanel)
-                            {
-                                OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs { PanelBinding = genericPanelBinding });
-                            }
+                            AppEventHandler.SettingsReadFromFile(this, genericPanelBinding);
                         }
-                        catch (Exception ex)
-                        {
-                            Common.ShowErrorMessageBox(ex, $"Error reading settings. Panel : {genericPanelBinding.PanelType}");
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Common.ShowErrorMessageBox(ex, $"Error reading settings. Panel : {genericPanelBinding.PanelType}");
                     }
                 }
             }
@@ -427,8 +439,8 @@
 
         public void SendEventRegardingSavingPanelConfigurations()
         {
-            OnSavePanelSettings?.Invoke(this, new ProfileHandlerEventArgs { ProfileHandlerEA = this });
-            OnSavePanelSettingsJSON?.Invoke(this, new ProfileHandlerEventArgs { ProfileHandlerEA = this });
+            AppEventHandler.SavePanelSettings(this);
+            AppEventHandler.SavePanelSettingsJSON(this);
         }
 
         public bool IsNewProfile => _isNewProfile;
@@ -599,7 +611,7 @@
                 Common.ResetEmulationModesFlag();
                 SetEmulationModeFlag();
                 DCSBIOSControlLocator.Profile = Profile;
-                OnAirframeSelected?.Invoke(this, new AirframeEventArgs { Profile = _dcsfpProfile });
+                AppEventHandler.AirframeSelected(this, _dcsfpProfile);
             }
         }
 
@@ -614,8 +626,6 @@
             get => DCSBIOSControlLocator.JSONDirectory;
             set => DCSBIOSControlLocator.JSONDirectory = value;
         }
-
-        public void SelectedProfile(object sender, AirframeEventArgs e) { }
 
         public bool ProfileLoaded => _profileLoaded || _isNewProfile;
 
@@ -637,71 +647,6 @@
             }
         }
 
-
-        public delegate void ProfileReadFromFileEventHandler(object sender, PanelBindingReadFromFileEventArgs e);
-
-        public event ProfileReadFromFileEventHandler OnSettingsReadFromFile;
-
-        public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
-
-        public event SavePanelSettingsEventHandler OnSavePanelSettings;
-
-        public delegate void SavePanelSettingsEventHandlerJSON(object sender, ProfileHandlerEventArgs e);
-
-        public event SavePanelSettingsEventHandlerJSON OnSavePanelSettingsJSON;
-
-        public delegate void AirframeSelectedEventHandler(object sender, AirframeEventArgs e);
-
-        public event AirframeSelectedEventHandler OnAirframeSelected;
-
-        public delegate void ClearPanelSettingsEventHandler(object sender);
-
-        public event ClearPanelSettingsEventHandler OnClearPanelSettings;
-
-        /*public delegate void UserMessageEventHandler(object sender, UserMessageEventArgs e);
-
-        public event UserMessageEventHandler OnUserMessageEventHandler;
-        */
-        public void Attach(GamingPanel gamingPanel)
-        {
-            OnSettingsReadFromFile += gamingPanel.PanelBindingReadFromFile;
-            OnSavePanelSettings += gamingPanel.SavePanelSettings;
-            OnSavePanelSettingsJSON += gamingPanel.SavePanelSettingsJSON;
-            OnClearPanelSettings += gamingPanel.ClearPanelSettings;
-            OnAirframeSelected += gamingPanel.SelectedProfile;
-        }
-
-        public void Detach(GamingPanel gamingPanel)
-        {
-            OnSettingsReadFromFile -= gamingPanel.PanelBindingReadFromFile;
-            OnSavePanelSettings -= gamingPanel.SavePanelSettings;
-            OnSavePanelSettingsJSON -= gamingPanel.SavePanelSettingsJSON;
-            OnClearPanelSettings -= gamingPanel.ClearPanelSettings;
-            OnAirframeSelected -= gamingPanel.SelectedProfile;
-        }
-
-        public void Attach(IProfileHandlerListener gamingPanelSettingsListener)
-        {
-            OnSettingsReadFromFile += gamingPanelSettingsListener.PanelBindingReadFromFile;
-            OnAirframeSelected += gamingPanelSettingsListener.SelectedProfile;
-        }
-
-        public void Detach(IProfileHandlerListener gamingPanelSettingsListener)
-        {
-            OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelBindingReadFromFile;
-            OnAirframeSelected -= gamingPanelSettingsListener.SelectedProfile;
-        }
-/*
-        public void AttachUserMessageHandler(IUserMessageHandler userMessageHandler)
-        {
-            OnUserMessageEventHandler += userMessageHandler.UserMessage;
-        }
-
-        public void DetachUserMessageHandler(IUserMessageHandler userMessageHandler)
-        {
-            OnUserMessageEventHandler -= userMessageHandler.UserMessage;
-        }
-*/
         public void StateSaved()
         {
             _isDirty = false;

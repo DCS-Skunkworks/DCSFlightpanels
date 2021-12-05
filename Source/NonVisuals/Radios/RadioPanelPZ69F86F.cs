@@ -16,7 +16,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69F86F : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
+    public class RadioPanelPZ69F86F : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentF86FRadioMode _currentUpperRadioMode = CurrentF86FRadioMode.ARC27_PRESET;
         private CurrentF86FRadioMode _currentLowerRadioMode = CurrentF86FRadioMode.ARC27_PRESET;
@@ -95,6 +95,23 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
@@ -137,7 +154,7 @@
                         _arc27PresetCockpitDialPos = _arc27PresetDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _arc27PresetCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -151,7 +168,7 @@
                         _arc27ModeCockpitDialPos = _arc27ModeDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _arc27ModeCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -165,7 +182,7 @@
                         _arn6CockpitFrequency = _arn6ManualDcsbiosOutputCockpitFrequency.GetUIntValue(e.Data);
                         if (tmp != _arn6CockpitFrequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -179,7 +196,7 @@
                         _arn6CockpitBand = _arn6BandDcsbiosOutputCockpit.GetUIntValue(e.Data);
                         if (tmp != _arn6CockpitBand)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -193,7 +210,7 @@
                         _arn6ModeCockpitDialPos = _arn6ModeDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _arn6ModeCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -207,7 +224,7 @@
                         _apx6ModeCockpitDialPos = _apx6ModeDcsbiosOutputCockpit.GetUIntValue(e.Data);
                         if (tmp != _apx6ModeCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -322,7 +339,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -1184,7 +1201,7 @@
                 Common.ShowErrorMessageBox( ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 
@@ -1197,8 +1214,6 @@
         {
             try
             {
-                StartupBase("F-86F");
-
                 // COM1
                 _arc27PresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC27_CHAN_SEL");
                 _arc27ModeDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC27_PWR_SEL");
@@ -1215,7 +1230,7 @@
                 // ADF
                 _apx6ModeDcsbiosOutputCockpit = DCSBIOSControlLocator.GetDCSBIOSOutput("APX6_MASTER");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }
@@ -1224,19 +1239,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

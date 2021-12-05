@@ -15,7 +15,7 @@
     using NonVisuals.Interfaces;
     using NonVisuals.Saitek.Switches;
 
-    public abstract class SaitekPanel : GamingPanel
+    public abstract class SaitekPanel : GamingPanel, IDisposable
     {
         public abstract void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff);
 
@@ -50,13 +50,30 @@
             hidSkeleton.PanelHasBeenInstantiated = true;
         }
 
-        protected override void StartListeningForPanelChanges()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
+        protected override void StartListeningForHidPanelChanges()
         {
             try
             {
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
-                    // Debug.Write("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType + " " + GuidString + "\n");
+                    // Debug.Write("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType\n");
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
                 }
             }
@@ -76,7 +93,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    UISwitchesChanged(hashSet);
+                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.InstanceId, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
@@ -89,7 +106,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    UISwitchesChanged(hashSet);
+                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.InstanceId, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
@@ -102,13 +119,13 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    UISwitchesChanged(hashSet);
+                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.InstanceId, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
             }
 
-            StartListeningForPanelChanges();
+            StartListeningForHidPanelChanges();
         }
 
         private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
@@ -223,32 +240,15 @@
         {
             return (currentValue[saitekPanelKnob.Group] & saitekPanelKnob.Mask) > 0;
         }
-
-
-
-        public delegate void LedLightChangedEventHandler(object sender, LedLightChangeEventArgs e);
-
-        public event LedLightChangedEventHandler OnLedLightChangedA;
-
-        protected virtual void LedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
-        {
-            OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs { UniqueId = HIDInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
-        }
-         
-        // For those that wants to listen to this panel
-        public override void Attach(IGamingPanelListener gamingPanelListener)
-        {
-            OnLedLightChangedA += gamingPanelListener.LedLightChanged;
-            base.Attach(gamingPanelListener);
-        }
-
-        // For those that wants to listen to this panel
-        public override void Detach(IGamingPanelListener gamingPanelListener)
-        {
-            OnLedLightChangedA -= gamingPanelListener.LedLightChanged;
-            base.Detach(gamingPanelListener);
-        }
     }
 
 
+    public enum ControlList : byte
+    {
+        ALL,
+        DCSBIOS,
+        KEYS,
+        BIPS,
+        OSCOMMANDS
+    }
 }

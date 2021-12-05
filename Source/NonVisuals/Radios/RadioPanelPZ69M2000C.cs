@@ -17,7 +17,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69M2000C : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
+    public class RadioPanelPZ69M2000C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentM2000CRadioMode _currentUpperRadioMode = CurrentM2000CRadioMode.VUHF;
         private CurrentM2000CRadioMode _currentLowerRadioMode = CurrentM2000CRadioMode.VUHF;
@@ -106,6 +106,23 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
@@ -175,7 +192,7 @@
                         if (tmp != _vhfPresetCockpitDialPos)
                         {
                             Debug.WriteLine(_vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data));
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -189,7 +206,7 @@
                         _uhfPresetCockpitDialPos = _uhfDcsbiosOutputPresetDial.GetUIntValue(e.Data) + 1;
                         if (tmp != _uhfPresetCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -203,7 +220,7 @@
                         _tacanTensCockpitDialPos = _tacanDcsbiosOutputDialTens.GetUIntValue(e.Data);
                         if (tmp != _tacanTensCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -217,7 +234,7 @@
                         _tacanOnesCockpitDialPos = _tacanDcsbiosOutputDialOnes.GetUIntValue(e.Data);
                         if (tmp != _tacanOnesCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -231,7 +248,7 @@
                         _tacanModeSelectCockpitDialPos = _tacanDcsbiosOutputDialModeSelect.GetUIntValue(e.Data);
                         if (tmp != _tacanModeSelectCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -245,7 +262,7 @@
                         _tacanXYSelectCockpitDialPos = _tacanDcsbiosOutputDialXYSelect.GetUIntValue(e.Data);
                         if (tmp != _tacanXYSelectCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -259,7 +276,7 @@
                         _vorDecimalsCockpitDialPos = _vorDcsbiosOutputDialDecimals.GetUIntValue(e.Data);
                         if (tmp != _vorDecimalsCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -273,7 +290,7 @@
                         _vorOnesCockpitDialPos = _vorDcsbiosOutputDialOnes.GetUIntValue(e.Data);
                         if (tmp != _vorOnesCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -287,7 +304,7 @@
                         _vorPowerCockpitDialPos = _vorDcsbiosOutputDialPower.GetUIntValue(e.Data);
                         if (tmp != _vorPowerCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -301,7 +318,7 @@
                         _vorTestCockpitDialPos = _vorDcsbiosOutputDialTest.GetUIntValue(e.Data);
                         if (tmp != _vorTestCockpitDialPos)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -397,7 +414,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -1184,7 +1201,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 
@@ -1197,8 +1214,6 @@
         {
             try
             {
-                StartupBase("M2000C");
-
                 // COM1
                 _vhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_FREQUENCY");
                 DCSBIOSStringManager.AddListener(_vhfDcsbiosOutputPresetFreqString, this);
@@ -1221,7 +1236,7 @@
                 _vorDcsbiosOutputDialPower = DCSBIOSControlLocator.GetDCSBIOSOutput("VORILS_PWR_DIAL");
                 _vorDcsbiosOutputDialTest = DCSBIOSControlLocator.GetDCSBIOSOutput("VORILS_TEST_DIAL");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }
@@ -1230,19 +1245,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

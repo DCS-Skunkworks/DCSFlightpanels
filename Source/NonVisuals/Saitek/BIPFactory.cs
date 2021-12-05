@@ -43,17 +43,7 @@
 
             return BIPEventHandlerManager;
         }
-
-        public static void AddBipListener(IGamingPanelListener gamingPanelListener)
-        {
-            BIPEventHandlerManager.AddBipListener(gamingPanelListener);
-        }
-
-        public static void RemoveBipListener(IGamingPanelListener gamingPanelListener)
-        {
-            BIPEventHandlerManager.RemoveBipListener(gamingPanelListener);
-        }
-
+        
         public static void LightUpGreen(string hash)
         {
             BIPEventHandlerManager.LightUpGreen(hash);

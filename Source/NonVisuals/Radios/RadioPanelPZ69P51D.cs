@@ -13,7 +13,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69P51D : RadioPanelPZ69Base, IRadioPanel
+    public class RadioPanelPZ69P51D : RadioPanelPZ69Base
     {
         private CurrentP51DRadioMode _currentUpperRadioMode = CurrentP51DRadioMode.VHF;
         private CurrentP51DRadioMode _currentLowerRadioMode = CurrentP51DRadioMode.VHF;
@@ -39,6 +39,23 @@
         {
             CreateRadioKnobs();
             Startup();
+        }
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -69,7 +86,7 @@
 
                         if (tmp != _vhf1CockpitPresetActiveButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -88,7 +105,7 @@
 
                         if (tmp != _vhf1CockpitPresetActiveButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -107,7 +124,7 @@
 
                         if (tmp != _vhf1CockpitPresetActiveButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -126,7 +143,7 @@
 
                         if (tmp != _vhf1CockpitPresetActiveButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -145,7 +162,7 @@
 
                         if (tmp != _vhf1CockpitPresetActiveButton)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -164,7 +181,7 @@
         {
             try
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -525,12 +542,12 @@
                 logger.Error(ex);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private void SendIncVHFPresetCommand()
         {
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             lock (_lockVhf1DialObject1)
             {
                 switch (_vhf1CockpitPresetActiveButton)
@@ -569,7 +586,7 @@
 
         private void SendDecVHFPresetCommand()
         {
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             lock (_lockVhf1DialObject1)
             {
                 switch (_vhf1CockpitPresetActiveButton)
@@ -615,8 +632,6 @@
         {
             try
             {
-                StartupBase("P-51D");
-
                 // VHF
                 _vhf1DcsbiosOutputPresetButton0 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_RADIO_ON_OFF");
                 _vhf1DcsbiosOutputPresetButton1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_RADIO_CHAN_A");
@@ -624,7 +639,7 @@
                 _vhf1DcsbiosOutputPresetButton3 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_RADIO_CHAN_C");
                 _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_RADIO_CHAN_D");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }
@@ -633,19 +648,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

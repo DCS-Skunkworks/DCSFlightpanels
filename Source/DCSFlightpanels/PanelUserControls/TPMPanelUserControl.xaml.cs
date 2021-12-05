@@ -35,7 +35,7 @@
 
 
 
-        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -44,20 +44,29 @@
 
             _tpmPanel = new TPMPanel(hidSkeleton);
 
-            _tpmPanel.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_tpmPanel);
-            GlobalHandler = globalHandler;
+            AppEventHandler.AttachGamingPanelListener(this);
         }
 
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!_disposed)
             {
-                _tpmPanel.Dispose();
-                _tpmPanel.Dispose();
-            }
-        }
+                if (disposing)
+                {
+                    _tpmPanel.Dispose();
+                    AppEventHandler.DetachGamingPanelListener(this);
+                }
 
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+        
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             if (!_once)
@@ -89,11 +98,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
-        {
-        }
-
+        
         public override GamingPanel GetGamingPanel()
         {
             return _tpmPanel;
@@ -109,7 +114,7 @@
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
         }
 
@@ -117,11 +122,11 @@
         {
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.HidInstance.Equals(_tpmPanel.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.TPM && e.HidInstance.Equals(_tpmPanel.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -146,38 +151,13 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
+        
+        
+        public void DeviceAttached(object sender, PanelEventArgs e) { }
 
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.TPM && _tpmPanel.HIDInstanceId == e.HidInstance)
-                {
-                    ClearAll(false);
-                    ShowGraphicConfiguration();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-        }
-
-        public void DeviceAttached(object sender, PanelEventArgs e)
-        {
-        }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
-        {
-        }
-
-        public void DeviceDetached(object sender, PanelEventArgs e)
-        {
-        }
+        public void DeviceDetached(object sender, PanelEventArgs e) { }
 
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
@@ -195,11 +175,14 @@
             }
         }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelEventArgs e)
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                if (_tpmPanel.HIDInstanceId == e.HidInstance)
+                {
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                }
             }
             catch (Exception ex)
             {
@@ -253,7 +236,7 @@
                     continue;
                 }
 
-                textBox.Bill = new BillTPM(GlobalHandler, this, _tpmPanel, textBox);
+                textBox.Bill = new BillTPM(this, _tpmPanel, textBox);
             }
             _textBoxBillsSet = true;
         }
@@ -533,6 +516,10 @@
                     {
                         textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                     }
+                    else
+                    {
+                        textBox.Bill.KeyPress = null;
+                    }
                 }
 
                 foreach (var operatingSystemCommand in _tpmPanel.OSCommandHashSet)
@@ -541,6 +528,10 @@
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
                         textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                    }
+                    else
+                    {
+                        textBox.Bill.OSCommandObject = null;
                     }
                 }
 
@@ -551,6 +542,10 @@
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
                     }
+                    else
+                    {
+                        textBox.Bill.DCSBIOSBinding = null;
+                    }
                 }
 
                 foreach (var bipLink in _tpmPanel.BipLinkHashSet)
@@ -559,6 +554,10 @@
                     if (bipLink.BIPLights.Count > 0)
                     {
                         textBox.Bill.BipLink = bipLink;
+                    }
+                    else
+                    {
+                        textBox.Bill.BipLink = null;
                     }
                 }
             }

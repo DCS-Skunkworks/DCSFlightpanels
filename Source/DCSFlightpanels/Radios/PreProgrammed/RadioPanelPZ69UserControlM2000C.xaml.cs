@@ -26,7 +26,7 @@
     {
         private readonly RadioPanelPZ69M2000C _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlM2000C(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlM2000C(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -36,17 +36,30 @@
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69M2000C(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
-            _radioPanelPZ69.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_radioPanelPZ69);
-            GlobalHandler = globalHandler;
+            AppEventHandler.AttachGamingPanelListener(this);
 
             //LoadConfiguration();
         }
 
-        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-        }
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _radioPanelPZ69.Dispose();
+                    AppEventHandler.DetachGamingPanelListener(this);
+                }
 
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+        
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
@@ -74,7 +87,7 @@
             }
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e)
+        public void ProfileSelected(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -86,11 +99,14 @@
             }
         }
 
-        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                SetGraphicsState(e.Switches);
+                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId))
+                {
+                    SetGraphicsState(e.Switches);
+                }
             }
             catch (Exception ex)
             {
@@ -98,101 +114,19 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) {}
 
-        public void SettingsCleared(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void SettingsCleared(object sender, PanelEventArgs e){}
 
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e){}
+        
+        public void DeviceAttached(object sender, PanelEventArgs e){}
 
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void SettingsApplied(object sender, PanelEventArgs e){}
 
-        public void DeviceAttached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void SettingsModified(object sender, PanelEventArgs e){}
 
-        public void SettingsApplied(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo nada?
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        public void DeviceDetached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+        public void DeviceDetached(object sender, PanelEventArgs e){}
 
         private void SetGraphicsState(HashSet<object> knobs)
         {

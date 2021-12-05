@@ -63,27 +63,32 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public override sealed void Startup()
         {
             try
             {
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
-            }
-        }
-
-        public override void Dispose()
-        {
-            try
-            {
-                Closed = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
             }
         }
 
@@ -153,7 +158,7 @@
                 }
             }
 
-            SettingsApplied();
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
         }
 
@@ -224,7 +229,7 @@
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
+            e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
@@ -577,7 +582,7 @@
 
             if (string.IsNullOrEmpty(keyPress))
             {
-                RemoveSwitchFromList(ControlListPZ55.KEYS, pz55SwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -618,7 +623,7 @@
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             if (keySequence.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ55.KEYS, pz55SwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -693,7 +698,7 @@
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ55.DCSBIOS, pz55SwitchOnOff);
+                RemoveSwitchFromList(ControlList.DCSBIOS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -733,7 +738,7 @@
             var bipLinkPZ55 = (BIPLinkPZ55)bipLink;
             if (bipLinkPZ55.BIPLights.Count == 0)
             {
-                RemoveSwitchFromList(ControlListPZ55.BIPS, pz55SwitchOnOff);
+                RemoveSwitchFromList(ControlList.BIPS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -764,11 +769,11 @@
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
-            var controlListPZ55 = (ControlListPZ55) controlList;
+            var controlListPZ55 = (ControlList) controlList;
             var pz55SwitchOnOff = (PZ55SwitchOnOff) panelSwitchOnOff;
 
             var  found = false;
-            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.KEYS)
+            if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.KEYS)
             {
                 foreach (var keyBindingPZ55 in _keyBindings)
                 {
@@ -780,7 +785,7 @@
                 }
             }
 
-            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.DCSBIOS)
+            if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
@@ -792,7 +797,7 @@
                 }
             }
 
-            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.BIPS)
+            if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
@@ -804,7 +809,7 @@
                 }
             }
             
-            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.OSCOMMANDS)
+            if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.OSCOMMANDS)
             {
                 OSCommandBindingPZ55 operatingSystemCommandBindingPZ55  = null;
                 for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
@@ -874,13 +879,11 @@
         private void DeviceAttachedHandler()
         {
             Startup();
-            DeviceAttached();
         }
 
         private void DeviceRemovedHandler()
         {
             Dispose();
-            DeviceDetached();
         }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
@@ -922,7 +925,7 @@
                             break;
                         }
                 }
-                this.LedLightChanged(new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
+                AppEventHandler.LedLightChanged(this, HIDSkeletonBase.InstanceId, new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
                 SetLandingGearLED(_ledUpperColor | _ledLeftColor | _ledRightColor);
             }
             catch (Exception ex)
@@ -940,7 +943,7 @@
                 {
                     var array = new[] { (byte)0x0, (byte)switchPanelPZ55LEDs };
 
-                    // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
+                    // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel);
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(new byte[] { 0, 0 });
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
                 }
@@ -1120,14 +1123,6 @@
             }
         }
     }
-
-    public enum ControlListPZ55 : byte
-    {
-        ALL,
-        DCSBIOS,
-        KEYS,
-        BIPS,
-        OSCOMMANDS
-    }
+    
 }
 

@@ -41,6 +41,25 @@
             InitializeComponent();
         }
 
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
+
         internal void SetStreamDeckPanel(StreamDeckPanel streamDeckPanel)
         {
             _streamDeckPanel = streamDeckPanel;
@@ -638,7 +657,7 @@
 
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetProfile(),
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(
                         textBox.Name.Replace("TextBox", string.Empty),
                         textBox.Bill.DCSBIOSBinding.DCSBIOSInputs,
                         textBox.Text,
@@ -648,7 +667,7 @@
                 }
                 else
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetProfile(), textBox.Name.Replace("TextBox", string.Empty), null, true);
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(textBox.Name.Replace("TextBox", string.Empty), null, true);
                 }
 
                 dcsbiosControlsConfigsWindow.ShowDialog();

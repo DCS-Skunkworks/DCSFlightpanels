@@ -17,7 +17,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69AV8BNA : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
+    public class RadioPanelPZ69AV8BNA : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentAV8BNARadioMode _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM1;
         private CurrentAV8BNARadioMode _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM1;
@@ -59,7 +59,24 @@
             CreateRadioKnobs();
             Startup();
         }
-        
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             UpdateCounter(e.Address, e.Data);
@@ -90,7 +107,7 @@
                         _comm1Frequency = e.StringData;
                         if (tmp != _comm1Frequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -103,7 +120,7 @@
                         _comm2Frequency = e.StringData;
                         if (tmp != _comm2Frequency)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
                     }
                 }
@@ -272,7 +289,7 @@
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private string GetUHFCockpitFrequencyAsString()
@@ -538,7 +555,7 @@
                 }
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             ShowFrequenciesOnPanel();
         }
 
@@ -547,7 +564,7 @@
         {
             lock (LockLCDUpdateObject)
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 foreach (var radioPanelKnobObject in hashSet)
                 {
                     var radioPanelKnob = (RadioPanelKnobAV8BNA)radioPanelKnobObject;
@@ -689,8 +706,6 @@
         {
             try
             {
-                StartupBase("AV-8B NA");
-
                 // V/UHF COMM1
                 _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_STRING_FREQ");
                 DCSBIOSStringManager.AddListener(_comm1DcsbiosOutputFreq, this);
@@ -699,7 +714,7 @@
                 _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM2_STRING_FREQ");
                 DCSBIOSStringManager.AddListener(_comm2DcsbiosOutputFreq, this);
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }
@@ -708,19 +723,7 @@
                 SetLastException(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

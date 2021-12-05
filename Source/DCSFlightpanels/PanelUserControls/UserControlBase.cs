@@ -2,49 +2,17 @@
 using System.Windows.Controls;
 using ClassLibraryCommon;
 using NonVisuals;
-using NonVisuals.Interfaces;
+
 
 namespace DCSFlightpanels.PanelUserControls
 {
     public class UserControlBase : UserControl, IDisposable
     {
-        private IGlobalHandler _globalHandler;
         private TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private bool _userControlLoaded;
-        
+        private bool _disposed;
 
-        public UserControlBase()
-        {}
-        
-        public void DeviceRemovedHandler()
-        {
-            GlobalHandler.Detach(GetGamingPanel());
-        }
-
-        public virtual GamingPanel GetGamingPanel()
-        {
-            return null;
-        }
-
-        public virtual GamingPanelEnum GetPanelType()
-        {
-            return GamingPanelEnum.Unknown;
-        }
-
-        public IGlobalHandler GlobalHandler
-        {
-            set => _globalHandler = value;
-            get => _globalHandler;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        { }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        public string ParentTabItemHeader { get; set; }  //unused except in 6 commented lines and I think those lines could be deleted, not very clear in my head.
+        public bool UserControlLoaded { get; set; }
 
         public TabItem ParentTabItem
         {
@@ -59,18 +27,42 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public string ParentTabItemHeader
+        public UserControlBase()
+        {}
+        
+        protected virtual void Dispose(bool disposing)
         {
-            get => _parentTabItemHeader;
-            set => _parentTabItemHeader = value;
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+            }
+
+            _disposed = true;
         }
 
-        public bool UserControlLoaded
+        public void Dispose()
         {
-            get => _userControlLoaded;
-            set => _userControlLoaded = value;
+            // Dispose of unmanaged resources.
+            Dispose(true);
         }
 
+        public void DeviceRemovedHandler()
+        {
+            Dispose();
+        }
 
+        public virtual GamingPanel GetGamingPanel()
+        {
+            return null;
+        }
+
+        public virtual GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.Unknown;
+        }
     }
 }

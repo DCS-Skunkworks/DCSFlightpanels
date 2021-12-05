@@ -162,6 +162,7 @@
     <Compile Include="DCSBIOS.cs" />
     <Compile Include="DCSBIOSInputHandler.cs" />
     <Compile Include="DCSBIOSInputObject.cs" />
+    <Compile Include="EventArgs\BIOSEventHandler.cs" />
     <Compile Include="EventArgs\DCSBIOSConnectionEventArgs.cs" />
     <Compile Include="EventArgs\DCSBIOSDataEventArgs.cs" />
     <Compile Include="EventArgs\DCSBIOSStringDataEventArgs.cs" />

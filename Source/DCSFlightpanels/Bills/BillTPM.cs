@@ -8,9 +8,7 @@
     using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
 
-
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Interfaces;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
 
@@ -18,15 +16,61 @@
     {
         private DCSBIOSActionBindingTPM _dcsbiosBindingTPM;
         private BIPLinkTPM _bipLinkTPM;
-        
-        public BillTPM(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
+
+        public override BIPLink BipLink
+        {
+            get => _bipLinkTPM;
+            set
+            {
+                _bipLinkTPM = (BIPLinkTPM)value;
+                TextBox.Background = _bipLinkTPM != null ? Brushes.Bisque : Brushes.White;
+            }
+        }
+
+        public override List<DCSBIOSInput> DCSBIOSInputs
+        {
+            get
+            {
+                return ContainsDCSBIOS() ? _dcsbiosBindingTPM.DCSBIOSInputs : null;
+            }
+            set
+            {
+                if (ContainsDCSBIOS())
+                {
+                    _dcsbiosBindingTPM.DCSBIOSInputs = value;
+                }
+            }
+        }
+
+        public override DCSBIOSActionBindingBase DCSBIOSBinding
+        {
+            get => _dcsbiosBindingTPM;
+            set
+            {
+                if (ContainsKeyPress())
+                {
+                    throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
+                }
+                _dcsbiosBindingTPM = (DCSBIOSActionBindingTPM)value;
+                if (_dcsbiosBindingTPM != null)
+                {
+                    TextBox.Text = string.IsNullOrEmpty(_dcsbiosBindingTPM.Description) ? "DCS-BIOS" : _dcsbiosBindingTPM.Description;
+                }
+                else
+                {
+                    TextBox.Text = string.Empty;
+                }
+            }
+        }
+
+        public BillTPM(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
             SetContextMenu();
         }
 
         public override bool ContainsDCSBIOS()
         {
-            return _dcsbiosBindingTPM != null;// && _dcsbiosInputs.Count > 0;
+            return _dcsbiosBindingTPM != null;
         }
 
         public override bool ContainsBIPLink()
@@ -57,71 +101,6 @@
         protected override void ClearDCSBIOSFromBill()
         {
             DCSBIOSBinding = null;
-        }
-        
-        public override BIPLink BipLink
-        {
-            get => _bipLinkTPM;
-            set
-            {
-                _bipLinkTPM = (BIPLinkTPM)value;
-                if (_bipLinkTPM != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.White;
-                }
-            }
-        }
-
-        public override List<DCSBIOSInput> DCSBIOSInputs
-        {
-            get
-            {
-                if (ContainsDCSBIOS())
-                {
-                    return _dcsbiosBindingTPM.DCSBIOSInputs;
-                }
-
-                return null;
-            }
-            set
-            {
-                if (ContainsDCSBIOS())
-                {
-                    _dcsbiosBindingTPM.DCSBIOSInputs = value;
-                }
-            }
-        }
-
-        public override DCSBIOSActionBindingBase DCSBIOSBinding
-        {
-            get => _dcsbiosBindingTPM;
-            set
-            {
-                if (ContainsKeyPress())
-                {
-                    throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
-                }
-                _dcsbiosBindingTPM = (DCSBIOSActionBindingTPM)value;
-                if (_dcsbiosBindingTPM != null)
-                {
-                    if (string.IsNullOrEmpty(_dcsbiosBindingTPM.Description))
-                    {
-                        TextBox.Text = "DCS-BIOS";
-                    }
-                    else
-                    {
-                        TextBox.Text = _dcsbiosBindingTPM.Description;
-                    }
-                }
-                else
-                {
-                    TextBox.Text = string.Empty;
-                }
-            }
         }
 
         public override void ClearAll()

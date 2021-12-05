@@ -38,27 +38,33 @@
             Startup();
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
+
         public sealed override void Startup()
         {
             try
             {
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
-            }
-        }
-
-        public override void Dispose()
-        {
-            try
-            {
-                Closed = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
             }
         }
 
@@ -102,7 +108,7 @@
             }
 
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-            SettingsApplied();
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -151,7 +157,7 @@
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
+            e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
@@ -416,7 +422,7 @@
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
             if (keySequence.Count == 0)
             {
-                RemoveSwitchFromList(ControlListTPM.KEYS, tpmPanelSwitchOnOff);
+                RemoveSwitchFromList(ControlList.KEYS, tpmPanelSwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -461,7 +467,7 @@
 
             if (bipLinkTPM.BIPLights.Count == 0)
             {
-                RemoveSwitchFromList(ControlListTPM.BIPS, tpmPanelSwitchOnOff);
+                RemoveSwitchFromList(ControlList.BIPS, tpmPanelSwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -495,7 +501,7 @@
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveSwitchFromList(ControlListTPM.DCSBIOS, tpmPanelSwitchOnOff);
+                RemoveSwitchFromList(ControlList.DCSBIOS, tpmPanelSwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -532,10 +538,10 @@
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
-            var controlListTPM = (ControlListTPM) controlList;
+            var controlListTPM = (ControlList) controlList;
 
             var found = false;
-            if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.KEYS)
+            if (controlListTPM == ControlList.ALL || controlListTPM == ControlList.KEYS)
             {
                 foreach (var keyBindingTPM in _keyBindings)
                 {
@@ -547,7 +553,7 @@
                 }
             }
 
-            if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.DCSBIOS)
+            if (controlListTPM == ControlList.ALL || controlListTPM == ControlList.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
@@ -559,7 +565,7 @@
                 }
             }
 
-            if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.BIPS)
+            if (controlListTPM == ControlList.ALL || controlListTPM == ControlList.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
@@ -571,7 +577,7 @@
                 }
             }
 
-            if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.OSCOMMAND)
+            if (controlListTPM == ControlList.ALL || controlListTPM == ControlList.OSCOMMANDS)
             {
                 OSCommandBindingTPM operatingSystemCommandBindingTPM = null;
                 for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
@@ -618,13 +624,11 @@
         private void DeviceAttachedHandler()
         {
             Startup();
-            DeviceAttached();
         }
 
         private void DeviceRemovedHandler()
         {
             Dispose();
-            DeviceDetached();
         }
 
         private void CreateSwitchKeys()
@@ -641,12 +645,4 @@
 
 
 
-    public enum ControlListTPM : byte
-    {
-        ALL,
-        DCSBIOS,
-        KEYS,
-        BIPS,
-        OSCOMMAND
-    }
 }

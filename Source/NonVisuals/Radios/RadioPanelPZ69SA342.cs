@@ -17,7 +17,7 @@
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
 
-    public class RadioPanelPZ69SA342 : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
+    public class RadioPanelPZ69SA342 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private CurrentSA342RadioMode _currentUpperRadioMode = CurrentSA342RadioMode.VHFAM;
         private CurrentSA342RadioMode _currentLowerRadioMode = CurrentSA342RadioMode.VHFAM;
@@ -252,10 +252,24 @@
             Startup();
         }
 
-        ~RadioPanelPZ69SA342()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _vhfAmSyncThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _vhfAmSyncThread?.Abort();
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
+        
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -318,7 +332,7 @@
                         if (tmp != _vhfAmCockpitDecimal10SFrequencyValue)
                         {
                             // Debug.Print("RECEIVE _vhfAmCockpitDecimal10sFrequencyValue " + _vhfAmCockpitDecimal10sFrequencyValue);
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _vhfAmValue3WaitingForFeedback, 0);
                         }
                     }
@@ -337,7 +351,7 @@
                         if (tmp != _vhfAmCockpitDecimal100SFrequencyValue)
                         {
                             // Debug.Print("RECEIVE _vhfAmCockpitDecimal100sFrequencyValue " + _vhfAmCockpitDecimal100sFrequencyValue);
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Increment(ref _doUpdatePanelLCD);
                             Interlocked.Exchange(ref _vhfAmValue4WaitingForFeedback, 0);
                         }
                     }
@@ -353,7 +367,7 @@
                     _fmRadioPresetCockpitDialPos = _fmRadioPresetDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _fmRadioPresetCockpitDialPos)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -367,7 +381,7 @@
                     _adfCockpitSelectedUnitValue = _adfSwitchUnitDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _adfCockpitSelectedUnitValue)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -381,7 +395,7 @@
                     _nadirModeCockpitValue = _nadirModeDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _nadirModeCockpitValue)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -395,7 +409,7 @@
                     _nadirDopplerModeCockpitValue = _nadirDopplerModeDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _nadirDopplerModeCockpitValue)
                     {
-                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
@@ -542,16 +556,14 @@
                     var dial2SendCount = 0;
                     do
                     {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "VHF AM dial1Timeout"))
+                        if (IsTimedOut(ref dial1Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfAmValue1WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfAmValue1WaitingForFeedback); // Lets do an ugly reset
                         }
 
-                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF AM dial2Timeout"))
+                        if (IsTimedOut(ref dial2Timeout))
                         {
-                            // Lets do an ugly reset
-                            Interlocked.Exchange(ref _vhfAmValue2WaitingForFeedback, 0);
+                            ResetWaitingForFeedBack(ref _vhfAmValue2WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _vhfAmValue1WaitingForFeedback) == 0 || Interlocked.Read(ref _vhfAmValue2WaitingForFeedback) == 0)
@@ -650,7 +662,7 @@
                 Interlocked.Exchange(ref _vhfAmThreadNowSynching, 0);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
         private void SendUhfToDCSBIOS()
@@ -1014,7 +1026,7 @@
                 SendLCDData(bytes);
             }
 
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
+            Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
@@ -1653,7 +1665,7 @@
         {
             lock (LockLCDUpdateObject)
             {
-                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                Interlocked.Increment(ref _doUpdatePanelLCD);
                 foreach (var radioPanelKnobObject in hashSet)
                 {
                     var radioPanelKnob = (RadioPanelKnobSA342)radioPanelKnobObject;
@@ -1863,8 +1875,6 @@
         {
             try
             {
-                StartupBase("A-10C");
-
                 // VHF AM
                 _vhfAmDcsbiosOutputReading10S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_10s");
                 _vhfAmDcsbiosOutputReading1S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_1s");
@@ -1881,7 +1891,7 @@
                 _nadirModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("NADIR_PARAMETER");
                 _nadirDopplerModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("NADIR_DOPPLER_MODE");
 
-                StartListeningForPanelChanges();
+                StartListeningForHidPanelChanges();
 
                 // IsAttached = true;
             }
@@ -1890,19 +1900,7 @@
                 logger.Error(ex);
             }
         }
-
-        public override void Dispose()
-        {
-            try
-            {
-                ShutdownBase();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false)
         {
         }
