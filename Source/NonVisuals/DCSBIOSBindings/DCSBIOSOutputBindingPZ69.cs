@@ -86,9 +86,11 @@ namespace NonVisuals.DCSBIOSBindings
                     LimitDecimalPlaces = bool.Parse(decimalSettingValues[0]);
                     if (LimitDecimalPlaces)
                     {
-                        NumberFormatInfoDecimals = new NumberFormatInfo();
-                        NumberFormatInfoDecimals.NumberDecimalSeparator = ".";
-                        NumberFormatInfoDecimals.NumberDecimalDigits = int.Parse(decimalSettingValues[1]);
+                        NumberFormatInfoDecimals = new NumberFormatInfo
+                        {
+                            NumberDecimalSeparator = ".",
+                            NumberDecimalDigits = int.Parse(decimalSettingValues[1])
+                        };
                     }
                 }
             }

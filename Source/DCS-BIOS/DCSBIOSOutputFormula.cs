@@ -25,7 +25,7 @@ namespace DCS_BIOS
         private string _formula;
         
         [NonSerialized]
-        private object _jaceLockObject = new object();
+        private readonly object _jaceLockObject = new object();
 
         [NonSerialized]
         private int _staticUpdateInterval = 0;
@@ -55,11 +55,11 @@ namespace DCS_BIOS
                 var controls = DCSBIOSControlLocator.GetControls();
                 foreach (var dcsbiosControl in controls)
                 {
-                    if (_formula.Contains(dcsbiosControl.identifier))
+                    if (_formula.Contains(dcsbiosControl.Identifier))
                     {
                         // Console.WriteLine("Variable " + dcsbiosControl.identifier + " set to 0");
-                        _variables.Add(dcsbiosControl.identifier, 0);
-                        var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControl.identifier);
+                        _variables.Add(dcsbiosControl.Identifier, 0);
+                        var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControl.Identifier);
                         _dcsbiosOutputs.Add(dcsbiosOutput);
                         DCSBIOSProtocolParser.RegisterAddressToBroadCast(dcsbiosOutput.Address);
                     }

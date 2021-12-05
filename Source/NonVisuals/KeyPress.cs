@@ -54,8 +54,10 @@
 
         public KeyPress(string keycodes, KeyPressLength keyPressLength = KeyPressLength.FiftyMilliSec, string description = null)
         {
-            var keyPressInfo = new KeyPressInfo();
-            keyPressInfo.VirtualKeyCodes = SplitStringKeyCodes(keycodes);
+            var keyPressInfo = new KeyPressInfo
+            {
+                VirtualKeyCodes = SplitStringKeyCodes(keycodes)
+            };
             _sortedKeyPressInfoList.Add(GetNewKeyValue(), keyPressInfo);
             keyPressInfo.LengthOfKeyPress = keyPressLength;
             _description = description;

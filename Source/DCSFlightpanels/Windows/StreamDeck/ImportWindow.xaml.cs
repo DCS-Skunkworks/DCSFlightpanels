@@ -240,10 +240,11 @@
             try
             {
                 var zipFileName = string.Empty;
-                var openFileDialog = new OpenFileDialog();
-
-                openFileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastStreamDeckImportFolder) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastStreamDeckImportFolder;
-                openFileDialog.Filter = @"Compressed File|*.zip";
+                var openFileDialog = new OpenFileDialog
+                {
+                    InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastStreamDeckImportFolder) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastStreamDeckImportFolder,
+                    Filter = @"Compressed File|*.zip"
+                };
 
                 if (openFileDialog.ShowDialog() == true)
                 {
@@ -505,13 +506,14 @@
         {
             try
             {
-                var folderBrowserDialog = new FolderBrowserDialog();
-                folderBrowserDialog.Description = @"Select location to where files (images, sounds) will be saved.";
-
-                folderBrowserDialog.SelectedPath = string.IsNullOrEmpty(Settings.Default.ImageImportFolder)
-                    ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-                    : Settings.Default.ImageImportFolder;
-                folderBrowserDialog.ShowNewFolderButton = false;
+                var folderBrowserDialog = new FolderBrowserDialog()
+                {
+                    Description = @"Select location to where files (images, sounds) will be saved.",
+                    SelectedPath = string.IsNullOrEmpty(Settings.Default.ImageImportFolder)
+                        ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                        : Settings.Default.ImageImportFolder,
+                    ShowNewFolderButton = false
+                };
 
                 if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {

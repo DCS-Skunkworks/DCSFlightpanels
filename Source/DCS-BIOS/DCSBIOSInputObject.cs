@@ -1,4 +1,5 @@
 ﻿using System;
+using DCS_BIOS.Json;
 
 namespace DCS_BIOS
 {
@@ -25,27 +26,27 @@ namespace DCS_BIOS
         public void Consume(string controlId, DCSBIOSControlInput dcsbiosControlInput)
         {
             _controlId = controlId;
-            _description = dcsbiosControlInput.description;
+            _description = dcsbiosControlInput.Description;
 
-            if (dcsbiosControlInput.@interface.Equals("fixed_step"))
+            if (dcsbiosControlInput.ControlInterface.Equals("fixed_step"))
             {
                 _interface = DCSBIOSInputType.FIXED_STEP;
             }
-            else if (dcsbiosControlInput.@interface.Equals("set_state"))
+            else if (dcsbiosControlInput.ControlInterface.Equals("set_state"))
             {
                 _interface = DCSBIOSInputType.SET_STATE;
             }
-            else if (dcsbiosControlInput.@interface.Equals("action"))
+            else if (dcsbiosControlInput.ControlInterface.Equals("action"))
             {
                 _interface = DCSBIOSInputType.ACTION;
             }
-            else if (dcsbiosControlInput.@interface.Equals("variable_step"))
+            else if (dcsbiosControlInput.ControlInterface.Equals("variable_step"))
             {
                 _interface = DCSBIOSInputType.VARIABLE_STEP;
             }
 
-            _maxValue = dcsbiosControlInput.max_value.GetValueOrDefault();
-            _specifiedActionArgument = dcsbiosControlInput.argument;
+            _maxValue = dcsbiosControlInput.MaxValue.GetValueOrDefault();
+            _specifiedActionArgument = dcsbiosControlInput.Argument;
             //Set by user
             //_specifiedSetStateArgument
             //Set by user

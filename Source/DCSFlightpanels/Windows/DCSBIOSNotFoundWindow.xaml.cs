@@ -10,7 +10,7 @@
     /// </summary>
     public partial class DCSBIOSNotFoundWindow : Window
     {
-        private string _dcsbiosLocation;
+        private readonly string _dcsbiosLocation;
 
         public DCSBIOSNotFoundWindow(string dcsbiosLocation)
         {

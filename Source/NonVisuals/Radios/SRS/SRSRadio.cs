@@ -476,7 +476,7 @@
 
         public void ChangeFrequency(CurrentSRSRadioMode currentSRSRadioMode, double value)
         {
-            var radioId = 0;
+            int radioId;
             switch (currentSRSRadioMode)
             {
                 case CurrentSRSRadioMode.COM1:

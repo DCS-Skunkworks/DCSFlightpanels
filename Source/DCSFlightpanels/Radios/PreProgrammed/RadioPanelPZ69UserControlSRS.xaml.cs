@@ -37,9 +37,13 @@
 
             HideAllImages();
 
-            _radioPanelPZ69SRS = new RadioPanelPZ69SRS(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo, hidSkeleton);
-            _radioPanelPZ69SRS.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
-            _radioPanelPZ69SRS.SmallFreqStepping = Settings.Default.SRSSmallFreqStepping;
+            _radioPanelPZ69SRS = new RadioPanelPZ69SRS(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo,
+                Settings.Default.SRSPortTo, hidSkeleton)
+            {
+                FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity,
+                SmallFreqStepping = Settings.Default.SRSSmallFreqStepping
+            };
+
             AppEventHandler.AttachGamingPanelListener(this);
         }
 
@@ -85,6 +89,7 @@
         {
             try
             {
+                SetGraphicsState(e.Switches);
             }
             catch (Exception ex)
             {

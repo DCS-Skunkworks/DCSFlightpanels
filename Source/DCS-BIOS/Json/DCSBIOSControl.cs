@@ -1,21 +1,35 @@
 ﻿using System.Collections.Generic;
+using DCS_BIOS.Json;
+using Newtonsoft.Json;
 
-// ReSharper disable All
-/*
- * naming of all variables can not be changed because these classes are instantiated from Json based on DCS-BIOS naming standard. *
- */
-namespace DCS_BIOS
+namespace DCS_BIOS.Json
 {
     public class DCSBIOSControl
     {
-        public string category { get; set; }
-        public string control_type { get; set; }
-        public string description { get; set; }
-        public string identifier { get; set; }
-        public List<DCSBIOSControlInput> inputs { get; set; }
-        public string momentary_positions { get; set; }
-        public List<DCSBIOSControlOutput> outputs { get; set; }
-        public string physical_variant { get; set; }
+
+        [JsonProperty("category", Required = Required.Default)]
+        public string Category { get; set; }
+
+        [JsonProperty("control_type", Required = Required.Default)]
+        public string ControlType { get; set; }
+
+        [JsonProperty("description", Required = Required.Default)]
+        public string Description { get; set; }
+
+        [JsonProperty("identifier", Required = Required.Default)]
+        public string Identifier { get; set; }
+
+        [JsonProperty("inputs", Required = Required.Default)]
+        public List<DCSBIOSControlInput> Inputs { get; set; }
+
+        [JsonProperty("momentary_positions", Required = Required.Default)]
+        public string MomentaryPositions { get; set; }
+
+        [JsonProperty("outputs", Required = Required.Default)]
+        public List<DCSBIOSControlOutput> Outputs { get; set; }
+
+        [JsonProperty("physical_variant", Required = Required.Default)]
+        public string PhysicalVariant { get; set; }
     }
 
     public class DCSBIOSControlRootObject

@@ -33,37 +33,37 @@
         public static HashSet<ISaitekPanelKnob> GetRadioPanelKnobs()
         {
             // true means clockwise turn
-            var result = new HashSet<ISaitekPanelKnob>();
+            var result = new HashSet<ISaitekPanelKnob>
+            {
+                // Group 0
+                new RadioPanelKnobA10C(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsA10C.UPPER_SMALL_FREQ_WHEEL_INC),
+                new RadioPanelKnobA10C(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsA10C.UPPER_SMALL_FREQ_WHEEL_DEC),
+                new RadioPanelKnobA10C(2, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsA10C.UPPER_LARGE_FREQ_WHEEL_INC),
+                new RadioPanelKnobA10C(2, Convert.ToInt32("1000", 2), false, RadioPanelPZ69KnobsA10C.UPPER_LARGE_FREQ_WHEEL_DEC),
+                new RadioPanelKnobA10C(2, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_SMALL_FREQ_WHEEL_INC),
+                new RadioPanelKnobA10C(2, Convert.ToInt32("100000", 2), false, RadioPanelPZ69KnobsA10C.LOWER_SMALL_FREQ_WHEEL_DEC),
+                new RadioPanelKnobA10C(2, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_LARGE_FREQ_WHEEL_INC),
+                new RadioPanelKnobA10C(2, Convert.ToInt32("10000000", 2), false, RadioPanelPZ69KnobsA10C.LOWER_LARGE_FREQ_WHEEL_DEC),
+                // Group 1
+                new RadioPanelKnobA10C(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsA10C.LOWER_UHF),
+                new RadioPanelKnobA10C(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsA10C.LOWER_VHFFM),
+                new RadioPanelKnobA10C(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsA10C.LOWER_ILS),
+                new RadioPanelKnobA10C(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_TACAN),
+                new RadioPanelKnobA10C(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_DME),
+                new RadioPanelKnobA10C(1, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_XPDR),
+                new RadioPanelKnobA10C(1, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsA10C.UPPER_FREQ_SWITCH),
+                new RadioPanelKnobA10C(1, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_FREQ_SWITCH),
+                // Group 2
+                new RadioPanelKnobA10C(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsA10C.UPPER_VHFAM), // UPPER COM 1
+                new RadioPanelKnobA10C(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsA10C.UPPER_UHF), // UPPER COM 2
+                new RadioPanelKnobA10C(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsA10C.UPPER_VHFFM), // UPPER NAV 1
+                new RadioPanelKnobA10C(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsA10C.UPPER_ILS), // UPPER NAV 2
+                new RadioPanelKnobA10C(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsA10C.UPPER_TACAN), // UPPER ADF
+                new RadioPanelKnobA10C(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsA10C.UPPER_DME), // UPPER DME
+                new RadioPanelKnobA10C(0, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsA10C.UPPER_XPDR), // UPPER XPDR
+                new RadioPanelKnobA10C(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_VHFAM) // LOWER COM 1 
+            };
 
-            // Group 0
-            result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsA10C.UPPER_SMALL_FREQ_WHEEL_INC));
-            result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsA10C.UPPER_SMALL_FREQ_WHEEL_DEC));
-            result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsA10C.UPPER_LARGE_FREQ_WHEEL_INC));
-            result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("1000", 2), false, RadioPanelPZ69KnobsA10C.UPPER_LARGE_FREQ_WHEEL_DEC));
-            result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_SMALL_FREQ_WHEEL_INC));
-            result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("100000", 2), false, RadioPanelPZ69KnobsA10C.LOWER_SMALL_FREQ_WHEEL_DEC));
-            result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_LARGE_FREQ_WHEEL_INC));
-            result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("10000000", 2), false, RadioPanelPZ69KnobsA10C.LOWER_LARGE_FREQ_WHEEL_DEC));
-
-            // Group 1
-            result.Add(new RadioPanelKnobA10C(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsA10C.LOWER_UHF));
-            result.Add(new RadioPanelKnobA10C(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsA10C.LOWER_VHFFM));
-            result.Add(new RadioPanelKnobA10C(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsA10C.LOWER_ILS));
-            result.Add(new RadioPanelKnobA10C(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_TACAN));
-            result.Add(new RadioPanelKnobA10C(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_DME));
-            result.Add(new RadioPanelKnobA10C(1, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_XPDR));
-            result.Add(new RadioPanelKnobA10C(1, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsA10C.UPPER_FREQ_SWITCH));
-            result.Add(new RadioPanelKnobA10C(1, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_FREQ_SWITCH));
-
-            // Group 2
-            result.Add(new RadioPanelKnobA10C(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsA10C.UPPER_VHFAM)); // UPPER COM 1
-            result.Add(new RadioPanelKnobA10C(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsA10C.UPPER_UHF)); // UPPER COM 2
-            result.Add(new RadioPanelKnobA10C(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsA10C.UPPER_VHFFM)); // UPPER NAV 1
-            result.Add(new RadioPanelKnobA10C(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsA10C.UPPER_ILS)); // UPPER NAV 2
-            result.Add(new RadioPanelKnobA10C(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsA10C.UPPER_TACAN)); // UPPER ADF
-            result.Add(new RadioPanelKnobA10C(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsA10C.UPPER_DME)); // UPPER DME
-            result.Add(new RadioPanelKnobA10C(0, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsA10C.UPPER_XPDR)); // UPPER XPDR
-            result.Add(new RadioPanelKnobA10C(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_VHFAM)); // LOWER COM 1 
             return result;
         }
     }

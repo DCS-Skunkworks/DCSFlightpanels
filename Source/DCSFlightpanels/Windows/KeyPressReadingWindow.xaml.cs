@@ -21,7 +21,7 @@
         private bool _isDirty = false;
         private bool _loaded = false;
         private KeyPressLength _keyPressLength;
-        private bool _supportIndefinite;
+        private readonly bool _supportIndefinite;
 
         public KeyPressReadingWindow(bool supportIndefinite = true)
         {

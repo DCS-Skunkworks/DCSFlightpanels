@@ -20,14 +20,15 @@
 
         public static DialogResult BrowseForImage(ref string initialDirectory, ref string imageRelativePath)
         {
-            
-            FileDialog fileDialog = new OpenFileDialog();
-            fileDialog.CheckPathExists = true;
-            fileDialog.CheckFileExists = true;
-            
-            fileDialog.InitialDirectory = string.IsNullOrEmpty(initialDirectory) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : initialDirectory;
-            fileDialog.Filter = @"Image files|*.jpg;*.jpeg;*.png";
 
+            FileDialog fileDialog = new OpenFileDialog()
+            {
+                CheckPathExists = true,
+                CheckFileExists = true,
+                InitialDirectory = string.IsNullOrEmpty(initialDirectory) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : initialDirectory,
+                Filter = @"Image files|*.jpg;*.jpeg;*.png"
+            };
+            
             var result = fileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -41,12 +42,13 @@
         public static DialogResult BrowseForSoundFile(ref string initialDirectory, ref string imageRelativePath)
         {
 
-            FileDialog fileDialog = new OpenFileDialog();
-            fileDialog.CheckPathExists = true;
-            fileDialog.CheckFileExists = true;
-
-            fileDialog.InitialDirectory = string.IsNullOrEmpty(initialDirectory) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : initialDirectory;
-            fileDialog.Filter = @"Sound files|*.mp3;*.wav";
+            FileDialog fileDialog = new OpenFileDialog()
+            {
+                CheckPathExists = true,
+                CheckFileExists = true,
+                InitialDirectory = string.IsNullOrEmpty(initialDirectory) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : initialDirectory,
+                Filter = @"Sound files|*.mp3;*.wav"
+            };
 
             var result = fileDialog.ShowDialog();
             if (result == DialogResult.OK)
@@ -73,14 +75,13 @@
 
         public static DialogResult SetFontStyle(ref Font font)
         {
-            var fontDialog = new FontDialog();
-
-            fontDialog.FixedPitchOnly = true;
-            fontDialog.FontMustExist = true;
-            fontDialog.MinSize = 6;
-
-            fontDialog.Font = SettingsManager.DefaultFont;
-
+            var fontDialog = new FontDialog()
+            {
+                FixedPitchOnly = true,
+                FontMustExist = true,
+                MinSize = 6,
+                Font = SettingsManager.DefaultFont
+            };
 
             var result = fontDialog.ShowDialog();
             if (result == DialogResult.OK)
@@ -109,9 +110,11 @@
 
         public static DialogResult SetFontColor(ref Color color)
         {
-            var colorDialog = new ColorDialog();
-            colorDialog.Color = SettingsManager.DefaultFontColor;
-            colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
+            var colorDialog = new ColorDialog()
+            {
+                Color = SettingsManager.DefaultFontColor,
+                CustomColors = StreamDeckConstants.GetOLEColors()
+            };
 
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
@@ -139,9 +142,12 @@
 
         public static DialogResult SetBackgroundColor(ref Color color)
         {
-            var colorDialog = new ColorDialog();
-            colorDialog.Color = SettingsManager.DefaultBackgroundColor;
-            colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
+            var colorDialog = new ColorDialog()
+            {
+                Color = SettingsManager.DefaultBackgroundColor,
+                CustomColors = StreamDeckConstants.GetOLEColors(),
+            };
+
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
             {

@@ -14,7 +14,7 @@ namespace Tests.NonVisuals
         private const string DEIGHTS = "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8";
         private const string VALUES = "00-01-02-03-04-05-06-07-08-09-01-02-03-04-05-06-07-08-09-01-02";
 
-        private byte[] StringToBytes(string text)
+        private static byte[] StringToBytes(string text)
         {
             byte[] data = text.Split('-').Select(b => Convert.ToByte(b, 16)).ToArray();
             return data;

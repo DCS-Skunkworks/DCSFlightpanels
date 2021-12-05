@@ -22,7 +22,7 @@
         private readonly SortedList<int, IKeyPressInfo> _sortedList = new SortedList<int, IKeyPressInfo>();
         private bool _isDirty;
         private bool _formLoaded = false;
-        private bool _supportIndefinite;
+        private readonly bool _supportIndefinite;
 
         public KeySequenceWindow(bool supportIndefinite = true)
         {
@@ -110,10 +110,12 @@
             if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
             {
                 // Clicked OK
-                var keyPressInfo = new KeyPressInfo();
-                keyPressInfo.LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
-                keyPressInfo.VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
-                keyPressInfo.LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
+                var keyPressInfo = new KeyPressInfo
+                {
+                    LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem,
+                    VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text),
+                    LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem
+                };
                 _sortedList.Add(GetNewKeyValue(), keyPressInfo);
 
                 DataGridSequences.DataContext = _sortedList;

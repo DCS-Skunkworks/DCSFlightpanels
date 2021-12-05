@@ -77,8 +77,7 @@
 
             IntPtr foregroundWindowHandle = GetForegroundWindow();
             uint currentThreadId = GetCurrentThreadId();
-            uint temp;
-            uint foregroundThreadId = GetWindowThreadProcessId(foregroundWindowHandle, out temp);
+            uint foregroundThreadId = GetWindowThreadProcessId(foregroundWindowHandle, out _);
             AttachThreadInput(currentThreadId, foregroundThreadId, true);
             SetForegroundWindow(windowHandle);
             AttachThreadInput(currentThreadId, foregroundThreadId, false);

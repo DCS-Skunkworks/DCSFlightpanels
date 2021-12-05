@@ -1,33 +1,46 @@
-﻿namespace DCS_BIOS
+﻿using Newtonsoft.Json;
+
+namespace DCS_BIOS.Json
 {
-    // ReSharper disable All
-    /*
-     * naming of all variables can not be changed because these classes are instantiated from Json based on DCS-BIOS naming standard. *
-     */
     public class DCSBIOSControlOutput
     {
         private string _type;
-        public uint address { get; set; }
-        public string description { get; set; }
-        public uint mask { get; set; }
-        public int max_value { get; set; }
-        public int shift_by { get; set; }
-        public string suffix { get; set; }
-        public int max_length { get; set; }
 
-        public string type
+        [JsonProperty("address", Required = Required.Default)]
+        public uint Address { get; set; }
+
+        [JsonProperty("description", Required = Required.Default)]
+        public string Description { get; set; }
+
+        [JsonProperty("mask", Required = Required.Default)]
+        public uint Mask { get; set; }
+
+        [JsonProperty("max_value", Required = Required.Default)]
+        public int MaxValue { get; set; }
+
+        [JsonProperty("shift_by", Required = Required.Default)]
+        public int ShiftBy { get; set; }
+
+        [JsonProperty("suffix", Required = Required.Default)]
+        public string Suffix { get; set; }
+
+        [JsonProperty("max_length", Required = Required.Default)]
+        public int MaxLength { get; set; }
+
+        [JsonProperty("type", Required = Required.Default)]
+        public string Type
         {
-            get { return _type; }
+            get => _type; 
             set
             {
                 _type = value;
                 if (_type.Equals("string"))
                 {
-                    OutputDataType = DCSBiosOutputType.STRING_TYPE;
+                    OutputDataType = DCSBiosOutputType.StringType;
                 }
                 if (_type.Equals("integer"))
                 {
-                    OutputDataType = DCSBiosOutputType.INTEGER_TYPE;
+                    OutputDataType = DCSBiosOutputType.IntegerType;
                 }
             }
         }

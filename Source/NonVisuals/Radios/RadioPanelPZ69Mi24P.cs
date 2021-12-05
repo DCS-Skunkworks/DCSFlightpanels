@@ -1124,7 +1124,7 @@
                                                     _yadro1ASmallFrequencyStandby = 0;
                                                     break;
                                                 }
-                                                _yadro1ASmallFrequencyStandby = _yadro1ASmallFrequencyStandby + 1;
+                                                _yadro1ASmallFrequencyStandby++;
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:

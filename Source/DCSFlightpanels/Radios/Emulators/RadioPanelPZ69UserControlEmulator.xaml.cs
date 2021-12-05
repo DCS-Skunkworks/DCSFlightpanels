@@ -42,8 +42,11 @@
 
             HideAllImages();
 
-            _radioPanelPZ69 = new RadioPanelPZ69Emulator(hidSkeleton);
-            _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
+            _radioPanelPZ69 = new RadioPanelPZ69Emulator(hidSkeleton)
+            {
+                FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
+            };
+            
             AppEventHandler.AttachGamingPanelListener(this);
         }
 

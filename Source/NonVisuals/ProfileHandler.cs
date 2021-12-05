@@ -35,7 +35,7 @@
         private string _lastProfileUsed = string.Empty;
         private bool _isDirty;
         private bool _isNewProfile;
-        private string _dcsbiosJSONDirectory; // hunting weird bug
+        private readonly string _dcsbiosJSONDirectory; // hunting weird bug
         private bool _profileLoaded;
 
         private IHardwareConflictResolver _hardwareConflictResolver;

@@ -1,6 +1,9 @@
 ﻿/*
  * naming of all variables can not be changed because these classes are instantiated from Json based on DCS-BIOS naming standard. *
  */
+
+using DCS_BIOS.Json;
+
 namespace DCS_BIOS
 {
     using System;
@@ -73,12 +76,12 @@ namespace DCS_BIOS
 
         public void Consume(DCSBIOSControl dcsbiosControl)
         {
-            _controlId = dcsbiosControl.identifier;
-            _controlDescription = dcsbiosControl.description;
-            _controlType = dcsbiosControl.physical_variant;
+            _controlId = dcsbiosControl.Identifier;
+            _controlDescription = dcsbiosControl.Description;
+            _controlType = dcsbiosControl.PhysicalVariant;
             try
             {
-                foreach (var dcsbiosControlInput in dcsbiosControl.inputs)
+                foreach (var dcsbiosControlInput in dcsbiosControl.Inputs)
                 {
                     var inputObject = new DCSBIOSInputObject();
                     inputObject.Consume(_controlId, dcsbiosControlInput);

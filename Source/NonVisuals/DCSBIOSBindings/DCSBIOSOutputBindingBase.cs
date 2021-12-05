@@ -95,9 +95,11 @@ namespace NonVisuals.DCSBIOSBindings
         public void SetNumberOfDecimals(bool limitDecimals, int decimalPlaces = 0)
         {
             LimitDecimalPlaces = limitDecimals;
-            _numberFormatInfoDecimals = new NumberFormatInfo();
-            _numberFormatInfoDecimals.NumberDecimalSeparator = ".";
-            _numberFormatInfoDecimals.NumberDecimalDigits = decimalPlaces;
+            _numberFormatInfoDecimals = new NumberFormatInfo
+            {
+                NumberDecimalSeparator = ".",
+                NumberDecimalDigits = decimalPlaces
+            };
         }
         
 

@@ -43,7 +43,7 @@ namespace DCS_BIOS
         private int _dcsbiosReceivePortUdp = 5010;
         private int _dcsbiosSendPortUdp = 7778;
         private IPEndPoint _ipEndPointReceiverUdp;
-        private IPEndPoint _ipEndPointSenderUdp;
+        private readonly IPEndPoint _ipEndPointSenderUdp;
         private readonly string _receivedDataUdp = null;
         /************************
         *************************
@@ -54,29 +54,31 @@ namespace DCS_BIOS
         private DCSBIOSProtocolParser _dcsProtocolParser;
         private readonly DcsBiosNotificationMode _dcsBiosNotificationMode;
         private readonly object _lockObjectForSendingData = new object();
-        private Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
         private bool _isRunning;
 
         public DCSBIOS(string ipFromUdp, string ipToUdp, int portFromUdp, int portToUdp, DcsBiosNotificationMode dcsNoficationMode)
         {
-            IPAddress ipAddress;
 
-            if (!string.IsNullOrEmpty(ipFromUdp) && IPAddress.TryParse(ipFromUdp, out ipAddress))
+            if (!string.IsNullOrEmpty(ipFromUdp) && IPAddress.TryParse(ipFromUdp, out _))
             {
                 _dcsbiosReceiveFromIPUdp = ipFromUdp;
             }
-            if (!string.IsNullOrEmpty(ipToUdp) && IPAddress.TryParse(ipToUdp, out ipAddress))
+
+            if (!string.IsNullOrEmpty(ipToUdp) && IPAddress.TryParse(ipToUdp, out _))
             {
                 _dcsbiosSendToIPUdp = ipToUdp;
             }
+
             if (portFromUdp > 0)
             {
                 _dcsbiosReceivePortUdp = portFromUdp;
             }
+
             if (portToUdp > 0)
             {
                 _dcsbiosSendPortUdp = portToUdp;
             }
+
             _dcsBiosNotificationMode = dcsNoficationMode;
             
             _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();

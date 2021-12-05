@@ -163,8 +163,8 @@
 
     public class ModifiedGenericBinding
     {
-        private GenericBindingStateEnum _state = GenericBindingStateEnum.Unknown;
-        private GenericPanelBinding _genericPanelBinding;
+        private readonly GenericBindingStateEnum _state = GenericBindingStateEnum.Unknown;
+        private readonly GenericPanelBinding _genericPanelBinding;
 
         public ModifiedGenericBinding(GenericBindingStateEnum state, GenericPanelBinding genericPanelBinding)
         {

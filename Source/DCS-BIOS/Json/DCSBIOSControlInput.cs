@@ -1,14 +1,20 @@
-﻿namespace DCS_BIOS
+﻿using Newtonsoft.Json;
+
+namespace DCS_BIOS.Json
 {
-    // ReSharper disable All
-    /*
-     * naming of all variables can not be changed because these classes are instantiated from Json based on DCS-BIOS naming standard. *
-     */
     public class DCSBIOSControlInput
     {
-        public string description { get; set; }
-        public string @interface { get; set; }
-        public int? max_value { get; set; }
-        public string argument { get; set; }
+
+        [JsonProperty("description", Required = Required.Default)]
+        public string Description { get; set; }
+        
+        [JsonProperty("interface", Required = Required.Default)]
+        public string ControlInterface { get; set; }
+
+        [JsonProperty("max_value", Required = Required.Default)]
+        public int? MaxValue { get; set; }
+
+        [JsonProperty("argument", Required = Required.Default)]
+        public string Argument { get; set; }
     }
 }

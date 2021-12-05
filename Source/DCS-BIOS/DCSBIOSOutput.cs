@@ -1,4 +1,6 @@
-﻿namespace DCS_BIOS
+﻿using DCS_BIOS.Json;
+
+namespace DCS_BIOS
 {
     using System;
     using System.ComponentModel;
@@ -7,8 +9,8 @@
 
     public enum DCSBiosOutputType
     {
-        STRING_TYPE,
-        INTEGER_TYPE
+        StringType,
+        IntegerType
     }
 
     public enum DCSBiosOutputComparison
@@ -41,30 +43,32 @@
         private int _maxLength;
         private volatile uint _lastIntValue = uint.MaxValue;
         private string _controlType; // display button toggle etc
-        private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
+        private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
 
         [NonSerialized] private object _lockObject = new object();
         
         public static DCSBIOSOutput CreateCopy(DCSBIOSOutput dcsbiosOutput)
         {
-            var tmp = new DCSBIOSOutput();
-            tmp.DCSBiosOutputType = dcsbiosOutput.DCSBiosOutputType;
-            tmp.ControlId = dcsbiosOutput.ControlId;
-            tmp.Address = dcsbiosOutput.Address;
-            tmp.ControlDescription = dcsbiosOutput.ControlDescription;
-            tmp.ControlType = dcsbiosOutput.ControlType;
-            tmp.DCSBiosOutputComparison = dcsbiosOutput.DCSBiosOutputComparison;
-            tmp.Mask = dcsbiosOutput.Mask;
-            tmp.MaxLength = dcsbiosOutput.MaxLength;
-            tmp.MaxValue = dcsbiosOutput.MaxValue;
-            tmp.ShiftValue = dcsbiosOutput.ShiftValue;
-            if (tmp.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+            var tmp = new DCSBIOSOutput
+            {
+                DCSBiosOutputType = dcsbiosOutput.DCSBiosOutputType,
+                ControlId = dcsbiosOutput.ControlId,
+                Address = dcsbiosOutput.Address,
+                ControlDescription = dcsbiosOutput.ControlDescription,
+                ControlType = dcsbiosOutput.ControlType,
+                DCSBiosOutputComparison = dcsbiosOutput.DCSBiosOutputComparison,
+                Mask = dcsbiosOutput.Mask,
+                MaxLength = dcsbiosOutput.MaxLength,
+                MaxValue = dcsbiosOutput.MaxValue,
+                ShiftValue = dcsbiosOutput.ShiftValue
+            };
+            if (tmp.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
             {
                 tmp.SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
             }
 
-            if (tmp.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+            if (tmp.DCSBiosOutputType == DCSBiosOutputType.StringType)
             {
                 tmp.SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
             }
@@ -84,12 +88,12 @@
             MaxLength = dcsbiosOutput.MaxLength;
             MaxValue = dcsbiosOutput.MaxValue;
             ShiftValue = dcsbiosOutput.ShiftValue;
-            if (DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+            if (DCSBiosOutputType == DCSBiosOutputType.IntegerType)
             {
                 SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
             }
 
-            if (DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+            if (DCSBiosOutputType == DCSBiosOutputType.StringType)
             {
                 SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
             }
@@ -101,13 +105,13 @@
             lock (_lockObject)
             {
                 var result = false;
-                if (DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE && data is uint)
+                if (DCSBiosOutputType == DCSBiosOutputType.IntegerType && data is uint u)
                 {
-                    result = CheckForValueMatchAndChange((uint)data);
+                    result = CheckForValueMatchAndChange(u);
                 }
-                else if (DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE && data is string)
+                else if (DCSBiosOutputType == DCSBiosOutputType.StringType && data is string s)
                 {
-                    result = CheckForValueMatch((string)data);
+                    result = CheckForValueMatch(s);
                 }
                 else
                 {
@@ -165,13 +169,13 @@
             lock (_lockObject)
             {
                 var result = false;
-                if (DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE && data is uint)
+                if (DCSBiosOutputType == DCSBiosOutputType.IntegerType && data is uint u)
                 {
-                    result = CheckForValueMatch((uint)data);
+                    result = CheckForValueMatch(u);
                 }
-                else if (DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE && data is string)
+                else if (DCSBiosOutputType == DCSBiosOutputType.StringType && data is string s)
                 {
-                    result = CheckForValueMatch((string)data);
+                    result = CheckForValueMatch(s);
                 }
                 else
                 {
@@ -249,23 +253,23 @@
 
         public void Consume(DCSBIOSControl dcsbiosControl)
         {
-            _controlId = dcsbiosControl.identifier;
-            _controlDescription = dcsbiosControl.description;
-            _controlType = dcsbiosControl.physical_variant;
+            _controlId = dcsbiosControl.Identifier;
+            _controlDescription = dcsbiosControl.Description;
+            _controlType = dcsbiosControl.PhysicalVariant;
             try
             {
-                _address = dcsbiosControl.outputs[0].address;
-                _mask = dcsbiosControl.outputs[0].mask;
-                _maxValue = dcsbiosControl.outputs[0].max_value;
-                _maxLength = dcsbiosControl.outputs[0].max_length;
-                this._shiftValue = dcsbiosControl.outputs[0].shift_by;
-                if (dcsbiosControl.outputs[0].type.Equals("string"))
+                _address = dcsbiosControl.Outputs[0].Address;
+                _mask = dcsbiosControl.Outputs[0].Mask;
+                _maxValue = dcsbiosControl.Outputs[0].MaxValue;
+                _maxLength = dcsbiosControl.Outputs[0].MaxLength;
+                this._shiftValue = dcsbiosControl.Outputs[0].ShiftBy;
+                if (dcsbiosControl.Outputs[0].Type.Equals("string"))
                 {
-                    _dcsBiosOutputType = DCSBiosOutputType.STRING_TYPE;
+                    _dcsBiosOutputType = DCSBiosOutputType.StringType;
                 }
-                else if (dcsbiosControl.outputs[0].type.Equals("integer"))
+                else if (dcsbiosControl.Outputs[0].Type.Equals("integer"))
                 {
-                    _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
+                    _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
                 }
 
                 // TODO Denna borde göras så att förutom _address så är mottagarens unika ID med så slipper alla lyssna eller ..? (prestanda)
@@ -279,7 +283,7 @@
 
         public string ToDebugString()
         {
-            if (_dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+            if (_dcsBiosOutputType == DCSBiosOutputType.StringType)
             {
                 return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + this._shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
             }
@@ -289,7 +293,7 @@
 
         public override string ToString()
         {
-            if (_dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+            if (_dcsBiosOutputType == DCSBiosOutputType.StringType)
             {
                 return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
             }
@@ -319,11 +323,11 @@
             var dcsBIOSControl = DCSBIOSControlLocator.GetControl(_controlId);
             Consume(dcsBIOSControl);
             _dcsBiosOutputComparison = (DCSBiosOutputComparison)Enum.Parse(typeof(DCSBiosOutputComparison), entries[1]);
-            if (DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+            if (DCSBiosOutputType == DCSBiosOutputType.IntegerType)
             {
                 _specifiedValueInt = (uint)int.Parse(entries[2]);
             }
-            else if (DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+            else if (DCSBiosOutputType == DCSBiosOutputType.StringType)
             {
                 _specifiedValueString = entries[2];
             }
@@ -382,7 +386,7 @@
             get => _specifiedValueInt;
             set
             {
-                if (DCSBiosOutputType != DCSBiosOutputType.INTEGER_TYPE)
+                if (DCSBiosOutputType != DCSBiosOutputType.IntegerType)
                 {
                     throw new Exception("Invalid DCSBiosOutput. Specified value (trigger value) set to [int] but DCSBiosOutputType set to " + DCSBiosOutputType);
                 }
@@ -397,7 +401,7 @@
             get => _specifiedValueString;
             set
             {
-                if (DCSBiosOutputType != DCSBiosOutputType.STRING_TYPE)
+                if (DCSBiosOutputType != DCSBiosOutputType.StringType)
                 {
                     throw new Exception("Invalid DCSBiosOutput. Specified value (trigger value) set to [String] but DCSBiosOutputType set to " + DCSBiosOutputType);
                 }

@@ -2,6 +2,7 @@
 using System.Windows.Threading;
 using DCS_BIOS.EventArgs;
 using DCS_BIOS.Interfaces;
+using DCS_BIOS.Json;
 using NLog;
 
 namespace DCSFlightpanels.Windows.StreamDeck
@@ -46,7 +47,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
     public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty, IDisposable, IDcsBiosDataListener
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly JaceExtended _jaceExtended = new JaceExtended();
         private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
         private readonly StreamDeckPanel _streamDeckPanel;
         private bool _formLoaded;
@@ -54,13 +54,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private DataGrid _popupDataGrid;
         private IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private DCSBIOSControl _dcsbiosControl;
-        private Dictionary<string, double> _variables = new Dictionary<string, double>();
         private bool _isDirty = false;
         private bool _populatingData = false;
 
         private DCSBIOSDecoder _dcsbiosDecoder = null;
         private bool _closing = false;
-        private object _formulaLockObject = new object();
         private System.Windows.Threading.DispatcherTimer _dispatcherTimer;
 
 
@@ -73,7 +71,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
             _streamDeckPanel = streamDeckPanel;
-            
+
             BIOSEventHandler.AttachDataListener(this);
         }
 
@@ -81,14 +79,15 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             InitializeComponent();
             _streamDeckPanel = streamDeckPanel;
-            _dcsbiosDecoder = new DCSBIOSDecoder(streamDeckPanel);
-            _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
-            _dcsbiosDecoder.StreamDeckPanelInstance = streamDeckPanel;
+            _dcsbiosDecoder = new DCSBIOSDecoder(streamDeckPanel)
+            {
+                DecoderSourceType = DCSBiosOutputType.IntegerType,
+                StreamDeckPanelInstance = streamDeckPanel,
+                StreamDeckButtonName = streamDeckPanel.SelectedButtonName
+            };
             LoadDefaults();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
-            _dcsbiosDecoder.StreamDeckButtonName = streamDeckPanel.SelectedButtonName;
-            
             BIOSEventHandler.AttachDataListener(this);
         }
 
@@ -115,7 +114,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 {
                     return;
                 }
-                
+
                 ShowDecoder();
                 _dcsbiosDecoder.IsVisible = true;
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
@@ -152,7 +151,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             ButtonEditConverter.IsEnabled = DataGridConverters.SelectedItems.Count == 1;
             ButtonDeleteConverter.IsEnabled = DataGridConverters.SelectedItems.Count == 1;
 
-            if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.STRING_TYPE && CheckBoxTreatStringAsNumber.IsChecked == false)
+            if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.StringType && CheckBoxTreatStringAsNumber.IsChecked == false)
             {
                 RadioButtonProcessToRaw.IsChecked = true;
                 RadioButtonProcessToConverter.IsEnabled = false;
@@ -191,7 +190,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 LabelErrors.Content = _dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : string.Empty;
                 LabelFormulaResult.Content = _dcsbiosDecoder.HasErrors ? "-" : _dcsbiosDecoder.GetResultString();
 
-                if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
+                if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.IntegerType)
                 {
                     if (_dcsbiosDecoder.UseFormula)
                     {
@@ -250,11 +249,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
             SetInfoTextBoxes();
 
             DCSBIOSDecoder.ShowOnly(_dcsbiosDecoder, _streamDeckPanel);
-            if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
+            if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.IntegerType)
             {
                 RadioButtonIntegerSource.IsChecked = true;
             }
-            else if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.STRING_TYPE)
+            else if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.StringType)
             {
                 RadioButtonStringSource.IsChecked = true;
             }
@@ -313,9 +312,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 if (_popupDataGrid.SelectedItems.Count == 1)
                 {
                     _dcsbiosControl = (DCSBIOSControl)_popupDataGrid.SelectedItem;
-                    _dcsbiosDecoder.DCSBIOSOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsbiosControl.identifier);
+                    _dcsbiosDecoder.DCSBIOSOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsbiosControl.Identifier);
 
-                    TextBoxDCSBIOSId.Text = _dcsbiosControl.identifier;
+                    TextBoxDCSBIOSId.Text = _dcsbiosControl.Identifier;
                     SetIsDirty();
                     SetFormState();
                 }
@@ -345,8 +344,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     _popupDataGrid.Items.Refresh();
                     return;
                 }
-                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.identifier) && controlObject.identifier.ToUpper().Contains(textBox.Text.ToUpper()))
-                                                                      || (!string.IsNullOrWhiteSpace(controlObject.description) && controlObject.description.ToUpper().Contains(textBox.Text.ToUpper())));
+                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.Identifier) && controlObject.Identifier.ToUpper().Contains(textBox.Text.ToUpper()))
+                                                                      || (!string.IsNullOrWhiteSpace(controlObject.Description) && controlObject.Description.ToUpper().Contains(textBox.Text.ToUpper())));
                 _popupDataGrid.DataContext = subList;
                 _popupDataGrid.ItemsSource = subList;
                 _popupDataGrid.Items.Refresh();
@@ -574,13 +573,14 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 if (TextBoxSearchWord.Text == string.Empty)
                 {
                     // Create an ImageBrush.
-                    var textImageBrush = new ImageBrush();
-                    textImageBrush.ImageSource =
-                        new BitmapImage(
+                    var textImageBrush = new ImageBrush
+                    {
+                        ImageSource = new BitmapImage(
                             new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)
-                        );
-                    textImageBrush.AlignmentX = AlignmentX.Left;
-                    textImageBrush.Stretch = Stretch.Uniform;
+                        ),
+                        AlignmentX = AlignmentX.Left,
+                        Stretch = Stretch.Uniform
+                    };
                     // Use the brush to paint the button's background.
                     TextBoxSearchWord.Background = textImageBrush;
                 }
@@ -853,7 +853,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
                 if (_dcsbiosDecoder != null)
                 {
-                    _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
+                    _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.IntegerType;
                 }
                 SetFormState();
             }
@@ -870,7 +870,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 _dcsbiosControls = DCSBIOSControlLocator.GetStringOutputControls();
                 if (_dcsbiosDecoder != null)
                 {
-                    _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.STRING_TYPE;
+                    _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.StringType;
                 }
                 SetFormState();
             }
@@ -994,7 +994,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 {
                     return;
                 }
-                
+
                 _dcsbiosDecoder.SetNumberOfDecimals(CheckBoxLimitDecimals.IsChecked == true, Convert.ToInt32(ComboBoxDecimals.SelectedValue.ToString()));
                 SetFormState();
             }

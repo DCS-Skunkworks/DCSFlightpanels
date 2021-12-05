@@ -3075,7 +3075,7 @@
                                                 }
                                                 else
                                                 {
-                                                    _vhfAmBigFrequencyStandby = _vhfAmBigFrequencyStandby + 1;
+                                                    _vhfAmBigFrequencyStandby++;
                                                 }
                                             }
 
@@ -3134,7 +3134,7 @@
                                                 }
                                                 else
                                                 {
-                                                    _vhfFmBigFrequencyStandby = _vhfFmBigFrequencyStandby + 1;
+                                                    _vhfFmBigFrequencyStandby++;
                                                 }
                                             }
 
@@ -3204,7 +3204,7 @@
                                                 }
                                                 else
                                                 {
-                                                    _vhfAmBigFrequencyStandby = _vhfAmBigFrequencyStandby - 1;
+                                                    _vhfAmBigFrequencyStandby--;
                                                 }
                                             }
 
@@ -3262,7 +3262,7 @@
                                                 }
                                                 else
                                                 {
-                                                    _vhfFmBigFrequencyStandby = _vhfFmBigFrequencyStandby - 1;
+                                                    _vhfFmBigFrequencyStandby--;
                                                 }
                                             }
 

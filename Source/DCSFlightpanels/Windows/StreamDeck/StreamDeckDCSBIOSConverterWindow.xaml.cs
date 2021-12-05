@@ -98,7 +98,7 @@
 
 
 
-                var criteriaOK = (Use2Criteria ? criteria2DataOK : true) && criteria1DataOK && referenceValuesOK;
+                var criteriaOK = (!Use2Criteria || criteria2DataOK) && criteria1DataOK && referenceValuesOK;
 
                 ButtonOk.IsEnabled = criteriaOK && _dcsbiosConverter.FaceConfigurationIsOK && IsDirty;
             }
@@ -143,13 +143,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void SecondCriteriaVisibility(bool show)
-        {
-            StackPanelAddSecondCriteria.Visibility = show ? Visibility.Collapsed : Visibility.Visible;
-            StackPanelSecondCriteria.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
-        }
-
+        
         public DCSBIOSConverter DCSBIOSConverter
         {
             get => _dcsbiosConverter;

@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Windows
+﻿using DCS_BIOS.Json;
+
+namespace DCSFlightpanels.Windows
 {
     using System;
     using System.Collections.Generic;
@@ -49,7 +51,6 @@
         private DCSBIOSControl _dcsbiosControl3;
         private DCSBIOSControl _dcsbiosControl4;
         private DCSBIOSControl _dcsbiosControl5;
-        private Dictionary<string, double> _variables = new Dictionary<string, double>();
 
         public JaceSandboxWindow()
         {
@@ -204,41 +205,41 @@
                 if (_dataGridValues.SelectedItems.Count == 1)
                 {
                     var dcsbiosControl = (DCSBIOSControl)_dataGridValues.SelectedItem;
-                    var dcsBiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControl.identifier);
+                    var dcsBiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControl.Identifier);
                     var textBox = (TextBox)_dataGridValues.Tag;
                     if (Equals(textBox, TextBoxSearch1))
                     {
                         _dcsbiosOutput1 = dcsBiosOutput;
                         _dcsbiosControl1 = dcsbiosControl;
-                        TextBoxId1.Text = _dcsbiosControl1.identifier;
+                        TextBoxId1.Text = _dcsbiosControl1.Identifier;
                         TextBoxSearch1.Text = _typeToSearch;
                     }
                     if (Equals(textBox, TextBoxSearch2))
                     {
                         _dcsbiosOutput2 = dcsBiosOutput;
                         _dcsbiosControl2 = dcsbiosControl;
-                        TextBoxId2.Text = _dcsbiosControl2.identifier;
+                        TextBoxId2.Text = _dcsbiosControl2.Identifier;
                         TextBoxSearch2.Text = _typeToSearch;
                     }
                     if (Equals(textBox, TextBoxSearch3))
                     {
                         _dcsbiosOutput3 = dcsBiosOutput;
                         _dcsbiosControl3 = dcsbiosControl;
-                        TextBoxId3.Text = _dcsbiosControl3.identifier;
+                        TextBoxId3.Text = _dcsbiosControl3.Identifier;
                         TextBoxSearch3.Text = _typeToSearch;
                     }
                     if (Equals(textBox, TextBoxSearch4))
                     {
                         _dcsbiosOutput4 = dcsBiosOutput;
                         _dcsbiosControl4 = dcsbiosControl;
-                        TextBoxId4.Text = _dcsbiosControl4.identifier;
+                        TextBoxId4.Text = _dcsbiosControl4.Identifier;
                         TextBoxSearch4.Text = _typeToSearch;
                     }
                     if (Equals(textBox, TextBoxSearch5))
                     {
                         _dcsbiosOutput5 = dcsBiosOutput;
                         _dcsbiosControl5 = dcsbiosControl;
-                        TextBoxId5.Text = _dcsbiosControl5.identifier;
+                        TextBoxId5.Text = _dcsbiosControl5.Identifier;
                         TextBoxSearch5.Text = _typeToSearch;
                     }
                     SetFormState();
@@ -462,8 +463,8 @@
                     _dataGridValues.Items.Refresh();
                     return;
                 }
-                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.identifier) && controlObject.identifier.ToUpper().Contains(textBox.Text.ToUpper()))
-                                                                      || (!string.IsNullOrWhiteSpace(controlObject.description) && controlObject.description.ToUpper().Contains(textBox.Text.ToUpper())));
+                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.Identifier) && controlObject.Identifier.ToUpper().Contains(textBox.Text.ToUpper()))
+                                                                      || (!string.IsNullOrWhiteSpace(controlObject.Description) && controlObject.Description.ToUpper().Contains(textBox.Text.ToUpper())));
                 _dataGridValues.DataContext = subList;
                 _dataGridValues.ItemsSource = subList;
                 _dataGridValues.Items.Refresh();

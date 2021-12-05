@@ -693,7 +693,7 @@
         {
             try
             {
-                var outputControlsWindow = new DCSBiosOutputWindow(_dcsfpProfile, "Brightness Control", false);
+                var outputControlsWindow = new DCSBiosOutputWindow("Brightness Control", false);
                 outputControlsWindow.ShowDialog();
                 if (outputControlsWindow.DialogResult.HasValue && outputControlsWindow.DialogResult.Value)
                 {

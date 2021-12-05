@@ -35,8 +35,11 @@
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             HideAllImages();
-            _radioPanelPZ69 = new RadioPanelPZ69AV8BNA(hidSkeleton);
-            _radioPanelPZ69.FrequencyKnobSensitivity = -1;//doesn't work with 0 value Settings.Default.RadioFrequencyKnobSensitivity;
+            _radioPanelPZ69 = new RadioPanelPZ69AV8BNA(hidSkeleton)
+            {
+                FrequencyKnobSensitivity = -1//doesn't work with 0 value Settings.Default.RadioFrequencyKnobSensitivity;
+            };
+            
             AppEventHandler.AttachGamingPanelListener(this);
         }
 

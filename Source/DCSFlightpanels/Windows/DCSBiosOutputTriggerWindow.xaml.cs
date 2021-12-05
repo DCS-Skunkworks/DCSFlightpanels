@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Windows
+﻿using DCS_BIOS.Json;
+
+namespace DCSFlightpanels.Windows
 {
     using System;
     using System.Collections.Generic;
@@ -79,7 +81,7 @@
         private void ShowValues1()
         {
             ComboBoxComparisonCriteria.SelectedValue = _dcsBiosOutput.DCSBiosOutputComparison.GetDescriptionField();
-            if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+            if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
             {
                 TextBoxTriggerValue.Text = _dcsBiosOutput.SpecifiedValueInt.ToString(CultureInfo.InvariantCulture);
             }
@@ -93,10 +95,10 @@
         {
             if (_dcsbiosControl != null)
             {
-                TextBoxControlId.Text = _dcsbiosControl.identifier;
-                TextBoxControlDescription.Text = _dcsbiosControl.description;
-                TextBoxMaxValue.Text = _dcsbiosControl.outputs[0].max_value.ToString();
-                TextBoxOutputType.Text = _dcsbiosControl.outputs[0].type;
+                TextBoxControlId.Text = _dcsbiosControl.Identifier;
+                TextBoxControlDescription.Text = _dcsbiosControl.Description;
+                TextBoxMaxValue.Text = _dcsbiosControl.Outputs[0].MaxValue.ToString();
+                TextBoxOutputType.Text = _dcsbiosControl.Outputs[0].Type;
             }
         }
 
@@ -108,7 +110,7 @@
             }
 
 
-            ComboBoxComparisonCriteria.IsEnabled = _dcsbiosControl != null && _dcsbiosControl.outputs.Count == 1 && _dcsbiosControl.outputs[0].OutputDataType == DCSBiosOutputType.INTEGER_TYPE;
+            ComboBoxComparisonCriteria.IsEnabled = _dcsbiosControl != null && _dcsbiosControl.Outputs.Count == 1 && _dcsbiosControl.Outputs[0].OutputDataType == DCSBiosOutputType.IntegerType;
 
             LabelCriteria.Visibility = _showCriteria ? Visibility.Visible : Visibility.Collapsed;
             ComboBoxComparisonCriteria.Visibility = _showCriteria ? Visibility.Visible : Visibility.Collapsed;
@@ -167,7 +169,7 @@
                         {
                             throw new Exception($"Error while checking Trigger value. Only integers are allowed : {ex.Message}");
                         }
-                        if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+                        if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
                         {
                             _dcsBiosOutput.SpecifiedValueInt = (uint)Convert.ToInt32(TextBoxTriggerValue.Text);
                         }
@@ -245,8 +247,8 @@
                     _dataGridValues.Items.Refresh();
                     return;
                 }
-                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.identifier) && controlObject.identifier.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper()))
-                    || (!string.IsNullOrWhiteSpace(controlObject.description) && controlObject.description.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper())));
+                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.Identifier) && controlObject.Identifier.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper()))
+                    || (!string.IsNullOrWhiteSpace(controlObject.Description) && controlObject.Description.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper())));
                 _dataGridValues.DataContext = subList;
                 _dataGridValues.ItemsSource = subList;
                 _dataGridValues.Items.Refresh();
@@ -273,11 +275,12 @@
                 if (TextBoxSearchWord.Text == string.Empty)
                 {
                     // Create an ImageBrush.
-                    var textImageBrush = new ImageBrush();
-                    textImageBrush.ImageSource =
-                        new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute));
-                    textImageBrush.AlignmentX = AlignmentX.Left;
-                    textImageBrush.Stretch = Stretch.Uniform;
+                    var textImageBrush = new ImageBrush
+                    {
+                        ImageSource = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)),
+                        AlignmentX = AlignmentX.Left,
+                        Stretch = Stretch.Uniform
+                    };
 
                     // Use the brush to paint the button's background.
                     TextBoxSearchWord.Background = textImageBrush;
@@ -303,11 +306,11 @@
                     _dcsBiosOutput = new DCSBIOSOutput();
                     _dcsBiosOutput.Consume(_dcsbiosControl);
                     ShowValues2();
-                    if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+                    if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
                     {
                         TextBoxTriggerValue.Text = "0";
                     }
-                    else if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+                    else if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
                     {
                         TextBoxTriggerValue.Text = "<string>";
                     }
@@ -351,11 +354,11 @@
                     _dcsBiosOutput = new DCSBIOSOutput();
                     _dcsBiosOutput.Consume(_dcsbiosControl);
                     ShowValues2();
-                    if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+                    if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
                     {
                         TextBoxTriggerValue.Text = "0";
                     }
-                    else if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+                    else if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
                     {
                         TextBoxTriggerValue.Text = "<string>";
                     }

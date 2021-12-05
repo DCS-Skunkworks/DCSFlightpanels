@@ -132,7 +132,7 @@
 
         public static void SetEmulationModes(EmulationMode emulationMode)
         {
-            _emulationModesFlag = _emulationModesFlag | (int)emulationMode;
+            _emulationModesFlag |= (int)emulationMode;
             ValidateFlag();
         }
 

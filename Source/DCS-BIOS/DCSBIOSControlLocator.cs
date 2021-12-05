@@ -1,4 +1,6 @@
-﻿namespace DCS_BIOS
+﻿using DCS_BIOS.Json;
+
+namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
@@ -54,12 +56,12 @@
                         }
                     }
                     PrintDuplicateControlIdentifiers(_dcsbiosControls, true);*/
-                    if (!DCSBIOSControls.Exists(controlObject => controlObject.identifier.Equals(controlId)))
+                    if (!DCSBIOSControls.Exists(controlObject => controlObject.Identifier.Equals(controlId)))
                     {
                         throw new Exception("Error, control " + controlId + " does not exist. (" + Profile.Description + ")");
                     }
 
-                    return DCSBIOSControls.Single(controlObject => controlObject.identifier.Equals(controlId));
+                    return DCSBIOSControls.Single(controlObject => controlObject.Identifier.Equals(controlId));
                 }
                 catch (InvalidOperationException ioe)
                 {
@@ -181,17 +183,17 @@
                 }
 
                 // Remove duplicates which may come from loading NS430 or other additional profiles
-                while (DCSBIOSControls.Count(controlObject => controlObject.identifier.Equals("_UPDATE_COUNTER")) > 1)
+                while (DCSBIOSControls.Count(controlObject => controlObject.Identifier.Equals("_UPDATE_COUNTER")) > 1)
                 {
                     DCSBIOSControls.Remove(DCSBIOSControls.FindLast(controlObject =>
-                        controlObject.identifier.Equals("_UPDATE_COUNTER")));
+                        controlObject.Identifier.Equals("_UPDATE_COUNTER")));
                 }
 
                 while (DCSBIOSControls.Count(controlObject =>
-                           controlObject.identifier.Equals("_UPDATE_SKIP_COUNTER")) > 1)
+                           controlObject.Identifier.Equals("_UPDATE_SKIP_COUNTER")) > 1)
                 {
                     DCSBIOSControls.Remove(DCSBIOSControls.FindLast(controlObject =>
-                        controlObject.identifier.Equals("_UPDATE_SKIP_COUNTER")));
+                        controlObject.Identifier.Equals("_UPDATE_SKIP_COUNTER")));
                 }
             }
             catch (Exception ex)
@@ -208,14 +210,14 @@
             {
                 if (printAll)
                 {
-                    result.Add(dcsbiosControl.identifier);
+                    result.Add(dcsbiosControl.Identifier);
                 }
 
                 // Debug.Print(dcsbiosControl.identifier);
                 var found = false;
                 foreach (var str in result)
                 {
-                    if (str.Trim() == dcsbiosControl.identifier.Trim())
+                    if (str.Trim() == dcsbiosControl.Identifier.Trim())
                     {
                         found = true;
                     }
@@ -223,12 +225,12 @@
 
                 if (!found)
                 {
-                    result.Add(dcsbiosControl.identifier);
+                    result.Add(dcsbiosControl.Identifier);
                 }
 
                 if (found)
                 {
-                    dupes.Add(dcsbiosControl.identifier);
+                    dupes.Add(dcsbiosControl.Identifier);
                 }
             }
 
@@ -345,7 +347,7 @@
             }
 
             LoadControls();
-            var result = DCSBIOSControls.Where(controlObject => (controlObject.outputs.Count > 0) && controlObject.outputs[0].OutputDataType == DCSBiosOutputType.STRING_TYPE);
+            var result = DCSBIOSControls.Where(controlObject => (controlObject.Outputs.Count > 0) && controlObject.Outputs[0].OutputDataType == DCSBiosOutputType.StringType);
             return result;
         }
 
@@ -357,7 +359,7 @@
             }
 
             LoadControls();
-            return DCSBIOSControls.Where(controlObject => (controlObject.outputs.Count > 0) && controlObject.outputs[0].OutputDataType == DCSBiosOutputType.INTEGER_TYPE);
+            return DCSBIOSControls.Where(controlObject => (controlObject.Outputs.Count > 0) && controlObject.Outputs[0].OutputDataType == DCSBiosOutputType.IntegerType);
         }
 
         public static IEnumerable<DCSBIOSControl> GetInputControls()
@@ -368,7 +370,7 @@
             }
 
             LoadControls();
-            return DCSBIOSControls.Where(controlObject => (controlObject.inputs.Count > 0));
+            return DCSBIOSControls.Where(controlObject => (controlObject.Inputs.Count > 0));
         }
     }
 }

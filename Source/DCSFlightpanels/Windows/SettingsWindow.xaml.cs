@@ -269,8 +269,11 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var folderBrowserDialog = new FolderBrowserDialog();
-                folderBrowserDialog.ShowNewFolderButton = false;
+                var folderBrowserDialog = new FolderBrowserDialog()
+                {
+                    ShowNewFolderButton = false
+                };
+
                 if (!string.IsNullOrEmpty(DCS_BIOS.DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation)))
                 {
                     folderBrowserDialog.SelectedPath = DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);

@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using DCS_BIOS.Json;
 
 namespace DCSFlightpanels.Windows
 {
@@ -21,17 +22,14 @@ namespace DCSFlightpanels.Windows
         private readonly string _description;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
-        private DCSFPProfile _dcsfpProfile;
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
-        private readonly JaceExtended _jaceExtended = new JaceExtended();
-        private bool _userEditsDescription = false;
+        private readonly bool _userEditsDescription = false;
 
-        public DCSBiosOutputWindow(DCSFPProfile dcsfpProfile, string description, bool userEditsDescription = false)
+        public DCSBiosOutputWindow(string description, bool userEditsDescription = false)
         {
             InitializeComponent();
-            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _userEditsDescription = userEditsDescription;
             _dcsBiosOutput = new DCSBIOSOutput();
@@ -39,10 +37,9 @@ namespace DCSFlightpanels.Windows
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
         }
 
-        public DCSBiosOutputWindow(DCSFPProfile dcsfpProfile, string description, DCSBIOSOutput dcsBiosOutput, bool userEditsDescription = false)
+        public DCSBiosOutputWindow(string description, DCSBIOSOutput dcsBiosOutput, bool userEditsDescription = false)
         {
             InitializeComponent();
-            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _userEditsDescription = userEditsDescription;
             _dcsBiosOutput = dcsBiosOutput;
@@ -74,10 +71,10 @@ namespace DCSFlightpanels.Windows
         {
             if (_dcsbiosControl != null)
             {
-                TextBoxControlId.Text = _dcsbiosControl.identifier;
-                TextBoxControlDescription.Text = _dcsbiosControl.description;
-                TextBoxMaxValue.Text = _dcsbiosControl.outputs[0].max_value.ToString();
-                TextBoxOutputType.Text = _dcsbiosControl.outputs[0].type;
+                TextBoxControlId.Text = _dcsbiosControl.Identifier;
+                TextBoxControlDescription.Text = _dcsbiosControl.Description;
+                TextBoxMaxValue.Text = _dcsbiosControl.Outputs[0].MaxValue.ToString();
+                TextBoxOutputType.Text = _dcsbiosControl.Outputs[0].Type;
             }
         }
 
@@ -182,8 +179,8 @@ namespace DCSFlightpanels.Windows
                     _dataGridValues.Items.Refresh();
                     return;
                 }
-                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.identifier) && controlObject.identifier.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper()))
-                    || (!string.IsNullOrWhiteSpace(controlObject.description) && controlObject.description.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper())));
+                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.Identifier) && controlObject.Identifier.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper()))
+                    || (!string.IsNullOrWhiteSpace(controlObject.Description) && controlObject.Description.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper())));
                 _dataGridValues.DataContext = subList;
                 _dataGridValues.ItemsSource = subList;
                 _dataGridValues.Items.Refresh();
@@ -210,11 +207,12 @@ namespace DCSFlightpanels.Windows
                 if (TextBoxSearchWord.Text == string.Empty)
                 {
                     // Create an ImageBrush.
-                    var textImageBrush = new ImageBrush();
-                    textImageBrush.ImageSource =
-                        new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute));
-                    textImageBrush.AlignmentX = AlignmentX.Left;
-                    textImageBrush.Stretch = Stretch.Uniform;
+                    var textImageBrush = new ImageBrush
+                    {
+                        ImageSource = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)),
+                        AlignmentX = AlignmentX.Left,
+                        Stretch = Stretch.Uniform
+                    };
 
                     // Use the brush to paint the button's background.
                     TextBoxSearchWord.Background = textImageBrush;

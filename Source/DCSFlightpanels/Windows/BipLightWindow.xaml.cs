@@ -64,11 +64,13 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _bipLight = new BIPLight();
-                _bipLight.BIPLedPosition = (BIPLedPositionEnum)ComboBoxPosition.SelectedValue;
-                _bipLight.LEDColor = (PanelLEDColor)ComboBoxColor.SelectedValue;
-                _bipLight.DelayBefore = (BIPLightDelays)ComboBoxDelay.SelectedValue;
-                _bipLight.BindingHash = (string)ComboBoxBIPPanel.SelectedValue;
+                _bipLight = new BIPLight
+                {
+                    BIPLedPosition = (BIPLedPositionEnum)ComboBoxPosition.SelectedValue,
+                    LEDColor = (PanelLEDColor)ComboBoxColor.SelectedValue,
+                    DelayBefore = (BIPLightDelays)ComboBoxDelay.SelectedValue,
+                    BindingHash = (string)ComboBoxBIPPanel.SelectedValue
+                };
             }
             catch (Exception ex)
             {
@@ -124,8 +126,10 @@ namespace DCSFlightpanels.Windows
                 ComboBoxPosition.Items.Clear();
                 foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
                 {
-                    var comboBoxItem = new ComboBoxItem();
-                    comboBoxItem.Content = position;
+                    var comboBoxItem = new ComboBoxItem
+                    {
+                        Content = position
+                    };
                     ComboBoxPosition.Items.Add(comboBoxItem);
                 }
 
@@ -133,8 +137,10 @@ namespace DCSFlightpanels.Windows
                 ComboBoxDelay.Items.Clear();
                 foreach (BIPLightDelays delay in Enum.GetValues(typeof(BIPLightDelays)))
                 {
-                    var comboBoxItem = new ComboBoxItem();
-                    comboBoxItem.Content = delay;
+                    var comboBoxItem = new ComboBoxItem
+                    {
+                        Content = delay
+                    };
                     ComboBoxDelay.Items.Add(comboBoxItem);
                     ComboBoxDelay.SelectedValue = BIPLightDelays.Zeroms;
                 }
@@ -143,8 +149,10 @@ namespace DCSFlightpanels.Windows
                 ComboBoxColor.Items.Clear();
                 foreach (PanelLEDColor color in Enum.GetValues(typeof(PanelLEDColor)))
                 {
-                    var comboBoxItem = new ComboBoxItem();
-                    comboBoxItem.Content = color;
+                    var comboBoxItem = new ComboBoxItem
+                    {
+                        Content = color
+                    };
                     ComboBoxColor.Items.Add(comboBoxItem);
                 }
                 ComboBoxColor.SelectedValue = PanelLEDColor.GREEN;
@@ -153,8 +161,10 @@ namespace DCSFlightpanels.Windows
                 ComboBoxBIPPanel.Items.Clear();
                 foreach (BacklitPanelBIP bip in BipFactory.GetBips())
                 {
-                    var comboBoxItem = new ComboBoxItem();
-                    comboBoxItem.Content = bip.BindingHash;
+                    var comboBoxItem = new ComboBoxItem
+                    {
+                        Content = bip.BindingHash
+                    };
                     ComboBoxBIPPanel.Items.Add(comboBoxItem);
                 }
 
@@ -211,11 +221,13 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _bipLight = new BIPLight();
-                _bipLight.BIPLedPosition = (BIPLedPositionEnum)ComboBoxPosition.SelectedValue;
-                _bipLight.LEDColor = (PanelLEDColor)ComboBoxColor.SelectedValue;
-                _bipLight.DelayBefore = (BIPLightDelays)ComboBoxDelay.SelectedValue;
-                _bipLight.BindingHash = (string)ComboBoxBIPPanel.SelectedValue;
+                _bipLight = new BIPLight
+                {
+                    BIPLedPosition = (BIPLedPositionEnum)ComboBoxPosition.SelectedValue,
+                    LEDColor = (PanelLEDColor)ComboBoxColor.SelectedValue,
+                    DelayBefore = (BIPLightDelays)ComboBoxDelay.SelectedValue,
+                    BindingHash = (string)ComboBoxBIPPanel.SelectedValue
+                };
                 BipFactory.SetDark(_bipLight.BindingHash);
                 BipFactory.ShowLight(_bipLight);
             }

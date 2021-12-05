@@ -138,7 +138,7 @@
             get => _bipLights;
             set => _bipLights = value;
         }
-
+        /*
         private int GetNewKeyValue()
         {
             if (_bipLights.Count == 0)
@@ -148,7 +148,7 @@
 
             return _bipLights.Keys.Max() + 1;
         }
-
+        */
         [JsonProperty("WhenTurnedOn", Required = Required.Default)]
         public bool WhenTurnedOn
         {

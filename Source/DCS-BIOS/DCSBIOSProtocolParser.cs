@@ -30,7 +30,7 @@ namespace DCS_BIOS
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private List<string> _errorsLogged = new List<string>(10);
+        private readonly List<string> _errorsLogged = new List<string>(10);
         
         private DCSBiosStateEnum _state;
         private uint _address;
@@ -38,7 +38,7 @@ namespace DCS_BIOS
         private uint _data;
         private byte _syncByteCount;
         private bool _shutdown;
-        private static object _lockListOfAddressesToBroascastObject = new object();
+        private static readonly object _lockListOfAddressesToBroascastObject = new object();
         private readonly List<uint> _listOfAddressesToBroascast = new List<uint>();
         public static DCSBIOSProtocolParser DCSBIOSProtocolParserSO;
         private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);

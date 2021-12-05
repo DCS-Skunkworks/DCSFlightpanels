@@ -6,11 +6,11 @@
 
     public static class JaceExtendedFactory
     {
-        private static Dictionary<int, JaceExtended> _jaceEngines = new Dictionary<int, JaceExtended>();
+        private static readonly Dictionary<int, JaceExtended> JaceEngines = new Dictionary<int, JaceExtended>();
 
         public static JaceExtended Instance(ref int id)
         {
-            if (!_jaceEngines.ContainsKey(id) || id == 0)
+            if (!JaceEngines.ContainsKey(id) || id == 0)
             {
                 if (id == 0)
                 {
@@ -18,11 +18,11 @@
                 }
 
                 var jaceExtended = new JaceExtended();
-                _jaceEngines.Add(id, jaceExtended);
+                JaceEngines.Add(id, jaceExtended);
                 return jaceExtended;
             }
 
-            return _jaceEngines[id];
+            return JaceEngines[id];
         }
     }
 }

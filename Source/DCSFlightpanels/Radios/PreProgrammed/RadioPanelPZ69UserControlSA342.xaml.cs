@@ -34,8 +34,11 @@
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             HideAllImages();
-            _radioPanelPZ69 = new RadioPanelPZ69SA342(hidSkeleton);
-            _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
+            _radioPanelPZ69 = new RadioPanelPZ69SA342(hidSkeleton)
+            {
+                FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
+            };
+            
             AppEventHandler.AttachGamingPanelListener(this);
             LabelAirframe.Content = ProfileHandler.ActiveDCSFPProfile + " Gazelle";
             //LoadConfiguration();

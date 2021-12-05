@@ -7,7 +7,7 @@ namespace DCS_BIOS
     {
         private string Profile { get; set; }
         private bool Loaded { get; set; }
-        private static List<DCSBIOSProfileLoadStatus> _loadStatusList = new List<DCSBIOSProfileLoadStatus>();
+        private static readonly List<DCSBIOSProfileLoadStatus> LoadStatusList = new List<DCSBIOSProfileLoadStatus>();
 
         private DCSBIOSProfileLoadStatus(string profile, bool loaded)
         {
@@ -17,18 +17,18 @@ namespace DCS_BIOS
 
         public static void Clear()
         {
-            _loadStatusList.Clear();
+            LoadStatusList.Clear();
         }
 
         public static void SetLoaded(string profile, bool loaded)
         {
             if (!IsRegistered(profile))
             {
-                _loadStatusList.Add(new DCSBIOSProfileLoadStatus(profile, loaded));
+                LoadStatusList.Add(new DCSBIOSProfileLoadStatus(profile, loaded));
                 return;
             }
 
-            foreach (var loadStatus in _loadStatusList)
+            foreach (var loadStatus in LoadStatusList)
             {
                 if (loadStatus.Profile == profile)
                 {
@@ -39,7 +39,7 @@ namespace DCS_BIOS
 
         public static bool IsLoaded(string profile)
         {
-            foreach (var loadStatus in _loadStatusList)
+            foreach (var loadStatus in LoadStatusList)
             {
                 if (loadStatus.Profile == profile && loadStatus.Loaded)
                 {
@@ -51,7 +51,7 @@ namespace DCS_BIOS
 
         private static bool IsRegistered(string profile)
         {
-            foreach (var loadStatus in _loadStatusList)
+            foreach (var loadStatus in LoadStatusList)
             {
                 if (loadStatus.Profile == profile)
                 {
@@ -63,10 +63,10 @@ namespace DCS_BIOS
 
         public static void Remove(string profile)
         {
-            var itemToRemove = _loadStatusList.SingleOrDefault(r => r.Profile == profile);
+            var itemToRemove = LoadStatusList.SingleOrDefault(r => r.Profile == profile);
             if (itemToRemove != null)
             {
-                _loadStatusList.Remove(itemToRemove);
+                LoadStatusList.Remove(itemToRemove);
             }
         }
     }

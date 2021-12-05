@@ -1306,7 +1306,7 @@
                                             }
                                             else if (!SkipUhfSmallFrequencyChange())
                                             {
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 1;
+                                                _uhfSmallFrequencyStandby--;
                                             }
 
                                             if (_uhfSmallFrequencyStandby < 0)
@@ -1607,7 +1607,7 @@
                                             }
                                             else if (!SkipUhfSmallFrequencyChange())
                                             {
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 1;
+                                                _uhfSmallFrequencyStandby--;
                                             }
 
                                             if (_uhfSmallFrequencyStandby < 0)

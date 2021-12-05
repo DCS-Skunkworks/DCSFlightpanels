@@ -18,9 +18,9 @@
     {
         private bool _formLoaded;
         private bool _isDirty;
-        private List<GenericPanelBinding> _genericBindings;
-        private List<ModifiedGenericBinding> _modifiedGenericBindings = new List<ModifiedGenericBinding>();
-        private List<GamingPanel> _gamingPanels;
+        private readonly List<GenericPanelBinding> _genericBindings;
+        private readonly List<ModifiedGenericBinding> _modifiedGenericBindings = new List<ModifiedGenericBinding>();
+        private readonly List<GamingPanel> _gamingPanels;
 
 
 

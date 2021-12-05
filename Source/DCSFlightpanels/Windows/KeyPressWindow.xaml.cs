@@ -19,7 +19,7 @@
     public partial class KeyPressWindow : Window, IIsDirty
     {
         private bool _isDirty;
-        private bool _supportIndefinite;
+        private readonly bool _supportIndefinite;
 
         public KeyPressWindow(bool supportIndefinite = true)
         {
@@ -88,8 +88,7 @@
                 var keyPressed = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
                 e.Handled = true;
 
-                var hashSetOfKeysPressed = new HashSet<string>();
-                hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), keyPressed));
+                var hashSetOfKeysPressed = new HashSet<string> {Enum.GetName(typeof(MEF.VirtualKeyCode), keyPressed)};
 
                 var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)

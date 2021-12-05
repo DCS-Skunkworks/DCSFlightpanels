@@ -30,7 +30,7 @@
         private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
         private volatile bool _valueUpdated = true;
         [NonSerialized] private int _jaceId;
-        private DCSBiosOutputType _decoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
+        private DCSBiosOutputType _decoderSourceType = DCSBiosOutputType.IntegerType;
         private bool _treatStringAsNumber;
         private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
 
@@ -167,7 +167,7 @@
         {
             try
             {
-                if (_decoderSourceType == DCSBiosOutputType.STRING_TYPE)
+                if (_decoderSourceType == DCSBiosOutputType.StringType)
                 {
                     return;
                 }
@@ -198,7 +198,7 @@
         {
             try
             {
-                if (_decoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
+                if (_decoderSourceType == DCSBiosOutputType.IntegerType)
                 {
                     return;
                 }
@@ -289,7 +289,7 @@
                 }
 
                 /* 2) Use converter    (formula / no formula) */
-                else if (_dcsbiosConverters.Count > 0 && (_decoderSourceType == DCSBiosOutputType.STRING_TYPE && _treatStringAsNumber) || _decoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
+                else if (_dcsbiosConverters.Count > 0 && (_decoderSourceType == DCSBiosOutputType.StringType && _treatStringAsNumber) || _decoderSourceType == DCSBiosOutputType.IntegerType)
                 {
                     foreach (var dcsbiosConverter in _dcsbiosConverters)
                     {
@@ -343,7 +343,7 @@
                 return _formulaResult.ToString(CultureInfo.InvariantCulture);
             }
 
-            if (DecoderSourceType == DCSBiosOutputType.STRING_TYPE && !TreatStringAsNumber)
+            if (DecoderSourceType == DCSBiosOutputType.StringType && !TreatStringAsNumber)
             {
                 return string.IsNullOrWhiteSpace(StringDcsBiosValue) ? string.Empty : StringDcsBiosValue;
             }
@@ -461,7 +461,7 @@
                 _dcsbiosOutput = value;
                 UintDcsBiosValue = uint.MaxValue;
                 StringDcsBiosValue = string.Empty;
-                if (_dcsbiosOutput != null && _dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+                if (_dcsbiosOutput != null && _dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
                 {
                     DCSBIOSStringManager.AddListener(_dcsbiosOutput, this);
                 }

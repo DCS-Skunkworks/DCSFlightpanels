@@ -18,7 +18,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     public partial class ExportWindow : Window, IDisposable
     {
         private bool _formLoaded = false;
-        private StreamDeckPanel _streamDeckPanel;
+        private readonly StreamDeckPanel _streamDeckPanel;
         private string _zipFileName = string.Empty;
 
 
@@ -107,11 +107,12 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                var saveFileDialog = new SaveFileDialog();
-
-                saveFileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastStreamDeckExportFolder) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastStreamDeckExportFolder;
-                saveFileDialog.Filter = @"Compressed File|*.zip";
-                saveFileDialog.FileName = "streamdeck_export";
+                var saveFileDialog = new SaveFileDialog
+                {
+                    InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastStreamDeckExportFolder) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastStreamDeckExportFolder,
+                    Filter = @"Compressed File|*.zip",
+                    FileName = "streamdeck_export"
+                };
 
                 if (saveFileDialog.ShowDialog() == true)
                 {

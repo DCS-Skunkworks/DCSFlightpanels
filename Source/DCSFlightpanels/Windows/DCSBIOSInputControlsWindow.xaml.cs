@@ -22,7 +22,7 @@
         private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();
         private string _description;
         private bool _isDirty = false;
-        private bool _showSequenced = false;
+        private readonly bool _showSequenced = false;
         private bool _isSequenced = false;
 
         public DCSBIOSInputControlsWindow(string header, string description, bool showSequenced = false)

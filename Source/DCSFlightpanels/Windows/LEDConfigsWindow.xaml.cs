@@ -59,19 +59,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
-        private void UpdateState()
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
+        
         public List<DcsOutputAndColorBinding> ColorOutputBindings
         {
             get { return _colorOutputBindings; }

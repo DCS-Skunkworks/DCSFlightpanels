@@ -1790,7 +1790,7 @@
                                                 }
                                                 else
                                                 {
-                                                    _yadro1ABigFrequencyStandby--;
+                                                    _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby -1;
                                                 }
                                                 
                                                 // 20-179-20

@@ -8,13 +8,13 @@
         private readonly List<uint> _receivedAddresses = new List<uint>();
 
         private readonly string[] _internalBuffer;
-        private int _length;
+        private readonly int _length;
         private uint _address;
         
         public DCSBIOSString(uint address, int length)
         {
             _address = address;
-            for (var i = _address; i < _address + length; i = i + 2)
+            for (var i = _address; i < _address + length; i += 2)
             {
                 // ommon.DebugP("DCSBIOSString Registering()" + address + ", total length = " + _length);
                 DCSBIOSProtocolParser.RegisterAddressToBroadCast(i);
@@ -27,7 +27,7 @@
 
         public void Reset()
         {
-            for (var i = _address; i < _address + _length; i = i + 2)
+            for (var i = _address; i < _address + _length; i += 2)
             {
                 // Fill list of addresses to listen for
                 _receivedAddresses.Add(i);

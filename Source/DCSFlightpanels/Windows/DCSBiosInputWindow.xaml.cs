@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using DCS_BIOS.Json;
 using NonVisuals;
 
 namespace DCSFlightpanels.Windows
@@ -170,8 +171,8 @@ namespace DCSFlightpanels.Windows
         {
             if (_dcsbiosControl != null)
             {
-                TextBoxControlId.Text = _dcsbiosControl.identifier;
-                TextBoxControlDescription.Text = _dcsbiosControl.description;
+                TextBoxControlId.Text = _dcsbiosControl.Identifier;
+                TextBoxControlDescription.Text = _dcsbiosControl.Description;
             }
             if (_dcsBiosInput?.SelectedDCSBIOSInput != null)
             {
@@ -359,8 +360,8 @@ namespace DCSFlightpanels.Windows
                         _dataGridValues.Items.Refresh();
                         return;
                     }
-                    var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.identifier) && controlObject.identifier.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper()))
-                                                                          || (!string.IsNullOrWhiteSpace(controlObject.description) && controlObject.description.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper())));
+                    var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.Identifier) && controlObject.Identifier.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper()))
+                                                                          || (!string.IsNullOrWhiteSpace(controlObject.Description) && controlObject.Description.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper())));
                     _dataGridValues.DataContext = subList;
                     _dataGridValues.ItemsSource = subList;
                     _dataGridValues.Items.Refresh();
@@ -392,11 +393,12 @@ namespace DCSFlightpanels.Windows
                 if (TextBoxSearchWord.Text == string.Empty)
                 {
                     // Create an ImageBrush.
-                    var textImageBrush = new ImageBrush();
-                    textImageBrush.ImageSource =
-                        new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute));
-                    textImageBrush.AlignmentX = AlignmentX.Left;
-                    textImageBrush.Stretch = Stretch.Uniform;
+                    var textImageBrush = new ImageBrush
+                    {
+                        ImageSource = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)),
+                        AlignmentX = AlignmentX.Left,
+                        Stretch = Stretch.Uniform
+                    };
                     // Use the brush to paint the button's background.
                     TextBoxSearchWord.Background = textImageBrush;
                 }
@@ -492,8 +494,10 @@ namespace DCSFlightpanels.Windows
                 ComboBoxInterfaceType.Items.Clear();
                 foreach (var dcsbiosInputObject in dcsbiosInput.DCSBIOSInputObjects)
                 {
-                    var comboBoxItem = new ComboBoxItem();
-                    comboBoxItem.Content = dcsbiosInputObject.Interface.ToString();
+                    var comboBoxItem = new ComboBoxItem
+                    {
+                        Content = dcsbiosInputObject.Interface.ToString()
+                    };
                     ComboBoxInterfaceType.Items.Add(comboBoxItem);
                 }
                 if (dcsbiosInput.SelectedDCSBIOSInput != null)
