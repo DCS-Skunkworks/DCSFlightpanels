@@ -1884,13 +1884,6 @@
 
                         case RadioPanelPZ69KnobsF5E.UPPER_FREQ_SWITCH:
                             {
-                                if (ReportCounter == 1)
-                                {
-                                    // Don't do synch from the initial panel touch
-                                    // where are switches are included
-                                    break;
-                                }
-
                                 _upperButtonPressed = radioPanelKnob.IsOn;
                                 if (!radioPanelKnob.IsOn)
                                 {
@@ -1909,13 +1902,6 @@
 
                         case RadioPanelPZ69KnobsF5E.LOWER_FREQ_SWITCH:
                             {
-                                if (ReportCounter == 1)
-                                {
-                                    // Don't do synch from the initial panel touch
-                                    // where are switches are included
-                                    break;
-                                }
-
                                 _lowerButtonPressed = radioPanelKnob.IsOn;
                                 if (!radioPanelKnob.IsOn)
                                 {
