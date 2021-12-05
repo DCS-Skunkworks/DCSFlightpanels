@@ -79,25 +79,6 @@
             }
         }
 
-        private bool _disposed;
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                Closed = true; // Don't know if this is necessary atm. (2021)
-                AppEventHandler.DetachForwardPanelEventListener(this);
-                AppEventHandler.DetachSettingsConsumerListener(this);
-                BIOSEventHandler.DetachDataListener(this);
-            }
-
-            _disposed = true;
-        }
-
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
             this.TypeOfPanel = typeOfGamingPanel;
@@ -132,6 +113,25 @@
             Dispose(true);
             // Suppress finalization.
             GC.SuppressFinalize(this);
+        }
+
+        private bool _disposed;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                Closed = true; // Don't know if this is necessary atm. (2021)
+                AppEventHandler.DetachForwardPanelEventListener(this);
+                AppEventHandler.DetachSettingsConsumerListener(this);
+                BIOSEventHandler.DetachDataListener(this);
+            }
+
+            _disposed = true;
         }
 
         public void DeviceInsertedHandler()
