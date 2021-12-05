@@ -19,8 +19,6 @@
     using NonVisuals.Interfaces;
     using NonVisuals.Properties;
 
-    using Theraot.Core;
-
     public class ProfileHandler : ISettingsModifiedListener, IIsDirty, IDisposable
     {
         private const string OPEN_FILE_DIALOG_FILE_NAME = "*.bindings";
@@ -196,7 +194,7 @@
                                  * 
                                  */
                 _profileLoaded = true;
-                Debug.WriteLine("ProfileHandler reading file ".Append(_filename));
+                Debug.WriteLine($"ProfileHandler reading file {_filename}");
                 var fileLines = File.ReadAllLines(_filename);
                 var currentPanelType = GamingPanelEnum.Unknown;
                 string currentPanelInstanceID = null;
