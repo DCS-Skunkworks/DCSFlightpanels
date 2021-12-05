@@ -69,6 +69,7 @@
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControl = DCSBIOSControlLocator.GetControl(_dcsBiosOutput.ControlId);
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         public DCSBiosOutputFormulaWindow(string description, DCSBIOSOutputFormula dcsBiosOutputFormula, bool limitDecimals, int decimalPlaces, bool userEditsDescription = false, bool showDecimalSetting = false)
@@ -82,6 +83,12 @@
             _decimalPlaces = decimalPlaces;
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            BIOSEventHandler.AttachDataListener(this);
+        }
+
+        public void Dispose()
+        {
+            BIOSEventHandler.DetachDataListener(this);
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)

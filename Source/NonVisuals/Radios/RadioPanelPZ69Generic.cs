@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Radios
 {
@@ -142,7 +143,6 @@ namespace NonVisuals.Radios
 
                 _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
                 _settingsAreBeingImported = false;
-                SettingsApplied();
                 AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
             }
         }
