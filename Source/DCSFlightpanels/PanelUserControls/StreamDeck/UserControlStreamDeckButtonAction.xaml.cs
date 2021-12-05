@@ -420,10 +420,12 @@
                         if (textBoxKeyPress.Bill.ContainsKeyPress())
                         {
                             ActionTypeKey result;
-                            result = new ActionTypeKey(_streamDeckPanel);
-                            result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            result.WhenTurnedOn = forButtonPressed;
-                            result.OSKeyPress = textBoxKeyPress.Bill.KeyPress;
+                            result = new ActionTypeKey(_streamDeckPanel)
+                            {
+                                StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName,
+                                WhenTurnedOn = forButtonPressed,
+                                OSKeyPress = textBoxKeyPress.Bill.KeyPress
+                            };
                             if (SoundConfigIsOk() && forButtonPressed) // && forButtonPressed so as not to have sound for both events in case both events have actions
                             {
                                 result.SoundFile = TextBoxSoundFile.Text;
@@ -453,10 +455,12 @@
                     {
                         if (textBoxOSCommand.Bill.ContainsOSCommand())
                         {
-                            var result = new ActionTypeOS(_streamDeckPanel);
-                            result.WhenTurnedOn = forButtonPressed;
-                            result.OSCommandObject = textBoxOSCommand.Bill.OSCommandObject;
-                            result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
+                            var result = new ActionTypeOS(_streamDeckPanel)
+                            {
+                                WhenTurnedOn = forButtonPressed,
+                                OSCommandObject = textBoxOSCommand.Bill.OSCommandObject,
+                                StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName
+                            };
                             if (SoundConfigIsOk() && forButtonPressed)
                             {
                                 result.SoundFile = TextBoxSoundFile.Text;
@@ -473,8 +477,10 @@
                             return null;
                         }
 
-                        var target = new ActionTypeLayer(_streamDeckPanel);
-                        target.TargetLayer = ComboBoxLayerNavigationButton.Text;
+                        var target = new ActionTypeLayer(_streamDeckPanel)
+                        {
+                            TargetLayer = ComboBoxLayerNavigationButton.Text
+                        };
                         switch (ComboBoxLayerNavigationButton.Text)
                         {
                             case StreamDeckConstants.NO_ACTION:
@@ -661,9 +667,10 @@
                         textBox.Name.Replace("TextBox", string.Empty),
                         textBox.Bill.DCSBIOSBinding.DCSBIOSInputs,
                         textBox.Text,
-                        true);
-
-                    dcsbiosControlsConfigsWindow.IsSequenced = textBox.Bill.DCSBIOSBinding.IsSequenced; //Add on, not optimal structure
+                        true)
+                    {
+                        IsSequenced = textBox.Bill.DCSBIOSBinding.IsSequenced //Add on, not optimal structure
+                    };
                 }
                 else
                 {
@@ -1010,10 +1017,12 @@
 
         private void ActionTypeChangedLayerNavigation(string layerName)
         {
-            var arguments = new ActionTypeChangedEventArgs();
-            arguments.BindingHash = _streamDeckPanel.BindingHash;
-            arguments.ActionType = GetSelectedActionType();
-            arguments.TargetLayerName = layerName;
+            var arguments = new ActionTypeChangedEventArgs
+            {
+                BindingHash = _streamDeckPanel.BindingHash,
+                ActionType = GetSelectedActionType(),
+                TargetLayerName = layerName
+            };
             OnActionTypeChanged?.Invoke(this, arguments);
         }
 

@@ -105,6 +105,7 @@
             }
         }
 
+        // todo shouldn't the layername be used?
         private void UIShowLayer(string layerName)
         {
             try
@@ -172,27 +173,35 @@
                     <MenuItem Name="MenuItemPaste" Header="Paste" Click="ButtonContextMenuPaste_OnClick"/>
                 </ContextMenu>
              */
-            var contextMenu = new ContextMenu();
-            contextMenu.Name = "ButtonContextMenu";
+            var contextMenu = new ContextMenu
+            {
+                Name = "ButtonContextMenu"
+            };
             contextMenu.Opened += ButtonContextMenu_OnOpened;
 
-            var menuItem = new MenuItem();
-            menuItem.Name = "MenuItemCopy";
-            menuItem.Header = "Copy";
+            var menuItem = new MenuItem
+            {
+                Name = "MenuItemCopy",
+                Header = "Copy"
+            };
             menuItem.Click += ButtonContextMenuCopy_OnClick;
             contextMenu.Items.Add(menuItem);
 
-            menuItem = new MenuItem();
-            menuItem.Name = "MenuItemPaste";
-            menuItem.Header = "Paste";
+            menuItem = new MenuItem
+            {
+                Name = "MenuItemPaste",
+                Header = "Paste"
+            };
             menuItem.Click += ButtonContextMenuPaste_OnClick;
             contextMenu.Items.Add(menuItem);
 
             contextMenu.Items.Add(new Separator());
 
-            menuItem = new MenuItem();
-            menuItem.Name = "MenuItemDelete";
-            menuItem.Header = "Delete";
+            menuItem = new MenuItem
+            {
+                Name = "MenuItemDelete",
+                Header = "Delete"
+            };
             menuItem.Click += ButtonContextMenuDelete_OnClick;
             contextMenu.Items.Add(menuItem);
 
@@ -396,8 +405,10 @@
                 {
                     continue;
                 }
-                buttonImage.Bill = new BillStreamDeckFace();
-                buttonImage.Bill.StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", string.Empty));
+                buttonImage.Bill = new BillStreamDeckFace
+                {
+                    StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", string.Empty)),
+                };
                 buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, System.Drawing.Color.Green);
                 buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
                 buttonImage.Bill.StreamDeckPanelInstance = _streamDeckPanel;
@@ -422,7 +433,7 @@
                 return false;
             }
 
-            var result = false;
+            bool result;
             var newStreamDeckButton = (StreamDeckButton)dataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
             var oldStreamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton) &&

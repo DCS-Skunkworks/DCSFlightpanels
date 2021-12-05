@@ -458,19 +458,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private PZ55TextBox GetTextBoxInFocus()
-        {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogPZ55) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
-                {
-                    return (PZ55TextBox)textBox;
-                }
-            }
-            return null;
-        }
-
+        
         private void ImageLEDClick(object sender, MouseButtonEventArgs e)
         {
             try

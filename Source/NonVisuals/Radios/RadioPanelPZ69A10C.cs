@@ -599,7 +599,7 @@
 
                             if (tmpUint != _tacanCockpitFreq1DialPos)
                             {
-                                changeCount = changeCount | 2;
+                                changeCount |= 2;
                                 _tacanCockpitFreq1DialPos = tmpUint;
                             }
                         }
@@ -613,7 +613,7 @@
 
                             if (tmpUint != _tacanCockpitFreq2DialPos)
                             {
-                                changeCount = changeCount | 4;
+                                changeCount |= 4;
                                 _tacanCockpitFreq2DialPos = tmpUint;
                             }
                         }
@@ -625,7 +625,7 @@
                             _tacanCockpitFreq3DialPos = tmpXY.Equals("X") ? 0 : (uint)1;
                             if (tmp != _tacanCockpitFreq3DialPos)
                             {
-                                changeCount = changeCount | 8;
+                                changeCount |= 8;
                             }
                         }
 
@@ -2155,16 +2155,16 @@
                         {
                             // Mhz   "108" "109" "110" "111"
                             // Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockIlsDialsObject1)
                             {
                                 frequencyAsString = GetILSDialFrequencyForPosition(1, _ilsCockpitFreq1DialPos);
                             }
 
-                            frequencyAsString = frequencyAsString + ".";
+                            frequencyAsString += ".";
                             lock (_lockIlsDialsObject2)
                             {
-                                frequencyAsString = frequencyAsString + GetILSDialFrequencyForPosition(2, _ilsCockpitFreq2DialPos);
+                                frequencyAsString += GetILSDialFrequencyForPosition(2, _ilsCockpitFreq2DialPos);
                             }
 
                             SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -2183,19 +2183,19 @@
 
                             // Frequency selector 3      RIGHT
                             // X=0 / Y=1
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockTacanDialsObject1)
                             {
                                 lock (_lockTacanDialsObject2)
                                 {
-                                    frequencyAsString = this._tacanCockpitFreq1DialPos + _tacanCockpitFreq2DialPos.ToString();
+                                    frequencyAsString = _tacanCockpitFreq1DialPos + _tacanCockpitFreq2DialPos.ToString();
                                 }
                             }
 
-                            frequencyAsString = frequencyAsString + ".";
+                            frequencyAsString += ".";
                             lock (_lockTacanDialsObject3)
                             {
-                                frequencyAsString = frequencyAsString + this._tacanCockpitFreq3DialPos;
+                                frequencyAsString += _tacanCockpitFreq3DialPos;
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -2321,16 +2321,16 @@
 
                     case CurrentA10RadioMode.ILS:
                         {
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockIlsDialsObject1)
                             {
                                 frequencyAsString = GetILSDialFrequencyForPosition(1, _ilsCockpitFreq1DialPos);
                             }
 
-                            frequencyAsString = frequencyAsString + ".";
+                            frequencyAsString += ".";
                             lock (_lockIlsDialsObject2)
                             {
-                                frequencyAsString = frequencyAsString + GetILSDialFrequencyForPosition(2, _ilsCockpitFreq2DialPos);
+                                frequencyAsString += GetILSDialFrequencyForPosition(2, _ilsCockpitFreq2DialPos);
                             }
 
                             SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -2340,19 +2340,19 @@
 
                     case CurrentA10RadioMode.TACAN:
                         {
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockTacanDialsObject1)
                             {
                                 lock (_lockTacanDialsObject2)
                                 {
-                                    frequencyAsString = this._tacanCockpitFreq1DialPos + _tacanCockpitFreq2DialPos.ToString();
+                                    frequencyAsString = _tacanCockpitFreq1DialPos + _tacanCockpitFreq2DialPos.ToString();
                                 }
                             }
 
-                            frequencyAsString = frequencyAsString + ".";
+                            frequencyAsString += ".";
                             lock (_lockTacanDialsObject3)
                             {
-                                frequencyAsString = frequencyAsString + this._tacanCockpitFreq3DialPos;
+                                frequencyAsString += _tacanCockpitFreq3DialPos;
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -2381,7 +2381,8 @@
             // Frequency selector 4      VHFAM_FREQ4
             // "00" "25" "50" "75", only "00" and "50" used.
             // Pos     0    1    2    3
-            var frequencyAsString = string.Empty;
+            string frequencyAsString;
+
             lock (_lockVhfAmDialsObject1)
             {
                 frequencyAsString = GetVhfAmDialFrequencyForPosition(1, _vhfAmCockpitFreq1DialPos);
@@ -2389,18 +2390,18 @@
 
             lock (_lockVhfAmDialsObject2)
             {
-                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(2, _vhfAmCockpitFreq2DialPos);
+                frequencyAsString += GetVhfAmDialFrequencyForPosition(2, _vhfAmCockpitFreq2DialPos);
             }
 
-            frequencyAsString = frequencyAsString + ".";
+            frequencyAsString += ".";
             lock (_lockVhfAmDialsObject3)
             {
-                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(3, _vhfAmCockpitFreq3DialPos);
+                frequencyAsString += GetVhfAmDialFrequencyForPosition(3, _vhfAmCockpitFreq3DialPos);
             }
 
             lock (_lockVhfAmDialsObject4)
             {
-                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(4, _vhfAmCockpitFreq4DialPos);
+                frequencyAsString += GetVhfAmDialFrequencyForPosition(4, _vhfAmCockpitFreq4DialPos);
             }
 
             return frequencyAsString;
@@ -2427,7 +2428,7 @@
             // Pos     0    1    2    3
 
             // 251.75
-            var frequencyAsString = string.Empty;
+            string frequencyAsString;
             lock (_lockUhfDialsObject1)
             {
                 frequencyAsString = GetUhfDialFrequencyForPosition(1, _uhfCockpitFreq1DialPos);
@@ -2435,23 +2436,23 @@
 
             lock (_lockUhfDialsObject2)
             {
-                frequencyAsString = frequencyAsString + GetUhfDialFrequencyForPosition(2, _uhfCockpitFreq2DialPos);
+                frequencyAsString += GetUhfDialFrequencyForPosition(2, _uhfCockpitFreq2DialPos);
             }
 
             lock (_lockUhfDialsObject3)
             {
-                frequencyAsString = frequencyAsString + GetUhfDialFrequencyForPosition(3, _uhfCockpitFreq3DialPos);
+                frequencyAsString += GetUhfDialFrequencyForPosition(3, _uhfCockpitFreq3DialPos);
             }
 
-            frequencyAsString = frequencyAsString + ".";
+            frequencyAsString += ".";
             lock (_lockUhfDialsObject4)
             {
-                frequencyAsString = frequencyAsString + GetUhfDialFrequencyForPosition(4, _uhfCockpitFreq4DialPos);
+                frequencyAsString += GetUhfDialFrequencyForPosition(4, _uhfCockpitFreq4DialPos);
             }
 
             lock (_lockUhfDialsObject5)
             {
-                frequencyAsString = frequencyAsString + GetUhfDialFrequencyForPosition(5, _uhfCockpitFreq5DialPos);
+                frequencyAsString += GetUhfDialFrequencyForPosition(5, _uhfCockpitFreq5DialPos);
             }
 
             return frequencyAsString;
@@ -3793,6 +3794,11 @@
 
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
+            if (isFirstReport)
+            {
+                return;
+            }
+
             lock (LockLCDUpdateObject)
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -4082,10 +4088,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 
@@ -4097,11 +4105,6 @@
         private void CreateRadioKnobs()
         {
             SaitekPanelKnobs = RadioPanelKnobA10C.GetRadioPanelKnobs();
-        }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobA10C radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
         }
 
         private string GetVhfAmDialFrequencyForPosition(int dial, uint position)
@@ -5564,7 +5567,7 @@
              */
             try
             {
-                var bigFrequencyAsString = string.Empty;
+                string bigFrequencyAsString;
                 var smallFrequencyAsString = string.Empty;
                 lock (_lockUhfDialsObject1)
                 {
@@ -5574,24 +5577,24 @@
 
                 lock (_lockUhfDialsObject2)
                 {
-                    bigFrequencyAsString = bigFrequencyAsString + GetUhfDialFrequencyForPosition(2, _uhfCockpitFreq2DialPos);
+                    bigFrequencyAsString += GetUhfDialFrequencyForPosition(2, _uhfCockpitFreq2DialPos);
 
                 }
 
                 lock (_lockUhfDialsObject3)
                 {
-                    bigFrequencyAsString = bigFrequencyAsString + GetUhfDialFrequencyForPosition(3, _uhfCockpitFreq3DialPos);
+                    bigFrequencyAsString += GetUhfDialFrequencyForPosition(3, _uhfCockpitFreq3DialPos);
 
                 }
 
                 lock (_lockUhfDialsObject4)
                 {
-                    smallFrequencyAsString = smallFrequencyAsString + GetUhfDialFrequencyForPosition(4, _uhfCockpitFreq4DialPos);
+                    smallFrequencyAsString += GetUhfDialFrequencyForPosition(4, _uhfCockpitFreq4DialPos);
                 }
 
                 lock (_lockUhfDialsObject5)
                 {
-                    smallFrequencyAsString = smallFrequencyAsString + GetUhfDialFrequencyForPosition(5, _uhfCockpitFreq5DialPos);
+                    smallFrequencyAsString += GetUhfDialFrequencyForPosition(5, _uhfCockpitFreq5DialPos);
                 }
 
 

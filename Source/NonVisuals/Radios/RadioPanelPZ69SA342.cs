@@ -1663,6 +1663,11 @@
 
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
+            if (isFirstReport)
+            {
+                return;
+            }
+
             lock (LockLCDUpdateObject)
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);

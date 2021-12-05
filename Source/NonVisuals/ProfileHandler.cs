@@ -86,12 +86,14 @@
 
             var tempDirectory = string.IsNullOrEmpty(Settings.Default.LastImageFileDialogLocation) ? Constants.PathRootDriveC : Settings.Default.LastImageFileDialogLocation;
             ClearAll();
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.RestoreDirectory = true;
-            openFileDialog.InitialDirectory = tempDirectory;
-            openFileDialog.FileName = OPEN_FILE_DIALOG_FILE_NAME;
-            openFileDialog.DefaultExt = OPEN_FILE_DIALOG_DEFAULT_EXT;
-            openFileDialog.Filter = OPEN_FILE_DIALOG_FILTER;
+            var openFileDialog = new OpenFileDialog
+            {
+                RestoreDirectory = true,
+                InitialDirectory = tempDirectory,
+                FileName = OPEN_FILE_DIALOG_FILE_NAME,
+                DefaultExt = OPEN_FILE_DIALOG_DEFAULT_EXT,
+                Filter = OPEN_FILE_DIALOG_FILTER
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 Settings.Default.LastImageFileDialogLocation = Path.GetDirectoryName(openFileDialog.FileName);
@@ -243,8 +245,10 @@
                         if (fileLine.StartsWith("PanelType="))
                         {
                             currentPanelType = (GamingPanelEnum)Enum.Parse(typeof(GamingPanelEnum), fileLine.Replace("PanelType=", string.Empty).Trim());
-                            genericPanelBinding = new GenericPanelBinding();
-                            genericPanelBinding.PanelType = currentPanelType;
+                            genericPanelBinding = new GenericPanelBinding
+                            {
+                                PanelType = currentPanelType
+                            };
                         }
                         else if (fileLine.StartsWith("PanelInstanceID="))
                         {
@@ -416,13 +420,15 @@
 
         public bool SaveAsNewProfile()
         {
-            var saveFileDialog = new SaveFileDialog();
-            saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastImageFileDialogLocation) ? Constants.PathRootDriveC : Settings.Default.LastImageFileDialogLocation;
-            saveFileDialog.FileName = "dcsfp_profile.bindings";
-            saveFileDialog.DefaultExt = OPEN_FILE_DIALOG_DEFAULT_EXT;
-            saveFileDialog.Filter = OPEN_FILE_DIALOG_FILTER;
-            saveFileDialog.OverwritePrompt = true;
+            var saveFileDialog = new SaveFileDialog
+            {
+                RestoreDirectory = true,
+                InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastImageFileDialogLocation) ? Constants.PathRootDriveC : Settings.Default.LastImageFileDialogLocation,
+                FileName = "dcsfp_profile.bindings",
+                DefaultExt = OPEN_FILE_DIALOG_DEFAULT_EXT,
+                Filter = OPEN_FILE_DIALOG_FILTER,
+                OverwritePrompt = true
+            };
             if (saveFileDialog.ShowDialog() == true)
             {
                 _isNewProfile = false;

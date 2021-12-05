@@ -273,6 +273,11 @@
 
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
+            if (isFirstReport)
+            {
+                return;
+            }
+
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -794,7 +799,7 @@
                                 {
                                     if (layerSelector == 1)
                                     {
-                                        channelSelector = channelSelector + 10;
+                                        channelSelector += 10;
                                     }
 
                                     SetPZ69DisplayBytesUnsignedInteger(ref bytes, channelSelector, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -853,7 +858,7 @@
                                 {
                                     if (layerSelector == 1)
                                     {
-                                        channelSelector = channelSelector + 10;
+                                        channelSelector += 10;
                                     }
 
                                     SetPZ69DisplayBytesUnsignedInteger(ref bytes, channelSelector, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -920,10 +925,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 

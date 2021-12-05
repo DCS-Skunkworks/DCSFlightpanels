@@ -360,30 +360,6 @@
                 }
             }
         }
-
-        private void ClearCommands()
-        {
-            foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
-            {
-                if (!textBox.Name.EndsWith("Numbers"))
-                {
-                    textBox.Bill.ClearAll();
-                }
-            }
-        }
-
-
-        private PZ69GenericTextBox GetTextBoxInFocus()
-        {
-            foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogPZ69) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
-                {
-                    return textBox;
-                }
-            }
-            return null;
-        }
         
         /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1387,19 +1363,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void UpdateDCSBIOSBinding(PZ69GenericTextBox textBox)
-        {
-            try
-            {
-                _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(GetSwitch(textBox), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         public PanelSwitchOnOff GetSwitch(TextBox textBox)
         {
             try

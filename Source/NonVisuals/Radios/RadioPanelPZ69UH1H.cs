@@ -2870,6 +2870,11 @@ namespace NonVisuals.Radios
 
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
+            if (isFirstReport)
+            {
+                return;
+            }
+
             Interlocked.Increment(ref _doUpdatePanelLCD);
             lock (LockLCDUpdateObject)
             {

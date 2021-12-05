@@ -215,6 +215,11 @@
 
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
+            if (isFirstReport)
+            {
+                return;
+            }
+
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);

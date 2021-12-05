@@ -428,31 +428,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void UpdateKeyBindingProfileSequencedKeyStrokesTPM(TPMTextBox textBox)
-        {
-            try
-            {
-                _tpmPanel.AddOrUpdateSequencedKeyBinding(GetSwitch(textBox), textBox.Text, textBox.Bill.GetKeySequence());
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void UpdateBIPLinkBindings(TPMTextBox textBox)
-        {
-            try
-            {
-                _tpmPanel.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BipLink);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private void UpdateKeyBindingProfileSimpleKeyStrokes(TPMTextBox textBox)
         {
             try
@@ -486,20 +462,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void UpdateDCSBIOSBinding(TPMTextBox textBox)
-        {
-            try
-            {
-                _tpmPanel.AddOrUpdateDCSBIOSBinding(GetSwitch(textBox), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
+        
         private void ShowGraphicConfiguration()
         {
             try

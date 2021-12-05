@@ -240,8 +240,7 @@
         public void ClearPanelSettings(object sender)
         {
             ClearSettings();
-            AppEventHandler.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
-            //AppEventHandler.SettingsCleared(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsChanged(sender, HIDInstanceId, TypeOfPanel);
         }
     }
 }

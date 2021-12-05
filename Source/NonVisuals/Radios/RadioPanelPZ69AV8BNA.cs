@@ -291,28 +291,7 @@
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-
-        private string GetUHFCockpitFrequencyAsString()
-        {
-            /*var frequencyAsString = string.Empty;
-            lock (_lockUhfBigFreqObject1)
-            {
-                lock (_lockUhfDial3FreqObject2)
-                {
-                    lock (_lockUhfDial4FreqObject2)
-                    {
-                        frequencyAsString = _uhfCockpitBigFrequency.ToString(CultureInfo.InvariantCulture).PadRight(3, '0');
-                        frequencyAsString = frequencyAsString + ".";
-                        frequencyAsString = frequencyAsString + _uhfCockpitDial3Frequency.ToString(CultureInfo.InvariantCulture);
-                        frequencyAsString = frequencyAsString + _uhfCockpitDial4Frequency.ToString(CultureInfo.InvariantCulture).PadRight(2, '0');
-                        //225.000 7 characters
-                    }
-                }
-            }
-            return frequencyAsString;*/
-            return string.Empty;
-        }
-
+        
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             if (SkipCurrentFrequencyChange())
@@ -562,6 +541,11 @@
 
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
+            if (isFirstReport)
+            {
+                return;
+            }
+
             lock (LockLCDUpdateObject)
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);

@@ -220,8 +220,10 @@
         {
             foreach (var textBox in _textBoxList)
             {
-                textBox.Bill = new BillStreamDeckFace();
-                textBox.Bill.TextBox = textBox;
+                textBox.Bill = new BillStreamDeckFace
+                {
+                    TextBox = textBox
+                };
             }
         }
 
@@ -433,16 +435,17 @@
                     {
                         if (TextBoxButtonTextFace.Bill.ContainsTextFace())
                         {
-                            var result = new FaceTypeText();
-
-                            result.StreamDeckButtonName = streamDeckButtonName;
-                            result.StreamDeckPanelInstance = _streamDeckPanel;
-                            result.ButtonTextTemplate = TextBoxButtonTextFace.Text;
-                            result.TextFont = TextBoxButtonTextFace.Bill.TextFont;
-                            result.FontColor = TextBoxButtonTextFace.Bill.FontColor;
-                            result.BackgroundColor = TextBoxButtonTextFace.Bill.BackgroundColor;
-                            result.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
-                            result.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
+                            var result = new FaceTypeText
+                            {
+                                StreamDeckButtonName = streamDeckButtonName,
+                                StreamDeckPanelInstance = _streamDeckPanel,
+                                ButtonTextTemplate = TextBoxButtonTextFace.Text,
+                                TextFont = TextBoxButtonTextFace.Bill.TextFont,
+                                FontColor = TextBoxButtonTextFace.Bill.FontColor,
+                                BackgroundColor = TextBoxButtonTextFace.Bill.BackgroundColor,
+                                OffsetX = TextBoxButtonTextFace.Bill.OffsetX,
+                                OffsetY = TextBoxButtonTextFace.Bill.OffsetY
+                            };
 
                             return result;
                         }
@@ -466,11 +469,12 @@
                     {
                         if (TextBoxImageFace.Bill.ContainsImageFace())
                         {
-                            var result = new FaceTypeImage();
-
-                            result.StreamDeckButtonName = streamDeckButtonName;
-                            result.StreamDeckPanelInstance = _streamDeckPanel;
-                            result.ImageFile = TextBoxImageFace.Bill.ImageFileRelativePath;
+                            var result = new FaceTypeImage
+                            {
+                                StreamDeckButtonName = streamDeckButtonName,
+                                StreamDeckPanelInstance = _streamDeckPanel,
+                                ImageFile = TextBoxImageFace.Bill.ImageFileRelativePath
+                            };
 
                             return result;
                         }

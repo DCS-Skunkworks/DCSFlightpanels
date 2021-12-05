@@ -39,37 +39,37 @@
         public static HashSet<ISaitekPanelKnob> GetRadioPanelKnobs()
         {
             // true means clockwise turn
-            var result = new HashSet<ISaitekPanelKnob>();
+            var result = new HashSet<ISaitekPanelKnob>
+            {
+                // Group 0
+                new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc),
+                new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec),
+                new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc),
+                new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("1000", 2), false, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec),
+                new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc),
+                new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("100000", 2), false, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec),
+                new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc),
+                new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("10000000", 2), false, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec),
+                // Group 1
+                new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsEmulator.LowerCOM2),
+                new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsEmulator.LowerNAV1),
+                new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsEmulator.LowerNAV2),
+                new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsEmulator.LowerADF),
+                new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsEmulator.LowerDME),
+                new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsEmulator.LowerXPDR),
+                new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch),
+                new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch),
+                // Group 2
+                new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsEmulator.UpperCOM1),
+                new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsEmulator.UpperCOM2),
+                new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsEmulator.UpperNAV1),
+                new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsEmulator.UpperNAV2),
+                new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsEmulator.UpperADF),
+                new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsEmulator.UpperDME),
+                new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsEmulator.UpperXPDR),
+                new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsEmulator.LowerCOM1)
+            };
 
-            // Group 0
-            result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc));
-            result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec));
-            result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc));
-            result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("1000", 2), false, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec));
-            result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc));
-            result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("100000", 2), false, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec));
-            result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc));
-            result.Add(new RadioPanelPZ69KnobEmulator(2, Convert.ToInt32("10000000", 2), false, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec));
-
-            // Group 1
-            result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsEmulator.LowerCOM2));
-            result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsEmulator.LowerNAV1));
-            result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsEmulator.LowerNAV2));
-            result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsEmulator.LowerADF));
-            result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsEmulator.LowerDME));
-            result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsEmulator.LowerXPDR));
-            result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch));
-            result.Add(new RadioPanelPZ69KnobEmulator(1, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch));
-
-            // Group 2
-            result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsEmulator.UpperCOM1));
-            result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsEmulator.UpperCOM2));
-            result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsEmulator.UpperNAV1));
-            result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsEmulator.UpperNAV2));
-            result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsEmulator.UpperADF));
-            result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsEmulator.UpperDME));
-            result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsEmulator.UpperXPDR));
-            result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsEmulator.LowerCOM1));
             return result;
         }
     }
