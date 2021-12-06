@@ -62,9 +62,9 @@
         // private long _changesWithinLastticksSinceLastChangeLargeDial;
         private readonly int[] _r800L1Freq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
 
-        private volatile uint _r800L1BigFrequencyStandby = 108;
+        private uint _r800L1BigFrequencyStandby = 108;
 
-        private volatile uint _r800L1SmallFrequencyStandby;
+        private uint _r800L1SmallFrequencyStandby;
 
         private volatile uint _r800L1SavedCockpitBigFrequency;
 
@@ -1226,7 +1226,7 @@
                                                     break;
                                                 }
 
-                                                _r800L1SmallFrequencyStandby = _r800L1SmallFrequencyStandby + 5;
+                                                _r800L1SmallFrequencyStandby += 5;
                                                 break;
                                             }
 
@@ -1281,7 +1281,7 @@
                                                     break;
                                                 }
 
-                                                _r800L1SmallFrequencyStandby = _r800L1SmallFrequencyStandby - 5;
+                                                _r800L1SmallFrequencyStandby -= 5;
                                                 break;
                                             }
 
@@ -1344,7 +1344,7 @@
                                                 // 100-149  220-399
                                                 if (changeFaster)
                                                 {
-                                                    _r800L1BigFrequencyStandby = _r800L1BigFrequencyStandby + CHANGE_VALUE;
+                                                    _r800L1BigFrequencyStandby += CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
@@ -1429,7 +1429,7 @@
                                                 // 100-149  220-399
                                                 if (changeFaster)
                                                 {
-                                                    _r800L1BigFrequencyStandby = _r800L1BigFrequencyStandby - CHANGE_VALUE;
+                                                    _r800L1BigFrequencyStandby -= CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
@@ -1506,7 +1506,7 @@
                                                     break;
                                                 }
 
-                                                _r800L1SmallFrequencyStandby = _r800L1SmallFrequencyStandby + 5;
+                                                _r800L1SmallFrequencyStandby += 5;
                                                 break;
                                             }
 
@@ -1561,7 +1561,7 @@
                                                     break;
                                                 }
 
-                                                _r800L1SmallFrequencyStandby = _r800L1SmallFrequencyStandby - 5;
+                                                _r800L1SmallFrequencyStandby -= 5;
                                                 break;
                                             }
 
@@ -1779,7 +1779,7 @@
 
                         case CurrentKa50RadioMode.VHF2_R800L1:
                             {
-                                var frequencyAsString = string.Empty;
+                                string frequencyAsString;
                                 lock (_lockR800L1DialsObject1)
                                 {
                                     try
@@ -1798,18 +1798,18 @@
 
                                 lock (_lockR800L1DialsObject2)
                                 {
-                                    frequencyAsString = frequencyAsString + _r800L1CockpitFreq2DialPos;
+                                    frequencyAsString += _r800L1CockpitFreq2DialPos;
                                 }
 
-                                frequencyAsString = frequencyAsString + ".";
+                                frequencyAsString += ".";
                                 lock (_lockR800L1DialsObject3)
                                 {
-                                    frequencyAsString = frequencyAsString + _r800L1CockpitFreq3DialPos;
+                                    frequencyAsString += _r800L1CockpitFreq3DialPos;
                                 }
 
                                 lock (_lockR800L1DialsObject4)
                                 {
-                                    frequencyAsString = frequencyAsString + GetR800L1DialFrequencyForPosition(_r800L1CockpitFreq4DialPos);
+                                    frequencyAsString += GetR800L1DialFrequencyForPosition(_r800L1CockpitFreq4DialPos);
                                 }
 
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -1856,7 +1856,7 @@
                             {
                                 // Preset Channel Selector
                                 // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 lock (_lockADFDialObject1)
                                 {
                                     switch (_adfCockpitPresetDialPos)
@@ -1907,7 +1907,7 @@
                                 // Preset Channel Selector
                                 // " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 lock (_lockVhf1DialObject1)
                                 {
                                     channelAsString = (_vhf1CockpitPresetDialPos + 1).ToString().PadLeft(2, ' ');
@@ -1920,7 +1920,7 @@
 
                         case CurrentKa50RadioMode.VHF2_R800L1:
                             {
-                                var frequencyAsString = string.Empty;
+                                string frequencyAsString;
                                 lock (_lockR800L1DialsObject1)
                                 {
                                     frequencyAsString = _r800L1Freq1DialValues[_r800L1CockpitFreq1DialPos].ToString();
@@ -1928,18 +1928,18 @@
 
                                 lock (_lockR800L1DialsObject2)
                                 {
-                                    frequencyAsString = frequencyAsString + _r800L1CockpitFreq2DialPos;
+                                    frequencyAsString += _r800L1CockpitFreq2DialPos;
                                 }
 
-                                frequencyAsString = frequencyAsString + ".";
+                                frequencyAsString += ".";
                                 lock (_lockR800L1DialsObject3)
                                 {
-                                    frequencyAsString = frequencyAsString + _r800L1CockpitFreq3DialPos;
+                                    frequencyAsString += _r800L1CockpitFreq3DialPos;
                                 }
 
                                 lock (_lockR800L1DialsObject4)
                                 {
-                                    frequencyAsString = frequencyAsString + GetR800L1DialFrequencyForPosition(_r800L1CockpitFreq4DialPos);
+                                    frequencyAsString += GetR800L1DialFrequencyForPosition(_r800L1CockpitFreq4DialPos);
                                 }
 
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -1986,7 +1986,7 @@
                             {
                                 // Preset Channel Selector
                                 // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 lock (_lockADFDialObject1)
                                 {
                                     switch (_adfCockpitPresetDialPos)
@@ -2084,10 +2084,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 

@@ -38,9 +38,7 @@ namespace NonVisuals.Radios
         private const string INTERCOMM_DIAL_COMMAND_INC = "INT_MODE INC\n";
 
         private const string INTERCOMM_DIAL_COMMAND_DEC = "INT_MODE DEC\n";
-
-        private long _intercommThreadNowSynching;
-
+        
         private long _intercommDialWaitingForFeedback;
 
         private const string INTERCOMM_VOLUME_KNOB_COMMAND_INC = "INT_VOL +2500\n";
@@ -106,9 +104,9 @@ namespace NonVisuals.Radios
 
         private readonly object _lockUhfDialsObject3 = new object();
 
-        private volatile uint _uhfBigFrequencyStandby = 200;
+        private uint _uhfBigFrequencyStandby = 200;
 
-        private volatile uint _uhfSmallFrequencyStandby;
+        private uint _uhfSmallFrequencyStandby;
 
         private volatile uint _uhfSavedCockpitBigFrequency = 200;
 
@@ -2274,7 +2272,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 5;
+                                            _uhfSmallFrequencyStandby += 5;
                                             break;
                                         }
 
@@ -2343,7 +2341,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 5;
+                                            _uhfSmallFrequencyStandby -= 5;
                                             break;
                                         }
 
@@ -2562,7 +2560,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 5;
+                                            _uhfSmallFrequencyStandby += 5;
                                             break;
                                         }
 
@@ -2631,7 +2629,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 5;
+                                            _uhfSmallFrequencyStandby -= 5;
                                             break;
                                         }
 
@@ -3156,10 +3154,12 @@ namespace NonVisuals.Radios
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 
@@ -3456,12 +3456,7 @@ namespace NonVisuals.Radios
             _vhfNavBigFrequencyStandby = _vhfNavSavedCockpitBigFrequency;
             _vhfNavSmallFrequencyStandby = _vhfNavSavedCockpitSmallFrequency;
         }
-
-        private bool IntercommSyncing()
-        {
-            return Interlocked.Read(ref _intercommThreadNowSynching) > 0;
-        }
-
+        
         private bool VhfCommSyncing()
         {
             return Interlocked.Read(ref _vhfCommThreadNowSynching) > 0;

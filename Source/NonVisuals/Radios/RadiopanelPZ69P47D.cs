@@ -860,10 +860,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 
@@ -871,12 +873,7 @@
         {
             SaitekPanelKnobs = RadioPanelKnobP47D.GetRadioPanelKnobs();
         }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobP47D radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
-        }
-
+        
         private void SetUpperRadioMode(CurrentP47DRadioMode currentP47DRadioMode)
         {
             try

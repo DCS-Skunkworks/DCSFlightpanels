@@ -232,7 +232,7 @@
         /// </summary>
         private string GetLogFilePathByTarget(string targetName)
         {
-            string fileName = null;
+            string fileName;
             if (LogManager.Configuration != null && LogManager.Configuration.ConfiguredNamedTargets.Count != 0)
             {
                 Target target = LogManager.Configuration.FindTargetByName(targetName);
@@ -241,7 +241,7 @@
                     throw new Exception($"Could not find log with a target named: [{targetName}]. See NLog.config for configured targets");
                 }
 
-                FileTarget fileTarget = null;
+                FileTarget fileTarget;
                 WrapperTargetBase wrapperTarget = target as WrapperTargetBase;
 
                 // Unwrap the target if necessary.
@@ -1185,7 +1185,7 @@
 
             if (_profileHandler.IsDirty)
             {
-                Title = Title + " *";
+                Title += " *";
             }
         }
 

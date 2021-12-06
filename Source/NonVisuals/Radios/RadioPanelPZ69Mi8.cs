@@ -35,9 +35,9 @@
         private const int CHANGE_VALUE = 10;
 
         // private int[] _r863ManualFreq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
-        private volatile uint _r863ManualBigFrequencyStandby = 108;
+        private uint _r863ManualBigFrequencyStandby = 108;
 
-        private volatile uint _r863ManualSmallFrequencyStandby;
+        private uint _r863ManualSmallFrequencyStandby;
 
         private volatile uint _r863ManualSavedCockpitBigFrequency;
 
@@ -122,9 +122,9 @@
 
         private readonly ClickSpeedDetector _yadro1ABigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
 
-        private volatile uint _yadro1ABigFrequencyStandby = 100;
+        private uint _yadro1ABigFrequencyStandby = 100;
 
-        private volatile uint _yadro1ASmallFrequencyStandby;
+        private uint _yadro1ASmallFrequencyStandby;
 
         private volatile uint _yadro1ASavedCockpitBigFrequency;
 
@@ -1624,7 +1624,7 @@
                                                 
                                                 if (changeFaster)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby + CHANGE_VALUE;
+                                                    _r863ManualBigFrequencyStandby += CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
@@ -1667,7 +1667,7 @@
 
                                                 if (changeFaster)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby + CHANGE_VALUE;
+                                                    _yadro1ABigFrequencyStandby += CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
@@ -1748,7 +1748,7 @@
 
                                                 if (changeFaster)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby - CHANGE_VALUE;
+                                                    _r863ManualBigFrequencyStandby -= CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
@@ -1791,11 +1791,11 @@
 
                                                 if (changeFaster)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby - CHANGE_VALUE;
+                                                    _yadro1ABigFrequencyStandby -= CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
-                                                    _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby -1;
+                                                    _yadro1ABigFrequencyStandby--;
                                                 }
                                                 
                                                 // 20-179-20
@@ -1869,7 +1869,7 @@
                                                     break;
                                                 }
 
-                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby + 25;
+                                                _r863ManualSmallFrequencyStandby += 25;
                                                 break;
                                             }
 
@@ -1888,7 +1888,7 @@
                                                     break;
                                                 }
 
-                                                _yadro1ASmallFrequencyStandby = _yadro1ASmallFrequencyStandby + 1;
+                                                _yadro1ASmallFrequencyStandby++;
                                                 break;
                                             }
 
@@ -1946,7 +1946,7 @@
                                                     break;
                                                 }
 
-                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby - 25;
+                                                _r863ManualSmallFrequencyStandby -= 25;
                                                 break;
                                             }
 
@@ -1965,7 +1965,7 @@
                                                     break;
                                                 }
 
-                                                _yadro1ASmallFrequencyStandby = _yadro1ASmallFrequencyStandby - 1;
+                                                _yadro1ASmallFrequencyStandby--;
                                                 break;
                                             }
 
@@ -2026,7 +2026,7 @@
 
                                                 if (changeFaster)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby + CHANGE_VALUE;
+                                                    _r863ManualBigFrequencyStandby += CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
@@ -2069,7 +2069,7 @@
 
                                                 if (changeFaster)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby + CHANGE_VALUE;
+                                                    _yadro1ABigFrequencyStandby += CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
@@ -2150,7 +2150,7 @@
 
                                                 if (changeFaster)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby - CHANGE_VALUE;
+                                                    _r863ManualBigFrequencyStandby -= CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
@@ -2193,7 +2193,7 @@
 
                                                 if (changeFaster)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby - CHANGE_VALUE;
+                                                    _yadro1ABigFrequencyStandby -= CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
@@ -2271,7 +2271,7 @@
                                                     break;
                                                 }
 
-                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby + 25;
+                                                _r863ManualSmallFrequencyStandby += 25;
                                                 break;
                                             }
 
@@ -2290,7 +2290,7 @@
                                                     break;
                                                 }
 
-                                                _yadro1ASmallFrequencyStandby = _yadro1ASmallFrequencyStandby + 1;
+                                                _yadro1ASmallFrequencyStandby += 1;
                                                 break;
                                             }
 
@@ -2348,7 +2348,7 @@
                                                     break;
                                                 }
                                                 
-                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby - 25;
+                                                _r863ManualSmallFrequencyStandby -= 25;
                                                 break;
                                             }
 
@@ -2367,7 +2367,7 @@
                                                     break;
                                                 }
 
-                                                _yadro1ASmallFrequencyStandby = _yadro1ASmallFrequencyStandby - 1;
+                                                _yadro1ASmallFrequencyStandby -= 1;
                                                 break;
                                             }
 
@@ -2482,28 +2482,26 @@
                     {
                         case CurrentMi8RadioMode.R863_MANUAL:
                             {
-                                var frequencyAsString = string.Empty;
+                                string frequencyAsString;
                                 lock (_lockR863ManualDialsObject1)
                                 {
-                                    frequencyAsString = _r863ManualCockpitFreq1DialPos.ToString(); // _r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString();
+                                    frequencyAsString = _r863ManualCockpitFreq1DialPos.ToString(); 
                                 }
 
                                 lock (_lockR863ManualDialsObject2)
                                 {
-                                    frequencyAsString = frequencyAsString + _r863ManualCockpitFreq2DialPos;
+                                    frequencyAsString += _r863ManualCockpitFreq2DialPos;
                                 }
 
-                                frequencyAsString = frequencyAsString + ".";
+                                frequencyAsString += ".";
                                 lock (_lockR863ManualDialsObject3)
                                 {
-                                    frequencyAsString = frequencyAsString + _r863ManualCockpitFreq3DialPos;
+                                    frequencyAsString += _r863ManualCockpitFreq3DialPos;
                                 }
 
                                 lock (_lockR863ManualDialsObject4)
                                 {
-                                    frequencyAsString = frequencyAsString + _r863ManualCockpitFreq4DialPos.ToString().PadLeft(2, '0');
-
-                                    // GetR863ManualDialFrequencyForPosition(_r863ManualCockpitFreq4DialPos);
+                                    frequencyAsString += _r863ManualCockpitFreq4DialPos.ToString().PadLeft(2, '0');
                                 }
 
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -2583,7 +2581,7 @@
                             {
                                 // Dial1 XX00
                                 // Dial2 00XX
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 uint backupMain = 0;
                                 lock (_lockADFBackupMainDialObject)
                                 {
@@ -2607,14 +2605,14 @@
                                     {
                                         lock (_lockADFMainDialObject2)
                                         {
-                                            channelAsString = channelAsString + _adfMainCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                            channelAsString += _adfMainCockpitPresetDial2Pos.ToString().PadRight(2, '0');
                                         }
                                     }
                                     else
                                     {
                                         lock (_lockADFBackupDialObject2)
                                         {
-                                            channelAsString = channelAsString + _adfBackupCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                            channelAsString += _adfBackupCockpitPresetDial2Pos.ToString().PadRight(2, '0');
                                         }
                                     }
                                 }
@@ -2626,7 +2624,7 @@
 
                         case CurrentMi8RadioMode.ARK_UD:
                             {
-                                var stringToBeShownLeft = string.Empty;
+                                string stringToBeShownLeft;
                                 uint arkPreset = 0;
                                 uint arkMode = 0;
                                 uint arkBand = 0;
@@ -2656,7 +2654,7 @@
                         case CurrentMi8RadioMode.SPU7:
                             {
                                 // 0-5
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 uint spuICSSwitch = 0;
                                 lock (_lockSpu7DialObject1)
                                 {
@@ -2685,7 +2683,7 @@
                     {
                         case CurrentMi8RadioMode.R863_MANUAL:
                             {
-                                var frequencyAsString = string.Empty;
+                                string frequencyAsString;
                                 lock (_lockR863ManualDialsObject1)
                                 {
                                     frequencyAsString = _r863ManualCockpitFreq1DialPos.ToString(); // _r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString();
@@ -2693,20 +2691,18 @@
 
                                 lock (_lockR863ManualDialsObject2)
                                 {
-                                    frequencyAsString = frequencyAsString + _r863ManualCockpitFreq2DialPos;
+                                    frequencyAsString += _r863ManualCockpitFreq2DialPos;
                                 }
 
-                                frequencyAsString = frequencyAsString + ".";
+                                frequencyAsString += ".";
                                 lock (_lockR863ManualDialsObject3)
                                 {
-                                    frequencyAsString = frequencyAsString + _r863ManualCockpitFreq3DialPos;
+                                    frequencyAsString += _r863ManualCockpitFreq3DialPos;
                                 }
 
                                 lock (_lockR863ManualDialsObject4)
                                 {
-                                    frequencyAsString = frequencyAsString + _r863ManualCockpitFreq4DialPos.ToString().PadLeft(
-                                                            2,
-                                                            '0'); // GetR863ManualDialFrequencyForPosition(_r863ManualCockpitFreq4DialPos);
+                                    frequencyAsString += _r863ManualCockpitFreq4DialPos.ToString().PadLeft(2, '0');
                                 }
 
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -2724,7 +2720,7 @@
                                 // Preset Channel Selector
                                 // " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 uint unitSwitch = 0;
                                 lock (_lockR863Preset1DialObject1)
                                 {
@@ -2756,8 +2752,6 @@
                                                     ref bytes,
                                                     Convert.ToUInt32(_yadro1ABigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1ASmallFrequencyStandby.ToString().PadLeft(2, '0')),
                                                     PZ69LCDPosition.LOWER_STBY_RIGHT);
-
-                                                // SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_yadro1aBigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1aSmallFrequencyStandby.ToString().PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
                                             }
                                         }
                                     }
@@ -2771,7 +2765,7 @@
                                 // Preset Channel Selector
                                 // " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 // Pos     0    1    2    3    4    5    6    7    8    9   10 
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 lock (_lockR828Preset1DialObject1)
                                 {
                                     channelAsString = (_r828PresetCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -2786,7 +2780,7 @@
                             {
                                 // Dial1 XX00
                                 // Dial2 00XX
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 uint backupMain = 0;
                                 lock (_lockADFBackupMainDialObject)
                                 {
@@ -2810,14 +2804,14 @@
                                     {
                                         lock (_lockADFMainDialObject2)
                                         {
-                                            channelAsString = channelAsString + _adfMainCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                            channelAsString += _adfMainCockpitPresetDial2Pos.ToString().PadRight(2, '0');
                                         }
                                     }
                                     else
                                     {
                                         lock (_lockADFBackupDialObject2)
                                         {
-                                            channelAsString = channelAsString + _adfBackupCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                            channelAsString += _adfBackupCockpitPresetDial2Pos.ToString().PadRight(2, '0');
                                         }
                                     }
                                 }
@@ -2829,7 +2823,7 @@
 
                         case CurrentMi8RadioMode.ARK_UD:
                             {
-                                var stringToBeShownLeft = string.Empty;
+                                string stringToBeShownLeft;
                                 uint arkPreset = 0;
                                 uint arkMode = 0;
                                 uint arkBand = 0;
@@ -2859,7 +2853,7 @@
                         case CurrentMi8RadioMode.SPU7:
                             {
                                 // 0-5
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 uint spuICSSwitch = 0;
                                 lock (_lockSpu7DialObject1)
                                 {
@@ -2951,10 +2945,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 

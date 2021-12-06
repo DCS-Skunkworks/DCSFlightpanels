@@ -9,9 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000" Loaded="MultiPanelUserControl_OnLoaded">
     <UserControl.Resources>
-        <ContextMenu x:Key="ButtonLcdContextMenu" IsVisibleChanged="ButtonLcdContextMenu_OnIsVisibleChanged" x:Shared="False">
-            <MenuItem Header="Delete" x:Name="contextMenuItemDeleteBinding" Click="ButtonLcdMenuItemDeleteBinding_OnClick"/>
-        </ContextMenu>
     </UserControl.Resources>
     <Grid>
         <Grid x:Name="PZ70Grid" >

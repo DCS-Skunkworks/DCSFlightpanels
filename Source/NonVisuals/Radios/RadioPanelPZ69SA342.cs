@@ -821,7 +821,7 @@
                             // Frequency selector 4      VHFAM_FREQ4
                             // "00" "25" "50" "75", only "00" and "50" used.
                             // Pos     0    1    2    3
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockVhfAm10SObject)
                             {
                                 frequencyAsString = "1" + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Second, _vhfAmCockpit10SFrequencyValue);
@@ -829,18 +829,18 @@
 
                             lock (_lockVhfAm1SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Third, _vhfAmCockpit1SFrequencyValue);
+                                frequencyAsString += GetVhfAmDialFrequencyForPosition(VhfAmDigit.Third, _vhfAmCockpit1SFrequencyValue);
                             }
 
-                            frequencyAsString = frequencyAsString + ".";
+                            frequencyAsString += ".";
                             lock (_lockVhfAmDecimal10SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Fourth, _vhfAmCockpitDecimal10SFrequencyValue);
+                                frequencyAsString += GetVhfAmDialFrequencyForPosition(VhfAmDigit.Fourth, _vhfAmCockpitDecimal10SFrequencyValue);
                             }
 
                             lock (_lockVhfAmDecimal100SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100SFrequencyValue);
+                                frequencyAsString += GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100SFrequencyValue);
                             }
 
                             SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -934,7 +934,7 @@
                             // Frequency selector 4      VHFAM_FREQ4
                             // "00" "25" "50" "75", only "00" and "50" used.
                             // Pos     0    1    2    3
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockVhfAm10SObject)
                             {
                                 frequencyAsString = "1" + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Second, _vhfAmCockpit10SFrequencyValue);
@@ -942,18 +942,18 @@
 
                             lock (_lockVhfAm1SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Third, _vhfAmCockpit1SFrequencyValue);
+                                frequencyAsString += GetVhfAmDialFrequencyForPosition(VhfAmDigit.Third, _vhfAmCockpit1SFrequencyValue);
                             }
 
-                            frequencyAsString = frequencyAsString + ".";
+                            frequencyAsString += ".";
                             lock (_lockVhfAmDecimal10SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Fourth, _vhfAmCockpitDecimal10SFrequencyValue);
+                                frequencyAsString += GetVhfAmDialFrequencyForPosition(VhfAmDigit.Fourth, _vhfAmCockpitDecimal10SFrequencyValue);
                             }
 
                             lock (_lockVhfAmDecimal100SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100SFrequencyValue);
+                                frequencyAsString += GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100SFrequencyValue);
                             }
 
                             SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -1079,7 +1079,7 @@
 
                                             if (changeFaster)
                                             {
-                                                _uhfBigFrequencyStandby = _uhfBigFrequencyStandby + 5;
+                                                _uhfBigFrequencyStandby += 5;
                                             }
                                             else
                                             {
@@ -1154,7 +1154,7 @@
 
                                             if (changeFaster)
                                             {
-                                                _uhfBigFrequencyStandby = _uhfBigFrequencyStandby - 5;
+                                                _uhfBigFrequencyStandby -= 5;
                                             }
                                             else
                                             {
@@ -1201,7 +1201,7 @@
                                         {
                                             if (!SkipVhfAmRightDialChange())
                                             {
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.025;
+                                                _vhfAmSmallFrequencyStandby += 0.025;
                                                 if (_vhfAmSmallFrequencyStandby > 0.975)
                                                 {
                                                     // At max value
@@ -1229,11 +1229,11 @@
 
                                             if (changeFaster)
                                             {
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 5;
+                                                _uhfSmallFrequencyStandby += 5;
                                             }
                                             else if (!SkipUhfSmallFrequencyChange())
                                             {
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 1;
+                                                _uhfSmallFrequencyStandby += 1;
                                             }
 
                                             if (_uhfSmallFrequencyStandby >= 99)
@@ -1274,7 +1274,7 @@
                                         {
                                             if (!SkipVhfAmRightDialChange())
                                             {
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.025;
+                                                _vhfAmSmallFrequencyStandby -= 0.025;
                                                 if (_vhfAmSmallFrequencyStandby < 0.00)
                                                 {
                                                     // At min value
@@ -1302,7 +1302,7 @@
 
                                             if (changeFaster)
                                             {
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 5;
+                                                _uhfSmallFrequencyStandby -= 5;
                                             }
                                             else if (!SkipUhfSmallFrequencyChange())
                                             {
@@ -1380,7 +1380,7 @@
 
                                             if (changeFaster)
                                             {
-                                                _uhfBigFrequencyStandby = _uhfBigFrequencyStandby + 5;
+                                                _uhfBigFrequencyStandby += 5;
                                             }
                                             else
                                             {
@@ -1455,7 +1455,7 @@
 
                                             if (changeFaster)
                                             {
-                                                _uhfBigFrequencyStandby = _uhfBigFrequencyStandby - 5;
+                                                _uhfBigFrequencyStandby -= 5;
                                             }
                                             else
                                             {
@@ -1502,7 +1502,7 @@
                                         {
                                             if (!SkipVhfAmRightDialChange())
                                             {
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.025;
+                                                _vhfAmSmallFrequencyStandby += 0.025;
                                                 if (_vhfAmSmallFrequencyStandby > 0.975)
                                                 {
                                                     // At max value
@@ -1530,11 +1530,11 @@
 
                                             if (changeFaster)
                                             {
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 5;
+                                                _uhfSmallFrequencyStandby += 5;
                                             }
                                             else if (!SkipUhfSmallFrequencyChange())
                                             {
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 1;
+                                                _uhfSmallFrequencyStandby++;
                                             }
 
                                             if (_uhfSmallFrequencyStandby >= 99)
@@ -1575,7 +1575,7 @@
                                         {
                                             if (!SkipVhfAmRightDialChange())
                                             {
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.025;
+                                                _vhfAmSmallFrequencyStandby -= 0.025;
                                                 if (_vhfAmSmallFrequencyStandby < 0.00)
                                                 {
                                                     // At min value
@@ -1603,7 +1603,7 @@
 
                                             if (changeFaster)
                                             {
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 5;
+                                                _uhfSmallFrequencyStandby -= 5;
                                             }
                                             else if (!SkipUhfSmallFrequencyChange())
                                             {
@@ -1912,10 +1912,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 
@@ -2119,7 +2121,7 @@
             while (tmpCockpitValue != desiredValue)
             {
                 upCount++;
-                tmpCockpitValue = tmpCockpitValue + 25;
+                tmpCockpitValue += 25;
                 if (tmpCockpitValue > 975)
                 {
                     tmpCockpitValue = 0;
@@ -2130,7 +2132,7 @@
             while (tmpCockpitValue != desiredValue)
             {
                 downCount++;
-                tmpCockpitValue = tmpCockpitValue - 25;
+                tmpCockpitValue -= 25;
                 if (tmpCockpitValue < 0)
                 {
                     tmpCockpitValue = 975;

@@ -90,26 +90,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
         public void SettingsModified(object sender, PanelEventArgs e) { }
 
         public void DeviceDetached(object sender, PanelEventArgs e) { }
-
-        private void SetGraphicsState(HashSet<object> knobs)
-        {
-            try
-            {
-                
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
         
-        private void HideAllImages()
-        {
-        }
-
-        
-
-
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {
             try

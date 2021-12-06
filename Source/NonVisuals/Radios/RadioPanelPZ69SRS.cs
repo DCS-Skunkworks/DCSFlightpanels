@@ -126,6 +126,11 @@
 
         private void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
+            if (isFirstReport)
+            {
+                return;
+            }
+
             try
             {
                 lock (LockLCDUpdateObject)
@@ -422,12 +427,12 @@
                                             var changeValue = _smallFreqStepping;
                                             if (_firstSmallDialIncreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue = changeValue * 10;
+                                                changeValue *= 10;
                                             }
 
                                             if (_secondSmallDialIncreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue = changeValue * 100;
+                                                changeValue *= 100;
                                             }
 
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
@@ -452,12 +457,12 @@
                                             var changeValue = _smallFreqStepping * -1;
                                             if (_firstSmallDialDecreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue = changeValue * 10;
+                                                changeValue *= 10;
                                             }
 
                                             if (_secondSmallDialDecreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue = changeValue * 100;
+                                                changeValue *= 100;
                                             }
 
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
@@ -530,12 +535,12 @@
                                             var changeValue = _smallFreqStepping;
                                             if (_firstSmallDialIncreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue = changeValue * 10;
+                                                changeValue *= 10;
                                             }
 
                                             if (_secondSmallDialIncreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue = changeValue * 100;
+                                                changeValue *= 100;
                                             }
 
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
@@ -560,12 +565,12 @@
                                             var changeValue = _smallFreqStepping * -1;
                                             if (_firstSmallDialDecreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue = changeValue * 10;
+                                                changeValue *= 10;
                                             }
 
                                             if (_secondSmallDialDecreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue = changeValue * 100;
+                                                changeValue *= 100;
                                             }
 
                                             SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
@@ -672,10 +677,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 

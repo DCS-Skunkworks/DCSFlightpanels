@@ -97,7 +97,6 @@
         private volatile uint _homingCockpitDialPos = 1;
         private const string HOMING_COMMAND_INC = "FT_ZF_SWITCH INC\n";
         private const string HOMING_COMMAND_DEC = "FT_ZF_SWITCH DEC\n";
-        private int _homingDialSkipper;
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
@@ -909,10 +908,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 
@@ -995,31 +996,7 @@
 
             return false;
         }
-
-        private bool SkipHomingPresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentBf109RadioMode.HOMING || _currentLowerRadioMode == CurrentBf109RadioMode.HOMING)
-                {
-                    if (_homingDialSkipper > 2)
-                    {
-                        _homingDialSkipper = 0;
-                        return false;
-                    }
-
-                    _homingDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-            }
-
-            return false;
-        }
-
+        
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
         }

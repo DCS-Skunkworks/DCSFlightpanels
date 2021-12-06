@@ -93,7 +93,6 @@
         private volatile uint _homingCockpitDialPos = 1;
         private const string HOMING_COMMAND_INC = "FT_ZF_SWITCH INC\n";
         private const string HOMING_COMMAND_DEC = "FT_ZF_SWITCH DEC\n";
-        private int _homingDialSkipper;
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
@@ -875,10 +874,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 
@@ -961,54 +962,18 @@
 
             return false;
         }
+        
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
 
-        private bool SkipHomingPresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentFw190RadioMode.HOMING || _currentLowerRadioMode == CurrentFw190RadioMode.HOMING)
-                {
-                    if (_homingDialSkipper > 2)
-                    {
-                        _homingDialSkipper = 0;
-                        return false;
-                    }
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
 
-                    _homingDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-            }
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
 
-            return false;
-        }
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description) { }
 
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
-        {
-        }
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink) { }
 
-        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
-        {
-        }
-
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
-        {
-        }
-
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
-        {
-        }
-
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
-        {
-        }
-
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
-        {
-        }
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
 
     }
 }

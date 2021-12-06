@@ -159,13 +159,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void HideLedImages(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition)
-        {
-
-        }
         
-
         public void DeviceAttached(object sender, PanelEventArgs e)
         {
             try
@@ -273,18 +267,6 @@
                 textBox.Bill = new BillPFarmingPanel(this, _farmingSidePanel, textBox);
             }
             _textBoxBillsSet = true;
-        }
-        
-        private FarmingPanelTextBox GetTextBoxInFocus()
-        {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogFarmingPanel) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
-                {
-                    return (FarmingPanelTextBox)textBox;
-                }
-            }
-            return null;
         }
         
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)

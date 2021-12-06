@@ -33,7 +33,6 @@
         private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
         private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
-        private DCSFPProfile _dcsfpProfile;
 
 
         public BackLitPanelUserControl(TabItem parentTabItem, HIDSkeleton hidSkeleton)
@@ -91,10 +90,7 @@
             return GetType().Name;
         }
 
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            _dcsfpProfile = e.Profile;
-        }
+        public void ProfileSelected(object sender, AirframeEventArgs e) { }
 
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }

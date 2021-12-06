@@ -29,7 +29,6 @@
         private string _lastFormulaError = string.Empty;
         private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
         private volatile bool _valueUpdated = true;
-        [NonSerialized] private int _jaceId;
         private DCSBiosOutputType _decoderSourceType = DCSBiosOutputType.IntegerType;
         private bool _treatStringAsNumber;
         private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
@@ -50,7 +49,6 @@
 
         public DCSBIOSDecoder(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
         {
-            _jaceId = RandomFactory.Get();
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();
             BIOSEventHandler.AttachDataListener(this);
@@ -161,7 +159,7 @@
          * 18 Nov 2021
          * Issue with DCSBIOSDecoder not updating a button's text. Adding this helped.
          */
-        [NonSerialized] private int _refreshIntervalLimit = 20;
+        [NonSerialized] private readonly int _refreshIntervalLimit = 20;
         [NonSerialized] private int _refreshInterval = 0;
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -372,7 +370,7 @@
 
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, bitmap);
         }
-
+        /*
         private void ShowBitmapImage(BitmapImage bitmapImage)
         {
             if (StreamDeckPanelInstance == null)
@@ -382,7 +380,7 @@
 
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, bitmapImage);
         }
-
+        */
         [JsonIgnore]
         public new StreamDeckPanel StreamDeckPanelInstance
         {
@@ -716,9 +714,11 @@
             }
 
             LimitDecimalPlaces = limitDecimals;
-            _numberFormatInfoFormula = new NumberFormatInfo();
-            _numberFormatInfoFormula.NumberDecimalSeparator = ".";
-            _numberFormatInfoFormula.NumberDecimalDigits = decimalPlaces;
+            _numberFormatInfoFormula = new NumberFormatInfo
+            {
+                NumberDecimalSeparator = ".",
+                NumberDecimalDigits = decimalPlaces
+            };
         }
 
         [JsonProperty("LimitDecimalPlaces", Required = Required.Default)]

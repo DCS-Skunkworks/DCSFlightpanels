@@ -1704,7 +1704,7 @@
 
                             // Frequency selector 3      RIGHT
                             // X=0 / Y=1
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockPilotTacanTensDialObject)
                             {
                                 lock (_lockPilotTacanOnesObject)
@@ -1713,10 +1713,10 @@
                                 }
                             }
 
-                            frequencyAsString = frequencyAsString + ".";
+                            frequencyAsString += ".";
                             lock (_lockPilotTacanXYDialObject)
                             {
-                                frequencyAsString = frequencyAsString + this._pilotTacanCockpitXYDialPos;
+                                frequencyAsString += this._pilotTacanCockpitXYDialPos;
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -1726,19 +1726,19 @@
 
                     case CurrentF14RadioMode.RIO_TACAN:
                         {
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockRioTacanTensDialObject)
                             {
                                 lock (_lockRioTacanOnesObject)
                                 {
-                                    frequencyAsString = this._rioTacanCockpitTensDialPos + _rioTacanCockpitOnesDialPos.ToString();
+                                    frequencyAsString = _rioTacanCockpitTensDialPos + _rioTacanCockpitOnesDialPos.ToString();
                                 }
                             }
 
-                            frequencyAsString = frequencyAsString + ".";
+                            frequencyAsString += ".";
                             lock (_lockRioTacanXYDialObject)
                             {
-                                frequencyAsString = frequencyAsString + this._rioTacanCockpitXYDialPos;
+                                frequencyAsString += _rioTacanCockpitXYDialPos;
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -1761,7 +1761,7 @@
                             }
                             else
                             {
-                                var frequencyAsString = string.Empty;
+                                string frequencyAsString;
                                 lock (_lockRioLink4HundredsDial)
                                 {
                                     lock (_lockRioLink4TensDial)
@@ -1854,19 +1854,19 @@
 
                     case CurrentF14RadioMode.PLT_TACAN:
                         {
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockPilotTacanTensDialObject)
                             {
                                 lock (_lockPilotTacanOnesObject)
                                 {
-                                    frequencyAsString = this._pilotTacanCockpitTensDialPos + _pilotTacanCockpitOnesDialPos.ToString();
+                                    frequencyAsString = _pilotTacanCockpitTensDialPos + _pilotTacanCockpitOnesDialPos.ToString();
                                 }
                             }
 
-                            frequencyAsString = frequencyAsString + ".";
+                            frequencyAsString += ".";
                             lock (_lockPilotTacanXYDialObject)
                             {
-                                frequencyAsString = frequencyAsString + this._pilotTacanCockpitXYDialPos;
+                                frequencyAsString += _pilotTacanCockpitXYDialPos;
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -1876,7 +1876,7 @@
 
                     case CurrentF14RadioMode.RIO_TACAN:
                         {
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockRioTacanTensDialObject)
                             {
                                 lock (_lockRioTacanOnesObject)
@@ -1885,10 +1885,10 @@
                                 }
                             }
 
-                            frequencyAsString = frequencyAsString + ".";
+                            frequencyAsString += ".";
                             lock (_lockRioTacanXYDialObject)
                             {
-                                frequencyAsString = frequencyAsString + this._rioTacanCockpitXYDialPos;
+                                frequencyAsString += _rioTacanCockpitXYDialPos;
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
@@ -1911,7 +1911,7 @@
                             }
                             else
                             {
-                                var frequencyAsString = string.Empty;
+                                string frequencyAsString;
                                 lock (_lockRioLink4HundredsDial)
                                 {
                                     lock (_lockRioLink4TensDial)
@@ -1948,7 +1948,7 @@
 
         private string GetUHFCockpitFrequencyAsString()
         {
-            var frequencyAsString = string.Empty;
+            string frequencyAsString;
             lock (_lockUhfDialBigFreqObject)
             {
                 lock (_lockUhfDial3FreqObject)
@@ -1956,9 +1956,9 @@
                     lock (_lockUhfDial4FreqObject)
                     {
                         frequencyAsString = _uhfCockpitBigFrequency.ToString(CultureInfo.InvariantCulture).PadRight(3, '0');
-                        frequencyAsString = frequencyAsString + ".";
-                        frequencyAsString = frequencyAsString + _uhfCockpitDial3Frequency.ToString(CultureInfo.InvariantCulture);
-                        frequencyAsString = frequencyAsString + _uhfCockpitDial4Frequency.ToString(CultureInfo.InvariantCulture).PadRight(2, '0');
+                        frequencyAsString += ".";
+                        frequencyAsString += _uhfCockpitDial3Frequency.ToString(CultureInfo.InvariantCulture);
+                        frequencyAsString += _uhfCockpitDial4Frequency.ToString(CultureInfo.InvariantCulture).PadRight(2, '0');
 
                         // 225.000 7 characters
                     }
@@ -1970,7 +1970,7 @@
 
         private string GetVUHFCockpitFrequencyAsString()
         {
-            var frequencyAsString = string.Empty;
+            string frequencyAsString;
             lock (_lockVuhfBigFreqObject)
             {
                 lock (_lockVuhfDial3FreqObject)
@@ -1978,9 +1978,9 @@
                     lock (_lockVuhfDial4FreqObject)
                     {
                         frequencyAsString = _vuhfCockpitBigFrequency.ToString(CultureInfo.InvariantCulture);
-                        frequencyAsString = frequencyAsString + ".";
-                        frequencyAsString = frequencyAsString + _vuhfCockpitDial3Frequency.ToString(CultureInfo.InvariantCulture);
-                        frequencyAsString = frequencyAsString + _vuhfCockpitDial4Frequency.ToString(CultureInfo.InvariantCulture).PadRight(2, '0');
+                        frequencyAsString += ".";
+                        frequencyAsString += _vuhfCockpitDial3Frequency.ToString(CultureInfo.InvariantCulture);
+                        frequencyAsString += _vuhfCockpitDial4Frequency.ToString(CultureInfo.InvariantCulture).PadRight(2, '0');
 
                         // 225.000 7 characters
                     }
@@ -1999,10 +1999,10 @@
 
             foreach (var o in hashSet)
             {
-                var RadioPanelKnobF14 = (RadioPanelKnobF14B)o;
-                if (RadioPanelKnobF14.IsOn)
+                var radioPanelKnobF14 = (RadioPanelKnobF14B)o;
+                if (radioPanelKnobF14.IsOn)
                 {
-                    switch (RadioPanelKnobF14.RadioPanelPZ69Knob)
+                    switch (radioPanelKnobF14.RadioPanelPZ69Knob)
                     {
                         case RadioPanelPZ69KnobsF14B.UPPER_LARGE_FREQ_WHEEL_INC:
                             {
@@ -3292,10 +3292,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 

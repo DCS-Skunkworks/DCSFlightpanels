@@ -11,8 +11,8 @@
                           VerticalScrollBarVisibility="Visible" MouseDown="UIElement_OnMouseDown" MouseDoubleClick="Control_OnMouseDoubleClick" 
                           SelectionChanged="Selector_OnSelectionChanged" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False">
                     <DataGrid.Columns>
-                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding Path=identifier}" Width="*" />
-                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding Path=description}" Width="*" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding Path=Identifier}" Width="*" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding Path=Description}" Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

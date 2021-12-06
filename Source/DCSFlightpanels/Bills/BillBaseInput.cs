@@ -388,8 +388,10 @@
                 return;
             }
 
-            KeyPress = new KeyPress(virtualKeyNull, KeyPressLength.ThirtyTwoMilliSec);
-            KeyPress.Description = "VK_NULL";
+            KeyPress = new KeyPress(virtualKeyNull, KeyPressLength.ThirtyTwoMilliSec)
+            {
+                Description = "VK_NULL"
+            };
             TextBox.Text = virtualKeyNull;
             UpdateKeyBindingKeyStroke();
         }
@@ -426,8 +428,10 @@
                 }
                 else
                 {
-                    KeyPress = new KeyPress(keyPressReadingWindow.VirtualKeyCodesAsString, keyPressReadingWindow.LengthOfKeyPress);
-                    KeyPress.Description = string.Empty;
+                    KeyPress = new KeyPress(keyPressReadingWindow.VirtualKeyCodesAsString, keyPressReadingWindow.LengthOfKeyPress)
+                        {
+                            Description = string.Empty
+                        };
                     TextBox.Text = keyPressReadingWindow.VirtualKeyCodesAsString;
                 }
                 UpdateKeyBindingKeyStroke();
@@ -445,8 +449,10 @@
 
         private void AddKeySequence(string description, SortedList<int, IKeyPressInfo> keySequence)
         {
-            KeyPress = new KeyPress("Key stroke sequence", keySequence);
-            KeyPress.Description = description;
+            KeyPress = new KeyPress("Key stroke sequence", keySequence)
+            {
+                Description = description
+            };
             if (!string.IsNullOrEmpty(description))
             {
                 TextBox.Text = description;
@@ -481,8 +487,10 @@
                 else if (sequenceList.Count == 1)
                 {
                     // If only one press was created treat it as a simple keypress
-                    KeyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                    KeyPress.Description = keySequenceWindow.Description;
+                    KeyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress)
+                        {
+                            Description = keySequenceWindow.Description
+                        };
                     TextBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                     UpdateKeyBindingKeyStroke();
                 }

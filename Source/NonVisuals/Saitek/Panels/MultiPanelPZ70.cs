@@ -317,15 +317,17 @@
             try
             {
                 var random = new Random();
-                var buttonList = new List<MultiPanelPZ70Knobs>();
-                buttonList.Add(MultiPanelPZ70Knobs.AP_BUTTON);
-                buttonList.Add(MultiPanelPZ70Knobs.HDG_BUTTON);
-                buttonList.Add(MultiPanelPZ70Knobs.NAV_BUTTON);
-                buttonList.Add(MultiPanelPZ70Knobs.IAS_BUTTON);
-                buttonList.Add(MultiPanelPZ70Knobs.ALT_BUTTON);
-                buttonList.Add(MultiPanelPZ70Knobs.VS_BUTTON);
-                buttonList.Add(MultiPanelPZ70Knobs.APR_BUTTON);
-                buttonList.Add(MultiPanelPZ70Knobs.REV_BUTTON);
+                var buttonList = new List<MultiPanelPZ70Knobs>
+                {
+                    MultiPanelPZ70Knobs.AP_BUTTON,
+                    MultiPanelPZ70Knobs.HDG_BUTTON,
+                    MultiPanelPZ70Knobs.NAV_BUTTON,
+                    MultiPanelPZ70Knobs.IAS_BUTTON,
+                    MultiPanelPZ70Knobs.ALT_BUTTON,
+                    MultiPanelPZ70Knobs.VS_BUTTON,
+                    MultiPanelPZ70Knobs.APR_BUTTON,
+                    MultiPanelPZ70Knobs.REV_BUTTON
+                };
 
                 for (int i = 0; i < 40; i++)
                 {
@@ -392,11 +394,13 @@
 
             if (!found && !string.IsNullOrEmpty(keyPress))
             {
-                var knobBinding = new KeyBindingPZ70();
-                knobBinding.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
-                knobBinding.DialPosition = _pz70DialPosition;
-                knobBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
-                knobBinding.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
+                var knobBinding = new KeyBindingPZ70
+                {
+                    MultiPanelPZ70Knob = pz70SwitchOnOff.Switch,
+                    DialPosition = _pz70DialPosition,
+                    OSKeyPress = new KeyPress(keyPress, keyPressLength),
+                    WhenTurnedOn = pz70SwitchOnOff.ButtonState
+                };
                 _knobBindings.Add(knobBinding);
             }
 
@@ -436,11 +440,13 @@
 
             if (!found && keySequence.Count > 0)
             {
-                var knobBinding = new KeyBindingPZ70();
-                knobBinding.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
-                knobBinding.DialPosition = _pz70DialPosition;
-                knobBinding.OSKeyPress = new KeyPress(description, keySequence);
-                knobBinding.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
+                var knobBinding = new KeyBindingPZ70
+                {
+                    MultiPanelPZ70Knob = pz70SwitchOnOff.Switch,
+                    DialPosition = _pz70DialPosition,
+                    OSKeyPress = new KeyPress(description, keySequence),
+                    WhenTurnedOn = pz70SwitchOnOff.ButtonState
+                };
                 _knobBindings.Add(knobBinding);
             }
 
@@ -473,12 +479,14 @@
 
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSActionBindingPZ70();
-                dcsBiosBinding.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
-                dcsBiosBinding.DialPosition = _pz70DialPosition;
-                dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                dcsBiosBinding.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
-                dcsBiosBinding.Description = description;
+                var dcsBiosBinding = new DCSBIOSActionBindingPZ70
+                {
+                    MultiPanelPZ70Knob = pz70SwitchOnOff.Switch,
+                    DialPosition = _pz70DialPosition,
+                    DCSBIOSInputs = dcsbiosInputs,
+                    WhenTurnedOn = pz70SwitchOnOff.ButtonState,
+                    Description = description
+                };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
 
@@ -501,10 +509,12 @@
 
             if (!found)
             {
-                var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ70();
-                dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
-                dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
-                dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
+                var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ70
+                {
+                    DialPosition = _pz70DialPosition,
+                    DCSBIOSOutputObject = dcsbiosOutput,
+                    PZ70LCDPosition = pz70LCDPosition
+                };
                 dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
@@ -528,10 +538,12 @@
 
             if (!found)
             {
-                var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ70();
-                dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
-                dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
-                dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
+                var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ70
+                {
+                    DialPosition = _pz70DialPosition,
+                    DCSBIOSOutputFormulaObject = dcsbiosOutputFormula,
+                    PZ70LCDPosition = pz70LCDPosition
+                };
                 dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
@@ -539,19 +551,11 @@
             SetIsDirty();
         }
 
-        public void AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition pz70LCDPosition)
+        public void RemoveDCSBIOSLcdBinding(PZ70LCDPosition pz70LCDPosition)
         {
             // Removes config
-            foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
-            {
-                if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
-                {
-                    dcsBiosBindingLCD.DCSBIOSOutputObject = null;
-                    dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = null;
-                    break;
-                }
-            }
-
+            _dcsBiosLcdBindings.RemoveWhere(o => o.PZ70LCDPosition == pz70LCDPosition && o.DialPosition == _pz70DialPosition);
+            
             SetIsDirty();
         }
 
@@ -609,10 +613,12 @@
 
             if (!found)
             {
-                var operatingSystemCommandBindingPZ70 = new OSCommandBindingPZ70();
-                operatingSystemCommandBindingPZ70.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
-                operatingSystemCommandBindingPZ70.OSCommandObject = operatingSystemCommand;
-                operatingSystemCommandBindingPZ70.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
+                var operatingSystemCommandBindingPZ70 = new OSCommandBindingPZ70
+                {
+                    MultiPanelPZ70Knob = pz70SwitchOnOff.Switch,
+                    OSCommandObject = operatingSystemCommand,
+                    WhenTurnedOn = pz70SwitchOnOff.ButtonState
+                };
                 _operatingSystemCommandBindings.Add(operatingSystemCommandBindingPZ70);
             }
 
@@ -1074,7 +1080,7 @@
             }
             else
             {
-                _altLCDKeyEmulatorValue = _altLCDKeyEmulatorValue + value;
+                _altLCDKeyEmulatorValue += value;
             }
         }
 
@@ -1090,7 +1096,7 @@
             }
             else
             {
-                _vsLCDKeyEmulatorValue = _vsLCDKeyEmulatorValue + value;
+                _vsLCDKeyEmulatorValue += value;
             }
         }
 
@@ -1106,7 +1112,7 @@
             }
             else
             {
-                _iasLCDKeyEmulatorValue = _iasLCDKeyEmulatorValue + value;
+                _iasLCDKeyEmulatorValue += value;
             }
         }
 
@@ -1122,7 +1128,7 @@
             }
             else
             {
-                _hdgLCDKeyEmulatorValue = _hdgLCDKeyEmulatorValue + value;
+                _hdgLCDKeyEmulatorValue += value;
             }
         }
 
@@ -1138,7 +1144,7 @@
             }
             else
             {
-                _crsLCDKeyEmulatorValue = _crsLCDKeyEmulatorValue + value;
+                _crsLCDKeyEmulatorValue += value;
             }
         }
 

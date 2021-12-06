@@ -74,7 +74,6 @@
         {
             ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
             SetTextBoxBills();
-            SetContextMenuClickHandlers();
             UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
@@ -729,54 +728,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private PZ70TextBox GetTextBoxInFocus()
-        {
-            foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
-            {
-                if (!textBox.Equals(TextBoxLogPZ70) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
-                {
-                    return textBox;
-                }
-            }
-            return null;
-        }
-
-
-
-        private void UpdateKeyBindingProfileSimpleKeyStrokes(PZ70TextBox textBox)
-        {
-            try
-            {
-                KeyPressLength keyPressLength;
-                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeyPressSequence.Count == 0)
-                {
-                    keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
-                }
-                else
-                {
-                    keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
-                }
-                _multiPanelPZ70.AddOrUpdateKeyStrokeBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void UpdateOSCommandBindingsPZ70(PZ70TextBox textBox)
-        {
-            try
-            {
-                _multiPanelPZ70.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.Bill.OSCommandObject);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private void UpdateDCSBIOSBindingLCD(bool useFormula,
             bool deleteConfig,
             DCSBIOSOutput dcsbiosOutput,
@@ -792,17 +744,16 @@
                     if (button.Equals(ButtonLcdUpper))
                     {
                         ImageLcdUpperRow.Visibility = Visibility.Hidden;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition.UpperLCD);
+                        _multiPanelPZ70.RemoveDCSBIOSLcdBinding(PZ70LCDPosition.UpperLCD);
                     }
 
                     if (button.Equals(ButtonLcdLower))
                     {
                         ImageLcdLowerRow.Visibility = Visibility.Hidden;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition.LowerLCD);
+                        _multiPanelPZ70.RemoveDCSBIOSLcdBinding(PZ70LCDPosition.LowerLCD);
                     }
                 }
-
-                if (!useFormula)
+                else if (!useFormula)
                 {
                     if (button.Equals(ButtonLcdUpper))
                     {
@@ -816,8 +767,7 @@
                         _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.LowerLCD, limitDecimalPlaces, decimalPlaces);
                     }
                 }
-
-                if (useFormula)
+                else // useFormula
                 {
                     if (button.Equals(ButtonLcdUpper))
                     {
@@ -837,36 +787,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void SetContextMenuClickHandlers()
-        {
-            if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
-            {
-                ButtonLcdUpper.Visibility = Visibility.Hidden;
-                ButtonLcdLower.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                if (ButtonLcdUpper.ContextMenu == null)
-                {
-                    ButtonLcdUpper.ContextMenu = (ContextMenu)Resources["ButtonLcdContextMenu"];
-                    if (ButtonLcdUpper.ContextMenu != null)
-                    {
-                        ButtonLcdUpper.ContextMenu.Tag = ButtonLcdUpper;
-                    }
-                }
-
-                if (ButtonLcdLower.ContextMenu == null)
-                {
-                    ButtonLcdLower.ContextMenu = (ContextMenu)Resources["ButtonLcdContextMenu"];
-                    if (ButtonLcdLower.ContextMenu != null)
-                    {
-                        ButtonLcdLower.ContextMenu.Tag = ButtonLcdLower;
-                    }
-                }
-            }
-        }
-
+        
         private void NotifyKnobChanges(HashSet<object> knobs)
         {
             try
@@ -906,79 +827,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void ButtonLcdMenuItemDeleteBinding_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var menuItem = (MenuItem)sender;
-                var button = (Button)((ContextMenu)(menuItem.Parent)).Tag;
-                if (button.Name.Contains("Upper"))
-                {
-                    DeleteLCDBinding(PZ70LCDPosition.UpperLCD, button);
-                }
-                else
-                {
-                    DeleteLCDBinding(PZ70LCDPosition.LowerLCD, button);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ButtonLcdContextMenu_OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            try
-            {
-                var contextMenu = (ContextMenu)sender;
-                if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
-                {
-                    ((MenuItem)contextMenu.Items[0]).IsEnabled = true;
-                }
-                else
-                {
-                    ((MenuItem)contextMenu.Items[0]).IsEnabled = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void DeleteLCDBinding(PZ70LCDPosition pz70LCDPosition, Button button)
-        {
-            try
-            {
-                //Check if this button contains DCS-BIOS information. If so then prompt the user for deletion
-                if (MessageBox.Show("Do you want to delete the specified DCS-BIOS control binding?", "Delete DCS-BIOS control binding?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                {
-                    return;
-                }
-                UpdateDCSBIOSBindingLCD(false, true, null, null, button, false, 0);
-                switch (button.Name)
-                {
-                    case "ButtonLcdUpper":
-                        {
-                            ImageLcdUpperRow.Visibility = Visibility.Collapsed;
-                            break;
-                        }
-                    case "ButtonLcdLower":
-                        {
-                            ImageLcdLowerRow.Visibility = Visibility.Collapsed;
-                            break;
-                        }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
+        
         private void ComboBoxLcdKnobSensitivity_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -995,13 +844,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
-
-
-
-
-
+        
         public PanelSwitchOnOff GetSwitch(TextBox textBox)
         {
             try

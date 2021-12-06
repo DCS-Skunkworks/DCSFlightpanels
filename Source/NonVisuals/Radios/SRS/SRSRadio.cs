@@ -655,7 +655,7 @@
             
                         { "Command": 4,"RadioId":1}
                         --channel down(if channels have been configured)*/
-            var result = string.Empty;
+            string result;
             if (increase)
             {
                 result = "{\"Command\": 3,\"RadioId\":" + radioId + "}\n";

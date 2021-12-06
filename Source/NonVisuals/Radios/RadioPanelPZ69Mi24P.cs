@@ -39,8 +39,8 @@
         //Small dial 0 - 99
         private readonly ClickSpeedDetector _yadro1ABigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
         private readonly ClickSpeedDetector _yadro1ABigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        private volatile uint _yadro1ABigFrequencyStandby = 100;
-        private volatile uint _yadro1ASmallFrequencyStandby;
+        private uint _yadro1ABigFrequencyStandby = 100;
+        private uint _yadro1ASmallFrequencyStandby;
         private volatile uint _yadro1ASavedCockpitBigFrequency;
         private volatile uint _yadro1ASavedCockpitSmallFrequency;
         private readonly object _lockYadro1ADialsObject1 = new object();
@@ -981,7 +981,7 @@
                                                 }
                                                 if (changeFaster)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby + CHANGE_VALUE;
+                                                    _yadro1ABigFrequencyStandby += CHANGE_VALUE;
                                                 }
                                                 if (_yadro1ABigFrequencyStandby >= 179)
                                                 {
@@ -1058,7 +1058,7 @@
                                                 }
                                                 if (changeFaster)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby - CHANGE_VALUE;
+                                                    _yadro1ABigFrequencyStandby -= CHANGE_VALUE;
                                                 }
                                                 if (_yadro1ABigFrequencyStandby <= 20)
                                                 {
@@ -1182,7 +1182,7 @@
                                                     _yadro1ASmallFrequencyStandby = 99;
                                                     break;
                                                 }
-                                                _yadro1ASmallFrequencyStandby = _yadro1ASmallFrequencyStandby - 1;
+                                                _yadro1ASmallFrequencyStandby--;
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
@@ -1241,7 +1241,7 @@
                                                 }
                                                 if (changeFaster)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby + CHANGE_VALUE;
+                                                    _yadro1ABigFrequencyStandby += CHANGE_VALUE;
                                                 }
                                                 if (_yadro1ABigFrequencyStandby >= 179)
                                                 {
@@ -1318,7 +1318,7 @@
                                                 }
                                                 if (changeFaster)
                                                 {
-                                                    _yadro1ABigFrequencyStandby = _yadro1ABigFrequencyStandby - CHANGE_VALUE;
+                                                    _yadro1ABigFrequencyStandby -= CHANGE_VALUE;
                                                 }
                                                 if (_yadro1ABigFrequencyStandby <= 20)
                                                 {
@@ -1389,7 +1389,7 @@
                                                     _yadro1ASmallFrequencyStandby = 0;
                                                     break;
                                                 }
-                                                _yadro1ASmallFrequencyStandby = _yadro1ASmallFrequencyStandby + 1;
+                                                _yadro1ASmallFrequencyStandby++;
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
@@ -1442,7 +1442,7 @@
                                                     _yadro1ASmallFrequencyStandby = 99;
                                                     break;
                                                 }
-                                                _yadro1ASmallFrequencyStandby = _yadro1ASmallFrequencyStandby - 1;
+                                                _yadro1ASmallFrequencyStandby--;
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
@@ -1872,10 +1872,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 

@@ -28,7 +28,7 @@
         private StreamDeckPanel _streamDeckPanel;
         private volatile bool _isVisible;
 
-        [NonSerialized] private static List<StreamDeckButton> _staticStreamDeckButtons = new List<StreamDeckButton>();
+        [NonSerialized] private static readonly List<StreamDeckButton> _staticStreamDeckButtons = new List<StreamDeckButton>();
 
 
 

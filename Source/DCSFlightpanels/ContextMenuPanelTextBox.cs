@@ -357,9 +357,8 @@
         {
             foreach (var item in itemCollection)
             {
-                if (item is MenuItem)
+                if (item is MenuItem contextMenuItem)
                 {
-                    var contextMenuItem = (MenuItem)item;
                     contextMenuItem.Visibility = Visibility.Collapsed;
                     HideItems(contextMenuItem.Items);
                 }

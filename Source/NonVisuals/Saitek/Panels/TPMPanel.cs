@@ -212,23 +212,7 @@
             get => _bipLinks;
             set => _bipLinks = value;
         }
-
-        private void TPMSwitchChanged(TPMPanelSwitch tpmPanelSwitch)
-        {
-            if (!ForwardPanelEvent)
-            {
-                return;
-            }
-
-            foreach (var keyBinding in _keyBindings)
-            {
-                if (keyBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && keyBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
-                {
-                    keyBinding.OSKeyPress.Execute(new CancellationToken());
-                }
-            }
-        }
-
+        
         private void TPMSwitchChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (!ForwardPanelEvent)
@@ -355,10 +339,12 @@
 
             if (!found && !string.IsNullOrEmpty(keyPress))
             {
-                var keyBinding = new KeyBindingTPM();
-                keyBinding.TPMSwitch = tpmPanelSwitchOnOff.Switch;
-                keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
-                keyBinding.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
+                var keyBinding = new KeyBindingTPM
+                {
+                    TPMSwitch = tpmPanelSwitchOnOff.Switch,
+                    OSKeyPress = new KeyPress(keyPress, keyPressLength),
+                    WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState
+                };
                 _keyBindings.Add(keyBinding);
             }
 
@@ -385,10 +371,12 @@
 
             if (!found)
             {
-                var operatingSystemCommandBindingTPM = new OSCommandBindingTPM();
-                operatingSystemCommandBindingTPM.TPMSwitch = tpmPanelSwitchOnOff.Switch;
-                operatingSystemCommandBindingTPM.OSCommandObject = operatingSystemCommand;
-                operatingSystemCommandBindingTPM.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
+                var operatingSystemCommandBindingTPM = new OSCommandBindingTPM
+                {
+                    TPMSwitch = tpmPanelSwitchOnOff.Switch,
+                    OSCommandObject = operatingSystemCommand,
+                    WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState
+                };
                 _operatingSystemCommandBindings.Add(operatingSystemCommandBindingTPM);
             }
 
@@ -449,10 +437,12 @@
 
             if (!found && keySequence.Count > 0)
             {
-                var keyBinding = new KeyBindingTPM();
-                keyBinding.TPMSwitch = tpmPanelSwitchOnOff.Switch;
-                keyBinding.OSKeyPress = new KeyPress(description, keySequence);
-                keyBinding.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
+                var keyBinding = new KeyBindingTPM
+                {
+                    TPMSwitch = tpmPanelSwitchOnOff.Switch,
+                    OSKeyPress = new KeyPress(description, keySequence),
+                    WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState
+                };
                 _keyBindings.Add(keyBinding);
             }
 
@@ -524,11 +514,13 @@
 
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSActionBindingTPM();
-                dcsBiosBinding.TPMSwitch = tpmPanelSwitchOnOff.Switch;
-                dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                dcsBiosBinding.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
-                dcsBiosBinding.Description = description;
+                var dcsBiosBinding = new DCSBIOSActionBindingTPM
+                {
+                    TPMSwitch = tpmPanelSwitchOnOff.Switch,
+                    DCSBIOSInputs = dcsbiosInputs,
+                    WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState,
+                    Description = description
+                };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
 

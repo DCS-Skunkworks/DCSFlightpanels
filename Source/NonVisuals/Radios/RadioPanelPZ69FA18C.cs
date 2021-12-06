@@ -47,13 +47,7 @@ namespace NonVisuals.Radios
         private const string COMM1_PULL_PRESS = "UFC_COMM1_PULL INC\n";
 
         private const string COMM1_PULL_RELEASE = "UFC_COMM1_PULL DEC\n";
-
-        private double _comm1BigFrequencyStandby = 225;
-
-        private double _comm1SmallFrequencyStandby = 0;
-
-        private double _comm1SavedCockpitBigFrequency;
-
+        
         private readonly object _lockCOMM1DialsObject = new object();
 
         private DCSBIOSOutput _comm1DcsbiosOutputFreq; // comm1 frequency from DCSbios
@@ -63,13 +57,9 @@ namespace NonVisuals.Radios
         private volatile uint _comm1CockpitFreq = 12400;
 
         private volatile uint _comm1CockpitChannel = 1; // channel number 1 to 24
-
-        private long _comm1ThreadNowSynching;
-
+        
         private long _comm1DialWaitingForFeedback;
-
-        private readonly ClickSpeedDetector _comm1ChannelClickSpeedDetector = new ClickSpeedDetector(8);
-
+        
         /*FA-18C COMM2 radio*/
         private const string COMM2_CHANNEL_INC = "UFC_COMM2_CHANNEL_SELECT INC\n";
 
@@ -84,11 +74,7 @@ namespace NonVisuals.Radios
         private const string COMM2_PULL_RELEASE = "UFC_COMM2_PULL DEC\n";
 
         private double _comm2BigFrequencyStandby = 255;
-
-        private double _comm2SmallFrequencyStandby = 0;
-
-        private double _comm2SavedCockpitBigFrequency;
-
+        
         private readonly object _lockComm2DialObject = new object();
 
         private DCSBIOSOutput _comm2DcsbiosOutputFreq; // comm2 frequency from DCSbios
@@ -100,9 +86,7 @@ namespace NonVisuals.Radios
         private volatile uint _comm2CockpitFreq = 12400;
 
         private volatile uint _comm2CockpitChannel = 1; // channel number 1 to 24
-
-        private long _comm2ThreadNowSynching;
-
+        
         private long _comm2DialWaitingForFeedback;
 
         /*FA-18C ILS*/
@@ -345,40 +329,7 @@ namespace NonVisuals.Radios
                     }
             }
         }
-
-        private void SendVhfAmToDCSBIOS()
-        {
-            if (VhfAmNowSyncing())
-            {
-                return;
-            }
-
-            SaveCockpitFrequencyVhfAm();
-            var frequency = _comm1BigFrequencyStandby + _comm1SmallFrequencyStandby;
-            var frequencyAsString = frequency.ToString("0.00", NumberFormatInfoFullDisplay);
-
-            // send frequency to dcsbios here 
-            SwapCockpitStandbyFrequencyVhfAm();
-            ShowFrequenciesOnPanel();
-        }
-
-        private void SendUhfToDCSBIOS()
-        {
-            if (UhfNowSyncing())
-            {
-                return;
-            }
-
-            SaveCockpitFrequencyUhf();
-
-            var frequency = _comm2BigFrequencyStandby + _comm2SmallFrequencyStandby;
-            var frequencyAsString = frequency.ToString("0.00", NumberFormatInfoFullDisplay);
-
-            // send frequency to dcsbios here 
-            SwapCockpitStandbyFrequencyUhf();
-            ShowFrequenciesOnPanel();
-        }
-
+        
         private void SendILSToDCSBIOS()
         {
             if (IlsNowSyncing())
@@ -499,13 +450,12 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.COMM1:
                         {
                             // show comm1 frequencies in upper panel
-                            var frequencyAsString = string.Empty;
 
                             uint integerCOMM1 = _comm1CockpitFreq / 100;
                             uint decimalCOMM1 = _comm1CockpitFreq - (integerCOMM1 * 100);
-                            frequencyAsString = string.Empty + integerCOMM1;
-                            frequencyAsString = frequencyAsString + ".";
-                            frequencyAsString = frequencyAsString + decimalCOMM1;
+                            var frequencyAsString = string.Empty + integerCOMM1;
+                            frequencyAsString += ".";
+                            frequencyAsString += decimalCOMM1;
 
                             if (_upperButtonPressed)
                             {
@@ -515,9 +465,6 @@ namespace NonVisuals.Radios
                             else
                             {
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-
-                                // SetPZ69DisplayBytesDefault(ref bytes, _COMM1BigFrequencyStandby + _COMM1SmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                // SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _comm1CockpitChannel, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
 
@@ -527,12 +474,11 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.COMM2:
                         {
                             // show comm2 frequencies in upper panel
-                            var frequencyAsString = string.Empty;
                             uint integerCOMM2 = _comm2CockpitFreq / 100;
                             uint decimalCOMM2 = _comm2CockpitFreq - (integerCOMM2 * 100);
-                            frequencyAsString = string.Empty + integerCOMM2;
-                            frequencyAsString = frequencyAsString + ".";
-                            frequencyAsString = frequencyAsString + decimalCOMM2;
+                            var frequencyAsString = string.Empty + integerCOMM2;
+                            frequencyAsString += ".";
+                            frequencyAsString += decimalCOMM2;
 
                             if (_upperButtonPressed)
                             {
@@ -542,9 +488,6 @@ namespace NonVisuals.Radios
                             else
                             {
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-
-                                // SetPZ69DisplayBytesDefault(ref bytes, _COMM1BigFrequencyStandby + _COMM1SmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                // SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _comm2CockpitChannel, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
 
@@ -607,13 +550,12 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.COMM1:
                         {
                             // show comm1 frequencies in lower panel
-                            var frequencyAsString = string.Empty;
 
                             uint integerCOMM1 = _comm1CockpitFreq / 100;
                             uint decimalCOMM1 = _comm1CockpitFreq - (integerCOMM1 * 100);
-                            frequencyAsString = string.Empty + integerCOMM1;
-                            frequencyAsString = frequencyAsString + ".";
-                            frequencyAsString = frequencyAsString + decimalCOMM1;
+                            var frequencyAsString = string.Empty + integerCOMM1;
+                            frequencyAsString += ".";
+                            frequencyAsString += decimalCOMM1;
 
                             if (_lowerButtonPressed)
                             {
@@ -623,9 +565,6 @@ namespace NonVisuals.Radios
                             else
                             {
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-
-                                // SetPZ69DisplayBytesDefault(ref bytes, _COMM1BigFrequencyStandby + _COMM1SmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                // SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _comm1CockpitChannel, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
 
@@ -635,12 +574,11 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.COMM2:
                         {
                             // show comm2 frequencies in lower panel
-                            var frequencyAsString = string.Empty;
                             uint integerCOMM2 = _comm2CockpitFreq / 100;
                             uint decimalCOMM2 = _comm2CockpitFreq - (integerCOMM2 * 100);
-                            frequencyAsString = string.Empty + integerCOMM2;
-                            frequencyAsString = frequencyAsString + ".";
-                            frequencyAsString = frequencyAsString + decimalCOMM2;
+                            var frequencyAsString = string.Empty + integerCOMM2;
+                            frequencyAsString += ".";
+                            frequencyAsString += decimalCOMM2;
 
                             if (_lowerButtonPressed)
                             {
@@ -650,9 +588,6 @@ namespace NonVisuals.Radios
                             else
                             {
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-
-                                // SetPZ69DisplayBytesDefault(ref bytes, _COMM1BigFrequencyStandby + _COMM1SmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                // SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _comm2CockpitChannel, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
 
@@ -1032,19 +967,7 @@ namespace NonVisuals.Radios
         private void CheckFrequenciesForValidity()
         {
             // Crude fix if any freqs are outside the valid boundaries
-
-            // COMM1
-            // 116.00 - 151.975
-            if (_comm1BigFrequencyStandby < 116)
-            {
-                _comm1BigFrequencyStandby = 116;
-            }
-
-            if (_comm1BigFrequencyStandby > 151)
-            {
-                _comm1BigFrequencyStandby = 151;
-            }
-
+            
             // VHF FM
             // 30.000 - 76.000Mhz
 
@@ -1367,10 +1290,12 @@ namespace NonVisuals.Radios
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 
@@ -1383,40 +1308,7 @@ namespace NonVisuals.Radios
         {
             SaitekPanelKnobs = RadioPanelKnobFA18C.GetRadioPanelKnobs();
         }
-
-        private void SaveCockpitFrequencyVhfAm()
-        {
-            lock (_lockCOMM1DialsObject)
-            {
-                _comm1SavedCockpitBigFrequency = double.Parse((_comm1CockpitFreq + 3).ToString(), NumberFormatInfoFullDisplay);
-            }
-        }
-
-        private void SwapCockpitStandbyFrequencyVhfAm()
-        {
-            _comm1BigFrequencyStandby = _comm1SavedCockpitBigFrequency;
-        }
-
-        private void SaveCockpitFrequencyUhf()
-        {
-            try
-            {
-                var bigFrequencyAsString = string.Empty;
-
-                _comm2SavedCockpitBigFrequency = double.Parse(bigFrequencyAsString, NumberFormatInfoFullDisplay);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex, "SaveCockpitFrequencyUhf()");
-                throw;
-            }
-        }
-
-        private void SwapCockpitStandbyFrequencyUhf()
-        {
-            _comm2BigFrequencyStandby = _comm2SavedCockpitBigFrequency;
-        }
-
+        
         private void SaveCockpitFrequencyIls()
         {
             lock (_lockIlsDialsObject)
@@ -1429,17 +1321,7 @@ namespace NonVisuals.Radios
         {
             _ilsChannelStandby = _ilsSavedCockpitChannel;
         }
-
-        private bool VhfAmNowSyncing()
-        {
-            return Interlocked.Read(ref _comm1ThreadNowSynching) > 0;
-        }
-
-        private bool UhfNowSyncing()
-        {
-            return Interlocked.Read(ref _comm2ThreadNowSynching) > 0;
-        }
-
+        
         private bool IlsNowSyncing()
         {
             return Interlocked.Read(ref _ilsThreadNowSynching) > 0;

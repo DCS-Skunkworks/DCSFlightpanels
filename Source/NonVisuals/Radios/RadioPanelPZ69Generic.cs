@@ -680,10 +680,12 @@ namespace NonVisuals.Radios
 
             if (!found)
             {
-                var displayValue = new RadioPanelPZ69DisplayValue();
-                displayValue.RadioPanelPZ69Knob = radioPanelPZ69Knob;
-                displayValue.RadioPanelDisplay = radioPanelDisplay;
-                displayValue.Value = valueAsString;
+                var displayValue = new RadioPanelPZ69DisplayValue
+                {
+                    RadioPanelPZ69Knob = radioPanelPZ69Knob,
+                    RadioPanelDisplay = radioPanelDisplay,
+                    Value = valueAsString
+                };
                 _displayValues.Add(displayValue);
             }
 
@@ -721,11 +723,13 @@ namespace NonVisuals.Radios
 
             if (!found && !string.IsNullOrEmpty(keyPress))
             {
-                var keyBinding = new KeyBindingPZ69DialPosition();
-                keyBinding.RadioPanelPZ69Key = radioPanelPZ69KeyOnOff.Switch;
-                keyBinding.DialPosition = pz69DialPosition;
-                keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
-                keyBinding.WhenTurnedOn = radioPanelPZ69KeyOnOff.ButtonState;
+                var keyBinding = new KeyBindingPZ69DialPosition
+                {
+                    RadioPanelPZ69Key = radioPanelPZ69KeyOnOff.Switch,
+                    DialPosition = pz69DialPosition,
+                    OSKeyPress = new KeyPress(keyPress, keyPressLength),
+                    WhenTurnedOn = radioPanelPZ69KeyOnOff.ButtonState
+                };
                 _keyBindings.Add(keyBinding);
             }
 
@@ -752,11 +756,13 @@ namespace NonVisuals.Radios
 
             if (!found)
             {
-                var operatingSystemCommandBindingPZ69Full = new OSCommandBindingPZ69FullEmulator();
-                operatingSystemCommandBindingPZ69Full.DialPosition = pz69DialPosition;
-                operatingSystemCommandBindingPZ69Full.RadioPanelPZ69Key = radioPanelPZ69KeyOnOff.Switch;
-                operatingSystemCommandBindingPZ69Full.OSCommandObject = operatingSystemCommand;
-                operatingSystemCommandBindingPZ69Full.WhenTurnedOn = radioPanelPZ69KeyOnOff.ButtonState;
+                var operatingSystemCommandBindingPZ69Full = new OSCommandBindingPZ69FullEmulator
+                {
+                    DialPosition = pz69DialPosition,
+                    RadioPanelPZ69Key = radioPanelPZ69KeyOnOff.Switch,
+                    OSCommandObject = operatingSystemCommand,
+                    WhenTurnedOn = radioPanelPZ69KeyOnOff.ButtonState
+                };
                 _operatingSystemCommandBindings.Add(operatingSystemCommandBindingPZ69Full);
             }
 
@@ -816,11 +822,13 @@ namespace NonVisuals.Radios
 
             if (!found && keySequence.Count > 0)
             {
-                var keyBinding = new KeyBindingPZ69DialPosition();
-                keyBinding.RadioPanelPZ69Key = radioPanelPZ69KeyOnOff.Switch;
-                keyBinding.DialPosition = pz69DialPosition;
-                keyBinding.OSKeyPress = new KeyPress(description, keySequence);
-                keyBinding.WhenTurnedOn = radioPanelPZ69KeyOnOff.ButtonState;
+                var keyBinding = new KeyBindingPZ69DialPosition
+                {
+                    RadioPanelPZ69Key = radioPanelPZ69KeyOnOff.Switch,
+                    DialPosition = pz69DialPosition,
+                    OSKeyPress = new KeyPress(description, keySequence),
+                    WhenTurnedOn = radioPanelPZ69KeyOnOff.ButtonState
+                };
                 _keyBindings.Add(keyBinding);
             }
 
@@ -891,10 +899,12 @@ namespace NonVisuals.Radios
 
                 if (!found)
                 {
-                    var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ69();
-                    dcsBiosBindingLCD.DialPosition = pz69DialPosition;
-                    dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
-                    dcsBiosBindingLCD.PZ69LcdPosition = pz69LCDPosition;
+                    var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ69
+                    {
+                        DialPosition = pz69DialPosition,
+                        DCSBIOSOutputObject = dcsbiosOutput,
+                        PZ69LcdPosition = pz69LCDPosition
+                    };
                     dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                     _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
                 }
@@ -931,10 +941,12 @@ namespace NonVisuals.Radios
 
                 if (!found)
                 {
-                    var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ69();
-                    dcsBiosBindingLCD.DialPosition = pz69DialPosition;
-                    dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
-                    dcsBiosBindingLCD.PZ69LcdPosition = pz69LCDPosition;
+                    var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ69
+                    {
+                        DialPosition = pz69DialPosition,
+                        DCSBIOSOutputFormulaObject = dcsbiosOutputFormula,
+                        PZ69LcdPosition = pz69LCDPosition
+                    };
                     dcsBiosBindingLCD.SetNumberOfDecimals(limitDecimals, decimalPlaces);
                     _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
                 }
@@ -995,12 +1007,14 @@ namespace NonVisuals.Radios
 
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSActionBindingPZ69();
-                dcsBiosBinding.RadioPanelPZ69Knob = radioPanelPZ69KeyOnOff.Switch;
-                dcsBiosBinding.DialPosition = pz69DialPosition;
-                dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                dcsBiosBinding.WhenTurnedOn = radioPanelPZ69KeyOnOff.ButtonState;
-                dcsBiosBinding.Description = description;
+                var dcsBiosBinding = new DCSBIOSActionBindingPZ69
+                {
+                    RadioPanelPZ69Knob = radioPanelPZ69KeyOnOff.Switch,
+                    DialPosition = pz69DialPosition,
+                    DCSBIOSInputs = dcsbiosInputs,
+                    WhenTurnedOn = radioPanelPZ69KeyOnOff.ButtonState,
+                    Description = description
+                };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
 
@@ -1161,10 +1175,12 @@ namespace NonVisuals.Radios
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 
