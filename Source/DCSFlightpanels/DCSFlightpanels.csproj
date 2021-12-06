@@ -1,26 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <LangVersion>8.0</LangVersion>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6459906E-71BE-4987-B128-B793B50EAD10}</ProjectGuid>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DCSFlightpanels</RootNamespace>
     <AssemblyName>dcsfp</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -35,6 +18,10 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
@@ -43,570 +30,32 @@
     <StartupObject>DCSFlightpanels.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
     <DebugType>none</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <AllowedReferenceRelatedFileExtensions>
-      <!-- Prevent default XML and PDB files copied to output in RELEASE. 
-        Only *.allowedextension files will be included, which doesn't exist in my case.
-    -->
 		.allowedextension
 	</AllowedReferenceRelatedFileExtensions>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HidLibrary, Version=3.2.49.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\hidlibrary.3.3.40\lib\net45\HidLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="Jace, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Jace.1.0.0\lib\netstandard1.6\Jace.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.5.0.0-preview.3\lib\net46\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="Octokit, Version=0.50.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.50.0\lib\net46\Octokit.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="Windows\AboutFPWindow.xaml.cs">
-      <DependentUpon>AboutFPWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Bills\BillBaseInputStreamDeck.cs" />
-    <Compile Include="Bills\BillBaseOutput.cs" />
-    <Compile Include="Bills\BillPFarmingPanel.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="CustomControls\FontInfoTextBox.cs" />
-    <Compile Include="CustomControls\OffsetInfoTextBox.cs" />
-    <Compile Include="CustomControls\FarmingPanelTextBox.cs" />
-    <Compile Include="CustomControls\TextBoxBaseOutput.cs" />
-    <Compile Include="CustomControls\TextBoxBaseStreamDeckInput.cs" />
-    <Compile Include="DCSFPContextMenuVisibility.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Interfaces\IPanelUI.cs" />
-    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIMini.xaml.cs">
-      <DependentUpon>UserControlStreamDeckUIMini.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PanelUserControls\FarmingPanelUserControl.xaml.cs">
-      <DependentUpon>FarmingPanelUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ProfileHandler.cs" />
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMi24P.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlMi24P.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlP47D.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlP47D.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Shared\CommonUI.cs" />
-    <Compile Include="Shared\StreamDeckUICommon.cs" />
-    <Compile Include="CustomControls\PZ69GenericTextBox.cs" />
-    <Compile Include="CustomControls\StreamDeckFaceTextBox.cs" />
-    <Compile Include="CustomControls\StreamDeckImage.cs" />
-    <Compile Include="CustomControls\TextBoxBase.cs" />
-    <Compile Include="CustomControls\TPMTextBox.cs" />
-    <Compile Include="CustomControls\PZ70TextBox.cs" />
-    <Compile Include="CustomControls\PZ69Button.cs" />
-    <Compile Include="CustomControls\PZ69TextBox.cs" />
-    <Compile Include="CustomControls\StreamDeckActionTextBox.cs" />
-    <Compile Include="CustomControls\PZ55TextBox.cs" />
-    <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
-      <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIBase.cs" />
-    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIXL.xaml.cs">
-      <DependentUpon>UserControlStreamDeckUIXL.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUINormal.xaml.cs">
-      <DependentUpon>UserControlStreamDeckUINormal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ContextMenuPanelTextBox.cs" />
-    <Compile Include="Windows\BindingsMappingWindow.xaml.cs">
-      <DependentUpon>BindingsMappingWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ChooseProfileModuleWindow.xaml.cs">
-      <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\DCSBIOSInputControlsWindow.xaml.cs">
-      <DependentUpon>DCSBIOSInputControlsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\BipLightWindow.xaml.cs">
-      <DependentUpon>BipLightWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\DCSBiosInputWindow.xaml.cs">
-      <DependentUpon>DCSBiosInputWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\DCSBiosOutputWindow.xaml.cs">
-      <DependentUpon>DCSBiosOutputWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\DCSBiosOutputFormulaWindow.xaml.cs">
-      <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\InformationTextBlockWindow.xaml.cs">
-      <DependentUpon>InformationTextBlockWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\InformationRichTextWindow.xaml.cs">
-      <DependentUpon>InformationRichTextWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Interfaces\IGamingPanelUserControl.cs" />
-    <Compile Include="Windows\JaceHelpWindow.xaml.cs">
-      <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\KeyPressReadingSmallWindow.xaml.cs">
-      <DependentUpon>KeyPressReadingSmallWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\StreamDeck\ImportWindow.xaml.cs">
-      <DependentUpon>ImportWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\StreamDeck\ExportWindow.xaml.cs">
-      <DependentUpon>ExportWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\StreamDeck\StreamDeckDCSBIOSConverterWindow.xaml.cs">
-      <DependentUpon>StreamDeckDCSBIOSConverterWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\StreamDeck\StreamDeckDCSBIOSDecoderWindow.xaml.cs">
-      <DependentUpon>StreamDeckDCSBIOSDecoderWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\JaceSandboxWindow.xaml.cs">
-      <DependentUpon>JaceSandboxWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PanelUserControls\MultiPanelUserControl.xaml.cs">
-      <DependentUpon>MultiPanelUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\DCSBiosOutputTriggerWindow.xaml.cs">
-      <DependentUpon>DCSBiosOutputTriggerWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\KeyPressReadingBigWindow.xaml.cs">
-      <DependentUpon>KeyPressReadingBigWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\LEDConfigsWindow.xaml.cs">
-      <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlAV8BNA.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlAV8BNA.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF14B.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlF14B.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF5E.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlF5E.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\Emulators\RadioPanelPZ69UserControlGeneric.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlGeneric.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\Emulators\RadioPanelPZ69UserControlEmulator.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlEmulator.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlA10C.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlA10C.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlM2000C.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlM2000C.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlFA18C.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlFA18C.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSA342.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlSA342.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlAJS37.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlAJS37.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlBf109.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlBf109.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF86F.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlF86F.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlFw190.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlFw190.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlKa50.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlKa50.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMi8.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlMi8.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMiG21bis.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlMiG21bis.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlP51D.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlP51D.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSpitfireLFMkIX.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlSpitfireLFMkIX.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlUH1H.xaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>RadioPanelPZ69UserControlUH1H.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\BIPLinkWindow.xaml.cs">
-      <DependentUpon>BIPLinkWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\KeySequenceWindow.xaml.cs">
-      <DependentUpon>KeySequenceWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\StreamDeck\StreamDeckLayerWindow.xaml.cs">
-      <DependentUpon>StreamDeckLayerWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PanelUserControls\StreamDeckUserControl.xaml.cs">
-      <DependentUpon>StreamDeckUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml.cs">
-      <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Bills\BillBaseInput.cs" />
-    <Compile Include="Bills\BillStreamDeckFace.cs" />
-    <Compile Include="Bills\BillPZ69Button.cs" />
-    <Compile Include="Bills\BillPZ69Full.cs" />
-    <Compile Include="Bills\BillStreamDeckAction.cs" />
-    <Compile Include="Bills\BillTPM.cs" />
-    <Compile Include="Bills\BillPZ69.cs" />
-    <Compile Include="Bills\BillPZ70.cs" />
-    <Compile Include="Windows\TextBlockDialogWindow.xaml.cs">
-      <DependentUpon>TextBlockDialogWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Bills\BillPZ55.cs" />
-    <Compile Include="PanelUserControls\TPMPanelUserControl.xaml.cs">
-      <DependentUpon>TPMPanelUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PanelUserControls\UserControlBase.cs" />
-    <Compile Include="Windows\OSCommandWindow.xaml.cs">
-      <DependentUpon>OSCommandWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckButtonAction.xaml.cs">
-      <DependentUpon>UserControlStreamDeckButtonAction.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckButtonFace.xaml.cs">
-      <DependentUpon>UserControlStreamDeckButtonFace.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Windows\AboutFPWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIMini.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="PanelUserControls\FarmingPanelUserControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="PanelUserControls\UCDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PanelUserControls\BackLitPanelUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIXL.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckUINormal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMi24P.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlP47D.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\BindingsMappingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ChooseProfileModuleWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\DCSBIOSInputControlsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\BipLightWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\DCSBiosInputWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\DCSBiosOutputWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\DCSBiosOutputFormulaWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\DCSBiosOutputTriggerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\InformationTextBlockWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\InformationRichTextWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\JaceHelpWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\KeyPressReadingSmallWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\StreamDeck\ImportWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\StreamDeck\ExportWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\StreamDeck\StreamDeckDCSBIOSConverterWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\StreamDeck\StreamDeckDCSBIOSDecoderWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\JaceSandboxWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\KeyPressReadingBigWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\LEDConfigsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="PanelUserControls\MultiPanelUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlAV8BNA.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF14B.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF5E.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Radios\Emulators\RadioPanelPZ69UserControlGeneric.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Radios\Emulators\RadioPanelPZ69UserControlEmulator.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlA10C.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlM2000C.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlFA18C.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSA342.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlAJS37.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlBf109.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF86F.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlFw190.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlKa50.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMi8.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMiG21bis.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlP51D.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSpitfireLFMkIX.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlUH1H.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\BIPLinkWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\KeySequenceWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\SettingsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\StreamDeck\StreamDeckLayerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PanelUserControls\StreamDeckUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\TextBlockDialogWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PanelUserControls\TPMPanelUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\OSCommandWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckButtonAction.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckButtonFace.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="NLog.config">
+    <None Update="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
@@ -678,22 +127,10 @@
     <Resource Include="Images\yellow1.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj">
-      <Project>{66514ca6-6e8e-407c-8cfe-e108a95febc2}</Project>
-      <Name>ClassLibraryCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj">
-      <Project>{6ef4492f-d4b4-42bc-b209-98783098db22}</Project>
-      <Name>DCS-BIOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MEF\MEF.csproj">
-      <Project>{0c0196b3-2442-4838-a587-c51660136f9c}</Project>
-      <Name>MEF</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NonVisuals\NonVisuals.csproj">
-      <Project>{54c2dd8f-259c-41b7-94ed-88f51f698595}</Project>
-      <Name>NonVisuals</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
+    <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
+    <ProjectReference Include="..\MEF\MEF.csproj" />
+    <ProjectReference Include="..\NonVisuals\NonVisuals.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\gear-image.png" />
@@ -835,13 +272,29 @@
     <Resource Include="Images\F-14 RIO Datalink.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\icons8-bug-26.png" />
+    <Resource Include="Images\icons8-bug-52.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dcs_screenshot_by_derbysieger.jpg" />
+  </ItemGroup>
+  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\av8bna_comm1_comm2.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\streamdeck35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\streamdeck48.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Images\default_image_streamdeck_button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\question_mark.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\down_arrow.png" />
@@ -859,357 +312,30 @@
     </Resource>
     <Resource Include="Images\mi8_r863_freq_panel.png" />
     <Resource Include="Images\P47_radio.png" />
+    <SplashScreen Include="Images\dcs_screenshot_by_derbysieger_splash.png" />
     <Resource Include="Images\BIP Saitek2.jpg" />
     <Resource Include="Images\sidepanel.png" />
-    <Content Include="Extensions\readme.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Images\M2000C_new.png" />
     <Resource Include="Images\Mi24P_Yadro.png" />
     <Resource Include="Images\Mi24P_R828.png" />
     <Resource Include="Images\Mi24P_R863.png" />
     <Resource Include="Images\Mi24P_ARC15.png" />
     <Resource Include="Images\Mi24P_SPU8.png" />
-    <Resource Include="Images\SA342_ADF.png" />
-    <Resource Include="Images\SA342_NADIR.png" />
-    <Resource Include="Images\SA342_UHF.png" />
-    <Resource Include="Images\SA342_VHF AM.png" />
-    <Resource Include="Images\SA342_VHF FM.png" />
-    <Resource Include="Images\search_panels3.png" />
-    <SplashScreen Include="Images\apache_dcs2.png" />
-    <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\10_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\10_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\11_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\11_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\11_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\12_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\12_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\12_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\13_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\13_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\13_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\14_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\14_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\14_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\15_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\15_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\15_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\16_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\16_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\16_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\17_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\17_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\17_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\18_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\18_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\18_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\19_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\19_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\19_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\1_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\1_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\1_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\20_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\20_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\20_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\21_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\21_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\21_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\22_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\22_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\22_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\23_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\23_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\23_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\24_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\24_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\24_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\25_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\25_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\25_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\26_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\26_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\26_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\27_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\27_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\27_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\28_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\28_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\28_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\29_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\29_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\29_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\2_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\2_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\2_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\30_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\30_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\30_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\31_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\31_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\31_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\32_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\32_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\32_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\3_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\3_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\3_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\4_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\4_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\4_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\5_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\5_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\5_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\6_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\6_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\6_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\7_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\7_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\7_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\8_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\8_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\8_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\9_blue.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\9_green.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\NumberButtons\9_red.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\Symbols\back_turkose.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\Symbols\back_white.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\Symbols\home_turkose.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\Symbols\home_white.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="StreamDeckGallery\Symbols\minus_sign.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\Symbols\plus_sign.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.256001">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="formulas.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <PackageReference Include="Octokit" Version="0.50.0" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="StreamDeckGallery\CockpitButtons\Radio\an-arc-164_uhf.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\CockpitButtons\Radio\an-arc-186_vhf_am.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\CockpitButtons\Radio\an-arc-186_vhf_fm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\CockpitButtons\Radio\ils.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StreamDeckGallery\CockpitButtons\Radio\tacan.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
+    <Page Remove="AboutWindow.xaml" />
+    <Page Remove="PreferencesWindow.xaml" />
+    <Page Remove="Windows\LinkMappingWindow.xaml" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"
 if exist pre-build-$(ConfigurationName).cmd call  pre-build-$(ConfigurationName).cmd $(ProjectDir)
@@ -1220,11 +346,4 @@ if exist pre-build-$(ConfigurationName).cmd call  pre-build-$(ConfigurationName)
 if exist post-build-$(ConfigurationName).cmd call  post-build-$(ConfigurationName).cmd $(ProjectDir)
 </PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
