@@ -3,7 +3,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <NoWarn>$(NoWarn);SYSLIB0006</NoWarn>
     <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
