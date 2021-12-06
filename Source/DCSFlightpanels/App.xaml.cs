@@ -19,28 +19,28 @@ namespace DCSFlightpanels
 
         private void InitNotificationIcon()
         {
-            System.Windows.Forms.MenuItem notifyIconContextMenuShow = new System.Windows.Forms.MenuItem
+            System.Windows.Forms.ToolStripMenuItem notifyIconContextMenuShow = new System.Windows.Forms.ToolStripMenuItem
             {
-                Index = 0,
+               // Index = 0,
                 Text = "Show"
             };
             notifyIconContextMenuShow.Click += new EventHandler(NotifyIcon_Show);
 
-            System.Windows.Forms.MenuItem notifyIconContextMenuQuit = new System.Windows.Forms.MenuItem
+            System.Windows.Forms.ToolStripMenuItem notifyIconContextMenuQuit = new System.Windows.Forms.ToolStripMenuItem
             {
-                Index = 1,
+              //  Index = 1,
                 Text = "Quit"
             };
             notifyIconContextMenuQuit.Click += new EventHandler(NotifyIcon_Quit);
 
-            System.Windows.Forms.ContextMenu notifyIconContextMenu = new System.Windows.Forms.ContextMenu();
-            notifyIconContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] { notifyIconContextMenuShow, notifyIconContextMenuQuit });
+            System.Windows.Forms.ContextMenuStrip notifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip();
+            notifyIconContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripMenuItem[] { notifyIconContextMenuShow, notifyIconContextMenuQuit });
 
             _notifyIcon = new System.Windows.Forms.NotifyIcon
             {
                 Icon = DCSFlightpanels.Properties.Resources.flightpanels02_8Rc_icon,
                 Visible = true,
-                ContextMenu = notifyIconContextMenu
+                ContextMenuStrip = notifyIconContextMenu
             };
             _notifyIcon.DoubleClick += new EventHandler(NotifyIcon_Show);
 
@@ -121,11 +121,7 @@ namespace DCSFlightpanels
                 string mutexId = "Global\\" + appGuid;
 
                 // Need a place to store a return value in Mutex() constructor call
-                var allowEveryoneRule = new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.FullControl, AccessControlType.Allow);
-                var securitySettings = new MutexSecurity();
-                securitySettings.AddAccessRule(allowEveryoneRule);
-
-                _mutex = new Mutex(false, mutexId, out var createdNew, securitySettings);
+                _mutex = new Mutex(false, mutexId, out var createdNew);
 
                 _hasHandle = false;
                 try
