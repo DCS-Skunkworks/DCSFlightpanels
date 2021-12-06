@@ -1,8 +1,6 @@
 ﻿namespace NonVisuals.Saitek
 {
     using System.Collections.Generic;
-
-    using NonVisuals.Interfaces;
     using NonVisuals.Saitek.Panels;
 
     public static class BipFactory

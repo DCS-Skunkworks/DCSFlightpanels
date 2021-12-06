@@ -1,15 +1,9 @@
-﻿using System.Globalization;
-using Jace.Execution;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
-
-    using System.Globalization;
-
     using NLog;
 
     [Serializable]

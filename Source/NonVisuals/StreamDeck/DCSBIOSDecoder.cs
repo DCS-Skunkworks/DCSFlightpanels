@@ -7,8 +7,6 @@
     using System.IO;
     using System.Text;
     using System.Threading;
-    using System.Windows.Media.Imaging;
-
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;

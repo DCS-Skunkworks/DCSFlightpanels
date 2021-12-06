@@ -9,7 +9,6 @@
     using DCS_BIOS.Interfaces;
 
     using MEF;
-    using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;

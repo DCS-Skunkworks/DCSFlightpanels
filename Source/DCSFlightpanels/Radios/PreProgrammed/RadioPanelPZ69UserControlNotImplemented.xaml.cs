@@ -1,10 +1,6 @@
-﻿
-
-// Resharper Disable all
-namespace DCSFlightpanels.Radios.PreProgrammed
+﻿namespace DCSFlightpanels.Radios.PreProgrammed
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
@@ -18,7 +14,6 @@ namespace DCSFlightpanels.Radios.PreProgrammed
     using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
-    using NonVisuals.Saitek;
 
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlNotImplemented.xaml

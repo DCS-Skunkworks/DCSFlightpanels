@@ -4,7 +4,6 @@
     using System.Collections.Generic;
 
     using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
     using NonVisuals.Saitek.Panels;
 
     public class BipEventHandlerManager

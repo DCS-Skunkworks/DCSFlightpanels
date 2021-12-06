@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DCS_BIOS.Json;
 using Newtonsoft.Json;
 
 namespace DCS_BIOS.Json

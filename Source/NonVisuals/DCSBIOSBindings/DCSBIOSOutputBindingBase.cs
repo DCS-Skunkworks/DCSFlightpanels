@@ -6,11 +6,6 @@ namespace NonVisuals.DCSBIOSBindings
 
     using DCS_BIOS;
 
-    using MEF;
-
-    using NonVisuals.Radios;
-    using NonVisuals.Saitek;
-
     [Serializable]
     public abstract class DCSBIOSOutputBindingBase
     {

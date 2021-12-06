@@ -25,7 +25,6 @@
 
     using Brush = System.Windows.Media.Brush;
     using Brushes = System.Windows.Media.Brushes;
-    using Image = System.Windows.Controls.Image;
 
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
