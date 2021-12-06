@@ -68,18 +68,18 @@
       <HintPath>..\packages\StreamDeckSharp.3.2.0\lib\netstandard2.0\StreamDeckSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Windows" />	
-	<Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="PresentationCore" />
-	<Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System.ComponentModel.Composition" />
-	<Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing" />
     <Reference Include="WindowsBase" />
     <Reference Include="System.Drawing.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Drawing.Common.6.0.0-rc.2.21480.5\lib\net461\System.Drawing.Common.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression" />
-	<Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingBase.cs" />
@@ -145,7 +145,7 @@
     <Compile Include="StreamDeck\BitMapCreator.cs" />
     <Compile Include="StreamDeck\ButtonExport.cs" />
     <Compile Include="StreamDeck\ColorCounter.cs" />
-    <Compile Include="StreamDeck\Events\EventHandlers.cs" />
+    <Compile Include="StreamDeck\Events\SDEventHandlers.cs" />
     <Compile Include="StreamDeck\JSONFixer.cs" />
     <Compile Include="StreamDeck\LockedBitmap.cs" />
     <Compile Include="StreamDeck\StreamDeckCommon.cs" />

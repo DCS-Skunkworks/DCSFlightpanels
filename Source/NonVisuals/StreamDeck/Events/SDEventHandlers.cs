@@ -6,7 +6,7 @@
 
     using NonVisuals.Interfaces;
 
-    public static class EventHandlers
+    public static class SDEventHandlers
     {
 
 

@@ -271,8 +271,7 @@ namespace DCS_BIOS
                 {
                     _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
                 }
-
-                // TODO Denna borde göras så att förutom _address så är mottagarens unika ID med så slipper alla lyssna eller ..? (prestanda)
+                
                 DCSBIOSProtocolParser.RegisterAddressToBroadCast(_address);
             }
             catch (Exception)

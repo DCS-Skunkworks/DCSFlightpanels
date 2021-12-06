@@ -127,7 +127,6 @@ namespace DCS_BIOS
 
                                 if (hex.Length < 4)
                                 {
-                                    //TODO Keep getting garbage from DCS-BIOS, especially A-10C TACAN
                                     return;
                                 }*/
                                 //Little Endian !

@@ -87,7 +87,7 @@
                 /*
                  * Here we must check if event if we can change the button that is selected. If there are unsaved configurations we can't
                  */
-                if (newlySelectedImage.Bill.Button != _streamDeckPanel.SelectedButton && EventHandlers.AreThereDirtyListeners(this))
+                if (newlySelectedImage.Bill.Button != _streamDeckPanel.SelectedButton && SDEventHandlers.AreThereDirtyListeners(this))
                 {
                     if (CommonUI.DoDiscardAfterMessage(true, $"Discard Changes to {SelectedButtonName} ?"))
                     {
@@ -104,9 +104,8 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        // todo shouldn't the layername be used?
-        private void UIShowLayer(string layerName)
+        
+        private void UIShowLayer()
         {
             try
             {
@@ -339,7 +338,7 @@
         {
             try
             {
-                UIShowLayer(StreamDeckPanelInstance.HomeLayer.Name);
+                UIShowLayer();
             }
             catch (Exception ex)
             {
@@ -461,7 +460,7 @@
             {
                 if (_streamDeckPanel.BindingHash == e.BindingHash && _lastShownLayer != e.SelectedLayerName)
                 {
-                    Dispatcher?.BeginInvoke((Action)(() => UIShowLayer(e.SelectedLayerName)));
+                    Dispatcher?.BeginInvoke((Action)(UIShowLayer));
                     _lastShownLayer = e.SelectedLayerName;
                 }
             }

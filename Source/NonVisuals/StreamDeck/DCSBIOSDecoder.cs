@@ -34,7 +34,7 @@
         [NonSerialized] private Thread _imageUpdateTread;
         private bool _shutdown;
 
-        private Bitmap _converterBitmap;
+        private volatile Bitmap _converterBitmap;
 
         private bool _limitDecimalPlaces = false;
         private NumberFormatInfo _numberFormatInfoFormula;
@@ -50,12 +50,12 @@
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();
             BIOSEventHandler.AttachDataListener(this);
-            EventHandlers.AttachDCSBIOSDecoder(this);
+            SDEventHandlers.AttachDCSBIOSDecoder(this);
         }
 
         public override void Dispose()
         {
-            EventHandlers.DetachDCSBIOSDecoder(this);
+            SDEventHandlers.DetachDCSBIOSDecoder(this);
             DCSBIOSStringManager.DetachListener(this);
             BIOSEventHandler.DetachDataListener(this);
             _shutdown = true;
@@ -97,7 +97,7 @@
 
         public static void ShowOnly(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeckPanel)
         {
-            EventHandlers.HideDCSBIOSDecoders(dcsbiosDecoder, streamDeckPanel.SelectedLayerName, streamDeckPanel.BindingHash);
+            SDEventHandlers.HideDCSBIOSDecoders(dcsbiosDecoder, streamDeckPanel.SelectedLayerName, streamDeckPanel.BindingHash);
             dcsbiosDecoder.IsVisible = true;
         }
 
@@ -327,6 +327,16 @@
             }
         }
 
+        private void ShowBitmap(Bitmap bitmap)
+        {
+            if (StreamDeckPanelInstance == null)
+            {
+                throw new Exception("StreamDeckPanelInstance is not set, cannot show image [DCSBIOSDecoder]");
+            }
+
+            StreamDeckPanelInstance.SetImage(StreamDeckButtonName, bitmap);
+        }
+
         public string GetResultString()
         {
             if (_useFormula && _limitDecimalPlaces)
@@ -359,15 +369,6 @@
             StreamDeckPanelInstance.ClearFace(StreamDeckButtonName);
         }
 
-        private void ShowBitmap(Bitmap bitmap)
-        {
-            if (StreamDeckPanelInstance == null)
-            {
-                throw new Exception("StreamDeckPanelInstance is not set, cannot show image [DCSBIOSDecoder]");
-            }
-
-            StreamDeckPanelInstance.SetImage(StreamDeckButtonName, bitmap);
-        }
         /*
         private void ShowBitmapImage(BitmapImage bitmapImage)
         {
@@ -682,13 +683,20 @@
                 base.IsVisible = value;
                 if (IsVisible)
                 {
-                    if (_converterBitmap != null)
+                    if (_dcsbiosConverters.Count > 0)
                     {
-                        ShowBitmap(_converterBitmap);
+                        if (_converterBitmap != null)
+                        {
+                            ShowBitmap(_converterBitmap);
+                        }
+                        else
+                        {
+                            BlackoutKey();
+                        }
                     }
                     else
                     {
-                        BlackoutKey();
+                        Show();
                     }
                 }
             }

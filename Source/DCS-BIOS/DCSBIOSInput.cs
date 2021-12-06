@@ -32,8 +32,7 @@ namespace DCS_BIOS
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         // These are loaded and saved, all the rest are fetched from DCS-BIOS
         private string _controlId;
-
-        // TODO Can a DCSBIOSInput have multiple _dcsbiosInputObjects????
+        
         // The user has entered these two depending on type
         private List<DCSBIOSInputObject> _dcsbiosInputObjects = new List<DCSBIOSInputObject>();
         private DCSBIOSInputObject _selectedDCSBIOSInput;

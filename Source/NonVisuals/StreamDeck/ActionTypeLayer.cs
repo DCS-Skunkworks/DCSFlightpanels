@@ -126,7 +126,7 @@
 
             if (!string.IsNullOrEmpty(RemoteStreamdeckBindingHash) && !string.IsNullOrEmpty(RemoteStreamdeckTargetLayer))
             {
-                EventHandlers.RemoteLayerSwitch(this, RemoteStreamdeckBindingHash, RemoteStreamdeckTargetLayer);
+                SDEventHandlers.RemoteLayerSwitch(this, RemoteStreamdeckBindingHash, RemoteStreamdeckTargetLayer);
             }
         }
 

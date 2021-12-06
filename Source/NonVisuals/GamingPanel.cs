@@ -45,7 +45,7 @@
         public int VendorId { get; set; }
         public int ProductId { get; set; }
         public long ReportCounter = 0;
-        public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); // TODO REMOVE PUBLIC
+        public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); 
 
         public string HIDInstanceId
         {

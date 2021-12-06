@@ -70,11 +70,11 @@
             }
 
 
-            EventHandlers.AttachStreamDeckListener(UCStreamDeckButtonAction);
-            EventHandlers.AttachStreamDeckListener(UCStreamDeckButtonFace);
-            EventHandlers.AttachStreamDeckListener(_uiButtonGrid);
-            EventHandlers.AttachStreamDeckConfigListener(_uiButtonGrid);
-            EventHandlers.AttachStreamDeckListener(this);
+            SDEventHandlers.AttachStreamDeckListener(UCStreamDeckButtonAction);
+            SDEventHandlers.AttachStreamDeckListener(UCStreamDeckButtonFace);
+            SDEventHandlers.AttachStreamDeckListener(_uiButtonGrid);
+            SDEventHandlers.AttachStreamDeckConfigListener(_uiButtonGrid);
+            SDEventHandlers.AttachStreamDeckListener(this);
             AppEventHandler.AttachGamingPanelListener(this);
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
@@ -90,11 +90,11 @@
                 if (disposing)
                 {
                     StackPanelButtonUI.Children.Clear();
-                    EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonAction);
-                    EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonFace);
-                    EventHandlers.DetachStreamDeckListener(_uiButtonGrid);
-                    EventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
-                    EventHandlers.DetachStreamDeckListener(this);
+                    SDEventHandlers.DetachStreamDeckListener(UCStreamDeckButtonAction);
+                    SDEventHandlers.DetachStreamDeckListener(UCStreamDeckButtonFace);
+                    SDEventHandlers.DetachStreamDeckListener(_uiButtonGrid);
+                    SDEventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
+                    SDEventHandlers.DetachStreamDeckListener(this);
                     AppEventHandler.DetachGamingPanelListener(this);
                     _streamDeckPanel.Dispose();
                 }
@@ -218,7 +218,7 @@
             {
                 if (e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId) && e.PanelType == _streamDeckPanel.TypeOfPanel)
                 {
-                    EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
+                    SDEventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 }
             }
             catch (Exception ex)
@@ -391,7 +391,7 @@
                     }
                     UCStreamDeckButtonAction.StateSaved();
                     UCStreamDeckButtonFace.StateSaved();
-                    EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
+                    SDEventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                     SetFormState();
                 }
                 catch (Exception ex)
@@ -430,7 +430,7 @@
 
                 UCStreamDeckButtonAction.Clear();
 
-                EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
+                SDEventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 SetFormState();
             }
             catch (Exception ex)
@@ -443,9 +443,9 @@
         {
             try
             {
-                EventHandlers.ClearSettings(this, true, false, false, _streamDeckPanel.BindingHash);
-                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton, _streamDeckPanel.BindingHash);
-                EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
+                SDEventHandlers.ClearSettings(this, true, false, false, _streamDeckPanel.BindingHash);
+                SDEventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton, _streamDeckPanel.BindingHash);
+                SDEventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 SetFormState();
             }
             catch (Exception ex)
@@ -474,7 +474,7 @@
                 }
                 UCStreamDeckButtonFace.Clear();
                 _streamDeckPanel.ClearFace(streamDeckButtonName);
-                EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
+                SDEventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 SetFormState();
             }
             catch (Exception ex)
@@ -487,9 +487,9 @@
         {
             try
             {
-                EventHandlers.ClearSettings(this, false, true, false, _streamDeckPanel.BindingHash);
-                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton, _streamDeckPanel.BindingHash);
-                EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
+                SDEventHandlers.ClearSettings(this, false, true, false, _streamDeckPanel.BindingHash);
+                SDEventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton, _streamDeckPanel.BindingHash);
+                SDEventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 _streamDeckPanel.SelectedButton.ClearFace();
                 SetFormState();
             }
@@ -610,7 +610,7 @@
             Debug.WriteLine(_streamDeckPanel.GetConfigurationInformation());
             Debug.WriteLine(HIDHandler.GetInformation());
             Debug.WriteLine(_streamDeckPanel.GetLayerHandlerInformation());
-            Debug.WriteLine(EventHandlers.GetInformation());
+            Debug.WriteLine(SDEventHandlers.GetInformation());
         }
 
         private void ButtonImport_OnClick(object sender, RoutedEventArgs e)

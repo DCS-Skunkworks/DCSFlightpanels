@@ -86,17 +86,6 @@
 
         public void DeviceDetached(object sender, PanelEventArgs e) { }
         
-        private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
         private void RadioPanelPZ69UserControlNotImplemented_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
