@@ -40,7 +40,7 @@
             };
             
             AppEventHandler.AttachGamingPanelListener(this);
-            LabelAirframe.Content = ProfileHandler.ActiveDCSFPProfile + " Gazelle";
+            LabelAirframe.Content = ProfileHandler.ActiveDCSFPProfile.Description;
             //LoadConfiguration();
         }
 
