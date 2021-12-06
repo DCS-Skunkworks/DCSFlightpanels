@@ -201,12 +201,7 @@
 
         public static string GetRandomMd5Hash()
         {
-            var bytes = new byte[16];
-            using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
-            {
-                rngCryptoServiceProvider.GetBytes(bytes);
-            }
-
+            var bytes = RandomNumberGenerator.GetBytes(16);
             return BitConverter.ToString(bytes).Replace("-", string.Empty).ToLower();
         }
 
