@@ -3,8 +3,12 @@ using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Text.Json;
     using System.Windows.Forms;
 
     using NonVisuals.StreamDeck;
@@ -30,16 +34,13 @@ namespace NonVisuals
         /// <returns>The copied object.</returns>
         public static T CloneJson<T>(this T source)
         {
-            // Don't serialize a null object, simply return the default for that object
-            if (ReferenceEquals(source, null)) return default;
+            if (!typeof(T).IsSerializable)
+            {
+                throw new ArgumentException($"DeepClone error. The type must be serializable");
+            }
 
-            // initialize inner objects individually
-            // for example in default constructor some list property initialized with some values,
-            // but in 'source' these items are cleaned -
-            // without ObjectCreationHandling.Replace default constructor values will be added to result
-            var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
-
-            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(source), deserializeSettings);
+            string jsonString = JsonSerializer.Serialize(obj);
+            return JsonSerializer.Deserialize<T>(jsonString);
         }
 
         public static bool ValidateDouble(this TextBox textBox, bool ignoreIfEmpty)
