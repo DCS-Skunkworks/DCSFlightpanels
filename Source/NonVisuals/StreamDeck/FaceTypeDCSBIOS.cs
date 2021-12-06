@@ -20,12 +20,9 @@
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
         private uint _uintDcsBiosValue = uint.MaxValue;
         private string _stringDcsBiosValue = "PÖLKASD2!";
-        [NonSerialized]
-        private StreamDeckPanel _streamDeckPanel;
 
-        public FaceTypeDCSBIOS(StreamDeckPanel streamDeckPanel)
+        public FaceTypeDCSBIOS()
         {
-            _streamDeckPanel = streamDeckPanel;
         }
         
         [JsonIgnore]

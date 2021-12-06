@@ -353,10 +353,12 @@
 
             if (!found && !string.IsNullOrEmpty(keyPress))
             {
-                var keyBinding = new KeyBindingFarmingPanel();
-                keyBinding.FarmingPanelKey = farmingPanelSwitchOnOff.Switch;
-                keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
-                keyBinding.WhenTurnedOn = farmingPanelSwitchOnOff.ButtonState;
+                var keyBinding = new KeyBindingFarmingPanel
+                {
+                    FarmingPanelKey = farmingPanelSwitchOnOff.Switch,
+                    OSKeyPress = new KeyPress(keyPress, keyPressLength),
+                    WhenTurnedOn = farmingPanelSwitchOnOff.ButtonState
+                };
                 _keyBindings.Add(keyBinding);
             }
 
@@ -398,8 +400,10 @@
 
             if (!found && keySequence.Count > 0)
             {
-                var keyBinding = new KeyBindingFarmingPanel();
-                keyBinding.FarmingPanelKey = farmingPanelOnOff.Switch;
+                var keyBinding = new KeyBindingFarmingPanel
+                {
+                    FarmingPanelKey = farmingPanelOnOff.Switch
+                };
                 var keyPress = new KeyPress(description, keySequence);
                 keyBinding.OSKeyPress = keyPress;
                 keyBinding.WhenTurnedOn = farmingPanelOnOff.ButtonState;
@@ -429,10 +433,12 @@
 
             if (!found)
             {
-                var operatingSystemCommandBindingFarmingPanel = new OSCommandBindingFarmingPanel();
-                operatingSystemCommandBindingFarmingPanel.FarmingPanelKey = farmingPanelOnOff.Switch;
-                operatingSystemCommandBindingFarmingPanel.OSCommandObject = operatingSystemCommand;
-                operatingSystemCommandBindingFarmingPanel.WhenTurnedOn = farmingPanelOnOff.ButtonState;
+                var operatingSystemCommandBindingFarmingPanel = new OSCommandBindingFarmingPanel
+                {
+                    FarmingPanelKey = farmingPanelOnOff.Switch,
+                    OSCommandObject = operatingSystemCommand,
+                    WhenTurnedOn = farmingPanelOnOff.ButtonState
+                };
                 _operatingSystemCommandBindings.Add(operatingSystemCommandBindingFarmingPanel);
             }
 
@@ -472,11 +478,13 @@
 
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSActionBindingFarmingPanel();
-                dcsBiosBinding.FarmingPanelKey = farmingPanelOnOff.Switch;
-                dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                dcsBiosBinding.WhenTurnedOn = farmingPanelOnOff.ButtonState;
-                dcsBiosBinding.Description = description;
+                var dcsBiosBinding = new DCSBIOSActionBindingFarmingPanel
+                {
+                    FarmingPanelKey = farmingPanelOnOff.Switch,
+                    DCSBIOSInputs = dcsbiosInputs,
+                    WhenTurnedOn = farmingPanelOnOff.ButtonState,
+                    Description = description
+                };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
 

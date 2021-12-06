@@ -31,7 +31,7 @@
         public DCSBIOSConverter(StreamDeckPanel streamDeckPanel)
         {
             _streamDeckPanel = streamDeckPanel;
-            _faceTypeDCSBIOSOverlay = new FaceTypeDCSBIOSOverlay(streamDeckPanel);
+            _faceTypeDCSBIOSOverlay = new FaceTypeDCSBIOSOverlay();
         }
 
 
@@ -122,7 +122,7 @@
                 throw new Exception("Cannot call get when criteria(s) not fulfilled. DCSBIOSValueToFaceConverter()");
             }
 
-            Bitmap result = null;
+            Bitmap result;
 
             switch (_converterOutputType)
             {
@@ -175,9 +175,11 @@
 
             var formula = StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + GetComparatorAsString(_comparator1) + " reference";
             formula = formula.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets);
-            var variables = new Dictionary<string, double>();
-            variables.Add(StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, dcsbiosValue);
-            variables.Add("reference", _referenceValue1);
+            var variables = new Dictionary<string, double>
+            {
+                {StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, dcsbiosValue},
+                {"reference", _referenceValue1}
+            };
             var result1 = jaceExtended.CalculationEngine.Calculate(formula, variables);
             _criteria1IsOk = Math.Abs(result1 - 1.0) < 0.0001;
 
@@ -188,9 +190,11 @@
 
             formula = StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + GetComparatorAsString(_comparator2) + " reference";
             formula = formula.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets);
-            variables = new Dictionary<string, double>();
-            variables.Add(StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, dcsbiosValue);
-            variables.Add("reference", _referenceValue2);
+            variables = new Dictionary<string, double>
+            {
+                {StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, dcsbiosValue},
+                {"reference", _referenceValue2}
+            };
             var result2 = jaceExtended.CalculationEngine.Calculate(formula, variables);
             _criteria2IsOk = Math.Abs(result2 - 1.0) < 0.0001;
 
@@ -279,7 +283,7 @@
 
         private string GetOutputAsString(EnumConverterOutputType converterOutputType)
         {
-            var result = string.Empty;
+            string result;
             switch (converterOutputType)
             {
                 case EnumConverterOutputType.NotSet:

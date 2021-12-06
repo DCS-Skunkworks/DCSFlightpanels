@@ -79,7 +79,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             InitializeComponent();
             _streamDeckPanel = streamDeckPanel;
-            _dcsbiosDecoder = new DCSBIOSDecoder(streamDeckPanel)
+            _dcsbiosDecoder = new DCSBIOSDecoder
             {
                 DecoderSourceType = DCSBiosOutputType.IntegerType,
                 StreamDeckPanelInstance = streamDeckPanel,

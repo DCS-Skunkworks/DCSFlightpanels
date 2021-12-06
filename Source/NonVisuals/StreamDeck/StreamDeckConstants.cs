@@ -121,33 +121,35 @@
 
         public static List<Color> GetColors()
         {
-            var result = new List<Color>();
-            result.Add(ColorTranslator.FromHtml(COLOR_MILITARY_GRAY));
-            result.Add(ColorTranslator.FromHtml(COLOR_DEFAULT_WHITE));
-            result.Add(ColorTranslator.FromHtml(COLOR_DEFAULT_WHITE2));
-            result.Add(ColorTranslator.FromHtml(COLOR_MI8_BLUE));
-            result.Add(ColorTranslator.FromHtml(COLOR_MILITARY_DARK_GREEN));
-            result.Add(ColorTranslator.FromHtml(COLOR_MILITARY_LIGHT_GREEN));
-            result.Add(ColorTranslator.FromHtml(COLOR_MILITARY_SAND));
-            result.Add(ColorTranslator.FromHtml(COLOR_NAVY_DARK_BLUE));
-            result.Add(ColorTranslator.FromHtml(COLOR_ALERT_YELLOW));
-            result.Add(ColorTranslator.FromHtml(COLOR_RAF_BLUE));
-            result.Add(ColorTranslator.FromHtml(COLOR_TEAK_BROWN));
-            result.Add(ColorTranslator.FromHtml(COLOR_WARNING_RED));
-            result.Add(ColorTranslator.FromHtml(COLOR_AIRCRAFT_GRAY));
-            result.Add(ColorTranslator.FromHtml(COLOR_SANDSTONE_CAMO));
-            result.Add(ColorTranslator.FromHtml(COLOR_DRAB_CAMO));
-            result.Add(ColorTranslator.FromHtml(COLOR_SAND_CAMO));
-            result.Add(ColorTranslator.FromHtml(COLOR_CAMO_GRAY));
-            result.Add(ColorTranslator.FromHtml(COLOR_CAMO_EARTH));
-            result.Add(ColorTranslator.FromHtml(COLOR_INSIGNIA_BLUE));
-            result.Add(ColorTranslator.FromHtml(COLOR_BLUE));
-            result.Add(ColorTranslator.FromHtml(COLOR_INSTRUMENT_BLACK));
-            result.Add(ColorTranslator.FromHtml(COLOR_GUNSHIP_GREEN));
-            result.Add(ColorTranslator.FromHtml(COLOR_INTERIOR_GREEN));
-            result.Add(ColorTranslator.FromHtml(COLOR_NAVY_BLUE));
-            result.Add(ColorTranslator.FromHtml(COLOR_SKY));
-            result.Add(ColorTranslator.FromHtml(COLOR_AIRCRAFT_YELLOW));
+            var result = new List<Color>
+            {
+                ColorTranslator.FromHtml(COLOR_MILITARY_GRAY),
+                ColorTranslator.FromHtml(COLOR_DEFAULT_WHITE),
+                ColorTranslator.FromHtml(COLOR_DEFAULT_WHITE2),
+                ColorTranslator.FromHtml(COLOR_MI8_BLUE),
+                ColorTranslator.FromHtml(COLOR_MILITARY_DARK_GREEN),
+                ColorTranslator.FromHtml(COLOR_MILITARY_LIGHT_GREEN),
+                ColorTranslator.FromHtml(COLOR_MILITARY_SAND),
+                ColorTranslator.FromHtml(COLOR_NAVY_DARK_BLUE),
+                ColorTranslator.FromHtml(COLOR_ALERT_YELLOW),
+                ColorTranslator.FromHtml(COLOR_RAF_BLUE),
+                ColorTranslator.FromHtml(COLOR_TEAK_BROWN),
+                ColorTranslator.FromHtml(COLOR_WARNING_RED),
+                ColorTranslator.FromHtml(COLOR_AIRCRAFT_GRAY),
+                ColorTranslator.FromHtml(COLOR_SANDSTONE_CAMO),
+                ColorTranslator.FromHtml(COLOR_DRAB_CAMO),
+                ColorTranslator.FromHtml(COLOR_SAND_CAMO),
+                ColorTranslator.FromHtml(COLOR_CAMO_GRAY),
+                ColorTranslator.FromHtml(COLOR_CAMO_EARTH),
+                ColorTranslator.FromHtml(COLOR_INSIGNIA_BLUE),
+                ColorTranslator.FromHtml(COLOR_BLUE),
+                ColorTranslator.FromHtml(COLOR_INSTRUMENT_BLACK),
+                ColorTranslator.FromHtml(COLOR_GUNSHIP_GREEN),
+                ColorTranslator.FromHtml(COLOR_INTERIOR_GREEN),
+                ColorTranslator.FromHtml(COLOR_NAVY_BLUE),
+                ColorTranslator.FromHtml(COLOR_SKY),
+                ColorTranslator.FromHtml(COLOR_AIRCRAFT_YELLOW)
+            };
             return result;
         }
 

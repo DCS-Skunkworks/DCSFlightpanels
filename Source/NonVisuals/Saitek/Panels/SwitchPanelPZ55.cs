@@ -607,10 +607,12 @@
 
             if (!found && !string.IsNullOrEmpty(keyPress))
             {
-                var keyBinding = new KeyBindingPZ55();
-                keyBinding.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
-                keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
-                keyBinding.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
+                var keyBinding = new KeyBindingPZ55
+                {
+                    SwitchPanelPZ55Key = pz55SwitchOnOff.Switch,
+                    OSKeyPress = new KeyPress(keyPress, keyPressLength),
+                    WhenTurnedOn = pz55SwitchOnOff.ButtonState
+                };
                 _keyBindings.Add(keyBinding);
             }
 
@@ -652,8 +654,10 @@
 
             if (!found && keySequence.Count > 0)
             {
-                var keyBinding = new KeyBindingPZ55();
-                keyBinding.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
+                var keyBinding = new KeyBindingPZ55
+                {
+                    SwitchPanelPZ55Key = pz55SwitchOnOff.Switch
+                };
                 var keyPress = new KeyPress(description, keySequence);
                 keyBinding.OSKeyPress = keyPress;
                 keyBinding.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
@@ -683,10 +687,12 @@
 
             if (!found)
             {
-                var operatingSystemCommandBindingPZ55 = new OSCommandBindingPZ55();
-                operatingSystemCommandBindingPZ55.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
-                operatingSystemCommandBindingPZ55.OSCommandObject = operatingSystemCommand;
-                operatingSystemCommandBindingPZ55.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
+                var operatingSystemCommandBindingPZ55 = new OSCommandBindingPZ55
+                {
+                    SwitchPanelPZ55Key = pz55SwitchOnOff.Switch,
+                    OSCommandObject = operatingSystemCommand,
+                    WhenTurnedOn = pz55SwitchOnOff.ButtonState
+                };
                 _operatingSystemCommandBindings.Add(operatingSystemCommandBindingPZ55);
             }
 
@@ -721,11 +727,13 @@
 
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSActionBindingPZ55();
-                dcsBiosBinding.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
-                dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                dcsBiosBinding.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
-                dcsBiosBinding.Description = description;
+                var dcsBiosBinding = new DCSBIOSActionBindingPZ55
+                {
+                    SwitchPanelPZ55Key = pz55SwitchOnOff.Switch,
+                    DCSBIOSInputs = dcsbiosInputs,
+                    WhenTurnedOn = pz55SwitchOnOff.ButtonState,
+                    Description = description
+                };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
 
@@ -888,10 +896,12 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 

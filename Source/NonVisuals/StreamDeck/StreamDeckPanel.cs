@@ -34,17 +34,13 @@
 
         private readonly object _updateStreamDeckOledLockObject = new object();
         private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
-        private readonly object _lcdLockObject = new object();
-        private readonly object _lcdDataVariablesLockObject = new object();
         private readonly int _buttonCount;
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new List<StreamDeckPanel>();
         private readonly IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
-        private GamingPanelEnum _panelType;
 
         public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
         {
-            _panelType = panelType;
             switch (panelType)
             {
                 case GamingPanelEnum.StreamDeckMini:
@@ -367,15 +363,7 @@
             // and performs the actual actions for key presses
             // ADD METHOD ?
         }
-
-
-        private void StreamDeckButtonChanged(IEnumerable<object> hashSet)
-        {
-            if (!ForwardPanelEvent)
-            {
-            }
-        }
-
+        
         private void DeviceAttachedHandler()
         {
             Startup();

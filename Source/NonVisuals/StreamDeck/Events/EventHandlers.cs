@@ -95,10 +95,12 @@
 
         public static void SenderNotifiesIsDirty(object sender, EnumStreamDeckButtonNames buttonName, string layerName, string bindingHash)
         {
-            var eventArguments = new StreamDeckDirtyNotificationArgs();
-            eventArguments.BindingHash = bindingHash;
-            eventArguments.ButtonName = buttonName;
-            eventArguments.LayerName = layerName;
+            var eventArguments = new StreamDeckDirtyNotificationArgs
+            {
+                BindingHash = bindingHash,
+                ButtonName = buttonName,
+                LayerName = layerName
+            };
 
             OnDirtyNotificationEventHandler?.Invoke(sender, eventArguments);
         }
@@ -149,11 +151,13 @@
 
         public static void ClearSettings(object sender, bool clearAction, bool clearFace, bool clearUI, string bindingHash)
         {
-            var newEvent = new StreamDeckClearSettingsArgs();
-            newEvent.BindingHash = bindingHash;
-            newEvent.ClearActionConfiguration = clearAction;
-            newEvent.ClearFaceConfiguration = clearFace;
-            newEvent.ClearUIConfiguration = clearUI;
+            var newEvent = new StreamDeckClearSettingsArgs
+            {
+                BindingHash = bindingHash,
+                ClearActionConfiguration = clearAction,
+                ClearFaceConfiguration = clearFace,
+                ClearUIConfiguration = clearUI
+            };
 
             OnStreamDeckClearSettingsEventHandler?.Invoke(sender, newEvent);
         }
@@ -211,10 +215,12 @@
 
         public static void HideDCSBIOSDecoders(DCSBIOSDecoder dcsbiosDecoder, string layerName, string bindingHash)
         {
-            var eventArgs = new StreamDeckHideDecoderEventArgs();
-            eventArgs.BindingHash = bindingHash;
-            eventArgs.StreamDeckButtonName = dcsbiosDecoder.StreamDeckButtonName;
-            eventArgs.LayerName = layerName;
+            var eventArgs = new StreamDeckHideDecoderEventArgs
+            {
+                BindingHash = bindingHash,
+                StreamDeckButtonName = dcsbiosDecoder.StreamDeckButtonName,
+                LayerName = layerName
+            };
             OnStreamDeckHideDecodersEventHandler?.Invoke(dcsbiosDecoder, eventArgs);
         }
 

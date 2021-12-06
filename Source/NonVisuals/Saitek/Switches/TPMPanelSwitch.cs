@@ -58,20 +58,20 @@
 
         public static HashSet<ISaitekPanelKnob> GetTPMPanelSwitches()
         {
-            var result = new HashSet<ISaitekPanelKnob>();
-
-            // Group 1
-            result.Add(new TPMPanelSwitch(3, Convert.ToInt32("00001000", 2), false, TPMPanelSwitches.G1));
-            result.Add(new TPMPanelSwitch(3, Convert.ToInt32("00010000", 2), false, TPMPanelSwitches.G2));
-            result.Add(new TPMPanelSwitch(3, Convert.ToInt32("00100000", 2), false, TPMPanelSwitches.G3));
-            result.Add(new TPMPanelSwitch(3, Convert.ToInt32("01000000", 2), false, TPMPanelSwitches.G4));
-            result.Add(new TPMPanelSwitch(3, Convert.ToInt32("10000000", 2), false, TPMPanelSwitches.G5));
-
-            // Group 0
-            result.Add(new TPMPanelSwitch(4, Convert.ToInt32("1", 2), false, TPMPanelSwitches.G6));
-            result.Add(new TPMPanelSwitch(4, Convert.ToInt32("10", 2), false, TPMPanelSwitches.G7));
-            result.Add(new TPMPanelSwitch(4, Convert.ToInt32("100", 2), false, TPMPanelSwitches.G8));
-            result.Add(new TPMPanelSwitch(4, Convert.ToInt32("1000", 2), false, TPMPanelSwitches.G9));
+            var result = new HashSet<ISaitekPanelKnob>
+            {
+                // Group 1
+                new TPMPanelSwitch(3, Convert.ToInt32("00001000", 2), false, TPMPanelSwitches.G1),
+                new TPMPanelSwitch(3, Convert.ToInt32("00010000", 2), false, TPMPanelSwitches.G2),
+                new TPMPanelSwitch(3, Convert.ToInt32("00100000", 2), false, TPMPanelSwitches.G3),
+                new TPMPanelSwitch(3, Convert.ToInt32("01000000", 2), false, TPMPanelSwitches.G4),
+                new TPMPanelSwitch(3, Convert.ToInt32("10000000", 2), false, TPMPanelSwitches.G5),
+                // Group 0
+                new TPMPanelSwitch(4, Convert.ToInt32("1", 2), false, TPMPanelSwitches.G6),
+                new TPMPanelSwitch(4, Convert.ToInt32("10", 2), false, TPMPanelSwitches.G7),
+                new TPMPanelSwitch(4, Convert.ToInt32("100", 2), false, TPMPanelSwitches.G8),
+                new TPMPanelSwitch(4, Convert.ToInt32("1000", 2), false, TPMPanelSwitches.G9)
+            };
 
             return result;
         }

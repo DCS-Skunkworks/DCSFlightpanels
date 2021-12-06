@@ -26,7 +26,6 @@
 
         private readonly StreamDeckPanel _streamDeckPanel;
         private volatile List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
-        private const string HOME_LAYER_ID = "*";
         private volatile List<string> _layerHistory = new List<string>();
         private volatile string _selectedLayerName = string.Empty;
         private readonly IStreamDeckBoard _streamDeckBoard;
@@ -262,8 +261,10 @@
 
             if (!found)
             {
-                var streamDeckLayer = new StreamDeckLayer(_streamDeckPanel);
-                streamDeckLayer.Name = StreamDeckConstants.HOME_LAYER_NAME;
+                var streamDeckLayer = new StreamDeckLayer(_streamDeckPanel)
+                {
+                    Name = StreamDeckConstants.HOME_LAYER_NAME
+                };
                 _layerList.Insert(0, streamDeckLayer);
             }
 

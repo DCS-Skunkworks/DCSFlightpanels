@@ -17,9 +17,8 @@
         private bool _loadBackground;
         private double _dcsbiosValue;
 
-        public FaceTypeDCSBIOSOverlay(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
-        {
-        }
+        public FaceTypeDCSBIOSOverlay()
+        { }
 
         protected override void DrawBitmap()
         {

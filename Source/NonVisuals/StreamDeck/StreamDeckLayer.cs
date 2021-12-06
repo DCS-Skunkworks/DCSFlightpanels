@@ -16,9 +16,6 @@
     {
         private string _name = string.Empty;
         private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
-        private Font _textFont;
-        private Color _fontColor;
-        private Color _backgroundColor;
         private volatile bool _isVisible;
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
@@ -152,8 +149,6 @@
 
                     }
                 }
-
-                _textFont = value;
             }
         }
 
@@ -178,8 +173,6 @@
                         }
                     }
                 }
-
-                _fontColor = value;
             }
         }
 
@@ -203,8 +196,6 @@
                         }
                     }
                 }
-
-                _backgroundColor = value;
             }
         }
 

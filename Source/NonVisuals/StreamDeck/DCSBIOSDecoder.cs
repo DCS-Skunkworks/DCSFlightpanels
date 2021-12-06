@@ -47,7 +47,7 @@
             "0", "0.0", "0.00", "0.000", "0.0000", "0.00000"
         };*/
 
-        public DCSBIOSDecoder(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
+        public DCSBIOSDecoder()
         {
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();

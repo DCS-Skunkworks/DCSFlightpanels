@@ -72,7 +72,6 @@
                 return;
             }
 
-            var color = string.Empty;
             if (settings.Contains("SwitchPanelLedUp"))
             {
                 SaitekLEDPosition = new SaitekPanelLEDPosition(SwitchPanelPZ55LEDPosition.UP);
@@ -92,7 +91,7 @@
             // SwitchPanelLedUp{DARK|DCSBiosOutput{INTEGER_TYPE|Equals|0x0000|0x0000|0|0}}
             settings = settings.Substring(settings.IndexOf("{", StringComparison.InvariantCulture) + 1);
             settings = settings.Substring(0, settings.Length - 1);
-            color = settings.Substring(0, settings.IndexOf('|'));
+            var color = settings.Substring(0, settings.IndexOf('|'));
             settings = settings.Substring(settings.IndexOf('|') + 1);
             DCSBiosOutputLED = new DCSBIOSOutput();
             DCSBiosOutputLED.ImportString(settings);

@@ -4,7 +4,7 @@
 
     public static class RandomFactory
     {
-        private static Random _random = new Random(DateTime.Now.Millisecond);
+        private static readonly Random _random = new Random(DateTime.Now.Millisecond);
 
         public static int Get()
         {

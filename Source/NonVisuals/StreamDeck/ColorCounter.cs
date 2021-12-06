@@ -6,14 +6,16 @@
 
     internal class ColorCounter
     {
-        private List<ColorCount> _colorList = new List<ColorCount>(50);
+        private readonly List<ColorCount> _colorList = new List<ColorCount>(50);
 
         public void RegisterColor(Color color)
         {
             if (_colorList.Count(o => o.Color == color) == 0)
             {
-                var colorCount = new ColorCount();
-                colorCount.Color = color;
+                var colorCount = new ColorCount
+                {
+                    Color = color
+                };
                 _colorList.Add(colorCount);
             }
             else
