@@ -107,10 +107,19 @@
         </GroupBox>
 
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
-
+            <Label Content="VHF AM" FontWeight="Bold"/>
+            <Image Height="110" Source="/dcsfp;component/Images/SA342_VHF AM.png" />
+            <Label Content="VHF FM" FontWeight="Bold"/>
+            <Image Height="110" Source="/dcsfp;component/Images/SA342_VHF FM.png" />
+            <Label Content="UHF" FontWeight="Bold"/>
+            <Image Height="110" Source="/dcsfp;component/Images/SA342_UHF.png" />
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0"  Grid.RowSpan="4">
             <Label Name="LabelAirframe" Content="SA342 Gazelle" FontSize="30" FontWeight="Bold" />
+            <Label Content="ADF" FontWeight="Bold"/>
+            <Image Height="110" Source="/dcsfp;component/Images/SA342_ADF.png" />
+            <Label Content="NADIR" FontWeight="Bold"/>
+            <Image Height="210" Source="/dcsfp;component/Images/SA342_NADIR.png" />
         </StackPanel>
         <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="3" >
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">

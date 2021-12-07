@@ -85,11 +85,11 @@
       <HintPath>..\packages\Octokit.0.50.0\lib\net46\Octokit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />	
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-	<Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -850,12 +850,6 @@
     <Resource Include="Images\av8bna_comm1_comm2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\streamdeck35.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\streamdeck48.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\default_image_streamdeck_button.png" />
   </ItemGroup>
   <ItemGroup>
@@ -889,6 +883,11 @@
     <Resource Include="Images\Mi24P_R863.png" />
     <Resource Include="Images\Mi24P_ARC15.png" />
     <Resource Include="Images\Mi24P_SPU8.png" />
+    <Resource Include="Images\SA342_ADF.png" />
+    <Resource Include="Images\SA342_NADIR.png" />
+    <Resource Include="Images\SA342_UHF.png" />
+    <Resource Include="Images\SA342_VHF AM.png" />
+    <Resource Include="Images\SA342_VHF FM.png" />
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
