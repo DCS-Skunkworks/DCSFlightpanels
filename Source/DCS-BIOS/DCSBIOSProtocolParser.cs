@@ -124,7 +124,6 @@ namespace DCS_BIOS
                     _autoResetEvent?.WaitOne();
                 }
             }
-            catch (ThreadAbortException) { }
             catch (Exception ex)
             {
                 logger.Error(ex, $"DCSBIOSProtocolParser.ProcessArrays(), arrays to process : {_arraysToProcess.Count}");

@@ -128,7 +128,6 @@
                     }
                 }
             }
-            catch (ThreadAbortException) { }
             catch (Exception ex)
             {
                 logger.Error(ex, "SRSListener.ReceiveDataUdp()");

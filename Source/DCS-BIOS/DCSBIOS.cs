@@ -115,6 +115,26 @@ namespace DCS_BIOS
                 Shutdown();
             }
         }
+        
+        public void Shutdown()
+        {
+            try
+            {
+                _isRunning = false;
+                _udpReceiveClient?.Close();
+                _udpReceiveClient?.Close();
+                _dcsProtocolParser?.Shutdown();
+
+                _udpReceiveClient = null;
+                _udpReceiveClient = null;
+                _dcsProtocolParser = null;
+            }
+            catch (Exception ex)
+            {
+                SetLastException(ex);
+                logger.Error(ex, "DCSBIOS.Shutdown()");
+            }
+        }
 
         public void ReceiveDataUdp()
         {
@@ -137,7 +157,6 @@ namespace DCS_BIOS
                 }
 
             }
-            catch (ThreadAbortException) { }
             catch (Exception ex)
             {
                 if (!ex.Message.Contains("WSACancelBlockingCall"))
@@ -176,26 +195,6 @@ namespace DCS_BIOS
                     _udpSendClient.Close();
                     _udpSendClient = null;
                 }
-            }
-        }
-
-        public void Shutdown()
-        {
-            try
-            {
-                _isRunning = false;
-                _udpReceiveClient?.Close();
-                _udpReceiveClient?.Close();
-                _dcsProtocolParser?.Shutdown();
-
-                _udpReceiveClient = null;
-                _udpReceiveClient = null;
-                _dcsProtocolParser = null;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-                logger.Error(ex, "DCSBIOS.Shutdown()");
             }
         }
 
