@@ -73,7 +73,6 @@
         ~KeyPress()
         {
             Abort = true;
-            _executingThread?.Abort();
         }
 
 
@@ -146,18 +145,18 @@
 
                     if (Common.APIMode == APIModeEnum.keybd_event)
                     {
-                        this.KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
+                        KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
 
                         // Common.DebugP("KeyBdEventAPI result code -----------------------------------> " + Marshal.GetLastWin32Error());
                     }
                     else
                     {
-                        this.SendKeys(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
+                        SendKeys(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
 
                         // Common.DebugP("SendKeys result code -----------------------------------> " + Marshal.GetLastWin32Error());
                     }
 
-                    if (this.Abort)
+                    if (Abort)
                     {
                         break;
                     }
@@ -552,7 +551,7 @@
             set
             {
                 _oldSortedKeyPressInfoList = value;
-                if (this._oldSortedKeyPressInfoList != null)
+                if (_oldSortedKeyPressInfoList != null)
                 {
                     for (var i = 0; i < _oldSortedKeyPressInfoList.Count; i++)
                     {

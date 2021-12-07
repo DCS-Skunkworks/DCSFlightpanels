@@ -9,7 +9,7 @@
     using NLog;
 
     [Serializable]
-    public abstract class DCSBIOSActionBindingBase
+    public abstract class DCSBIOSActionBindingBase : IDisposable
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private bool _whenOnTurnedOn = true;
@@ -22,7 +22,29 @@
 
         private bool _isSequenced;
         private int _sequenceIndex;
+        private volatile bool _shutdownCommandsThread;
 
+        private bool _disposed;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _shutdownCommandsThread = true;
+            }
+
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+        }
 
         public bool IsRunning()
         {
@@ -38,43 +60,52 @@
 
         protected Thread DCSBIOSCommandsThread => _sendDCSBIOSCommandsThread;
 
-        protected bool CancelSendDCSBIOSCommands { get; set; }
+        protected bool CancelSendDCSBIOSCommands
+        {
+            get => _shutdownCommandsThread; 
+            set => _shutdownCommandsThread = value;
+        }
 
 
         public void SendDCSBIOSCommands(CancellationToken cancellationToken)
         {
             CancelSendDCSBIOSCommands = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            CancelSendDCSBIOSCommands = false;
             _sendDCSBIOSCommandsThread = new Thread(() => SendDCSBIOSCommandsThread(DCSBIOSInputs, cancellationToken));
             _sendDCSBIOSCommandsThread.Start();
         }
 
         private void SendDCSBIOSCommandsThread(List<DCSBIOSInput> dcsbiosInputs, CancellationToken cancellationToken)
         {
-            CancelSendDCSBIOSCommands = false;
             try
             {
-                if (this._isSequenced)
+                if (_isSequenced)
                 {
                     if (dcsbiosInputs.Count == 0)
                     {
                         return;
                     }
 
-                    if (this._sequenceIndex <= dcsbiosInputs.Count - 1)
+                    if (_sequenceIndex <= dcsbiosInputs.Count - 1)
                     {
-                        var command = dcsbiosInputs[this._sequenceIndex].SelectedDCSBIOSInput.GetDCSBIOSCommand();
-                        Thread.Sleep(dcsbiosInputs[this._sequenceIndex].SelectedDCSBIOSInput.Delay);
-                        if (this.CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
+                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
+                        var command = dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.GetDCSBIOSCommand();
+                        Thread.Sleep(dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.Delay);
+                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
                         {
                             return;
                         }
 
                         DCSBIOS.Send(command);
-                        this._sequenceIndex++;
+                        _sequenceIndex++;
 
-                        if (this._sequenceIndex >= dcsbiosInputs.Count)
+                        if (_sequenceIndex >= dcsbiosInputs.Count)
                         {
-                            this._sequenceIndex = 0;
+                            _sequenceIndex = 0;
                         }
                     }
                 }
@@ -82,14 +113,14 @@
                 {
                     foreach (var dcsbiosInput in dcsbiosInputs)
                     {
-                        if (this.CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
+                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
                         {
                             return;
                         }
 
                         var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
                         Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
-                        if (this.CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
+                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
                         {
                             return;
                         }

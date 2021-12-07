@@ -259,7 +259,7 @@
             {
                 if (disposing)
                 {
-                    _vhfAmSyncThread?.Abort();
+                    _shutdownVHFAMThread = true;
                 }
 
                 _disposed = true;
@@ -531,11 +531,14 @@
             desiredPositionDecimals = frequencyAsString.Length < 7 ? int.Parse(frequencyAsString.Substring(4, 2) + "0") : int.Parse(frequencyAsString.Substring(4, 3));
 
             // #1
-            _vhfAmSyncThread?.Abort();
+            _shutdownVHFAMThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownVHFAMThread = false;
             _vhfAmSyncThread = new Thread(() => VhfAmSynchThreadMethod(desiredPositionDialWholeNumbers, desiredPositionDecimals));
             _vhfAmSyncThread.Start();
         }
 
+        private volatile bool _shutdownVHFAMThread;
         private void VhfAmSynchThreadMethod(int desiredPositionDialWholeNumbers, int desiredPositionDialDecimals)
         {
             try
@@ -643,7 +646,7 @@
 
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
-                    while (IsTooShort(dial1Time) || IsTooShort(dial2Time));
+                    while ((IsTooShort(dial1Time) || IsTooShort(dial2Time)) && !_shutdownVHFAMThread);
 
                     SwapCockpitStandbyFrequencyVhfAm();
                     ShowFrequenciesOnPanel();

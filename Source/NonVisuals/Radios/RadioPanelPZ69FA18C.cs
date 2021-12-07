@@ -125,7 +125,7 @@ namespace NonVisuals.Radios
             {
                 if (disposing)
                 {
-                    _ilsSyncThread?.Abort();
+                    _shutdownILSThread = true;
                 }
 
                 _disposed = true;
@@ -337,11 +337,14 @@ namespace NonVisuals.Radios
 
             SaveCockpitFrequencyIls();
 
-            _ilsSyncThread?.Abort();
+            _shutdownILSThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownILSThread = false;
             _ilsSyncThread = new Thread(() => ILSSynchThreadMethod(_ilsChannelStandby));
             _ilsSyncThread.Start();
         }
 
+        private volatile bool _shutdownILSThread;
         private void ILSSynchThreadMethod(uint standbyPosition)
         {
             try
@@ -401,7 +404,7 @@ namespace NonVisuals.Radios
 
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
-                    while (IsTooShort(dialOkTime));
+                    while (IsTooShort(dialOkTime) && !_shutdownILSThread);
 
                     SwapCockpitStandbyFrequencyIls();
                     ShowFrequenciesOnPanel();

@@ -81,7 +81,7 @@
 
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
-            this.TypeOfPanel = typeOfGamingPanel;
+            TypeOfPanel = typeOfGamingPanel;
             HIDSkeletonBase = hidSkeleton;
             if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {

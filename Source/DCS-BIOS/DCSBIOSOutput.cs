@@ -125,7 +125,7 @@ namespace DCS_BIOS
         private bool CheckForValueMatchAndChange(uint data)
         {
             var tmpData = data;
-            var value = (tmpData & Mask) >> this.ShiftValue;
+            var value = (tmpData & Mask) >> ShiftValue;
             var resultComparison = false;
             switch (DCSBiosOutputComparison)
             {
@@ -189,7 +189,7 @@ namespace DCS_BIOS
         private bool CheckForValueMatch(uint data)
         {
             var tmpData = data;
-            var value = (tmpData & Mask) >> this.ShiftValue;
+            var value = (tmpData & Mask) >> ShiftValue;
             var result = false;
             switch (DCSBiosOutputComparison)
             {
@@ -262,7 +262,7 @@ namespace DCS_BIOS
                 _mask = dcsbiosControl.Outputs[0].Mask;
                 _maxValue = dcsbiosControl.Outputs[0].MaxValue;
                 _maxLength = dcsbiosControl.Outputs[0].MaxLength;
-                this._shiftValue = dcsbiosControl.Outputs[0].ShiftBy;
+                _shiftValue = dcsbiosControl.Outputs[0].ShiftBy;
                 if (dcsbiosControl.Outputs[0].Type.Equals("string"))
                 {
                     _dcsBiosOutputType = DCSBiosOutputType.StringType;
@@ -284,10 +284,10 @@ namespace DCS_BIOS
         {
             if (_dcsBiosOutputType == DCSBiosOutputType.StringType)
             {
-                return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + this._shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
+                return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
             }
 
-            return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + this._shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
+            return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
         }
 
         public override string ToString()

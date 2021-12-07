@@ -262,7 +262,11 @@
             {
                 if (disposing)
                 {
-                    _pilotTacanSyncThread?.Abort();
+                    _shutdownUHFThread = true;
+                    _shutdownPilotTACANThread = true;
+                    _shutdownRIOLink4Thread = true;
+                    _shutdownRIOTACANThread = true;
+                    _shutdownVUHFThread = true;
                 }
 
                 _disposed = true;
@@ -776,11 +780,14 @@
                 desiredDial4Value = int.Parse(frequencyAsString.Substring(5, 2));
             }
 
-            _uhfSyncThread?.Abort();
+            _shutdownUHFThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownUHFThread = false;
             _uhfSyncThread = new Thread(() => UHFSynchThreadMethod(desiredDial1Value, desiredDial2Value, desiredDial3Value, desiredDial4Value));
             _uhfSyncThread.Start();
         }
 
+        private volatile bool _shutdownUHFThread;
         private void UHFSynchThreadMethod(int desiredValueDial1, int desiredValueDial2, int desiredValueDial3, int desiredValueDial4)
         {
             try
@@ -921,7 +928,7 @@
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
 
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownUHFThread);
                     SwapCockpitStandbyFrequencyUhf();
                     ShowFrequenciesOnPanel();
                 }
@@ -974,11 +981,14 @@
                 desiredDial4Value = int.Parse(frequencyAsString.Substring(5, 2));
             }
 
-            _vuhfSyncThread?.Abort();
+            _shutdownVUHFThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownVUHFThread = false;
             _vuhfSyncThread = new Thread(() => VUHFSynchThreadMethod(desiredDial1Value, desiredDial2Value, desiredDial3Value, desiredDial4Value));
             _vuhfSyncThread.Start();
         }
 
+        private volatile bool _shutdownVUHFThread;
         private void VUHFSynchThreadMethod(int desiredValueDial1, int desiredValueDial2, int desiredValueDial3, int desiredValueDial4)
         {
             try
@@ -1119,7 +1129,7 @@
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
 
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownVUHFThread);
                     SwapCockpitStandbyFrequencyVuhf();
                     ShowFrequenciesOnPanel();
                 }
@@ -1149,12 +1159,14 @@
             SaveLink4Frequency();
             var dial2 = int.Parse(_rioLink4TensAndOnesFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0').Substring(0, 1));
             var dial3 = int.Parse(_rioLink4TensAndOnesFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0').Substring(1, 1));
-            _rioLink4SyncThread?.Abort();
+            _shutdownRIOLink4Thread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownRIOLink4Thread = false;
             _rioLink4SyncThread = new Thread(() => RioDatalink4SynchThreadMethod(_rioLink4HundredsFrequencyStandby, dial2, dial3));
             _rioLink4SyncThread.Start();
         }
 
-
+        private volatile bool _shutdownRIOLink4Thread;
         private void RioDatalink4SynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
         {
             try
@@ -1270,7 +1282,7 @@
 
 
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime)) && !_shutdownRIOLink4Thread);
                     SwapCockpitStandbyFrequencyDataLink4();
                     ShowFrequenciesOnPanel();
                 }
@@ -1314,11 +1326,14 @@
             // #1 = 12  (position = value)
             // #2 = 0   (position = value)
             // #3 = 1   (position = value)
-            _pilotTacanSyncThread?.Abort();
+            _shutdownPilotTACANThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownPilotTACANThread = false;
             _pilotTacanSyncThread = new Thread(() => PilotTacanSynchThreadMethod(_pilotTacanTensFrequencyStandby, _pilotTacanOnesFrequencyStandby, _pilotTacanXYStandby));
             _pilotTacanSyncThread.Start();
         }
 
+        private volatile bool _shutdownPilotTACANThread;
         private void PilotTacanSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
         {
             try
@@ -1439,7 +1454,7 @@
 
 
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime)) && !_shutdownPilotTACANThread);
                     SwapPilotCockpitStandbyFrequencyTacan();
                     ShowFrequenciesOnPanel();
                 }
@@ -1467,11 +1482,14 @@
             }
 
             SaveRioCockpitFrequencyTacan();
-            _rioTacanSyncThread?.Abort();
+            _shutdownRIOTACANThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownRIOTACANThread = false;
             _rioTacanSyncThread = new Thread(() => RioTacanSynchThreadMethod(_rioTacanTensFrequencyStandby, _rioTacanOnesFrequencyStandby, _rioTacanXYStandby));
             _rioTacanSyncThread.Start();
         }
 
+        private volatile bool _shutdownRIOTACANThread;
         private void RioTacanSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
         {
             try
@@ -1592,7 +1610,7 @@
 
 
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime)) && !_shutdownRIOTACANThread);
                     SwapRioCockpitStandbyFrequencyTacan();
                     ShowFrequenciesOnPanel();
                 }
@@ -1654,7 +1672,7 @@
                                 {
                                     var frequencyAsString = GetUHFCockpitFrequencyAsString();
                                     SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, this._uhfBigFrequencyStandby + (((double)_uhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + (((double)_uhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
 
@@ -1684,7 +1702,7 @@
                                 {
                                     var frequencyAsString = GetVUHFCockpitFrequencyAsString();
                                     SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, this._vuhfBigFrequencyStandby + (((double)_vuhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _vuhfBigFrequencyStandby + (((double)_vuhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
 
@@ -1707,18 +1725,18 @@
                             {
                                 lock (_lockPilotTacanOnesObject)
                                 {
-                                    frequencyAsString = this._pilotTacanCockpitTensDialPos + _pilotTacanCockpitOnesDialPos.ToString();
+                                    frequencyAsString = _pilotTacanCockpitTensDialPos + _pilotTacanCockpitOnesDialPos.ToString();
                                 }
                             }
 
                             frequencyAsString += ".";
                             lock (_lockPilotTacanXYDialObject)
                             {
-                                frequencyAsString += this._pilotTacanCockpitXYDialPos;
+                                frequencyAsString += _pilotTacanCockpitXYDialPos;
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(this._pilotTacanTensFrequencyStandby + _pilotTacanOnesFrequencyStandby.ToString() + "." + this._pilotTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_pilotTacanTensFrequencyStandby + _pilotTacanOnesFrequencyStandby.ToString() + "." + _pilotTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
 
@@ -1740,7 +1758,7 @@
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(this._rioTacanTensFrequencyStandby + _rioTacanOnesFrequencyStandby.ToString() + "." + this._rioTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_rioTacanTensFrequencyStandby + _rioTacanOnesFrequencyStandby.ToString() + "." + _rioTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
 
@@ -1813,7 +1831,7 @@
                                 {
                                     var frequencyAsString = GetUHFCockpitFrequencyAsString();
                                     SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, this._uhfBigFrequencyStandby + (((double)_uhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + (((double)_uhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
 
@@ -1843,7 +1861,7 @@
                                 {
                                     var frequencyAsString = GetVUHFCockpitFrequencyAsString();
                                     SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, this._vuhfBigFrequencyStandby + (((double)_vuhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _vuhfBigFrequencyStandby + (((double)_vuhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
 
@@ -1868,7 +1886,7 @@
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(this._pilotTacanTensFrequencyStandby + _pilotTacanOnesFrequencyStandby.ToString() + "." + this._pilotTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_pilotTacanTensFrequencyStandby + _pilotTacanOnesFrequencyStandby.ToString() + "." + _pilotTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
 
@@ -1879,7 +1897,7 @@
                             {
                                 lock (_lockRioTacanOnesObject)
                                 {
-                                    frequencyAsString = this._rioTacanCockpitTensDialPos + _rioTacanCockpitOnesDialPos.ToString();
+                                    frequencyAsString = _rioTacanCockpitTensDialPos + _rioTacanCockpitOnesDialPos.ToString();
                                 }
                             }
 
@@ -1890,7 +1908,7 @@
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(this._rioTacanTensFrequencyStandby + _rioTacanOnesFrequencyStandby.ToString() + "." + this._rioTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_rioTacanTensFrequencyStandby + _rioTacanOnesFrequencyStandby.ToString() + "." + _rioTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
 

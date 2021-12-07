@@ -129,7 +129,7 @@
                     PluginManager.DoEvent(
                         ProfileHandler.SelectedProfile().Description, 
                         StreamDeckPanelInstance.HIDInstanceId, 
-                        (int)StreamDeckCommon.ConvertEnum(this._streamDeckPanel.TypeOfPanel),
+                        (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
                         (int)StreamDeckButtonName, 
                         true, 
                         null);
@@ -209,7 +209,7 @@
                 {
                     var pluginPanel = PluginGamingPanelEnum.Unknown;
 
-                    switch (this._streamDeckPanel.TypeOfPanel)
+                    switch (_streamDeckPanel.TypeOfPanel)
                     {
                         case GamingPanelEnum.StreamDeckMini:
                             {
@@ -270,7 +270,7 @@
 
         public void Consume(StreamDeckButton newStreamDeckButton)
         {
-            if (!this.Equals(newStreamDeckButton))
+            if (!Equals(newStreamDeckButton))
             {
                 ClearConfiguration();
             }

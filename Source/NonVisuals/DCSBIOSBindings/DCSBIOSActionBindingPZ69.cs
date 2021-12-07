@@ -19,11 +19,24 @@
          */
         private PZ69DialPosition _pz69DialPosition;
         private RadioPanelPZ69KnobsEmulator _panelPZ69Knob;
-        
-        ~DCSBIOSActionBindingPZ69()
+
+
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            CancelSendDCSBIOSCommands = true;
-            DCSBIOSCommandsThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
 
         internal override void ImportSettings(string settings)

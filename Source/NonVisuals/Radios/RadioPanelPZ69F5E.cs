@@ -128,8 +128,8 @@
             {
                 if (disposing)
                 {
-                    _uhfSyncThread?.Abort();
-                    _tacanSyncThread?.Abort();
+                    _shutdownUHFThread = true;
+                    _shutdownTACANThread = true;
                 }
 
                 _disposed = true;
@@ -495,12 +495,14 @@
                     }
             }
 
-            _uhfSyncThread?.Abort();
-
+            _shutdownUHFThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownUHFThread = false;
             _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(freqDial1, freqDial2, freqDial3, freqDial4, freqDial5));
             _uhfSyncThread.Start();
         }
 
+        private volatile bool _shutdownUHFThread;
         private void UhfSynchThreadMethod(int desiredPosition1, int desiredPosition2, int desiredPosition3, int desiredPosition4, int desiredPosition5)
         {
             try
@@ -725,7 +727,7 @@
 
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime) || IsTooShort(dial5OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime) || IsTooShort(dial5OkTime)) && !_shutdownUHFThread);
                     SwapCockpitStandbyFrequencyUhf();
                     ShowFrequenciesOnPanel();
                 }
@@ -767,11 +769,14 @@
             // #1 = 12  (position = value)
             // #2 = 0   (position = value)
             // #3 = 1   (position = value)
-            _tacanSyncThread?.Abort();
+            _shutdownTACANThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownTACANThread = false;
             _tacanSyncThread = new Thread(() => TacanSynchThreadMethod(_tacanBigFrequencyStandby, _tacanSmallFrequencyStandby, _tacanXYStandby));
             _tacanSyncThread.Start();
         }
 
+        private volatile bool _shutdownTACANThread;
         private void TacanSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
         {
             try
@@ -892,7 +897,7 @@
 
 
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime)) && !_shutdownTACANThread);
                     SwapCockpitStandbyFrequencyTacan();
                     ShowFrequenciesOnPanel();
                 }

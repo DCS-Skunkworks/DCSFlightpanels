@@ -201,7 +201,7 @@
 
                 CheckForNewDCSFPRelease();
 
-                if (Settings.Default.LoadStreamDeck == true && Process.GetProcessesByName("StreamDeck").Length >= 1 && this._hidHandler.HIDSkeletons.Any(o => o.GamingPanelSkeleton.VendorId == (int)GamingPanelVendorEnum.Elgato))
+                if (Settings.Default.LoadStreamDeck == true && Process.GetProcessesByName("StreamDeck").Length >= 1 && _hidHandler.HIDSkeletons.Any(o => o.GamingPanelSkeleton.VendorId == (int)GamingPanelVendorEnum.Elgato))
                 {
                     MessageBox.Show("StreamDeck's official software is running in the background.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
@@ -1655,7 +1655,7 @@
             {
                 lock (_lockObjectStatusMessages)
                 {
-                    _statusMessagesTimer.Interval = this._statusMessages.Count > 0 ? 8000 : 1000;
+                    _statusMessagesTimer.Interval = _statusMessages.Count > 0 ? 8000 : 1000;
 
                     Dispatcher?.BeginInvoke((Action)(() => LabelInformation.Text = string.Empty));
 
@@ -1996,12 +1996,12 @@
 
         private void ButtonDisablePanelEventsFromBeingRouted_OnMouseEnter(object sender, MouseEventArgs e)
         {
-            this.Cursor = Cursors.Hand;
+            Cursor = Cursors.Hand;
         }
 
         private void ButtonDisablePanelEventsFromBeingRouted_OnMouseLeave(object sender, MouseEventArgs e)
         {
-            this.Cursor = Cursors.Arrow;
+            Cursor = Cursors.Arrow;
         }
 
 

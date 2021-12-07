@@ -14,7 +14,6 @@ namespace DCS_BIOS
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
-    using DCS_BIOS.Interfaces;
 
     [Flags]
     public enum DcsBiosNotificationMode
@@ -54,7 +53,7 @@ namespace DCS_BIOS
         private DCSBIOSProtocolParser _dcsProtocolParser;
         private readonly DcsBiosNotificationMode _dcsBiosNotificationMode;
         private readonly object _lockObjectForSendingData = new object();
-        private bool _isRunning;
+        private volatile bool _isRunning;
 
         public DCSBIOS(string ipFromUdp, string ipToUdp, int portFromUdp, int portToUdp, DcsBiosNotificationMode dcsNoficationMode)
         {
@@ -80,14 +79,15 @@ namespace DCS_BIOS
             }
 
             _dcsBiosNotificationMode = dcsNoficationMode;
-            
+
             _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
-            
+
             _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePort);
             _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIp), SendPort);
 
             _udpReceiveClient = new UdpClient();
             _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 200);
             _udpReceiveClient.Client.Bind(_ipEndPointReceiverUdp);
             _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(ReceiveFromIp));
 
@@ -98,7 +98,7 @@ namespace DCS_BIOS
             //_tcpIpPort = tcpIpPort;
             _dcsBIOSInstance = this;
         }
-        
+
         public void Dispose()
         {
             Dispose(true);
@@ -122,13 +122,20 @@ namespace DCS_BIOS
             {
                 while (_isRunning)
                 {
-                    var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
-                    if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.AddressValue) == DcsBiosNotificationMode.AddressValue)
+                    try
                     {
-                        _dcsProtocolParser.AddArray(byteData);
+                        var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
+                        if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.AddressValue) == DcsBiosNotificationMode.AddressValue)
+                        {
+                            _dcsProtocolParser.AddArray(byteData);
+                        }
+                    }
+                    catch (SocketException)
+                    {
+                        continue;
                     }
                 }
-                
+
             }
             catch (ThreadAbortException) { }
             catch (Exception ex)
@@ -150,6 +157,7 @@ namespace DCS_BIOS
                     return;
                 }
                 _dcsbiosListeningThread = new Thread(ReceiveDataUdp);
+
                 _isRunning = true;
                 _dcsProtocolParser.Startup();
                 _dcsbiosListeningThread.Start();
@@ -163,18 +171,19 @@ namespace DCS_BIOS
                     _udpReceiveClient.Close();
                     _udpReceiveClient = null;
                 }
-                if (_udpSendClient != null && _udpSendClient.Client  != null && _udpSendClient.Client.Connected)
+                if (_udpSendClient != null && _udpSendClient.Client != null && _udpSendClient.Client.Connected)
                 {
                     _udpSendClient.Close();
                     _udpSendClient = null;
                 }
             }
         }
-     
+
         public void Shutdown()
         {
             try
             {
+                _isRunning = false;
                 _udpReceiveClient?.Close();
                 _udpReceiveClient?.Close();
                 _dcsProtocolParser?.Shutdown();
@@ -182,7 +191,6 @@ namespace DCS_BIOS
                 _udpReceiveClient = null;
                 _udpReceiveClient = null;
                 _dcsProtocolParser = null;
-                _isRunning = false;
             }
             catch (Exception ex)
             {
@@ -200,7 +208,7 @@ namespace DCS_BIOS
         {
             return _dcsBIOSInstance;
         }
-        
+
         public static int Send(string stringData)
         {
             return _dcsBIOSInstance.SendDataFunction(stringData);

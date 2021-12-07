@@ -335,6 +335,7 @@
             }
         }
 
+        private volatile bool _shutdownThread;
         private void SetLandingGearLedsManually(PanelLEDColor panelLEDColor)
         {
             try
@@ -362,7 +363,7 @@
                 SetLandingGearLED(SwitchPanelPZ55LEDPosition.RIGHT, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
                 SetLandingGearLED(SwitchPanelPZ55LEDPosition.LEFT, GetManualGearsColorForStatus(ManualGearsStatus.Trans));
 
-                while (true)
+                while (!_shutdownThread)
                 {
                     var millisecsNow = DateTime.Now.Ticks / 10000;
                     Debug.Print("millisecsNow - millisecsStart > delayUp " + (millisecsNow - millisecsStart) + " " + delayUp);
@@ -391,6 +392,10 @@
                         break;
                     }
 
+                    if (_shutdownThread)
+                    {
+                        break;
+                    }
                     Thread.Sleep(10);
                 }
             }
@@ -422,15 +427,12 @@
                 {
                     if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP && switchPanelKey.IsOn)
                     {
-                        _manualLandingGearThread?.Abort();
-
                         // Changed Lights to go DARK when gear level is selected to UP, instead of RED.
                         _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(GetManualGearsColorForStatus(ManualGearsStatus.Up)));
                         _manualLandingGearThread.Start();
                     }
                     else if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN && switchPanelKey.IsOn)
                     {
-                        _manualLandingGearThread?.Abort();
                         _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(GetManualGearsColorForStatus(ManualGearsStatus.Down)));
                         _manualLandingGearThread.Start();
                     }

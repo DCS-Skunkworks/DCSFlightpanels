@@ -13,25 +13,25 @@
         public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string instanceId)
         {
             _gamingPanelSkeleton = gamingPanelSkeleton;
-            this.InstanceId = instanceId;
+            InstanceId = instanceId;
         }
 
         public void Close()
         {
             try
             {
-                if (this.HIDReadDevice.IsOpen)
+                if (HIDReadDevice.IsOpen)
                 {
-                    this.HIDReadDevice.CloseDevice();
+                    HIDReadDevice.CloseDevice();
                 }
 
-                if (this.HIDWriteDevice.IsOpen)
+                if (HIDWriteDevice.IsOpen)
                 {
-                    this.HIDWriteDevice.CloseDevice();
+                    HIDWriteDevice.CloseDevice();
                 }
 
-                this.HIDReadDevice.Dispose();
-                this.HIDWriteDevice.Dispose();
+                HIDReadDevice.Dispose();
+                HIDWriteDevice.Dispose();
             }
             catch (Exception ex)
             {

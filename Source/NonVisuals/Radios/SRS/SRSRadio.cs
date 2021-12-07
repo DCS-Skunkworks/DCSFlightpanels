@@ -76,7 +76,7 @@
         private readonly int _srsReceivePortUdp;
         private readonly int _srsSendPortUdp;
         private SRSPlayerRadioInfo _srsPlayerRadioInfo;
-        private bool _shutdown;
+        private volatile bool _shutdownThread;
         private bool _started;
         private readonly object _sendSRSDataLockObject = new object();
         private readonly object _readSRSDataLockObject = new object();
@@ -96,9 +96,10 @@
             try
             {
                 IsRunning = true;
-                while (!_shutdown)
+                while (!_shutdownThread)
                 {
                     var ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
+                    
                     var byteData = _udpReceiveClient.Receive(ref ipEndPointReceiverUdp);
                     try
                     {
@@ -116,6 +117,10 @@
 
                             OnSRSDataReceived?.Invoke(this);
                         }
+                    }
+                    catch (SocketException)
+                    {
+                        continue;
                     }
                     catch (Exception ex)
                     {
@@ -163,7 +168,7 @@
                     return;
                 }
 
-                _shutdown = false;
+                _shutdownThread = true;
 
                 var ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
                 var ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIPUdp), _srsSendPortUdp);
@@ -171,10 +176,10 @@
                 _udpReceiveClient?.Close();
                 _udpReceiveClient = new UdpClient();
                 _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 200);
                 _udpReceiveClient.ExclusiveAddressUse = false;
                 _udpReceiveClient.Client.Bind(ipEndPointReceiverUdp);
-
-                // _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(_srsReceiveFromIPUdp));
+                
                 lock (_sendSRSDataLockObject)
                 {
                     _udpSendClient?.Close();
@@ -183,7 +188,8 @@
                     _udpSendClient.EnableBroadcast = true;
                 }
 
-                _srsListeningThread?.Abort();
+                Thread.Sleep(Constants.ThreadShutDownWaitTime);
+                _shutdownThread = false;
                 _srsListeningThread = new Thread(ReceiveDataUdp);
                 _srsListeningThread.Start();
 
@@ -674,8 +680,7 @@
             {
                 try
                 {
-                    _shutdown = true;
-                    _srsListeningThread?.Abort();
+                    _shutdownThread = true;
                 }
                 catch (Exception)
                 {

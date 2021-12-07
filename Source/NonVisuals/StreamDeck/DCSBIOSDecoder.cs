@@ -32,7 +32,7 @@
         private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
 
         [NonSerialized] private Thread _imageUpdateTread;
-        private bool _shutdown;
+        private volatile bool _shutdownThread;
 
         private volatile Bitmap _converterBitmap;
 
@@ -55,17 +55,13 @@
 
         public override void Dispose()
         {
+            _shutdownThread = true;
             SDEventHandlers.DetachDCSBIOSDecoder(this);
             DCSBIOSStringManager.DetachListener(this);
             BIOSEventHandler.DetachDataListener(this);
-            _shutdown = true;
 
             try
             {
-                if (_imageUpdateTread != null && (_imageUpdateTread.ThreadState & (ThreadState.Aborted | ThreadState.AbortRequested)) == 0)
-                {
-                    _imageUpdateTread.Abort();
-                }
             }
             catch (Exception)
             {
@@ -109,13 +105,16 @@
             }
         }
 
+
         public override void AfterClone()
         {
             if (_imageUpdateTread != null)
             {
                 try
                 {
-                    _imageUpdateTread.Abort();
+                    _shutdownThread = true;
+                    Thread.Sleep(Constants.ThreadShutDownWaitTime);
+                    _shutdownThread = false;
                 }
                 catch (Exception)
                 {
@@ -129,7 +128,7 @@
 
         private void ImageRefreshingThread()
         {
-            while (!_shutdown)
+            while (!_shutdownThread)
             {
                 if (!IsVisible)
                 {
@@ -139,7 +138,7 @@
                     // _autoResetEvent.WaitOne();
                 }
 
-                if (_shutdown)
+                if (_shutdownThread)
                 {
                     break;
                 }

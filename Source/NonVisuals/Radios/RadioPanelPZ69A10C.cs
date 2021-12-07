@@ -234,11 +234,11 @@
             {
                 if (disposing)
                 {
-                    _vhfAmSyncThread?.Abort();
-                    _vhfFmSyncThread?.Abort();
-                    _uhfSyncThread?.Abort();
-                    _ilsSyncThread?.Abort();
-                    _tacanSyncThread?.Abort();
+                    _shutdownUHFThread = true;
+                    _shutdownVHFAMThread = true;
+                    _shutdownILSThread = true;
+                    _shutdownTACANThread = true;
+                    _shutdownVHFFMThread = true;
                 }
 
                 _disposed = true;
@@ -655,7 +655,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
         }
 
@@ -866,11 +866,14 @@
             }
 
             // #1
-            _vhfAmSyncThread?.Abort();
+            _shutdownVHFAMThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownVHFAMThread = false;
             _vhfAmSyncThread = new Thread(() => VhfAmSynchThreadMethod(desiredPositionDial1, desiredPositionDial2, desiredPositionDial3, desiredPositionDial4));
             _vhfAmSyncThread.Start();
         }
 
+        private volatile bool _shutdownVHFAMThread;
         private void VhfAmSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, int desiredPositionDial4)
         {
             try
@@ -1024,7 +1027,7 @@
 
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownVHFAMThread);
                     SwapCockpitStandbyFrequencyVhfAm();
                     ShowFrequenciesOnPanel();
                 }
@@ -1032,7 +1035,7 @@
                 { }
                 catch (Exception ex)
                 {
-                    Common.ShowErrorMessageBox( ex);
+                    Common.ShowErrorMessageBox(ex);
                 }
             }
             finally
@@ -1188,11 +1191,14 @@
             // Small dial 0.00-0.95 [step of 0.05]
 
             // #1
-            _uhfSyncThread?.Abort();
+            _shutdownUHFThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownUHFThread = false;
             _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(freqDial1, freqDial2, freqDial3, freqDial4, freqDial5));
             _uhfSyncThread.Start();
         }
 
+        private volatile bool _shutdownUHFThread;
         private void UhfSynchThreadMethod(int desiredPosition1, int desiredPosition2, int desiredPosition3, int desiredPosition4, int desiredPosition5)
         {
             try
@@ -1417,7 +1423,7 @@
 
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime) || IsTooShort(dial5OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime) || IsTooShort(dial5OkTime)) && !_shutdownUHFThread);
                     SwapCockpitStandbyFrequencyUhf();
                     ShowFrequenciesOnPanel();
                 }
@@ -1425,7 +1431,7 @@
                 { }
                 catch (Exception ex)
                 {
-                    Common.ShowErrorMessageBox( ex);
+                    Common.ShowErrorMessageBox(ex);
                 }
             }
             finally
@@ -1513,11 +1519,14 @@
                 desiredPositionDial4 = 0;
             }
 
-            _vhfFmSyncThread?.Abort();
+            _shutdownVHFFMThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownVHFFMThread = false;
             _vhfFmSyncThread = new Thread(() => VhfFmSynchThreadMethod(desiredPositionDial1, desiredPositionDial2, desiredPositionDial3, desiredPositionDial4));
             _vhfFmSyncThread.Start();
         }
 
+        private volatile bool _shutdownVHFFMThread;
         private void VhfFmSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, int frequencyDial4)
         {
             try
@@ -1669,7 +1678,7 @@
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
 
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownVHFFMThread);
                     SwapCockpitStandbyFrequencyVhfFm();
                     ShowFrequenciesOnPanel();
                 }
@@ -1677,7 +1686,7 @@
                 { }
                 catch (Exception ex)
                 {
-                    Common.ShowErrorMessageBox( ex);
+                    Common.ShowErrorMessageBox(ex);
                 }
             }
             finally
@@ -1718,11 +1727,14 @@
             freqDial2 = GetILSDialPosForFrequency(2, int.Parse(frequencyAsString.Substring(4, 2)));
 
             // #1
-            _ilsSyncThread?.Abort();
+            _shutdownILSThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownILSThread = false;
             _ilsSyncThread = new Thread(() => ILSSynchThreadMethod(freqDial1, freqDial2));
             _ilsSyncThread.Start();
         }
 
+        private volatile bool _shutdownILSThread;
         private void ILSSynchThreadMethod(int position1, int position2)
         {
             try
@@ -1819,7 +1831,7 @@
 
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
- while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime)) && !_shutdownILSThread);
                     SwapCockpitStandbyFrequencyIls();
                     ShowFrequenciesOnPanel();
                 }
@@ -1827,7 +1839,7 @@
                 { }
                 catch (Exception ex)
                 {
-                    Common.ShowErrorMessageBox( ex);
+                    Common.ShowErrorMessageBox(ex);
                 }
             }
             finally
@@ -1861,11 +1873,14 @@
             // #1 = 12  (position = value)
             // #2 = 0   (position = value)
             // #3 = 1   (position = value)
-            _tacanSyncThread?.Abort();
+            _shutdownTACANThread = true;
+            Thread.Sleep(Constants.ThreadShutDownWaitTime);
+            _shutdownTACANThread = false;
             _tacanSyncThread = new Thread(() => TacanSynchThreadMethod(_tacanBigFrequencyStandby, _tacanSmallFrequencyStandby, _tacanXYStandby));
             _tacanSyncThread.Start();
         }
 
+        private volatile bool _shutdownTACANThread;
         private void TacanSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
         {
             try
@@ -1986,7 +2001,7 @@
 
 
                     }
-                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime));
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime)) && !_shutdownTACANThread);
                     SwapCockpitStandbyFrequencyTacan();
                     ShowFrequenciesOnPanel();
                 }
@@ -1994,7 +2009,7 @@
                 { }
                 catch (Exception ex)
                 {
-                    Common.ShowErrorMessageBox( ex);
+                    Common.ShowErrorMessageBox(ex);
                 }
             }
             finally
@@ -2197,7 +2212,7 @@
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(this._tacanBigFrequencyStandby + _tacanSmallFrequencyStandby.ToString() + "." + this._tacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_tacanBigFrequencyStandby + _tacanSmallFrequencyStandby.ToString() + "." + _tacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                 }
@@ -2354,7 +2369,7 @@
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(this._tacanBigFrequencyStandby + _tacanSmallFrequencyStandby.ToString() + "." + this._tacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_tacanBigFrequencyStandby + _tacanSmallFrequencyStandby.ToString() + "." + _tacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                 }
@@ -3150,7 +3165,7 @@
                                             }
 
                                             _ilsBigFrequencyStandby++;
-                                            break; 
+                                            break;
                                         }
 
                                     case CurrentA10RadioMode.TACAN:
@@ -5528,8 +5543,8 @@
                                         break;
                                     }
                             }
-                            _vhfAmSavedCockpitBigFrequency = double.Parse((this._vhfAmCockpitFreq1DialPos + 3) + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
-                            _vhfAmSavedCockpitSmallFrequency = double.Parse(this._vhfAmCockpitFreq3DialPos + dial4.ToString(NumberFormatInfoFullDisplay).PadLeft(2, '0'), NumberFormatInfoFullDisplay);
+                            _vhfAmSavedCockpitBigFrequency = double.Parse((_vhfAmCockpitFreq1DialPos + 3) + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
+                            _vhfAmSavedCockpitSmallFrequency = double.Parse(_vhfAmCockpitFreq3DialPos + dial4.ToString(NumberFormatInfoFullDisplay).PadLeft(2, '0'), NumberFormatInfoFullDisplay);
                         }
                     }
                 }
@@ -5605,7 +5620,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "SaveCockpitFrequencyUhf()");
+                Common.ShowErrorMessageBox(ex, "SaveCockpitFrequencyUhf()");
                 throw;
             }
         }
@@ -5668,7 +5683,7 @@
                                         break;
                                     }
                             }
-                            _vhfFmSavedCockpitBigFrequency = uint.Parse((this._vhfFmCockpitFreq1DialPos + 3) + _vhfFmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
+                            _vhfFmSavedCockpitBigFrequency = uint.Parse((_vhfFmCockpitFreq1DialPos + 3) + _vhfFmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfFmSavedCockpitSmallFrequency = uint.Parse((_vhfFmCockpitFreq3DialPos.ToString() + dial4).PadLeft(3, '0'), NumberFormatInfoFullDisplay);
                         }
                     }
@@ -5694,8 +5709,8 @@
             {
                 lock (_lockIlsDialsObject2)
                 {
-                    _ilsSavedCockpitBigFrequency = uint.Parse(this.GetILSDialFrequencyForPosition(1, this._ilsCockpitFreq1DialPos));
-                    _ilsSavedCockpitSmallFrequency = uint.Parse(this.GetILSDialFrequencyForPosition(2, this._ilsCockpitFreq2DialPos));
+                    _ilsSavedCockpitBigFrequency = uint.Parse(GetILSDialFrequencyForPosition(1, _ilsCockpitFreq1DialPos));
+                    _ilsSavedCockpitSmallFrequency = uint.Parse(GetILSDialFrequencyForPosition(2, _ilsCockpitFreq2DialPos));
                 }
             }
         }

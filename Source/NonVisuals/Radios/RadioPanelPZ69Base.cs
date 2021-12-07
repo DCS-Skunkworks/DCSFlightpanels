@@ -20,10 +20,10 @@
 
     public abstract class RadioPanelPZ69Base : SaitekPanel
     {
-        private byte _ignoreSwitchButtonCounter = 3;
+        private byte _ignoreSwitchButtonCounter = 1;
         private readonly NumberFormatInfo _numberFormatInfoFullDisplay;
         private int _frequencyKnobSensitivity;
-        private volatile byte _frequencySensitivitySkipper;
+        private volatile int _frequencySensitivitySkipper;
         protected readonly object LockLCDUpdateObject = new object();
         protected bool DataHasBeenReceivedFromDCSBIOS;
 
@@ -37,8 +37,7 @@
         private long _syncOKDelayTimeout = 50000000; // 5s
         private readonly PZ69DisplayBytes _pZ69DisplayBytes = new PZ69DisplayBytes();
 
-        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton)
-            : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
+        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
         {
             if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ69RadioPanel)
             {
@@ -243,7 +242,7 @@
                 case -1:
                     {
                         // Skip every 2 manipulations
-                        _frequencySensitivitySkipper++;
+                        Interlocked.Increment(ref _frequencySensitivitySkipper);
                         if (_frequencySensitivitySkipper <= 2)
                         {
                             return true;
@@ -256,7 +255,7 @@
                 case -2:
                     {
                         // Skip every 4 manipulations
-                        _frequencySensitivitySkipper++;
+                        Interlocked.Increment(ref _frequencySensitivitySkipper);
                         if (_frequencySensitivitySkipper <= 4)
                         {
                             return true;

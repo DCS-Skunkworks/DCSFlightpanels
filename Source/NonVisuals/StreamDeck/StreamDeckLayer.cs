@@ -286,7 +286,7 @@
 
         public List<StreamDeckButton> GetButtonsWithConfig()
         {
-            return this._streamDeckButtons.Where(o => o.HasConfig).ToList();
+            return _streamDeckButtons.Where(o => o.HasConfig).ToList();
         }
 
         public List<StreamDeckButton> StreamDeckButtons

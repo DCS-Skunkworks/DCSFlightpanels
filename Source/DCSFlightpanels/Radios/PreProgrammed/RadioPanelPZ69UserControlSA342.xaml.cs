@@ -40,8 +40,6 @@
             };
             
             AppEventHandler.AttachGamingPanelListener(this);
-            LabelAirframe.Content = ProfileHandler.ActiveDCSFPProfile.Description;
-            //LoadConfiguration();
         }
 
         private bool _disposed;

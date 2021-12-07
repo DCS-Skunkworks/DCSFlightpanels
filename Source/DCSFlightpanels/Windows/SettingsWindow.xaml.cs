@@ -229,7 +229,7 @@ namespace DCSFlightpanels.Windows
 
                     Settings.Default.RunMinimized = CheckBoxMinimizeToTray.IsChecked == true;
                     Settings.Default.EnablePlugin = CheckBoxEnablePluginSupport.IsChecked == true;
-                    Settings.Default.DisableKeyboardAPI = this.CheckBoxDisableKeyboardAPI.IsChecked == true;
+                    Settings.Default.DisableKeyboardAPI = CheckBoxDisableKeyboardAPI.IsChecked == true;
                     Settings.Default.Save();
                 }
 

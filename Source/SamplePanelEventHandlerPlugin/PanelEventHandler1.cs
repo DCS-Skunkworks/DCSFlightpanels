@@ -25,7 +25,7 @@
 
         public void Settings()
         {
-            var name = this.GetType()
+            var name = GetType()
                 .GetCustomAttributes(false)
                 .OfType<ExportMetadataAttribute>()
                 .Single(attribute => attribute.Name == "Name").Value;

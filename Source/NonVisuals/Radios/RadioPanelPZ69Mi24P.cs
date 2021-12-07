@@ -165,7 +165,7 @@
             {
                 if (disposing)
                 {
-                    _yadro1ASyncThread?.Abort();
+                    _shutdownYaDRO1AThread = true;
                 }
 
                 _disposed = true;
@@ -531,7 +531,9 @@
                 }
                 SaveCockpitFrequencyYaDRO1A();
 
-                _yadro1ASyncThread?.Abort();
+                _shutdownYaDRO1AThread = true;
+                Thread.Sleep(Constants.ThreadShutDownWaitTime);
+                _shutdownYaDRO1AThread = false;
                 _yadro1ASyncThread = new Thread(() => YaDRO1ASynchThreadMethod());
                 _yadro1ASyncThread.Start();
             }
@@ -541,6 +543,7 @@
             }
         }
 
+        private volatile bool _shutdownYaDRO1AThread;
         private void YaDRO1ASynchThreadMethod()
         {
             try

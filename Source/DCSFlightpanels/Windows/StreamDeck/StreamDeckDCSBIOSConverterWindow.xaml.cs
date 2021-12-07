@@ -347,7 +347,7 @@
                 infoWindow.AddInline("\n");
                 infoWindow.AddInline("Here you can convert DCS-BIOS values to have unique images / texts based on DCS-BIOS value.\n");
                 infoWindow.AddInline("A radio can based on a dial's position show texts : OFF MANUAL PRESET and so on.\n");
-                infoWindow.AddInline("If you want to show units after the value you can do this here too. Choose comparison mode \"Always\" for this.\n");
+                infoWindow.AddInline("If you want to show units after the value you can do this here too. Choose comparison mode \"Always\" for \n");
                 infoWindow.AddInline(new Run("7400 RPM\n") { FontWeight = FontWeights.Bold });
                 infoWindow.AddInline(new Run("242°\n") { FontWeight = FontWeights.Bold });
                 infoWindow.AddInline(new Run("180°C\n") { FontWeight = FontWeights.Bold });

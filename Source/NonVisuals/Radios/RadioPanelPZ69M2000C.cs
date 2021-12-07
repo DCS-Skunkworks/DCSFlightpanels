@@ -1073,7 +1073,7 @@
                                 var modeAsString = string.Empty;
                                 lock (_lockTACANDialObject)
                                 {
-                                    channelAsString = (_tacanXYSelectCockpitDialPos).ToString().PadRight(3, ' ') + (this._tacanTensCockpitDialPos) + (this._tacanOnesCockpitDialPos);
+                                    channelAsString = (_tacanXYSelectCockpitDialPos).ToString().PadRight(3, ' ') + (_tacanTensCockpitDialPos) + (_tacanOnesCockpitDialPos);
                                     modeAsString = _tacanModeSelectCockpitDialPos.ToString().PadLeft(5, ' ');
                                 }
 
@@ -1164,7 +1164,7 @@
                                 var modeAsString = string.Empty;
                                 lock (_lockTACANDialObject)
                                 {
-                                    channelAsString = (_tacanXYSelectCockpitDialPos).ToString().PadRight(3, ' ') + (this._tacanTensCockpitDialPos) + (this._tacanOnesCockpitDialPos);
+                                    channelAsString = (_tacanXYSelectCockpitDialPos).ToString().PadRight(3, ' ') + (_tacanTensCockpitDialPos) + (_tacanOnesCockpitDialPos);
                                     modeAsString = _tacanModeSelectCockpitDialPos.ToString().PadLeft(5, ' ');
                                 }
 

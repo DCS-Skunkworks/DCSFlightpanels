@@ -235,7 +235,7 @@
             {
                 if (disposing)
                 {
-                    _r800L1SyncThread?.Abort();
+                    _shutdownR800L1Thread = true;
                 }
 
                 _disposed = true;
@@ -521,7 +521,9 @@
 
                 SaveCockpitFrequencyR800L1();
 
-                _r800L1SyncThread?.Abort();
+                _shutdownR800L1Thread = true;
+                Thread.Sleep(Constants.ThreadShutDownWaitTime);
+                _shutdownR800L1Thread = false;
                 _r800L1SyncThread = new Thread(() => R800L1SynchThreadMethod());
                 _r800L1SyncThread.Start();
             }
@@ -531,6 +533,7 @@
             }
         }
 
+        private volatile bool _shutdownR800L1Thread;
         private void R800L1SynchThreadMethod()
         {
             try
@@ -556,7 +559,7 @@
                         var dial3SendCount = 0;
                         var dial4SendCount = 0;
 
-                        var frequencyAsString = this._r800L1BigFrequencyStandby + "." + _r800L1SmallFrequencyStandby.ToString().PadLeft(2, '0');
+                        var frequencyAsString = _r800L1BigFrequencyStandby + "." + _r800L1SmallFrequencyStandby.ToString().PadLeft(2, '0');
                         frequencyAsString = frequencyAsString.PadRight(6, '0');
 
                         // Frequency selector 1      R800_FREQ1
@@ -738,7 +741,7 @@
 
                             Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                         }
-                        while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+                        while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownR800L1Thread);
 
                         SwapCockpitStandbyFrequencyR800L1();
                         ShowFrequenciesOnPanel();
@@ -2177,8 +2180,8 @@
                                         }
                                 }
 
-                                _r800L1SavedCockpitBigFrequency = uint.Parse(this._r800L1Freq1DialValues[this._r800L1CockpitFreq1DialPos] + _r800L1CockpitFreq2DialPos.ToString());
-                                _r800L1SavedCockpitSmallFrequency = uint.Parse(this._r800L1CockpitFreq3DialPos + dial4.ToString());
+                                _r800L1SavedCockpitBigFrequency = uint.Parse(_r800L1Freq1DialValues[_r800L1CockpitFreq1DialPos] + _r800L1CockpitFreq2DialPos.ToString());
+                                _r800L1SavedCockpitSmallFrequency = uint.Parse(_r800L1CockpitFreq3DialPos + dial4.ToString());
                             }
                         }
                     }

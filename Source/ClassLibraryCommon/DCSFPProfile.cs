@@ -12,9 +12,9 @@
         
         private DCSFPProfile(int id, string description, string jsonFilename)
         {
-            this.ID = id;
-            this.JSONFilename = jsonFilename;
-            this.Description = description;
+            ID = id;
+            JSONFilename = jsonFilename;
+            Description = description;
         }
 
         public static void Init()

@@ -342,7 +342,8 @@
             {
                 if (disposing)
                 {
-                    _r863ManualSyncThread?.Abort();
+                    _shutdownR863Thread = true;
+                    _shutdownYaDRO1AThread = true;
                 }
 
                 _disposed = true;
@@ -850,8 +851,10 @@
 
                 SaveCockpitFrequencyR863Manual();
 
-                _r863ManualSyncThread?.Abort();
-                _r863ManualSyncThread = new Thread(() => R863ManualSynchThreadMethod());
+                _shutdownR863Thread = true;
+                Thread.Sleep(Constants.ThreadShutDownWaitTime);
+                _shutdownR863Thread = false;
+                _r863ManualSyncThread = new Thread(R863ManualSynchThreadMethod);
                 _r863ManualSyncThread.Start();
             }
             catch (Exception ex)
@@ -860,6 +863,7 @@
             }
         }
 
+        private volatile bool _shutdownR863Thread;
         private void R863ManualSynchThreadMethod()
         {
             try
@@ -885,7 +889,7 @@
                         var dial3SendCount = 0;
                         var dial4SendCount = 0;
 
-                        var frequencyAsString = this._r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(3, '0');
+                        var frequencyAsString = _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(3, '0');
                         frequencyAsString = frequencyAsString.PadRight(7, '0');
 
                         // Frequency selector 1      R863_FREQ1
@@ -1070,7 +1074,7 @@
 
                             Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                         }
-                        while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+                        while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownR863Thread);
                     }
                     catch (ThreadAbortException ex)
                     {
@@ -1121,8 +1125,10 @@
 
                 SaveCockpitFrequencyYaDRO1A();
 
-                _yadro1ASyncThread?.Abort();
-                _yadro1ASyncThread = new Thread(() => YaDRO1ASynchThreadMethod());
+                _shutdownYaDRO1AThread = true;
+                Thread.Sleep(Constants.ThreadShutDownWaitTime);
+                _shutdownYaDRO1AThread = false;
+                _yadro1ASyncThread = new Thread(YaDRO1ASynchThreadMethod);
                 _yadro1ASyncThread.Start();
             }
             catch (Exception ex)
@@ -1131,6 +1137,7 @@
             }
         }
 
+        private volatile bool _shutdownYaDRO1AThread;
         private void YaDRO1ASynchThreadMethod()
         {
             try
@@ -1151,10 +1158,6 @@
                         long dial2OkTime = 0;
                         long dial3OkTime = 0;
                         long dial4OkTime = 0;
-                        var dial1SendCount = 0;
-                        var dial2SendCount = 0;
-                        var dial3SendCount = 0;
-                        var dial4SendCount = 0;
 
                         var frequencyAsString = _yadro1ABigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1ASmallFrequencyStandby.ToString().PadLeft(2, '0');
                         frequencyAsString = frequencyAsString.PadRight(6, '0');
@@ -1231,7 +1234,6 @@
                                         }
 
                                         DCSBIOS.Send(str);
-                                        dial1SendCount++;
                                         Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
                                     }
 
@@ -1252,7 +1254,6 @@
                                         dial2OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _yadro1ACockpitFreq2DialPos);
                                         DCSBIOS.Send(str);
-                                        dial2SendCount++;
                                         Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 1);
                                     }
 
@@ -1273,7 +1274,6 @@
                                         dial3OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _yadro1ACockpitFreq3DialPos);
                                         DCSBIOS.Send(str);
-                                        dial3SendCount++;
                                         Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 1);
                                     }
 
@@ -1294,7 +1294,6 @@
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_4DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial4X, _yadro1ACockpitFreq4DialPos);
                                         DCSBIOS.Send(str);
-                                        dial4SendCount++;
                                         Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 1);
                                     }
 
@@ -1308,7 +1307,7 @@
 
                             Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                         }
-                        while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+                        while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownYaDRO1AThread);
 
                         SwapCockpitStandbyFrequencyYaDRO1A();
                         ShowFrequenciesOnPanel();
@@ -3025,10 +3024,10 @@
                             {
                                 _r863ManualSavedCockpitBigFrequency =
                                     uint.Parse(
-                                        this._r863ManualCockpitFreq1DialPos
+                                        _r863ManualCockpitFreq1DialPos
                                         + _r863ManualCockpitFreq2DialPos
                                             .ToString()); // uint.Parse(_r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString() + _r863ManualCockpitFreq2DialPos.ToString());
-                                _r863ManualSavedCockpitSmallFrequency = uint.Parse(this._r863ManualCockpitFreq3DialPos + _r863ManualCockpitFreq4DialPos.ToString().PadLeft(2 , '0'));
+                                _r863ManualSavedCockpitSmallFrequency = uint.Parse(_r863ManualCockpitFreq3DialPos + _r863ManualCockpitFreq4DialPos.ToString().PadLeft(2 , '0'));
                             }
                         }
                     }
@@ -3070,8 +3069,8 @@
                         {
                             lock (_lockYadro1ADialsObject4)
                             {
-                                _yadro1ASavedCockpitBigFrequency = uint.Parse(this._yadro1ACockpitFreq1DialPos + _yadro1ACockpitFreq2DialPos.ToString());
-                                _yadro1ASavedCockpitSmallFrequency = uint.Parse(this._yadro1ACockpitFreq3DialPos + _yadro1ACockpitFreq4DialPos.ToString());
+                                _yadro1ASavedCockpitBigFrequency = uint.Parse(_yadro1ACockpitFreq1DialPos + _yadro1ACockpitFreq2DialPos.ToString());
+                                _yadro1ASavedCockpitSmallFrequency = uint.Parse(_yadro1ACockpitFreq3DialPos + _yadro1ACockpitFreq4DialPos.ToString());
                             }
                         }
                     }

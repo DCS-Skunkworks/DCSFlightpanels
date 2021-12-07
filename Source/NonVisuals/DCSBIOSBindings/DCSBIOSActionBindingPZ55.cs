@@ -19,11 +19,26 @@
          */
         private SwitchPanelPZ55Keys _switchPanelPZ55Key;
 
-        ~DCSBIOSActionBindingPZ55()
+
+
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            CancelSendDCSBIOSCommands = true;
-            DCSBIOSCommandsThread?.Abort();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
         }
+
 
         internal override void ImportSettings(string settings)
         {

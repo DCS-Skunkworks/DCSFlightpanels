@@ -23,7 +23,7 @@ namespace NonVisuals.StreamDeck
 
         public LockBitmap(Bitmap source)
         {
-            this._source = source;
+            _source = source;
         }
 
         /// <summary>
