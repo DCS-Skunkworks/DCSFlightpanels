@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using System.Diagnostics;
+
+namespace NonVisuals.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -22,13 +24,13 @@
         private IStreamDeckButtonFace _buttonFace;
         private IStreamDeckButtonAction _buttonActionForPress;
         private IStreamDeckButtonAction _buttonActionForRelease;
-        [NonSerialized] private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        [NonSerialized] private volatile CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         [NonSerialized] private Thread _keyPressedThread;
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
         private volatile bool _isVisible;
 
-        [NonSerialized] private static readonly List<StreamDeckButton> _staticStreamDeckButtons = new List<StreamDeckButton>();
+        [NonSerialized] private static readonly List<StreamDeckButton> StaticStreamDeckButtons = new List<StreamDeckButton>();
 
 
 
@@ -48,12 +50,12 @@
          */
         public void RegisterButtonToStaticList()
         {
-            if (_staticStreamDeckButtons.Exists(o => o == this))
+            if (StaticStreamDeckButtons.Exists(o => o == this))
             {
                 return;
             }
 
-            _staticStreamDeckButtons.Add(this);
+            StaticStreamDeckButtons.Add(this);
         }
 
         private void ReleaseUnmanagedResources()
@@ -67,12 +69,12 @@
             if (disposing)
             {
                 _cancellationTokenSource?.Dispose();
-                _staticStreamDeckButtons.Remove(this);
+                StaticStreamDeckButtons.Remove(this);
                 IsVisible = false;
                 _buttonFace?.Dispose();
                 _buttonActionForPress = null;
                 _buttonActionForRelease = null;
-                _staticStreamDeckButtons.Remove(this);
+                StaticStreamDeckButtons.Remove(this);
             }
         }
 
@@ -89,71 +91,31 @@
 
         public static StreamDeckButton GetStatic(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            return _staticStreamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
+            return StaticStreamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
         }
 
         public static void DisposeAll()
         {
-            for (var i = 0; i < _staticStreamDeckButtons.Count; i++)
+            for (var i = 0; i < StaticStreamDeckButtons.Count; i++)
             {
-                var streamDeckButton = _staticStreamDeckButtons[i];
+                var streamDeckButton = StaticStreamDeckButtons[i];
                 streamDeckButton.Dispose();
             }
         }
 
         public static List<StreamDeckButton> WarningGetStaticButtons()
         {
-            return _staticStreamDeckButtons;
+            return StaticStreamDeckButtons;
         }
 
         public static List<StreamDeckButton> GetStaticButtons(StreamDeckPanel streamDeckPanel)
         {
             if (streamDeckPanel == null)
             {
-                return _staticStreamDeckButtons;
+                return StaticStreamDeckButtons;
             }
 
-            return _staticStreamDeckButtons.FindAll(o => o.StreamDeckPanelInstance.BindingHash == streamDeckPanel.BindingHash).ToList();
-        }
-
-        public void DoPress()
-        {
-            if (ActionForPress == null)
-            {
-                /*
-                 * Must do this here as there are no ActionTypeKey for this button, otherwise Plugin would never get any event.
-                 * Otherwise it is sent from ActionTypeKey together with key configs associated with the button.
-                 */
-                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                {
-                    PluginManager.DoEvent(
-                        ProfileHandler.SelectedProfile().Description, 
-                        StreamDeckPanelInstance.HIDInstanceId, 
-                        (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
-                        (int)StreamDeckButtonName, 
-                        true, 
-                        null);
-                }
-
-                return;
-            }
-
-            while (ActionForPress.IsRunning())
-            {
-                _cancellationTokenSource.Cancel();
-            }
-
-            if (ActionForPress.IsRepeatable())
-            {
-                _cancellationTokenSource = new CancellationTokenSource();
-                var threadCancellationToken = _cancellationTokenSource.Token;
-                _keyPressedThread = new Thread(() => ThreadedPress(threadCancellationToken));
-                _keyPressedThread.Start();
-            }
-            else
-            {
-                ActionForPress.Execute(CancellationToken.None);
-            }
+            return StaticStreamDeckButtons.FindAll(o => o.StreamDeckPanelInstance.BindingHash == streamDeckPanel.BindingHash).ToList();
         }
 
         public void ClearConfiguration()
@@ -169,21 +131,61 @@
             _streamDeckPanel.ClearFace(_streamDeckButtonName);
         }
 
+        public void DoPress()
+        {
+            if (ActionForPress == null)
+            {
+                /*
+                 * Must do this here as there are no ActionTypeKey for this button, otherwise Plugin would never get any event.
+                 * Otherwise it is sent from ActionTypeKey together with key configs associated with the button.
+                 */
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.DoEvent(
+                        ProfileHandler.SelectedProfile().Description,
+                        StreamDeckPanelInstance.HIDInstanceId,
+                        (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
+                        (int)StreamDeckButtonName,
+                        true,
+                        null);
+                }
+
+                return;
+            }
+
+            while (ActionForPress.IsRunning())
+            {
+                _cancellationTokenSource?.Cancel();
+            }
+
+            if (ActionForPress.IsRepeatable())
+            {
+                _cancellationTokenSource = new CancellationTokenSource();
+                var threadCancellationToken = _cancellationTokenSource.Token;
+                Debug.WriteLine("New Thread ThreadedPress");
+                _keyPressedThread = new Thread(() => ThreadedPress(threadCancellationToken));
+                _keyPressedThread.Start();
+            }
+            else
+            {
+                ActionForPress.Execute(CancellationToken.None);
+            }
+        }
+
         private void ThreadedPress(CancellationToken threadCancellationToken)
         {
             var first = true;
             while (true)
             {
-                if (_cancellationTokenSource.IsCancellationRequested)
-                {
-                    break;
-                }
-
                 if (!ActionForPress.IsRunning())
                 {
                     ActionForPress?.Execute(threadCancellationToken);
                 }
-
+                
+                if (_cancellationTokenSource.IsCancellationRequested)
+                {
+                    break;
+                }
 
                 if (first)
                 {
@@ -197,12 +199,14 @@
             }
         }
 
-        public void DoRelease(CancellationToken threadCancellationToken)
+        public void DoRelease()
         {
-            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource?.Cancel();
 
             if (ActionForRelease == null)
-            {/*
+            {
+
+                /*
                  * Must do this here as there are no ActionTypeKey for this button, otherwise Plugin would never get any event
                  */
                 if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
@@ -254,9 +258,20 @@
                 return;
             }
 
-            if (!ActionForRelease.IsRunning())
+            while (ActionForRelease.IsRunning())
             {
+                _cancellationTokenSource?.Cancel();
+            }
+
+            if (ActionForRelease.IsRepeatable())
+            {
+                _cancellationTokenSource = new CancellationTokenSource();
+                var threadCancellationToken = _cancellationTokenSource.Token;
                 ActionForRelease?.Execute(threadCancellationToken);
+            }
+            else
+            {
+                ActionForRelease.Execute(CancellationToken.None);
             }
         }
 

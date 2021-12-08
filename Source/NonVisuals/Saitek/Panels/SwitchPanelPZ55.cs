@@ -428,11 +428,17 @@
                     if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP && switchPanelKey.IsOn)
                     {
                         // Changed Lights to go DARK when gear level is selected to UP, instead of RED.
+                        _shutdownThread = true;
+                        Thread.Sleep(Constants.ThreadShutDownWaitTime);
+                        _shutdownThread = false;
                         _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(GetManualGearsColorForStatus(ManualGearsStatus.Up)));
                         _manualLandingGearThread.Start();
                     }
                     else if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN && switchPanelKey.IsOn)
                     {
+                        _shutdownThread = true;
+                        Thread.Sleep(Constants.ThreadShutDownWaitTime);
+                        _shutdownThread = false;
                         _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(GetManualGearsColorForStatus(ManualGearsStatus.Down)));
                         _manualLandingGearThread.Start();
                     }

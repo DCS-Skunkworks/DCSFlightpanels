@@ -227,7 +227,7 @@
             }
             else
             {
-                streamDeckButton.DoRelease(CancellationToken.None);
+                streamDeckButton.DoRelease();
             }
         }
 

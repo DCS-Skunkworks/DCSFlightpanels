@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.DCSBIOSBindings
+﻿using System.Diagnostics;
+
+namespace NonVisuals.DCSBIOSBindings
 {
     using System;
     using System.Collections.Generic;
@@ -23,7 +25,6 @@
         private bool _isSequenced;
         private int _sequenceIndex;
         private volatile bool _shutdownCommandsThread;
-
         private bool _disposed;
         protected virtual void Dispose(bool disposing)
         {
@@ -113,19 +114,15 @@
                 {
                     foreach (var dcsbiosInput in dcsbiosInputs)
                     {
-                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
-                        {
-                            return;
-                        }
-
                         var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
                         Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
+
+                        DCSBIOS.Send(command);
+
                         if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
                         {
                             return;
                         }
-
-                        DCSBIOS.Send(command);
                     }
                 }
             }
