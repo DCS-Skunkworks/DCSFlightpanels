@@ -186,7 +186,7 @@
         {
             try
             {
-                _pZ69DisplayBytes.DefaultStringAsIt(ref bytes, digits, pz69LCDPosition);
+                _pZ69DisplayBytes.DefaultStringAsIs(ref bytes, digits, pz69LCDPosition);
             }
             catch (Exception ex)
             {

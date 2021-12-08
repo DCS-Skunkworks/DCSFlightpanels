@@ -41,11 +41,13 @@
         /// Can deal with multiple '.' chars.
         /// If size does not match 5, it will NOT replace previous characters in the array (no padding left or right).
         /// </summary>
-        public void DefaultStringAsIt(ref byte[] bytes, string digits, PZ69LCDPosition pz69LCDPosition)
+        public void DefaultStringAsIs(ref byte[] bytes, string digits, PZ69LCDPosition pz69LCDPosition)
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
             var i = 0;
+
+            digits = digits.PadLeft(5); //Makes text right justified in the screen
 
             do
             {

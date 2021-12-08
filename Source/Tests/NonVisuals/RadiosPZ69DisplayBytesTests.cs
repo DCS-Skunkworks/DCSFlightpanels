@@ -145,7 +145,7 @@ namespace Tests.NonVisuals
         public void DefaultStringAsIt_ShouldReturn_ExpectedValue(string expected, string inputString, string inputArray, PZ69LCDPosition lcdPosition)
         {
             var bytes = StringToBytes(inputArray);
-            _dp.DefaultStringAsIt(ref bytes, inputString, lcdPosition);
+            _dp.DefaultStringAsIs(ref bytes, inputString, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
         }
 
@@ -160,7 +160,7 @@ namespace Tests.NonVisuals
         public void DefaultStringAsIt_InvalidChars_OrCombination_ShouldThrow_FormatException(string inputString)
         {
             var bytes = StringToBytes(DEIGHTS);
-            Assert.Throws<FormatException>(() => _dp.DefaultStringAsIt(ref bytes, inputString, PZ69LCDPosition.UPPER_ACTIVE_LEFT));            
+            Assert.Throws<FormatException>(() => _dp.DefaultStringAsIs(ref bytes, inputString, PZ69LCDPosition.UPPER_ACTIVE_LEFT));            
         }
 
         public static IEnumerable<object[]> DoubleWithSpecifiedDecimalsPlacesData()
