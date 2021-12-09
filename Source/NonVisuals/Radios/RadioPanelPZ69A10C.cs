@@ -224,6 +224,8 @@
         {
             CreateRadioKnobs();
             Startup();
+            BIOSEventHandler.AttachDataListener(this);
+            BIOSEventHandler.AttachStringListener(this);
         }
 
         private bool _disposed;
@@ -239,6 +241,8 @@
                     _shutdownILSThread = true;
                     _shutdownTACANThread = true;
                     _shutdownVHFFMThread = true;
+                    BIOSEventHandler.DetachDataListener(this);
+                    BIOSEventHandler.DetachStringListener(this);
                 }
 
                 _disposed = true;
@@ -4082,7 +4086,7 @@
 
                 // TACAN
                 _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
-                DCSBIOSStringManager.AddListener(_tacanDcsbiosOutputFreqChannel, this); // _tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
+                DCSBIOSStringManager.AddListeningAddress(_tacanDcsbiosOutputFreqChannel); // _tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
 
                 StartListeningForHidPanelChanges();
 

@@ -1,9 +1,19 @@
-﻿namespace NonVisuals.StreamDeck.Events
+﻿using NonVisuals.Interfaces;
+
+namespace NonVisuals.StreamDeck.Events
 {
     using System;
     using System.ComponentModel;
 
     using MEF;
+
+
+    public class ActionTypeChangedEventArgs : System.EventArgs
+    {
+        public string BindingHash { get; set; }
+        public EnumStreamDeckActionType ActionType { get; set; }
+        public string TargetLayerName { get; set; }
+    }
 
     /*
      * Buttons change => update GUI to show new Button's configuration

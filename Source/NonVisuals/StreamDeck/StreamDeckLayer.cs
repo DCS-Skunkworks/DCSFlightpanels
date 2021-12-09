@@ -117,7 +117,7 @@
 
         private void NotifyChanges()
         {
-            SDEventHandlers.NotifyStreamDeckConfigurationChange(this, _streamDeckPanel.BindingHash);
+            SDEventHandler.NotifyStreamDeckConfigurationChange(this, _streamDeckPanel.BindingHash);
         }
 
         public void RegisterStreamDeckButtons()

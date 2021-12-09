@@ -327,11 +327,11 @@
 
         // private const int SKIP_CONSTANT = 0;
 
-        public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton)
-            : base(hidSkeleton)
+        public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             CreateRadioKnobs();
             Startup();
+            BIOSEventHandler.AttachStringListener(this);
         }
 
         private bool _disposed;
@@ -344,6 +344,7 @@
                 {
                     _shutdownR863Thread = true;
                     _shutdownYaDRO1AThread = true;
+                    BIOSEventHandler.DetachStringListener(this);
                 }
 
                 _disposed = true;
@@ -2898,7 +2899,7 @@
             {
                 // COM1
                 _r863ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_FREQ");
-                DCSBIOSStringManager.AddListener(_r863ManualDcsbiosOutputCockpitFrequency, this);
+                DCSBIOSStringManager.AddListeningAddress(_r863ManualDcsbiosOutputCockpitFrequency);
 
                 // COM2
                 _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_CNL_SEL");
@@ -2906,7 +2907,7 @@
 
                 // NAV1
                 _yadro1ADcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("YADRO1A_FREQ");
-                DCSBIOSStringManager.AddListener(_yadro1ADcsbiosOutputCockpitFrequency, this);
+                DCSBIOSStringManager.AddListeningAddress(_yadro1ADcsbiosOutputCockpitFrequency);
 
                 // NAV2
                 _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R828_PRST_CHAN_SEL");

@@ -398,7 +398,6 @@
                     if (gamingPanel != null && gamingPanel.HIDInstanceId == instanceId)
                     {
                         TabControlPanels.Items.Remove(tabItem);
-                        Detach(gamingPanel);
                         userControl.Dispose();
                         _panelUserControls.Remove(userControl);
 
@@ -440,8 +439,6 @@
 
                         if (gamingPanel != null)
                         {
-                            Detach(gamingPanel);
-
                             userControl.Dispose();
                             _panelUserControls.Remove(userControl);
                             closedItemCount++;
@@ -472,19 +469,6 @@
             {
                 Common.ShowErrorMessageBox(ex);
             }
-        }
-
-        /*
-         * DCS-BIOS may be created AFTER the panels are created so then
-         * they need to be added as listeners to DCS-BIOS.
-         */
-        public void Attach(GamingPanel gamingPanel)
-        {
-        }
-
-        public void Detach(GamingPanel gamingPanel)
-        {
-            Dispatcher?.BeginInvoke((Action)(() => CloseTabItem(gamingPanel.HIDInstanceId)));
         }
 
         private void CreateDCSBIOS()

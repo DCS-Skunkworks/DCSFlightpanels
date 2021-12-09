@@ -265,7 +265,7 @@
         public void SetIsDirty()
         {
             _isDirty = true;
-            SDEventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton.StreamDeckButtonName, string.Empty, _streamDeckPanel.BindingHash);
+            SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckButton.StreamDeckButtonName, string.Empty, _streamDeckPanel.BindingHash);
         }
 
         public bool IsDirty
@@ -850,7 +850,7 @@
         {
             try
             {
-                ActionTypeChangedLayerNavigation(StreamDeckConstants.TranslateLayerName(ComboBoxLayerNavigationButton.Text));
+                SDEventHandler.ActionTypeChangedLayerNavigation(this, _streamDeckPanel, GetSelectedActionType(), StreamDeckConstants.TranslateLayerName(ComboBoxLayerNavigationButton.Text));
                 SetIsDirty();
             }
             catch (Exception ex)
@@ -988,42 +988,6 @@
             {
                 ComboBoxLayerNavigationButton.SelectedIndex = 0;
             }
-        }
-
-        public interface IStreamDeckButtonActionListener
-        {
-            void ActionTypeChangedEvent(object sender, ActionTypeChangedEventArgs e);
-        }
-
-        public virtual void AttachListener(IStreamDeckButtonActionListener buttonActionListener)
-        {
-            OnActionTypeChanged += buttonActionListener.ActionTypeChangedEvent;
-        }
-
-        public virtual void DetachListener(IStreamDeckButtonActionListener buttonActionListener)
-        {
-            OnActionTypeChanged -= buttonActionListener.ActionTypeChangedEvent;
-        }
-
-        public delegate void ActionTypeChangedEventHandler(object sender, ActionTypeChangedEventArgs e);
-        public event ActionTypeChangedEventHandler OnActionTypeChanged;
-
-        public class ActionTypeChangedEventArgs : EventArgs
-        {
-            public string BindingHash { get; set; }
-            public EnumStreamDeckActionType ActionType { get; set; }
-            public string TargetLayerName { get; set; }
-        }
-
-        private void ActionTypeChangedLayerNavigation(string layerName)
-        {
-            var arguments = new ActionTypeChangedEventArgs
-            {
-                BindingHash = _streamDeckPanel.BindingHash,
-                ActionType = GetSelectedActionType(),
-                TargetLayerName = layerName
-            };
-            OnActionTypeChanged?.Invoke(this, arguments);
         }
 
         public StreamDeckButtonOnOff GetStreamDeckButtonOnOff(StreamDeckActionTextBox textBox)

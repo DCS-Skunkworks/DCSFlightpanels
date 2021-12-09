@@ -12,18 +12,16 @@
             _dcsbiosStringListener.AddStringAddress(address, length);
         }
 
-        public static void AddListener(uint address, int length, IDCSBIOSStringListener dcsbiosStringListener)
+        public static void AddListeningAddress(uint address, int length)
         {
             CheckInstance();
             AddAddress(address, length);
-            _dcsbiosStringListener.Attach(dcsbiosStringListener);
         }
 
-        public static void AddListener(DCSBIOSOutput dcsbiosOutput, IDCSBIOSStringListener dcsbiosStringListener)
+        public static void AddListeningAddress(DCSBIOSOutput dcsbiosOutput)
         {
             CheckInstance();
             AddAddress(dcsbiosOutput.Address, dcsbiosOutput.MaxLength);
-            _dcsbiosStringListener.Attach(dcsbiosStringListener);
         }
 
         private static void CheckInstance()
@@ -32,12 +30,6 @@
             {
                 _dcsbiosStringListener = new DCSBIOSStringListener();
             }
-        }
-
-        public static void DetachListener(IDCSBIOSStringListener dcsbiosStringListener)
-        {
-            CheckInstance();
-            _dcsbiosStringListener.Detach(dcsbiosStringListener);
         }
 
         public static void Close()

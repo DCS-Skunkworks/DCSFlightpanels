@@ -155,6 +155,7 @@
         {
             CreateRadioKnobs();
             Startup();
+            BIOSEventHandler.AttachStringListener(this);
         }
 
         private bool _disposed;
@@ -166,6 +167,7 @@
                 if (disposing)
                 {
                     _shutdownYaDRO1AThread = true;
+                    BIOSEventHandler.DetachStringListener(this);
                 }
 
                 _disposed = true;
@@ -1842,7 +1844,7 @@
 
                 //NAV1
                 _yadro1ADcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("JADRO_FREQ");
-                DCSBIOSStringManager.AddListener(_yadro1ADcsbiosOutputCockpitFrequency, this);
+                DCSBIOSStringManager.AddListeningAddress(_yadro1ADcsbiosOutputCockpitFrequency);
 
                 //NAV2
                 _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_R828_CHAN");

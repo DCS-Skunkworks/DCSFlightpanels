@@ -73,8 +73,8 @@
             _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
             _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
-            SDEventHandlers.AttachStreamDeckListener(this);
-            SDEventHandlers.AttachStreamDeckConfigListener(this);
+            SDEventHandler.AttachStreamDeckListener(this);
+            SDEventHandler.AttachStreamDeckConfigListener(this);
             StreamDeckPanels.Add(this);
         }
         
@@ -90,8 +90,8 @@
                     _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
                     _streamDeckBoard?.Dispose();
                     StreamDeckPanels.Remove(this);
-                    SDEventHandlers.DetachStreamDeckListener(this);
-                    SDEventHandlers.DetachStreamDeckConfigListener(this);
+                    SDEventHandler.DetachStreamDeckListener(this);
+                    SDEventHandler.DetachStreamDeckConfigListener(this);
                     _disposed = true;
                 }
             }

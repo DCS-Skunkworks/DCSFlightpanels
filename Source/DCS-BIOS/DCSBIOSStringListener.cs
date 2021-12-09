@@ -19,19 +19,7 @@ namespace DCS_BIOS
         private readonly List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new List<KeyValuePair<uint, DCSBIOSString>>();
         private readonly object _lockObject = new object();
         private readonly Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
-
-
-        //For those that wants to listen to Strings received from DCS-BIOS
-        public void Attach(IDCSBIOSStringListener iDCSBIOSStringListener)
-        {
-            BIOSEventHandler.AttachStringListener(iDCSBIOSStringListener);
-        }
-
-        //For those that wants to listen to this panel
-        public void Detach(IDCSBIOSStringListener iDCSBIOSStringListener)
-        {
-            BIOSEventHandler.DetachStringListener(iDCSBIOSStringListener);
-        }
+        
 
         public DCSBIOSStringListener()
         {

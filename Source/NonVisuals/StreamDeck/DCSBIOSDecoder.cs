@@ -50,14 +50,15 @@
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();
             BIOSEventHandler.AttachDataListener(this);
-            SDEventHandlers.AttachDCSBIOSDecoder(this);
+            BIOSEventHandler.AttachStringListener(this);
+            SDEventHandler.AttachDCSBIOSDecoder(this);
         }
 
         public override void Dispose()
         {
             _shutdownThread = true;
-            SDEventHandlers.DetachDCSBIOSDecoder(this);
-            DCSBIOSStringManager.DetachListener(this);
+            SDEventHandler.DetachDCSBIOSDecoder(this);
+            BIOSEventHandler.DetachStringListener(this);
             BIOSEventHandler.DetachDataListener(this);
 
             try
@@ -93,7 +94,7 @@
 
         public static void ShowOnly(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeckPanel)
         {
-            SDEventHandlers.HideDCSBIOSDecoders(dcsbiosDecoder, streamDeckPanel.SelectedLayerName, streamDeckPanel.BindingHash);
+            SDEventHandler.HideDCSBIOSDecoders(dcsbiosDecoder, streamDeckPanel.SelectedLayerName, streamDeckPanel.BindingHash);
             dcsbiosDecoder.IsVisible = true;
         }
 
@@ -459,7 +460,7 @@
                 StringDcsBiosValue = string.Empty;
                 if (_dcsbiosOutput != null && _dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
                 {
-                    DCSBIOSStringManager.AddListener(_dcsbiosOutput, this);
+                    DCSBIOSStringManager.AddListeningAddress(_dcsbiosOutput);
                 }
             }
         }

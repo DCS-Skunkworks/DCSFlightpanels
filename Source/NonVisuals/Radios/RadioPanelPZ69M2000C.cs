@@ -103,6 +103,7 @@
         {
             CreateRadioKnobs();
             Startup();
+            BIOSEventHandler.AttachStringListener(this);
         }
 
         private bool _disposed;
@@ -113,6 +114,7 @@
             {
                 if (disposing)
                 {
+                    BIOSEventHandler.DetachStringListener(this);
                 }
 
                 _disposed = true;
@@ -1220,12 +1222,12 @@
             {
                 // COM1
                 _vhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_FREQUENCY");
-                DCSBIOSStringManager.AddListener(_vhfDcsbiosOutputPresetFreqString, this);
+                DCSBIOSStringManager.AddListeningAddress(_vhfDcsbiosOutputPresetFreqString);
                 _vhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_CH_SEL");
 
                 // COM2
                 _uhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FREQUENCY");
-                DCSBIOSStringManager.AddListener(_uhfDcsbiosOutputPresetFreqString, this);
+                DCSBIOSStringManager.AddListeningAddress(_uhfDcsbiosOutputPresetFreqString);
                 _uhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET_KNOB");
 
                 // NAV1

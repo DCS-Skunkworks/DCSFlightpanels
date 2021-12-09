@@ -6,13 +6,36 @@
 
     using NonVisuals.Interfaces;
 
-    public static class SDEventHandlers
+    public static class SDEventHandler
     {
 
 
 
 
+        public static void AttachActionTypeChangedListener(IStreamDeckButtonActionListener buttonActionListener)
+        {
+            OnActionTypeChanged += buttonActionListener.ActionTypeChangedEvent;
+        }
 
+        public static void DetachActionTypeChangedListener(IStreamDeckButtonActionListener buttonActionListener)
+        {
+            OnActionTypeChanged -= buttonActionListener.ActionTypeChangedEvent;
+        }
+
+        public delegate void ActionTypeChangedEventHandler(object sender, ActionTypeChangedEventArgs e);
+        public static event ActionTypeChangedEventHandler OnActionTypeChanged;
+
+
+        public static void ActionTypeChangedLayerNavigation (object sender, StreamDeckPanel streamDeckPanel, EnumStreamDeckActionType actionType, string layerName)
+        {
+            var arguments = new ActionTypeChangedEventArgs
+            {
+                BindingHash = streamDeckPanel.BindingHash,
+                ActionType = actionType,
+                TargetLayerName = layerName
+            };
+            OnActionTypeChanged?.Invoke(sender, arguments);
+        }
 
 
         /*

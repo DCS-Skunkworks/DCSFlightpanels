@@ -56,6 +56,7 @@
         {
             CreateRadioKnobs();
             Startup();
+            BIOSEventHandler.AttachStringListener(this);
         }
 
         private bool _disposed;
@@ -66,6 +67,7 @@
             {
                 if (disposing)
                 {
+                    BIOSEventHandler.DetachStringListener(this);
                 }
 
                 _disposed = true;
@@ -690,11 +692,11 @@
             {
                 // V/UHF COMM1
                 _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_STRING_FREQ");
-                DCSBIOSStringManager.AddListener(_comm1DcsbiosOutputFreq, this);
+                DCSBIOSStringManager.AddListeningAddress(_comm1DcsbiosOutputFreq);
 
                 // V/UHF COMM2
                 _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM2_STRING_FREQ");
-                DCSBIOSStringManager.AddListener(_comm2DcsbiosOutputFreq, this);
+                DCSBIOSStringManager.AddListeningAddress(_comm2DcsbiosOutputFreq);
 
                 StartListeningForHidPanelChanges();
 

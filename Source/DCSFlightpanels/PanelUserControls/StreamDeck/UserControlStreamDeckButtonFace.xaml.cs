@@ -28,7 +28,7 @@
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonFace.xaml
     /// </summary>
-    public partial class UserControlStreamDeckButtonFace : UserControlStreamDeckButtonAction.IStreamDeckButtonActionListener, IIsDirty, INvStreamDeckListener
+    public partial class UserControlStreamDeckButtonFace : IStreamDeckButtonActionListener, IIsDirty, INvStreamDeckListener
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
@@ -197,7 +197,7 @@
         public void SetIsDirty()
         {
             _isDirty = true;
-            SDEventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton, string.Empty, _streamDeckPanel.BindingHash);
+            SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckButton, string.Empty, _streamDeckPanel.BindingHash);
         }
 
         public bool IsDirty
@@ -588,7 +588,7 @@
             }
         }
 
-        public void ActionTypeChangedEvent(object sender, UserControlStreamDeckButtonAction.ActionTypeChangedEventArgs e)
+        public void ActionTypeChangedEvent(object sender, ActionTypeChangedEventArgs e)
         {
             /*
              * Add the incoming button face if there isn't any already specified.

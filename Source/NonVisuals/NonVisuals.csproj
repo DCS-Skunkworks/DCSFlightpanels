@@ -102,6 +102,7 @@
     <Compile Include="Interfaces\IHardwareConflictResolver.cs" />
     <Compile Include="Interfaces\IOledImageListener.cs" />
     <Compile Include="Interfaces\ISettingsModifiedListener.cs" />
+    <Compile Include="Interfaces\IStreamDeckButtonActionListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />
     <Compile Include="Interfaces\IIsDirty.cs" />
     <Compile Include="Interfaces\ISRSHandler.cs" />
@@ -145,7 +146,7 @@
     <Compile Include="StreamDeck\BitMapCreator.cs" />
     <Compile Include="StreamDeck\ButtonExport.cs" />
     <Compile Include="StreamDeck\ColorCounter.cs" />
-    <Compile Include="StreamDeck\Events\SDEventHandlers.cs" />
+    <Compile Include="StreamDeck\Events\SDEventHandler.cs" />
     <Compile Include="StreamDeck\JSONFixer.cs" />
     <Compile Include="StreamDeck\LockedBitmap.cs" />
     <Compile Include="StreamDeck\StreamDeckCommon.cs" />

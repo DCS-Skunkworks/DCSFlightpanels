@@ -522,7 +522,7 @@
 
             selectedLayer.IsVisible = true;
 
-            SDEventHandlers.LayerSwitched(this, _streamDeckPanel.BindingHash, _selectedLayerName);
+            SDEventHandler.LayerSwitched(this, _streamDeckPanel.BindingHash, _selectedLayerName);
         }
 
         public int SelectedButtonNumber
@@ -546,7 +546,7 @@
                 if (_selectedButtonName != value)
                 {
                     _selectedButtonName = value;
-                    SDEventHandlers.SelectedButtonChanged(this, SelectedButton, _streamDeckPanel.BindingHash);
+                    SDEventHandler.SelectedButtonChanged(this, SelectedButton, _streamDeckPanel.BindingHash);
                     return;
                 }
 

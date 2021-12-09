@@ -252,6 +252,7 @@
         {
             CreateRadioKnobs();
             Startup();
+            BIOSEventHandler.AttachStringListener(this);
         }
 
         private bool _disposed;
@@ -267,6 +268,7 @@
                     _shutdownRIOLink4Thread = true;
                     _shutdownRIOTACANThread = true;
                     _shutdownVUHFThread = true;
+                    BIOSEventHandler.DetachStringListener(this);
                 }
 
                 _disposed = true;
@@ -3265,7 +3267,7 @@
                 _uhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_DIAL4_FREQ");
                 _uhfDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF1_FUNCTION");
                 _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_REMOTE_DISP");
-                DCSBIOSStringManager.AddListener(_uhfDcsbiosOutputSelectedChannel, this);
+                DCSBIOSStringManager.AddListeningAddress(_uhfDcsbiosOutputSelectedChannel);
 
                 // VUHF
                 _vuhfDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_FREQ_MODE");
@@ -3273,7 +3275,7 @@
                 _vuhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL3_FREQ");
                 _vuhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL4_FREQ");
                 _vuhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_VUHF_REMOTE_DISP");
-                DCSBIOSStringManager.AddListener(_vuhfDcsbiosOutputSelectedChannel, this);
+                DCSBIOSStringManager.AddListeningAddress(_vuhfDcsbiosOutputSelectedChannel);
 
                 _vuhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_HIGH_FREQ");
                 _vuhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL3_FREQ");

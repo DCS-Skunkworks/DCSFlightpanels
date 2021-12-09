@@ -87,7 +87,7 @@
                 /*
                  * Here we must check if event if we can change the button that is selected. If there are unsaved configurations we can't
                  */
-                if (newlySelectedImage.Bill.Button != _streamDeckPanel.SelectedButton && SDEventHandlers.AreThereDirtyListeners(this))
+                if (newlySelectedImage.Bill.Button != _streamDeckPanel.SelectedButton && SDEventHandler.AreThereDirtyListeners(this))
                 {
                     if (CommonUI.DoDiscardAfterMessage(true, $"Discard Changes to {SelectedButtonName} ?"))
                     {

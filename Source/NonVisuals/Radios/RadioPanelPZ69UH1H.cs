@@ -284,6 +284,7 @@ namespace NonVisuals.Radios
         {
             CreateRadioKnobs();
             Startup();
+            BIOSEventHandler.AttachStringListener(this);
         }
 
         private bool _disposed;
@@ -299,6 +300,7 @@ namespace NonVisuals.Radios
                     _shutdownVHFNavThread = true;
                     _shutdownVHFFMThread = true;
                     _shutdownADFThread = true;
+                    BIOSEventHandler.DetachStringListener(this);
                 }
 
                 _disposed = true;
@@ -3126,16 +3128,16 @@ namespace NonVisuals.Radios
             {
                 // VHF COMM
                 _vhfCommDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFCOMM_FREQ");
-                DCSBIOSStringManager.AddListener(_vhfCommDcsbiosOutputCockpitFrequency, this);
+                DCSBIOSStringManager.AddListeningAddress(_vhfCommDcsbiosOutputCockpitFrequency);
 
                 // UHF
                 _uhfDcsbiosOutputCockpitPresetChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET");
                 _uhfDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FREQ");
-                DCSBIOSStringManager.AddListener(_uhfDcsbiosOutputCockpitFrequency, this);
+                DCSBIOSStringManager.AddListeningAddress(_uhfDcsbiosOutputCockpitFrequency);
 
                 // VHF NAV
                 _vhfNavDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFNAV_FREQ");
-                DCSBIOSStringManager.AddListener(_vhfNavDcsbiosOutputCockpitFrequency, this);
+                DCSBIOSStringManager.AddListeningAddress(_vhfNavDcsbiosOutputCockpitFrequency);
 
                 // INTERCOMM
                 _interCommDcsbiosOutputCockpitPos = DCSBIOSControlLocator.GetDCSBIOSOutput("INT_MODE");
