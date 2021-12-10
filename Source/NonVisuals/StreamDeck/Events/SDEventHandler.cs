@@ -11,7 +11,9 @@
 
 
 
-
+        /*
+         * This is UI event within Stream Deck. Triggered when user changes value in Layer combobox when assigning a button for changing layer.
+         */
         public static void AttachActionTypeChangedListener(IStreamDeckButtonActionListener buttonActionListener)
         {
             OnActionTypeChanged += buttonActionListener.ActionTypeChangedEvent;
@@ -221,7 +223,7 @@
         }
 
         /********************************************************************************************
-        * Event to notify DCSBIOSDecoders to go invisible (ugly workaround when I can't get handle of the various threads)
+        * Event to notify DCSBIOSDecoders to go invisible when layer no more is visible
         ********************************************************************************************/
         public delegate void StreamDeckHideDecodersEventHandler(object sender, StreamDeckHideDecoderEventArgs e);
         public static event StreamDeckHideDecodersEventHandler OnStreamDeckHideDecodersEventHandler;

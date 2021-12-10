@@ -107,6 +107,7 @@
                 {
                     return;
                 }
+
                 Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
             }
             catch (Exception ex)

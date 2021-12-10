@@ -6,7 +6,7 @@
 
     public class BipPanelRegisteredEventArgs : EventArgs
     {
-        public string UniqueId { get; set; }
+        public string HIDInstanceId { get; set; }
 
         public BacklitPanelBIP BacklitPanelBip { get; set; }
     }

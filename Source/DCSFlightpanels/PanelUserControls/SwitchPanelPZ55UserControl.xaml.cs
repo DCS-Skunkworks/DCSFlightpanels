@@ -211,7 +211,7 @@
         {
             try
             {
-                if (_switchPanelPZ55.HIDInstanceId.Equals(e.UniqueId))
+                if (_switchPanelPZ55.HIDInstanceId.Equals(e.HIDInstanceId))
                 {
                     var position = (SwitchPanelPZ55LEDPosition)e.LEDPosition.Position;
                     var imageArray = _imageArrayUpper;
@@ -331,7 +331,7 @@
         {
             try
             {
-                if (e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ55SwitchPanel)
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ55.Text = string.Empty));

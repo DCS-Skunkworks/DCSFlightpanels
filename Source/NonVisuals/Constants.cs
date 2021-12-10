@@ -4,6 +4,6 @@
     {
         public static readonly string PathRootDriveC = "c:\\";
         public static readonly int StreamDeckImageSideSize = 72;
-        public static readonly int ThreadShutDownWaitTime = 300;
+        public static readonly int ThreadShutDownWaitTime = 30;
     }
 }

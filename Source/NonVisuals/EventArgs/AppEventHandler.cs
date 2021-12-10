@@ -249,7 +249,7 @@ namespace NonVisuals.EventArgs
 
         public static void LedLightChanged(object sender, string hidInstanceId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
-            OnLedLightChangedA?.Invoke(sender, new LedLightChangeEventArgs { UniqueId = hidInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
+            OnLedLightChangedA?.Invoke(sender, new LedLightChangeEventArgs { HIDInstanceId = hidInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
         }
 
         public static void AttachLEDLightListener(IGamingPanelListener gamingPanelListener)

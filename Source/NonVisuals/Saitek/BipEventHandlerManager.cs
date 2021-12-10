@@ -95,7 +95,7 @@
          */
         private void OnPanelRegistered(BacklitPanelBIP backlitPanelBip)
         {
-            OnBipPanelRegistered?.Invoke(this, new BipPanelRegisteredEventArgs { UniqueId = backlitPanelBip.HIDInstanceId, BacklitPanelBip = backlitPanelBip });
+            OnBipPanelRegistered?.Invoke(this, new BipPanelRegisteredEventArgs { HIDInstanceId = backlitPanelBip.HIDInstanceId, BacklitPanelBip = backlitPanelBip });
         }
     }
 }

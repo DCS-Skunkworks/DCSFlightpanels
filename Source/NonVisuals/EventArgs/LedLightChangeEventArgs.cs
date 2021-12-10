@@ -6,7 +6,7 @@
 
     public class LedLightChangeEventArgs : EventArgs
     {
-        public string UniqueId { get; set; }
+        public string HIDInstanceId { get; set; }
 
         public SaitekPanelLEDPosition LEDPosition { get; set; }
 
