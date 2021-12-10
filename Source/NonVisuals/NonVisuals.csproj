@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
+    <ProjectReference Include="..\HidLibrary\HidLibrary.csproj" />
     <ProjectReference Include="..\MEF\MEF.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -41,7 +42,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="hidlibrary" Version="3.3.40" />
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
     <PackageReference Include="StreamDeckSharp" Version="3.2.0" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
