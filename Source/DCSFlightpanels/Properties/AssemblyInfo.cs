@@ -1,3 +1,4 @@
+using System.Resources;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -55,6 +56,6 @@ using System.Windows;
 
 
 
-[assembly: AssemblyVersion("4.5.47.7217")]
-[assembly: AssemblyFileVersion("4.5.47.7217")]
-
+[assembly: AssemblyVersion("4.6.1.4572")]
+[assembly: AssemblyFileVersion("4.6.1.4572")]
+[assembly: NeutralResourcesLanguage("en")]

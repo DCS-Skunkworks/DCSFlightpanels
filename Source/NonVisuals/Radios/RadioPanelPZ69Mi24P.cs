@@ -703,7 +703,7 @@
                             }
                             Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
                         }
-                        while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+                        while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownYaDRO1AThread);
                         SwapCockpitStandbyFrequencyYaDRO1A();
                         ShowFrequenciesOnPanel();
                     }
