@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
 	<AssemblyName>NonVisuals</AssemblyName>
-    <NoWarn>$(NoWarn);SYSLIB0006</NoWarn>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
