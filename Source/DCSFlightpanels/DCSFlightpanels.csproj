@@ -274,10 +274,6 @@
 		<Resource Include="Images\F-14 RIO Datalink.png" />
 	</ItemGroup>
 	<ItemGroup>
-		<Resource Include="Images\icons8-bug-26.png" />
-		<Resource Include="Images\icons8-bug-52.png" />
-	</ItemGroup>
-	<ItemGroup>
 		<Resource Include="Images\dcs_screenshot_by_derbysieger.jpg" />
 	</ItemGroup>
 	<ItemGroup>
@@ -287,16 +283,7 @@
 		<Resource Include="Images\av8bna_comm1_comm2.png" />
 	</ItemGroup>
 	<ItemGroup>
-		<Resource Include="Images\streamdeck35.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\streamdeck48.png" />
-	</ItemGroup>
-	<ItemGroup>
 		<Resource Include="Images\default_image_streamdeck_button.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\question_mark.png" />
 	</ItemGroup>
 	<ItemGroup>
 		<Resource Include="Images\down_arrow.png" />
