@@ -186,7 +186,7 @@ namespace HidLibrary
         public async Task<HidReport> ReadReportAsync(int timeout = 0)
         {
             var readReportDelegate = new ReadReportDelegate(ReadReport);
-#if NET20 || NET35
+#if NET20 || NET35 || NET5_0_OR_GREATER
             return await Task<HidReport>.Factory.StartNew(() => readReportDelegate.Invoke(timeout));
 #else
             return await Task<HidReport>.Factory.FromAsync(readReportDelegate.BeginInvoke, readReportDelegate.EndInvoke, timeout, null);
