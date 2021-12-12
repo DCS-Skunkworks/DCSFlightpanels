@@ -22,9 +22,12 @@ namespace HidLibrary
 
         public void Init()
         {
-            // var eventMonitor = new Action(DeviceEventMonitor);
-            // eventMonitor.BeginInvoke(DisposeDeviceEventMonitor, eventMonitor);
+#if NET20 || NET35 || NET5_0_OR_GREATER
             Task task = Task.Factory.StartNew(() => DeviceEventMonitor());
+#else
+             var eventMonitor = new Action(DeviceEventMonitor);
+             eventMonitor.BeginInvoke(DisposeDeviceEventMonitor, eventMonitor);
+#endif
         }
 
         private void DeviceEventMonitor()
@@ -43,9 +46,9 @@ namespace HidLibrary
             if (_device.MonitorDeviceEvents) Init();
         }
 
-        //private static void DisposeDeviceEventMonitor(IAsyncResult ar)
-        //{
-        //    ((Action)ar.AsyncState).EndInvoke(ar);
-        //}
+        private static void DisposeDeviceEventMonitor(IAsyncResult ar)
+        {
+            ((Action)ar.AsyncState).EndInvoke(ar);
+        }
     }
 }
