@@ -617,10 +617,6 @@
                         {
                             textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                         }
-                        else
-                        {
-                            textBox.Bill.KeyPress = null;
-                        }
                     }
                 }
 
@@ -632,10 +628,6 @@
                         {
                             textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
                         }
-                        else
-                        {
-                            textBox.Bill.OSCommandObject = null;
-                        }
                 }
 
                 foreach (var dcsBiosBinding in _multiPanelPZ70.DCSBiosBindings)
@@ -644,10 +636,6 @@
                     if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
-                    }
-                    else
-                    {
-                        textBox.Bill.DCSBIOSBinding = null;
                     }
                 }
 
@@ -658,10 +646,6 @@
                     if (bipLink.DialPosition == _multiPanelPZ70.PZ70DialPosition && bipLink.BIPLights.Count > 0)
                     {
                         textBox.Bill.BipLink = bipLink;
-                    }
-                    else
-                    {
-                        textBox.Bill.BipLink = null;
                     }
                 }
 
