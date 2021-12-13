@@ -957,9 +957,9 @@
             };
         }
 
-        public TextBox GetTextBox(object general_key, bool isTurnedOn)
+        public TextBox GetTextBox(object panelSwitch, bool isTurnedOn)
         {
-            var key = (SwitchPanelPZ55Keys)general_key;
+            var key = (SwitchPanelPZ55Keys)panelSwitch;
             return (key, isTurnedOn) switch
             {
                 (SwitchPanelPZ55Keys.KNOB_ENGINE_OFF, true) => TextBoxKnobOff,

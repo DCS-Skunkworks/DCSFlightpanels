@@ -1142,192 +1142,41 @@
             throw new Exception("Failed to find Radiopanel knob for TextBox " + textBox.Name);
         }
 
-        public TextBox GetTextBox(object panelSwitch, bool whenTurnedOn)
+        public TextBox GetTextBox(object panelSwitch, bool isTurnedOn)
         {
-            var knob = (RadioPanelPZ69KnobsEmulator)panelSwitch;
-            try
+            var key = (RadioPanelPZ69KnobsEmulator)panelSwitch;
+            return (key, isTurnedOn) switch
             {
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperCOM1 && whenTurnedOn)
-                {
-                    return TextBoxUpperCom1;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperCOM2 && whenTurnedOn)
-                {
-                    return TextBoxUpperCom2;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperNAV1 && whenTurnedOn)
-                {
-                    return TextBoxUpperNav1;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperNAV2 && whenTurnedOn)
-                {
-                    return TextBoxUpperNav2;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperADF && whenTurnedOn)
-                {
-                    return TextBoxUpperADF;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperDME && whenTurnedOn)
-                {
-                    return TextBoxUpperDME;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperXPDR && whenTurnedOn)
-                {
-                    return TextBoxUpperXPDR;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc && whenTurnedOn)
-                {
-                    return TextBoxUpperLargePlus;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec && whenTurnedOn)
-                {
-                    return TextBoxUpperLargeMinus;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc && whenTurnedOn)
-                {
-                    return TextBoxUpperSmallPlus;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec && whenTurnedOn)
-                {
-                    return TextBoxUpperSmallMinus;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperFreqSwitch && whenTurnedOn)
-                {
-                    return TextBoxUpperActStbyOn;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.UpperFreqSwitch && !whenTurnedOn)
-                {
-                    return TextBoxUpperActStbyOff;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerCOM1 && whenTurnedOn)
-                {
-                    return TextBoxLowerCom1;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerCOM2 && whenTurnedOn)
-                {
-                    return TextBoxLowerCom2;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerNAV1 && whenTurnedOn)
-                {
-                    return TextBoxLowerNav1;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerNAV2 && whenTurnedOn)
-                {
-                    return TextBoxLowerNav2;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerADF && whenTurnedOn)
-                {
-                    return TextBoxLowerADF;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerDME && whenTurnedOn)
-                {
-                    return TextBoxLowerDME;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerXPDR && whenTurnedOn)
-                {
-                    return TextBoxLowerXPDR;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc && whenTurnedOn)
-                {
-                    return TextBoxLowerLargePlus;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec && whenTurnedOn)
-                {
-                    return TextBoxLowerLargeMinus;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc && whenTurnedOn)
-                {
-                    return TextBoxLowerSmallPlus;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec && whenTurnedOn)
-                {
-                    return TextBoxLowerSmallMinus;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerFreqSwitch && whenTurnedOn)
-                {
-                    return TextBoxLowerActStbyOn;
-                }
-                if (knob == RadioPanelPZ69KnobsEmulator.LowerFreqSwitch && !whenTurnedOn)
-                {
-                    return TextBoxLowerActStbyOff;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-            throw new Exception("Failed to find TextBox for Radiopanel knob " + knob);
+                (RadioPanelPZ69KnobsEmulator.UpperCOM1, true) => TextBoxUpperCom1,
+                (RadioPanelPZ69KnobsEmulator.UpperCOM2, true) => TextBoxUpperCom2,
+                (RadioPanelPZ69KnobsEmulator.UpperNAV1, true) => TextBoxUpperNav1,
+                (RadioPanelPZ69KnobsEmulator.UpperNAV2, true) => TextBoxUpperNav2,
+                (RadioPanelPZ69KnobsEmulator.UpperADF, true) => TextBoxUpperADF,
+                (RadioPanelPZ69KnobsEmulator.UpperDME, true) => TextBoxUpperDME,
+                (RadioPanelPZ69KnobsEmulator.UpperXPDR, true) => TextBoxUpperXPDR,
+                (RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc, true) => TextBoxUpperLargePlus,
+                (RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec, true) => TextBoxUpperLargeMinus,
+                (RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc, true) => TextBoxUpperSmallPlus,
+                (RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec, true) => TextBoxUpperSmallMinus,
+                (RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, true) => TextBoxUpperActStbyOn,
+                (RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, false) => TextBoxUpperActStbyOff,
+                (RadioPanelPZ69KnobsEmulator.LowerCOM1, true) => TextBoxLowerCom1,
+                (RadioPanelPZ69KnobsEmulator.LowerCOM2, true) => TextBoxLowerCom2,
+                (RadioPanelPZ69KnobsEmulator.LowerNAV1, true) => TextBoxLowerNav1,
+                (RadioPanelPZ69KnobsEmulator.LowerNAV2, true) => TextBoxLowerNav2,
+                (RadioPanelPZ69KnobsEmulator.LowerADF, true) => TextBoxLowerADF,
+                (RadioPanelPZ69KnobsEmulator.LowerDME, true) => TextBoxLowerDME,
+                (RadioPanelPZ69KnobsEmulator.LowerXPDR, true) => TextBoxLowerXPDR,
+                (RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc, true) => TextBoxLowerLargePlus,
+                (RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec, true) => TextBoxLowerLargeMinus,
+                (RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc, true) => TextBoxLowerSmallPlus,
+                (RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec, true) => TextBoxLowerSmallMinus,
+                (RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, true) => TextBoxLowerActStbyOn,
+                (RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, false) => TextBoxLowerActStbyOff,
+                _ => throw new Exception($"Failed to find text box based on key (RadioPanelUserControl) {key} and value {isTurnedOn}")
+            };
         }
-
-        private void MenuItemAddNullKey_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                textBox.Bill.ClearAll();
-                var vkNull = Enum.GetName(typeof(MEF.VirtualKeyCode), MEF.VirtualKeyCode.VK_NULL);
-                if (string.IsNullOrEmpty(vkNull))
-                {
-                    return;
-                }
-                var keyPress = new KeyPress(vkNull, KeyPressLength.ThirtyTwoMilliSec);
-                textBox.Bill.KeyPress = keyPress;
-                textBox.Bill.KeyPress.Description = "VK_NULL";
-                textBox.Text = vkNull;
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-                OSCommandWindow osCommandWindow;
-                if (textBox.Bill.ContainsOSCommand())
-                {
-                    osCommandWindow = new OSCommandWindow(textBox.Bill.OSCommandObject);
-                }
-                else
-                {
-                    osCommandWindow = new OSCommandWindow();
-                }
-                osCommandWindow.ShowDialog();
-                if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
-                {
-                    //Clicked OK
-                    if (!osCommandWindow.IsDirty)
-                    {
-                        //User made no changes
-                        return;
-                    }
-                    var operatingSystemCommand = osCommandWindow.OSCommandObject;
-                    textBox.Bill.OSCommandObject = operatingSystemCommand;
-                    textBox.Text = operatingSystemCommand.Name;
-                    UpdateOSCommandBindingsPZ55(textBox);
-                }
-                TextBoxLogPZ69.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
+        
         private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
         {
             try

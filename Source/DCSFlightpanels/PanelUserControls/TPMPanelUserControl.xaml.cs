@@ -649,108 +649,33 @@
 
             throw new Exception("Failed to find TPM switch for TextBox : " + textBox.Name);
         }
-        public TextBox GetTextBox(object panelKey, bool whenTurnedOn)
+
+
+        public TextBox GetTextBox(object panelSwitch, bool isTurnedOn)
         {
-            var key = (TPMPanelSwitches) panelKey;
-
-            try
+            var key = (TPMPanelSwitches)panelSwitch;
+            return (key, isTurnedOn) switch
             {
-                if (key == TPMPanelSwitches.G1 && !whenTurnedOn)
-                {
-                    return TextBoxG1Off;
-                }
-
-                if (key == TPMPanelSwitches.G1 && whenTurnedOn)
-                {
-                    return TextBoxG1On;
-                }
-
-                if (key == TPMPanelSwitches.G2 && !whenTurnedOn)
-                {
-                    return TextBoxG2Off;
-                }
-
-                if (key == TPMPanelSwitches.G2 && whenTurnedOn)
-                {
-                    return TextBoxG2On;
-                }
-
-                if (key == TPMPanelSwitches.G3 && !whenTurnedOn)
-                {
-                    return TextBoxG3Off;
-                }
-
-                if (key == TPMPanelSwitches.G3 && whenTurnedOn)
-                {
-                    return TextBoxG3On;
-                }
-
-                if (key == TPMPanelSwitches.G4 && !whenTurnedOn)
-                {
-                    return TextBoxG4Off;
-                }
-
-                if (key == TPMPanelSwitches.G4 && whenTurnedOn)
-                {
-                    return TextBoxG4On;
-                }
-
-                if (key == TPMPanelSwitches.G5 && !whenTurnedOn)
-                {
-                    return TextBoxG5Off;
-                }
-
-                if (key == TPMPanelSwitches.G5 && whenTurnedOn)
-                {
-                    return TextBoxG5On;
-                }
-
-                if (key == TPMPanelSwitches.G6 && !whenTurnedOn)
-                {
-                    return TextBoxG6Off;
-                }
-
-                if (key == TPMPanelSwitches.G6 && whenTurnedOn)
-                {
-                    return TextBoxG6On;
-                }
-
-                if (key == TPMPanelSwitches.G7 && !whenTurnedOn)
-                {
-                    return TextBoxG7Off;
-                }
-
-                if (key == TPMPanelSwitches.G7 && whenTurnedOn)
-                {
-                    return TextBoxG7On;
-                }
-
-                if (key == TPMPanelSwitches.G8 && !whenTurnedOn)
-                {
-                    return TextBoxG8Off;
-                }
-
-                if (key == TPMPanelSwitches.G8 && whenTurnedOn)
-                {
-                    return TextBoxG8On;
-                }
-
-                if (key == TPMPanelSwitches.G9 && !whenTurnedOn)
-                {
-                    return TextBoxG9Off;
-                }
-
-                if (key == TPMPanelSwitches.G9 && whenTurnedOn)
-                {
-                    return TextBoxG9On;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-
-            throw new Exception("Failed to find TextBox for TPM switch : " + key);
+                (TPMPanelSwitches.G1, false) => TextBoxG1Off,
+                (TPMPanelSwitches.G1, true) => TextBoxG1On,
+                (TPMPanelSwitches.G2, false) => TextBoxG2Off,
+                (TPMPanelSwitches.G2, true) => TextBoxG2On,
+                (TPMPanelSwitches.G3, false) => TextBoxG3Off,
+                (TPMPanelSwitches.G3, true) => TextBoxG3On,
+                (TPMPanelSwitches.G4, false) => TextBoxG4Off,
+                (TPMPanelSwitches.G4, true) => TextBoxG4On,
+                (TPMPanelSwitches.G5, false) => TextBoxG5Off,
+                (TPMPanelSwitches.G5, true) => TextBoxG5On,
+                (TPMPanelSwitches.G6, false) => TextBoxG6Off,
+                (TPMPanelSwitches.G6, true) => TextBoxG6On,
+                (TPMPanelSwitches.G7, false) => TextBoxG7Off,
+                (TPMPanelSwitches.G7, true) => TextBoxG7On,
+                (TPMPanelSwitches.G8, false) => TextBoxG8Off,
+                (TPMPanelSwitches.G8, true) => TextBoxG8On,
+                (TPMPanelSwitches.G9, false) => TextBoxG9Off,
+                (TPMPanelSwitches.G9, true) => TextBoxG9On,
+                _ => throw new Exception($"Failed to find text box based on key (TPMPanelUserControl) {key} and value {isTurnedOn}")
+            };
         }
 
 

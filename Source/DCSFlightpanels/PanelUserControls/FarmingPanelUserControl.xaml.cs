@@ -860,138 +860,43 @@
         }
 
 
-
-        public TextBox GetTextBox(object generalKey, bool whenTurnedOn)
+        public TextBox GetTextBox(object panelSwitch, bool isTurnedOn)
         {
-            var key = (FarmingPanelMKKeys)generalKey;
-            try
+            var key = (FarmingPanelMKKeys)panelSwitch;
+            return (key, isTurnedOn) switch
             {
-                if (key == FarmingPanelMKKeys.BUTTON_1 && whenTurnedOn)
-                {
-                    return TextBox1;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_2 && whenTurnedOn)
-                {
-                    return TextBox2;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_3 && whenTurnedOn)
-                {
-                    return TextBox3;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_4 && whenTurnedOn)
-                {
-                    return TextBox4;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_5 && whenTurnedOn)
-                {
-                    return TextBox5;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_6 && whenTurnedOn)
-                {
-                    return TextBox6;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_7 && whenTurnedOn)
-                {
-                    return TextBox7;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_8 && whenTurnedOn)
-                {
-                    return TextBox8;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_9 && whenTurnedOn)
-                {
-                    return TextBox9;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_10 && whenTurnedOn)
-                {
-                    return TextBox10;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_11 && whenTurnedOn)
-                {
-                    return TextBox11;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_12 && whenTurnedOn)
-                {
-                    return TextBox12;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_13 && whenTurnedOn)
-                {
-                    return TextBox13;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_14 && whenTurnedOn)
-                {
-                    return TextBox14;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_15 && whenTurnedOn)
-                {
-                    return TextBox15;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_16 && whenTurnedOn)
-                {
-                    return TextBox16;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_17 && whenTurnedOn)
-                {
-                    return TextBox17;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_18 && whenTurnedOn)
-                {
-                    return TextBox18;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_19 && whenTurnedOn)
-                {
-                    return TextBox19;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_20 && whenTurnedOn)
-                {
-                    return TextBox20;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_21 && whenTurnedOn)
-                {
-                    return TextBox21;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_22 && whenTurnedOn)
-                {
-                    return TextBox22;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_23 && whenTurnedOn)
-                {
-                    return TextBox23;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_24 && whenTurnedOn)
-                {
-                    return TextBox24;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_25 && whenTurnedOn)
-                {
-                    return TextBox25;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_26 && whenTurnedOn)
-                {
-                    return TextBox26;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_27 && whenTurnedOn)
-                {
-                    return TextBox27;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_JOY_LEFT && whenTurnedOn)
-                {
-                    return TextBoxJoyLeft;
-                }
-                if (key == FarmingPanelMKKeys.BUTTON_JOY_RIGHT && whenTurnedOn)
-                {
-                    return TextBoxJoyRight;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-            throw new Exception("Failed to find text box based on key (SwitchPanelPZ55UserControl)" + key);
+                (FarmingPanelMKKeys.BUTTON_1, true) => TextBox1,
+                (FarmingPanelMKKeys.BUTTON_2, true) => TextBox2,
+                (FarmingPanelMKKeys.BUTTON_3, true) => TextBox3,
+                (FarmingPanelMKKeys.BUTTON_4, true) => TextBox4,
+                (FarmingPanelMKKeys.BUTTON_5, true) => TextBox5,
+                (FarmingPanelMKKeys.BUTTON_6, true) => TextBox6,
+                (FarmingPanelMKKeys.BUTTON_7, true) => TextBox7,
+                (FarmingPanelMKKeys.BUTTON_8, true) => TextBox8,
+                (FarmingPanelMKKeys.BUTTON_9, true) => TextBox9,
+                (FarmingPanelMKKeys.BUTTON_10, true) => TextBox10,
+                (FarmingPanelMKKeys.BUTTON_11, true) => TextBox11,
+                (FarmingPanelMKKeys.BUTTON_12, true) => TextBox12,
+                (FarmingPanelMKKeys.BUTTON_13, true) => TextBox13,
+                (FarmingPanelMKKeys.BUTTON_14, true) => TextBox14,
+                (FarmingPanelMKKeys.BUTTON_15, true) => TextBox15,
+                (FarmingPanelMKKeys.BUTTON_16, true) => TextBox16,
+                (FarmingPanelMKKeys.BUTTON_17, true) => TextBox17,
+                (FarmingPanelMKKeys.BUTTON_18, true) => TextBox18,
+                (FarmingPanelMKKeys.BUTTON_19, true) => TextBox19,
+                (FarmingPanelMKKeys.BUTTON_20, true) => TextBox20,
+                (FarmingPanelMKKeys.BUTTON_21, true) => TextBox21,
+                (FarmingPanelMKKeys.BUTTON_22, true) => TextBox22,
+                (FarmingPanelMKKeys.BUTTON_23, true) => TextBox23,
+                (FarmingPanelMKKeys.BUTTON_24, true) => TextBox24,
+                (FarmingPanelMKKeys.BUTTON_25, true) => TextBox25,
+                (FarmingPanelMKKeys.BUTTON_26, true) => TextBox26,
+                (FarmingPanelMKKeys.BUTTON_27, true) => TextBox27,
+                (FarmingPanelMKKeys.BUTTON_JOY_LEFT, true) => TextBoxJoyLeft,
+                (FarmingPanelMKKeys.BUTTON_JOY_RIGHT, true) => TextBoxJoyRight,
+                _ => throw new Exception($"Failed to find text box based on key (FarmingPanelUserControl) {key} and value {isTurnedOn}")
+            };
         }
-
-
-
         private void ButtonDEV_OnClick(object sender, RoutedEventArgs e)
         {
             try
