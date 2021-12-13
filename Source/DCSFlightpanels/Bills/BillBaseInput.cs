@@ -440,9 +440,10 @@
 
         private void AddKeyStroke(KeyPressInfo keyStroke)
         {
-            KeyPress = new KeyPress();
-            KeyPress.KeyPressSequence.Add(0, keyStroke);
-            KeyPress.Description = string.Empty;
+            var keyPress = new KeyPress();
+            keyPress.KeyPressSequence.Add(0, keyStroke);
+            keyPress.Description = string.Empty;
+            KeyPress = keyPress;
             TextBox.Text = keyStroke.VirtualKeyCodesAsString;
             UpdateKeyBindingKeyStroke();
         }
