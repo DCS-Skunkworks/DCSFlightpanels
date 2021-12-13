@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Radios.Emulators
+﻿using System.CodeDom;
+
+namespace DCSFlightpanels.Radios.Emulators
 {
     using System;
     using System.Collections.Generic;
@@ -1025,122 +1027,41 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
+        
         public PanelSwitchOnOff GetSwitch(TextBox textBox)
         {
-            try
+            return textBox switch
             {
-                if (textBox.Equals(TextBoxUpperCom1))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperCOM1, true);
-                }
-                if (textBox.Equals(TextBoxUpperCom2))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperCOM2, true);
-                }
-                if (textBox.Equals(TextBoxUpperNav1))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperNAV1, true);
-                }
-                if (textBox.Equals(TextBoxUpperNav2))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperNAV2, true);
-                }
-                if (textBox.Equals(TextBoxUpperADF))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperADF, true);
-                }
-                if (textBox.Equals(TextBoxUpperDME))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperDME, true);
-                }
-                if (textBox.Equals(TextBoxUpperXPDR))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperXPDR, true);
-                }
-                if (textBox.Equals(TextBoxUpperLargePlus))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc, true);
-                }
-                if (textBox.Equals(TextBoxUpperLargeMinus))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec, true);
-                }
-                if (textBox.Equals(TextBoxUpperSmallPlus))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc, true);
-                }
-                if (textBox.Equals(TextBoxUpperSmallMinus))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec, true);
-                }
-                if (textBox.Equals(TextBoxUpperActStbyOn))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, true);
-                }
-                if (textBox.Equals(TextBoxUpperActStbyOff))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, false);
-                }
-                if (textBox.Equals(TextBoxLowerCom1))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerCOM1, true);
-                }
-                if (textBox.Equals(TextBoxLowerCom2))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerCOM2, true);
-                }
-                if (textBox.Equals(TextBoxLowerNav1))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerNAV1, true);
-                }
-                if (textBox.Equals(TextBoxLowerNav2))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerNAV2, true);
-                }
-                if (textBox.Equals(TextBoxLowerADF))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerADF, true);
-                }
-                if (textBox.Equals(TextBoxLowerDME))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerDME, true);
-                }
-                if (textBox.Equals(TextBoxLowerXPDR))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerXPDR, true);
-                }
-                if (textBox.Equals(TextBoxLowerLargePlus))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc, true);
-                }
-                if (textBox.Equals(TextBoxLowerLargeMinus))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec, true);
-                }
-                if (textBox.Equals(TextBoxLowerSmallPlus))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc, true);
-                }
-                if (textBox.Equals(TextBoxLowerSmallMinus))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec, true);
-                }
-                if (textBox.Equals(TextBoxLowerActStbyOn))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, true);
-                }
-                if (textBox.Equals(TextBoxLowerActStbyOff))
-                {
-                    return new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, false);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-            throw new Exception("Failed to find Radiopanel knob for TextBox " + textBox.Name);
+                TextBox t when t.Equals(TextBoxUpperCom1) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperCOM1, true),
+                TextBox t when t.Equals(TextBoxUpperCom2) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperCOM2, true),
+                TextBox t when t.Equals(TextBoxUpperNav1) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperNAV1, true),
+                TextBox t when t.Equals(TextBoxUpperNav2) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperNAV2, true),
+                TextBox t when t.Equals(TextBoxUpperADF) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperADF, true),
+                TextBox t when t.Equals(TextBoxUpperDME) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperDME, true),
+                TextBox t when t.Equals(TextBoxUpperXPDR) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperXPDR, true),
+                TextBox t when t.Equals(TextBoxUpperLargePlus) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc, true),
+                TextBox t when t.Equals(TextBoxUpperLargeMinus) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec, true),
+                TextBox t when t.Equals(TextBoxUpperSmallPlus) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc, true),
+                TextBox t when t.Equals(TextBoxUpperSmallMinus) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec, true),
+                TextBox t when t.Equals(TextBoxUpperActStbyOn) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, true),
+                TextBox t when t.Equals(TextBoxUpperActStbyOff) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, false),
+                TextBox t when t.Equals(TextBoxLowerCom1) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerCOM1, true),
+                TextBox t when t.Equals(TextBoxLowerCom2) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerCOM2, true),
+                TextBox t when t.Equals(TextBoxLowerNav1) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerNAV1, true),
+                TextBox t when t.Equals(TextBoxLowerNav2) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerNAV2, true),
+                TextBox t when t.Equals(TextBoxLowerADF) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerADF, true),
+                TextBox t when t.Equals(TextBoxLowerDME) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerDME, true),
+                TextBox t when t.Equals(TextBoxLowerXPDR) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerXPDR, true),
+                TextBox t when t.Equals(TextBoxLowerLargePlus) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc, true),
+                TextBox t when t.Equals(TextBoxLowerLargeMinus) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec, true),
+                TextBox t when t.Equals(TextBoxLowerSmallPlus) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc, true),
+                TextBox t when t.Equals(TextBoxLowerSmallMinus) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec, true),
+                TextBox t when t.Equals(TextBoxLowerActStbyOn) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, true),
+                TextBox t when t.Equals(TextBoxLowerActStbyOff) => new PZ69SwitchOnOff(RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, false),
+                _ => throw new Exception($"Failed to find RadioPanel knob for TextBox {textBox.Name}")
+            };
         }
+
 
         public TextBox GetTextBox(object panelSwitch, bool isTurnedOn)
         {

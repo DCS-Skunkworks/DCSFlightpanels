@@ -547,110 +547,33 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
+
         public PanelSwitchOnOff GetSwitch(TextBox textBox)
         {
-            try
+            return textBox switch
             {
-                if (textBox.Equals(TextBoxG1Off))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G1, false);
-                }
-
-                if (textBox.Equals(TextBoxG1On))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G1, true);
-                }
-
-                if (textBox.Equals(TextBoxG2Off))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G2, false);
-                }
-
-                if (textBox.Equals(TextBoxG2On))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G2, true);
-                }
-
-                if (textBox.Equals(TextBoxG3Off))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G3, false);
-                }
-
-                if (textBox.Equals(TextBoxG3On))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G3, true);
-                }
-
-                if (textBox.Equals(TextBoxG4Off))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G4, false);
-                }
-
-                if (textBox.Equals(TextBoxG4On))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G4, true);
-                }
-
-                if (textBox.Equals(TextBoxG5Off))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G5, false);
-                }
-
-                if (textBox.Equals(TextBoxG5On))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G5, true);
-                }
-
-                if (textBox.Equals(TextBoxG6Off))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G6, false);
-                }
-
-                if (textBox.Equals(TextBoxG6On))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G6, true);
-                }
-
-                if (textBox.Equals(TextBoxG7Off))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G7, false);
-                }
-
-                if (textBox.Equals(TextBoxG7On))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G7, true);
-                }
-
-                if (textBox.Equals(TextBoxG8Off))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G8, false);
-                }
-
-                if (textBox.Equals(TextBoxG8On))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G8, true);
-                }
-
-                if (textBox.Equals(TextBoxG9Off))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G9, false);
-                }
-
-                if (textBox.Equals(TextBoxG9On))
-                {
-                    return new TPMSwitchOnOff(TPMPanelSwitches.G9, true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-
-            throw new Exception("Failed to find TPM switch for TextBox : " + textBox.Name);
+                TextBox t when t.Equals(TextBoxG1Off) => new TPMSwitchOnOff(TPMPanelSwitches.G1, false),
+                TextBox t when t.Equals(TextBoxG1On) => new TPMSwitchOnOff(TPMPanelSwitches.G1, true),
+                TextBox t when t.Equals(TextBoxG2Off) => new TPMSwitchOnOff(TPMPanelSwitches.G2, false),
+                TextBox t when t.Equals(TextBoxG2On) => new TPMSwitchOnOff(TPMPanelSwitches.G2, true),
+                TextBox t when t.Equals(TextBoxG3Off) => new TPMSwitchOnOff(TPMPanelSwitches.G3, false),
+                TextBox t when t.Equals(TextBoxG3On) => new TPMSwitchOnOff(TPMPanelSwitches.G3, true),
+                TextBox t when t.Equals(TextBoxG4Off) => new TPMSwitchOnOff(TPMPanelSwitches.G4, false),
+                TextBox t when t.Equals(TextBoxG4On) => new TPMSwitchOnOff(TPMPanelSwitches.G4, true),
+                TextBox t when t.Equals(TextBoxG5Off) => new TPMSwitchOnOff(TPMPanelSwitches.G5, false),
+                TextBox t when t.Equals(TextBoxG5On) => new TPMSwitchOnOff(TPMPanelSwitches.G5, true),
+                TextBox t when t.Equals(TextBoxG6Off) => new TPMSwitchOnOff(TPMPanelSwitches.G6, false),
+                TextBox t when t.Equals(TextBoxG6On) => new TPMSwitchOnOff(TPMPanelSwitches.G6, true),
+                TextBox t when t.Equals(TextBoxG7Off) => new TPMSwitchOnOff(TPMPanelSwitches.G7, false),
+                TextBox t when t.Equals(TextBoxG7On) => new TPMSwitchOnOff(TPMPanelSwitches.G7, true),
+                TextBox t when t.Equals(TextBoxG8Off) => new TPMSwitchOnOff(TPMPanelSwitches.G8, false),
+                TextBox t when t.Equals(TextBoxG8On) => new TPMSwitchOnOff(TPMPanelSwitches.G8, true),
+                TextBox t when t.Equals(TextBoxG9Off) => new TPMSwitchOnOff(TPMPanelSwitches.G9, false),
+                TextBox t when t.Equals(TextBoxG9On) => new TPMSwitchOnOff(TPMPanelSwitches.G9, true),
+                _ => throw new Exception($"Failed to find key based on text box (TPMUserControl) {textBox.Name}")
+            };
         }
-
-
         public TextBox GetTextBox(object panelSwitch, bool isTurnedOn)
         {
             var key = (TPMPanelSwitches)panelSwitch;

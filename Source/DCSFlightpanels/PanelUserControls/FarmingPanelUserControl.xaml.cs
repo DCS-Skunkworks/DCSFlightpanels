@@ -733,133 +733,40 @@
 
         public PanelSwitchOnOff GetSwitch(TextBox textBox)
         {
-            try
+            return textBox switch
             {
-                if (textBox.Equals(TextBox1))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_1, true);
-                }
-                if (textBox.Equals(TextBox2))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_2, true);
-                }
-                if (textBox.Equals(TextBox3))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_3, true);
-                }
-                if (textBox.Equals(TextBox4))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_4, true);
-                }
-                if (textBox.Equals(TextBox5))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_5, true);
-                }
-                if (textBox.Equals(TextBox6))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_6, true);
-                }
-                if (textBox.Equals(TextBox7))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_7, true);
-                }
-                if (textBox.Equals(TextBox8))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_8, true);
-                }
-                if (textBox.Equals(TextBox9))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_9, true);
-                }
-                if (textBox.Equals(TextBox10))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_10, true);
-                }
-                if (textBox.Equals(TextBox11))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_11, true);
-                }
-                if (textBox.Equals(TextBox12))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_12, true);
-                }
-                if (textBox.Equals(TextBox13))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_13, true);
-                }
-                if (textBox.Equals(TextBox14))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_14, true);
-                }
-                if (textBox.Equals(TextBox15))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_15, true);
-                }
-                if (textBox.Equals(TextBox16))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_16, true);
-                }
-                if (textBox.Equals(TextBox17))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_17, true);
-                }
-                if (textBox.Equals(TextBox18))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_18, true);
-                }
-                if (textBox.Equals(TextBox19))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_19, true);
-                }
-                if (textBox.Equals(TextBox20))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_20, true);
-                }
-                if (textBox.Equals(TextBox21))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_21, true);
-                }
-                if (textBox.Equals(TextBox22))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_22, true);
-                }
-                if (textBox.Equals(TextBox23))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_23, true);
-                }
-                if (textBox.Equals(TextBox24))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_24, true);
-                }
-                if (textBox.Equals(TextBox25))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_25, true);
-                }
-                if (textBox.Equals(TextBox26))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_26, true);
-                }
-                if (textBox.Equals(TextBox27))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_27, true);
-                }
-                if (textBox.Equals(TextBoxJoyLeft))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_JOY_LEFT, true);
-                }
-                if (textBox.Equals(TextBoxJoyRight))
-                {
-                    return new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_JOY_RIGHT, true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-            throw new Exception("Failed to find key based on text box (FarmingSidePanelUserControl) : " + textBox.Name);
+                TextBox t when t.Equals(TextBox1) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_1, true),
+                TextBox t when t.Equals(TextBox2) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_2, true),
+                TextBox t when t.Equals(TextBox3) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_3, true),
+                TextBox t when t.Equals(TextBox4) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_4, true),
+                TextBox t when t.Equals(TextBox5) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_5, true),
+                TextBox t when t.Equals(TextBox6) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_6, true),
+                TextBox t when t.Equals(TextBox7) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_7, true),
+                TextBox t when t.Equals(TextBox8) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_8, true),
+                TextBox t when t.Equals(TextBox9) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_9, true),
+                TextBox t when t.Equals(TextBox10) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_10, true),
+                TextBox t when t.Equals(TextBox11) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_11, true),
+                TextBox t when t.Equals(TextBox12) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_12, true),
+                TextBox t when t.Equals(TextBox13) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_13, true),
+                TextBox t when t.Equals(TextBox14) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_14, true),
+                TextBox t when t.Equals(TextBox15) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_15, true),
+                TextBox t when t.Equals(TextBox16) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_16, true),
+                TextBox t when t.Equals(TextBox17) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_17, true),
+                TextBox t when t.Equals(TextBox18) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_18, true),
+                TextBox t when t.Equals(TextBox19) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_19, true),
+                TextBox t when t.Equals(TextBox20) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_20, true),
+                TextBox t when t.Equals(TextBox21) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_21, true),
+                TextBox t when t.Equals(TextBox22) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_22, true),
+                TextBox t when t.Equals(TextBox23) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_23, true),
+                TextBox t when t.Equals(TextBox24) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_24, true),
+                TextBox t when t.Equals(TextBox25) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_25, true),
+                TextBox t when t.Equals(TextBox26) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_26, true),
+                TextBox t when t.Equals(TextBox27) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_27, true),
+                TextBox t when t.Equals(TextBoxJoyLeft) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_JOY_LEFT, true),
+                TextBox t when t.Equals(TextBoxJoyRight) => new FarmingPanelOnOff(FarmingPanelMKKeys.BUTTON_JOY_RIGHT, true),
+                _ => throw new Exception($"Failed to find key based on text box (FarmingSidePanelUserControl)  {textBox.Name}")
+            };
         }
-
-
         public TextBox GetTextBox(object panelSwitch, bool isTurnedOn)
         {
             var key = (FarmingPanelMKKeys)panelSwitch;
