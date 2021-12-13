@@ -1,6 +1,6 @@
 #declaring & setting some variables
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
-$releasePath = $scriptPath+"\DCSFlightpanels\bin\x64\Release\"
+$releasePath = $scriptPath+"\DCSFlightpanels\bin\x64\Release\net6.0-windows\"
 $msBuildExePath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
 
 #Checking destination folder first
