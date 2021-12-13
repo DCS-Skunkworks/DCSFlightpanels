@@ -1062,152 +1062,47 @@
 
 
 
-        public TextBox GetTextBox(object general_key, bool whenTurnedOn)
+        public TextBox GetTextBox(object general_key, bool isTurnedOn)
         {
-            var key = (SwitchPanelPZ55Keys) general_key;
-            try
+            var key = (SwitchPanelPZ55Keys)general_key;
+            return (key, isTurnedOn) switch
             {
-                if (key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF && whenTurnedOn)
-                {
-                    return TextBoxKnobOff;
-                }
-                if (key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT && whenTurnedOn)
-                {
-                    return TextBoxKnobR;
-                }
-                if (key == SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT && whenTurnedOn)
-                {
-                    return TextBoxKnobL;
-                }
-                if (key == SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH && whenTurnedOn)
-                {
-                    return TextBoxKnobAll;
-                }
-                if (key == SwitchPanelPZ55Keys.KNOB_ENGINE_START && whenTurnedOn)
-                {
-                    return TextBoxKnobStart;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL && !whenTurnedOn)
-                {
-                    return TextBoxCowlClose;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL && whenTurnedOn)
-                {
-                    return TextBoxCowlOpen;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL && !whenTurnedOn)
-                {
-                    return TextBoxPanelOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL && whenTurnedOn)
-                {
-                    return TextBoxPanelOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON && !whenTurnedOn)
-                {
-                    return TextBoxBeaconOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON && whenTurnedOn)
-                {
-                    return TextBoxBeaconOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV && !whenTurnedOn)
-                {
-                    return TextBoxNavOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV && whenTurnedOn)
-                {
-                    return TextBoxNavOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE && !whenTurnedOn)
-                {
-                    return TextBoxStrobeOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE && whenTurnedOn)
-                {
-                    return TextBoxStrobeOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI && !whenTurnedOn)
-                {
-                    return TextBoxTaxiOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI && whenTurnedOn)
-                {
-                    return TextBoxTaxiOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING && !whenTurnedOn)
-                {
-                    return TextBoxLandingOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING && whenTurnedOn)
-                {
-                    return TextBoxLandingOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT && !whenTurnedOn)
-                {
-                    return TextBoxMasterBatOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT && whenTurnedOn)
-                {
-                    return TextBoxMasterBatOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT && !whenTurnedOn)
-                {
-                    return TextBoxMasterAltOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT && whenTurnedOn)
-                {
-                    return TextBoxMasterAltOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER && !whenTurnedOn)
-                {
-                    return TextBoxAvionicsMasterOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER && whenTurnedOn)
-                {
-                    return TextBoxAvionicsMasterOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP && !whenTurnedOn)
-                {
-                    return TextBoxFuelPumpOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP && whenTurnedOn)
-                {
-                    return TextBoxFuelPumpOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE && !whenTurnedOn)
-                {
-                    return TextBoxDeIceOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE && whenTurnedOn)
-                {
-                    return TextBoxDeIceOn;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT && !whenTurnedOn)
-                {
-                    return TextBoxPitotHeatOff;
-                }
-                if (key == SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT && whenTurnedOn)
-                {
-                    return TextBoxPitotHeatOn;
-                }
-                if (key == SwitchPanelPZ55Keys.LEVER_GEAR_UP && whenTurnedOn)
-                {
-                    return TextBoxGearUp;
-                }
-                if (key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN && whenTurnedOn)
-                {
-                    return TextBoxGearDown;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-            throw new Exception("Failed to find text box based on key (SwitchPanelPZ55UserControl)" + key);
+                (SwitchPanelPZ55Keys.KNOB_ENGINE_OFF, true) => TextBoxKnobOff,
+                (SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT, true) => TextBoxKnobR,
+                (SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT, true) => TextBoxKnobL,
+                (SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, true) => TextBoxKnobAll,
+                (SwitchPanelPZ55Keys.KNOB_ENGINE_START, true) => TextBoxKnobStart,
+                (SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, true) => TextBoxCowlOpen,
+                (SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, false) => TextBoxCowlClose,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, true) => TextBoxPanelOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, false) => TextBoxPanelOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, true) => TextBoxBeaconOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, false) => TextBoxPanelOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, true) => TextBoxNavOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, false) => TextBoxNavOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, true) => TextBoxStrobeOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, false) => TextBoxStrobeOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, true) => TextBoxTaxiOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, false) => TextBoxTaxiOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, true) => TextBoxLandingOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, false) => TextBoxLandingOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, true) => TextBoxMasterBatOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, false) => TextBoxMasterBatOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, true) => TextBoxMasterBatOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, false) => TextBoxMasterAltOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, true) => TextBoxAvionicsMasterOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, false) => TextBoxAvionicsMasterOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, true) => TextBoxFuelPumpOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, false) => TextBoxFuelPumpOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, true) => TextBoxDeIceOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, false) => TextBoxDeIceOff,
+                (SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, true) => TextBoxPitotHeatOn,
+                (SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, false) => TextBoxPitotHeatOff,
+                (SwitchPanelPZ55Keys.LEVER_GEAR_UP, true) => TextBoxGearUp,
+                (SwitchPanelPZ55Keys.LEVER_GEAR_DOWN, false) => TextBoxGearDown,
+                _ => throw new Exception($"Failed to find text box based on key (SwitchPanelPZ55UserControl) {key} and value {isTurnedOn}")
+            };
         }
-
-
 
         private void ButtonDEV_OnClick(object sender, RoutedEventArgs e)
         {
