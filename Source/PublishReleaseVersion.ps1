@@ -13,7 +13,9 @@ Write-Host "Latest MsBuild path found is: $msBuildExePath"  -foregroundcolor "Gr
 Write-Host "Building release version " -foregroundcolor "Green"
 
 ###############cmd.exe /c $msBuildExePath /verbosity:minimal /target:Build /property:Configuration=Release /property:Platform=x64 'DCSFlightpanels.local.sln'
-dotnet publish --sc -f net6.0-windows -r win-x64 -c Release -o $publishPath DCSFlightpanels.local.sln
+#dotnet publish --sc -f net6.0-windows -r win-x64 -c Release -o $publishPath DCSFlightpanels.local.sln
+#dotnet publish -f net6.0-windows -r win-x64 --self-contained false -c Release -o $publishPath DCSFlightpanels.local.sln
+dotnet publish -f net6.0-windows -r win-x64 -c Release -o $publishPath DCSFlightpanels.local.sln
 $buildLastExitCode = $LastExitCode
 
 Write-Host "Build LastExitCode: $buildLastExitCode" -foregroundcolor "Green"
