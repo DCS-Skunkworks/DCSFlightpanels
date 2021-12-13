@@ -144,10 +144,13 @@ namespace DCS_BIOS
                 {
                     try
                     {
-                        var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
-                        if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.AddressValue) == DcsBiosNotificationMode.AddressValue)
+                        if (_udpReceiveClient.Available > 0)
                         {
-                            _dcsProtocolParser.AddArray(byteData);
+                            var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
+                            if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.AddressValue) == DcsBiosNotificationMode.AddressValue)
+                            {
+                                _dcsProtocolParser.AddArray(byteData);
+                            }
                         }
                     }
                     catch (SocketException)

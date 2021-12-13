@@ -617,10 +617,6 @@
                         {
                             textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                         }
-                        else
-                        {
-                            textBox.Bill.KeyPress = null;
-                        }
                     }
                 }
 
@@ -632,10 +628,6 @@
                         {
                             textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
                         }
-                        else
-                        {
-                            textBox.Bill.OSCommandObject = null;
-                        }
                 }
 
                 foreach (var dcsBiosBinding in _multiPanelPZ70.DCSBiosBindings)
@@ -644,10 +636,6 @@
                     if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
-                    }
-                    else
-                    {
-                        textBox.Bill.DCSBIOSBinding = null;
                     }
                 }
 
@@ -658,10 +646,6 @@
                     if (bipLink.DialPosition == _multiPanelPZ70.PZ70DialPosition && bipLink.BIPLights.Count > 0)
                     {
                         textBox.Bill.BipLink = bipLink;
-                    }
-                    else
-                    {
-                        textBox.Bill.BipLink = null;
                     }
                 }
 
@@ -845,220 +829,67 @@
         
         public PanelSwitchOnOff GetSwitch(TextBox textBox)
         {
-            try
+            return textBox switch
             {
-                if (textBox.Equals(TextBoxLcdKnobDecrease))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_DEC, true);
-                }
-                if (textBox.Equals(TextBoxLcdKnobIncrease))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_INC, true);
-                }
-                if (textBox.Equals(TextBoxAutoThrottleOff))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, false);
-                }
-                if (textBox.Equals(TextBoxAutoThrottleOn))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, true);
-                }
-                if (textBox.Equals(TextBoxFlapsUp))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_UP, true);
-                }
-                if (textBox.Equals(TextBoxFlapsDown))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, true);
-                }
-                if (textBox.Equals(TextBoxPitchTrimUp))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP, true);
-                }
-                if (textBox.Equals(TextBoxPitchTrimDown))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, true);
-                }
-                if (textBox.Equals(TextBoxApButtonOn))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AP_BUTTON, true);
-                }
-                if (textBox.Equals(TextBoxApButtonOff))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AP_BUTTON, false);
-                }
-                if (textBox.Equals(TextBoxHdgButtonOn))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, true);
-                }
-                if (textBox.Equals(TextBoxHdgButtonOff))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, false);
-                }
-                if (textBox.Equals(TextBoxNavButtonOn))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, true);
-                }
-                if (textBox.Equals(TextBoxNavButtonOff))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, false);
-                }
-                if (textBox.Equals(TextBoxIasButtonOn))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, true);
-                }
-                if (textBox.Equals(TextBoxIasButtonOff))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, false);
-                }
-                if (textBox.Equals(TextBoxAltButtonOn))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, true);
-                }
-                if (textBox.Equals(TextBoxAltButtonOff))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, false);
-                }
-                if (textBox.Equals(TextBoxVsButtonOn))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.VS_BUTTON, true);
-                }
-                if (textBox.Equals(TextBoxVsButtonOff))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.VS_BUTTON, false);
-                }
-                if (textBox.Equals(TextBoxAprButtonOn))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.APR_BUTTON, true);
-                }
-                if (textBox.Equals(TextBoxAprButtonOff))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.APR_BUTTON, false);
-                }
-                if (textBox.Equals(TextBoxRevButtonOn))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.REV_BUTTON, true);
-                }
-                if (textBox.Equals(TextBoxRevButtonOff))
-                {
-                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.REV_BUTTON, false);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-            throw new Exception("Failed to find MultiPanel knob for TextBox " + textBox.Name);
+                TextBox t when t.Equals(TextBoxLcdKnobDecrease) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_DEC, true),
+                TextBox t when t.Equals(TextBoxLcdKnobIncrease) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_INC, true),
+                TextBox t when t.Equals(TextBoxAutoThrottleOn) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, true),
+                TextBox t when t.Equals(TextBoxAutoThrottleOff) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, false),
+                TextBox t when t.Equals(TextBoxFlapsUp) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_UP, true),
+                TextBox t when t.Equals(TextBoxFlapsDown) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, true),
+                TextBox t when t.Equals(TextBoxPitchTrimUp) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP, true),
+                TextBox t when t.Equals(TextBoxPitchTrimDown) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, true),
+                TextBox t when t.Equals(TextBoxApButtonOn) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AP_BUTTON, true),
+                TextBox t when t.Equals(TextBoxApButtonOff) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AP_BUTTON, false),
+                TextBox t when t.Equals(TextBoxHdgButtonOn) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, true),
+                TextBox t when t.Equals(TextBoxHdgButtonOff) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, false),
+                TextBox t when t.Equals(TextBoxNavButtonOn) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, true),
+                TextBox t when t.Equals(TextBoxNavButtonOff) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, false),
+                TextBox t when t.Equals(TextBoxIasButtonOn) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, true),
+                TextBox t when t.Equals(TextBoxIasButtonOff) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, false),
+                TextBox t when t.Equals(TextBoxAltButtonOn) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, true),
+                TextBox t when t.Equals(TextBoxAltButtonOff) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, false),
+                TextBox t when t.Equals(TextBoxVsButtonOn) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.VS_BUTTON, true),
+                TextBox t when t.Equals(TextBoxVsButtonOff) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.VS_BUTTON, false),
+                TextBox t when t.Equals(TextBoxAprButtonOn) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.APR_BUTTON, true),
+                TextBox t when t.Equals(TextBoxAprButtonOff) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.APR_BUTTON, false),
+                TextBox t when t.Equals(TextBoxRevButtonOn) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.REV_BUTTON, true),
+                TextBox t when t.Equals(TextBoxRevButtonOff) => new PZ70SwitchOnOff(MultiPanelPZ70Knobs.REV_BUTTON, false),
+                _ => throw new Exception($"Failed to find MultiPanel knob for TextBox {textBox.Name}")
+            };
         }
 
 
-        public TextBox GetTextBox(object panelSwitch, bool whenTurnedOn)
+        public TextBox GetTextBox(object panelSwitch, bool isTurnedOn)
         {
             var knob = (MultiPanelPZ70Knobs)panelSwitch;
-            try
-            {
-                if (knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC && whenTurnedOn)
-                {
-                    return TextBoxLcdKnobDecrease;
-                }
-                if (knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC && whenTurnedOn)
-                {
-                    return TextBoxLcdKnobIncrease;
-                }
-                if (knob == MultiPanelPZ70Knobs.AUTO_THROTTLE && !whenTurnedOn)
-                {
-                    return TextBoxAutoThrottleOff;
-                }
-                if (knob == MultiPanelPZ70Knobs.AUTO_THROTTLE && whenTurnedOn)
-                {
-                    return TextBoxAutoThrottleOn;
-                }
-                if (knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP && whenTurnedOn)
-                {
-                    return TextBoxFlapsUp;
-                }
-                if (knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN && whenTurnedOn)
-                {
-                    return TextBoxFlapsDown;
-                }
-                if (knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP && whenTurnedOn)
-                {
-                    return TextBoxPitchTrimUp;
-                }
-                if (knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN && whenTurnedOn)
-                {
-                    return TextBoxPitchTrimDown;
-                }
-                if (knob == MultiPanelPZ70Knobs.AP_BUTTON && whenTurnedOn)
-                {
-                    return TextBoxApButtonOn;
-                }
-                if (knob == MultiPanelPZ70Knobs.AP_BUTTON && !whenTurnedOn)
-                {
-                    return TextBoxApButtonOff;
-                }
-                if (knob == MultiPanelPZ70Knobs.HDG_BUTTON && whenTurnedOn)
-                {
-                    return TextBoxHdgButtonOn;
-                }
-                if (knob == MultiPanelPZ70Knobs.HDG_BUTTON && !whenTurnedOn)
-                {
-                    return TextBoxHdgButtonOff;
-                }
-                if (knob == MultiPanelPZ70Knobs.NAV_BUTTON && whenTurnedOn)
-                {
-                    return TextBoxNavButtonOn;
-                }
-                if (knob == MultiPanelPZ70Knobs.NAV_BUTTON && !whenTurnedOn)
-                {
-                    return TextBoxNavButtonOff;
-                }
-                if (knob == MultiPanelPZ70Knobs.IAS_BUTTON && whenTurnedOn)
-                {
-                    return TextBoxIasButtonOn;
-                }
-                if (knob == MultiPanelPZ70Knobs.IAS_BUTTON && !whenTurnedOn)
-                {
-                    return TextBoxIasButtonOff;
-                }
-                if (knob == MultiPanelPZ70Knobs.ALT_BUTTON && whenTurnedOn)
-                {
-                    return TextBoxAltButtonOn;
-                }
-                if (knob == MultiPanelPZ70Knobs.ALT_BUTTON && !whenTurnedOn)
-                {
-                    return TextBoxAltButtonOff;
-                }
-                if (knob == MultiPanelPZ70Knobs.VS_BUTTON && whenTurnedOn)
-                {
-                    return TextBoxVsButtonOn;
-                }
-                if (knob == MultiPanelPZ70Knobs.VS_BUTTON && !whenTurnedOn)
-                {
-                    return TextBoxVsButtonOff;
-                }
-                if (knob == MultiPanelPZ70Knobs.APR_BUTTON && whenTurnedOn)
-                {
-                    return TextBoxAprButtonOn;
-                }
-                if (knob == MultiPanelPZ70Knobs.APR_BUTTON && !whenTurnedOn)
-                {
-                    return TextBoxAprButtonOff;
-                }
-                if (knob == MultiPanelPZ70Knobs.REV_BUTTON && whenTurnedOn)
-                {
-                    return TextBoxRevButtonOn;
-                }
-                if (knob == MultiPanelPZ70Knobs.REV_BUTTON && !whenTurnedOn)
-                {
-                    return TextBoxRevButtonOff;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-            throw new Exception("Failed to find TextBox from MultiPanel Knob : " + knob);
+            return (knob, isTurnedOn) switch {
+                (MultiPanelPZ70Knobs.LCD_WHEEL_DEC, true) => TextBoxLcdKnobDecrease,
+                (MultiPanelPZ70Knobs.LCD_WHEEL_INC, true) => TextBoxLcdKnobIncrease,
+                (MultiPanelPZ70Knobs.AUTO_THROTTLE, true) => TextBoxAutoThrottleOn,
+                (MultiPanelPZ70Knobs.AUTO_THROTTLE, false) => TextBoxAutoThrottleOff,
+                (MultiPanelPZ70Knobs.FLAPS_LEVER_UP, true) => TextBoxFlapsUp,
+                (MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, true) => TextBoxFlapsDown,
+                (MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP, true) => TextBoxPitchTrimUp,
+                (MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, true) => TextBoxPitchTrimUp,
+                (MultiPanelPZ70Knobs.AP_BUTTON, true) => TextBoxApButtonOn,
+                (MultiPanelPZ70Knobs.AP_BUTTON, false) => TextBoxApButtonOff,
+                (MultiPanelPZ70Knobs.HDG_BUTTON, true) => TextBoxHdgButtonOn,
+                (MultiPanelPZ70Knobs.HDG_BUTTON, false) => TextBoxHdgButtonOff,
+                (MultiPanelPZ70Knobs.NAV_BUTTON, true) => TextBoxNavButtonOn,
+                (MultiPanelPZ70Knobs.NAV_BUTTON, false) => TextBoxNavButtonOff,
+                (MultiPanelPZ70Knobs.IAS_BUTTON, true) => TextBoxIasButtonOn,
+                (MultiPanelPZ70Knobs.IAS_BUTTON, false) => TextBoxIasButtonOff,
+                (MultiPanelPZ70Knobs.ALT_BUTTON, true) => TextBoxAltButtonOn,
+                (MultiPanelPZ70Knobs.ALT_BUTTON, false) => TextBoxAltButtonOff,
+                (MultiPanelPZ70Knobs.VS_BUTTON, true) => TextBoxVsButtonOn,
+                (MultiPanelPZ70Knobs.VS_BUTTON, false) => TextBoxVsButtonOff,
+                (MultiPanelPZ70Knobs.APR_BUTTON, true) => TextBoxAprButtonOn,
+                (MultiPanelPZ70Knobs.APR_BUTTON, false) => TextBoxAprButtonOff,
+                (MultiPanelPZ70Knobs.REV_BUTTON, true) => TextBoxRevButtonOn,
+                (MultiPanelPZ70Knobs.REV_BUTTON, false) => TextBoxRevButtonOff,
+                _ => throw new Exception($"Failed to find TextBox for MultiPanel Knob: {knob} & value {isTurnedOn}")
+            };
         }
 
         private void ButtonIdentify_OnClick(object sender, RoutedEventArgs e)
