@@ -1,7 +1,6 @@
 #declaring & setting some variables
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 $publishPath = $scriptPath+"\_PublishTemp_\"
-###############$msBuildExePath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
 
 #Checking destination folder first
 if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env:dcsfpReleaseDestinationFolderPath))){
@@ -9,12 +8,8 @@ if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env
 	exit
 }
 
-Write-Host "Latest MsBuild path found is: $msBuildExePath"  -foregroundcolor "Green"
 Write-Host "Building release version " -foregroundcolor "Green"
 
-###############cmd.exe /c $msBuildExePath /verbosity:minimal /target:Build /property:Configuration=Release /property:Platform=x64 'DCSFlightpanels.local.sln'
-#dotnet publish --sc -f net6.0-windows -r win-x64 -c Release -o $publishPath DCSFlightpanels.local.sln
-#dotnet publish -f net6.0-windows -r win-x64 --self-contained false -c Release -o $publishPath /p:DebugType=None /p:DebugSymbols=false
 dotnet publish DCSFlightpanels\DCSFlightpanels.csproj --self-contained false -f net6.0-windows -r win-x64 -c Release -o $publishPath /p:DebugType=None /p:DebugSymbols=false
 $buildLastExitCode = $LastExitCode
 
