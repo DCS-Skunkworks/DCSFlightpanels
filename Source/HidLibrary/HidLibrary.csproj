@@ -3,11 +3,9 @@
   <PropertyGroup>
     <TargetFrameworks>net20;net35;net40;net45;netstandard2;net6.0-windows</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-
     <Version>3.2.49</Version>
     <Company>Ultraviolet Catastrophe</Company>
     <Copyright>Copyright © 2011-2020 Ultraviolet Catastrophe</Copyright>
-
     <PackageId>hidlibrary</PackageId>
     <Title>Hid Library</Title>
     <Authors>Mike O'Brien</Authors>
@@ -16,6 +14,7 @@
     <PackageProjectUrl>https://github.com/mikeobrien/HidLibrary</PackageProjectUrl>
     <PackageIcon>logo.png</PackageIcon>
     <PackageTags>usb hid</PackageTags>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>

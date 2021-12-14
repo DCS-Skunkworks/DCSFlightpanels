@@ -7,6 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>	  
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
@@ -46,9 +47,5 @@
     <PackageReference Include="StreamDeckSharp" Version="3.2.0" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
-  <PropertyGroup>
-    <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"
-if exist pre-build-$(ConfigurationName).cmd call  pre-build-$(ConfigurationName).cmd $(ProjectDir)
-</PreBuildEvent>
-  </PropertyGroup>
+  <PropertyGroup />
 </Project>

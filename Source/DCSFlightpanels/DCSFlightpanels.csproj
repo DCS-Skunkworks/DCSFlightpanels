@@ -53,7 +53,6 @@
 			.allowedextension
 		</AllowedReferenceRelatedFileExtensions>
 		<CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	</PropertyGroup>
 	<ItemGroup>
 		<Content Include="StreamDeckGallery\**" CopyToOutputDirectory="Always" />
@@ -333,16 +332,10 @@
 		<None Include="Properties\AssemblyInfo.cs" />
 	</ItemGroup>
 	<PropertyGroup>
-		<PreBuildEvent>
-			cd "$(SolutionDir)..\BuildScripts"
-			if exist pre-build-$(ConfigurationName).cmd call  pre-build-$(ConfigurationName).cmd $(ProjectDir)
-		</PreBuildEvent>
+		<PreBuildEvent>cd "$(MSBuildProjectDirectory)\..\..\BuildScripts"
+if exist pre-build-$(Configuration).cmd call pre-build-$(Configuration).cmd $(MSBuildProjectDirectory)</PreBuildEvent>
 	</PropertyGroup>
 	<PropertyGroup>
-		<PostBuildEvent>
-			cd "$(SolutionDir)..\BuildScripts"
-			if exist post-build-$(ConfigurationName).cmd call  post-build-$(ConfigurationName).cmd $(ProjectDir)
-		</PostBuildEvent>
 		<RootNamespace>DCSFlightpanels</RootNamespace>
 	</PropertyGroup>
 </Project>
