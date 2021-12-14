@@ -53,6 +53,7 @@
 			.allowedextension
 		</AllowedReferenceRelatedFileExtensions>
 		<CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	</PropertyGroup>
 	<ItemGroup>
 		<Content Include="StreamDeckGallery\**" CopyToOutputDirectory="Always" />
