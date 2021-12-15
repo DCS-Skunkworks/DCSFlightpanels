@@ -19,7 +19,6 @@
 		<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
 		<UseApplicationTrust>false</UseApplicationTrust>
 		<BootstrapperEnabled>true</BootstrapperEnabled>
-		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<UseWindowsForms>true</UseWindowsForms>
 		<UseWPF>true</UseWPF>
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
@@ -30,8 +29,8 @@
 		<Authors></Authors>
 		<PackageId>DCSFlightpanels (DCSFP)</PackageId>
 		<Version>1.0.0</Version>
-		<AssemblyVersion>4.5.46.6715</AssemblyVersion>
-		<FileVersion>4.5.46.6715</FileVersion>
+		<AssemblyVersion>4.6.8.7463</AssemblyVersion>
+		<FileVersion>4.6.8.7463</FileVersion>
 	</PropertyGroup>
 	<PropertyGroup>
 		<ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
@@ -322,20 +321,14 @@
 		<PackageReference Include="Octokit" Version="0.50.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Remove="Properties\AssemblyInfo.cs" />
 		<Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
 		<Page Remove="AboutWindow.xaml" />
 		<Page Remove="PreferencesWindow.xaml" />
 		<Page Remove="Windows\LinkMappingWindow.xaml" />
 	</ItemGroup>
-	<ItemGroup>
-		<None Include="Properties\AssemblyInfo.cs" />
-	</ItemGroup>
-	<PropertyGroup>
-		<PreBuildEvent>cd "$(MSBuildProjectDirectory)\..\..\BuildScripts"
-if exist pre-build-$(Configuration).cmd call pre-build-$(Configuration).cmd $(MSBuildProjectDirectory)</PreBuildEvent>
-	</PropertyGroup>
+	<PropertyGroup />
 	<PropertyGroup>
 		<RootNamespace>DCSFlightpanels</RootNamespace>
+		<Description>Saitek Pro Flight &amp; Streamdeck with DCS-BIOS or as keyemulator</Description>
 	</PropertyGroup>
 </Project>

@@ -3,7 +3,6 @@
     <TargetFramework>net6.0-windows</TargetFramework>
 	<AssemblyName>NonVisuals</AssemblyName>
     <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>

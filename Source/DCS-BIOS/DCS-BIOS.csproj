@@ -3,7 +3,6 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>DCS_BIOS</RootNamespace>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 	<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
@@ -44,5 +43,13 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NLog" Version="5.0.0-preview.3" />
   </ItemGroup>
-  <PropertyGroup />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <Description>For using DCS-BIOS from C# based projects</Description>
+    <Company>ArturDCS (Jerker Dahlblom)</Company>
+    <AssemblyVersion>2.1.865.6527</AssemblyVersion>
+    <FileVersion>2.1.865.6527</FileVersion>
+  </PropertyGroup>
 </Project>
