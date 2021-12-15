@@ -52,14 +52,7 @@
                     throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
                 }
                 _dcsbiosBindingTPM = (DCSBIOSActionBindingTPM)value;
-                if (_dcsbiosBindingTPM != null)
-                {
-                    TextBox.Text = string.IsNullOrEmpty(_dcsbiosBindingTPM.Description) ? "DCS-BIOS" : _dcsbiosBindingTPM.Description;
-                }
-                else
-                {
-                    TextBox.Text = string.Empty;
-                }
+                SetTextBoxText(value);
             }
         }
 

@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Bills
+﻿using System.Linq;
+
+namespace DCSFlightpanels.Bills
 {
     using System;
     using System.Collections.Generic;
@@ -52,14 +54,7 @@
                     throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
                 }
                 _dcsbiosBinding = (DCSBIOSActionBindingFarmingPanel)value;
-                if (_dcsbiosBinding != null)
-                {
-                    TextBox.Text = string.IsNullOrEmpty(_dcsbiosBinding.Description) ? "DCS-BIOS" : _dcsbiosBinding.Description;
-                }
-                else
-                {
-                    TextBox.Text = string.Empty;
-                }
+                SetTextBoxText(value);
             }
         }
 

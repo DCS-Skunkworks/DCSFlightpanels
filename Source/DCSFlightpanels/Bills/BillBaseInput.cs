@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Bills
+﻿using System.Linq;
+
+namespace DCSFlightpanels.Bills
 {
     using System;
     using System.Collections.Generic;
@@ -62,6 +64,52 @@
                 }
                 _keyPress = value;
                 TextBox.Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : string.Empty;
+            }
+        }
+
+        protected void SetTextBoxText(DCSBIOSActionBindingBase dcsbiosActionBindingBase)
+        {
+            if (dcsbiosActionBindingBase != null)
+            {
+                if (!string.IsNullOrEmpty(dcsbiosActionBindingBase.Description))
+                {
+                    TextBox.Text = dcsbiosActionBindingBase.Description;
+                }
+                else if (dcsbiosActionBindingBase.DCSBIOSInputs.Any())
+                {
+                    TextBox.Text = dcsbiosActionBindingBase.DCSBIOSInputs[0].ControlId;
+                }
+                else
+                {
+                    TextBox.Text = "DCS-BIOS";
+                }
+            }
+            else
+            {
+                TextBox.Text = string.Empty;
+            }
+        }
+
+        protected void SetTextBoxText(string description, List<DCSBIOSInput> dcsBiosInputs)
+        {
+            if (dcsBiosInputs != null)
+            {
+                if (!string.IsNullOrEmpty(description))
+                {
+                    TextBox.Text = description;
+                }
+                else if (dcsBiosInputs.Any())
+                {
+                    TextBox.Text = dcsBiosInputs[0].ControlId;
+                }
+                else
+                {
+                    TextBox.Text = "DCS-BIOS";
+                }
+            }
+            else
+            {
+                TextBox.Text = string.Empty;
             }
         }
 
@@ -500,11 +548,9 @@
 
         private void AddDCSBIOS(string description, List<DCSBIOSInput> dcsBiosInputs)
         {
-            var text = string.IsNullOrWhiteSpace(description) ? "DCS-BIOS" : description;
-
             // 1 appropriate text to textbox
             // 2 update bindings
-            TextBox.Text = text;
+            SetTextBoxText(description, dcsBiosInputs);
             Consume(dcsBiosInputs);
             UpdateDCSBIOSBinding();
         }

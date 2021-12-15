@@ -52,14 +52,7 @@
                     throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
                 }
                 _dcsbiosBindingPZ69 = (DCSBIOSActionBindingPZ69)value;
-                if (_dcsbiosBindingPZ69 != null)
-                {
-                    TextBox.Text = string.IsNullOrEmpty(_dcsbiosBindingPZ69.Description) ? "DCS-BIOS" : _dcsbiosBindingPZ69.Description;
-                }
-                else
-                {
-                    TextBox.Text = string.Empty;
-                }
+                SetTextBoxText(value);
             }
         }
 
