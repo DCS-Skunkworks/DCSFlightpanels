@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿using NonVisuals;
+
+namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -420,7 +422,7 @@
             var streamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (streamDeckButton != null)
             {
-                Clipboard.SetDataObject(streamDeckButton);
+                Clipboard.SetDataObject(streamDeckButton.DeepClone());
             }
         }
 
@@ -434,6 +436,7 @@
 
             bool result;
             var newStreamDeckButton = (StreamDeckButton)dataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
+            
             var oldStreamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton) &&
                 MessageBox.Show("Overwrite previous configuration (partial or fully)", "Overwrite?)", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -444,7 +447,12 @@
             {
                 result = oldStreamDeckButton.Consume(true, newStreamDeckButton);
             }
-
+            /*
+             * 15 Dec 2021 JDA
+             * For some reason some properties does not follow through the copying phase, e.g. StreamDeckPanelInstance is null for Face object after copy. Why?
+             * Have to set it, otherwise nullpointer exception.
+             */
+            oldStreamDeckButton.StreamDeckPanelInstance = oldStreamDeckButton.StreamDeckPanelInstance;
             if (result)
             {
                 _streamDeckPanel.SelectedLayer.AddButton(oldStreamDeckButton);

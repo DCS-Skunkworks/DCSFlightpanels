@@ -302,7 +302,7 @@ namespace NonVisuals.StreamDeck
         public bool Consume(bool overwrite, StreamDeckButton streamDeckButton)
         {
             var result = false;
-
+            
             if (_buttonFace != null && streamDeckButton.Face != null)
             {
                 if (overwrite)
