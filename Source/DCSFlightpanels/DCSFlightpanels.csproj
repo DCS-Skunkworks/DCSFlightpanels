@@ -1,328 +1,330 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net6.0-windows</TargetFramework>
-		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-		<OutputType>WinExe</OutputType>
-		<AssemblyName>dcsfp</AssemblyName>
-		<IsWebBootstrapper>false</IsWebBootstrapper>
-		<PublishUrl>publish\</PublishUrl>
-		<Install>true</Install>
-		<InstallFrom>Disk</InstallFrom>
-		<UpdateEnabled>false</UpdateEnabled>
-		<UpdateMode>Foreground</UpdateMode>
-		<UpdateInterval>7</UpdateInterval>
-		<UpdateIntervalUnits>Days</UpdateIntervalUnits>
-		<UpdatePeriodically>false</UpdatePeriodically>
-		<UpdateRequired>false</UpdateRequired>
-		<MapFileExtensions>true</MapFileExtensions>
-		<ApplicationRevision>0</ApplicationRevision>
-		<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-		<UseApplicationTrust>false</UseApplicationTrust>
-		<BootstrapperEnabled>true</BootstrapperEnabled>
-		<UseWindowsForms>true</UseWindowsForms>
-		<UseWPF>true</UseWPF>
-		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-		<Company>DCSFlightpanels (DCSFP)</Company>
-		<Authors></Authors>
-		<PackageId>DCSFlightpanels (DCSFP)</PackageId>
-		<Version>1.0.0</Version>
-		<AssemblyVersion>1.2.3.4</AssemblyVersion>
-		<FileVersion></FileVersion>
-		<ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
-		<StartupObject>DCSFlightpanels.App</StartupObject>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-		<OutputPath>bin\x64\Debug\</OutputPath>
-		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-		<RunCodeAnalysis>false</RunCodeAnalysis>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-		<OutputPath>bin\x64\Release\</OutputPath>
-		<DebugType>none</DebugType>
-		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-		<RunCodeAnalysis>false</RunCodeAnalysis>
-		<AllowedReferenceRelatedFileExtensions>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>dcsfp</AssemblyName>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <Company>DCSFlightpanels (DCSFP)</Company>
+    <Authors>
+    </Authors>
+    <PackageId>DCSFlightpanels (DCSFP)</PackageId>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>4.6.8022.1</AssemblyVersion>
+    <FileVersion>
+    </FileVersion>
+    <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
+    <StartupObject>DCSFlightpanels.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DebugType>none</DebugType>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <AllowedReferenceRelatedFileExtensions>
 			.allowedextension
 		</AllowedReferenceRelatedFileExtensions>
-		<CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-	</PropertyGroup>
-	<ItemGroup>
-		<Content Include="StreamDeckGallery\**" CopyToOutputDirectory="Always" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Update="NLog.config">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<AppDesigner Include="Properties\" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\fip.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\knob_ALL.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\knob_L.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\knob_R.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\knob_start.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\black_switch_on.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\red_master_on.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\gear_up.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\gear_down.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="huey_icon.ico" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\NewDocument_32x32.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\SaveHL.bmp" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\OpenPL.bmp" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\112_RefreshArrow_Green_32x32_72.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\Notepad_32x32.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\109_AllAnnotations_RedWarning_256.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\PZ69_Radiopanel.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\pz70multipanel.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\PZ55_Switchpanel1.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\green.png" />
-		<Resource Include="Images\red.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\dark.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\yellow1.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
-		<ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
-		<ProjectReference Include="..\MEF\MEF.csproj" />
-		<ProjectReference Include="..\NonVisuals\NonVisuals.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\gear-image.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\dot.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\black.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\resharper_ultimate.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\about_image.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\info.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\paypal_donate.gif" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\A-10C_an_arc_164_UHF_radio2.png" />
-		<Resource Include="Images\A-10C_an_arc_186_vhf_am_radio1.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\A10C_an_arc_186_VHF_FM_radio2.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\A-10C_ILS.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\A-10C_TACAN.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\UH-1H_AN_ARN-82_VHF_NAV.png" />
-		<Resource Include="Images\UH-1H_AN_ARN-83_ADF.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\UH-1H_AN_ARC_131_FM.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\UH-1H_AN_ARC-134_VHF.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\UH-1H_AN_ARC-51BX_UHF.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\UH-1H_INTERCOMM.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\TPM.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\ARC frequency range selector.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\ARC volume.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\ARC_RSBN NPP needle control switch %28up for RSBN%29.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\ARC-main-control-panel.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\RSBN receiver mode.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\RSBN-control-panel.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\Ka50_ARK-22 ADF.jpg" />
-		<Resource Include="Images\Ka50_R-828_radio.jpg" />
-		<Resource Include="Images\Ka50_abck.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\Ka50_Betty.jpg" />
-		<Resource Include="Images\Ka50_intercom_radio_control.jpg" />
-		<Resource Include="Images\Ka50_R-800L1_VHF.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
-			<Visible>False</Visible>
-			<ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
-			<Install>true</Install>
-		</BootstrapperPackage>
-		<BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-			<Visible>False</Visible>
-			<ProductName>.NET Framework 3.5 SP1</ProductName>
-			<Install>false</Install>
-		</BootstrapperPackage>
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\FlightPanels01.png" />
-		<Resource Include="Images\FlightPanels02.png" />
-		<Resource Include="Images\flightpanels02_8Rc_icon.ico" />
-		<Resource Include="Images\FlightPanels03.png" />
-		<Resource Include="Images\FlightPanels04.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="flightpanels02_8Rc_icon.ico" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\fa18C_comms.jpg" />
-		<Resource Include="Images\fa18C_ils_manual.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\F-5E_an_arc_164_radio.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\F-5E_TACAN.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\AJS37_.png" />
-		<Resource Include="Images\AJS37_FR22.png" />
-		<Resource Include="Images\AJS37_FR24.png" />
-		<Resource Include="Images\F86_.png" />
-		<Resource Include="Images\FW190_FUG_16zy.png" />
-		<Resource Include="Images\M2000c_tacan.png" />
-		<Resource Include="Images\Mi8_R828.png" />
-		<Resource Include="Images\Mi8_r836.png" />
-		<Resource Include="Images\Mi8_Yadro.png" />
-		<Resource Include="Images\Radio TF51_P51_preview.jpeg" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\Spitfire_ARI1063.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\Bf109_FUG 16ZY.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\F-14 ANARC-159 Pilot.png" />
-		<Resource Include="Images\F-14 ANARC-182 RIO.png" />
-		<Resource Include="Images\F-14 TACAN.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\F-14 RIO Datalink.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\dcs_screenshot_by_derbysieger.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<WCFMetadata Include="Connected Services\" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\av8bna_comm1_comm2.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\default_image_streamdeck_button.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\down_arrow.png" />
-		<Resource Include="Images\left_arrow.png" />
-		<Resource Include="Images\right_arrow.png" />
-		<Resource Include="Images\up_arrow.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\dot3.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Images\filenotfound.png" />
-		<Resource Include="Images\cue_banner_search_dcsbios.png">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Resource>
-		<Resource Include="Images\mi8_r863_freq_panel.png" />
-		<Resource Include="Images\P47_radio.png" />
-		<SplashScreen Include="Images\dcs_screenshot_by_derbysieger_splash.png" />
-		<Resource Include="Images\BIP Saitek2.jpg" />
-		<Resource Include="Images\sidepanel.png" />
-		<Resource Include="Images\M2000C_new.png" />
-		<Resource Include="Images\Mi24P_Yadro.png" />
-		<Resource Include="Images\Mi24P_R828.png" />
-		<Resource Include="Images\Mi24P_R863.png" />
-		<Resource Include="Images\Mi24P_ARC15.png" />
-		<Resource Include="Images\Mi24P_SPU8.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.256001">
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Octokit" Version="0.50.0" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
-		<Page Remove="AboutWindow.xaml" />
-		<Page Remove="PreferencesWindow.xaml" />
-		<Page Remove="Windows\LinkMappingWindow.xaml" />
-	</ItemGroup>
-	<PropertyGroup />
-	<PropertyGroup>
-		<RootNamespace>DCSFlightpanels</RootNamespace>
-		<Description>Saitek Pro Flight &amp; Streamdeck with DCS-BIOS or as keyemulator</Description>
-	</PropertyGroup>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="StreamDeckGallery\**" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\fip.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\knob_ALL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\knob_L.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\knob_R.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\knob_start.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\black_switch_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\red_master_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\gear_up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\gear_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="huey_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\NewDocument_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\SaveHL.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\OpenPL.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\112_RefreshArrow_Green_32x32_72.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Notepad_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\109_AllAnnotations_RedWarning_256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\PZ69_Radiopanel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\pz70multipanel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\PZ55_Switchpanel1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\green.png" />
+    <Resource Include="Images\red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\yellow1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
+    <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
+    <ProjectReference Include="..\MEF\MEF.csproj" />
+    <ProjectReference Include="..\NonVisuals\NonVisuals.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\gear-image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dot.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\resharper_ultimate.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\about_image.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\paypal_donate.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\A-10C_an_arc_164_UHF_radio2.png" />
+    <Resource Include="Images\A-10C_an_arc_186_vhf_am_radio1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\A10C_an_arc_186_VHF_FM_radio2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\A-10C_ILS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\A-10C_TACAN.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\UH-1H_AN_ARN-82_VHF_NAV.png" />
+    <Resource Include="Images\UH-1H_AN_ARN-83_ADF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\UH-1H_AN_ARC_131_FM.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\UH-1H_AN_ARC-134_VHF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\UH-1H_AN_ARC-51BX_UHF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\UH-1H_INTERCOMM.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TPM.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ARC frequency range selector.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ARC volume.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ARC_RSBN NPP needle control switch %28up for RSBN%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ARC-main-control-panel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\RSBN receiver mode.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\RSBN-control-panel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ka50_ARK-22 ADF.jpg" />
+    <Resource Include="Images\Ka50_R-828_radio.jpg" />
+    <Resource Include="Images\Ka50_abck.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ka50_Betty.jpg" />
+    <Resource Include="Images\Ka50_intercom_radio_control.jpg" />
+    <Resource Include="Images\Ka50_R-800L1_VHF.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\FlightPanels01.png" />
+    <Resource Include="Images\FlightPanels02.png" />
+    <Resource Include="Images\flightpanels02_8Rc_icon.ico" />
+    <Resource Include="Images\FlightPanels03.png" />
+    <Resource Include="Images\FlightPanels04.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="flightpanels02_8Rc_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\fa18C_comms.jpg" />
+    <Resource Include="Images\fa18C_ils_manual.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\F-5E_an_arc_164_radio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\F-5E_TACAN.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\AJS37_.png" />
+    <Resource Include="Images\AJS37_FR22.png" />
+    <Resource Include="Images\AJS37_FR24.png" />
+    <Resource Include="Images\F86_.png" />
+    <Resource Include="Images\FW190_FUG_16zy.png" />
+    <Resource Include="Images\M2000c_tacan.png" />
+    <Resource Include="Images\Mi8_R828.png" />
+    <Resource Include="Images\Mi8_r836.png" />
+    <Resource Include="Images\Mi8_Yadro.png" />
+    <Resource Include="Images\Radio TF51_P51_preview.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Spitfire_ARI1063.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Bf109_FUG 16ZY.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\F-14 ANARC-159 Pilot.png" />
+    <Resource Include="Images\F-14 ANARC-182 RIO.png" />
+    <Resource Include="Images\F-14 TACAN.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\F-14 RIO Datalink.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dcs_screenshot_by_derbysieger.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\av8bna_comm1_comm2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\default_image_streamdeck_button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\down_arrow.png" />
+    <Resource Include="Images\left_arrow.png" />
+    <Resource Include="Images\right_arrow.png" />
+    <Resource Include="Images\up_arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dot3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\filenotfound.png" />
+    <Resource Include="Images\cue_banner_search_dcsbios.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\mi8_r863_freq_panel.png" />
+    <Resource Include="Images\P47_radio.png" />
+    <SplashScreen Include="Images\dcs_screenshot_by_derbysieger_splash.png" />
+    <Resource Include="Images\BIP Saitek2.jpg" />
+    <Resource Include="Images\sidepanel.png" />
+    <Resource Include="Images\M2000C_new.png" />
+    <Resource Include="Images\Mi24P_Yadro.png" />
+    <Resource Include="Images\Mi24P_R828.png" />
+    <Resource Include="Images\Mi24P_R863.png" />
+    <Resource Include="Images\Mi24P_ARC15.png" />
+    <Resource Include="Images\Mi24P_SPU8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.256001">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Octokit" Version="0.50.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
+    <Page Remove="AboutWindow.xaml" />
+    <Page Remove="PreferencesWindow.xaml" />
+    <Page Remove="Windows\LinkMappingWindow.xaml" />
+  </ItemGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <RootNamespace>DCSFlightpanels</RootNamespace>
+    <Description>Saitek Pro Flight &amp; Streamdeck with DCS-BIOS or as keyemulator</Description>
+  </PropertyGroup>
 </Project>
