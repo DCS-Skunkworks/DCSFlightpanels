@@ -23,19 +23,13 @@
 		<UseWPF>true</UseWPF>
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-	</PropertyGroup>
-	<PropertyGroup>
 		<Company>DCSFlightpanels (DCSFP)</Company>
 		<Authors></Authors>
 		<PackageId>DCSFlightpanels (DCSFP)</PackageId>
 		<Version>1.0.0</Version>
-		<AssemblyVersion>4.6.8.7463</AssemblyVersion>
-		<FileVersion>4.6.8.7463</FileVersion>
-	</PropertyGroup>
-	<PropertyGroup>
+		<AssemblyVersion>1.2.3.4</AssemblyVersion>
+		<FileVersion></FileVersion>
 		<ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
-	</PropertyGroup>
-	<PropertyGroup>
 		<StartupObject>DCSFlightpanels.App</StartupObject>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
