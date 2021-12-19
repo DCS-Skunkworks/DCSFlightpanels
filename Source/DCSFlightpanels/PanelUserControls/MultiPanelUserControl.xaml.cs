@@ -871,7 +871,7 @@
                 (MultiPanelPZ70Knobs.FLAPS_LEVER_UP, true) => TextBoxFlapsUp,
                 (MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, true) => TextBoxFlapsDown,
                 (MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP, true) => TextBoxPitchTrimUp,
-                (MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, true) => TextBoxPitchTrimUp,
+                (MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, true) => TextBoxPitchTrimDown,
                 (MultiPanelPZ70Knobs.AP_BUTTON, true) => TextBoxApButtonOn,
                 (MultiPanelPZ70Knobs.AP_BUTTON, false) => TextBoxApButtonOff,
                 (MultiPanelPZ70Knobs.HDG_BUTTON, true) => TextBoxHdgButtonOn,
