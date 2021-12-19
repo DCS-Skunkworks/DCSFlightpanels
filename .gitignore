@@ -240,3 +240,4 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 /Source/ProUsbPanels.local.sln
+/Source/_PublishTemp_/*
