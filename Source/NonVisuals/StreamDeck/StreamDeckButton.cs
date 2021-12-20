@@ -26,8 +26,7 @@ namespace NonVisuals.StreamDeck
         private IStreamDeckButtonAction _buttonActionForRelease;
         [NonSerialized] private volatile CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         [NonSerialized] private Thread _keyPressedThread;
-        [NonSerialized]
-        private StreamDeckPanel _streamDeckPanel;
+        [NonSerialized] private StreamDeckPanel _streamDeckPanel;
         private volatile bool _isVisible;
 
         [NonSerialized] private static readonly List<StreamDeckButton> StaticStreamDeckButtons = new List<StreamDeckButton>();
