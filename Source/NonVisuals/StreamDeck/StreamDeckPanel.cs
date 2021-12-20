@@ -219,7 +219,7 @@
                 return;
             }
 
-            var streamDeckButton = _streamDeckLayerHandler.GetSelectedLayerButton(e.Key + 1);
+            var streamDeckButton = _streamDeckLayerHandler.GetSelectedLayerButtonNumber(e.Key + 1);
 
             if (e.IsDown)
             {
@@ -290,12 +290,7 @@
 
         public override List<string> ExportSettings()
         {
-            if (Closed)
-            {
-                return null;
-            }
-
-            return new List<string>();
+            return Closed ? null : new List<string>();
         }
 
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
@@ -317,13 +312,7 @@
 
         private string ExportJSONSettings()
         {
-            if (Closed)
-            {
-                return null;
-            }
-
-            var str = _streamDeckLayerHandler.ExportJSONSettings();
-            return str;
+            return Closed ? null : _streamDeckLayerHandler.ExportJSONSettings();
         }
 
         public string GetKeyPressForLoggingPurposes(StreamDeckButton streamDeckButton)

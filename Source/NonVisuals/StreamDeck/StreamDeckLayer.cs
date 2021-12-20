@@ -14,11 +14,13 @@
 
     public class StreamDeckLayer
     {
-        private string _name = string.Empty;
         private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
         private volatile bool _isVisible;
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
+
+        [JsonProperty("Name", Required = Required.Default)]
+        public string Name { get; set; } = string.Empty;
 
         public StreamDeckLayer(StreamDeckPanel streamDeckPanel)
         {
@@ -27,7 +29,7 @@
 
         public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
         {
-            var streamDeckButtons = buttonExports.Where(o => o.LayerName == _name).Select(m => m.Button).ToList();
+            var streamDeckButtons = buttonExports.Where(o => o.LayerName == Name).Select(m => m.Button).ToList();
             if (streamDeckButtons.Count > 0)
             {
                 ImportButtons(importMode, streamDeckButtons);
@@ -122,10 +124,7 @@
 
         public void RegisterStreamDeckButtons()
         {
-            foreach (var streamDeckButton in _streamDeckButtons)
-            {
-                streamDeckButton.RegisterButtonToStaticList();
-            }
+            _streamDeckButtons.ForEach(button => button.RegisterButtonToStaticList());
         }
 
         [JsonProperty("TextFont", Required = Required.Default)]
@@ -133,20 +132,16 @@
         {
             set
             {
-                foreach (var streamDeckButton in _streamDeckButtons)
+                foreach (var streamDeckButton in _streamDeckButtons.Where(x => x.Face != null))
                 {
-                    if (streamDeckButton.Face != null)
+                    switch (streamDeckButton.Face.FaceType)
                     {
-                        switch (streamDeckButton.Face.FaceType)
-                        {
-                            case EnumStreamDeckFaceType.DCSBIOS:
-                            case EnumStreamDeckFaceType.Text:
-                                {
-                                    ((IFontFace)streamDeckButton.Face).TextFont = value;
-                                    break;
-                                }
-                        }
-
+                        case EnumStreamDeckFaceType.DCSBIOS:
+                        case EnumStreamDeckFaceType.Text:
+                            {
+                                ((IFontFace)streamDeckButton.Face).TextFont = value;
+                                break;
+                            }
                     }
                 }
             }
@@ -157,20 +152,16 @@
         {
             set
             {
-                foreach (var streamDeckButton in _streamDeckButtons)
+                foreach (var streamDeckButton in _streamDeckButtons.Where(x=> x.Face != null))
                 {
-                    if (streamDeckButton.Face != null)
+                    switch (streamDeckButton.Face.FaceType)
                     {
-
-                        switch (streamDeckButton.Face.FaceType)
-                        {
-                            case EnumStreamDeckFaceType.DCSBIOS:
-                            case EnumStreamDeckFaceType.Text:
-                                {
-                                    ((IFontFace)streamDeckButton.Face).FontColor = value;
-                                    break;
-                                }
-                        }
+                        case EnumStreamDeckFaceType.DCSBIOS:
+                        case EnumStreamDeckFaceType.Text:
+                            {
+                                ((IFontFace)streamDeckButton.Face).FontColor = value;
+                                break;
+                            }
                     }
                 }
             }
@@ -181,19 +172,16 @@
         {
             set
             {
-                foreach (var streamDeckButton in _streamDeckButtons)
+                foreach (var streamDeckButton in _streamDeckButtons.Where(x => x.Face != null))
                 {
-                    if (streamDeckButton.Face != null)
+                    switch (streamDeckButton.Face.FaceType)
                     {
-                        switch (streamDeckButton.Face.FaceType)
-                        {
-                            case EnumStreamDeckFaceType.DCSBIOS:
-                            case EnumStreamDeckFaceType.Text:
-                                {
-                                    ((IFontFace)streamDeckButton.Face).BackgroundColor = value;
-                                    break;
-                                }
-                        }
+                        case EnumStreamDeckFaceType.DCSBIOS:
+                        case EnumStreamDeckFaceType.Text:
+                            {
+                                ((IFontFace)streamDeckButton.Face).BackgroundColor = value;
+                                break;
+                            }
                     }
                 }
             }
@@ -236,10 +224,7 @@
 
         public void RemoveButtons(bool sendNotification)
         {
-            foreach (var streamDeckButton in _streamDeckButtons)
-            {
-                streamDeckButton.Dispose();
-            }
+            _streamDeckButtons.ForEach(button => button.Dispose());
 
             _streamDeckButtons.RemoveAll(o => o != null);
 
@@ -247,13 +232,6 @@
             {
                 NotifyChanges();
             }
-        }
-
-        [JsonProperty("Name", Required = Required.Default)]
-        public string Name
-        {
-            get => _name;
-            set => _name = value;
         }
 
         public void RemoveEmptyButtons()
@@ -267,7 +245,7 @@
         }
 
         [JsonIgnore]
-        public bool HasConfig
+        public bool HasAtLeastOneButtonConfig
         {
             get
             {
@@ -312,15 +290,7 @@
 
         public bool ContainStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            foreach (var streamDeckButton in _streamDeckButtons)
-            {
-                if (streamDeckButton.StreamDeckButtonName == streamDeckButtonName)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return _streamDeckButtons.Exists(x => x.StreamDeckButtonName == streamDeckButtonName);
         }
 
         public StreamDeckButton GetStreamDeckButtonName(EnumStreamDeckButtonNames streamDeckButtonName)
@@ -333,7 +303,7 @@
                 }
             }
 
-            throw new Exception("StreamDeckLayer " + Name + " does not contain button " + streamDeckButtonName + ".");
+            throw new Exception($"StreamDeckLayer [{Name}] does not contain button [{streamDeckButtonName}].");
         }
 
         [JsonIgnore]
@@ -343,11 +313,7 @@
             set
             {
                 _isVisible = value;
-                foreach (var streamDeckButton in _streamDeckButtons)
-                {
-                    streamDeckButton.IsVisible = _isVisible;
-                    streamDeckButton.IsVisible = _isVisible;
-                }
+                _streamDeckButtons.ForEach(button => button.IsVisible = value);
             }
         }
 
@@ -358,10 +324,7 @@
             set
             {
                 _streamDeckPanel = value;
-                foreach (var streamDeckButton in _streamDeckButtons)
-                {
-                    streamDeckButton.StreamDeckPanelInstance = value;
-                }
+                _streamDeckButtons.ForEach(button => button.StreamDeckPanelInstance = value);
             }
         }
 
