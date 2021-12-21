@@ -24,8 +24,8 @@
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly StreamDeckPanel _streamDeckPanel;
-        private volatile List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
-        private volatile List<string> _layerHistory = new List<string>();
+        private volatile List<StreamDeckLayer> _layerList = new();
+        private volatile List<string> _layerHistory = new();
         private volatile string _selectedLayerName = string.Empty;
         private readonly IStreamDeckBoard _streamDeckBoard;
         private EnumStreamDeckButtonNames _selectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
@@ -36,7 +36,7 @@
         private readonly int _instanceId;
 
 
-        private readonly UnicodeEncoding _uniCodeEncoding = new UnicodeEncoding();
+        private readonly UnicodeEncoding _uniCodeEncoding = new();
         private const Formatting INDENTED_FORMATTING = Formatting.Indented;
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
                                                                     {
@@ -49,6 +49,8 @@
                                                                             }
                                                                     };
 
+        public static int InstanceIdCounter => _instanceIdCounter;
+        public int InstanceId => _instanceId;
 
         public StreamDeckLayerHandler(StreamDeckPanel streamDeckPanel)
         {
@@ -59,13 +61,8 @@
 
         public List<string> GetLayerNameList()
         {
-            var result = new List<string>();
-
-            foreach (var layer in _layerList)
-            {
-                result.Add(layer.Name);
-            }
-
+            List<string> result = new();
+            _layerList.ForEach(x => result.Add(x.Name));
             return result;
         }
         
@@ -98,10 +95,7 @@
 
         private void RegisterButtons()
         {
-            foreach (var streamDeckLayer in _layerList)
-            {
-                streamDeckLayer.RegisterStreamDeckButtons();
-            }
+            _layerList.ForEach(x => x.RegisterStreamDeckButtons());
         }
 
         public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
@@ -110,11 +104,9 @@
 
             foreach (var importLayerName in importLayerNames)
             {
-
                 if (!LayerExists(importLayerName))
                 {
-                    var newLayer = new StreamDeckLayer(_streamDeckPanel) { Name = importLayerName };
-                    AddLayer(newLayer);
+                    AddLayer(new StreamDeckLayer(_streamDeckPanel) { Name = importLayerName });
                 }
 
                 var layer = GetLayer(importLayerName);
@@ -126,28 +118,21 @@
 
         public List<ButtonExport> GetButtonExports()
         {
-            var result = new List<ButtonExport>();
-
-            foreach (var streamDeckLayer in _layerList)
+            List<ButtonExport> result = new();
+            foreach (var streamDeckLayer in _layerList.Where(layer=>layer.HasAtLeastOneButtonConfig))
             {
-                if (streamDeckLayer.HasConfig)
-                {
-                    var list = streamDeckLayer.GetButtonsWithConfig();
-                    foreach (var streamDeckButton in list)
-                    {
-                        var clonedButton = streamDeckButton.DeepClone();
-                        var exportButton = new ButtonExport(streamDeckLayer.Name, clonedButton);
-                        result.Add(exportButton);
-                    }
-                }
+                streamDeckLayer.GetButtonsWithConfig().ForEach(
+                    x => result.Add(
+                    new ButtonExport(streamDeckLayer.Name, x.DeepClone())
+                    )
+                );
             }
-
             return result;
         }
 
         public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
         {
-            var filesToCompressList = new List<string>(); // includes the json file and eventual image files
+            List<string> filesToCompressList = new(); // includes the json file and eventual image files
 
             StreamDeckCommon.CleanDCSFPTemporaryFolder();
 
@@ -173,7 +158,7 @@
                 {
                     if (buttonExport.Button.Face.GetType() == typeof(DCSBIOSDecoder))
                     {
-                        var decoder = ((DCSBIOSDecoder)buttonExport.Button.Face);
+                        var decoder = (DCSBIOSDecoder)buttonExport.Button.Face;
 
                         foreach (var imageFile in decoder.ImageFiles)
                         {
@@ -220,17 +205,9 @@
 
         private List<string> AddFileForCompression(List<string> list, string file)
         {
-            if (string.IsNullOrEmpty(file) || !File.Exists(file))
+            if (string.IsNullOrEmpty(file) || !File.Exists(file) || list.Contains(file))
             {
                 return list;
-            }
-
-            foreach (var filename in list)
-            {
-                if (filename == file)
-                {
-                    return list;
-                }
             }
 
             list.Add(file);
@@ -247,16 +224,7 @@
 
         private void CheckHomeLayerExists()
         {
-            var found = false;
-
-            foreach (var streamDeckLayer in _layerList)
-            {
-                if (streamDeckLayer.Name == StreamDeckConstants.HOME_LAYER_NAME)
-                {
-                    found = true;
-                    break;
-                }
-            }
+            bool found = _layerList.Exists(x => x.Name == StreamDeckConstants.HOME_LAYER_NAME);
 
             if (!found)
             {
@@ -397,18 +365,11 @@
                     return;
                 }
 
-                var found = false;
-                foreach (var layer in LayerList)
-                {
-                    if (layer.Name == value)
-                    {
-                        found = true;
-                    }
-                }
+                bool found = _layerList.Exists(x => x.Name == value);
 
                 if (!found)
                 {
-                    throw new Exception("StreamDeckLayerHandler : Failed to find layer " + value + " in order to mark it selected.");
+                    throw new Exception($"StreamDeckLayerHandler : Failed to find layer with name {value} in order to mark it selected.");
                 }
 
                 SetSelectedLayer(value);
@@ -437,10 +398,7 @@
 
         private void CleanLayers()
         {
-            foreach (var streamDeckLayer in _layerList)
-            {
-                streamDeckLayer.RemoveEmptyButtons();
-            }
+            _layerList.ForEach(layer => layer.RemoveEmptyButtons());
         }
 
         public string GetConfigurationInformation()
@@ -448,11 +406,11 @@
             var stringBuilder = new StringBuilder(500);
             stringBuilder.Append("\n");
 
-            stringBuilder.Append("Layer count : " + _layerList.Count + ", button count = " + StreamDeckButton.GetStaticButtons(null).Count + "\n");
+            stringBuilder.Append($"Layer count : {_layerList.Count}, button count = {StreamDeckButton.GetStaticButtons(null).Count}\n");
             stringBuilder.Append("Existing layers:\n");
             foreach (var streamDeckLayer in _layerList)
             {
-                stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.StreamDeckButtons.Count + ")\n");
+                stringBuilder.Append($"\t{streamDeckLayer.Name} ({streamDeckLayer.StreamDeckButtons.Count})\n");
             }
 
             stringBuilder.Append("\n");
@@ -479,11 +437,7 @@
         {
             if (StreamDeckButton.GetStaticButtons(_streamDeckPanel) != null)
             {
-                foreach (var streamDeckButton in StreamDeckButton.GetStaticButtons(_streamDeckPanel))
-                {
-                    streamDeckButton.IsVisible = false;
-                }
-
+                StreamDeckButton.GetStaticButtons(_streamDeckPanel).ForEach(button => button.IsVisible = false);
                 ClearAllFaces();
             }
         }
@@ -561,13 +515,8 @@
 
         public List<string> GetStreamDeckLayerNames()
         {
-            var result = new List<string>();
-
-            foreach (var streamDeckLayer in _layerList)
-            {
-                result.Add(streamDeckLayer.Name);
-            }
-
+            List<string> result = new();
+            _layerList.ForEach(layer => result.Add(layer.Name));
             return result;
         }
 
@@ -578,15 +527,12 @@
                 return null;
             }
 
-            foreach (var streamDeckLayer in _layerList)
+            if (!_layerList.Exists(layer => layer.Name == layerName))
             {
-                if (streamDeckLayer.Name == layerName)
-                {
-                    return streamDeckLayer;
-                }
+                throw new Exception($"GetStreamDeckLayer : Failed to find layer with name [{layerName}].");
             }
 
-            throw new Exception("GetStreamDeckLayer : Failed to find layer [" + layerName + "].");
+            return _layerList.First(x=> x.Name == layerName);
         }
 
         public StreamDeckButton GetButton(EnumStreamDeckButtonNames buttonName, string layerName, bool throwExceptionIfNotFound = true)
@@ -606,7 +552,7 @@
 
             if (throwExceptionIfNotFound)
             {
-                throw new Exception("Button " + buttonName + " cannot be found in layer " + layerName + ".");
+                throw new Exception($"Button [{buttonName}] cannot be found in layer [{layerName}].");
             }
 
             var button = new StreamDeckButton(buttonName, _streamDeckPanel);
@@ -632,7 +578,7 @@
             return GetButton(streamDeckButtonName, SelectedLayerName, false);
         }
 
-        public StreamDeckButton GetSelectedLayerButton(int streamDeckButtonNumber)
+        public StreamDeckButton GetSelectedLayerButtonNumber(int streamDeckButtonNumber)
         {
             var streamDeckButtonName = StreamDeckCommon.ButtonName(streamDeckButtonNumber);
             return GetButton(streamDeckButtonName, SelectedLayerName, false);
@@ -640,23 +586,8 @@
 
         public bool LayerExists(string layerName)
         {
-            var result = false;
-
-            foreach (var streamDeckLayer in _layerList)
-            {
-                if (streamDeckLayer.Name == layerName)
-                {
-                    result = true;
-                    break;
-                }
-            }
-
-            return result;
+            return _layerList.Exists(x => x.Name == layerName);
         }
-
-        public static int InstanceIdCounter => _instanceIdCounter;
-
-        public int InstanceId => _instanceId;
     }
 
     public class ExcludeObsoletePropertiesResolver : DefaultContractResolver
