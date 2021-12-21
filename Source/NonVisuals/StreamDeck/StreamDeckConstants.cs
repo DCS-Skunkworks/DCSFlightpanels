@@ -155,25 +155,13 @@
 
         public static string TranslateLayerName(string layerName)
         {
-            switch (layerName)
+            return layerName switch
             {
-                case NO_ACTION:
-                    {
-                        return "NOACTION";
-                    }
-
-                case GO_TO_HOME_LAYER_STRING:
-                    {
-                        return "HOME";
-                    }
-
-                case GO_BACK_ONE_LAYER_STRING:
-                    {
-                        return "BACK";
-                    }
-            }
-
-            return layerName;
+                NO_ACTION => "NOACTION",
+                GO_TO_HOME_LAYER_STRING => "HOME",
+                GO_BACK_ONE_LAYER_STRING => "BACK",
+                _ => layerName
+            };
         }
 
         public static Color HexColorToColor(string hexColor)

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Threading;
     using System.Windows.Media.Imaging;
@@ -32,42 +33,78 @@
                 Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
             };
 
-        private readonly object _updateStreamDeckOledLockObject = new object();
+        private readonly object _updateStreamDeckOledLockObject = new();
         private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly int _buttonCount;
-        private static readonly List<StreamDeckPanel> StreamDeckPanels = new List<StreamDeckPanel>();
+        private static readonly List<StreamDeckPanel> StreamDeckPanels = new();
         private readonly IStreamDeckBoard _streamDeckBoard;
-        private int _lcdKnobSensitivity;
+        private static Bitmap _fileNotFoundBitMap;
+        public IStreamDeckBoard StreamDeckBoard => _streamDeckBoard;
+        public int ButtonCount => _buttonCount;
+
+        public string SelectedLayerName
+        {
+            get => _streamDeckLayerHandler.SelectedLayerName;
+            set => _streamDeckLayerHandler.SelectedLayerName = value;
+        }
+
+        public List<string> LayerNameList
+        {
+            get => _streamDeckLayerHandler.GetLayerNameList();
+        }
+
+        public List<StreamDeckLayer> LayerList
+        {
+            get => _streamDeckLayerHandler.LayerList;
+        }
+
+        public StreamDeckLayer HomeLayer
+        {
+            get => _streamDeckLayerHandler.HomeLayer;
+        }
+
+        public StreamDeckLayer SelectedLayer
+        {
+            get => _streamDeckLayerHandler.SelectedLayer;
+            set => _streamDeckLayerHandler.SelectedLayer = value;
+        }
+
+        public bool HasLayers
+        {
+            get { return _streamDeckLayerHandler.HasLayers; }
+        }
+
+        public int SelectedButtonNumber
+        {
+            get => _streamDeckLayerHandler.SelectedButtonNumber;
+            set => _streamDeckLayerHandler.SelectedButtonNumber = value;
+        }
+
+        public EnumStreamDeckButtonNames SelectedButtonName
+        {
+            get => _streamDeckLayerHandler.SelectedButtonName;
+            set => _streamDeckLayerHandler.SelectedButtonName = value;
+        }
+
+        public StreamDeckButton SelectedButton
+        {
+            get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+        }
 
         public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
         {
-            switch (panelType)
+
+            _buttonCount = panelType switch
             {
-                case GamingPanelEnum.StreamDeckMini:
-                    {
-                        _buttonCount = 6;
-                        break;
-                    }
+                GamingPanelEnum.StreamDeckMini => 6,
+                
+                GamingPanelEnum.StreamDeck or 
+                GamingPanelEnum.StreamDeckV2 or 
+                GamingPanelEnum.StreamDeckMK2 => 15,
 
-                case GamingPanelEnum.StreamDeck:
-                case GamingPanelEnum.StreamDeckV2:
-                case GamingPanelEnum.StreamDeckMK2:
-                    {
-                        _buttonCount = 15;
-                        break;
-                    }
-
-                case GamingPanelEnum.StreamDeckXL:
-                    {
-                        _buttonCount = 32;
-                        break;
-                    }
-
-                default:
-                    {
-                        throw new Exception("Failed to determine Stream Deck model");
-                    }
-            }
+                GamingPanelEnum.StreamDeckXL => 32,
+                _ => throw new Exception("Failed to determine Stream Deck model")
+            };
 
             Startup();
             _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
@@ -78,7 +115,6 @@
             StreamDeckPanels.Add(this);
         }
         
-
         private bool _disposed;
         protected override void Dispose(bool disposing)
         {
@@ -102,36 +138,19 @@
 
         public static StreamDeckPanel GetInstance(string bindingHash)
         {
-            foreach (var streamDeckPanel in StreamDeckPanels)
-            {
-                if (streamDeckPanel.BindingHash == bindingHash)
-                {
-                    return streamDeckPanel;
-                }
-            }
-
-            return null;
+            return StreamDeckPanels.FirstOrDefault(x => x.BindingHash == bindingHash);
         }
 
         public static StreamDeckPanel GetInstance(GamingPanel gamingPanel)
         {
-            foreach (var streamDeckPanel in StreamDeckPanels)
-            {
-                if (streamDeckPanel.BindingHash == gamingPanel.BindingHash)
-                {
-                    return streamDeckPanel;
-                }
-            }
-
-            return null;
+            return GetInstance(gamingPanel.BindingHash);
         }
-
 
         public override void Identify()
         {
             try
             {
-                var thread = new Thread(ShowIdentifyingValue);
+                Thread thread = new(ShowIdentifyingValue);
                 thread.Start();
             }
             catch (Exception)
@@ -144,8 +163,8 @@
         {
             try
             {
-                var spins = 40;
-                var random = new Random();
+                int spins = 40;
+                Random random = new();
                 var ledPositionArray = Enum.GetValues(typeof(SwitchPanelPZ55LEDPosition));
                 var panelColorArray = Enum.GetValues(typeof(PanelLEDColor));
 
@@ -159,7 +178,7 @@
                 }
 
                 var blackBitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(Color.Black);
-                for (var i = 0; i < ButtonCount; i++)
+                for (int i = 0; i < ButtonCount; i++)
                 {
                     SetImage(i, blackBitmap);
                 }
@@ -209,7 +228,7 @@
 
         private void StreamDeckKeyListener(object sender, KeyEventArgs e)
         {
-            if (!(sender is IMacroBoard))
+            if (sender is not IMacroBoard)
             {
                 return;
             }
@@ -356,43 +375,18 @@
         private void DeviceAttachedHandler()
         {
             Startup();
-
             // IsAttached = true;
         }
 
         private void DeviceRemovedHandler()
         {
             Dispose();
-
             // IsAttached = false;
         }
 
         public DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
             return null;
-        }
-
-        public int LCDKnobSensitivity
-        {
-            get => _lcdKnobSensitivity;
-            set => _lcdKnobSensitivity = value;
-        }
-
-
-        public string SelectedLayerName
-        {
-            get => _streamDeckLayerHandler.SelectedLayerName;
-            set => _streamDeckLayerHandler.SelectedLayerName = value;
-        }
-
-        public List<string> LayerNameList
-        {
-            get => _streamDeckLayerHandler.GetLayerNameList();
-        }
-
-        public List<StreamDeckLayer> LayerList
-        {
-            get => _streamDeckLayerHandler.LayerList;
         }
 
         public bool AddLayer(StreamDeckLayer streamDeckLayer)
@@ -413,11 +407,6 @@
             SetIsDirty();
         }
 
-        public StreamDeckLayer HomeLayer
-        {
-            get => _streamDeckLayerHandler.HomeLayer;
-        }
-
         public List<string> GetStreamDeckLayerNames()
         {
             return _streamDeckLayerHandler.GetStreamDeckLayerNames();
@@ -430,7 +419,7 @@
 
         public string GetLayerHandlerInformation()
         {
-            return $"StreamDeckLayerHandler Instance ID = {_streamDeckLayerHandler.InstanceId} Counter = {StreamDeckLayerHandler.InstanceIdCounter}";
+            return $"StreamDeckLayerHandler Instance ID = [{_streamDeckLayerHandler.InstanceId}] Counter = [{StreamDeckLayerHandler.InstanceIdCounter}]";
         }
 
         public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName, string layerName)
@@ -448,17 +437,6 @@
             return _streamDeckLayerHandler.GetLayer(layerName);
         }
 
-        public StreamDeckLayer SelectedLayer
-        {
-            get => _streamDeckLayerHandler.SelectedLayer;
-            set => _streamDeckLayerHandler.SelectedLayer = value;
-        }
-
-        public bool HasLayers
-        {
-            get { return _streamDeckLayerHandler.HasLayers; }
-        }
-
         public void ShowHomeLayer()
         {
             _streamDeckLayerHandler.ShowHomeLayer();
@@ -469,38 +447,10 @@
             _streamDeckLayerHandler.ShowPreviousLayer();
         }
 
-        public IStreamDeckBoard StreamDeckBoard => _streamDeckBoard;
-
-        public int ButtonCount => _buttonCount;
-
-        public int SelectedButtonNumber
-        {
-            get => _streamDeckLayerHandler.SelectedButtonNumber;
-            set => _streamDeckLayerHandler.SelectedButtonNumber = value;
-        }
-
-        public EnumStreamDeckButtonNames SelectedButtonName
-        {
-            get => _streamDeckLayerHandler.SelectedButtonName;
-            set => _streamDeckLayerHandler.SelectedButtonName = value;
-        }
-
-        public StreamDeckButton SelectedButton
-        {
-            get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
-        }
-
         public static Bitmap Validate(string imagePath)
         {
-            if (File.Exists(imagePath))
-            {
-                return new Bitmap(imagePath);
-            }
-
-            return FileNotFoundBitmap();
+            return File.Exists(imagePath) ? new Bitmap(imagePath) : FileNotFoundBitmap();
         }
-
-        private static Bitmap _fileNotFoundBitMap;
 
         public static Bitmap FileNotFoundBitmap()
         {
@@ -511,7 +461,7 @@
 
             var assembly = Assembly.GetExecutingAssembly();
 
-            var tmpBitMapImage = new BitmapImage();
+            BitmapImage tmpBitMapImage = new();
             using (var stream = assembly.GetManifestResourceStream(@"NonVisuals.Images.filenotfound.png"))
             {
                 tmpBitMapImage.BeginInit();
@@ -633,5 +583,4 @@
             }
         }
     }
-
 }

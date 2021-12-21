@@ -14,13 +14,53 @@
 
     public class StreamDeckLayer
     {
-        private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
         private volatile bool _isVisible;
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
         [JsonProperty("Name", Required = Required.Default)]
         public string Name { get; set; } = string.Empty;
+        public List<StreamDeckButton> StreamDeckButtons { get; set; } = new List<StreamDeckButton>();
+
+        [JsonIgnore]
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set
+            {
+                _isVisible = value;
+                StreamDeckButtons.ForEach(button => button.IsVisible = value);
+            }
+        }
+
+        [JsonIgnore]
+        public StreamDeckPanel StreamDeckPanelInstance
+        {
+            get => _streamDeckPanel;
+            set
+            {
+                _streamDeckPanel = value;
+                StreamDeckButtons.ForEach(button => button.StreamDeckPanelInstance = value);
+            }
+        }
+
+        [JsonIgnore]
+        public bool HasAtLeastOneButtonConfig
+        {
+            get
+            {
+                return StreamDeckButtons.Any(o => o.HasConfig);
+            }
+        }
+
+        [JsonIgnore]
+        public bool HasButtons
+        {
+            get
+            {
+                return StreamDeckButtons.Count > 0;
+            }
+        }
 
         public StreamDeckLayer(StreamDeckPanel streamDeckPanel)
         {
@@ -47,7 +87,7 @@
 
                 newStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
 
-                foreach (var oldStreamDeckButton in _streamDeckButtons)
+                foreach (var oldStreamDeckButton in StreamDeckButtons)
                 {
                     if (oldStreamDeckButton.StreamDeckButtonName == newStreamDeckButton.StreamDeckButtonName)
                     {
@@ -106,7 +146,7 @@
 
                 if (!found)
                 {
-                    _streamDeckButtons.Add(newStreamDeckButton);
+                    StreamDeckButtons.Add(newStreamDeckButton);
                     changesMade = true;
                 }
             }
@@ -124,7 +164,7 @@
 
         public void RegisterStreamDeckButtons()
         {
-            _streamDeckButtons.ForEach(button => button.RegisterButtonToStaticList());
+            StreamDeckButtons.ForEach(button => button.RegisterButtonToStaticList());
         }
 
         [JsonProperty("TextFont", Required = Required.Default)]
@@ -132,7 +172,7 @@
         {
             set
             {
-                foreach (var streamDeckButton in _streamDeckButtons.Where(x => x.Face != null))
+                foreach (var streamDeckButton in StreamDeckButtons.Where(x => x.Face != null))
                 {
                     switch (streamDeckButton.Face.FaceType)
                     {
@@ -152,7 +192,7 @@
         {
             set
             {
-                foreach (var streamDeckButton in _streamDeckButtons.Where(x=> x.Face != null))
+                foreach (var streamDeckButton in StreamDeckButtons.Where(x=> x.Face != null))
                 {
                     switch (streamDeckButton.Face.FaceType)
                     {
@@ -172,7 +212,7 @@
         {
             set
             {
-                foreach (var streamDeckButton in _streamDeckButtons.Where(x => x.Face != null))
+                foreach (var streamDeckButton in StreamDeckButtons.Where(x => x.Face != null))
                 {
                     switch (streamDeckButton.Face.FaceType)
                     {
@@ -193,7 +233,7 @@
             streamDeckButton.IsVisible = _isVisible;
 
             var found = false;
-            foreach (var button in _streamDeckButtons)
+            foreach (var button in StreamDeckButtons)
             {
                 if (button.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName)
                 {
@@ -205,7 +245,7 @@
 
             if (!found)
             {
-                _streamDeckButtons.Add(streamDeckButton);
+                StreamDeckButtons.Add(streamDeckButton);
             }
 
             if (!silently)
@@ -218,15 +258,15 @@
         public void RemoveButton(StreamDeckButton streamDeckButton)
         {
             streamDeckButton.Dispose();
-            _streamDeckButtons.Remove(streamDeckButton);
+            StreamDeckButtons.Remove(streamDeckButton);
             NotifyChanges();
         }
 
         public void RemoveButtons(bool sendNotification)
         {
-            _streamDeckButtons.ForEach(button => button.Dispose());
+            StreamDeckButtons.ForEach(button => button.Dispose());
 
-            _streamDeckButtons.RemoveAll(o => o != null);
+            StreamDeckButtons.RemoveAll(o => o != null);
 
             if (sendNotification)
             {
@@ -236,46 +276,22 @@
 
         public void RemoveEmptyButtons()
         {
-            foreach (var streamDeckButton in _streamDeckButtons.Where(o => o.HasConfig == false))
+            foreach (var streamDeckButton in StreamDeckButtons.Where(o => o.HasConfig == false))
             {
                 streamDeckButton.Dispose();
             }
 
-            _streamDeckButtons.RemoveAll(o => !o.HasConfig);
-        }
-
-        [JsonIgnore]
-        public bool HasAtLeastOneButtonConfig
-        {
-            get
-            {
-                return _streamDeckButtons.Any(o => o.HasConfig);
-            }
-        }
-
-        [JsonIgnore]
-        public bool HasButtons
-        {
-            get
-            {
-                return _streamDeckButtons.Count > 0;
-            }
+            StreamDeckButtons.RemoveAll(o => !o.HasConfig);
         }
 
         public List<StreamDeckButton> GetButtonsWithConfig()
         {
-            return _streamDeckButtons.Where(o => o.HasConfig).ToList();
-        }
-
-        public List<StreamDeckButton> StreamDeckButtons
-        {
-            get => _streamDeckButtons;
-            set => _streamDeckButtons = value;
+            return StreamDeckButtons.Where(o => o.HasConfig).ToList();
         }
 
         public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            foreach (var streamDeckButton in _streamDeckButtons)
+            foreach (var streamDeckButton in StreamDeckButtons)
             {
                 if (streamDeckButton.StreamDeckButtonName == streamDeckButtonName)
                 {
@@ -284,18 +300,18 @@
             }
 
             var newButton = new StreamDeckButton(streamDeckButtonName, _streamDeckPanel);
-            _streamDeckButtons.Add(newButton);
+            StreamDeckButtons.Add(newButton);
             return newButton;
         }
 
         public bool ContainStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            return _streamDeckButtons.Exists(x => x.StreamDeckButtonName == streamDeckButtonName);
+            return StreamDeckButtons.Exists(x => x.StreamDeckButtonName == streamDeckButtonName);
         }
 
         public StreamDeckButton GetStreamDeckButtonName(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            foreach (var streamDeckButton in _streamDeckButtons)
+            foreach (var streamDeckButton in StreamDeckButtons)
             {
                 if (streamDeckButton.StreamDeckButtonName == streamDeckButtonName)
                 {
@@ -305,29 +321,6 @@
 
             throw new Exception($"StreamDeckLayer [{Name}] does not contain button [{streamDeckButtonName}].");
         }
-
-        [JsonIgnore]
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set
-            {
-                _isVisible = value;
-                _streamDeckButtons.ForEach(button => button.IsVisible = value);
-            }
-        }
-
-        [JsonIgnore]
-        public StreamDeckPanel StreamDeckPanelInstance
-        {
-            get => _streamDeckPanel;
-            set
-            {
-                _streamDeckPanel = value;
-                _streamDeckButtons.ForEach(button => button.StreamDeckPanelInstance = value);
-            }
-        }
-
     }
 
     public enum EnumButtonImportMode
