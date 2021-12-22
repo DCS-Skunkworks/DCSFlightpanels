@@ -31,10 +31,9 @@
 
         private StreamDeckButton _streamDeckButton;
         private bool _isLoaded = false;
-        private bool _isDirty = false;
         private StreamDeckPanel _streamDeckPanel;
 
-
+        public bool IsDirty { get; set; } = false;
 
         public UserControlStreamDeckButtonAction()
         {
@@ -110,7 +109,7 @@
 
             DeleteSoundConfig();
 
-            _isDirty = false;
+            IsDirty = false;
 
             SetFormState();
         }
@@ -261,19 +260,13 @@
 
         public void StateSaved()
         {
-            _isDirty = false;
+            IsDirty = false;
         }
 
         public void SetIsDirty()
         {
-            _isDirty = true;
+            IsDirty = true;
             SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckButton.StreamDeckButtonName, string.Empty, _streamDeckPanel.BindingHash);
-        }
-
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set => _isDirty = value;
         }
 
         public bool HasConfig
