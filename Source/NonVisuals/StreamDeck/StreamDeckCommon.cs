@@ -58,37 +58,16 @@
             }
         }
 
-        public static PluginGamingPanelEnum ConvertEnum(GamingPanelEnum panel)
+        public static PluginGamingPanelEnum ConvertEnum(GamingPanelEnum gamingPanel)
         {
-            switch (panel)
-            {
-                case GamingPanelEnum.StreamDeckMini:
-                    {
-                        return PluginGamingPanelEnum.StreamDeckMini;
-                    }
-
-                case GamingPanelEnum.StreamDeck:
-                    {
-                        return PluginGamingPanelEnum.StreamDeck;
-                    }
-
-                case GamingPanelEnum.StreamDeckV2:
-                    {
-                        return PluginGamingPanelEnum.StreamDeckV2;
-                    }
-
-                case GamingPanelEnum.StreamDeckMK2:
-                    {
-                        return PluginGamingPanelEnum.StreamDeckMK2;
-                    }
-
-                case GamingPanelEnum.StreamDeckXL:
-                    {
-                        return PluginGamingPanelEnum.StreamDeckXL;
-                    }
-            }
-
-            return PluginGamingPanelEnum.Unknown;
+            return gamingPanel switch { 
+                GamingPanelEnum.StreamDeckMini => PluginGamingPanelEnum.StreamDeckMini,
+                GamingPanelEnum.StreamDeck => PluginGamingPanelEnum.StreamDeck,
+                GamingPanelEnum.StreamDeckV2 => PluginGamingPanelEnum.StreamDeckV2,
+                GamingPanelEnum.StreamDeckMK2 => PluginGamingPanelEnum.StreamDeckMK2,
+                GamingPanelEnum.StreamDeckXL => PluginGamingPanelEnum.StreamDeckXL,
+                _ => PluginGamingPanelEnum.Unknown
+                };
         }
 
         public static string GetDCSFPTemporaryFolder()
@@ -132,109 +111,35 @@
             return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
         }
 
-        public static EnumComparator ComparatorValue(string text)
+        public static EnumComparator GetComparatorValue(string text)
         {
-            if (text == "NotSet")
-            {
-                return EnumComparator.NotSet;
-            }
-
-            if (text == "==")
-            {
-                return EnumComparator.Equals;
-            }
-
-            if (text == "!=")
-            {
-                return EnumComparator.NotEquals;
-            }
-
-            if (text == "<")
-            {
-                return EnumComparator.LessThan;
-            }
-
-            if (text == "<=")
-            {
-                return EnumComparator.LessThanEqual;
-            }
-
-            if (text == ">")
-            {
-                return EnumComparator.GreaterThan;
-            }
-
-            if (text == ">=")
-            {
-                return EnumComparator.GreaterThanEqual;
-            }
-
-            if (text == "Always")
-            {
-                return EnumComparator.Always;
-            }
-
-            throw new Exception("Failed to decode comparison type.");
+            return text switch {
+                "NotSet" => EnumComparator.NotSet,
+                "==" => EnumComparator.Equals,
+                "!=" => EnumComparator.NotEquals,
+                "<" => EnumComparator.LessThan,
+                "<=" => EnumComparator.LessThanEqual,
+                ">" => EnumComparator.GreaterThan,
+                ">=" => EnumComparator.GreaterThanEqual,
+                "Always" => EnumComparator.Always,
+                _ => throw new Exception($"Failed to decode comparison type [{text}]")
+            };
         }
 
         public static void SetComparatorValue(ComboBox comboBox, EnumComparator comparator)
         {
-            switch (comparator)
+            comboBox.Text = comparator switch
             {
-                case EnumComparator.NotSet:
-                    {
-                        comboBox.Text = "NotSet";
-                        break;
-                    }
-
-                case EnumComparator.Equals:
-                    {
-                        comboBox.Text = "==";
-                        break;
-                    }
-
-                case EnumComparator.NotEquals:
-                    {
-                        comboBox.Text = "!=";
-                        break;
-                    }
-
-                case EnumComparator.LessThan:
-                    {
-                        comboBox.Text = "<";
-                        break;
-                    }
-
-                case EnumComparator.LessThanEqual:
-                    {
-                        comboBox.Text = "<=";
-                        break;
-                    }
-
-                case EnumComparator.GreaterThan:
-                    {
-                        comboBox.Text = ">";
-                        break;
-                    }
-
-                case EnumComparator.GreaterThanEqual:
-                    {
-                        comboBox.Text = ">=";
-                        break;
-                    }
-
-                case EnumComparator.Always:
-                    {
-                        comboBox.Text = "Always";
-                        break;
-                    }
-
-                default:
-                    {
-                        throw new Exception("Failed to decode comparison type.");
-                    }
-            }
+                EnumComparator.NotSet => "NotSet",
+                EnumComparator.Equals => "==",
+                EnumComparator.NotEquals => "!=",
+                EnumComparator.LessThan => "<",
+                EnumComparator.LessThanEqual => "<=",
+                EnumComparator.GreaterThan => ">",
+                EnumComparator.GreaterThanEqual => ">=",
+                EnumComparator.Always => "Always",
+                _ => throw new Exception($"Failed to decode comparison type [{comparator}]")
+            };
         }
-
     }
 }

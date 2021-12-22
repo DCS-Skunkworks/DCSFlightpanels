@@ -84,7 +84,7 @@
                     StackPanelOverlayImage.Visibility = Visibility.Collapsed;
                 }
 
-                if (StreamDeckCommon.ComparatorValue(ComboBoxComparisonType1.Text) == EnumComparator.NotSet || StreamDeckCommon.ComparatorValue(ComboBoxComparisonType1.Text) == EnumComparator.Always)
+                if (StreamDeckCommon.GetComparatorValue(ComboBoxComparisonType1.Text) == EnumComparator.NotSet || StreamDeckCommon.GetComparatorValue(ComboBoxComparisonType1.Text) == EnumComparator.Always)
                 {
                     StackPanelSecondCriteria.Visibility = Visibility.Collapsed;
                     StackPanelAddSecondCriteria.Visibility = Visibility.Visible;
@@ -369,18 +369,18 @@
                 if (sender.Equals(ComboBoxComparisonType1))
                 {
                     comboBox = ComboBoxComparisonType1;
-                    if (_dcsbiosConverter.Comparator1 != StreamDeckCommon.ComparatorValue(comboBox.Text))
+                    if (_dcsbiosConverter.Comparator1 != StreamDeckCommon.GetComparatorValue(comboBox.Text))
                     {
-                        _dcsbiosConverter.Comparator1 = StreamDeckCommon.ComparatorValue(comboBox.Text);
+                        _dcsbiosConverter.Comparator1 = StreamDeckCommon.GetComparatorValue(comboBox.Text);
                         SetIsDirty();
                     }
                 }
                 else
                 {
                     comboBox = ComboBoxComparisonType2;
-                    if (_dcsbiosConverter.Comparator2 != StreamDeckCommon.ComparatorValue(comboBox.Text))
+                    if (_dcsbiosConverter.Comparator2 != StreamDeckCommon.GetComparatorValue(comboBox.Text))
                     {
-                        _dcsbiosConverter.Comparator2 = StreamDeckCommon.ComparatorValue(comboBox.Text);
+                        _dcsbiosConverter.Comparator2 = StreamDeckCommon.GetComparatorValue(comboBox.Text);
                         SetIsDirty();
                     }
                 }
@@ -681,9 +681,9 @@
             get => StackPanelSecondCriteria.Visibility == Visibility.Visible;
         }
 
-        private EnumComparator SelectedComparator1 => StreamDeckCommon.ComparatorValue(ComboBoxComparisonType1.Text);
+        private EnumComparator SelectedComparator1 => StreamDeckCommon.GetComparatorValue(ComboBoxComparisonType1.Text);
 
-        private EnumComparator SelectedComparator2 => StreamDeckCommon.ComparatorValue(ComboBoxComparisonType2.Text);
+        private EnumComparator SelectedComparator2 => StreamDeckCommon.GetComparatorValue(ComboBoxComparisonType2.Text);
 
 
         private void StreamDeckDCSBIOSConverterWindow_OnKeyDown(object sender, KeyEventArgs e)

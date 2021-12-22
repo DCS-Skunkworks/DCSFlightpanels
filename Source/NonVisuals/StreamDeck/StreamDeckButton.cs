@@ -204,47 +204,20 @@ namespace NonVisuals.StreamDeck
 
             if (ActionForRelease == null)
             {
-
                 /*
                  * Must do this here as there are no ActionTypeKey for this button, otherwise Plugin would never get any event
                  */
                 if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
-                    var pluginPanel = PluginGamingPanelEnum.Unknown;
-
-                    switch (_streamDeckPanel.TypeOfPanel)
-                    {
-                        case GamingPanelEnum.StreamDeckMini:
-                            {
-                                pluginPanel = PluginGamingPanelEnum.StreamDeckMini;
-                                break;
-                            }
-
-                        case GamingPanelEnum.StreamDeck:
-                            {
-                                pluginPanel = PluginGamingPanelEnum.StreamDeck;
-                                break;
-                            }
-
-                        case GamingPanelEnum.StreamDeckV2:
-                            {
-                                pluginPanel = PluginGamingPanelEnum.StreamDeckV2;
-                                break;
-                            }
-
-                        case GamingPanelEnum.StreamDeckMK2:
-                            {
-                                pluginPanel = PluginGamingPanelEnum.StreamDeckMK2;
-                                break;
-                            }
-
-                        case GamingPanelEnum.StreamDeckXL:
-                            {
-                                pluginPanel = PluginGamingPanelEnum.StreamDeckXL;
-                                break;
-                            }
-                    }
-
+                    PluginGamingPanelEnum pluginPanel = _streamDeckPanel.TypeOfPanel switch {
+                        GamingPanelEnum.StreamDeckMini => PluginGamingPanelEnum.StreamDeckMini,
+                        GamingPanelEnum.StreamDeck => PluginGamingPanelEnum.StreamDeck,
+                        GamingPanelEnum.StreamDeckV2 => PluginGamingPanelEnum.StreamDeckV2,
+                        GamingPanelEnum.StreamDeckMK2 => PluginGamingPanelEnum.StreamDeckMK2,
+                        GamingPanelEnum.StreamDeckXL => PluginGamingPanelEnum.StreamDeckXL,
+                        _ => PluginGamingPanelEnum.Unknown
+                    };
+ 
                     PluginManager.DoEvent(
                         ProfileHandler.SelectedProfile().Description,
                         StreamDeckPanelInstance.HIDInstanceId,
@@ -253,7 +226,6 @@ namespace NonVisuals.StreamDeck
                         false,
                         null);
                 }
-
                 return;
             }
 

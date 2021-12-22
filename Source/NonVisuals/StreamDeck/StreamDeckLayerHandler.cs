@@ -51,12 +51,44 @@
 
         public static int InstanceIdCounter => _instanceIdCounter;
         public int InstanceId => _instanceId;
+        public bool HasLayers => _layerList.Count > 0;
+
+        public List<StreamDeckLayer> LayerList
+        {
+            get => _layerList;
+            set => _layerList = value;
+        }
+
+        public StreamDeckLayer HomeLayer
+        {
+            get
+            {
+                CheckHomeLayerExists();
+                return _layerList.Find(o => o.Name == StreamDeckConstants.HOME_LAYER_NAME);
+            }
+        }
+
+        public StreamDeckLayer SelectedLayer
+        {
+            get
+            {
+                CheckHomeLayerExists();
+                return GetLayer(_selectedLayerName);
+            }
+
+            set => SetSelectedLayer(value.Name);
+        }
 
         public StreamDeckLayerHandler(StreamDeckPanel streamDeckPanel)
         {
             _instanceId = _instanceIdCounter++;
             _streamDeckPanel = streamDeckPanel;
             _streamDeckBoard = streamDeckPanel.StreamDeckBoard;
+        }
+
+        public StreamDeckButton SelectedButton
+        {
+            get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
         }
 
         public List<string> GetLayerNameList()
@@ -224,9 +256,7 @@
 
         private void CheckHomeLayerExists()
         {
-            bool found = _layerList.Exists(x => x.Name == StreamDeckConstants.HOME_LAYER_NAME);
-
-            if (!found)
+            if (!_layerList.Exists(x => x.Name == StreamDeckConstants.HOME_LAYER_NAME))
             {
                 var streamDeckLayer = new StreamDeckLayer(_streamDeckPanel)
                 {
@@ -307,12 +337,6 @@
             GetLayer(layerName).RemoveButtons(true);
         }
 
-        public List<StreamDeckLayer> LayerList
-        {
-            get => _layerList;
-            set => _layerList = value;
-        }
-
         public void ClearSettings()
         {
             foreach (var streamDeckLayer in _layerList)
@@ -323,26 +347,6 @@
 
             _layerList.Clear();
             ClearAllFaces();
-        }
-
-        public StreamDeckLayer HomeLayer
-        {
-            get
-            {
-                CheckHomeLayerExists();
-                return _layerList.Find(o => o.Name == StreamDeckConstants.HOME_LAYER_NAME);
-            }
-        }
-
-        public StreamDeckLayer SelectedLayer
-        {
-            get
-            {
-                CheckHomeLayerExists();
-                return GetLayer(_selectedLayerName);
-            }
-
-            set => SetSelectedLayer(value.Name);
         }
 
         public string SelectedLayerName
@@ -375,8 +379,6 @@
                 SetSelectedLayer(value);
             }
         }
-
-        public bool HasLayers => _layerList.Count > 0;
 
         public void ClearAllFaces()
         {
@@ -506,11 +508,6 @@
 
                 _selectedButtonName = value;
             }
-        }
-
-        public StreamDeckButton SelectedButton
-        {
-            get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
         }
 
         public List<string> GetStreamDeckLayerNames()
