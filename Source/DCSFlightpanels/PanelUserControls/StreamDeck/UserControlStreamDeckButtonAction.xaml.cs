@@ -253,7 +253,9 @@
         {
             foreach (var textBox in _textBoxes)
             {
-                textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, !textBox.Name.Contains("Off")), _streamDeckPanel);
+                if (_streamDeckPanel != null) {
+                    textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, !textBox.Name.Contains("Off")), _streamDeckPanel);
+                }
             }
         }
 
