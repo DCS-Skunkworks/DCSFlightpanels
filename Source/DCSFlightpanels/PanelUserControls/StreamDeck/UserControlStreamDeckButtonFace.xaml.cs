@@ -3,11 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.IO;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Forms;
     using System.Windows.Input;
-
+    using System.Windows.Media.Imaging;
     using ClassLibraryCommon;
 
     using DCSFlightpanels.Bills;
@@ -33,10 +35,10 @@
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
         private readonly List<RadioButton> _radioButtonList = new List<RadioButton>();
-        private bool _isDirty = false;
         private bool _isLoaded = false;
         private EnumStreamDeckButtonNames _streamDeckButton;
         private StreamDeckPanel _streamDeckPanel;
+        public bool IsDirty { get; set; } = false;
 
         public UserControlStreamDeckButtonFace()
         {
@@ -110,10 +112,20 @@
                 ButtonTestTextFace.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
 
                 ButtonTestSelectImageGalleryButton.IsEnabled = TextBoxImageFace.Bill.ContainsImageFace();
+                DisplayImagePreview();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void DisplayImagePreview()
+        {
+            if (TextBoxImageFace.Bill.ContainsImageFace())
+            {
+                var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
+                ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
             }
         }
 
@@ -140,9 +152,11 @@
             {
                 radioButton.IsChecked = false;
             }
+            
+            ButtonImagePreview.Source = null;
 
             SetFormState();
-            _isDirty = false;
+            IsDirty = false;
         }
 
         private void MouseDownFocusLogTextBox(object sender, MouseButtonEventArgs e)
@@ -191,19 +205,13 @@
 
         public void StateSaved()
         {
-            _isDirty = false;
+            IsDirty = false;
         }
 
         public void SetIsDirty()
         {
-            _isDirty = true;
+            IsDirty = true;
             SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckButton, string.Empty, _streamDeckPanel.BindingHash);
-        }
-
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set => _isDirty = value;
         }
 
         private void FillControlLists()

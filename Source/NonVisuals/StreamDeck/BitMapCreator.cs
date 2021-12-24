@@ -17,6 +17,7 @@
     public static class BitMapCreator
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
+       
         public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
         {
             using (var outStream = new MemoryStream())
@@ -28,6 +29,30 @@
 
                 return new Bitmap(bitmap);
             }
+        }
+
+        public static BitmapImage Bitmap2BitmapImage(Bitmap bitmap)
+        {
+            try
+            {
+                using (MemoryStream memory = new MemoryStream())
+                {
+                    bitmap.Save(memory, ImageFormat.Bmp);
+                    memory.Position = 0;
+                    BitmapImage bitmapimage = new BitmapImage();
+                    bitmapimage.BeginInit();
+                    bitmapimage.StreamSource = memory;
+                    bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapimage.EndInit();
+
+                    return bitmapimage;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Failed to convert Bitmap to BitmapImage.");
+            }
+            return null;
         }
 
         public static bool IsSmallerThanStreamdeckDefault(Bitmap bitmap)
@@ -171,31 +196,6 @@
             graphics.DrawImage(bitmap, x, y, bitmap.Width, bitmap.Height);
             // graphics.DrawImageUnscaled(bitmap, 0, 0);
             return streamdeckSizedBitmap;
-        }
-
-        public static BitmapImage Bitmap2BitmapImage(Bitmap bitmap)
-        {
-            try
-            {
-                using (MemoryStream memory = new MemoryStream())
-                {
-                    bitmap.Save(memory, ImageFormat.Bmp);
-                    memory.Position = 0;
-                    BitmapImage bitmapimage = new BitmapImage();
-                    bitmapimage.BeginInit();
-                    bitmapimage.StreamSource = memory;
-                    bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapimage.EndInit();
-
-                    return bitmapimage;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "Failed to convert bitmap to bitmapimage.");
-            }
-
-            return null;
         }
 
         public static BitmapImage GetButtonImageFromResources(EnumStreamDeckButtonNames streamDeckButtonName, Color color)
