@@ -45,7 +45,6 @@
             InitializeComponent();
         }
 
-
         private bool _disposed;
         // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
@@ -62,7 +61,6 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-
 
         internal void SetStreamDeckPanel(StreamDeckPanel streamDeckPanel)
         {
@@ -180,22 +178,13 @@
 
         private EnumStreamDeckFaceType GetSelectedFaceType()
         {
-            if (RadioButtonTextFace.IsChecked == true)
+            return true switch
             {
-                return EnumStreamDeckFaceType.Text;
-            }
-
-            if (RadioButtonDCSBIOSFace.IsChecked == true)
-            {
-                return EnumStreamDeckFaceType.DCSBIOS;
-            }
-
-            if (RadioButtonImageFace.IsChecked == true)
-            {
-                return EnumStreamDeckFaceType.Image;
-            }
-
-            return EnumStreamDeckFaceType.Unknown;
+                _ when RadioButtonTextFace.IsChecked == true => EnumStreamDeckFaceType.Text,
+                _ when RadioButtonDCSBIOSFace.IsChecked == true => EnumStreamDeckFaceType.DCSBIOS,
+                _ when RadioButtonImageFace.IsChecked == true => EnumStreamDeckFaceType.Image,
+                _ => EnumStreamDeckFaceType.Unknown
+            };
         }
 
         private void RadioButtonFaceType_OnClick(object sender, RoutedEventArgs e)
@@ -312,7 +301,6 @@
             }
         }
 
-
         public bool HasConfig
         {
             get
@@ -384,7 +372,6 @@
             TextBoxOffsetInfo.OffSetY = TextBoxOffsetInfo.OffSetY;
         }
 
-
         private void ShowFaceConfiguration(IStreamDeckButtonFace streamDeckButtonFace)
         {
             if (streamDeckButtonFace == null)
@@ -434,7 +421,6 @@
             throw new ArgumentException("ShowFaceConfiguration, failed to determine Face Type");
         }
 
-
         public IStreamDeckButtonFace GetStreamDeckButtonFace(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             switch (GetSelectedFaceType())
@@ -454,10 +440,8 @@
                                 OffsetX = TextBoxButtonTextFace.Bill.OffsetX,
                                 OffsetY = TextBoxButtonTextFace.Bill.OffsetY
                             };
-
                             return result;
                         }
-
                         return null;
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
@@ -483,10 +467,8 @@
                                 StreamDeckPanelInstance = _streamDeckPanel,
                                 ImageFile = TextBoxImageFace.Bill.ImageFileRelativePath
                             };
-
                             return result;
                         }
-
                         return null;
                     }
                 case EnumStreamDeckFaceType.Unknown:
@@ -515,7 +497,6 @@
             }
         }
 
-
         private void TextBoxButtonTextFace_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -537,7 +518,6 @@
                 SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
                 TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
-
             }
             catch (Exception ex)
             {
@@ -554,7 +534,6 @@
                 SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
                 TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
-
             }
             catch (Exception ex)
             {
@@ -571,7 +550,6 @@
                 SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
                 TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
-
             }
             catch (Exception ex)
             {
@@ -588,7 +566,6 @@
                 SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
                 TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
-
             }
             catch (Exception ex)
             {
@@ -661,7 +638,6 @@
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.StreamDeckPanelInstance = _streamDeckPanel;
                     streamDeckDCSBIOSDecoderWindow.Dispose();
                     SetIsDirty();
-
                 }
                 ButtonFocus.Focus();
             }
@@ -715,12 +691,10 @@
             }
         }
 
-
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try
             {
-
                 if (_streamDeckPanel.BindingHash == e.BindingHash)
                 {
                     Dispatcher?.BeginInvoke((Action) (() =>
@@ -819,6 +793,5 @@
                 logger.Error(ex);
             }
         }
-
     }
 }

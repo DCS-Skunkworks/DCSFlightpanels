@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using DCSFlightpanels.CustomControls;
 using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.PanelUserControls.StreamDeck
@@ -28,25 +31,18 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         protected override int ButtonAmount()
         {
-            return 15;
+            return 6;
         }
 
         private void FillControlLists()
         {
-            ButtonImages.Add(ButtonImage1);
-            ButtonImages.Add(ButtonImage2);
-            ButtonImages.Add(ButtonImage3);
-            ButtonImages.Add(ButtonImage4);
-            ButtonImages.Add(ButtonImage5);
-            ButtonImages.Add(ButtonImage6);
+            FindVisualChildren<StreamDeckImage>(GridButtons).ToList()
+                .ForEach(x => ButtonImages.Add(x));
 
-            DotImages.Add(DotImage1);
-            DotImages.Add(DotImage2);
-            DotImages.Add(DotImage3);
-            DotImages.Add(DotImage4);
-            DotImages.Add(DotImage5);
-            DotImages.Add(DotImage6);
+            FindVisualChildren<Image>(GridButtons).ToList().Where(x => x.Name.StartsWith("DotImage")).ToList()
+                .ForEach(x => DotImages.Add(x));
+
+            CheckButonControlListValidity();
         }
-
     }
 }
