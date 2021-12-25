@@ -25,5 +25,27 @@ namespace Tests.ClassLibraryCommon
             Assert.Equal(expected, Common.RemoveLControl(inputString));
         }
 
+
+        [Theory]
+        [InlineData(@"\\testX", @"\\testX", @".\")]
+        [InlineData(@"\\testX\1", @"\\testX\1", @".\")]
+        [InlineData(@"\\testX", @"\\testY", @"file:\\testy\")]
+        [InlineData(@"\\testX\1", @"\\testY\1", @"file:\\testy\1")]
+        [InlineData(@"\\testX\1\2", @"\\testX\1", @"..\1")]
+        [InlineData(@"\\testX\1\2\3", @"\\testX\1", @"..\..\1")]
+        [InlineData(@"\\testX\1\2\3", @"\\testX\1\2", @"..\2")]
+        [InlineData(@"\\testX\1\2\3\", @"\\testX\1\2\", @"..\")]
+        [InlineData(@"\\testX\1\2\3", @"\\testX\1\2\", @".\")]
+        [InlineData(@"\\testX\1\2\3\", @"\\testX\1\2", @"..\..\2")]
+        [InlineData(@"\\testX\1\2\3\file.txt", @"\\testX\1\2\file.txt", @"..\file.txt")]
+        [InlineData(@"\\testX\1", @"\\testX\1\2", @"1\2")]
+        [InlineData(@"\\testX\1", @"\\testX\1\2\3", @"1\2\3")]
+        [InlineData(@"\\testX\1\2", @"\\testX\1\2\3", @"2\3")]
+        [InlineData(@"\\testX\1\2\file.txt", @"\\testX\1\2\3\file.txt", @"3\file.txt")]
+        public void GetRelativePath_ShouldReturn_Expectedvalue(string relativeTo, string path, string expected)
+        {
+            Assert.Equal(expected, Common.GetRelativePath(relativeTo, path));
+        }
+        
     }
 }
