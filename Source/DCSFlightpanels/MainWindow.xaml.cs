@@ -1160,11 +1160,11 @@
             }
             else if (_profileHandler.IsNewProfile)
             {
-                Title = _windowName; // + "      " + Common.GetLocalIPAddress();
+                Title = _windowName;
             }
             else
             {
-                Title = _windowName + _profileHandler.Filename; // + "      " + Common.GetLocalIPAddress();
+                Title = _windowName + _profileHandler.Filename;
             }
 
             if (_profileHandler.IsDirty)

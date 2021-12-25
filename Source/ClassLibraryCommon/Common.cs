@@ -6,8 +6,6 @@
     using System.ComponentModel;
     using System.Globalization;
     using System.IO;
-    using System.Net;
-    using System.Net.Sockets;
     using System.Security.Cryptography;
     using System.Text;
     using System.Windows;
@@ -27,9 +25,7 @@
     public static class Common
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-
         private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
-        private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
         private static int _emulationModesFlag = 0;
         public static APIModeEnum APIMode = 0;
 
@@ -216,32 +212,6 @@
             return BitConverter.ToString(bytes).Replace("-", string.Empty).ToLower();
         }
 
-        public static NumberFormatInfo GetPZ69EmptyDisplayNumberFormat()
-        {
-            if (_pz69NumberFormatInfoEmpty == null)
-            {
-                _pz69NumberFormatInfoEmpty = new NumberFormatInfo
-                {
-                    NumberDecimalSeparator = ".",
-                    NumberGroupSeparator = string.Empty
-                };
-            }
-            return _pz69NumberFormatInfoEmpty;
-        }
-
-        public static string GetLocalIPAddress()
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    return ip.ToString();
-                }
-            }
-            return string.Empty;
-        }
-
         public static string GetDescriptionField(this Enum value)
         {
             var field = value.GetType().GetField(value.ToString());
@@ -257,38 +227,6 @@
         {
             logger.Error(ex, message);
             MessageBox.Show(ex.Message, $"Details logged to error log.{Environment.NewLine}{ex.Source}", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        public static void ShowMessageBox(string text, string header = "Information")
-        {
-            MessageBox.Show(text, header, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        public static string PrintBitStrings(byte[] array)
-        {
-            var result = string.Empty;
-            for (int i = 0; i < array.Length; i++)
-            {
-                var str = Convert.ToString(array[i], 2).PadLeft(8, '0');
-                result = result + "  " + str;
-            }
-
-            return result;
-        }
-
-        public static void WaitMilliSeconds(int millisecs)
-        {
-            var startMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            var nowMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            while (nowMilliseconds - startMilliseconds < millisecs)
-            {
-                nowMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            }
-        }
-
-        public static long MilliSecsNow()
-        {
-            return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
         public static string GetApplicationPath()
