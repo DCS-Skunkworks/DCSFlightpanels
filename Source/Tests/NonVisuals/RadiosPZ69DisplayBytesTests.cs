@@ -95,12 +95,12 @@ namespace Tests.NonVisuals
 
         public static IEnumerable<object[]> DefaultStringAsItData()
         {
-            yield return new object[] { "00-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "12", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-02-03-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "123", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-FF-FF-FF-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-FF-FF-01-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "12", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-FF-01-02-03-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "123", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-02-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "12345", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-02-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "123456", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-FF-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1 2", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-FF-01-FF-02-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1 2", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-FF-02-FF-03-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1 2 3", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-FF-01-FF-02-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", " 1 2 3", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-FF-02-FF-03-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1 2 34", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
@@ -111,7 +111,7 @@ namespace Tests.NonVisuals
             //IndexOutOfRangeException. Should maybe return D1-FF-FF-FF-FF ?
             //yield return new object[] { "00-D1-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1.", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
 
-            yield return new object[] { "00-D1-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1. ", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
+            yield return new object[] { "00-FF-FF-D1-FF-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1. ", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-FF-FF-FF-FF-D1-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "    1.", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-00-00-00-00-D1-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "00001.", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-00-00-00-D2-01-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "0002.1", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
@@ -123,9 +123,9 @@ namespace Tests.NonVisuals
             yield return new object[] { "00-D1-02-03-D4-D5-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "1.234.5.", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-D2-D3-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8", "12.3.45", DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
 
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-D8-D8-D8-D8", "1", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-D8-D8-D8", "12", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
-            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-D8-D8", "123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-FF-01", "1", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-FF-01-02", "12", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
+            yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-FF-FF-01-02-03", "123", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
             yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", "12345", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
             yield return new object[] { "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-01-02-03-04-05", "123456", DEIGHTS, PZ69LCDPosition.LOWER_STBY_RIGHT };
 
