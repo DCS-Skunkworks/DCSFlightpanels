@@ -26,7 +26,8 @@
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly UserControlStreamDeckUIBase _uiButtonGrid;
-        
+        private string _comboBoxLayerTextComparison;
+
         public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
@@ -82,7 +83,6 @@
 
         }
 
-
         private bool _disposed;
         // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
@@ -108,7 +108,6 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
 
         private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -140,7 +139,6 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
 
         public override GamingPanel GetGamingPanel()
         {
@@ -251,7 +249,6 @@
             }
         }
 
-        private string _comboBoxLayerTextComparison;
         private void ComboBoxLayers_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             _comboBoxLayerTextComparison = ComboBoxLayers.Text;

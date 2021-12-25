@@ -31,16 +31,14 @@
 
         private StreamDeckButton _streamDeckButton;
         private bool _isLoaded = false;
-        private bool _isDirty = false;
         private StreamDeckPanel _streamDeckPanel;
 
-
+        public bool IsDirty { get; set; } = false;
 
         public UserControlStreamDeckButtonAction()
         {
             InitializeComponent();
         }
-
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -58,7 +56,6 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-
 
         internal void SetStreamDeckPanel(StreamDeckPanel streamDeckPanel)
         {
@@ -110,7 +107,7 @@
 
             DeleteSoundConfig();
 
-            _isDirty = false;
+            IsDirty = false;
 
             SetFormState();
         }
@@ -229,49 +226,34 @@
 
         private EnumStreamDeckActionType GetSelectedActionType()
         {
-            if (RadioButtonKeyPress.IsChecked == true)
-            {
-                return EnumStreamDeckActionType.KeyPress;
-            }
-            if (RadioButtonDCSBIOS.IsChecked == true)
-            {
-                return EnumStreamDeckActionType.DCSBIOS;
-            }
-            if (RadioButtonOSCommand.IsChecked == true)
-            {
-                return EnumStreamDeckActionType.OSCommand;
-            }
-            if (RadioButtonLayerNav.IsChecked == true)
-            {
-                return EnumStreamDeckActionType.LayerNavigation;
-            }
-
-            return EnumStreamDeckActionType.Unknown;
+            return true switch {
+                _ when RadioButtonKeyPress.IsChecked == true => EnumStreamDeckActionType.KeyPress,
+                _ when RadioButtonDCSBIOS.IsChecked == true => EnumStreamDeckActionType.DCSBIOS,
+                _ when RadioButtonOSCommand.IsChecked == true => EnumStreamDeckActionType.OSCommand,
+                _ when RadioButtonLayerNav.IsChecked == true => EnumStreamDeckActionType.LayerNavigation,
+                _ => EnumStreamDeckActionType.Unknown
+            };
         }
 
         private void SetTextBoxBills()
         {
             foreach (var textBox in _textBoxes)
             {
-                textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, !textBox.Name.Contains("Off")), _streamDeckPanel);
+                if (_streamDeckPanel != null) {
+                    textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, !textBox.Name.Contains("Off")), _streamDeckPanel);
+                }
             }
         }
 
         public void StateSaved()
         {
-            _isDirty = false;
+            IsDirty = false;
         }
 
         public void SetIsDirty()
         {
-            _isDirty = true;
+            IsDirty = true;
             SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckButton.StreamDeckButtonName, string.Empty, _streamDeckPanel.BindingHash);
-        }
-
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set => _isDirty = value;
         }
 
         public bool HasConfig
@@ -404,7 +386,6 @@
             throw new ArgumentException("ShowActionConfiguration, failed to determine Action Type for button");
         }
 
-
         public IStreamDeckButtonAction GetStreamDeckButtonAction(bool forButtonPressed)
         {
             //TextBox textBoxSRS;
@@ -531,7 +512,6 @@
                         return null;
                     }
             }
-
             throw new ArgumentException("GetStreamDeckButtonAction, failed to determine Action Type for button");
         }
 
@@ -628,7 +608,6 @@
             {
                 TextBoxKeyPressButtonOn.Bill.Clear();
                 SetIsDirty();
-
             }
             catch (Exception ex)
             {
@@ -642,7 +621,6 @@
             {
                 TextBoxKeyPressButtonOff.Bill.Clear();
                 SetIsDirty();
-
             }
             catch (Exception ex)
             {
@@ -692,7 +670,6 @@
                     textBox.Bill.DCSBIOSBinding.IsSequenced = dcsbiosControlsConfigsWindow.IsSequenced;
                     textBox.Bill.DCSBIOSBinding.Description = dcsbiosControlsConfigsWindow.Description;
                     SetIsDirty();
-
                 }
                 ButtonFocus.Focus();
             }
@@ -720,7 +697,6 @@
             try
             {
                 TextBoxDCSBIOSActionButtonOn.Bill.Clear();
-
             }
             catch (Exception ex)
             {
@@ -733,7 +709,6 @@
             try
             {
                 AddEditDCSBIOS(TextBoxDCSBIOSActionButtonOff);
-
             }
             catch (Exception ex)
             {
@@ -786,7 +761,6 @@
                     SetIsDirty();
                 }
                 ButtonFocus.Focus();
-
             }
             catch (Exception ex)
             {
@@ -812,7 +786,6 @@
             try
             {
                 TextBoxOSCommandButtonOn.Bill.Clear();
-                
             }
             catch (Exception ex)
             {
@@ -838,7 +811,6 @@
             try
             {
                 TextBoxOSCommandButtonOff.Bill.Clear();
-
             }
             catch (Exception ex)
             {
@@ -872,7 +844,6 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
 
         private void ComboBoxRemoteStreamDecks_OnDropDownClosed(object sender, EventArgs e)
         {
@@ -946,16 +917,13 @@
 
         private void LoadComboBoxLayers()
         {
-
             if (_streamDeckPanel.SelectedLayer == null)
             {
                 return;
             }
 
             var selectedLayerName = _streamDeckPanel.SelectedLayer.Name;
-
             var selectedIndex = ComboBoxLayerNavigationButton.SelectedIndex;
-
             var layerList = _streamDeckPanel.GetStreamDeckLayerNames();
 
             if (layerList == null)
@@ -1186,7 +1154,6 @@
                 CheckBoxControlRemoteStreamdeck.Checked -= CheckBoxControlRemoteStreamdeck_CheckedChange;
                 CheckBoxControlRemoteStreamdeck.Unchecked -= CheckBoxControlRemoteStreamdeck_CheckedChange;
             }
-
         }
 
         private void CheckBoxPlaySoundFile_OnChecked(object sender, RoutedEventArgs e)
