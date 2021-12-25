@@ -107,7 +107,7 @@
                         result = str + " " + result;
                     }
                 }
-                result = Common.RemoveRControl(result);
+                result = Common.RemoveLControl(result);
                 textBox.Text = result;
                 SetIsDirty();
                 SetFormState();

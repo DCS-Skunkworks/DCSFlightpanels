@@ -27,7 +27,13 @@
     public static class Common
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-        public static void PlaySoundFile(bool showException, string soundFile, double volume) //Volume 0 - 100
+
+        private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
+        private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
+        private static int _emulationModesFlag = 0;
+        public static APIModeEnum APIMode = 0;
+
+        public static void PlaySoundFile(string soundFile, double volume, bool showException = false) //Volume 0 - 100
         {
             try
             {
@@ -35,7 +41,7 @@
                 {
                     return;
                 }
-                var mediaPlayer = new MediaPlayer();
+                MediaPlayer mediaPlayer = new();
                 mediaPlayer.Open(new Uri(soundFile));
                 mediaPlayer.Volume = volume / 100.0f;
                 mediaPlayer.Play();
@@ -51,39 +57,31 @@
 
         public static bool IsStreamDeck(GamingPanelEnum panelType)
         {
-            return panelType == GamingPanelEnum.StreamDeckMini || panelType == GamingPanelEnum.StreamDeck || panelType == GamingPanelEnum.StreamDeckXL || panelType == GamingPanelEnum.StreamDeckV2 || panelType == GamingPanelEnum.StreamDeckMK2;
+            return panelType == GamingPanelEnum.StreamDeckMini 
+                || panelType == GamingPanelEnum.StreamDeck 
+                || panelType == GamingPanelEnum.StreamDeckXL 
+                || panelType == GamingPanelEnum.StreamDeckV2 
+                || panelType == GamingPanelEnum.StreamDeckMK2;
         }
 
         public static Key RealKey(this KeyEventArgs e)
         {
-            switch (e.Key)
+            return e.Key switch
             {
-                case Key.System:
-                    return e.SystemKey;
-
-                case Key.ImeProcessed:
-                    return e.ImeProcessedKey;
-
-                case Key.DeadCharProcessed:
-                    return e.DeadCharProcessedKey;
-
-                default:
-                    return e.Key;
-            }
+                Key.System => e.SystemKey,
+                Key.ImeProcessed => e.ImeProcessedKey,
+                Key.DeadCharProcessed => e.DeadCharProcessedKey,
+                _ => e.Key
+            };
         }
 
-        public static string RemoveRControl(string keySequence)
+        public static string RemoveLControl(string keySequence)
         {
-            if (keySequence.Contains(@"RMENU + LCONTROL"))
-            {
-                keySequence = keySequence.Replace(@"+ LCONTROL", string.Empty);
-            }
-            if (keySequence.Contains(@"LCONTROL + RMENU"))
-            {
-                keySequence = keySequence.Replace(@"LCONTROL +", string.Empty);
-            }
-
-            return keySequence;
+            return true switch {
+                _ when keySequence.Contains(@"RMENU + LCONTROL") => keySequence.Replace(@"+ LCONTROL", string.Empty),
+                _ when keySequence.Contains(@"LCONTROL + RMENU") => keySequence.Replace(@"LCONTROL +", string.Empty),
+                _ => keySequence,
+            };  
         }
 
         public static readonly List<GamingPanelSkeleton> GamingPanelSkeletons = new List<GamingPanelSkeleton>
@@ -100,11 +98,6 @@
             new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckMK2),
             new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckXL),
         };
-
-        private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
-        private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
-
-        private static int _emulationModesFlag = 0;
 
         private static void ValidateFlag()
         {
@@ -260,8 +253,6 @@
             return string.Empty;
         }
 
-        public static APIModeEnum APIMode = 0;
-
         public static void ShowErrorMessageBox(Exception ex, string message = null)
         {
             logger.Error(ex, message);
@@ -316,7 +307,6 @@
 
             return rel;
         }
-
 
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject dependencyObject) where T : DependencyObject
         {

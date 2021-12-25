@@ -66,7 +66,7 @@
 
         public void Execute(CancellationToken threadCancellationToken)
         {
-            Common.PlaySoundFile(false, SoundFile, Volume);
+            Common.PlaySoundFile(SoundFile, Volume);
 
             if (!PluginManager.DisableKeyboardAPI)
             {
@@ -128,7 +128,7 @@
 
         public void PlaySound()
         {
-            Common.PlaySoundFile(false, SoundFile, Volume);
+            Common.PlaySoundFile(SoundFile, Volume);
         }
     }
 }

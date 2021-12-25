@@ -50,7 +50,7 @@
 
         public void Execute(CancellationToken threadCancellationToken)
         {
-            Common.PlaySoundFile(false, SoundFile, Volume);
+            Common.PlaySoundFile(SoundFile, Volume);
             SendDCSBIOSCommands(threadCancellationToken);
         }
 
@@ -95,7 +95,7 @@
 
         public void PlaySound()
         {
-            Common.PlaySoundFile(false, SoundFile, Volume);
+            Common.PlaySoundFile(SoundFile, Volume);
         }
     }
 }
