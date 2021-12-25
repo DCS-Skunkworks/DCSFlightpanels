@@ -25,11 +25,20 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Xunit.StaFact" Version="1.0.37" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
     <ProjectReference Include="..\NonVisuals\NonVisuals.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PresentationCore">
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\PresentationCore.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
 
 </Project>
