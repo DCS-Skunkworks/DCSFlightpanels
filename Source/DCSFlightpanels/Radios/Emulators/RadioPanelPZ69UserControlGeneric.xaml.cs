@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -51,6 +52,11 @@
             };
             
             AppEventHandler.AttachGamingPanelListener(this);
+        }
+
+        public NumberFormatInfo NumberFormatInfoFullDisplay
+        {
+            get => _radioPanelPZ69.NumberFormatInfoFullDisplay;
         }
 
         private bool _disposed;
@@ -481,13 +487,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
                             TextBoxUpperCom1ActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
                             TextBoxUpperCom1StandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM2)
@@ -495,13 +501,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
                             TextBoxUpperCom2ActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
                             TextBoxUpperCom2StandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV1)
@@ -509,13 +515,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
                             TextBoxUpperNav1ActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
                             TextBoxUpperNav1StandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV2)
@@ -523,13 +529,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
                             TextBoxUpperNav2ActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
                             TextBoxUpperNav2StandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperADF)
@@ -537,13 +543,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
                             TextBoxUpperADFActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
                             TextBoxUpperADFStandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperDME)
@@ -551,13 +557,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
                             TextBoxUpperDMEActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
                             TextBoxUpperDMEStandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperXPDR)
@@ -565,13 +571,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
                             TextBoxUpperXPDRActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
                             TextBoxUpperXPDRStandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM1)
@@ -579,13 +585,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
                             TextBoxLowerCom1ActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
                             TextBoxLowerCom1StandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM2)
@@ -593,13 +599,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
                             TextBoxLowerCom2ActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
                             TextBoxLowerCom2StandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV1)
@@ -607,13 +613,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
                             TextBoxLowerNav1ActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
                             TextBoxLowerNav1StandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV2)
@@ -621,13 +627,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
                             TextBoxLowerNav2ActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
                             TextBoxLowerNav2StandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerADF)
@@ -635,13 +641,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
                             TextBoxLowerADFActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
                             TextBoxLowerADFStandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerDME)
@@ -649,13 +655,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
                             TextBoxLowerDMEActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
                             TextBoxLowerDMEStandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerXPDR)
@@ -663,13 +669,13 @@
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
                             TextBoxLowerXPDRActiveNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
 
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
                             TextBoxLowerXPDRStandbyNumbers.Text =
-                                displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                                displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                 }

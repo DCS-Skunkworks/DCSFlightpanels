@@ -25,7 +25,6 @@
     public static class Common
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-        private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
         private static int _emulationModesFlag = 0;
         public static APIModeEnum APIMode = 0;
 
@@ -162,20 +161,6 @@
         {
             ValidateEmulationModeFlag();
             return IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled) || IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled);
-        }
-
-        public static NumberFormatInfo GetPZ69FullDisplayNumberFormat()
-        {
-            if (_pz69NumberFormatInfoFullDisplay == null)
-            {
-                _pz69NumberFormatInfoFullDisplay = new NumberFormatInfo
-                {
-                    NumberDecimalSeparator = ".",
-                    NumberDecimalDigits = 4,
-                    NumberGroupSeparator = string.Empty
-                };
-            }
-            return _pz69NumberFormatInfoFullDisplay;
         }
 
         public static string GetMd5Hash(string input)

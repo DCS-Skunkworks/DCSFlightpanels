@@ -1,7 +1,7 @@
 ﻿namespace NonVisuals.Radios.Misc
 {
     using System;
-
+    using System.Globalization;
     using ClassLibraryCommon;
 
     using MEF;
@@ -41,7 +41,14 @@
 
         public string ExportSettings()
         {
-            if (!string.IsNullOrEmpty(Value) && double.Parse(Value, Common.GetPZ69FullDisplayNumberFormat()) >= 0)
+            var pz69NumberFormatInfoFullDisplay = new NumberFormatInfo
+            {
+                NumberDecimalSeparator = ".",
+                NumberDecimalDigits = 4,
+                NumberGroupSeparator = string.Empty
+            };
+
+            if (!string.IsNullOrEmpty(Value) && double.Parse(Value, pz69NumberFormatInfoFullDisplay) >= 0)
             {
                 return "PZ69DisplayValue{" + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) + "|" + Enum.GetName(typeof(RadioPanelPZ69Display), RadioPanelDisplay) + "|" + Value + "}";
             }
