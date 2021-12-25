@@ -77,6 +77,102 @@ namespace Tests.ClassLibraryCommon
                 Key.ImeProcessed);
 
             Assert.Equal(keyEvent.ImeProcessedKey, keyEvent.RealKey());
-        }        
+        }
+
+        [Fact]
+        public void EmulationModes_Set_ShouldSet_ExpectedValue()
+        {
+            try
+            {
+                Common.SetEmulationModes(EmulationMode.DCSBIOSInputEnabled);
+                Assert.Equal(1, Common.GetEmulationModesFlag());
+            }
+            finally
+            {
+                Common.ResetEmulationModesFlag();
+                Assert.Equal(0, Common.GetEmulationModesFlag());
+            }
+        }
+        
+        [Fact]
+        private void EmulationModes_ResetStaticFlagValuesAfterTest() {
+            Common.ResetEmulationModesFlag(); //should always call reset after test 'cause static
+            Assert.Equal(0, Common.GetEmulationModesFlag());
+        }
+
+        [StaTheory]
+        [InlineData(new EmulationMode[] {
+            EmulationMode.DCSBIOSInputEnabled,
+            EmulationMode.DCSBIOSOutputEnabled }, 3)]
+        [InlineData(new EmulationMode[] {
+            EmulationMode.SRSEnabled,
+            EmulationMode.SRSEnabled }, 8)]
+        [InlineData(new EmulationMode[] {
+            EmulationMode.DCSBIOSInputEnabled,
+            EmulationMode.DCSBIOSOutputEnabled,
+            EmulationMode.SRSEnabled,
+            EmulationMode.NS430Enabled }, 27)]
+        public void EmulationModes_SetMultipleValue_ShouldSet_ExpectedValue(EmulationMode[] modes, int expectedValue)
+        {
+            try
+            {
+                modes.ToList().ForEach(x => Common.SetEmulationModes(x));
+                Assert.Equal(expectedValue, Common.GetEmulationModesFlag());
+            }
+            finally
+            {
+                EmulationModes_ResetStaticFlagValuesAfterTest();
+            }
+        }
+
+        [Theory]
+        [InlineData(new EmulationMode[] {
+            EmulationMode.KeyboardEmulationOnly,
+            EmulationMode.DCSBIOSOutputEnabled})]
+        [InlineData(new EmulationMode[] {
+            EmulationMode.KeyboardEmulationOnly,
+            EmulationMode.DCSBIOSInputEnabled})]
+        [InlineData(new EmulationMode[] {
+            EmulationMode.KeyboardEmulationOnly,
+            EmulationMode.DCSBIOSInputEnabled,
+            EmulationMode.DCSBIOSOutputEnabled,})]
+        public void EmulationModes_InvalidConfigs_Shoud_RaiseException(EmulationMode[] modes)
+        {
+            try
+            {
+                Assert.Throws<Exception>(
+                () => modes.ToList().ForEach(x => Common.SetEmulationModes(x))
+                );
+            }
+            finally
+            {
+                EmulationModes_ResetStaticFlagValuesAfterTest();
+            }
+        }
+
+        [Theory]
+        //we want to remove SRSEnabled in those tests
+        [InlineData(new EmulationMode[] {
+            EmulationMode.DCSBIOSInputEnabled,
+            EmulationMode.DCSBIOSOutputEnabled,
+            EmulationMode.SRSEnabled,
+            EmulationMode.NS430Enabled }, 19)] 
+        
+        [InlineData(new EmulationMode[] {
+            EmulationMode.SRSEnabled }, 0)]
+        public void EmulationModes_Clear_ShoudRemove_TheFlag(EmulationMode[] modes, int expectedValueAfterRemove)
+        {
+            try
+            {
+                modes.ToList().ForEach(x => Common.SetEmulationModes(x));
+                Common.ClearEmulationModesFlag(EmulationMode.SRSEnabled);
+                Common.ClearEmulationModesFlag(EmulationMode.SRSEnabled); //A double clear should not affect result
+                Assert.Equal(expectedValueAfterRemove, Common.GetEmulationModesFlag());
+            }
+            finally
+            {
+                EmulationModes_ResetStaticFlagValuesAfterTest();
+            }
+        }
     }
 }

@@ -102,7 +102,7 @@
                 if (IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled) ||
                     IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled))
                 {
-                    throw new Exception("Invalid emulation modes flag : " + _emulationModesFlag);
+                    throw new Exception($"Invalid emulation modes flag : {_emulationModesFlag}");
                 }
             }
         }
