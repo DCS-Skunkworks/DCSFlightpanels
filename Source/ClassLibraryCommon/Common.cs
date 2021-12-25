@@ -95,7 +95,7 @@
             new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckXL),
         };
 
-        private static void ValidateFlag()
+        private static void ValidateEmulationModeFlag()
         {
             if (IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
             {
@@ -110,19 +110,19 @@
         public static void SetEmulationModesFlag(int flag)
         {
             _emulationModesFlag = flag;
-            ValidateFlag();
+            ValidateEmulationModeFlag();
         }
 
         public static int GetEmulationModesFlag()
         {
-            ValidateFlag();
+            ValidateEmulationModeFlag();
             return _emulationModesFlag;
         }
 
         public static void SetEmulationModes(EmulationMode emulationMode)
         {
             _emulationModesFlag |= (int)emulationMode;
-            ValidateFlag();
+            ValidateEmulationModeFlag();
         }
 
         public static bool IsEmulationModesFlagSet(EmulationMode flagValue)
@@ -142,25 +142,25 @@
 
         public static bool NoDCSBIOSEnabled()
         {
-            ValidateFlag();
+            ValidateEmulationModeFlag();
             return !IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled) && !IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled);
         }
 
         public static bool KeyEmulationOnly()
         {
-            ValidateFlag();
+            ValidateEmulationModeFlag();
             return IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly);
         }
 
         public static bool FullDCSBIOSEnabled()
         {
-            ValidateFlag();
+            ValidateEmulationModeFlag();
             return IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled) && IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled);
         }
 
         public static bool PartialDCSBIOSEnabled()
         {
-            ValidateFlag();
+            ValidateEmulationModeFlag();
             return IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled) || IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled);
         }
 
@@ -180,7 +180,6 @@
 
         public static string GetMd5Hash(string input)
         {
-
             var md5 = MD5.Create();
 
             // Convert the input string to a byte array and compute the hash.
