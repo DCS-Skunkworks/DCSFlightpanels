@@ -59,17 +59,6 @@
                 || panelType == GamingPanelEnum.StreamDeckMK2;
         }
 
-        public static Key RealKey(this KeyEventArgs e)
-        {
-            return e.Key switch
-            {
-                Key.System => e.SystemKey,
-                Key.ImeProcessed => e.ImeProcessedKey,
-                Key.DeadCharProcessed => e.DeadCharProcessedKey,
-                _ => e.Key
-            };
-        }
-
         public static string RemoveLControl(string keySequence)
         {
             return true switch {

@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Windows.Input;
 
     public static class Extensions
     {
@@ -14,6 +15,17 @@
                 return ((DescriptionAttribute)attribs[0]).Description;
             }
             return string.Empty;
+        }
+
+        public static Key RealKey(this KeyEventArgs e)
+        {
+            return e.Key switch
+            {
+                Key.System => e.SystemKey,
+                Key.ImeProcessed => e.ImeProcessedKey,
+                Key.DeadCharProcessed => e.DeadCharProcessedKey,
+                _ => e.Key
+            };
         }
     }
 }
