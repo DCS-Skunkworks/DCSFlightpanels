@@ -152,7 +152,7 @@
                 LoadSettings();
 
             
-                DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+                DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 CheckErrorLogAndDCSBIOSLocation();
                 /*******************************************************************************************/

@@ -54,7 +54,7 @@
             }
         }
 
-        public static void ParseSettings(string dcsbiosJsonFolder)
+        public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder)
         {
             var biosLua = Path.Combine(dcsbiosJsonFolder, "..\\..\\", "BIOS.lua");
 
@@ -84,8 +84,7 @@
                     // ProperName = A-10C Thunderbolt II
                     var properName = info[1].Split(new[] { "=" }, StringSplitOptions.None)[1].Trim();
 
-                    var dcsFPProfile = new DCSFPProfile(id, properName, json);
-                    ModulesList.Add(dcsFPProfile);
+                    ModulesList.Add(new DCSFPProfile(id, properName, json));
                 }
             }
         }
