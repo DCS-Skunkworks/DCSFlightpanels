@@ -4,53 +4,29 @@
 
     public class GamingPanelSkeleton
     {
-        private GamingPanelEnum _gamingPanelsEnum = GamingPanelEnum.Unknown;
-        private int _vendorId;
-        private int _productId;
-        private string _serialNumber;
+        public GamingPanelEnum GamingPanelType { get; set; } = GamingPanelEnum.Unknown;
+        public int VendorId { get; set; }
+        public int ProductId { get; set; }
+        public string SerialNumber { get; set; }
 
         public GamingPanelSkeleton(GamingPanelVendorEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum)
         {
-            _gamingPanelsEnum = gamingPanelsEnum;
-            _vendorId = (int)gamingPanelVendor;
-            _productId = (int)gamingPanelsEnum;
+            GamingPanelType = gamingPanelsEnum;
+            VendorId = (int)gamingPanelVendor;
+            ProductId = (int)gamingPanelsEnum;
         }
 
         public GamingPanelSkeleton(GamingPanelVendorEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum, string serialNumber)
         {
-            _gamingPanelsEnum = gamingPanelsEnum;
-            _vendorId = (int)gamingPanelVendor;
-            _productId = (int)gamingPanelsEnum;
-            _serialNumber = serialNumber;
+            GamingPanelType = gamingPanelsEnum;
+            VendorId = (int)gamingPanelVendor;
+            ProductId = (int)gamingPanelsEnum;
+            SerialNumber = serialNumber;
         }
 
         public bool HasSerialNumber()
         {
-            return !string.IsNullOrEmpty(_serialNumber) && !_serialNumber.Equals("0");
-        }
-
-        public GamingPanelEnum GamingPanelType
-        {
-            get { return _gamingPanelsEnum; }
-            set { _gamingPanelsEnum = value; }
-        }
-
-        public int VendorId
-        {
-            get { return _vendorId; }
-            set { _vendorId = value; }
-        }
-
-        public int ProductId
-        {
-            get { return _productId; }
-            set { _productId = value; }
-        }
-
-        public string SerialNumber
-        {
-            get { return _serialNumber; }
-            set { _serialNumber = value; }
+            return !string.IsNullOrEmpty(SerialNumber) && !SerialNumber.Equals("0");
         }
 
         public override string ToString()
