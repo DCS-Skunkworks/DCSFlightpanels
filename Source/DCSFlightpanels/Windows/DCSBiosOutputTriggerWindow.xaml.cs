@@ -80,7 +80,7 @@ namespace DCSFlightpanels.Windows
 
         private void ShowValues1()
         {
-            ComboBoxComparisonCriteria.SelectedValue = _dcsBiosOutput.DCSBiosOutputComparison.GetDescriptionField();
+            ComboBoxComparisonCriteria.SelectedValue = _dcsBiosOutput.DCSBiosOutputComparison.GetEnumDescriptionField();
             if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
             {
                 TextBoxTriggerValue.Text = _dcsBiosOutput.SpecifiedValueInt.ToString(CultureInfo.InvariantCulture);
@@ -120,7 +120,7 @@ namespace DCSFlightpanels.Windows
 
             if (ComboBoxComparisonCriteria.IsEnabled && _dcsBiosOutput != null)
             {
-                ComboBoxComparisonCriteria.SelectedValue = _dcsBiosOutput.DCSBiosOutputComparison.GetDescription();
+                ComboBoxComparisonCriteria.SelectedValue = _dcsBiosOutput.DCSBiosOutputComparison.GetEnumDescriptionField();
             }
             if (TextBoxTriggerValue != null)
             {

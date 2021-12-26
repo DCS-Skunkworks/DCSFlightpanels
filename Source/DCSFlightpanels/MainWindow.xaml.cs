@@ -582,7 +582,7 @@
                                 {
                                     if (!DCSFPProfile.IsKeyEmulator(_profileHandler.Profile))
                                     {
-                                        var tabItemStreamDeck = new TabItem { Header = hidSkeleton.PanelInfo.GamingPanelType.GetDescription() };
+                                        var tabItemStreamDeck = new TabItem { Header = hidSkeleton.PanelInfo.GamingPanelType.GetEnumDescriptionField() };
                                         var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck);
                                         _panelUserControls.Add(streamDeckUserControl);
                                         tabItemStreamDeck.Content = streamDeckUserControl;

@@ -196,17 +196,6 @@
             return BitConverter.ToString(bytes).Replace("-", string.Empty).ToLower();
         }
 
-        public static string GetDescriptionField(this Enum value)
-        {
-            var field = value.GetType().GetField(value.ToString());
-            var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute), true);
-            if (attributes.Length > 0)
-            {
-                return ((DescriptionAttribute)attributes[0]).Description;
-            }
-            return string.Empty;
-        }
-
         public static void ShowErrorMessageBox(Exception ex, string message = null)
         {
             logger.Error(ex, message);
