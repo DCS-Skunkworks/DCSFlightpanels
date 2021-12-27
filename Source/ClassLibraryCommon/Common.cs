@@ -196,6 +196,13 @@
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
+        /// <summary>
+        /// Returns the relative path from "relativeTo" to "path".
+        /// ATTN : relativeTo must end with a \ if it is a path only, not an object.
+        /// </summary>
+        /// <param name="relativeTo"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string GetRelativePath(string relativeTo, string path)
         {
             var uriRelativeTo = new Uri(relativeTo);
