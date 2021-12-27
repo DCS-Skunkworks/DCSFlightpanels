@@ -41,4 +41,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DcsBios\" />
+  </ItemGroup>
+
 </Project>

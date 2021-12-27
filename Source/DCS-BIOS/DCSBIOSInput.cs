@@ -8,7 +8,7 @@ namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
-
+    using System.Linq;
     using Newtonsoft.Json;
     using NLog;
 
@@ -34,7 +34,7 @@ namespace DCS_BIOS
         private string _controlId;
         
         // The user has entered these two depending on type
-        private List<DCSBIOSInputObject> _dcsbiosInputObjects = new List<DCSBIOSInputObject>();
+        private List<DCSBIOSInputObject> _dcsbiosInputObjects = new();
         private DCSBIOSInputObject _selectedDCSBIOSInput;
 
         private string _controlDescription;
@@ -44,15 +44,9 @@ namespace DCS_BIOS
 
         public string GetDescriptionForInterface(DCSBIOSInputType dcsbiosInputType)
         {
-            foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
-            {
-                if (dcsbiosInputObject.Interface == dcsbiosInputType)
-                {
-                    return dcsbiosInputObject.Description;
-                }
-            }
+            DCSBIOSInputObject searched = _dcsbiosInputObjects.FirstOrDefault(x => x.Interface == dcsbiosInputType);
 
-            return string.Empty;
+            return searched != null ? searched.Description : string.Empty;
         }
 
         public int GetMaxValueForInterface(DCSBIOSInputType dcsbiosInputType)
@@ -62,15 +56,9 @@ namespace DCS_BIOS
                 return -99;
             }
 
-            foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
-            {
-                if (dcsbiosInputObject.Interface == dcsbiosInputType)
-                {
-                    return dcsbiosInputObject.MaxValue;
-                }
-            }
+            DCSBIOSInputObject searched = _dcsbiosInputObjects.FirstOrDefault(x => x.Interface == dcsbiosInputType);
 
-            return -99;
+            return searched != null ? searched.MaxValue : -99;
         }
 
         public void Consume(DCSBIOSControl dcsbiosControl)
@@ -82,14 +70,14 @@ namespace DCS_BIOS
             {
                 foreach (var dcsbiosControlInput in dcsbiosControl.Inputs)
                 {
-                    var inputObject = new DCSBIOSInputObject();
+                    DCSBIOSInputObject inputObject = new();
                     inputObject.Consume(_controlId, dcsbiosControlInput);
                     _dcsbiosInputObjects.Add(inputObject);
                 }
             }
             catch (Exception)
             {
-                throw new Exception("Failed to copy control " + _controlId + ". Control input is missing." + Environment.NewLine);
+                throw new Exception($"Failed to copy control {_controlId}. Control input is missing.{Environment.NewLine}");
             }
         }
 
@@ -140,36 +128,19 @@ namespace DCS_BIOS
             */
             try
             {
-                switch (SelectedDCSBIOSInput.Interface)
-                {
-                    case DCSBIOSInputType.FIXED_STEP:
-                        {
-                            return "DCSBIOSInput{" + _controlId + "|FIXED_STEP|" + SelectedDCSBIOSInput.SpecifiedFixedStepArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
-                        }
-
-                    case DCSBIOSInputType.SET_STATE:
-                        {
-                            return "DCSBIOSInput{" + _controlId + "|SET_STATE|" + SelectedDCSBIOSInput.SpecifiedSetStateArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
-                        }
-
-                    case DCSBIOSInputType.ACTION:
-                        {
-                            return "DCSBIOSInput{" + _controlId + "|ACTION|" + SelectedDCSBIOSInput.SpecifiedActionArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
-                        }
-
-                    case DCSBIOSInputType.VARIABLE_STEP:
-                        {
-                            return "DCSBIOSInput{" + _controlId + "|VARIABLE_STEP|" + SelectedDCSBIOSInput.SpecifiedVariableStepArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
-                        }
-                }
+                return SelectedDCSBIOSInput.Interface switch {
+                    DCSBIOSInputType.FIXED_STEP     => "DCSBIOSInput{" + _controlId + "|FIXED_STEP|" + SelectedDCSBIOSInput.SpecifiedFixedStepArgument + "|" + SelectedDCSBIOSInput.Delay + "}",
+                    DCSBIOSInputType.SET_STATE      => "DCSBIOSInput{" + _controlId + "|SET_STATE|" + SelectedDCSBIOSInput.SpecifiedSetStateArgument + "|" + SelectedDCSBIOSInput.Delay + "}",
+                    DCSBIOSInputType.ACTION         => "DCSBIOSInput{" + _controlId + "|ACTION|" + SelectedDCSBIOSInput.SpecifiedActionArgument + "|" + SelectedDCSBIOSInput.Delay + "}",
+                    DCSBIOSInputType.VARIABLE_STEP  => "DCSBIOSInput{" + _controlId + "|VARIABLE_STEP|" + SelectedDCSBIOSInput.SpecifiedVariableStepArgument + "|" + SelectedDCSBIOSInput.Delay + "}",
+                    _ => throw new Exception()
+                };
             }
             catch (Exception ex)
             {
                 logger.Error(ex, $"Error in DCSBIOSInput.ToString(), ControlId = {_controlId}");
                 throw;
             }
-
-            return "SHOULD NEVER ARRIVE HERE";
         }
 
         public void ImportString(string str)
@@ -185,7 +156,7 @@ namespace DCS_BIOS
 
             if (!str.StartsWith("DCSBIOSInput{") || !str.EndsWith("}"))
             {
-                throw new Exception("DCSBIOSInput cannot import string : " + str);
+                throw new Exception($"DCSBIOSInput cannot import string : {str}");
             }
 
             value = value.Substring(value.IndexOf("{", StringComparison.InvariantCulture) + 1);
