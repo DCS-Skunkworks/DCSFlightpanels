@@ -4,11 +4,12 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
 
     public class DCSFPProfile
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-        private static readonly List<DCSFPProfile> ModulesList = new List<DCSFPProfile>();
+        private static readonly List<DCSFPProfile> ModulesList = new();
         
         private DCSFPProfile(int id, string description, string jsonFilename)
         {
@@ -53,7 +54,7 @@
             }
         }
 
-        public static void ParseSettings(string dcsbiosJsonFolder)
+        public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder)
         {
             var biosLua = Path.Combine(dcsbiosJsonFolder, "..\\..\\", "BIOS.lua");
 
@@ -83,116 +84,90 @@
                     // ProperName = A-10C Thunderbolt II
                     var properName = info[1].Split(new[] { "=" }, StringSplitOptions.None)[1].Trim();
 
-                    var dcsFPProfile = new DCSFPProfile(id, properName, json);
-                    ModulesList.Add(dcsFPProfile);
+                    ModulesList.Add(new DCSFPProfile(id, properName, json));
                 }
             }
+        }
+
+        private static void LogErrorAndThrowException(string message)
+        {
+            logger.Error(message);
+            throw new Exception(message);
         }
 
         public static DCSFPProfile GetProfile(int id)
         {
-            foreach (var dcsfpModule in Modules)
+            var module = Modules.FirstOrDefault(x => x.ID == id);
+            if (module == null)
             {
-                if (dcsfpModule.ID == id)
-                {
-                    return dcsfpModule;
-                }
+                LogErrorAndThrowException("Failed to determine airplane/helicopter in your bindings file. Please check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
             }
-            string message = "Failed to determine airplane/helicopter in your bindings file. Please check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.";
-            logger.Info(message);
-            throw new Exception(message);
-        }
-        
-        public static bool IsNoFrameLoadedYet(DCSFPProfile dcsfpModule)
-        {
-            if (dcsfpModule == null)
-            {
-                string message = "DCSFPProfile : Parameter dcsfpModule is null.";
-                logger.Error(message);
-                throw new Exception(message);
-            }
-            return dcsfpModule.ID == 1;
+            return module;
         }
 
         public static DCSFPProfile GetNoFrameLoadedYet()
         {
-            foreach (var dcsfpModule in Modules)
+            var module = Modules.FirstOrDefault(x => IsNoFrameLoadedYet(x));
+            if (module == null)
             {
-                if (IsNoFrameLoadedYet(dcsfpModule))
-                {
-                    return dcsfpModule;
-                }
+                LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
             }
-            string message = $"DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}";
-            logger.Error(message);
-            throw new Exception(message);
+            return module;
+        }
+
+        public static DCSFPProfile GetKeyEmulator()
+        {
+            var module = Modules.FirstOrDefault(x => IsKeyEmulator(x));
+            if (module == null)
+            {
+                LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module KeyEmulator. Modules loaded : {Modules.Count}");
+            }
+            return module;
+        }
+        
+        public static DCSFPProfile GetKeyEmulatorSRS()
+        {
+            var module = Modules.FirstOrDefault(x => IsKeyEmulatorSRS(x));
+            if (module == null)
+            {
+                LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module KeyEmulatorSRS. Modules loaded : {Modules.Count}");
+            }
+            return module;
+        }
+
+        public static bool HasNS430()
+        {
+            return Modules.Exists(x => IsNS430(x));
+        }
+
+        public static DCSFPProfile GetNS430()
+        {
+            return Modules.FirstOrDefault(x => IsNS430(x));
+        }
+
+
+        public static bool IsNoFrameLoadedYet(DCSFPProfile dcsfpModule)
+        {
+            if (dcsfpModule == null)
+            {
+                LogErrorAndThrowException("DCSFPProfile IsNoFrameLoadedYet : Parameter dcsfpModule is null.");
+            }
+            return dcsfpModule.ID == 1;
         }
 
         public static bool IsKeyEmulator(DCSFPProfile dcsfpModule)
         {
             return dcsfpModule.ID == 2;
         }
-        
-        public static DCSFPProfile GetKeyEmulator()
-        {
-            foreach (var dcsfpModule in Modules)
-            {
-                if (IsKeyEmulator(dcsfpModule))
-                {
-                    return dcsfpModule;
-                }
-            }
-            string message = $"DCSFPProfile : Failed to find internal module KeyEmulator. Modules loaded : {Modules.Count}";
-            logger.Error(message);
-            throw new Exception(message);
-        }
-        
+
         public static bool IsKeyEmulatorSRS(DCSFPProfile dcsfpModule)
         {
             return dcsfpModule.ID == 3;
         }
 
-        public static DCSFPProfile GetKeyEmulatorSRS()
-        {
-            foreach (var dcsfpModule in Modules)
-            {
-                if (IsKeyEmulatorSRS(dcsfpModule))
-                {
-                    return dcsfpModule;
-                }
-            }
-            string message = $"DCSFPProfile : Failed to find internal module KeyEmulatorSRS. Modules loaded : {Modules.Count}";
-            logger.Error(message);
-            throw new Exception(message);
-        }
-        
         public static bool IsFlamingCliff(DCSFPProfile dcsfpModule)
         {
             return dcsfpModule.ID == 4;
-        }
-
-        public static bool HasNS430()
-        {
-            foreach (var dcsfpModule in Modules)
-            {
-                if (IsNS430(dcsfpModule))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static DCSFPProfile GetNS430()
-        {
-            foreach (var dcsfpModule in Modules)
-            {
-                if (IsNS430(dcsfpModule))
-                {
-                    return dcsfpModule;
-                }
-            }
-            return null;
         }
 
         public static bool IsA10C(DCSFPProfile dcsfpModule)
@@ -377,198 +352,57 @@
 
         public static DCSFPProfile GetBackwardCompatible(string oldEnumValue)
         {
-            if ("KEYEMULATOR".Equals(oldEnumValue))
+            int? moduleNumber = oldEnumValue switch
             {
-                return Modules.Find(o => o.ID == 2);
-            }
-
-            if ("KEYEMULATOR_SRS".Equals(oldEnumValue))
+                "KEYEMULATOR" => 2,
+                "KEYEMULATOR_SRS" => 3,
+                "A4E" => 6,
+                "A10C" => 5,
+                "AH6J" => 7,
+                "AJS37" => 8,
+                "Alphajet" => 9,
+                "AV8BNA" => 10,
+                "Bf109" => 11,
+                "C101CC" => 12,
+                "ChristenEagle" => 14,
+                "Edge540" => 15,
+                "F5E" => 18,
+                "F14B" => 16,
+                "F16C" => 17,
+                "FA18C" => 20,
+                "F86F" => 19,
+                "FC3_CD_SRS" => 4,
+                "Fw190a8" => 21,
+                "Fw190d9" => 22,
+                "Hercules" => 13,
+                "I16" => 23,
+                "JF17" => 24,
+                "Ka50" => 25,
+                "L39ZA" => 26,
+                "M2000C" => 27,
+                "MB339" => 28,
+                "Mi8" => 29,
+                "Mig15bis" => 30,
+                "Mig19P" => 31,
+                "Mig21Bis" => 32,
+                "NS430" => 33,
+                "P51D" => 35,
+                "P47D" => 34,
+                "SA342M" => 36,
+                "SpitfireLFMkIX" => 37,
+                "UH1H" => 38,
+                "Yak52" => 39,
+                _ => null
+            };
+            if (moduleNumber != null)
             {
-                return Modules.Find(o => o.ID == 3);
+                return Modules.Find(o => o.ID == moduleNumber);
             }
-
-            if ("A4E".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 6);
+            else 
+            { 
+                LogErrorAndThrowException("Failed to determine airplane/helicopter in your bindings file. Please check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile = 5 equals A-10C.");
+                return null; //just to avoid compilation problem "error CS0161 not all code paths return a value"
             }
-
-            if ("A10C".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 5);
-            }
-
-            if ("AH6J".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 7);
-            }
-
-            if ("AJS37".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 8);
-            }
-
-            if ("Alphajet".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 9);
-            }
-
-            if ("AV8BNA".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 10);
-            }
-
-            if ("Bf109".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 11);
-            }
-
-            if ("C101CC".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 12);
-            }
-
-            if ("ChristenEagle".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 14);
-            }
-
-            if ("Edge540".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 15);
-            }
-
-            if ("F5E".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 18);
-            }
-
-            if ("F14B".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 16);
-            }
-
-            if ("F16C".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 17);
-            }
-
-            if ("FA18C".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 20);
-            }
-
-            if ("F86F".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 19);
-            }
-
-            if ("FC3_CD_SRS".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 4);
-            }
-
-            if ("Fw190a8".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 21);
-            }
-
-            if ("Fw190d9".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 22);
-            }
-
-            if ("Hercules".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 13);
-            }
-
-            if ("I16".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 23);
-            }
-
-            if ("JF17".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 24);
-            }
-
-            if ("Ka50".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 25);
-            }
-
-            if ("L39ZA".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 26);
-            }
-
-            if ("M2000C".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 27);
-            }
-
-            if ("MB339".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 28);
-            }
-
-            if ("Mi8".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 29);
-            }
-
-            if ("Mig15bis".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 30);
-            }
-
-            if ("Mig19P".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 31);
-            }
-
-            if ("Mig21Bis".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 32);
-            }
-
-            if ("NS430".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 33);
-            }
-
-            if ("P51D".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 35);
-            }
-
-            if ("P47D".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 34);
-            }
-
-            if ("SA342M".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 36);
-            }
-
-            if ("SpitfireLFMkIX".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 37);
-            }
-
-            if ("UH1H".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 38);
-            }
-
-            if ("Yak52".Equals(oldEnumValue))
-            {
-                return Modules.Find(o => o.ID == 39);
-            }
-            string message = "Failed to determine airplane/ helicopter in your bindings file. Please check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile = 5 equals A-10C.";
-            logger.Info(message);
-            throw new Exception(message);
         }
     }
 }

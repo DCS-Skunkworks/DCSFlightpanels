@@ -1211,7 +1211,7 @@
         {
             try
             {
-                Common.PlaySoundFile(true, TextBoxSoundFile.Text, SliderVolume.Value);
+                Common.PlaySoundFile(TextBoxSoundFile.Text, SliderVolume.Value, true);
             }
             catch (Exception ex)
             {

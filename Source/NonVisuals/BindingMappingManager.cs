@@ -187,7 +187,7 @@
                 }
                 else
                 {
-                    MessageBox.Show("Reference found in bindings file to a " + genericBinding.PanelType.GetDescriptionField() + ", no such hardware found.", "Hardware missing", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    MessageBox.Show("Reference found in bindings file to a " + genericBinding.PanelType.GetEnumDescriptionField() + ", no such hardware found.", "Hardware missing", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
 
                 return true;

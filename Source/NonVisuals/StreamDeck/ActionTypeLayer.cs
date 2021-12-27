@@ -83,7 +83,7 @@
         public void Execute(CancellationToken threadCancellationToken)
         {
             _isRunning = true;
-            Common.PlaySoundFile(false, SoundFile, Volume);
+            Common.PlaySoundFile(SoundFile, Volume);
             Navigate(threadCancellationToken);
             _isRunning = false;
         }
@@ -159,7 +159,7 @@
         public bool HasSound => !string.IsNullOrEmpty(SoundFile) && File.Exists(SoundFile);
         public void PlaySound()
         {
-            Common.PlaySoundFile(false, SoundFile, Volume);
+            Common.PlaySoundFile(SoundFile, Volume);
         }
     }
 }

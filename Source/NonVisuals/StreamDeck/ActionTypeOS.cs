@@ -62,7 +62,7 @@
 
         public void Execute(CancellationToken threadCancellationToken)
         {
-            Common.PlaySoundFile(false, SoundFile, Volume);
+            Common.PlaySoundFile(SoundFile, Volume);
             OSCommandObject.Execute(threadCancellationToken);
         }
 
@@ -104,7 +104,7 @@
 
         public void PlaySound()
         {
-            Common.PlaySoundFile(false, SoundFile, Volume);
+            Common.PlaySoundFile(SoundFile, Volume);
         }
     }
 }

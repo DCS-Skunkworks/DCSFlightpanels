@@ -4,6 +4,7 @@ namespace DCSFlightpanels.Radios.Emulators
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -17,8 +18,7 @@ namespace DCSFlightpanels.Radios.Emulators
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.PanelUserControls;
     using DCSFlightpanels.Properties;
-    using DCSFlightpanels.Windows;
-
+    
     using MEF;
 
     using NonVisuals;
@@ -50,6 +50,11 @@ namespace DCSFlightpanels.Radios.Emulators
             };
             
             AppEventHandler.AttachGamingPanelListener(this);
+        }
+
+        public NumberFormatInfo NumberFormatInfoFullDisplay
+        {
+            get => _radioPanelPZ69.NumberFormatInfoFullDisplay;
         }
 
         private bool _disposed;
@@ -170,8 +175,6 @@ namespace DCSFlightpanels.Radios.Emulators
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
 
         private void SetTextBoxBills()
         {
@@ -525,154 +528,154 @@ namespace DCSFlightpanels.Radios.Emulators
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
-                            TextBoxUpperCom1ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperCom1ActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
-                            TextBoxUpperCom1StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperCom1StandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM2)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
-                            TextBoxUpperCom2ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperCom2ActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
-                            TextBoxUpperCom2StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperCom2StandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV1)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
-                            TextBoxUpperNav1ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperNav1ActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
-                            TextBoxUpperNav1StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperNav1StandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV2)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
-                            TextBoxUpperNav2ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperNav2ActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
-                            TextBoxUpperNav2StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperNav2StandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperADF)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
-                            TextBoxUpperADFActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperADFActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
-                            TextBoxUpperADFStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperADFStandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperDME)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
-                            TextBoxUpperDMEActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperDMEActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
-                            TextBoxUpperDMEStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperDMEStandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperXPDR)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                         {
-                            TextBoxUpperXPDRActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperXPDRActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                         {
-                            TextBoxUpperXPDRStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxUpperXPDRStandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM1)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
-                            TextBoxLowerCom1ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerCom1ActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
-                            TextBoxLowerCom1StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerCom1StandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM2)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
-                            TextBoxLowerCom2ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerCom2ActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
-                            TextBoxLowerCom2StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerCom2StandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV1)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
-                            TextBoxLowerNav1ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerNav1ActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
-                            TextBoxLowerNav1StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerNav1StandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV2)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
-                            TextBoxLowerNav2ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerNav2ActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
-                            TextBoxLowerNav2StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerNav2StandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerADF)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
-                            TextBoxLowerADFActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerADFActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
-                            TextBoxLowerADFStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerADFStandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerDME)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
-                            TextBoxLowerDMEActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerDMEActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
-                            TextBoxLowerDMEStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerDMEStandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                     else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerXPDR)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                         {
-                            TextBoxLowerXPDRActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerXPDRActiveNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                         {
-                            TextBoxLowerXPDRStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                            TextBoxLowerXPDRStandbyNumbers.Text = displayValue.Value.ToString(NumberFormatInfoFullDisplay);
                         }
                     }
                 }

@@ -309,21 +309,23 @@ namespace NonVisuals.Radios
                     {
                         if (displayValue.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob)
                         {
+                            double parsedValue = double.Parse(displayValue.Value, NumberFormatInfoFullDisplay);
+
                             if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                             {
-                                _upperActive = double.Parse(displayValue.Value, Common.GetPZ69FullDisplayNumberFormat());
+                                _upperActive = parsedValue;
                             }
                             else if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                             {
-                                _upperStandby = double.Parse(displayValue.Value, Common.GetPZ69FullDisplayNumberFormat());
+                                _upperStandby = parsedValue;
                             }
                             else if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
                             {
-                                _lowerActive = double.Parse(displayValue.Value, Common.GetPZ69FullDisplayNumberFormat());
+                                _lowerActive = parsedValue;
                             }
                             else if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
                             {
-                                _lowerStandby = double.Parse(displayValue.Value, Common.GetPZ69FullDisplayNumberFormat());
+                                _lowerStandby = parsedValue;
                             }
                         }
                     }
@@ -399,7 +401,7 @@ namespace NonVisuals.Radios
                 return;
             }
 
-            var value = double.Parse(valueAsString, Common.GetPZ69FullDisplayNumberFormat());
+            var value = double.Parse(valueAsString, NumberFormatInfoFullDisplay);
             if (value < 0)
             {
                 ClearDisplayValue(radioPanelPZ69Knob, radioPanelDisplay);

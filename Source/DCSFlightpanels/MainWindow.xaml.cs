@@ -152,7 +152,7 @@
                 LoadSettings();
 
             
-                DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+                DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 CheckErrorLogAndDCSBIOSLocation();
                 /*******************************************************************************************/
@@ -582,7 +582,7 @@
                                 {
                                     if (!DCSFPProfile.IsKeyEmulator(_profileHandler.Profile))
                                     {
-                                        var tabItemStreamDeck = new TabItem { Header = hidSkeleton.PanelInfo.GamingPanelType.GetDescription() };
+                                        var tabItemStreamDeck = new TabItem { Header = hidSkeleton.PanelInfo.GamingPanelType.GetEnumDescriptionField() };
                                         var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck);
                                         _panelUserControls.Add(streamDeckUserControl);
                                         tabItemStreamDeck.Content = streamDeckUserControl;
@@ -1160,11 +1160,11 @@
             }
             else if (_profileHandler.IsNewProfile)
             {
-                Title = _windowName; // + "      " + Common.GetLocalIPAddress();
+                Title = _windowName;
             }
             else
             {
-                Title = _windowName + _profileHandler.Filename; // + "      " + Common.GetLocalIPAddress();
+                Title = _windowName + _profileHandler.Filename;
             }
 
             if (_profileHandler.IsDirty)
