@@ -34,14 +34,12 @@ namespace DCS_BIOS.Json
             set
             {
                 _type = value;
-                if (_type.Equals("string"))
+                OutputDataType = _type switch
                 {
-                    OutputDataType = DCSBiosOutputType.StringType;
-                }
-                if (_type.Equals("integer"))
-                {
-                    OutputDataType = DCSBiosOutputType.IntegerType;
-                }
+                    "string" => DCSBiosOutputType.StringType,
+                    "integer" => DCSBiosOutputType.IntegerType,
+                    _ => throw new System.Exception($"Unexpected DCSBiosOutputType [{_type}]")
+                };
             }
         }
 
