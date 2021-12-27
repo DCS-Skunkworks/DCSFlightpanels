@@ -10,6 +10,7 @@ namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Net.Sockets;
     using System.Text;
@@ -21,7 +22,6 @@ namespace DCS_BIOS
         AddressValue = 2,
         ByteArray = 4
     }
-
 
     public class DCSBIOS : IDisposable
     {
@@ -216,14 +216,11 @@ namespace DCS_BIOS
             return _dcsBIOSInstance.SendDataFunction(stringData);
         }
 
-        public static void Send(string[] stringData)
+        public static void Send(string[] stringArray)
         {
-            if (stringData != null)
+            if (stringArray != null)
             {
-                foreach (var s in stringData)
-                {
-                    _dcsBIOSInstance.SendDataFunction(s);
-                }
+                Send(stringArray.ToList());
             }
         }
 
@@ -231,10 +228,7 @@ namespace DCS_BIOS
         {
             if (stringList != null)
             {
-                foreach (var s in stringList)
-                {
-                    _dcsBIOSInstance.SendDataFunction(s);
-                }
+                stringList.ForEach(s => _dcsBIOSInstance.SendDataFunction(s));
             }
         }
 
