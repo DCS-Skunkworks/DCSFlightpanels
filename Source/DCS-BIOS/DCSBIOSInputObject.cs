@@ -28,23 +28,14 @@ namespace DCS_BIOS
             _controlId = controlId;
             _description = dcsbiosControlInput.Description;
 
-            if (dcsbiosControlInput.ControlInterface.Equals("fixed_step"))
+            _interface = dcsbiosControlInput.ControlInterface switch
             {
-                _interface = DCSBIOSInputType.FIXED_STEP;
-            }
-            else if (dcsbiosControlInput.ControlInterface.Equals("set_state"))
-            {
-                _interface = DCSBIOSInputType.SET_STATE;
-            }
-            else if (dcsbiosControlInput.ControlInterface.Equals("action"))
-            {
-                _interface = DCSBIOSInputType.ACTION;
-            }
-            else if (dcsbiosControlInput.ControlInterface.Equals("variable_step"))
-            {
-                _interface = DCSBIOSInputType.VARIABLE_STEP;
-            }
-
+                "fixed_step" => DCSBIOSInputType.FIXED_STEP,
+                "set_state" => DCSBIOSInputType.SET_STATE,
+                "action" => DCSBIOSInputType.ACTION,
+                "variable_step" => DCSBIOSInputType.VARIABLE_STEP,
+                _ => throw new SystemException($"Unexpected ControlInterface value [{dcsbiosControlInput.ControlInterface}]")
+            };
             _maxValue = dcsbiosControlInput.MaxValue.GetValueOrDefault();
             _specifiedActionArgument = dcsbiosControlInput.Argument;
             //Set by user
