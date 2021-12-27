@@ -1769,10 +1769,10 @@
                 {
                     // Refresh, make sure they are using the latest settings
                     DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    _dcsBios.ReceiveFromIp = Settings.Default.DCSBiosIPFrom;
-                    _dcsBios.ReceivePort = int.Parse(Settings.Default.DCSBiosPortFrom);
-                    _dcsBios.SendToIp = Settings.Default.DCSBiosIPTo;
-                    _dcsBios.SendPort = int.Parse(Settings.Default.DCSBiosPortTo);
+                    _dcsBios.ReceiveFromIpUdp = Settings.Default.DCSBiosIPFrom;
+                    _dcsBios.ReceivePortUdp = int.Parse(Settings.Default.DCSBiosPortFrom);
+                    _dcsBios.SendToIpUdp = Settings.Default.DCSBiosIPTo;
+                    _dcsBios.SendPortUdp = int.Parse(Settings.Default.DCSBiosPortTo);
                     _dcsBios.Shutdown();
                     _dcsBios.Startup();
                     _profileHandler.DCSBIOSJSONDirectory = Settings.Default.DCSBiosJSONLocation;

@@ -37,59 +37,63 @@ namespace DCS_BIOS
         private UdpClient _udpReceiveClient;
         private UdpClient _udpSendClient;
         private Thread _dcsbiosListeningThread;
-        private string _dcsbiosReceiveFromIPUdp = "239.255.50.10";
-        private string _dcsbiosSendToIPUdp = "127.0.0.1";
-        private int _dcsbiosReceivePortUdp = 5010;
-        private int _dcsbiosSendPortUdp = 7778;
+        public string ReceiveFromIpUdp { get; set; } = "239.255.50.10";
+        public string SendToIpUdp { get; set; } = "127.0.0.1";
+        public int ReceivePortUdp { get; set; } = 5010;
+        public int SendPortUdp { get; set; } = 7778;
         private IPEndPoint _ipEndPointReceiverUdp;
         private readonly IPEndPoint _ipEndPointSenderUdp;
-        private readonly string _receivedDataUdp = null;
+        public string ReceivedDataUdp { get; } = null;
         /************************
         *************************
         ************************/
 
-        private readonly object _lockExceptionObject = new object();
+        private readonly object _lockExceptionObject = new();
         private Exception _lastException;
         private DCSBIOSProtocolParser _dcsProtocolParser;
         private readonly DcsBiosNotificationMode _dcsBiosNotificationMode;
-        private readonly object _lockObjectForSendingData = new object();
+        private readonly object _lockObjectForSendingData = new();
         private volatile bool _isRunning;
+        public bool IsRunning
+        {
+            get => _isRunning;
+        }
 
         public DCSBIOS(string ipFromUdp, string ipToUdp, int portFromUdp, int portToUdp, DcsBiosNotificationMode dcsNoficationMode)
         {
 
             if (!string.IsNullOrEmpty(ipFromUdp) && IPAddress.TryParse(ipFromUdp, out _))
             {
-                _dcsbiosReceiveFromIPUdp = ipFromUdp;
+                ReceiveFromIpUdp = ipFromUdp;
             }
 
             if (!string.IsNullOrEmpty(ipToUdp) && IPAddress.TryParse(ipToUdp, out _))
             {
-                _dcsbiosSendToIPUdp = ipToUdp;
+                SendToIpUdp = ipToUdp;
             }
 
             if (portFromUdp > 0)
             {
-                _dcsbiosReceivePortUdp = portFromUdp;
+                ReceivePortUdp = portFromUdp;
             }
 
             if (portToUdp > 0)
             {
-                _dcsbiosSendPortUdp = portToUdp;
+                SendPortUdp = portToUdp;
             }
 
             _dcsBiosNotificationMode = dcsNoficationMode;
 
             _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
 
-            _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePort);
-            _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIp), SendPort);
+            _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePortUdp);
+            _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIpUdp), SendPortUdp);
 
             _udpReceiveClient = new UdpClient();
             _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 200);
             _udpReceiveClient.Client.Bind(_ipEndPointReceiverUdp);
-            _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(ReceiveFromIp));
+            _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(ReceiveFromIpUdp));
 
             _udpSendClient = new UdpClient();
             _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
@@ -201,11 +205,6 @@ namespace DCS_BIOS
             }
         }
 
-        public bool IsRunning
-        {
-            get => _isRunning;
-        }
-
         public static DCSBIOS GetInstance()
         {
             return _dcsBIOSInstance;
@@ -296,35 +295,6 @@ namespace DCS_BIOS
             {
                 return _lastException != null;
             }
-        }
-
-        public string ReceivedData
-        {
-            get { return _receivedDataUdp; }
-        }
-
-        public int SendPort
-        {
-            get { return _dcsbiosSendPortUdp; }
-            set { _dcsbiosSendPortUdp = value; }
-        }
-
-        public int ReceivePort
-        {
-            get { return _dcsbiosReceivePortUdp; }
-            set { _dcsbiosReceivePortUdp = value; }
-        }
-
-        public string SendToIp
-        {
-            get { return _dcsbiosSendToIPUdp; }
-            set { _dcsbiosSendToIPUdp = value; }
-        }
-
-        public string ReceiveFromIp
-        {
-            get { return _dcsbiosReceiveFromIPUdp; }
-            set { _dcsbiosReceiveFromIPUdp = value; }
         }
     }
 }
