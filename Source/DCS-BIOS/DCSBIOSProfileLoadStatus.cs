@@ -7,7 +7,7 @@ namespace DCS_BIOS
     {
         private string Profile { get; set; }
         private bool Loaded { get; set; }
-        private static readonly List<DCSBIOSProfileLoadStatus> LoadStatusList = new List<DCSBIOSProfileLoadStatus>();
+        private static readonly List<DCSBIOSProfileLoadStatus> LoadStatusList = new();
 
         private DCSBIOSProfileLoadStatus(string profile, bool loaded)
         {
@@ -39,26 +39,12 @@ namespace DCS_BIOS
 
         public static bool IsLoaded(string profile)
         {
-            foreach (var loadStatus in LoadStatusList)
-            {
-                if (loadStatus.Profile == profile && loadStatus.Loaded)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return LoadStatusList.Exists(loadStatus => loadStatus.Profile == profile && loadStatus.Loaded);
         }
 
         private static bool IsRegistered(string profile)
         {
-            foreach (var loadStatus in LoadStatusList)
-            {
-                if (loadStatus.Profile == profile)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return LoadStatusList.Exists(loadStatus => loadStatus.Profile == profile);
         }
 
         public static void Remove(string profile)
