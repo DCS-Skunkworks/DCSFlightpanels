@@ -5,12 +5,24 @@
     public class DCSBIOSString
     {
         // Use this, some strings need to be fully contructed before being broadcasted
-        private readonly List<uint> _receivedAddresses = new List<uint>();
-
+        private readonly List<uint> _receivedAddresses = new();
         private readonly string[] _internalBuffer;
         private readonly int _length;
         private uint _address;
         
+        public int Length { get; set; }
+        public bool IsComplete => _receivedAddresses.Count == 0;
+        public string StringValue => string.Join(string.Empty, _internalBuffer);
+        public uint Address
+        {
+            get => _address;
+            set
+            {
+                _address = value;
+                DCSBIOSProtocolParser.RegisterAddressToBroadCast(_address);
+            }
+        }
+
         public DCSBIOSString(uint address, int length)
         {
             _address = address;
@@ -33,20 +45,6 @@
                 _receivedAddresses.Add(i);
             }
         }
-
-        public int Length { get; set; }
-
-        public uint Address
-        {
-            get => _address;
-            set
-            {
-                _address = value;
-                DCSBIOSProtocolParser.RegisterAddressToBroadCast(_address);
-            }
-        }
-
-        public string StringValue => string.Join(string.Empty, _internalBuffer);
 
         public bool IsMatch(uint address)
         {
@@ -129,7 +127,5 @@
                 // Debug.WriteLine("*******************************************************");
             }
         }
-
-        public bool IsComplete => _receivedAddresses.Count == 0;
     }
 }
