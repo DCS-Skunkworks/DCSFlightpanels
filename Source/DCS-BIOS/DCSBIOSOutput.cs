@@ -179,7 +179,7 @@ namespace DCS_BIOS
                 }
                 else
                 {
-                    throw new Exception("Invalid DCSBiosOutput. Data is of type " + data.GetType() + " but DCSBiosOutputType set to " + DCSBiosOutputType);
+                    throw new Exception($"Invalid DCSBiosOutput. Data is of type {data.GetType()} but DCSBiosOutputType set to {DCSBiosOutputType}");
                 }
 
                 return result;
@@ -276,7 +276,7 @@ namespace DCS_BIOS
             }
             catch (Exception)
             {
-                throw new Exception("Failed to copy control " + _controlId + ". Control output is missing." + Environment.NewLine);
+                throw new Exception($"Failed to copy control {_controlId}. Control output is missing.{Environment.NewLine}");
             }
         }
 
@@ -311,7 +311,7 @@ namespace DCS_BIOS
 
             if (!str.StartsWith("DCSBiosOutput{") || !str.EndsWith("}"))
             {
-                throw new Exception("DCSBiosOutput cannot import string : " + str);
+                throw new Exception($"DCSBiosOutput cannot import string : {str}");
             }
 
             value = value.Replace("DCSBiosOutput{", string.Empty).Replace("}", string.Empty);
@@ -387,7 +387,7 @@ namespace DCS_BIOS
             {
                 if (DCSBiosOutputType != DCSBiosOutputType.IntegerType)
                 {
-                    throw new Exception("Invalid DCSBiosOutput. Specified value (trigger value) set to [int] but DCSBiosOutputType set to " + DCSBiosOutputType);
+                    throw new Exception($"Invalid DCSBiosOutput. Specified value (trigger value) set to [int] but DCSBiosOutputType set to {DCSBiosOutputType}");
                 }
 
                 _specifiedValueInt = value;
@@ -402,7 +402,7 @@ namespace DCS_BIOS
             {
                 if (DCSBiosOutputType != DCSBiosOutputType.StringType)
                 {
-                    throw new Exception("Invalid DCSBiosOutput. Specified value (trigger value) set to [String] but DCSBiosOutputType set to " + DCSBiosOutputType);
+                    throw new Exception($"Invalid DCSBiosOutput. Specified value (trigger value) set to [String] but DCSBiosOutputType set to {DCSBiosOutputType}");
                 }
 
                 _specifiedValueString = value;
