@@ -51,35 +51,35 @@ namespace DCS_BIOS
             {
                 case DCSBIOSInputType.FIXED_STEP:
                     {
-                        result = _controlId + " " + _specifiedFixedStepArgument + "\n";
+                        result = $"{_controlId} {_specifiedFixedStepArgument}\n";
                         break;
                     }
                 case DCSBIOSInputType.SET_STATE:
                     {
-                        result = _controlId + " " + _specifiedSetStateArgument + "\n";
+                        result = $"{_controlId} {_specifiedSetStateArgument}\n";
                         break;
                     }
                 case DCSBIOSInputType.ACTION:
                     {
-                        result = _controlId + " " + _specifiedActionArgument + "\n";
+                        result = $"{_controlId} {_specifiedActionArgument}\n";
                         break;
                     }
                 case DCSBIOSInputType.VARIABLE_STEP:
                     {
                         if (_specifiedVariableStepArgument > 0)
                         {
-                            result = _controlId + " +" + _specifiedVariableStepArgument + "\n";
+                            result = $"{_controlId} +{_specifiedVariableStepArgument}\n";
                         }
                         else
                         {
-                            result = _controlId + " " + _specifiedVariableStepArgument + "\n";
+                            result = $"{_controlId} {_specifiedVariableStepArgument}\n";
                         }
                         break;
                     }
             }
             if (string.IsNullOrWhiteSpace(result))
             {
-                throw new Exception("Error getting DCS-BIOSInput command. ControlId = " + _controlId + " Interface = " + _interface);
+                throw new Exception($"Error getting DCS-BIOSInput command. ControlId = {_controlId} Interface = {_interface}");
             }
             return result;
         }
