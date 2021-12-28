@@ -16,8 +16,8 @@ namespace DCS_BIOS
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new List<KeyValuePair<uint, DCSBIOSString>>();
-        private readonly object _lockObject = new object();
+        private readonly List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new();
+        private readonly object _lockObject = new();
         private readonly Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
         
 

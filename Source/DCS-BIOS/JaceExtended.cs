@@ -8,8 +8,8 @@ namespace DCS_BIOS
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly object _lockObject = new object();
-        private readonly CalculationEngine _calculationEngine = new CalculationEngine();
+        private readonly object _lockObject = new();
+        private readonly CalculationEngine _calculationEngine = new();
 
         public JaceExtended()
         {
