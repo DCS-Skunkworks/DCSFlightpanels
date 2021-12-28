@@ -115,7 +115,7 @@ namespace DCS_BIOS
                 }
                 else
                 {
-                    throw new Exception("Invalid DCSBiosOutput. Data is of type " + data.GetType() + " but DCSBiosOutputType set to " + DCSBiosOutputType);
+                    throw new Exception($"Invalid DCSBiosOutput. Data is of type {data.GetType()} but DCSBiosOutputType set to {DCSBiosOutputType}");
                 }
 
                 return result;
