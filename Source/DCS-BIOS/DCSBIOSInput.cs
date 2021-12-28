@@ -171,14 +171,7 @@ namespace DCS_BIOS
             // AAP_EGIPWR|ACTION|TOGGLE
             var entries = value.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
             _controlId = entries[0];
-            if (entries.Length == 4)
-            {
-                Delay = int.Parse(entries[3]);
-            }
-            else
-            {
-                Delay = 0;
-            }
+            Delay = entries.Length == 4 ? int.Parse(entries[3]) : 0;
 
             var dcsBIOSControl = DCSBIOSControlLocator.GetControl(_controlId);
             Consume(dcsBIOSControl);
@@ -193,19 +186,10 @@ namespace DCS_BIOS
                             {
                                 dcsbiosInputObject.SpecifiedFixedStepArgument = (DCSBIOSFixedStepInput)Enum.Parse(typeof(DCSBIOSFixedStepInput), entries[2]);
                                 SelectedDCSBIOSInput = dcsbiosInputObject;
-                                if (entries.Length == 4)
-                                {
-                                    SelectedDCSBIOSInput.Delay = int.Parse(entries[3]);
-                                }
-                                else
-                                {
-                                    SelectedDCSBIOSInput.Delay = 0;
-                                }
-
+                                SelectedDCSBIOSInput.Delay = entries.Length == 4 ? int.Parse(entries[3]) : 0;
                                 break;
                             }
                         }
-
                         break;
                     }
 
@@ -217,19 +201,10 @@ namespace DCS_BIOS
                             {
                                 dcsbiosInputObject.SpecifiedSetStateArgument = uint.Parse(entries[2]);
                                 SelectedDCSBIOSInput = dcsbiosInputObject;
-                                if (entries.Length == 4)
-                                {
-                                    SelectedDCSBIOSInput.Delay = int.Parse(entries[3]);
-                                }
-                                else
-                                {
-                                    SelectedDCSBIOSInput.Delay = 0;
-                                }
-
+                                SelectedDCSBIOSInput.Delay = entries.Length == 4 ? int.Parse(entries[3]) : 0;
                                 break;
                             }
                         }
-
                         break;
                     }
 
@@ -241,19 +216,10 @@ namespace DCS_BIOS
                             {
                                 dcsbiosInputObject.SpecifiedActionArgument = entries[2];
                                 SelectedDCSBIOSInput = dcsbiosInputObject;
-                                if (entries.Length == 4)
-                                {
-                                    SelectedDCSBIOSInput.Delay = int.Parse(entries[3]);
-                                }
-                                else
-                                {
-                                    SelectedDCSBIOSInput.Delay = 0;
-                                }
-
+                                SelectedDCSBIOSInput.Delay = entries.Length == 4 ? int.Parse(entries[3]) : 0;         
                                 break;
                             }
                         }
-
                         break;
                     }
 
@@ -265,19 +231,10 @@ namespace DCS_BIOS
                             {
                                 dcsbiosInputObject.SpecifiedVariableStepArgument = int.Parse(entries[2]);
                                 SelectedDCSBIOSInput = dcsbiosInputObject;
-                                if (entries.Length == 4)
-                                {
-                                    SelectedDCSBIOSInput.Delay = int.Parse(entries[3]);
-                                }
-                                else
-                                {
-                                    SelectedDCSBIOSInput.Delay = 0;
-                                }
-
+                                SelectedDCSBIOSInput.Delay = entries.Length == 4 ? int.Parse(entries[3]) : 0;
                                 break;
                             }
                         }
-
                         break;
                     }
             }
