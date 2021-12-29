@@ -1,7 +1,5 @@
 ﻿namespace DCS_BIOS
 {
-    using DCS_BIOS.Interfaces;
-
     public static class DCSBIOSStringManager
     {
         private static DCSBIOSStringListener _dcsbiosStringListener;

@@ -11,11 +11,11 @@ namespace DCS_BIOS
     {
         [NonSerialized]
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new List<DCSBIOSOutput>();
-        private readonly Dictionary<string, double> _variables = new Dictionary<string, double>();
+        private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new();
+        private readonly Dictionary<string, double> _variables = new();
 
         [NonSerialized]
-        private readonly JaceExtended _jaceExtended = new JaceExtended();
+        private readonly JaceExtended _jaceExtended = new();
         private string _formula;
         
         [NonSerialized]

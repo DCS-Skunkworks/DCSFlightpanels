@@ -28,23 +28,14 @@ namespace DCS_BIOS
             _controlId = controlId;
             _description = dcsbiosControlInput.Description;
 
-            if (dcsbiosControlInput.ControlInterface.Equals("fixed_step"))
+            _interface = dcsbiosControlInput.ControlInterface switch
             {
-                _interface = DCSBIOSInputType.FIXED_STEP;
-            }
-            else if (dcsbiosControlInput.ControlInterface.Equals("set_state"))
-            {
-                _interface = DCSBIOSInputType.SET_STATE;
-            }
-            else if (dcsbiosControlInput.ControlInterface.Equals("action"))
-            {
-                _interface = DCSBIOSInputType.ACTION;
-            }
-            else if (dcsbiosControlInput.ControlInterface.Equals("variable_step"))
-            {
-                _interface = DCSBIOSInputType.VARIABLE_STEP;
-            }
-
+                "fixed_step" => DCSBIOSInputType.FIXED_STEP,
+                "set_state" => DCSBIOSInputType.SET_STATE,
+                "action" => DCSBIOSInputType.ACTION,
+                "variable_step" => DCSBIOSInputType.VARIABLE_STEP,
+                _ => throw new SystemException($"Unexpected ControlInterface value [{dcsbiosControlInput.ControlInterface}]")
+            };
             _maxValue = dcsbiosControlInput.MaxValue.GetValueOrDefault();
             _specifiedActionArgument = dcsbiosControlInput.Argument;
             //Set by user
@@ -55,42 +46,23 @@ namespace DCS_BIOS
 
         public string GetDCSBIOSCommand()
         {
-            var result = string.Empty;
-            switch (_interface)
+            string command = _interface switch
             {
-                case DCSBIOSInputType.FIXED_STEP:
-                    {
-                        result = _controlId + " " + _specifiedFixedStepArgument + "\n";
-                        break;
-                    }
-                case DCSBIOSInputType.SET_STATE:
-                    {
-                        result = _controlId + " " + _specifiedSetStateArgument + "\n";
-                        break;
-                    }
-                case DCSBIOSInputType.ACTION:
-                    {
-                        result = _controlId + " " + _specifiedActionArgument + "\n";
-                        break;
-                    }
-                case DCSBIOSInputType.VARIABLE_STEP:
-                    {
-                        if (_specifiedVariableStepArgument > 0)
-                        {
-                            result = _controlId + " +" + _specifiedVariableStepArgument + "\n";
-                        }
-                        else
-                        {
-                            result = _controlId + " " + _specifiedVariableStepArgument + "\n";
-                        }
-                        break;
-                    }
-            }
-            if (string.IsNullOrWhiteSpace(result))
+                DCSBIOSInputType.FIXED_STEP => $"{_controlId} {_specifiedFixedStepArgument}\n",
+                DCSBIOSInputType.SET_STATE  => $"{_controlId} {_specifiedSetStateArgument}\n",
+                DCSBIOSInputType.ACTION     => $"{_controlId} {_specifiedActionArgument}\n",
+                DCSBIOSInputType.VARIABLE_STEP => 
+                    _specifiedVariableStepArgument > 0 ?
+                      $"{_controlId} +{_specifiedVariableStepArgument}\n"
+                    : $"{_controlId} {_specifiedVariableStepArgument}\n",
+                _ => throw new Exception("Unexpected DCSBIOSInputType value")
+            };
+
+            if (string.IsNullOrWhiteSpace(command))
             {
-                throw new Exception("Error getting DCS-BIOSInput command. ControlId = " + _controlId + " Interface = " + _interface);
+                throw new Exception($"Error getting DCS-BIOSInput command. ControlId = {_controlId} Interface = {_interface}");
             }
-            return result;
+            return command;
         }
 
         public int Delay

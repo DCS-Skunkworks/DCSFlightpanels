@@ -16,8 +16,8 @@ namespace DCS_BIOS
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private static readonly List<DCSBIOSControl> DCSBIOSControls = new List<DCSBIOSControl>();
-        private static readonly object LockObject = new object();
+        private static readonly List<DCSBIOSControl> DCSBIOSControls = new();
+        private static readonly object LockObject = new();
         private static DCSFPProfile _dcsfpProfile;
         private static string _jsonDirectory;
         public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
@@ -58,14 +58,14 @@ namespace DCS_BIOS
                     PrintDuplicateControlIdentifiers(_dcsbiosControls, true);*/
                     if (!DCSBIOSControls.Exists(controlObject => controlObject.Identifier.Equals(controlId)))
                     {
-                        throw new Exception("Error, control " + controlId + " does not exist. (" + Profile.Description + ")");
+                        throw new Exception($"Error, control {controlId} does not exist. ({Profile.Description})");
                     }
 
                     return DCSBIOSControls.Single(controlObject => controlObject.Identifier.Equals(controlId));
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    throw new Exception("Check DCS-BIOS version. Failed to find control " + controlId + " for airframe " + Profile.Description + " (" + Profile.JSONFilename + ". Did you switch airframe type for the profile and have existing control(s) for the previous type saved?" + Environment.NewLine + ioe.Message);
+                    throw new Exception($"Check DCS-BIOS version. Failed to find control {controlId} for airframe {Profile.Description} ({Profile.JSONFilename}). Did you switch airframe type for the profile and have existing control(s) for the previous type saved?{Environment.NewLine}{ioe.Message}");
                 }
             }
         }
@@ -81,14 +81,14 @@ namespace DCS_BIOS
 
                 try
                 {
-                    var control = GetControl(controlId);
+                    DCSBIOSControl control = GetControl(controlId);
                     var dcsBIOSOutput = new DCSBIOSOutput();
                     dcsBIOSOutput.Consume(control);
                     return dcsBIOSOutput;
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    throw new Exception("Check DCS-BIOS version. Failed to create DCSBIOSOutput based on control " + controlId + " for profile " + Profile.JSONFilename + Environment.NewLine + ioe.Message);
+                    throw new Exception($"Check DCS-BIOS version. Failed to create DCSBIOSOutput based on control {controlId} for profile {Profile.JSONFilename}{Environment.NewLine}{ioe.Message}");
                 }
             }
         }
@@ -112,7 +112,7 @@ namespace DCS_BIOS
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("Failed to find DCS-BIOS files. -> " + Environment.NewLine + ex.Message);
+                        throw new Exception($"Failed to find DCS-BIOS files. -> {Environment.NewLine}{ex.Message}");
                     }
 
                     foreach (var file in files)
@@ -127,7 +127,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + _jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception($"{DCSBIOSNotFoundErrorMessage} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
 
@@ -204,8 +204,8 @@ namespace DCS_BIOS
 
         private static void PrintDuplicateControlIdentifiers(List<DCSBIOSControl> dcsbiosControls, bool printAll = false)
         {
-            var result = new List<string>();
-            var dupes = new List<string>();
+            List<string> result = new();
+            List<string> dupes = new();
             foreach (var dcsbiosControl in dcsbiosControls)
             {
                 if (printAll)
@@ -214,7 +214,7 @@ namespace DCS_BIOS
                 }
 
                 // Debug.Print(dcsbiosControl.identifier);
-                var found = false;
+                bool found = false;
                 foreach (var str in result)
                 {
                     if (str.Trim() == dcsbiosControl.Identifier.Trim())
@@ -236,7 +236,7 @@ namespace DCS_BIOS
 
             if (dupes.Count > 0)
             {
-                var message = new StringBuilder();
+                StringBuilder message = new();
                 message.AppendLine($"Below is a list of duplicate identifiers found in the {Profile.JSONFilename} profile (DCS-BIOS)");
                 message.AppendLine($"The identifier must be unique, please correct the profile {Profile.JSONFilename} in the DCS-BIOS lib folder");
                 message.AppendLine("---------------------------------------------");
@@ -264,7 +264,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception($"{DCSBIOSNotFoundErrorMessage} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
 
@@ -296,7 +296,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception($"{DCSBIOSNotFoundErrorMessage} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
 
@@ -347,8 +347,7 @@ namespace DCS_BIOS
             }
 
             LoadControls();
-            var result = DCSBIOSControls.Where(controlObject => (controlObject.Outputs.Count > 0) && controlObject.Outputs[0].OutputDataType == DCSBiosOutputType.StringType);
-            return result;
+            return DCSBIOSControls.Where(controlObject => (controlObject.Outputs.Count > 0) && controlObject.Outputs[0].OutputDataType == DCSBiosOutputType.StringType);
         }
 
         public static IEnumerable<DCSBIOSControl> GetIntegerOutputControls()
