@@ -67,7 +67,6 @@ Stream Deck Panels Supported (only with DCS-BIOS):
 
 [Farming Panel Overlay for named buttons](https://forums.eagle.ru/topic/115280-dcsflightpanels-dcsfp-thread-saitek-pro-flight-panels-amp-dcs/page/53/?tab=comments#comment-4745816)
 
-
-Contributors : Tossler, ZoeESummers, Capt. Zeen, Derammo
+[Troubleshooting Tips](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Troubleshooting)
 
 Here you find our [DCSFlightpanels Discord Server](https://discord.gg/5svGwKX)
