@@ -184,17 +184,17 @@
                 }
 
                 /*
-                                 * Read all information and add InstanceID to all lines using BeginPanel and EndPanel
-                                 *             
-                                 * PanelType=PZ55SwitchPanel
-                                 * PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&3f11a32&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                                 * BeginPanel
-                                 *      SwitchPanelKey{1KNOB_ENGINE_RIGHT}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_Q}
-                                 *      SwitchPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{FiftyMilliSec,LCONTROL + VK_Q}
-                                 *      SwitchPanelKey{1KNOB_ENGINE_BOTH}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_C}
-                                 * EndPanel
-                                 * 
-                                 */
+                 * Read all information and add InstanceID to all lines using BeginPanel and EndPanel
+                 *             
+                 * PanelType=PZ55SwitchPanel
+                 * PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&3f11a32&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                 * BeginPanel
+                 *      SwitchPanelKey{1KNOB_ENGINE_RIGHT}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_Q}
+                 *      SwitchPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{FiftyMilliSec,LCONTROL + VK_Q}
+                 *      SwitchPanelKey{1KNOB_ENGINE_BOTH}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_C}
+                 * EndPanel
+                 * 
+                 */
                 _profileLoaded = true;
                 Debug.WriteLine($"ProfileHandler reading file {_filename}");
                 var fileLines = File.ReadAllLines(_filename);
