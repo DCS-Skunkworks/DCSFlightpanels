@@ -42,7 +42,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             FindVisualChildren<Image>(GridButtons).ToList().Where(x => x.Name.StartsWith("DotImage")).ToList()
                 .ForEach(x => DotImages.Add(x));
 
-            CheckButonControlListValidity();
+            CheckButtonControlListValidity();
         }
     }
 }

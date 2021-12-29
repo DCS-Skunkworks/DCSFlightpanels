@@ -155,14 +155,14 @@
 
         private void ReassignSortedListKeys()
         {
-            int newkey = 0;
+            int newKey = 0;
             for (int i = 0; i< _sortedList.Count; i++)
             {
                 var kvp = _sortedList.ElementAt(i);
                 int oldKey = kvp.Key;
                 var val = kvp.Value;
                 _sortedList.Remove(oldKey);
-                _sortedList.Add(newkey++, val);
+                _sortedList.Add(newKey++, val);
             }
         }
 

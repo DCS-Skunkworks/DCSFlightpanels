@@ -13,7 +13,7 @@ namespace NonVisuals.StreamDeck
     public class LockBitmap
     {
         readonly Bitmap _source;
-        IntPtr _iptr = IntPtr.Zero;
+        IntPtr _intPtr = IntPtr.Zero;
         BitmapData _bitmapData;
 
         public byte[] Pixels { get; set; }
@@ -59,10 +59,10 @@ namespace NonVisuals.StreamDeck
                 // create byte array to copy pixel values
                 int step = Depth / 8;
                 Pixels = new byte[pixelCount * step];
-                _iptr = _bitmapData.Scan0;
+                _intPtr = _bitmapData.Scan0;
 
                 // Copy data from pointer to array
-                Marshal.Copy(_iptr, Pixels, 0, Pixels.Length);
+                Marshal.Copy(_intPtr, Pixels, 0, Pixels.Length);
             }
             catch (Exception ex)
             {
@@ -78,7 +78,7 @@ namespace NonVisuals.StreamDeck
             try
             {
                 // Copy data from byte array to pointer
-                Marshal.Copy(Pixels, 0, _iptr, Pixels.Length);
+                Marshal.Copy(Pixels, 0, _intPtr, Pixels.Length);
 
                 // Unlock bitmap data
                 _source.UnlockBits(_bitmapData);

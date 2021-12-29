@@ -1091,7 +1091,7 @@
             set => _dcsBiosBindings = value;
         }
 
-        public bool ManualLandingGearLeds
+        public bool ManualLandingGearLEDs
         {
             get => _manualLandingGearLeds;
             set
@@ -1101,7 +1101,7 @@
             }
         }
 
-        public PanelLEDColor ManualLandingGearLedsColorDown
+        public PanelLEDColor ManualLandingGearLEDsColorDown
         {
             get => _manualLandingGearLedsColorDown;
             set
@@ -1111,7 +1111,7 @@
             }
         }
 
-        public PanelLEDColor ManualLandingGearLedsColorUp
+        public PanelLEDColor ManualLandingGearLEDsColorUp
         {
             get => _manualLandingGearLedsColorUp;
             set
@@ -1121,7 +1121,7 @@
             }
         }
 
-        public PanelLEDColor ManualLandingGearLedsColorTrans
+        public PanelLEDColor ManualLandingGearLEDsColorTrans
         {
             get => _manualLandingGearLedsColorTrans;
             set

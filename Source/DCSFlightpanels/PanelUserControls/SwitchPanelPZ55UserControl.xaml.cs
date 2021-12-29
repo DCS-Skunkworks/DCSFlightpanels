@@ -111,9 +111,9 @@
             ManualLedDownCombo.SelectionChanged -= ManualLedDownCombo_SelectionChanged;
             ManualLedTransSecondsCombo.SelectionChanged -= ManualLedTransSecondsCombo_SelectionChanged;
 
-            ManualLedUpCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorUp;
-            ManualLedDownCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorDown;
-            ManualLedTransCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLedsColorTrans;
+            ManualLedUpCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLEDsColorUp;
+            ManualLedDownCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLEDsColorDown;
+            ManualLedTransCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearLEDsColorTrans;
             ManualLedTransSecondsCombo.SelectedValue = _switchPanelPZ55.ManualLandingGearTransTimeSeconds;
 
             ManualLedUpCombo.SelectionChanged += ManualLedUpCombo_SelectionChanged;
@@ -835,8 +835,8 @@
                     }
                 }
 
-                CheckBoxManualLeDs.IsChecked = _switchPanelPZ55.ManualLandingGearLeds;
-                SetManualLedColorsSelectionVisibility(_switchPanelPZ55.ManualLandingGearLeds);
+                CheckBoxManualLeDs.IsChecked = _switchPanelPZ55.ManualLandingGearLEDs;
+                SetManualLedColorsSelectionVisibility(_switchPanelPZ55.ManualLandingGearLEDs);
                 SetConfigExistsImageVisibility();
             }
             catch (Exception ex)
@@ -907,7 +907,7 @@
             {
                 if (_switchPanelPZ55 != null)
                 {
-                    _switchPanelPZ55.ManualLandingGearLeds = CheckBoxManualLeDs.IsChecked.HasValue && CheckBoxManualLeDs.IsChecked.Value;
+                    _switchPanelPZ55.ManualLandingGearLEDs = CheckBoxManualLeDs.IsChecked.HasValue && CheckBoxManualLeDs.IsChecked.Value;
                 }
             }
             catch (Exception ex)
@@ -1050,17 +1050,17 @@
 
         private void ManualLedUpCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _switchPanelPZ55.ManualLandingGearLedsColorUp = (PanelLEDColor)((ComboBox)sender).SelectedValue;
+            _switchPanelPZ55.ManualLandingGearLEDsColorUp = (PanelLEDColor)((ComboBox)sender).SelectedValue;
         }
 
         private void ManualLedTransCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _switchPanelPZ55.ManualLandingGearLedsColorTrans = (PanelLEDColor)((ComboBox)sender).SelectedValue;
+            _switchPanelPZ55.ManualLandingGearLEDsColorTrans = (PanelLEDColor)((ComboBox)sender).SelectedValue;
         }
 
         private void ManualLedDownCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _switchPanelPZ55.ManualLandingGearLedsColorDown = (PanelLEDColor)((ComboBox)sender).SelectedValue;
+            _switchPanelPZ55.ManualLandingGearLEDsColorDown = (PanelLEDColor)((ComboBox)sender).SelectedValue;
         }
 
         private void ManualLedTransSecondsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)

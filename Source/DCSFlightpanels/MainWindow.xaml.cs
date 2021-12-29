@@ -1716,8 +1716,8 @@
         {
             try
             {
-                var formulaSanboxWindow = new JaceSandboxWindow();
-                formulaSanboxWindow.ShowDialog();
+                var formulaSandBoxWindow = new JaceSandboxWindow();
+                formulaSandBoxWindow.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -1875,13 +1875,13 @@
             informationWindow.ShowDialog();
         }
 
-        private string GetProductId(string saitedVID, string usbDeviceKeyName)
+        private string GetProductId(string saitekVID, string usbDeviceKeyName)
         {
             var pos = usbDeviceKeyName.IndexOf("&", StringComparison.InvariantCulture);
             var vid = usbDeviceKeyName.Substring(0, pos);
             var pid = usbDeviceKeyName.Substring(pos + 1);
             var result = pid;
-            if (vid == saitedVID)
+            if (vid == saitekVID)
             {
                 if (pid.StartsWith("PID_0D06"))
                 {

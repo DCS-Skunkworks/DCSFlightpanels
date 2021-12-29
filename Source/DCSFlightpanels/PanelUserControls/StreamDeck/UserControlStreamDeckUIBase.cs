@@ -598,7 +598,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
-        protected void CheckButonControlListValidity()
+        protected void CheckButtonControlListValidity()
         {
             if (ButtonImages.Count() != ButtonAmount()
                 || DotImages.Count() != ButtonAmount())

@@ -150,8 +150,8 @@
             set => _dcsbiosConverter = value;
         }
 
-        private string lastChecked1 = string.Empty;
-        private string lastChecked2 = string.Empty;
+        private string _lastChecked1 = string.Empty;
+        private string _lastChecked2 = string.Empty;
         private void TextBoxReferenceValue_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
@@ -163,26 +163,24 @@
 
                 if (sender.Equals(TextBoxReferenceValue1))
                 {
-                    if (lastChecked1 != TextBoxReferenceValue1.Text && !TextBoxReferenceValue1.ValidateDouble(true))
+                    if (_lastChecked1 != TextBoxReferenceValue1.Text && !TextBoxReferenceValue1.ValidateDouble(true))
                     {
-                        lastChecked1 = TextBoxReferenceValue1.Text;
+                        _lastChecked1 = TextBoxReferenceValue1.Text;
                         return;
                     }
 
-                    var validateResult2 = double.TryParse(TextBoxReferenceValue1.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var resul1t);
+                    //this is necessary?  var validateResult2 = double.TryParse(TextBoxReferenceValue1.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out _);
                     if (double.TryParse(TextBoxReferenceValue1.Text,NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var result))
                     {
                         _dcsbiosConverter.ReferenceValue1 = result;
                         SetIsDirty();
                     }
-
-
                 }
                 if (sender.Equals(TextBoxReferenceValue2))
                 {
-                    if (lastChecked2 != TextBoxReferenceValue2.Text && !TextBoxReferenceValue2.ValidateDouble(true))
+                    if (_lastChecked2 != TextBoxReferenceValue2.Text && !TextBoxReferenceValue2.ValidateDouble(true))
                     {
-                        lastChecked2 = TextBoxReferenceValue2.Text;
+                        _lastChecked2 = TextBoxReferenceValue2.Text;
                         return;
                     }
 

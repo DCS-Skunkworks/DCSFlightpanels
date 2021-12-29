@@ -42,7 +42,7 @@ namespace DCS_BIOS
         public int ReceivePortUdp { get; set; } = 5010;
         public int SendPortUdp { get; set; } = 7778;
         private IPEndPoint _ipEndPointReceiverUdp;
-        private readonly IPEndPoint _ipEndPointSenderUdp;
+        private IPEndPoint _ipEndPointSenderUdp;
         public string ReceivedDataUdp { get; } = null;
         /************************
         *************************
@@ -59,7 +59,7 @@ namespace DCS_BIOS
             get => _isRunning;
         }
 
-        public DCSBIOS(string ipFromUdp, string ipToUdp, int portFromUdp, int portToUdp, DcsBiosNotificationMode dcsNoficationMode)
+        public DCSBIOS(string ipFromUdp, string ipToUdp, int portFromUdp, int portToUdp, DcsBiosNotificationMode dcsNotificationMode)
         {
 
             if (!string.IsNullOrEmpty(ipFromUdp) && IPAddress.TryParse(ipFromUdp, out _))
@@ -82,25 +82,10 @@ namespace DCS_BIOS
                 SendPortUdp = portToUdp;
             }
 
-            _dcsBiosNotificationMode = dcsNoficationMode;
-
-            _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
-
-            _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePortUdp);
-            _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIpUdp), SendPortUdp);
-
-            _udpReceiveClient = new UdpClient();
-            _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 200);
-            _udpReceiveClient.Client.Bind(_ipEndPointReceiverUdp);
-            _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(ReceiveFromIpUdp));
-
-            _udpSendClient = new UdpClient();
-            _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            _udpSendClient.EnableBroadcast = true;
-
-            //_tcpIpPort = tcpIpPort;
+            _dcsBiosNotificationMode = dcsNotificationMode;
             _dcsBIOSInstance = this;
+
+            Startup();
         }
 
         public void Dispose()
@@ -119,13 +104,59 @@ namespace DCS_BIOS
                 Shutdown();
             }
         }
-        
+
+        public void Startup()
+        {
+            try
+            {
+                if (_isRunning)
+                {
+                    return;
+                }
+
+                _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
+
+                _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePortUdp);
+                _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIpUdp), SendPortUdp);
+
+                _udpReceiveClient = new UdpClient();
+                _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 200);
+                _udpReceiveClient.Client.Bind(_ipEndPointReceiverUdp);
+                _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(ReceiveFromIpUdp));
+
+                _udpSendClient = new UdpClient();
+                _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                _udpSendClient.EnableBroadcast = true;
+
+                _dcsbiosListeningThread = new Thread(ReceiveDataUdp);
+
+                _isRunning = true;
+                _dcsProtocolParser.Startup();
+                _dcsbiosListeningThread.Start();
+            }
+            catch (Exception ex)
+            {
+                SetLastException(ex);
+                logger.Error(ex, "DCSBIOS.Startup()");
+                if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
+                {
+                    _udpReceiveClient.Close();
+                    _udpReceiveClient = null;
+                }
+                if (_udpSendClient != null && _udpSendClient.Client != null && _udpSendClient.Client.Connected)
+                {
+                    _udpSendClient.Close();
+                    _udpSendClient = null;
+                }
+            }
+        }
+
         public void Shutdown()
         {
             try
             {
                 _isRunning = false;
-                _udpReceiveClient?.Close();
                 _udpReceiveClient?.Close();
                 _dcsProtocolParser?.Shutdown();
 
@@ -170,37 +201,6 @@ namespace DCS_BIOS
                 {
                     SetLastException(ex);
                     logger.Error(ex, "DCSBIOS.ReceiveData()");
-                }
-            }
-        }
-
-        public void Startup()
-        {
-            try
-            {
-                if (_isRunning)
-                {
-                    return;
-                }
-                _dcsbiosListeningThread = new Thread(ReceiveDataUdp);
-
-                _isRunning = true;
-                _dcsProtocolParser.Startup();
-                _dcsbiosListeningThread.Start();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-                logger.Error(ex, "DCSBIOS.Startup()");
-                if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
-                {
-                    _udpReceiveClient.Close();
-                    _udpReceiveClient = null;
-                }
-                if (_udpSendClient != null && _udpSendClient.Client != null && _udpSendClient.Client.Connected)
-                {
-                    _udpSendClient.Close();
-                    _udpSendClient = null;
                 }
             }
         }

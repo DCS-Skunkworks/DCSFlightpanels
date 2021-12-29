@@ -41,7 +41,7 @@ namespace Tests.ClassLibraryCommon
         [InlineData(@"\\testX\1", @"\\testX\1\2\3", @"1\2\3")]
         [InlineData(@"\\testX\1\2", @"\\testX\1\2\3", @"2\3")]
         [InlineData(@"\\testX\1\2\file.txt", @"\\testX\1\2\3\file.txt", @"3\file.txt")]
-        public void GetRelativePath_ShouldReturn_Expectedvalue(string relativeTo, string path, string expected)
+        public void GetRelativePath_ShouldReturn_ExpectedValue(string relativeTo, string path, string expected)
         {
             Assert.Equal(expected, Common.GetRelativePath(relativeTo, path));
         }
@@ -133,7 +133,7 @@ namespace Tests.ClassLibraryCommon
             EmulationMode.KeyboardEmulationOnly,
             EmulationMode.DCSBIOSInputEnabled,
             EmulationMode.DCSBIOSOutputEnabled,})]
-        public void EmulationModes_InvalidConfigs_Shoud_RaiseException(EmulationMode[] modes)
+        public void EmulationModes_InvalidConfigs_Should_RaiseException(EmulationMode[] modes)
         {
             try
             {
@@ -157,7 +157,7 @@ namespace Tests.ClassLibraryCommon
         
         [InlineData(new EmulationMode[] {
             EmulationMode.SRSEnabled }, 0)]
-        public void EmulationModes_Clear_ShoudRemove_TheFlag(EmulationMode[] modes, int expectedValueAfterRemove)
+        public void EmulationModes_Clear_ShouldRemove_TheFlag(EmulationMode[] modes, int expectedValueAfterRemove)
         {
             try
             {
