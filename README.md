@@ -49,6 +49,8 @@ Stream Deck Panels Supported (only with DCS-BIOS):
 
 [How to install](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki)
 
+[Troubleshooting](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Troubleshooting)
+
 [BaDCrC showing his cockpit that uses Helios and DCSFP](https://youtu.be/lgTJa-NUnM8?t=573)
 
 [Tutorial #1 (Key emulation)](https://youtu.be/mgm0JfldgYs)
@@ -66,7 +68,5 @@ Stream Deck Panels Supported (only with DCS-BIOS):
 [Demo video UH-1H](https://www.youtube.com/watch?v=jQxLX7UHMR8)
 
 [Farming Panel Overlay for named buttons](https://forums.eagle.ru/topic/115280-dcsflightpanels-dcsfp-thread-saitek-pro-flight-panels-amp-dcs/page/53/?tab=comments#comment-4745816)
-
-[Troubleshooting Tips](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Troubleshooting)
 
 Here you find our [DCSFlightpanels Discord Server](https://discord.gg/5svGwKX)
