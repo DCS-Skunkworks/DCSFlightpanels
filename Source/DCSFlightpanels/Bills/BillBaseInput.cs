@@ -489,7 +489,7 @@ namespace DCSFlightpanels.Bills
         private void AddKeyStroke(KeyPressInfo keyStroke)
         {
             var keyPress = new KeyPress();
-            keyPress.KeyPressSequence.Add(0, keyStroke);
+            keyPress.KeyPressSequence.Add(0, keyStroke.DeepClone());
             keyPress.Description = string.Empty;
             KeyPress = keyPress;
             TextBox.Text = keyStroke.VirtualKeyCodesAsString;
@@ -498,7 +498,7 @@ namespace DCSFlightpanels.Bills
 
         private void AddKeySequence(string description, SortedList<int, IKeyPressInfo> keySequence)
         {
-            KeyPress = new KeyPress("Key stroke sequence", keySequence)
+            KeyPress = new KeyPress("Key stroke sequence", keySequence.DeepClone())
             {
                 Description = description
             };
@@ -550,8 +550,8 @@ namespace DCSFlightpanels.Bills
         {
             // 1 appropriate text to textbox
             // 2 update bindings
-            SetTextBoxText(description, dcsBiosInputs);
-            Consume(dcsBiosInputs);
+            SetTextBoxText(description, dcsBiosInputs.DeepClone());
+            Consume(dcsBiosInputs.DeepClone());
             UpdateDCSBIOSBinding();
         }
 
@@ -584,7 +584,7 @@ namespace DCSFlightpanels.Bills
 
         private void AddBipLink(BIPLink bipLink)
         {
-            BipLink = bipLink;
+            BipLink = bipLink.DeepClone();
             UpdateBIPLinkBindings();
         }
 
@@ -648,7 +648,7 @@ namespace DCSFlightpanels.Bills
 
         private void AddOSCommand(OSCommand operatingSystemCommand)
         {
-            OSCommandObject = operatingSystemCommand;
+            OSCommandObject = operatingSystemCommand.DeepClone();
             TextBox.Text = operatingSystemCommand.Name;
             UpdateOSCommandBindings();
         }
