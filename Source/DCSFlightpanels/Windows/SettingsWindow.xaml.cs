@@ -31,7 +31,6 @@ namespace DCSFlightpanels.Windows
         public string PortToSRS { get; private set; }
         public bool GeneralChanged { get; private set; } = false;
         public bool DCSBIOSChanged { get; private set; } = false;
-        public bool SRSChanged { get; private set; } = false;
         public bool StreamDeckChanged { get; private set; } = false;
 
         public SettingsWindow()
@@ -45,17 +44,12 @@ namespace DCSFlightpanels.Windows
             {
                 ButtonOk.IsEnabled = false;
                 LoadSettings();
-                if (!Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled))
-                {
-                    LabelSRS.Visibility = Visibility.Collapsed;
-                }
-                else if (Common.NoDCSBIOSEnabled())
+                if (Common.NoDCSBIOSEnabled())
                 {
                     LabelDCSBIOS.Visibility = Visibility.Collapsed;
                 }
                 StackPanelGeneralSettings.Visibility = Visibility.Visible;
                 StackPanelDCSBIOSSettings.Visibility = Visibility.Collapsed;
-                StackPanelSRSSettings.Visibility = Visibility.Collapsed;
                 SetEventsHandlers();
             }
             catch (Exception exception)
@@ -85,11 +79,6 @@ namespace DCSFlightpanels.Windows
             TextBoxDCSBIOSToIP.TextChanged += DcsBiosDirty;
             TextBoxDCSBIOSFromPort.TextChanged += DcsBiosDirty;
             TextBoxDCSBIOSToPort.TextChanged += DcsBiosDirty;
-            
-            TextBoxSRSFromIP.TextChanged += SrsDirty;
-            TextBoxSRSToIP.TextChanged += SrsDirty;
-            TextBoxSRSFromPort.TextChanged += SrsDirty;
-            TextBoxSRSToPort.TextChanged += SrsDirty;
         }
 
         private void LoadSettings()
@@ -143,13 +132,6 @@ namespace DCSFlightpanels.Windows
                 TextBoxDCSBIOSFromPort.Text = Settings.Default.DCSBiosPortFrom;
                 TextBoxDCSBIOSToPort.Text = Settings.Default.DCSBiosPortTo;
             }
-            if (Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled))
-            {
-                TextBoxSRSFromIP.Text = Settings.Default.SRSIpFrom;
-                TextBoxSRSToIP.Text = Settings.Default.SRSIpTo;
-                TextBoxSRSFromPort.Text = Settings.Default.SRSPortFrom.ToString();
-                TextBoxSRSToPort.Text = Settings.Default.SRSPortTo.ToString();
-            }
         }
 
         private void GeneralSettings_OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -160,11 +142,6 @@ namespace DCSFlightpanels.Windows
         private void DCSBIOS_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             CollapseAllSettingsPanelExcept(StackPanelDCSBIOSSettings);
-        }
-
-        private void SRS_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            CollapseAllSettingsPanelExcept(StackPanelSRSSettings);
         }
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
@@ -178,7 +155,6 @@ namespace DCSFlightpanels.Windows
             try
             {
                 CheckValuesDCSBIOS();
-                CheckValuesSRS();
 
                 if (GeneralChanged)
                 {
@@ -242,16 +218,7 @@ namespace DCSFlightpanels.Windows
                     Settings.Default.DCSBiosPortTo = PortToDCSBIOS;
                     Settings.Default.Save();
                 }
-
-                if (SRSChanged)
-                {
-                    Settings.Default.SRSIpFrom = IpAddressFromSRS;
-                    Settings.Default.SRSPortFrom = int.Parse(PortFromSRS);
-                    Settings.Default.SRSIpTo = IpAddressToSRS;
-                    Settings.Default.SRSPortTo = int.Parse(PortToSRS);
-                    Settings.Default.Save();
-                }
-
+                
                 if (StreamDeckChanged)
                 {
                     Settings.Default.Save();
@@ -401,77 +368,7 @@ namespace DCSFlightpanels.Windows
                 throw new Exception($"DCS-BIOS Error checking values : {Environment.NewLine}{ex.Message}");
             }
         }
-
-        private void CheckValuesSRS()
-        {
-            try
-            {
-                IPAddress ipAddress;
-                if (string.IsNullOrEmpty(TextBoxSRSFromIP.Text))
-                {
-                    throw new Exception("SRS IP address from cannot be empty");
-                }
-                if (string.IsNullOrEmpty(TextBoxSRSToIP.Text))
-                {
-                    throw new Exception("SRS IP address to cannot be empty");
-                }
-                if (string.IsNullOrEmpty(TextBoxSRSFromPort.Text))
-                {
-                    throw new Exception("SRS Port from cannot be empty");
-                }
-                if (string.IsNullOrEmpty(TextBoxSRSToPort.Text))
-                {
-                    throw new Exception("SRS Port to cannot be empty");
-                }
-                try
-                {
-                    if (!IPAddress.TryParse(TextBoxSRSFromIP.Text, out ipAddress))
-                    {
-                        throw new Exception();
-                    }
-                    IpAddressFromSRS = TextBoxSRSFromIP.Text;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"SRS Error while checking IP from : {ex.Message}");
-                }
-                try
-                {
-                    if (!IPAddress.TryParse(TextBoxSRSToIP.Text, out ipAddress))
-                    {
-                        throw new Exception();
-                    }
-                    IpAddressToSRS = TextBoxSRSToIP.Text;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"SRS Error while checking IP to : {ex.Message}");
-                }
-                try
-                {
-                    var test = Convert.ToInt32(TextBoxSRSFromPort.Text);
-                    PortFromSRS = TextBoxSRSFromPort.Text;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"SRS Error while Port from : {ex.Message}");
-                }
-                try
-                {
-                    var test = Convert.ToInt32(TextBoxSRSFromPort.Text);
-                    PortToSRS = TextBoxSRSToPort.Text;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"SRS Error while Port to : {ex.Message}");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"SRS Error checking values : {Environment.NewLine}{ex.Message}");
-            }
-        }
-
+        
         private void DcsBiosDirty(object sender, TextChangedEventArgs e)
         {
             DCSBIOSChanged = true;
@@ -480,7 +377,6 @@ namespace DCSFlightpanels.Windows
 
         private void SrsDirty(object sender, TextChangedEventArgs e)
         {
-            SRSChanged = true;
             ButtonOk.IsEnabled = true;
         }
 
@@ -504,7 +400,6 @@ namespace DCSFlightpanels.Windows
         {
             StackPanelGeneralSettings.Visibility = Visibility.Collapsed;
             StackPanelDCSBIOSSettings.Visibility = Visibility.Collapsed;
-            StackPanelSRSSettings.Visibility = Visibility.Collapsed;
         
             visibleStackPanel.Visibility = Visibility.Visible;
         }

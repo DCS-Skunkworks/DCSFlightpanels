@@ -30,12 +30,11 @@ Saitek / Logitech Panels Supported:
 * PZ55 Switch Panel (DCS-BIOS & KeyEmulator**)
 * PZ70 Multi Panel (DCS-BIOS & KeyEmulator**)
 * TPM (DCS-BIOS & KeyEmulator)
-* PZ69 Radio Panel (DCS-BIOS & KeyEmulator** & KeyEmulator_SRS***)
+* PZ69 Radio Panel (DCS-BIOS & KeyEmulator**)
 * BIP Back Lit Information Panel (DCS-BIOS & KeyEmulator****)
 * Farming Simulator Side Panel
 
 - **	LCD information can not be shown in key emulator (KeyEmulator) mode (no data from game available)
-- ***	Simple Radio Standalone can be controlled with Radio Panel when using mode KeyEmulator_SRS.
 - ****	BIP can be linked to PZ69 (keyemulator), PZ55, PZ70, TPM so that switching changes LEDs.
 
 * For Mods use FC3 Profile

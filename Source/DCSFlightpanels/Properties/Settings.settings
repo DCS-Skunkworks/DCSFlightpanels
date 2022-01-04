@@ -53,18 +53,6 @@
     <Setting Name="RunMinimized" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="SRSIpFrom" Type="System.String" Scope="User">
-      <Value Profile="(Default)">127.0.0.1</Value>
-    </Setting>
-    <Setting Name="SRSIpTo" Type="System.String" Scope="User">
-      <Value Profile="(Default)">127.0.0.1</Value>
-    </Setting>
-    <Setting Name="SRSPortFrom" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">7082</Value>
-    </Setting>
-    <Setting Name="SRSPortTo" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">9040</Value>
-    </Setting>
     <Setting Name="LastGitHubCheck" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)">2018-01-01</Value>
     </Setting>

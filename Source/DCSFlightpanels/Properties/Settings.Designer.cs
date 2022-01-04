@@ -12,7 +12,7 @@ namespace DCSFlightpanels.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -224,54 +224,6 @@ namespace DCSFlightpanels.Properties {
             }
             set {
                 this["RunMinimized"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
-        public string SRSIpFrom {
-            get {
-                return ((string)(this["SRSIpFrom"]));
-            }
-            set {
-                this["SRSIpFrom"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
-        public string SRSIpTo {
-            get {
-                return ((string)(this["SRSIpTo"]));
-            }
-            set {
-                this["SRSIpTo"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("7082")]
-        public int SRSPortFrom {
-            get {
-                return ((int)(this["SRSPortFrom"]));
-            }
-            set {
-                this["SRSPortFrom"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("9040")]
-        public int SRSPortTo {
-            get {
-                return ((int)(this["SRSPortTo"]));
-            }
-            set {
-                this["SRSPortTo"] = value;
             }
         }
         

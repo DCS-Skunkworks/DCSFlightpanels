@@ -95,7 +95,7 @@ namespace DCS_BIOS
 
         private static void ReadDataFromJsonFile(string filename)
         {
-            if (DCSBIOSProfileLoadStatus.IsLoaded(filename) || filename == DCSFPProfile.GetKeyEmulator().JSONFilename || filename == DCSFPProfile.GetKeyEmulatorSRS().JSONFilename || filename == DCSFPProfile.GetNoFrameLoadedYet().JSONFilename)
+            if (DCSBIOSProfileLoadStatus.IsLoaded(filename) || filename == DCSFPProfile.GetKeyEmulator().JSONFilename || filename == DCSFPProfile.GetNoFrameLoadedYet().JSONFilename)
             {
                 return;
             }

@@ -353,15 +353,9 @@
             {
                 Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
             }
-            else if (DCSFPProfile.IsKeyEmulatorSRS(Profile))
-            {
-                Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
-                Common.SetEmulationModes(EmulationMode.SRSEnabled);
-            }
             else if (DCSFPProfile.IsFlamingCliff(Profile))
             {
-                Common.SetEmulationModes(EmulationMode.SRSEnabled);
-                Common.SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled);
+                Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
             }
             else
             {
