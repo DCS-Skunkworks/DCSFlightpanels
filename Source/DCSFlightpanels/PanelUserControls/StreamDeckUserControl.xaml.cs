@@ -200,7 +200,7 @@
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void SettingsModified(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelInfoArgs e)
         {
             try
             {
@@ -212,7 +212,7 @@
             }
         }
         
-        public void SettingsApplied(object sender, PanelEventArgs e)
+        public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
             {
@@ -227,9 +227,9 @@
             }
         }
 
-        public void DeviceAttached(object sender, PanelEventArgs e) { }
+        public void DeviceAttached(object sender, PanelInfoArgs e) { }
 
-        public void DeviceDetached(object sender, PanelEventArgs e) { }
+        public void DeviceDetached(object sender, PanelInfoArgs e) { }
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {

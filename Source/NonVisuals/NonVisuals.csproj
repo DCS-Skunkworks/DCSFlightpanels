@@ -96,12 +96,14 @@
     <Compile Include="EventArgs\ForwardPanelEventArgs.cs" />
     <Compile Include="EventArgs\PanelBindingReadFromFileEventArgs.cs" />
     <Compile Include="EventArgs\PanelEventArgs.cs" />
+    <Compile Include="EventArgs\PanelInfoArgs.cs" />
     <Compile Include="EventArgs\SwitchesChangedEventArgs.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericPanelBinding.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
     <Compile Include="Interfaces\IHardwareConflictResolver.cs" />
     <Compile Include="Interfaces\IOledImageListener.cs" />
+    <Compile Include="Interfaces\IPanelEventListener.cs" />
     <Compile Include="Interfaces\ISettingsModifiedListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonActionListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />

@@ -7,16 +7,36 @@ namespace NonVisuals.EventArgs
 {
     public static class AppEventHandler
     {
+        /*
+         * Used by by HIDHandler and others to announce a certain event regarding a panel. 
+         */
+        public delegate void PanelFoundEventHandler(object sender, PanelEventArgs e);
+
+        public static event PanelFoundEventHandler OnPanelFound;
+        public static void PanelFound(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum, PanelEventType panelEventType)
+        {
+            OnPanelFound?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum, EventType = panelEventType});
+        }
+
+        public static void AttachPanelFoundListener(IPanelEventListener panelEventListener)
+        {
+            OnPanelFound += panelEventListener.PanelEvent;
+        }
+
+        public static void DetachPanelFoundListener(IPanelEventListener panelEventListener)
+        {
+            OnPanelFound -= panelEventListener.PanelEvent;
+        }
 
         /*
          * Used by ProfileHandler to detect changes in panel configurations.
          */
-        public delegate void SettingsHasModifiedEventHandler(object sender, PanelEventArgs e);
+        public delegate void SettingsHasModifiedEventHandler(object sender, PanelInfoArgs e);
 
         public static event SettingsHasModifiedEventHandler OnSettingsModified;
         public static void SettingsChanged(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
         {
-            OnSettingsModified?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
+            OnSettingsModified?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
         }
 
         public static void AttachSettingsModified(ISettingsModifiedListener settingsModifiedListener)
@@ -166,13 +186,13 @@ namespace NonVisuals.EventArgs
          * Used for notifying when a device has been attached.
          * Not used atm.
          */
-        public delegate void DeviceAttachedEventHandler(object sender, PanelEventArgs e);
+        public delegate void DeviceAttachedEventHandler(object sender, PanelInfoArgs e);
 
         public static event DeviceAttachedEventHandler OnDeviceAttachedA;
         public static void DeviceAttached(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
         {
             // IsAttached = true;
-            OnDeviceAttachedA?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
+            OnDeviceAttachedA?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
         }
 
 
@@ -180,25 +200,25 @@ namespace NonVisuals.EventArgs
          * Used for notifying when a device has been detached.
          * Not used atm.
          */
-        public delegate void DeviceDetachedEventHandler(object sender, PanelEventArgs e);
+        public delegate void DeviceDetachedEventHandler(object sender, PanelInfoArgs e);
 
         public static event DeviceDetachedEventHandler OnDeviceDetachedA;
         public static void DeviceDetached(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
         {
             // IsAttached = false;
-            OnDeviceDetachedA?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
+            OnDeviceDetachedA?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
         }
 
         /*
          * Used by some UserControls to know when panels have loaded their configurations.
          * Used by MainWindow to SetFormstate().
          */
-        public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelEventArgs e);
+        public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelInfoArgs e);
 
         public static event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
         public static void SettingsApplied(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
         {
-            OnSettingsAppliedA?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
+            OnSettingsAppliedA?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
         }
 
         /*

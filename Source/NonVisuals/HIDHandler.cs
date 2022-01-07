@@ -20,7 +20,7 @@
 
         public static HIDHandler GetInstance()
         {
-            return _instance ?? (_instance = new HIDHandler());
+            return _instance ??= new HIDHandler();
         }
 
         public HIDHandler()
@@ -70,8 +70,13 @@
                             {
                                 var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, instanceId);
                                 HIDSkeletons.Add(hidSkeleton);
+
+                                //Only these needs this hid library, Stream Deck uses an other. But Stream Deck is added in order to have references.
                                 if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.Saitek || hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.MadCatz)
                                 {
+                                    hidDevice.Inserted += hidSkeleton.HIDDeviceOnInserted;
+                                    hidDevice.Removed += hidSkeleton.HIDDeviceOnRemoved;
+
                                     hidSkeleton.HIDReadDevice = hidDevice;
                                     hidSkeleton.HIDReadDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
                                     hidSkeleton.HIDReadDevice.MonitorDeviceEvents = true;
@@ -81,6 +86,8 @@
                                     hidSkeleton.HIDWriteDevice.MonitorDeviceEvents = true;
                                 }
                             }
+
+
                         }
                     }
                 }
@@ -90,7 +97,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
+        
         public void Shutdown()
         {
             try

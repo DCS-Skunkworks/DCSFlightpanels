@@ -38,7 +38,7 @@
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
+        
         public GamingPanelSkeleton PanelInfo
         {
             get => _gamingPanelSkeleton;
@@ -53,6 +53,16 @@
         public GamingPanelSkeleton GamingPanelSkeleton => _gamingPanelSkeleton;
 
         public bool PanelHasBeenInstantiated { get; set; }
+
+        public void HIDDeviceOnInserted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HIDDeviceOnRemoved()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
