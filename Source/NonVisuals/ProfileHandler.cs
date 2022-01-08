@@ -77,33 +77,6 @@
         public void Init()
         {
             DCSBIOSControlLocator.JSONDirectory = _dcsbiosJSONDirectory;
-
-            if (!LoadProfile(_lastProfileUsed))
-            {
-                CreateNewProfile();
-            }
-        }
-
-        public void CreateNewProfile()
-        {
-            /*var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
-            if (chooseProfileModuleWindow.ShowDialog() == true)
-            {
-                if (IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
-                {
-                    return;
-                }
-
-                _isNewProfile = true;
-                ClearAll();
-                Profile = DCSFPProfile.GetNoFrameLoadedYet(); // Just a default that doesn't remove non emulation panels from the GUI
-
-                // This sends info to all to clear their settings
-                AppEventHandler.ClearPanelSettings(this);
-
-                Profile = chooseProfileModuleWindow.Profile;
-                AppEventHandler.AirframeSelected(this, Profile);
-            }*/
         }
 
         public string OpenProfile()
@@ -131,6 +104,21 @@
             }
 
             return null;
+        }
+
+        public void NewProfile()
+        {
+            if (IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+            {
+                return;
+            }
+
+            _isNewProfile = true;
+            ClearAll();
+            Profile = DCSFPProfile.GetNoFrameLoadedYet(); // Just a default that doesn't remove non emulation panels from the GUI
+
+            // This sends info to all to clear their settings
+            AppEventHandler.ClearPanelSettings(this);
         }
 
         public void SettingsModified(object sender, PanelInfoArgs e)

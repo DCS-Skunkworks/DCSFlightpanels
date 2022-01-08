@@ -297,7 +297,21 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
+        private void CreateNewProfile()
+        {
+            var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
+            if (chooseProfileModuleWindow.ShowDialog() == true)
+            {
+                _profileHandler.NewProfile();
+                _profileHandler.Profile = chooseProfileModuleWindow.Profile;
+                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
+                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
+            }
+
+            SetWindowState();
+        }
+
         private void SetApplicationMode(DCSFPProfile dcsfpProfile)
         {
             if (!IsLoaded)
@@ -1976,7 +1990,7 @@
                 }
                 else if (e.Key == Key.N && Keyboard.Modifiers == ModifierKeys.Control)
                 {
-                    _profileHandler.CreateNewProfile();
+                    CreateNewProfile();
                 }
             }
             catch (Exception ex)
