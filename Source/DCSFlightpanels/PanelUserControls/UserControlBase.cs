@@ -26,9 +26,6 @@ namespace DCSFlightpanels.PanelUserControls
                 }
             }
         }
-
-        public UserControlBase()
-        {}
         
         protected virtual void Dispose(bool disposing)
         {

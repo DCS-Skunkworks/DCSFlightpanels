@@ -1,6 +1,4 @@
-﻿using NonVisuals.Windows;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
     using System;
     using System.Collections.Generic;
@@ -88,13 +86,24 @@ namespace NonVisuals
 
         public void CreateNewProfile()
         {
-            var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
+            /*var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
             if (chooseProfileModuleWindow.ShowDialog() == true)
             {
-                NewProfile();
+                if (IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                {
+                    return;
+                }
+
+                _isNewProfile = true;
+                ClearAll();
+                Profile = DCSFPProfile.GetNoFrameLoadedYet(); // Just a default that doesn't remove non emulation panels from the GUI
+
+                // This sends info to all to clear their settings
+                AppEventHandler.ClearPanelSettings(this);
+
                 Profile = chooseProfileModuleWindow.Profile;
                 AppEventHandler.AirframeSelected(this, Profile);
-            }
+            }*/
         }
 
         public string OpenProfile()
@@ -135,22 +144,7 @@ namespace NonVisuals
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void NewProfile()
-        {
-            if (IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
-            {
-                return;
-            }
-
-            _isNewProfile = true;
-            ClearAll();
-            Profile = DCSFPProfile.GetNoFrameLoadedYet(); // Just a default that doesn't remove non emulation panels from the GUI
-
-            // This sends info to all to clear their settings
-            AppEventHandler.ClearPanelSettings(this);
-        }
-
+        
         public void ClearAll()
         {
             _profileFileInstanceIDs.Clear();

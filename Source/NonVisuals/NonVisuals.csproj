@@ -259,9 +259,6 @@
     <Compile Include="Saitek\OSCommandBindingPZ69FullEmulator.cs" />
     <Compile Include="Saitek\OSCommandBindingPZ70.cs" />
     <Compile Include="Saitek\OSCommandBindingTPM.cs" />
-    <Compile Include="Windows\ChooseProfileModuleWindow.xaml.cs">
-      <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="flightpanels02_8Rc_icon.ico" />
@@ -298,12 +295,6 @@
     </None>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Page Include="Windows\ChooseProfileModuleWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

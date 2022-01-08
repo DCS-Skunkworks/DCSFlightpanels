@@ -87,14 +87,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -153,6 +151,9 @@
     <Compile Include="ContextMenuPanelTextBox.cs" />
     <Compile Include="Windows\BindingsMappingWindow.xaml.cs">
       <DependentUpon>BindingsMappingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ChooseProfileModuleWindow.xaml.cs">
+      <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DCSBIOSInputControlsWindow.xaml.cs">
       <DependentUpon>DCSBIOSInputControlsWindow.xaml</DependentUpon>
@@ -355,6 +356,10 @@
     <Page Include="Windows\BindingsMappingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ChooseProfileModuleWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\DCSBIOSInputControlsWindow.xaml">
       <SubType>Designer</SubType>

@@ -6,7 +6,7 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
-namespace NonVisuals.Windows
+namespace DCSFlightpanels.Windows
 {
     /// <summary>
     /// Interaction logic for ChooseProfileModuleWindow.xaml
