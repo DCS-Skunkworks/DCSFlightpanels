@@ -177,10 +177,10 @@
                 _profileHandler.Init();
                 //SearchForPanels();
                 
-                /*if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
+                if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
                 {
                     CreateNewProfile();
-                }*/
+                }
 
                 _dcsfpProfile = _profileHandler.Profile;
 

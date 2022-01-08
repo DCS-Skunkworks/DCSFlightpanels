@@ -120,6 +120,7 @@
     <Compile Include="PanelUserControls\FarmingPanelUserControl.xaml.cs">
       <DependentUpon>FarmingPanelUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProfileHandler.cs" />
     <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMi24P.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlMi24P.xaml</DependentUpon>
     </Compile>

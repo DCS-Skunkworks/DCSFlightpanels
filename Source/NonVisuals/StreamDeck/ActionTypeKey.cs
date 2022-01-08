@@ -76,7 +76,7 @@
             if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
             {
                 PluginManager.DoEvent(
-                    ProfileHandler.SelectedProfile().Description,
+                    DCSFPProfile.SelectedProfile.Description,
                     StreamDeckPanelInstance.HIDInstanceId,
                     (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
                     (int)StreamDeckButtonName,

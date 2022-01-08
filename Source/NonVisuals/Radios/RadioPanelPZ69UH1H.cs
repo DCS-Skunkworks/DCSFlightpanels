@@ -3109,7 +3109,7 @@ namespace NonVisuals.Radios
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
                         PluginManager.DoEvent(
-                            ProfileHandler.SelectedProfile().Description,
+                            DCSFPProfile.SelectedProfile.Description,
                             HIDInstanceId,
                             (int)PluginGamingPanelEnum.PZ69RadioPanel,
                             (int)radioPanelKnob.RadioPanelPZ69Knob,

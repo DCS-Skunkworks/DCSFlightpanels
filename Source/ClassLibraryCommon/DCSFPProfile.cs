@@ -10,7 +10,9 @@
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private static readonly List<DCSFPProfile> ModulesList = new();
-        
+
+        public static DCSFPProfile SelectedProfile { get; set; }
+
         private DCSFPProfile(int id, string description, string jsonFilename)
         {
             ID = id;

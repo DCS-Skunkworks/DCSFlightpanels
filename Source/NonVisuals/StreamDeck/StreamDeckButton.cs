@@ -141,7 +141,7 @@ namespace NonVisuals.StreamDeck
                 if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        ProfileHandler.SelectedProfile().Description,
+                        DCSFPProfile.SelectedProfile.Description,
                         StreamDeckPanelInstance.HIDInstanceId,
                         (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
                         (int)StreamDeckButtonName,
@@ -219,7 +219,7 @@ namespace NonVisuals.StreamDeck
                     };
  
                     PluginManager.DoEvent(
-                        ProfileHandler.SelectedProfile().Description,
+                        DCSFPProfile.SelectedProfile.Description,
                         StreamDeckPanelInstance.HIDInstanceId,
                         (int)pluginPanel,
                         (int)StreamDeckButtonName,

@@ -458,7 +458,7 @@
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                ProfileHandler.SelectedProfile().Description, 
+                                DCSFPProfile.SelectedProfile.Description, 
                                 HIDInstanceId, 
                                 (int)PluginGamingPanelEnum.PZ55SwitchPanel, 
                                 (int)switchPanelKey.SwitchPanelPZ55Key, 
@@ -474,7 +474,7 @@
                 if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        ProfileHandler.SelectedProfile().Description,
+                        DCSFPProfile.SelectedProfile.Description,
                         HIDInstanceId,
                         (int)PluginGamingPanelEnum.PZ55SwitchPanel,
                         (int)switchPanelKey.SwitchPanelPZ55Key,

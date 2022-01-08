@@ -96,7 +96,7 @@ namespace NonVisuals.EventArgs
 
         public static event SavePanelSettingsEventHandler OnSavePanelSettings;
 
-        public static void SavePanelSettings(ProfileHandler profileHandler)
+        public static void SavePanelSettings(IProfileHandler profileHandler)
         {
             OnSavePanelSettings?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
         }
@@ -105,7 +105,7 @@ namespace NonVisuals.EventArgs
 
         public static event SavePanelSettingsEventHandlerJSON OnSavePanelSettingsJSON;
 
-        public static void SavePanelSettingsJSON(ProfileHandler profileHandler)
+        public static void SavePanelSettingsJSON(IProfileHandler profileHandler)
         {
             OnSavePanelSettingsJSON?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
         }

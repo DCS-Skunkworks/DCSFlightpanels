@@ -104,6 +104,7 @@
     <Compile Include="Interfaces\IHardwareConflictResolver.cs" />
     <Compile Include="Interfaces\IOledImageListener.cs" />
     <Compile Include="Interfaces\IPanelEventListener.cs" />
+    <Compile Include="Interfaces\IProfileHandler.cs" />
     <Compile Include="Interfaces\ISettingsModifiedListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonActionListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />
@@ -194,7 +195,6 @@
     <Compile Include="Saitek\BIPLight.cs" />
     <Compile Include="Saitek\PanelSwitchOnOff.cs" />
     <Compile Include="PerformanceTimer.cs" />
-    <Compile Include="ProfileHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

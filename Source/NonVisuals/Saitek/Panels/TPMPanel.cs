@@ -240,7 +240,7 @@
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                ProfileHandler.SelectedProfile().Description, 
+                                DCSFPProfile.SelectedProfile.Description, 
                                 HIDInstanceId, 
                                 (int)PluginGamingPanelEnum.TPM, 
                                 (int)tpmPanelSwitch.TPMSwitch, 
@@ -255,7 +255,7 @@
                 if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        ProfileHandler.SelectedProfile().Description,
+                        DCSFPProfile.SelectedProfile.Description,
                         HIDInstanceId,
                         (int)PluginGamingPanelEnum.TPM,
                         (int)tpmPanelSwitch.TPMSwitch,
