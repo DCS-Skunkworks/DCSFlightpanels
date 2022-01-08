@@ -2,7 +2,7 @@
 {
     using EventArgs = System.EventArgs;
 
-    public class PanelBindingReadFromFileEventArgs : EventArgs
+    public class ProfileLoadedEventArgs : EventArgs
     {
         public GenericPanelBinding PanelBinding { get; set; }
     }

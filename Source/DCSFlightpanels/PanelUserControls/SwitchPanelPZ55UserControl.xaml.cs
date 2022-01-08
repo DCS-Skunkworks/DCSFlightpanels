@@ -192,7 +192,7 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
+        public void ProfileLoaded(object sender, ProfileLoadedEventArgs e)
         {
             try
             {

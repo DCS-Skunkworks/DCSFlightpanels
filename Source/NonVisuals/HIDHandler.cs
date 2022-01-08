@@ -1,4 +1,6 @@
-﻿namespace NonVisuals
+﻿using NonVisuals.EventArgs;
+
+namespace NonVisuals
 {
     using System;
     using System.Collections.Generic;
@@ -71,12 +73,12 @@
                                 var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, instanceId);
                                 HIDSkeletons.Add(hidSkeleton);
 
-                                //Only these needs this hid library, Stream Deck uses an other. But Stream Deck is added in order to have references.
+                                hidDevice.Inserted += hidSkeleton.HIDDeviceOnInserted;
+                                hidDevice.Removed += hidSkeleton.HIDDeviceOnRemoved;
+
+                                //Only Saitek needs this hid library, Stream Deck uses an other. But Stream Deck is added in order to have references.
                                 if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.Saitek || hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.MadCatz)
                                 {
-                                    hidDevice.Inserted += hidSkeleton.HIDDeviceOnInserted;
-                                    hidDevice.Removed += hidSkeleton.HIDDeviceOnRemoved;
-
                                     hidSkeleton.HIDReadDevice = hidDevice;
                                     hidSkeleton.HIDReadDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
                                     hidSkeleton.HIDReadDevice.MonitorDeviceEvents = true;
@@ -85,12 +87,16 @@
                                     hidSkeleton.HIDWriteDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
                                     hidSkeleton.HIDWriteDevice.MonitorDeviceEvents = true;
                                 }
+
+                                //Broadcast that this panel was found.
+                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton.GamingPanelSkeleton.GamingPanelType, PanelEventType.Found);
                             }
-
-
                         }
                     }
                 }
+
+                //Broadcast that panel search is over and all panels have been found that exists.
+                AppEventHandler.PanelEvent(this, null, GamingPanelEnum.Unknown, PanelEventType.AllPanelsFound);
             }
             catch (Exception ex)
             {

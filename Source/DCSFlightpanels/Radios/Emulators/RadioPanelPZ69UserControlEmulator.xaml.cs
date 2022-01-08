@@ -125,7 +125,7 @@ namespace DCSFlightpanels.Radios.Emulators
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) { }
+        public void ProfileLoaded(object sender, ProfileLoadedEventArgs e) { }
         
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
         

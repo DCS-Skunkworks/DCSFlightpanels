@@ -4,7 +4,7 @@
 
     public interface IProfileHandlerListener
     {
-        void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e);
+        void ProfileLoaded(object sender, ProfileLoadedEventArgs e);
         void ProfileSelected(object sender, AirframeEventArgs e);
     }
 }

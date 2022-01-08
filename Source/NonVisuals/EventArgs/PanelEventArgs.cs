@@ -21,6 +21,7 @@
         Detached,
         Found,
         Created,
-        Disposed
+        Disposed,
+        AllPanelsFound
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace NonVisuals
+﻿using NonVisuals.Windows;
+
+namespace NonVisuals
 {
     using System;
     using System.Collections.Generic;
@@ -45,15 +47,17 @@
             get => _dcsfpProfile;
         }
 
-        public ProfileHandler(string dcsbiosJSONDirectory)
+        public ProfileHandler(string dcsbiosJSONDirectory, IHardwareConflictResolver hardwareConflictResolver)
         {
             _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
+            _hardwareConflictResolver = hardwareConflictResolver;
             AppEventHandler.AttachSettingsModified(this);
         }
 
-        public ProfileHandler(string dcsbiosJSONDirectory, string lastProfileUsed)
+        public ProfileHandler(string dcsbiosJSONDirectory, string lastProfileUsed, IHardwareConflictResolver hardwareConflictResolver)
         {
             _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
+            _hardwareConflictResolver = hardwareConflictResolver;
             _lastProfileUsed = lastProfileUsed;
             AppEventHandler.AttachSettingsModified(this);
         }
@@ -75,6 +79,22 @@
         public void Init()
         {
             DCSBIOSControlLocator.JSONDirectory = _dcsbiosJSONDirectory;
+
+            if (!LoadProfile(_lastProfileUsed))
+            {
+                CreateNewProfile();
+            }
+        }
+
+        public void CreateNewProfile()
+        {
+            var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
+            if (chooseProfileModuleWindow.ShowDialog() == true)
+            {
+                NewProfile();
+                Profile = chooseProfileModuleWindow.Profile;
+                AppEventHandler.AirframeSelected(this, Profile);
+            }
         }
 
         public string OpenProfile()
@@ -142,10 +162,10 @@
         }*/
         public bool ReloadProfile()
         {
-            return LoadProfile(null, _hardwareConflictResolver);
+            return LoadProfile(null);
         }
 
-        public bool LoadProfile(string filename, IHardwareConflictResolver hardwareConflictResolver)
+        public bool LoadProfile(string filename)
         {
             try
             {
@@ -155,7 +175,6 @@
                  * 2 Try and open default profile located in My Documents
                  * 3 If none found create default file
                  */
-                _hardwareConflictResolver = hardwareConflictResolver;
 
                 _isNewProfile = false;
                 ClearAll();
@@ -373,7 +392,7 @@
                 {
                     try
                     {
-                        AppEventHandler.SettingsReadFromFile(this, genericPanelBinding);
+                        AppEventHandler.ProfileLoaded(this, genericPanelBinding);
                     }
                     catch (Exception ex)
                     {
@@ -397,7 +416,7 @@
                     {
                         if (genericPanelBinding.PanelType == GamingPanelEnum.PZ69RadioPanel)
                         {
-                            AppEventHandler.SettingsReadFromFile(this, genericPanelBinding);
+                            AppEventHandler.ProfileLoaded(this, genericPanelBinding);
                         }
                     }
                     catch (Exception ex)
@@ -553,7 +572,7 @@
                 File.WriteAllText(_filename, stringBuilder.ToString(), Encoding.ASCII);
                 _isDirty = false;
                 _isNewProfile = false;
-                LoadProfile(_filename, _hardwareConflictResolver);
+                LoadProfile(_filename);
             }
             catch (Exception ex)
             {

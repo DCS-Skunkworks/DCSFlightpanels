@@ -10,22 +10,22 @@ namespace NonVisuals.EventArgs
         /*
          * Used by by HIDHandler and others to announce a certain event regarding a panel. 
          */
-        public delegate void PanelFoundEventHandler(object sender, PanelEventArgs e);
+        public delegate void PanelEventHandler(object sender, PanelEventArgs e);
 
-        public static event PanelFoundEventHandler OnPanelFound;
-        public static void PanelFound(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum, PanelEventType panelEventType)
+        public static event PanelEventHandler OnPanelEvent;
+        public static void PanelEvent(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum, PanelEventType panelEventType)
         {
-            OnPanelFound?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum, EventType = panelEventType});
+            OnPanelEvent?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum, EventType = panelEventType});
         }
 
-        public static void AttachPanelFoundListener(IPanelEventListener panelEventListener)
+        public static void AttachPanelEventListener(IPanelEventListener panelEventListener)
         {
-            OnPanelFound += panelEventListener.PanelEvent;
+            OnPanelEvent += panelEventListener.PanelEvent;
         }
 
-        public static void DetachPanelFoundListener(IPanelEventListener panelEventListener)
+        public static void DetachPanelEventListener(IPanelEventListener panelEventListener)
         {
-            OnPanelFound -= panelEventListener.PanelEvent;
+            OnPanelEvent -= panelEventListener.PanelEvent;
         }
 
         /*
@@ -83,13 +83,13 @@ namespace NonVisuals.EventArgs
         /_/   /_/   \____/_/ /_/_/\___/_/ /_/\__,_/_/ /_/\__,_/_/\___/_/      \__/_/  /_/\__, /\__, /\___/_/   \___/\__,_/   \___/|___/\___/_/ /_/\__/____/  
                                                                                 /____//____/                                                         
          */
-        public delegate void ProfileReadFromFileEventHandler(object sender, PanelBindingReadFromFileEventArgs e);
+        public delegate void ProfileLoadedEventHandler(object sender, ProfileLoadedEventArgs e);
 
-        public static event ProfileReadFromFileEventHandler OnSettingsReadFromFile;
+        public static event ProfileLoadedEventHandler OnProfileLoaded;
 
-        public static void SettingsReadFromFile(object sender, GenericPanelBinding genericPanelBinding)
+        public static void ProfileLoaded(object sender, GenericPanelBinding genericPanelBinding)
         {
-            OnSettingsReadFromFile?.Invoke(sender, new PanelBindingReadFromFileEventArgs { PanelBinding = genericPanelBinding });
+            OnProfileLoaded?.Invoke(sender, new ProfileLoadedEventArgs { PanelBinding = genericPanelBinding });
         }
 
         public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
@@ -130,7 +130,7 @@ namespace NonVisuals.EventArgs
 
         public static void AttachSettingsConsumerListener(GamingPanel gamingPanel)
         {
-            OnSettingsReadFromFile += gamingPanel.PanelBindingReadFromFile;
+            OnProfileLoaded += gamingPanel.ProfileLoaded;
             OnSavePanelSettings += gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON += gamingPanel.SavePanelSettingsJSON;
             OnClearPanelSettings += gamingPanel.ClearPanelSettings;
@@ -139,23 +139,23 @@ namespace NonVisuals.EventArgs
 
         public static void DetachSettingsConsumerListener(GamingPanel gamingPanel)
         {
-            OnSettingsReadFromFile -= gamingPanel.PanelBindingReadFromFile;
+            OnProfileLoaded -= gamingPanel.ProfileLoaded;
             OnSavePanelSettings -= gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON -= gamingPanel.SavePanelSettingsJSON;
             OnClearPanelSettings -= gamingPanel.ClearPanelSettings;
             OnAirframeSelected -= gamingPanel.ProfileSelected;
         }
 
-        public static void AttachSettingsMonitoringListener(IProfileHandlerListener gamingPanelSettingsListener)
+        public static void AttachSettingsMonitoringListener(IProfileHandlerListener profileHandlerListener)
         {
-            OnSettingsReadFromFile += gamingPanelSettingsListener.PanelBindingReadFromFile;
-            OnAirframeSelected += gamingPanelSettingsListener.ProfileSelected;
+            OnProfileLoaded += profileHandlerListener.ProfileLoaded;
+            OnAirframeSelected += profileHandlerListener.ProfileSelected;
         }
 
-        public static void DetachSettingsMonitoringListener(IProfileHandlerListener gamingPanelSettingsListener)
+        public static void DetachSettingsMonitoringListener(IProfileHandlerListener profileHandlerListener)
         {
-            OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelBindingReadFromFile;
-            OnAirframeSelected -= gamingPanelSettingsListener.ProfileSelected;
+            OnProfileLoaded -= profileHandlerListener.ProfileLoaded;
+            OnAirframeSelected -= profileHandlerListener.ProfileSelected;
         }
 
 

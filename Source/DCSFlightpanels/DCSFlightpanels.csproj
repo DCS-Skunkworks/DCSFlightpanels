@@ -154,9 +154,6 @@
     <Compile Include="Windows\BindingsMappingWindow.xaml.cs">
       <DependentUpon>BindingsMappingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ChooseProfileModuleWindow.xaml.cs">
-      <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\DCSBIOSInputControlsWindow.xaml.cs">
       <DependentUpon>DCSBIOSInputControlsWindow.xaml</DependentUpon>
     </Compile>
@@ -356,10 +353,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\BindingsMappingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ChooseProfileModuleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

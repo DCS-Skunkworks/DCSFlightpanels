@@ -101,7 +101,7 @@
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) { }
+        public void ProfileLoaded(object sender, ProfileLoadedEventArgs e) { }
         
         public void SettingsModified(object sender, PanelInfoArgs e) { }
         public void ProfileSelected(object sender, AirframeEventArgs e) { }

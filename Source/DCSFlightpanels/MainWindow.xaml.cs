@@ -24,13 +24,13 @@
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
 
-    using DCSFlightpanels.Interfaces;
-    using DCSFlightpanels.PanelUserControls;
-    using DCSFlightpanels.Properties;
-    using DCSFlightpanels.Radios.Emulators;
-    using DCSFlightpanels.Radios.PreProgrammed;
-    using DCSFlightpanels.Shared;
-    using DCSFlightpanels.Windows;
+    using Interfaces;
+    using PanelUserControls;
+    using Properties;
+    using Radios.Emulators;
+    using Radios.PreProgrammed;
+    using Shared;
+    using Windows;
 
     using Microsoft.Win32;
     using NLog;
@@ -52,7 +52,7 @@
     using Timer = System.Timers.Timer;
     using UserControl = System.Windows.Controls.UserControl;
 
-    public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener , IProfileHandlerListener, IDisposable, IHardwareConflictResolver
+    public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener , IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -85,6 +85,7 @@
 
             AppEventHandler.AttachSettingsMonitoringListener(this);
             AppEventHandler.AttachSettingsModified(this);
+            AppEventHandler.AttachPanelEventListener(this);
             BIOSEventHandler.AttachConnectionListener(this);
         }
         
@@ -104,6 +105,7 @@
                     _statusMessagesTimer.Dispose();
                     _exceptionTimer.Dispose();
                     _dcsBios?.Dispose();
+                    AppEventHandler.DetachPanelEventListener(this);
                     AppEventHandler.DetachSettingsMonitoringListener(this);
                     AppEventHandler.DetachSettingsModified(this);
                     BIOSEventHandler.DetachConnectionListener(this);
@@ -158,28 +160,27 @@
                 /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
                 /*******************************************************************************************/
-                _hidHandler = new HIDHandler();
+                /*_hidHandler = new HIDHandler();
                 if (_doSearchForPanels)
                 {
                     _hidHandler.Startup(Settings.Default.LoadStreamDeck);
                 }
 
-                CreateDCSBIOS();
+                CreateDCSBIOS();*/
                 StartTimers();
 
                 /*******************************************************************************************/
                 /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
                 /*******************************************************************************************/
-                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
+                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed, this);
                 _profileHandler.Init();
-                SearchForPanels();
+                //SearchForPanels();
                 
-                //_profileHandler.AttachUserMessageHandler(this);
-                if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed, this))
+                /*if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
                 {
                     CreateNewProfile();
-                }
+                }*/
 
                 _dcsfpProfile = _profileHandler.Profile;
 
@@ -296,21 +297,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void CreateNewProfile()
-        {
-            var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
-            if (chooseProfileModuleWindow.ShowDialog() == true)
-            {
-                _profileHandler.NewProfile();
-                _profileHandler.Profile = chooseProfileModuleWindow.Profile;
-                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
-            }
-
-            SetWindowState();
-        }
-
+        
         private void SetApplicationMode(DCSFPProfile dcsfpProfile)
         {
             if (!IsLoaded)
@@ -974,7 +961,7 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
+        public void ProfileLoaded(object sender, ProfileLoadedEventArgs e)
         {
             try
             {
@@ -1360,7 +1347,7 @@
             try
             {
                 CloseTabItems();
-                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
+                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, this);
                 _profileHandler.Init();
                 //_profileHandler.AttachUserMessageHandler(this);
                 _dcsfpProfile = _profileHandler.Profile;
@@ -1989,7 +1976,7 @@
                 }
                 else if (e.Key == Key.N && Keyboard.Modifiers == ModifierKeys.Control)
                 {
-                    CreateNewProfile();
+                    _profileHandler.CreateNewProfile();
                 }
             }
             catch (Exception ex)
@@ -2024,6 +2011,38 @@
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        public void PanelEvent(object sender, PanelEventArgs e)
+        {
+            switch (e.EventType)
+            {
+                case PanelEventType.Found:
+                {
+                    break;
+                }
+                case PanelEventType.Attached:
+                {
+                    break;
+                }
+                case PanelEventType.Detached:
+                {
+                    break;
+                }
+                case PanelEventType.Disposed:
+                {
+                    break;
+                }
+                case PanelEventType.Created:
+                {
+                    break;
+                }
+                case PanelEventType.AllPanelsFound:
+                {
+                    break;
+                }
+                default: throw new Exception("Failed to understand PanelEventType in MainWindow");
             }
         }
     }
