@@ -1,4 +1,5 @@
 ﻿using DCSFlightpanels.Properties;
+using DCSFlightpanels.Windows;
 
 namespace NonVisuals
 {
@@ -79,27 +80,52 @@ namespace NonVisuals
         {
             DCSBIOSControlLocator.JSONDirectory = _dcsbiosJSONDirectory;
         }
-        
-        public void NewProfile()
+
+        public void SettingsModified(object sender, PanelInfoArgs e)
         {
-            if (IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+            try
             {
-                return;
+                IsDirty = true;
             }
-
-            _isNewProfile = true;
-            ClearAll();
-            Profile = DCSFPProfile.GetNoFrameLoadedYet(); // Just a default that doesn't remove non emulation panels from the GUI
-
-            // This sends info to all to clear their settings
-            AppEventHandler.ClearPanelSettings(this);
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
 
-        public string OpenProfile()
+        public void ClearAll()
+        {
+            _profileFileInstanceIDs.Clear();
+        }
+
+        public bool ReloadProfile()
+        {
+            return LoadProfile(null);
+        }
+
+        public bool CloseProfile()
         {
             if (IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
             {
-                return null;
+                return false;
+            }
+
+            BindingMappingManager.ClearBindings();
+            Profile = DCSFPProfile.GetNoFrameLoadedYet();
+
+            _profileLoaded = false;
+            _isNewProfile = false;
+            _profileFileInstanceIDs.Clear();
+            AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileClosed, null, DCSFPProfile.GetNoFrameLoadedYet());
+
+            return true;
+        }
+
+        public void OpenProfile()
+        {
+            if (!CloseProfile())
+            {
+                return;
             }
 
             var tempDirectory = string.IsNullOrEmpty(Settings.Default.LastProfileDialogLocation) ? Constants.PathRootDriveC : Settings.Default.LastProfileDialogLocation;
@@ -116,35 +142,36 @@ namespace NonVisuals
             {
                 Settings.Default.LastProfileDialogLocation = Path.GetDirectoryName(openFileDialog.FileName);
                 Settings.Default.Save();
-                return openFileDialog.FileName;
+                LoadProfile(openFileDialog.FileName);
             }
-
-            return null;
         }
 
-        public void SettingsModified(object sender, PanelInfoArgs e)
+        public void CreateNewProfile()
         {
-            try
+            if (!CloseProfile())
             {
-                IsDirty = true;
+                return;
             }
-            catch (Exception ex)
+
+            var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
+            if (chooseProfileModuleWindow.ShowDialog() == true)
             {
-                Common.ShowErrorMessageBox(ex);
+                _isNewProfile = true;
+                Profile = chooseProfileModuleWindow.Profile;
+
+                AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileTypeChosen, null, Profile);
             }
-        }
-        
-        public void ClearAll()
-        {
-            _profileFileInstanceIDs.Clear();
-        }
-        
-        public bool ReloadProfile()
-        {
-            return LoadProfile(null);
         }
 
-        public bool LoadProfile(string filename)
+        public void FindProfile()
+        {
+            if (!LoadProfile(Settings.Default.LastProfileFileUsed))
+            {
+                CreateNewProfile();
+            }
+        }
+
+        private bool LoadProfile(string filename)
         {
             try
             {
@@ -317,9 +344,9 @@ namespace NonVisuals
                 }
 
                 Profile = tmpProfile;
-                CheckHardwareConflicts();
 
-                SendBindingsReadEvent();
+                AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileTypeChosen, null, Profile);
+
                 return true;
             }
             catch (Exception ex)
@@ -363,7 +390,7 @@ namespace NonVisuals
 
         public void SendBindingsReadEvent()
         {
-            try
+            /*try
             {
                 AppEventHandler.AirframeSelected(this, _dcsfpProfile);
 
@@ -382,12 +409,12 @@ namespace NonVisuals
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
-            }
+            }*/
         }
 
         public void SendRadioSettings()
         {
-            try
+            /*try
             {
                 foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                 {
@@ -407,7 +434,7 @@ namespace NonVisuals
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
-            }
+            }*/
         }
 
         public bool SaveAsNewProfile()
@@ -592,7 +619,8 @@ namespace NonVisuals
             get => _dcsfpProfile;
             set
             {
-                // Called only when user creates a new profile
+                _dcsfpProfile = value;
+                /*// Called only when user creates a new profile
                 if (!DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile) && value != _dcsfpProfile)
                 {
                     SetIsDirty();
@@ -604,7 +632,7 @@ namespace NonVisuals
                 Common.ResetEmulationModesFlag();
                 SetEmulationModeFlag();
                 DCSBIOSControlLocator.Profile = Profile;
-                AppEventHandler.AirframeSelected(this, _dcsfpProfile);
+                AppEventHandler.AirframeSelected(this, _dcsfpProfile);*/
             }
         }
 

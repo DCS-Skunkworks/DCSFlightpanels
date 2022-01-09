@@ -94,7 +94,7 @@
     <Compile Include="EventArgs\BipPanelRegisteredEventArgs.cs" />
     <Compile Include="EventArgs\DCSBIOSUpdatesMissedEventArgs.cs" />
     <Compile Include="EventArgs\ForwardPanelEventArgs.cs" />
-    <Compile Include="EventArgs\ProfileLoadedEventArgs.cs" />
+    <Compile Include="EventArgs\ProfileEventArgs.cs" />
     <Compile Include="EventArgs\PanelEventArgs.cs" />
     <Compile Include="EventArgs\PanelInfoArgs.cs" />
     <Compile Include="EventArgs\SwitchesChangedEventArgs.cs" />

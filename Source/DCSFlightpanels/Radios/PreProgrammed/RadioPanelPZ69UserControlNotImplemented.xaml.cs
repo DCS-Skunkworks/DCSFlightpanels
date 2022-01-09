@@ -63,7 +63,7 @@
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
 
-        public void ProfileLoaded(object sender, ProfileLoadedEventArgs e){}
+        public void ProfileEvent(object sender, ProfileEventArgs e){}
 
         
 

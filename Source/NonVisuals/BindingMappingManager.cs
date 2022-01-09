@@ -9,6 +9,12 @@
     {
         private static volatile List<GenericPanelBinding> _genericBindings = new List<GenericPanelBinding>();
 
+
+        public static void ClearBindings()
+        {
+            _genericBindings.Clear();
+        }
+
         /*
          * This to be used when loading from file.
          * Checks that bindinghash exists, if not creates it.

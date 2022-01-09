@@ -229,12 +229,12 @@
             IsDirty = false;
         }
 
-        public void ProfileLoaded(object sender, ProfileLoadedEventArgs e)
+        public void ProfileEvent(object sender, ProfileEventArgs e)
         {
-            if (e.PanelBinding.HIDInstance == HIDInstanceId)
+            /*if (e.PanelBinding.HIDInstance == HIDInstanceId)
             {
                 ImportSettings(e.PanelBinding);
-            }
+            }*/
         }
 
         public void ClearPanelSettings(object sender)

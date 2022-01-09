@@ -95,7 +95,7 @@
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void ProfileLoaded(object sender, ProfileLoadedEventArgs e){}
+        public void ProfileEvent(object sender, ProfileEventArgs e){}
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
         

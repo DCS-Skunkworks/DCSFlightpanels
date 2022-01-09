@@ -117,7 +117,7 @@
             }
         }
 
-        public void ProfileLoaded(object sender, ProfileLoadedEventArgs e) {}
+        public void ProfileEvent(object sender, ProfileEventArgs e) {}
 
         public void SettingsCleared(object sender, PanelInfoArgs e){}
 

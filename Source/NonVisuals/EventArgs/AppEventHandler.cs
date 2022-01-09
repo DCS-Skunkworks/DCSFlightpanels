@@ -83,15 +83,15 @@ namespace NonVisuals.EventArgs
         /_/   /_/   \____/_/ /_/_/\___/_/ /_/\__,_/_/ /_/\__,_/_/\___/_/      \__/_/  /_/\__, /\__, /\___/_/   \___/\__,_/   \___/|___/\___/_/ /_/\__/____/  
                                                                                 /____//____/                                                         
          */
-        public delegate void ProfileLoadedEventHandler(object sender, ProfileLoadedEventArgs e);
+        public delegate void ProfileEventHandler(object sender, ProfileEventArgs e);
 
-        public static event ProfileLoadedEventHandler OnProfileLoaded;
+        public static event ProfileEventHandler OnProfileEvent;
 
-        public static void ProfileLoaded(object sender, GenericPanelBinding genericPanelBinding)
+        public static void ProfileEvent(object sender, ProfileEventEnum profileEventType, GenericPanelBinding genericPanelBinding, DCSFPProfile dcsfpProfile)
         {
-            OnProfileLoaded?.Invoke(sender, new ProfileLoadedEventArgs { PanelBinding = genericPanelBinding });
+            OnProfileEvent?.Invoke(sender, new ProfileEventArgs { PanelBinding = genericPanelBinding, ProfileEventType = profileEventType, DCSProfile = dcsfpProfile});
         }
-
+        
         public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
 
         public static event SavePanelSettingsEventHandler OnSavePanelSettings;
@@ -110,52 +110,28 @@ namespace NonVisuals.EventArgs
             OnSavePanelSettingsJSON?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
         }
 
-        public delegate void AirframeSelectedEventHandler(object sender, AirframeEventArgs e);
-
-        public static event AirframeSelectedEventHandler OnAirframeSelected;
-
-        public static void AirframeSelected(object sender, DCSFPProfile dcsfpProfile)
-        {
-            OnAirframeSelected?.Invoke(sender, new AirframeEventArgs { Profile = dcsfpProfile });
-        }
-
-        public delegate void ClearPanelSettingsEventHandler(object sender);
-
-        public static event ClearPanelSettingsEventHandler OnClearPanelSettings;
-
-        public static void ClearPanelSettings(object sender)
-        {
-            OnClearPanelSettings?.Invoke(sender);
-        }
-
         public static void AttachSettingsConsumerListener(GamingPanel gamingPanel)
         {
-            OnProfileLoaded += gamingPanel.ProfileLoaded;
+            OnProfileEvent += gamingPanel.ProfileEvent;
             OnSavePanelSettings += gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON += gamingPanel.SavePanelSettingsJSON;
-            OnClearPanelSettings += gamingPanel.ClearPanelSettings;
-            OnAirframeSelected += gamingPanel.ProfileSelected;
         }
 
         public static void DetachSettingsConsumerListener(GamingPanel gamingPanel)
         {
-            OnProfileLoaded -= gamingPanel.ProfileLoaded;
+            OnProfileEvent -= gamingPanel.ProfileEvent;
             OnSavePanelSettings -= gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON -= gamingPanel.SavePanelSettingsJSON;
-            OnClearPanelSettings -= gamingPanel.ClearPanelSettings;
-            OnAirframeSelected -= gamingPanel.ProfileSelected;
         }
 
         public static void AttachSettingsMonitoringListener(IProfileHandlerListener profileHandlerListener)
         {
-            OnProfileLoaded += profileHandlerListener.ProfileLoaded;
-            OnAirframeSelected += profileHandlerListener.ProfileSelected;
+            OnProfileEvent += profileHandlerListener.ProfileEvent;
         }
 
         public static void DetachSettingsMonitoringListener(IProfileHandlerListener profileHandlerListener)
         {
-            OnProfileLoaded -= profileHandlerListener.ProfileLoaded;
-            OnAirframeSelected -= profileHandlerListener.ProfileSelected;
+            OnProfileEvent -= profileHandlerListener.ProfileEvent;
         }
 
 

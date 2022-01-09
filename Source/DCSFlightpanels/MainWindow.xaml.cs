@@ -156,10 +156,7 @@
                 DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 CheckErrorLogAndDCSBIOSLocation();
-                /*******************************************************************************************/
-                /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
-                /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
-                /*******************************************************************************************/
+                
                 /*_hidHandler = new HIDHandler();
                 if (_doSearchForPanels)
                 {
@@ -168,33 +165,29 @@
 
                 CreateDCSBIOS();*/
                 StartTimers();
-
-                /*******************************************************************************************/
-                /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
-                /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
-                /*******************************************************************************************/
+                
                 _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed, this);
                 _profileHandler.Init();
                 //SearchForPanels();
                 
-                if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
+                /*if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
                 {
                     CreateNewProfile();
-                }
+                }*/
 
-                _dcsfpProfile = _profileHandler.Profile;
+                //_dcsfpProfile = _profileHandler.Profile;
 
                 SetWindowTitle();
                 SetWindowState();
 
-                if (!Common.PartialDCSBIOSEnabled())
+                /*if (!Common.PartialDCSBIOSEnabled())
                 {
                     ShutdownDCSBIOS();
                 }
                 else
                 {
                     StartupDCSBIOS();
-                }
+                }*/
 
                 // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
                 AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
@@ -207,6 +200,8 @@
                 }
 
                 ConfigurePlugins();
+                
+                _profileHandler.FindProfile();
 
                 _isLoaded = true;
             }
@@ -296,20 +291,6 @@
             {
                 Common.ShowErrorMessageBox(ex);
             }
-        }
-
-        private void CreateNewProfile()
-        {
-            var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
-            if (chooseProfileModuleWindow.ShowDialog() == true)
-            {
-                _profileHandler.NewProfile();
-                _profileHandler.Profile = chooseProfileModuleWindow.Profile;
-                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
-            }
-
-            SetWindowState();
         }
 
         private void SetApplicationMode(DCSFPProfile dcsfpProfile)
@@ -975,18 +956,18 @@
             }
         }
 
-        public void ProfileLoaded(object sender, ProfileLoadedEventArgs e)
+        public void ProfileEvent(object sender, ProfileEventArgs e)
         {
             try
             {
-                if (_profileHandler.Profile != _dcsfpProfile)
+                /*if (_profileHandler.Profile != _dcsfpProfile)
                 {
                     _dcsfpProfile = _profileHandler.Profile;
                     SetApplicationMode(_dcsfpProfile);
                 }
 
                 MenuItemUseNS430.IsChecked = _profileHandler.UseNS430;
-                SetWindowState();
+                SetWindowState();*/
             }
             catch (Exception ex)
             {
@@ -1318,7 +1299,8 @@
                 Common.UseGenericRadio = chooseProfileModuleWindow.UseGenericRadio;
                 _profileHandler.Profile = chooseProfileModuleWindow.DCSAirframe;
                 SetWindowState();*/
-                NewProfile();
+                //NewProfile();
+                _profileHandler.CreateNewProfile();
             }
             catch (Exception ex)
             {
@@ -1343,14 +1325,14 @@
         {
             try
             {
-                OpenAnOtherProfile();
+                _profileHandler.OpenProfile();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
+        /*
         private bool CloseProfile()
         {
             if (_profileHandler.IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
@@ -1381,7 +1363,7 @@
 
             return true;
         }
-
+        */
         private void MenuItemCloseProfile_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -1389,7 +1371,7 @@
                 try
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
-                    CloseProfile();
+                    _profileHandler.CloseProfile();
                 }
                 finally
                 {
@@ -1431,7 +1413,7 @@
         {
             try
             {
-                NewProfile();
+                _profileHandler.CreateNewProfile();
             }
             catch (Exception ex)
             {
@@ -1443,14 +1425,14 @@
         {
             try
             {
-                OpenAnOtherProfile();
+                _profileHandler.OpenProfile();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
+        /*
         private void NewProfile()
         {
             try
@@ -1478,7 +1460,7 @@
             var bindingsFile = _profileHandler.OpenProfile();
             RestartWithProfile(bindingsFile);
         }
-
+        
         private void RestartWithProfile(string bindingsFile)
         {
             try
@@ -1500,7 +1482,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
+        */
         private void ButtonImageRefreshMouseDown(object sender, MouseButtonEventArgs e)
         {
             try
@@ -1990,7 +1972,7 @@
                 }
                 else if (e.Key == Key.N && Keyboard.Modifiers == ModifierKeys.Control)
                 {
-                    CreateNewProfile();
+                    _profileHandler.CreateNewProfile();
                 }
             }
             catch (Exception ex)
