@@ -13,9 +13,9 @@ namespace NonVisuals.EventArgs
         public delegate void PanelEventHandler(object sender, PanelEventArgs e);
 
         public static event PanelEventHandler OnPanelEvent;
-        public static void PanelEvent(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum, PanelEventType panelEventType)
+        public static void PanelEvent(object sender, string hidInstanceId, HIDSkeleton hidSkeleton, PanelEventType panelEventType)
         {
-            OnPanelEvent?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum, EventType = panelEventType});
+            OnPanelEvent?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, HidSkeleton = hidSkeleton, EventType = panelEventType});
         }
 
         public static void AttachPanelEventListener(IPanelEventListener panelEventListener)

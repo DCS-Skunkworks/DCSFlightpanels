@@ -23,11 +23,6 @@
         private readonly List<GamingPanel> _gamingPanels;
 
 
-
-
-
-
-
         public BindingsMappingWindow(List<GenericPanelBinding> genericBindings, List<GamingPanel> gamingPanels)
         {
             InitializeComponent();
@@ -82,7 +77,7 @@
             ClearReplacementHardware();
 
             ComboBoxMissingHardware.ItemsSource = null;
-            var missingDevices = _genericBindings.FindAll(o => o.HardwareWasFound == false && o.HasBeenDeleted == false).ToList();
+            var missingDevices = _genericBindings.FindAll(o => o.InUse == false && o.HasBeenDeleted == false).ToList();
             ComboBoxMissingHardware.ItemsSource = missingDevices;
             ComboBoxMissingHardware.Items.Refresh();
             ShowMissingHardwareInformation();
@@ -130,10 +125,10 @@
             var sameTypeOfPanels = _gamingPanels.FindAll(o => o.TypeOfPanel == panelType).ToList();
             foreach (var genericPanelBinding in _genericBindings)
             {
-                if (genericPanelBinding.HardwareWasFound)
+                if (genericPanelBinding.InUse)
                 {
                     //Remove those that has been mapped already so they can't be re-mapped
-                    sameTypeOfPanels.RemoveAll(o => o.HIDInstanceId == genericPanelBinding.HIDInstance);
+                    sameTypeOfPanels.RemoveAll(o => o.HIDInstanceId == genericPanelBinding.HIDInstance && o.TypeOfPanel == genericPanelBinding.PanelType);
                 }
             }
             ComboBoxReplacementHardware.ItemsSource = sameTypeOfPanels;
@@ -216,14 +211,14 @@
                 }
 
                 genericBinding.HIDInstance = gamingPanel.HIDInstanceId;
-                genericBinding.HardwareWasFound = true;
+                genericBinding.InUse = true;
                 var modifiedGenericBinding = new ModifiedGenericBinding(GenericBindingStateEnum.Modified, genericBinding);
                 _modifiedGenericBindings.Add(modifiedGenericBinding);
                 _isDirty = true;
 
                 SystemSounds.Asterisk.Play();
 
-                if (!MissingHardwareFound())
+                if (!BindingMappingManager.UnusedBindingsExists())
                 {
                     Close();
                 }
@@ -237,12 +232,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private bool MissingHardwareFound()
-        {
-            return _genericBindings.FindAll(o => o.HardwareWasFound == false && o.HasBeenDeleted == false).ToList().Count > 0;
-        }
-
+        
         private void ButtonIdentifyPanel_OnClick(object sender, RoutedEventArgs e)
         {
             try

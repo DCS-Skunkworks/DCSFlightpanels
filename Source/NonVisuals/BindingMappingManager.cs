@@ -1,4 +1,7 @@
-﻿namespace NonVisuals
+﻿using System.Linq;
+using NonVisuals.EventArgs;
+
+namespace NonVisuals
 {
     using System.Collections.Generic;
     using System.Windows;
@@ -13,6 +16,28 @@
         public static void ClearBindings()
         {
             _genericBindings.Clear();
+        }
+
+        public static bool UnusedBindingsExists()
+        {
+            return _genericBindings.Any(o => o.InUse == false);
+        }
+
+        public static void SetNotInUse(HIDSkeleton hidSkeleton)
+        {
+            _genericBindings.FindAll(o => o.Match(hidSkeleton)).ToList().ForEach(u => u.InUse = false);
+        }
+
+        public static void SendBinding(HIDSkeleton hidSkeleton)
+        {
+            foreach (var genericPanelBinding in _genericBindings)
+            {
+                if (genericPanelBinding.Match(hidSkeleton))
+                {
+                    genericPanelBinding.InUse = true;
+                    AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding, DCSFPProfile.SelectedProfile);
+                }
+            }
         }
 
         /*
@@ -69,7 +94,7 @@
         {
             foreach (var binding in _genericBindings)
             {
-                if (binding.HIDInstance == genericPanelBinding.HIDInstance)
+                if (binding.Match(genericPanelBinding))
                 {
                     return true;
                 }
@@ -80,30 +105,10 @@
 
         public static bool VerifyBindings(ref bool settingsWereModified)
         {
-            foreach (var genericBinding in _genericBindings)
-            {
-                var found = false;
-
-                foreach (var hidSkeleton in HIDHandler.GetInstance().HIDSkeletons)
-                {
-                    if (genericBinding.HIDInstance == hidSkeleton.InstanceId)
-                    {
-                        genericBinding.HardwareWasFound = true;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found)
-                {
-                    genericBinding.HardwareWasFound = false;
-                }
-            }
-
             var problemsPersists = false;
             foreach (var genericBinding in _genericBindings)
             {
-                if (genericBinding.HardwareWasFound == false)
+                if (genericBinding.InUse == false)
                 {
                     if (!FindSolution(genericBinding, ref settingsWereModified))
                     {
@@ -180,7 +185,7 @@
              * 1) Check, are there multiple such panels where hardware does not match? If so user must map them
              *    If only 1, then we can map it without asking questions.
              */
-            var count = _genericBindings.FindAll(o => (o.HardwareWasFound == false) && (o.PanelType == genericBinding.PanelType)).Count;
+            var count = _genericBindings.FindAll(o => (o.InUse == false) && (o.PanelType == genericBinding.PanelType)).Count;
             if (count == 1)
             {
                 var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType);
@@ -189,6 +194,7 @@
                     // This we can map ourselves!
                     genericBinding.HIDInstance = hidSkeleton.InstanceId;
                     settingsWereModified = true;
+                    genericBinding.InUse = true;
                     MessageBox.Show("USB settings has changed. Please save the profile.", "USB changes found", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else

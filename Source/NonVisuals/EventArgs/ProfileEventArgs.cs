@@ -15,8 +15,8 @@ namespace NonVisuals.EventArgs
 
     public enum ProfileEventEnum
     {
-        ProfileTypeChosen,
         ProfileLoaded,
-        ProfileClosed
+        ProfileClosed,
+        ProfileSettings
     }
 }

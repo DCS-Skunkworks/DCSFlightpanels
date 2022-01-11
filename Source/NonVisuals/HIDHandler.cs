@@ -89,14 +89,14 @@ namespace NonVisuals
                                 }
 
                                 //Broadcast that this panel was found.
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton.GamingPanelSkeleton.GamingPanelType, PanelEventType.Found);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId,  hidSkeleton, PanelEventType.Found);
                             }
                         }
                     }
                 }
 
                 //Broadcast that panel search is over and all panels have been found that exists.
-                AppEventHandler.PanelEvent(this, null, GamingPanelEnum.Unknown, PanelEventType.AllPanelsFound);
+                AppEventHandler.PanelEvent(this, null, null, PanelEventType.AllPanelsFound);
             }
             catch (Exception ex)
             {

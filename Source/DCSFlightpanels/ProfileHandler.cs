@@ -21,7 +21,7 @@ namespace NonVisuals
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
 
-    public class ProfileHandler : ISettingsModifiedListener, IIsDirty, IDisposable, IProfileHandler
+    public class ProfileHandler : ISettingsModifiedListener, IIsDirty, IDisposable, IProfileHandler, IPanelEventListener
     {
         private const string OPEN_FILE_DIALOG_FILE_NAME = "*.bindings";
         private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
@@ -52,6 +52,7 @@ namespace NonVisuals
             _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
             _hardwareConflictResolver = hardwareConflictResolver;
             AppEventHandler.AttachSettingsModified(this);
+            AppEventHandler.AttachPanelEventListener(this);
         }
 
         public ProfileHandler(string dcsbiosJSONDirectory, string lastProfileUsed, IHardwareConflictResolver hardwareConflictResolver)
@@ -60,6 +61,7 @@ namespace NonVisuals
             _hardwareConflictResolver = hardwareConflictResolver;
             _lastProfileUsed = lastProfileUsed;
             AppEventHandler.AttachSettingsModified(this);
+            AppEventHandler.DetachPanelEventListener(this);
         }
 
         protected void Dispose(bool disposing)
@@ -159,7 +161,7 @@ namespace NonVisuals
                 _isNewProfile = true;
                 Profile = chooseProfileModuleWindow.Profile;
 
-                AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileTypeChosen, null, Profile);
+                AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
             }
         }
 
@@ -345,7 +347,7 @@ namespace NonVisuals
 
                 Profile = tmpProfile;
 
-                AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileTypeChosen, null, Profile);
+                AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
 
                 return true;
             }
@@ -412,30 +414,6 @@ namespace NonVisuals
             }*/
         }
 
-        public void SendRadioSettings()
-        {
-            /*try
-            {
-                foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
-                {
-                    try
-                    {
-                        if (genericPanelBinding.PanelType == GamingPanelEnum.PZ69RadioPanel)
-                        {
-                            AppEventHandler.ProfileLoaded(this, genericPanelBinding);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Common.ShowErrorMessageBox(ex, $"Error reading settings. Panel : {genericPanelBinding.PanelType}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }*/
-        }
 
         public bool SaveAsNewProfile()
         {
@@ -671,6 +649,44 @@ namespace NonVisuals
         public void StateSaved()
         {
             _isDirty = false;
+        }
+
+
+        public void PanelEvent(object sender, PanelEventArgs e)
+        {
+            switch (e.EventType)
+            {
+                case PanelEventType.Found:
+                    {
+                        break;
+                    }
+                case PanelEventType.Attached:
+                    {
+                        BindingMappingManager.SendBinding(e.HidSkeleton);
+                        break;
+                    }
+                case PanelEventType.Detached:
+                    {
+                        BindingMappingManager.SetNotInUse(e.HidSkeleton);
+                        break;
+                    }
+                case PanelEventType.Disposed:
+                    {
+                        BindingMappingManager.SetNotInUse(e.HidSkeleton);
+                        break;
+                    }
+                case PanelEventType.Created:
+                    {
+                        BindingMappingManager.SendBinding(e.HidSkeleton);
+                        break;
+                    }
+                case PanelEventType.AllPanelsFound:
+                    {
+                        CheckHardwareConflicts();
+                        break;
+                    }
+                default: throw new Exception("Failed to understand PanelEventType in MainWindow");
+            }
         }
     }
 }
