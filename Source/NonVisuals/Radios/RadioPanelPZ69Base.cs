@@ -273,18 +273,7 @@
         {
             e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
-
-        protected void DeviceAttachedHandler()
-        {
-            Startup();
-            // IsAttached = true;
-        }
-
-        protected void DeviceRemovedHandler()
-        {
-            Dispose();
-            // IsAttached = false;
-        }
+        
 
         protected void Reset(ref long syncVariable)
         {

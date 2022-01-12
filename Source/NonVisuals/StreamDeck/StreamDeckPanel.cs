@@ -220,12 +220,7 @@
         {
             _streamDeckLayerHandler.Export(compressedFilenameAndPath, buttonExports);
         }
-
-        public override void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            _streamDeckLayerHandler.ClearSettings();
-        }
-
+        
         private void StreamDeckKeyListener(object sender, KeyEventArgs e)
         {
             if (sender is not IMacroBoard)
@@ -372,18 +367,6 @@
             // ADD METHOD ?
         }
         
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-            // IsAttached = true;
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose();
-            // IsAttached = false;
-        }
-
         public DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
             return null;

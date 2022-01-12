@@ -1389,20 +1389,7 @@
         {
             SaitekPanelKnobs = MultiPanelKnob.GetMultiPanelKnobs();
         }
-
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-
-            // IsAttached = true;
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose();
-
-            // IsAttached = false;
-        }
+        
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {

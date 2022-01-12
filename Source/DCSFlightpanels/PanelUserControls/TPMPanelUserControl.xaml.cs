@@ -113,11 +113,7 @@
         {
             return GetType().Name;
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-        }
-
+        
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
         }

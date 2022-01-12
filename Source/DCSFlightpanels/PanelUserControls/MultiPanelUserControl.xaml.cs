@@ -93,19 +93,7 @@
         {
             return GetType().Name;
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-                SetApplicationMode();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private void SetApplicationMode()
         {
             if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))

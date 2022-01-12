@@ -89,19 +89,7 @@
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-                //nada
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
+        
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try

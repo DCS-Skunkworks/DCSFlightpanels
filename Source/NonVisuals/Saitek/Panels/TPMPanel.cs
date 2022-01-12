@@ -612,17 +612,7 @@
         {
             TPMSwitchChanged(isFirstReport, hashSet);
         }
-
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose();
-        }
-
+        
         private void CreateSwitchKeys()
         {
             SaitekPanelKnobs = TPMPanelSwitch.GetTPMPanelSwitches();

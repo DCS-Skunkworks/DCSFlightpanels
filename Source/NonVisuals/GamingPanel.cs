@@ -105,7 +105,6 @@
             AppEventHandler.AttachForwardPanelEventListener(this);
             AppEventHandler.AttachSettingsConsumerListener(this);
             BIOSEventHandler.AttachDataListener(this);
-            AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
         }
 
         public void Dispose()
@@ -179,10 +178,7 @@
             AppEventHandler.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
             IsDirty = true;
         }
-
-        public virtual void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-        }
+        
 
         // User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
         public void SetForwardPanelEvent(object sender, ForwardPanelEventArgs e)
@@ -233,16 +229,10 @@
 
         public void ProfileEvent(object sender, ProfileEventArgs e)
         {
-            /*if (e.PanelBinding.HIDInstance == HIDInstanceId)
+            if (e.ProfileEventType == ProfileEventEnum.ProfileSettings && e.PanelBinding.Match(HIDSkeletonBase))
             {
                 ImportSettings(e.PanelBinding);
-            }*/
-        }
-
-        public void ClearPanelSettings(object sender)
-        {
-            ClearSettings();
-            AppEventHandler.SettingsChanged(sender, HIDInstanceId, TypeOfPanel);
+            }
         }
     }
 }

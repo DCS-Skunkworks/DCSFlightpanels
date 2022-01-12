@@ -131,7 +131,7 @@ namespace NonVisuals
             _hardwareConflictResolver = hardwareConflictResolver;
             _lastProfileUsed = lastProfileUsed;
             AppEventHandler.AttachSettingsModified(this);
-            AppEventHandler.DetachPanelEventListener(this);
+            AppEventHandler.AttachPanelEventListener(this);
         }
 
         protected void Dispose(bool disposing)
@@ -139,6 +139,7 @@ namespace NonVisuals
             if (disposing)
             {
                 AppEventHandler.DetachSettingsModified(this);
+                AppEventHandler.DetachPanelEventListener(this);
             }
         }
 
@@ -172,6 +173,8 @@ namespace NonVisuals
 
         public bool ReloadProfile()
         {
+            CloseProfile();
+
             return LoadProfile(null);
         }
 

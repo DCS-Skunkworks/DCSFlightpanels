@@ -77,9 +77,7 @@
         }
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e) { }
-
+        
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try

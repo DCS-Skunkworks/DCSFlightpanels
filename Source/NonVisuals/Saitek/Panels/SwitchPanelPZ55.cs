@@ -891,17 +891,7 @@
         {
             PZ55SwitchChanged(isFirstReport, hashSet);
         }
-
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose();
-        }
-
+        
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
             var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55

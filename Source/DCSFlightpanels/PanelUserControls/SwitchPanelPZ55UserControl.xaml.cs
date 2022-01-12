@@ -65,6 +65,8 @@
             _imageArrayRight[1] = ImagePZ55LEDGreenRight;
             _imageArrayRight[2] = ImagePZ55LEDYellowRight;
             _imageArrayRight[3] = ImagePZ55LEDRedRight;
+
+
         }
 
 
@@ -86,7 +88,8 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
+        private bool _once = true;
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxBills();
@@ -94,6 +97,27 @@
             SetContextMenuClickHandlers();
             UserControlLoaded = true;
             ShowGraphicConfiguration();
+
+            if (_once)
+            {
+                _once = false;
+                foreach (var image in Common.FindVisualChildren<Image>(this))
+                {
+                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
+                    {
+                        image.ContextMenu = null;
+                    }
+                    else
+                    if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+                    {
+                        image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
+                        if (image.ContextMenu != null)
+                        {
+                            image.ContextMenu.Tag = image.Name;
+                        }
+                    }
+                }
+            }
         }
 
         private void LoadComboBoxesManualLeds()
@@ -137,34 +161,7 @@
         {
             return GetType().Name;
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-                foreach (var image in Common.FindVisualChildren<Image>(this))
-                {
-                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
-                    {
-                        image.ContextMenu = null;
-                    }
-                    else
-                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
-                    {
-                        image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
-                        if (image.ContextMenu != null)
-                        {
-                            image.ContextMenu.Tag = image.Name;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try

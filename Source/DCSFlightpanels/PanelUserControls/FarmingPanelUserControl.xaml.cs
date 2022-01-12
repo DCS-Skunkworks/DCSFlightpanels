@@ -93,18 +93,7 @@
         {
             return GetType().Name;
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try

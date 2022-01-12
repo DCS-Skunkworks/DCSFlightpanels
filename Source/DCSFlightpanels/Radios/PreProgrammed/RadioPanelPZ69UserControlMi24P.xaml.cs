@@ -97,7 +97,6 @@
         public void ProfileEvent(object sender, ProfileEventArgs e) { }
         
         public void SettingsModified(object sender, PanelInfoArgs e) { }
-        public void ProfileSelected(object sender, AirframeEventArgs e) { }
         public void SettingsApplied(object sender, PanelInfoArgs e) { }
 
         
