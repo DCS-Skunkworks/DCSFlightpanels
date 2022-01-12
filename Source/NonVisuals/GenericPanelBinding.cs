@@ -15,8 +15,6 @@
         private string _jsonString = string.Empty;
         private bool _hasBeenDeleted;
 
-        
-        private bool _inUse;
 
         public GenericPanelBinding()
         { }
@@ -89,11 +87,7 @@
         /// <summary>
         /// If a panel has been found with matching HID and type this will be true
         /// </summary>
-        public bool InUse
-        {
-            get => _inUse;
-            set => _inUse = value;
-        }
+        public bool InUse { get; set; }
 
         public string SettingsString
         {

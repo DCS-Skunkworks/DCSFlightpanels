@@ -171,11 +171,11 @@ namespace NonVisuals
             _profileFileInstanceIDs.Clear();
         }
 
-        public bool ReloadProfile()
+        public void ReloadProfile()
         {
             CloseProfile();
 
-            return LoadProfile(null);
+            LoadProfile(null);
         }
 
         public bool CloseProfile()

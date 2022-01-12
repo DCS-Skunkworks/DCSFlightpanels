@@ -87,12 +87,15 @@ namespace NonVisuals
                                     hidSkeleton.HIDWriteDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
                                     hidSkeleton.HIDWriteDevice.MonitorDeviceEvents = true;
                                 }
-
-                                //Broadcast that this panel was found.
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId,  hidSkeleton, PanelEventType.Found);
                             }
                         }
                     }
+                }
+
+                foreach (var hidSkeleton in HIDSkeletons)
+                {
+                    //Broadcast that this panel was found.
+                    AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Found);
                 }
 
                 //Broadcast that panel search is over and all panels have been found that exists.

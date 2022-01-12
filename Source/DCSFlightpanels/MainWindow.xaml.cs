@@ -331,7 +331,7 @@
             }
         }
 
-        private int CloseTabItems()
+        private int DisposePanels()
         {
             var closedItemCount = 0;
             try
@@ -1902,11 +1902,6 @@
         {
             try
             {
-                if (e.DCSProfile == DCSFPProfile.GetNoFrameLoadedYet())
-                {
-                    return;
-                }
-
                 switch (e.ProfileEventType)
                 {
                     case ProfileEventEnum.ProfileLoaded:
@@ -1920,7 +1915,7 @@
                     case ProfileEventEnum.ProfileClosed:
                         {
                             SetApplicationMode();
-                            CloseTabItems();
+                            DisposePanels();
                             SetWindowTitle();
                             SetWindowState();
                             break;
