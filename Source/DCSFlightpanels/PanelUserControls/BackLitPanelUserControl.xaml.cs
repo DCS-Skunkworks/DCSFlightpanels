@@ -156,37 +156,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void DeviceAttached(object sender, PanelInfoArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.BackLitPanel && e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (connected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void DeviceDetached(object sender, PanelInfoArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.BackLitPanel && e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (disconnected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private void Init()
         {
             var imageList = Common.FindVisualChildren<Image>(this);

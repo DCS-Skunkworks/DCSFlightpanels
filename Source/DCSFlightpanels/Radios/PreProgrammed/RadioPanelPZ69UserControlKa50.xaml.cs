@@ -103,14 +103,10 @@
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
         
-        public void DeviceAttached(object sender, PanelInfoArgs e) { }
-
         public void SettingsApplied(object sender, PanelInfoArgs e) { }
 
         public void SettingsModified(object sender, PanelInfoArgs e) { }
-
-        public void DeviceDetached(object sender, PanelInfoArgs e) { }
-
+        
         private void SetGraphicsState(HashSet<object> knobs)
         {
             try

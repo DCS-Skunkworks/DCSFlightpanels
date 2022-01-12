@@ -26,19 +26,7 @@
          * Used to show the same color in the UserControl as the physical panels.
          */
         void LedLightChanged(object sender, LedLightChangeEventArgs e);
-
-        /*
-         * Used for notifying when a device has been attached.
-         * Not used atm.
-         */
-        void DeviceAttached(object sender, PanelInfoArgs e);
-
-        /*
-         * Used for notifying when a device has been detached.
-         * Not used atm.
-         */
-        void DeviceDetached(object sender, PanelInfoArgs e);
-
+        
         /*
          * DCS-BIOS has a feature to detect if any updates has been missed.
          * It is not used as such since DCS-BIOS has been working so well.

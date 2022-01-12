@@ -105,6 +105,7 @@
             AppEventHandler.AttachForwardPanelEventListener(this);
             AppEventHandler.AttachSettingsConsumerListener(this);
             BIOSEventHandler.AttachDataListener(this);
+            AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
         }
 
         public void Dispose()
@@ -129,6 +130,7 @@
                 AppEventHandler.DetachForwardPanelEventListener(this);
                 AppEventHandler.DetachSettingsConsumerListener(this);
                 BIOSEventHandler.DetachDataListener(this);
+                AppEventHandler.PanelEvent(this, HIDSkeletonBase.InstanceId, HIDSkeletonBase, PanelEventType.Disposed);
             }
 
             _disposed = true;

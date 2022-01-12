@@ -157,34 +157,7 @@ namespace NonVisuals.EventArgs
         {
             OnSwitchesChangedA?.Invoke(sender, new SwitchesChangedEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum, Switches = hashSet });
         }
-
-        /*
-         * Used for notifying when a device has been attached.
-         * Not used atm.
-         */
-        public delegate void DeviceAttachedEventHandler(object sender, PanelInfoArgs e);
-
-        public static event DeviceAttachedEventHandler OnDeviceAttachedA;
-        public static void DeviceAttached(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
-        {
-            // IsAttached = true;
-            OnDeviceAttachedA?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
-        }
-
-
-        /*
-         * Used for notifying when a device has been detached.
-         * Not used atm.
-         */
-        public delegate void DeviceDetachedEventHandler(object sender, PanelInfoArgs e);
-
-        public static event DeviceDetachedEventHandler OnDeviceDetachedA;
-        public static void DeviceDetached(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
-        {
-            // IsAttached = false;
-            OnDeviceDetachedA?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
-        }
-
+        
         /*
          * Used by some UserControls to know when panels have loaded their configurations.
          * Used by MainWindow to SetFormstate().
@@ -215,20 +188,16 @@ namespace NonVisuals.EventArgs
         // For those that wants to listen to this panel
         public static void AttachGamingPanelListener(IGamingPanelListener gamingPanelListener)
         {
-            OnDeviceAttachedA += gamingPanelListener.DeviceAttached;
             OnSwitchesChangedA += gamingPanelListener.SwitchesChanged;
             OnSettingsAppliedA += gamingPanelListener.SettingsApplied;
-            //OnSettingsClearedA += gamingPanelListener.SettingsCleared;
             OnSettingsModified += gamingPanelListener.SettingsModified;
             OnUpdatesHasBeenMissed += gamingPanelListener.UpdatesHasBeenMissed;
         }
         
         public static void DetachGamingPanelListener(IGamingPanelListener gamingPanelListener)
         {
-            OnDeviceAttachedA -= gamingPanelListener.DeviceAttached;
             OnSwitchesChangedA -= gamingPanelListener.SwitchesChanged;
             OnSettingsAppliedA -= gamingPanelListener.SettingsApplied;
-            //OnSettingsClearedA -= gamingPanelListener.SettingsCleared;
             OnSettingsModified -= gamingPanelListener.SettingsModified;
             OnUpdatesHasBeenMissed -= gamingPanelListener.UpdatesHasBeenMissed;
         }

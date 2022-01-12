@@ -42,6 +42,76 @@ namespace NonVisuals
 
         private readonly IHardwareConflictResolver _hardwareConflictResolver;
 
+        public bool IsNewProfile => _isNewProfile;
+
+        public string Filename
+        {
+            get => _filename;
+            set => _filename = value;
+        }
+        public bool IsDirty
+        {
+            get => _isDirty;
+            set
+            {
+                _isDirty = value;
+            }
+        }
+
+        public DCSFPProfile Profile
+        {
+            get => _dcsfpProfile;
+            set
+            {
+                _dcsfpProfile = value;
+                /*// Called only when user creates a new profile
+                if (!DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile) && value != _dcsfpProfile)
+                {
+                    SetIsDirty();
+                }
+
+                ClearAll();
+                _dcsfpProfile = value;
+                DCSFPProfile.SelectedProfile = value;
+                Common.ResetEmulationModesFlag();
+                SetEmulationModeFlag();
+                DCSBIOSControlLocator.Profile = Profile;
+                AppEventHandler.AirframeSelected(this, _dcsfpProfile);*/
+            }
+        }
+
+        public string LastProfileUsed
+        {
+            get => _lastProfileUsed;
+            set => _lastProfileUsed = value;
+        }
+
+        public string DCSBIOSJSONDirectory
+        {
+            get => DCSBIOSControlLocator.JSONDirectory;
+            set => DCSBIOSControlLocator.JSONDirectory = value;
+        }
+
+        public bool ProfileLoaded => _profileLoaded || _isNewProfile;
+
+        public bool UseNS430
+        {
+            get => Common.IsEmulationModesFlagSet(EmulationMode.NS430Enabled);
+            set
+            {
+                if (value)
+                {
+                    Common.SetEmulationModes(EmulationMode.NS430Enabled);
+                }
+                else
+                {
+                    Common.ClearEmulationModesFlag(EmulationMode.NS430Enabled);
+                }
+
+                SetIsDirty();
+            }
+        }
+
         public static DCSFPProfile ActiveDCSFPProfile
         {
             get => _dcsfpProfile;
@@ -444,13 +514,6 @@ namespace NonVisuals
             AppEventHandler.SavePanelSettingsJSON(this);
         }
 
-        public bool IsNewProfile => _isNewProfile;
-
-        public string Filename
-        {
-            get => _filename;
-            set => _filename = value;
-        }
 
         public void RegisterPanelBinding(GamingPanel gamingPanel, List<string> strings)
         {
@@ -578,72 +641,10 @@ namespace NonVisuals
             return stringBuilder.ToString();
         }
 
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set
-            {
-                _isDirty = value;
-            }
-        }
 
         public void SetIsDirty()
         {
             IsDirty = true;
-        }
-
-        public DCSFPProfile Profile
-        {
-            get => _dcsfpProfile;
-            set
-            {
-                _dcsfpProfile = value;
-                /*// Called only when user creates a new profile
-                if (!DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile) && value != _dcsfpProfile)
-                {
-                    SetIsDirty();
-                }
-
-                ClearAll();
-                _dcsfpProfile = value;
-                DCSFPProfile.SelectedProfile = value;
-                Common.ResetEmulationModesFlag();
-                SetEmulationModeFlag();
-                DCSBIOSControlLocator.Profile = Profile;
-                AppEventHandler.AirframeSelected(this, _dcsfpProfile);*/
-            }
-        }
-
-        public string LastProfileUsed
-        {
-            get => _lastProfileUsed;
-            set => _lastProfileUsed = value;
-        }
-
-        public string DCSBIOSJSONDirectory
-        {
-            get => DCSBIOSControlLocator.JSONDirectory;
-            set => DCSBIOSControlLocator.JSONDirectory = value;
-        }
-
-        public bool ProfileLoaded => _profileLoaded || _isNewProfile;
-
-        public bool UseNS430
-        {
-            get => Common.IsEmulationModesFlagSet(EmulationMode.NS430Enabled);
-            set
-            {
-                if (value)
-                {
-                    Common.SetEmulationModes(EmulationMode.NS430Enabled);
-                }
-                else
-                {
-                    Common.ClearEmulationModesFlag(EmulationMode.NS430Enabled);
-                }
-
-                SetIsDirty();
-            }
         }
 
         public void StateSaved()

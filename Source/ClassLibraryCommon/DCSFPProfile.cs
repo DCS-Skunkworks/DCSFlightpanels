@@ -134,10 +134,10 @@
 
         public static bool IsNoFrameLoadedYet(DCSFPProfile dcsfpModule)
         {
-            if (dcsfpModule == null)
+            /*if (dcsfpModule == null)
             {
                 LogErrorAndThrowException("DCSFPProfile IsNoFrameLoadedYet : Parameter dcsfpModule is null.");
-            }
+            }*/
             return dcsfpModule.ID == 1;
         }
 

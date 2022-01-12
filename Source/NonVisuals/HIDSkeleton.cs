@@ -54,8 +54,14 @@
 
         public bool PanelHasBeenInstantiated { get; set; }
 
+        private bool _once = true;
         public void HIDDeviceOnInserted()
         {
+            if (_once)
+            {
+                _once = false;
+                return;
+            }
             throw new NotImplementedException();
         }
 

@@ -216,11 +216,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void DeviceAttached(object sender, PanelInfoArgs e) { }
-
-        public void DeviceDetached(object sender, PanelInfoArgs e) { }
-
+        
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {
             try

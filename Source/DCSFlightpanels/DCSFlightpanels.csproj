@@ -268,9 +268,6 @@
     <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSpitfireLFMkIX.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlSpitfireLFMkIX.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlNotImplemented.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlNotImplemented.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlUH1H.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>RadioPanelPZ69UserControlUH1H.xaml</DependentUpon>
@@ -521,10 +518,6 @@
     <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSpitfireLFMkIX.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlNotImplemented.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlUH1H.xaml">
       <SubType>Designer</SubType>

@@ -66,10 +66,8 @@
         private readonly object _lockObjectStatusMessages = new object();
         private readonly List<UserControl> _panelUserControls = new List<UserControl>();
 
-        private HIDHandler _hidHandler;
         private ProfileHandler _profileHandler;
         private DCSBIOS _dcsBios;
-        private DCSFPProfile _dcsfpProfile;
         private bool _disablePanelEventsFromBeingRouted;
         private bool _isLoaded = false;
 
@@ -155,48 +153,16 @@
                 DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 CheckErrorLogAndDCSBIOSLocation();
-
-                /*_hidHandler = new HIDHandler();
-                if (_doSearchForPanels)
-                {
-                    _hidHandler.Startup(Settings.Default.LoadStreamDeck);
-                }
-
-                CreateDCSBIOS();*/
+                
                 StartTimers();
 
                 _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed, this);
                 _profileHandler.Init();
-                //SearchForPanels();
-
-                /*if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
-                {
-                    CreateNewProfile();
-                }*/
-
-                //_dcsfpProfile = _profileHandler.Profile;
-
+                
                 SetWindowTitle();
                 SetWindowState();
-
-                /*if (!Common.PartialDCSBIOSEnabled())
-                {
-                    ShutdownDCSBIOS();
-                }
-                else
-                {
-                    StartupDCSBIOS();
-                }*/
-
-                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-                //AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
-
+                
                 CheckForNewDCSFPRelease();
-
-                /*if (Settings.Default.LoadStreamDeck == true && Process.GetProcessesByName("StreamDeck").Length >= 1 && _hidHandler.HIDSkeletons.Any(o => o.GamingPanelSkeleton.VendorId == (int)GamingPanelVendorEnum.Elgato))
-                {
-                    MessageBox.Show("StreamDeck's official software is running in the background.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                }*/
 
                 ConfigurePlugins();
 
@@ -292,8 +258,10 @@
             }
         }
 
-        private void SetApplicationModeFinal(DCSFPProfile dcsfpProfile)
+        private void SetApplicationMode()
         {
+            var dcsfpProfile = _profileHandler.Profile;
+
             if (!IsLoaded)
             {
                 return;
@@ -311,40 +279,11 @@
                 CreateDCSBIOS();
                 StartupDCSBIOS();
             }
-
-            SortTabs();
-        }
-
-        private void CloseTemporaryRadioPanels()
-        {
-            try
-            {
-                var counter = 0;
-                while (TabControlPanels.Items.Count > counter)
-                {
-                    var tabItem = (TabItem)TabControlPanels.Items[counter];
-                    var userControl = (UserControlBase)tabItem.Content;
-
-                    if (tabItem.Header.Equals(Constants.TemporaryRadioTabHeader))
-                    {
-                        TabControlPanels.Items.Remove(tabItem);
-                        userControl.Dispose();
-                        counter = 0;
-                        continue;
-                    }
-
-                    counter++;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
         }
 
         private void CloseStreamDecks()
         {
-            foreach (var hidSkeleton in _hidHandler.HIDSkeletons)
+            foreach (var hidSkeleton in HIDHandler.GetInstance().HIDSkeletons)
             {
                 if (Common.IsStreamDeck(hidSkeleton.PanelInfo.GamingPanelType))
                 {
@@ -448,6 +387,8 @@
                 return;
             }
 
+            DCSBIOSControlLocator.Profile = _profileHandler.Profile;
+
             _dcsBios = new DCSBIOS(Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
             if (!_dcsBios.HasLastException())
             {
@@ -475,14 +416,10 @@
             _dcsBios?.Shutdown();
             _dcsBios = null;
 
+            DCSBIOSControlLocator.Profile = _profileHandler.Profile;
             _dcsStopGearTimer.Stop();
             _dcsCheckDcsBiosStatusTimer.Stop();
             ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
-        }
-
-        public DCSFPProfile GetProfile()
-        {
-            return _dcsfpProfile;
         }
 
         private void DisposePanel(HIDSkeleton hidSkeleton)
@@ -491,7 +428,7 @@
             {
                 var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
                 var userControl = (IGamingPanelUserControl)tabItem.Content;
-                
+
                 if (userControl.GetGamingPanel().HIDInstanceId == hidSkeleton.InstanceId)
                 {
                     userControl.Dispose();
@@ -880,33 +817,6 @@
             }
         }
 
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-                if (_dcsfpProfile != e.Profile)
-                {
-                    _dcsfpProfile = e.Profile;
-                    //SetApplicationMode(_dcsfpProfile);
-                    // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-                    AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
-                }
-
-                if (Common.KeyEmulationOnly())
-                {
-                    SetNS430Status(false, false);
-                }
-                else
-                {
-                    SetNS430Status(false);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
@@ -918,15 +828,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void DeviceAttached(object sender, PanelInfoArgs e)
-        {
-        }
-
-        public void DeviceDetached(object sender, PanelInfoArgs e)
-        {
-        }
-
+        
         private void MainWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
             try
@@ -1957,24 +1859,23 @@
                         {
                             SetWindowTitle();
                             SetWindowState();
+                            SetApplicationMode();
                             HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck);
                             break;
                         }
                     case ProfileEventEnum.ProfileClosed:
                         {
+                            SetApplicationMode();
+                            CloseTabItems();
                             SetWindowTitle();
                             SetWindowState();
                             break;
                         }
                 }
-                /*if (_profileHandler.Profile != _dcsfpProfile)
-                {
-                    _dcsfpProfile = _profileHandler.Profile;
-                    SetApplicationMode(_dcsfpProfile);
-                }
 
                 MenuItemUseNS430.IsChecked = _profileHandler.UseNS430;
-                SetWindowState();*/
+
+                SetWindowState();
             }
             catch (Exception ex)
             {
@@ -2011,10 +1912,19 @@
                     }
                 case PanelEventType.AllPanelsFound:
                     {
+                        AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
+
+                        if (Settings.Default.LoadStreamDeck == true && Process.GetProcessesByName("StreamDeck").Length >= 1 && HIDHandler.GetInstance().HIDSkeletons.Any(o => o.GamingPanelSkeleton.VendorId == (int)GamingPanelVendorEnum.Elgato))
+                        {
+                            MessageBox.Show("StreamDeck's official software is running in the background.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        }
+
                         break;
                     }
                 default: throw new Exception("Failed to understand PanelEventType in MainWindow");
             }
+
+            SetWindowState();
         }
     }
 }

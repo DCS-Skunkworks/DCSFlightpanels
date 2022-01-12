@@ -607,19 +607,7 @@
                 SetLastException(ex);
             }
         }
-
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-            AppEventHandler.DeviceAttached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose(); 
-            AppEventHandler.DeviceDetached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
-        }
-
+        
         private void SetLedStrength()
         {
             try

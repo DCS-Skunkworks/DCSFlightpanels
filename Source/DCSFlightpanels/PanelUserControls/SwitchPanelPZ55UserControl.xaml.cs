@@ -297,36 +297,6 @@
             }
         }
         
-        public void DeviceAttached(object sender, PanelInfoArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (connected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void DeviceDetached(object sender, PanelInfoArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (disconnected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
