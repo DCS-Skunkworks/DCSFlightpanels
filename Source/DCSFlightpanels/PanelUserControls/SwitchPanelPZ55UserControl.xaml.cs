@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.PanelUserControls
+﻿using System.Diagnostics;
+
+namespace DCSFlightpanels.PanelUserControls
 {
     using System;
     using System.Collections.Generic;
@@ -65,8 +67,6 @@
             _imageArrayRight[1] = ImagePZ55LEDGreenRight;
             _imageArrayRight[2] = ImagePZ55LEDYellowRight;
             _imageArrayRight[3] = ImagePZ55LEDRedRight;
-
-
         }
 
 
@@ -435,12 +435,11 @@
                 {
                     return;
                 }
+
                 var imageArray = new Image[4];
                 var clickedImage = (Image)sender;
                 var position = SwitchPanelPZ55LEDPosition.UP;
-                //Name of graphics file
-                var imageSource = (string)clickedImage.Tag;
-
+                
                 if (clickedImage.Name.Contains("Upper"))
                 {
                     position = SwitchPanelPZ55LEDPosition.UP;
@@ -456,6 +455,7 @@
                     position = SwitchPanelPZ55LEDPosition.RIGHT;
                     imageArray = _imageArrayRight;
                 }
+
                 var nextImageIndex = 0;
                 HideLedImages(position);
                 for (int i = 0; i < 4; i++)
@@ -471,9 +471,9 @@
                     }
                 }
 
+                clickedImage.Visibility = Visibility.Collapsed;
                 imageArray[nextImageIndex].Visibility = Visibility.Visible;
-
-
+                
                 if (imageArray[nextImageIndex].Name.Contains("Dark"))
                 {
                     _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.DARK);
@@ -496,22 +496,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void ButtonClearAllClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (MessageBox.Show("Clear all settings for the Switch Panel?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-                {
-                    ClearAll(true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private void NotifySwitchChanges(HashSet<object> switches)
         {
             try

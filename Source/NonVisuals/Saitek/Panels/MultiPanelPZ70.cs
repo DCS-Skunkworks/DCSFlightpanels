@@ -115,7 +115,7 @@
                     {
                         var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
                         dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(e.Data);
-                        if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
+                        if (tmp.CompareTo(dcsbiosBindingLCDPZ70.CurrentValue) != 0)
                         {
                             Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
@@ -129,7 +129,7 @@
                         {
                             var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
                             dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate(false);
-                            if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
+                            if (tmp.CompareTo(dcsbiosBindingLCDPZ70.CurrentValue) != 0)
                             {
                                 Interlocked.Increment(ref _doUpdatePanelLCD);
                             }
@@ -138,6 +138,7 @@
                 }
             }
 
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             UpdateLCD();
         }
 
@@ -1372,7 +1373,7 @@
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
-        public void SendLEDData(byte[] array)
+        private void SendLEDData(byte[] array)
         {
             try
             {

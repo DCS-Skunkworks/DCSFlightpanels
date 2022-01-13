@@ -65,7 +65,7 @@ namespace DCS_BIOS.EventArgs
 
         public static void DCSBIOSStringAvailable(object sender, uint address, string data)
         {
-            OnDCSBIOSStringReceived(sender, new DCSBIOSStringDataEventArgs() { Address = address, StringData = data });
+            OnDCSBIOSStringReceived?.Invoke(sender, new DCSBIOSStringDataEventArgs() { Address = address, StringData = data });
         }
     }
 }
