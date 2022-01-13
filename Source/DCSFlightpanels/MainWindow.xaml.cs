@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels
+﻿using System.Windows.Threading;
+
+namespace DCSFlightpanels
 {
     /*
     Custom Resharper Naming abbreviations
@@ -153,15 +155,15 @@
                 DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 CheckErrorLogAndDCSBIOSLocation();
-                
+
                 StartTimers();
 
                 _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed, this);
                 _profileHandler.Init();
-                
+
                 SetWindowTitle();
                 SetWindowState();
-                
+
                 CheckForNewDCSFPRelease();
 
                 ConfigurePlugins();
@@ -424,19 +426,24 @@
 
         private void DisposePanel(HIDSkeleton hidSkeleton)
         {
-            for (var i = 0; i < TabControlPanels.Items.Count; i++)
+            void Action()
             {
-                var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
-                var userControl = (IGamingPanelUserControl)tabItem.Content;
-
-                if (userControl.GetGamingPanel().HIDInstanceId == hidSkeleton.InstanceId)
+                for (var i = 0; i < TabControlPanels.Items.Count; i++)
                 {
-                    userControl.Dispose();
-                    TabControlPanels.Items.RemoveAt(i);
-                    AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Disposed);
-                    break;
+                    var tabItem = (TabItem) TabControlPanels.Items.GetItemAt(i);
+                    var userControl = (IGamingPanelUserControl) tabItem.Content;
+
+                    if (userControl.GetGamingPanel().HIDInstanceId == hidSkeleton.InstanceId)
+                    {
+                        userControl.Dispose();
+                        TabControlPanels.Items.RemoveAt(i);
+                        AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Disposed);
+                        break;
+                    }
                 }
             }
+
+            Dispatcher?.Invoke(DispatcherPriority.Normal, (Action) Action);
         }
 
         private void CreatePanel(HIDSkeleton hidSkeleton)
@@ -882,7 +889,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void MainWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
             try
@@ -1157,8 +1164,10 @@
 
         private void SaveNewOrExistingProfile()
         {
+            var selectedIndex = TabControlPanels.SelectedIndex;
             _profileHandler.SaveProfile();
             SetWindowState();
+            TabControlPanels.SelectedIndex = selectedIndex;
         }
 
         private void MenuItemSaveAsClick(object sender, RoutedEventArgs e)
@@ -1922,9 +1931,9 @@
                         }
                 }
 
-                MenuItemUseNS430.IsChecked = _profileHandler.UseNS430;
-
-                SetWindowState();
+                Dispatcher?.BeginInvoke((Action)(() => MenuItemUseNS430.IsChecked = _profileHandler.UseNS430));
+                
+                Dispatcher?.BeginInvoke((Action)SetWindowState);
             }
             catch (Exception ex)
             {
@@ -1943,7 +1952,7 @@
                     }
                 case PanelEventType.Attached:
                     {
-                        CreatePanel(e.HidSkeleton);
+                        Dispatcher?.BeginInvoke((Action)(() => CreatePanel(e.HidSkeleton)));
                         break;
                     }
                 case PanelEventType.Detached:
@@ -1973,7 +1982,7 @@
                 default: throw new Exception("Failed to understand PanelEventType in MainWindow");
             }
 
-            SetWindowState();
+            Dispatcher?.BeginInvoke((Action)SetWindowState);
         }
     }
 }

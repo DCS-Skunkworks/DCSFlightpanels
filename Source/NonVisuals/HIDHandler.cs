@@ -73,6 +73,7 @@ namespace NonVisuals
                                 var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, instanceId);
                                 HIDSkeletons.Add(hidSkeleton);
 
+                                hidDevice.MonitorDeviceEvents = true;
                                 hidDevice.Inserted += hidSkeleton.HIDDeviceOnInserted;
                                 hidDevice.Removed += hidSkeleton.HIDDeviceOnRemoved;
 

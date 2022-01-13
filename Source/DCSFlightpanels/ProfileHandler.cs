@@ -622,6 +622,8 @@ namespace NonVisuals
                 File.WriteAllText(_filename, stringBuilder.ToString(), Encoding.ASCII);
                 _isDirty = false;
                 _isNewProfile = false;
+
+                CloseProfile();
                 LoadProfile(_filename);
             }
             catch (Exception ex)

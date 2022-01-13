@@ -1,4 +1,6 @@
-﻿namespace NonVisuals
+﻿using NonVisuals.EventArgs;
+
+namespace NonVisuals
 {
     using System;
 
@@ -54,6 +56,7 @@
 
         public bool PanelHasBeenInstantiated { get; set; }
 
+        
         private bool _once = true;
         public void HIDDeviceOnInserted()
         {
@@ -62,12 +65,13 @@
                 _once = false;
                 return;
             }
-            throw new NotImplementedException();
+
+            AppEventHandler.PanelEvent(this, InstanceId, this, PanelEventType.Attached);
         }
 
         public void HIDDeviceOnRemoved()
         {
-            throw new NotImplementedException();
+            AppEventHandler.PanelEvent(this, InstanceId, this, PanelEventType.Detached);
         }
     }
 

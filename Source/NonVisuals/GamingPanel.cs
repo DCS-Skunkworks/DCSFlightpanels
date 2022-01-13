@@ -96,12 +96,7 @@
             }
 
             GamingPanels.Add(this);
-
-            if (hidSkeleton.HIDReadDevice != null)
-            {
-                hidSkeleton.HIDReadDevice.Inserted += DeviceInsertedHandler;
-            }
-
+            
             AppEventHandler.AttachForwardPanelEventListener(this);
             AppEventHandler.AttachSettingsConsumerListener(this);
             BIOSEventHandler.AttachDataListener(this);
@@ -134,15 +129,7 @@
 
             _disposed = true;
         }
-
-        public void DeviceInsertedHandler()
-        {
-            /*
-             * Not working, hidSkeleton deleted when panel is removed => no instance where this can be executed on. Regardless, restarting isn't a big of a deal.
-             */
-            MessageBox.Show("New device has been detected. Restart DCSFP to take it into use", "New hardware detected", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
+        
         protected void UpdateCounter(uint address, uint data)
         {
             lock (UpdateCounterLockObject)
