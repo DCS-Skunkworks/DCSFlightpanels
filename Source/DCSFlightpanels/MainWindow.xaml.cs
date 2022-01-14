@@ -1045,9 +1045,17 @@ namespace DCSFlightpanels
         {
             try
             {
-                SaveNewOrExistingProfile();
-                SetWindowState();
-                SystemSounds.Asterisk.Play();
+                try
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    SaveNewOrExistingProfile();
+                    SetWindowState();
+                    SystemSounds.Asterisk.Play();
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                }
             }
             catch (Exception ex)
             {
@@ -1164,10 +1172,18 @@ namespace DCSFlightpanels
 
         private void SaveNewOrExistingProfile()
         {
-            var selectedIndex = TabControlPanels.SelectedIndex;
-            _profileHandler.SaveProfile();
-            SetWindowState();
-            TabControlPanels.SelectedIndex = selectedIndex;
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                var selectedIndex = TabControlPanels.SelectedIndex;
+                _profileHandler.SaveProfile();
+                SetWindowState();
+                TabControlPanels.SelectedIndex = selectedIndex;
+            }
+            finally
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
         }
 
         private void MenuItemSaveAsClick(object sender, RoutedEventArgs e)
@@ -1384,8 +1400,16 @@ namespace DCSFlightpanels
         {
             try
             {
-                RefreshProfile();
-                SystemSounds.Beep.Play();
+                try
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    RefreshProfile();
+                    SystemSounds.Beep.Play();
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                }
             }
             catch (Exception ex)
             {
@@ -1990,7 +2014,15 @@ namespace DCSFlightpanels
         {
             try
             {
-                HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck, true);
+                try
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck, true);
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                }
             }
             catch (Exception ex)
             {
