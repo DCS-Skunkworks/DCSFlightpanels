@@ -1948,15 +1948,11 @@ namespace DCSFlightpanels
             switch (e.EventType)
             {
                 case PanelEventType.Found:
+                case PanelEventType.ManuallyFound:
                     {
                         CreatePanel(e.HidSkeleton);
                         break;
                     }
-                case PanelEventType.ManuallyFound:
-                {
-                    CreatePanel(e.HidSkeleton);
-                    break;
-                }
                 case PanelEventType.Attached:
                     {
                         Dispatcher?.BeginInvoke((Action)(() => CreatePanel(e.HidSkeleton)));

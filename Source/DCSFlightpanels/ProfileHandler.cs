@@ -662,33 +662,21 @@ namespace NonVisuals
         {
             switch (e.EventType)
             {
-                case PanelEventType.Found:
-                    {
-                        break;
-                    }
                 case PanelEventType.ManuallyFound:
                     {
                         CheckHardwareConflicts();
                         break;
                     }
                 case PanelEventType.Attached:
+                case PanelEventType.Created:
                     {
                         BindingMappingManager.SendBinding(e.HidSkeleton);
                         break;
                     }
                 case PanelEventType.Detached:
-                    {
-                        BindingMappingManager.SetNotInUse(e.HidSkeleton);
-                        break;
-                    }
                 case PanelEventType.Disposed:
                     {
                         BindingMappingManager.SetNotInUse(e.HidSkeleton);
-                        break;
-                    }
-                case PanelEventType.Created:
-                    {
-                        BindingMappingManager.SendBinding(e.HidSkeleton);
                         break;
                     }
                 case PanelEventType.AllPanelsFound:
