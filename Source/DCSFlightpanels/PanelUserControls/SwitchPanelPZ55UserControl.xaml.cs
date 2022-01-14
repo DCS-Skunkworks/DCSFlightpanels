@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -22,7 +24,7 @@ namespace DCSFlightpanels.PanelUserControls
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
     using NonVisuals.Saitek.Switches;
-    
+
     using Brush = System.Windows.Media.Brush;
     using Brushes = System.Windows.Media.Brushes;
     using Image = System.Windows.Controls.Image;
@@ -36,10 +38,12 @@ namespace DCSFlightpanels.PanelUserControls
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
 
-        private readonly Image[] _imageArrayUpper = new Image[4];
-        private readonly Image[] _imageArrayLeft = new Image[4];
-        private readonly Image[] _imageArrayRight = new Image[4];
         private bool _textBoxBillsSet;
+
+        private readonly BitmapImage _darkImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/black.png"));
+        private readonly BitmapImage _redImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/red.png"));
+        private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
+        private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
 
 
 
@@ -53,20 +57,6 @@ namespace DCSFlightpanels.PanelUserControls
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
             AppEventHandler.AttachGamingPanelListener(this);
-            _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
-            _imageArrayUpper[1] = ImagePZ55LEDGreenUpper;
-            _imageArrayUpper[2] = ImagePZ55LEDYellowUpper;
-            _imageArrayUpper[3] = ImagePZ55LEDRedUpper;
-
-            _imageArrayLeft[0] = ImagePZ55LEDDarkLeft;
-            _imageArrayLeft[1] = ImagePZ55LEDGreenLeft;
-            _imageArrayLeft[2] = ImagePZ55LEDYellowLeft;
-            _imageArrayLeft[3] = ImagePZ55LEDRedLeft;
-
-            _imageArrayRight[0] = ImagePZ55LEDDarkRight;
-            _imageArrayRight[1] = ImagePZ55LEDGreenRight;
-            _imageArrayRight[2] = ImagePZ55LEDYellowRight;
-            _imageArrayRight[3] = ImagePZ55LEDRedRight;
         }
 
 
@@ -145,7 +135,7 @@ namespace DCSFlightpanels.PanelUserControls
             ManualLedDownCombo.SelectionChanged += ManualLedDownCombo_SelectionChanged;
             ManualLedTransSecondsCombo.SelectionChanged += ManualLedTransSecondsCombo_SelectionChanged;
         }
-        
+
 
         public override GamingPanel GetGamingPanel()
         {
@@ -161,7 +151,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             return GetType().Name;
         }
-        
+
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try
@@ -211,25 +201,28 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_switchPanelPZ55.HIDInstanceId.Equals(e.HIDInstanceId))
                 {
                     var position = (SwitchPanelPZ55LEDPosition)e.LEDPosition.Position;
-                    var imageArray = _imageArrayUpper;
+                    Image image;
 
                     switch (position)
                     {
                         case SwitchPanelPZ55LEDPosition.UP:
                             {
-                                HideLedImages(SwitchPanelPZ55LEDPosition.UP);
+                                image = ImagePZ55LEDUpper;
                                 break;
                             }
                         case SwitchPanelPZ55LEDPosition.LEFT:
                             {
-                                HideLedImages(SwitchPanelPZ55LEDPosition.LEFT);
-                                imageArray = _imageArrayLeft;
+                                image = ImagePZ55LEDLeft;
                                 break;
                             }
                         case SwitchPanelPZ55LEDPosition.RIGHT:
                             {
-                                HideLedImages(SwitchPanelPZ55LEDPosition.RIGHT);
-                                imageArray = _imageArrayRight;
+                                image = ImagePZ55LEDRight;
+                                break;
+                            }
+                        default:
+                            {
+                                image = ImagePZ55LEDRight;
                                 break;
                             }
                     }
@@ -238,22 +231,46 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         case PanelLEDColor.DARK:
                             {
-                                Dispatcher?.BeginInvoke((Action)(() => imageArray[0].Visibility = Visibility.Visible));
+                                void Action()
+                                {
+                                    image.Source = _darkImage;
+                                    image.Tag = "DARK";
+                                }
+
+                                Dispatcher?.Invoke(DispatcherPriority.Normal, (Action)Action);
                                 break;
                             }
                         case PanelLEDColor.GREEN:
                             {
-                                Dispatcher?.BeginInvoke((Action)(() => imageArray[1].Visibility = Visibility.Visible));
+                                void Action()
+                                {
+                                    image.Source = _greenImage;
+                                    image.Tag = "GREEN";
+                                }
+
+                                Dispatcher?.Invoke(DispatcherPriority.Normal, (Action)Action);
                                 break;
                             }
                         case PanelLEDColor.YELLOW:
                             {
-                                Dispatcher?.BeginInvoke((Action)(() => imageArray[2].Visibility = Visibility.Visible));
+                                void Action()
+                                {
+                                    image.Source = _yellowImage;
+                                    image.Tag = "YELLOW";
+                                }
+
+                                Dispatcher?.Invoke(DispatcherPriority.Normal, (Action)Action);
                                 break;
                             }
                         case PanelLEDColor.RED:
                             {
-                                Dispatcher?.BeginInvoke((Action)(() => imageArray[3].Visibility = Visibility.Visible));
+                                void Action()
+                                {
+                                    image.Source = _redImage;
+                                    image.Tag = "RED";
+                                }
+
+                                Dispatcher?.Invoke(DispatcherPriority.Normal, (Action)Action);
                                 break;
                             }
                     }
@@ -266,34 +283,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void HideLedImages(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition)
-        {
-            var imageArray = _imageArrayUpper;
-            switch (switchPanelPZ55LEDPosition)
-            {
-                case SwitchPanelPZ55LEDPosition.UP:
-                    {
-
-                        break;
-                    }
-                case SwitchPanelPZ55LEDPosition.LEFT:
-                    {
-                        imageArray = _imageArrayLeft;
-                        break;
-                    }
-                case SwitchPanelPZ55LEDPosition.RIGHT:
-                    {
-                        imageArray = _imageArrayRight;
-                        break;
-                    }
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                var image1 = imageArray[i];
-                Dispatcher?.BeginInvoke((Action)(() => image1.Visibility = Visibility.Collapsed));
-            }
-        }
-        
         public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
@@ -412,7 +401,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     position = SwitchPanelPZ55LEDPosition.RIGHT;
                 }
-                var ledConfigsWindow = new LEDConfigsWindow( "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
+                var ledConfigsWindow = new LEDConfigsWindow("Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position
@@ -425,7 +414,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void ImageLEDClick(object sender, MouseButtonEventArgs e)
         {
             try
@@ -436,59 +425,53 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
 
-                var imageArray = new Image[4];
                 var clickedImage = (Image)sender;
                 var position = SwitchPanelPZ55LEDPosition.UP;
-                
+
                 if (clickedImage.Name.Contains("Upper"))
                 {
                     position = SwitchPanelPZ55LEDPosition.UP;
-                    imageArray = _imageArrayUpper;
                 }
                 else if (clickedImage.Name.Contains("Left"))
                 {
                     position = SwitchPanelPZ55LEDPosition.LEFT;
-                    imageArray = _imageArrayLeft;
                 }
                 else if (clickedImage.Name.Contains("Right"))
                 {
                     position = SwitchPanelPZ55LEDPosition.RIGHT;
-                    imageArray = _imageArrayRight;
                 }
 
-                var nextImageIndex = 0;
-                HideLedImages(position);
-                for (int i = 0; i < 4; i++)
+                switch (clickedImage.Tag)
                 {
-                    var image = imageArray[i];
-                    if (clickedImage.Equals(image))
-                    {
-                        nextImageIndex = i + 1;
-                        if (nextImageIndex > 3)
+                    case "DARK":
                         {
-                            nextImageIndex = 0;
+                            clickedImage.Tag = "GREEN";
+                            clickedImage.Source = _greenImage;
+                            _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.GREEN);
+                            break;
                         }
-                    }
-                }
+                    case "GREEN":
+                        {
+                            clickedImage.Tag = "YELLOW";
+                            clickedImage.Source = _yellowImage;
+                            _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.YELLOW);
+                            break;
+                        }
+                    case "YELLOW":
+                        {
+                            clickedImage.Tag = "RED";
 
-                clickedImage.Visibility = Visibility.Collapsed;
-                imageArray[nextImageIndex].Visibility = Visibility.Visible;
-                
-                if (imageArray[nextImageIndex].Name.Contains("Dark"))
-                {
-                    _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.DARK);
-                }
-                else if (imageArray[nextImageIndex].Name.Contains("Green"))
-                {
-                    _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.GREEN);
-                }
-                else if (imageArray[nextImageIndex].Name.Contains("Yellow"))
-                {
-                    _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.YELLOW);
-                }
-                else if (imageArray[nextImageIndex].Name.Contains("Red"))
-                {
-                    _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.RED);
+                            clickedImage.Source = _redImage;
+                            _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.RED);
+                            break;
+                        }
+                    case "RED":
+                        {
+                            clickedImage.Tag = "DARK";
+                            clickedImage.Source = _darkImage;
+                            _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.DARK);
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
@@ -496,7 +479,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void NotifySwitchChanges(HashSet<object> switches)
         {
             try
@@ -852,7 +835,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void CheckBoxManualLEDs_OnClick(object sender, RoutedEventArgs e)
         {
             try

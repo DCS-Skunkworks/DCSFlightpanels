@@ -58,18 +58,9 @@
             <Image Height="70" Margin="0,8,0,0" Name="ImageLandingOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29"  Canvas.Left="401" Canvas.Top="130" />
 
             <!-- LEDS -->
-            <Image Height="15" Name="ImagePZ55LEDDarkUpper" Source="/dcsfp;component/Images/dark.png" Stretch="Fill" Width="19"  Canvas.Left="466" Canvas.Top="99" Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Visible"/>
-            <Image Height="15" Name="ImagePZ55LEDDarkLeft" Source="/dcsfp;component/Images/dark.png" Stretch="Fill" Width="19"  Canvas.Left="446" Canvas.Top="134"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Visible" />
-            <Image Height="15" Name="ImagePZ55LEDDarkRight" Source="/dcsfp;component/Images/dark.png" Stretch="Fill" Width="19"  Canvas.Left="488" Canvas.Top="134"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Visible"/>
-            <Image Height="15" Name="ImagePZ55LEDGreenUpper" Source="/dcsfp;component/Images/green.png" Stretch="Fill" Width="19"  Canvas.Left="466" Canvas.Top="99" Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Hidden" />
-            <Image Height="15" Name="ImagePZ55LEDGreenLeft" Source="/dcsfp;component/Images/green.png" Stretch="Fill" Width="19"  Canvas.Left="446" Canvas.Top="134"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Hidden" />
-            <Image Height="15" Name="ImagePZ55LEDGreenRight" Source="/dcsfp;component/Images/green.png" Stretch="Fill" Width="19"  Canvas.Left="488" Canvas.Top="134"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Hidden"/>
-            <Image Height="15" Name="ImagePZ55LEDYellowUpper" Source="/dcsfp;component/Images/yellow1.png" Stretch="Fill" Width="19"  Canvas.Left="466" Canvas.Top="99"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Hidden"/>
-            <Image Height="15" Name="ImagePZ55LEDYellowLeft" Source="/dcsfp;component/Images/yellow1.png" Stretch="Fill" Width="19"  Canvas.Left="446" Canvas.Top="134"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Hidden"/>
-            <Image Height="15" Name="ImagePZ55LEDYellowRight" Source="/dcsfp;component/Images/yellow1.png" Stretch="Fill" Width="19"  Canvas.Left="488" Canvas.Top="134"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Hidden"/>
-            <Image Height="15" Name="ImagePZ55LEDRedUpper" Source="/dcsfp;component/Images/red.png" Stretch="Fill" Width="19"  Canvas.Left="466" Canvas.Top="99"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Hidden"/>
-            <Image Height="15" Name="ImagePZ55LEDRedLeft" Source="/dcsfp;component/Images/red.png" Stretch="Fill" Width="19"  Canvas.Left="446" Canvas.Top="134"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Hidden"/>
-            <Image Height="15" Name="ImagePZ55LEDRedRight" Source="/dcsfp;component/Images/red.png" Stretch="Fill" Width="19"  Canvas.Left="488" Canvas.Top="134"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Hidden"/>
+            <Image Height="15" Name="ImagePZ55LEDUpper" Tag="DARK" Source="/dcsfp;component/Images/dark.png" Stretch="Fill" Width="19"  Canvas.Left="466" Canvas.Top="99" Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Visible"/>
+            <Image Height="15" Name="ImagePZ55LEDLeft" Tag="DARK" Source="/dcsfp;component/Images/dark.png" Stretch="Fill" Width="19"  Canvas.Left="446" Canvas.Top="134"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Visible" />
+            <Image Height="15" Name="ImagePZ55LEDRight" Tag="DARK" Source="/dcsfp;component/Images/dark.png" Stretch="Fill" Width="19"  Canvas.Left="488" Canvas.Top="134"  Cursor="Hand" MouseDown="ImageLEDClick" Visibility="Visible"/>
 
             <Image Height="5" Width="5" x:Name="ImageConfigFoundUpper" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="470" Canvas.Top="85" Visibility="Visible"/>
             <Image Height="5" Width="5" x:Name="ImageConfigFoundLeft" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="437" Canvas.Top="140" Visibility="Visible"/>

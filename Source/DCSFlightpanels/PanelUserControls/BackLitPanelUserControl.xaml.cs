@@ -438,7 +438,7 @@
                     newColor = PanelLEDColor.DARK;
                     image.Tag = "DARK";
                 }
-                SetLEDImage(image, newColor);
+
                 SetPhysicalLED(image, newColor);
             }
         }
