@@ -1963,6 +1963,11 @@ namespace DCSFlightpanels
                         DisposePanel(e.HidSkeleton);
                         break;
                     }
+                case PanelEventType.Created:
+                case PanelEventType.Disposed:
+                    {
+                        break;
+                    }
                 case PanelEventType.AllPanelsFound:
                     {
                         AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);

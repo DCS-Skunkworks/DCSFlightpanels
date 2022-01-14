@@ -662,6 +662,10 @@ namespace NonVisuals
         {
             switch (e.EventType)
             {
+                case PanelEventType.Found:
+                    {
+                        break;
+                    }
                 case PanelEventType.ManuallyFound:
                     {
                         CheckHardwareConflicts();
@@ -684,7 +688,7 @@ namespace NonVisuals
                         CheckHardwareConflicts();
                         break;
                     }
-                default: throw new Exception("Failed to understand PanelEventType in MainWindow");
+                default: throw new Exception("Failed to understand PanelEventType in ProfileHandler");
             }
         }
     }
