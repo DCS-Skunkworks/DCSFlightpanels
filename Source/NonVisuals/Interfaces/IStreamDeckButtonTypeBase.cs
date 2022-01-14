@@ -1,8 +1,8 @@
-﻿namespace NonVisuals.Interfaces
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.Interfaces
 {
     using MEF;
-
-    using NonVisuals.StreamDeck;
 
     public interface IStreamDeckButtonTypeBase
     {

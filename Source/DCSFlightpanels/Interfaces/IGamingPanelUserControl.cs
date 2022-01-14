@@ -1,5 +1,4 @@
-﻿using System;
-using ClassLibraryCommon;
+﻿using ClassLibraryCommon;
 using NonVisuals;
 
 namespace DCSFlightpanels.Interfaces

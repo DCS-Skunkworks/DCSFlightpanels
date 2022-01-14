@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.PanelUserControls
+﻿using System.Diagnostics;
+
+namespace DCSFlightpanels.PanelUserControls
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +24,7 @@
     /// <summary>
     /// Interaction logic for BackLitPanelUserControl.xaml
     /// </summary>
-    public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, ILedLightPanelListener
     {
         private readonly BacklitPanelBIP _backlitPanelBIP;
 
@@ -44,6 +46,7 @@
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             AppEventHandler.AttachGamingPanelListener(this);
+            AppEventHandler.AttachLEDLightListener(this);
         }
 
         private bool _disposed;
@@ -56,6 +59,7 @@
                 {
                     _backlitPanelBIP.Dispose(); 
                     AppEventHandler.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachLEDLightListener(this);
                 }
 
                 _disposed = true;
@@ -100,7 +104,7 @@
         {
             try
             {
-                if (!UserControlLoaded)
+                if (!UserControlLoaded || _backlitPanelBIP.HIDInstanceId.Equals(e.HIDInstanceId))
                 {
                     return;
                 }
@@ -179,7 +183,7 @@
                     return;
                 }
                 HideAllConfigurationExistsImages();
-                var bipPositions = ClassLibraryCommon.EnumEx.GetValues<BIPLedPositionEnum>();
+                var bipPositions = EnumEx.GetValues<BIPLedPositionEnum>();
                 foreach (var position in bipPositions)
                 {
                     SetLEDImage(position, _backlitPanelBIP.GetColor(position));
@@ -230,7 +234,7 @@
         {
             var result = BIPLedPositionEnum.Position_1_1;
             //ImagePosition3_4
-            var str = imageName.Remove(0, 13);
+            var str = imageName.Remove(0, 14);
             //3_4
             var row = int.Parse(str.Substring(0, 1));
             var index = int.Parse(str.Substring(2, 1));
@@ -451,6 +455,7 @@
                 if (tmpImage.Name.Contains(bipLedPositionEnum.ToString()))
                 {
                     image = tmpImage;
+                    break;
                 }
             }
             if (image != null)

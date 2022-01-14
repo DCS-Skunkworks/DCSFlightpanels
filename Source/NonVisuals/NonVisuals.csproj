@@ -102,6 +102,7 @@
     <Compile Include="GenericPanelBinding.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
     <Compile Include="Interfaces\IHardwareConflictResolver.cs" />
+    <Compile Include="Interfaces\ILedLightPanelListener.cs" />
     <Compile Include="Interfaces\IOledImageListener.cs" />
     <Compile Include="Interfaces\IPanelEventListener.cs" />
     <Compile Include="Interfaces\IProfileHandler.cs" />
@@ -245,7 +246,7 @@
     <Compile Include="StreamDeck\StreamDeckConstants.cs" />
     <Compile Include="StreamDeck\StreamDeckLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckLayerHandler.cs" />
-    <Compile Include="StreamDeck\StreamDeckPanel.cs" />
+    <Compile Include="StreamDeck\Panels\StreamDeckPanel.cs" />
     <Compile Include="Saitek\Switches\TPMPanelSwitch.cs" />
     <Compile Include="Saitek\Switches\SwitchPanelKey.cs" />
     <Compile Include="Saitek\Panels\TPMPanel.cs" />

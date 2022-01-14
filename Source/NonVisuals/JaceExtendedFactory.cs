@@ -12,28 +12,31 @@ namespace NonVisuals
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private static readonly Dictionary<int, JaceExtended> JaceEngines = new Dictionary<int, JaceExtended>();
-
+        private static readonly object LockObject = new();
         public static JaceExtended Instance(ref int id)
         {
             try
             {
-                if (!JaceEngines.ContainsKey(id) || id == 0)
+                lock (LockObject)
                 {
-                    var collision = false;
-                    while (true)
+                    if (!JaceEngines.ContainsKey(id) || id == 0)
                     {
-                        if (id == 0 || collision == true)
+                        var collision = false;
+                        while (true)
                         {
-                            id = RandomFactory.Get();
-                        }
-                        if (!JaceEngines.ContainsKey(id))
-                        {
-                            var jaceExtended = new JaceExtended();
-                            JaceEngines.Add(id, jaceExtended);
-                            return jaceExtended;
-                        }
+                            if (id == 0 || collision == true)
+                            {
+                                id = RandomFactory.Get();
+                            }
+                            if (!JaceEngines.ContainsKey(id))
+                            {
+                                var jaceExtended = new JaceExtended();
+                                JaceEngines.Add(id, jaceExtended);
+                                return jaceExtended;
+                            }
 
-                        collision = true;
+                            collision = true;
+                        }
                     }
                 }
             }

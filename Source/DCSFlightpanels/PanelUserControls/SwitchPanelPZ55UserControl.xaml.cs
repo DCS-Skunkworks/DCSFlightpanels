@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace DCSFlightpanels.PanelUserControls
@@ -33,7 +32,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
-    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI, ILedLightPanelListener
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
@@ -57,6 +56,7 @@ namespace DCSFlightpanels.PanelUserControls
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
             AppEventHandler.AttachGamingPanelListener(this);
+            AppEventHandler.AttachLEDLightListener(this);
         }
 
 
@@ -70,6 +70,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     _switchPanelPZ55.Dispose();
                     AppEventHandler.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachLEDLightListener(this);
                 }
 
                 _disposed = true;

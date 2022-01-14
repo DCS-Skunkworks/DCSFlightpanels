@@ -44,7 +44,7 @@
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
-            AppEventHandler.AttachGamingPanelListener(this);
+            AppEventHandler.AttachGamingPanelListener(this); 
 
             HideAllImages();
         }
@@ -178,9 +178,7 @@
             _textBoxBillsSet = true;
             
         }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
-
+        
         public void SettingsModified(object sender, PanelInfoArgs e)
         {
             if (e.HidInstance == _multiPanelPZ70.HIDInstanceId)

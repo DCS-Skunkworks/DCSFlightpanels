@@ -20,12 +20,6 @@
          * Used by some UserControls to show panel's updated configurations.
          */
         void SettingsModified(object sender, PanelInfoArgs e);
-
-        /*
-         * Used by those UserControls who's panels can show LED lights.
-         * Used to show the same color in the UserControl as the physical panels.
-         */
-        void LedLightChanged(object sender, LedLightChangeEventArgs e);
         
         /*
          * DCS-BIOS has a feature to detect if any updates has been missed.

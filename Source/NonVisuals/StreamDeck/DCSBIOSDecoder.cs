@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.StreamDeck
 {
     using System;
     using System.Collections.Generic;

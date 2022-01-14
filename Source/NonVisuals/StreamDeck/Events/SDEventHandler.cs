@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck.Events
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.StreamDeck.Events
 {
     using System.Text;
 

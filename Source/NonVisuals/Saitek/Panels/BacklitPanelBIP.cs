@@ -1,4 +1,7 @@
-﻿namespace NonVisuals.Saitek.Panels
+﻿using System.Diagnostics;
+using System.Text;
+
+namespace NonVisuals.Saitek.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -74,7 +77,6 @@
             Startup();
         }
 
-        // sätta färg efter om Config finns
         public sealed override void Startup()
         {
             try
@@ -288,6 +290,13 @@
                         }
                 }
 
+                /*
+                 * 14 Jan 2022
+                 * Very weird problem, without this delay the panel GUI would show the previous color instead of current.
+                 * As if it had a reference to the array as it was before the change. Can't figure this out. Just a workaround.
+                 */
+                Thread.Sleep(1);
+
                 // [0] & [1] == 0  --> DARK
                 // [0] == 1, [1] == 0 --> GREEN
                 // [0] == 1, [1] == 1 --> YELLOW
@@ -296,11 +305,13 @@
                 {
                     if ((array[1] & mask) < 1)
                     {
+                        //Debug.WriteLine(bipLedPositionEnum + " is currently GREEN");
                         return PanelLEDColor.GREEN;
                     }
 
                     if ((array[1] & mask) > 1)
                     {
+                        //Debug.WriteLine(bipLedPositionEnum + " is currently YELLOW");
                         return PanelLEDColor.YELLOW;
                     }
                 }
@@ -309,14 +320,17 @@
                 {
                     if ((array[1] & mask) < 1)
                     {
+                        //Debug.WriteLine(bipLedPositionEnum + " is currently DARK");
                         return PanelLEDColor.DARK;
                     }
 
                     if ((array[1] & mask) > 1)
                     {
+                        //Debug.WriteLine(bipLedPositionEnum + " is currently RED");
                         return PanelLEDColor.RED;
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -589,6 +603,9 @@
                 finalArray[6] = _lowerRowBytes[1];
 
                 SendLEDData(finalArray);
+
+
+                AppEventHandler.LedLightChanged(this, HIDInstanceId, null, PanelLEDColor.DARK);
             }
             catch (Exception ex)
             {
@@ -607,7 +624,7 @@
                 SetLastException(ex);
             }
         }
-        
+
         private void SetLedStrength()
         {
             try

@@ -160,7 +160,7 @@ namespace NonVisuals.EventArgs
         
         /*
          * Used by some UserControls to know when panels have loaded their configurations.
-         * Used by MainWindow to SetFormstate().
+         * Used by MainWindow to SetFormState().
          */
         public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelInfoArgs e);
 
@@ -216,15 +216,15 @@ namespace NonVisuals.EventArgs
         {
             OnLedLightChangedA?.Invoke(sender, new LedLightChangeEventArgs { HIDInstanceId = hidInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
         }
-
-        public static void AttachLEDLightListener(IGamingPanelListener gamingPanelListener)
+        
+        public static void AttachLEDLightListener(ILedLightPanelListener ledLightPanelListener)
         {
-            OnLedLightChangedA += gamingPanelListener.LedLightChanged;
+            OnLedLightChangedA += ledLightPanelListener.LedLightChanged;
         }
 
-        public static void DetachLEDLightListener(IGamingPanelListener gamingPanelListener)
+        public static void DetachLEDLightListener(ILedLightPanelListener ledLightPanelListener)
         {
-            OnLedLightChangedA -= gamingPanelListener.LedLightChanged;
+            OnLedLightChangedA -= ledLightPanelListener.LedLightChanged;
         }
     }
 }

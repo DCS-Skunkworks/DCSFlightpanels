@@ -851,9 +851,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
-
+        
         public void SettingsModified(object sender, PanelInfoArgs e)
         {
             try

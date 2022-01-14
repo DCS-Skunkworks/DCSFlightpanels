@@ -1,15 +1,14 @@
-﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     using System;
     using System.Collections.Generic;
     using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.IO;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Forms;
     using System.Windows.Input;
-    using System.Windows.Media.Imaging;
     using ClassLibraryCommon;
 
     using DCSFlightpanels.Bills;

@@ -135,18 +135,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
+        
         public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try

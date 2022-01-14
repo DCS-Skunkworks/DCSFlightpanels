@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace NonVisuals.DCSBIOSBindings
+﻿namespace NonVisuals.DCSBIOSBindings
 {
     using System;
     using System.Collections.Generic;

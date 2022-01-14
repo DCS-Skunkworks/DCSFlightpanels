@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.PanelUserControls
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace DCSFlightpanels.PanelUserControls
 {
     using System;
     using System.Collections.Generic;
@@ -186,9 +188,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
-
+        
         public void SettingsModified(object sender, PanelInfoArgs e)
         {
             try

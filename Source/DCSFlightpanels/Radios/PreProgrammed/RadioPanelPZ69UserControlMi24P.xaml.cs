@@ -92,8 +92,6 @@
             }
         }
         
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
-
         public void ProfileEvent(object sender, ProfileEventArgs e) { }
         
         public void SettingsModified(object sender, PanelInfoArgs e) { }

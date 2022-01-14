@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using DCSFlightpanels.CustomControls;
-using NonVisuals.StreamDeck;
+using NonVisuals.StreamDeck.Panels;
 
 namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {

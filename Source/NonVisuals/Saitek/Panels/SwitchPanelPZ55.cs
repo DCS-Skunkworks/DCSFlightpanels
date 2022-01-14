@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Saitek.Panels
+﻿using NonVisuals.Interfaces;
+
+namespace NonVisuals.Saitek.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -933,6 +935,7 @@
                             break;
                         }
                 }
+
                 AppEventHandler.LedLightChanged(this, HIDSkeletonBase.InstanceId, new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
                 SetLandingGearLED(_ledUpperColor | _ledLeftColor | _ledRightColor);
             }

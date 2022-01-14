@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
 {
