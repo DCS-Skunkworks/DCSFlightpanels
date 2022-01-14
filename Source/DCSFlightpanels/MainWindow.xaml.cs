@@ -271,10 +271,9 @@ namespace DCSFlightpanels
 
             LabelAirframe.Content = DCSFPProfile.IsNoFrameLoadedYet(dcsfpProfile) ? string.Empty : dcsfpProfile.Description;
 
-            if (Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
+            if (DCSFPProfile.IsNoFrameLoadedYet(dcsfpProfile) || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
             {
                 ShutdownDCSBIOS();
-                CloseStreamDecks();
             }
             else if (!DCSFPProfile.IsNoFrameLoadedYet(dcsfpProfile))
             {
@@ -282,18 +281,7 @@ namespace DCSFlightpanels
                 StartupDCSBIOS();
             }
         }
-
-        private void CloseStreamDecks()
-        {
-            foreach (var hidSkeleton in HIDHandler.GetInstance().HIDSkeletons)
-            {
-                if (Common.IsStreamDeck(hidSkeleton.PanelInfo.GamingPanelType))
-                {
-                    CloseTabItem(hidSkeleton.InstanceId);
-                }
-            }
-        }
-
+        
         private void CloseTabItem(string instanceId)
         {
             try
@@ -1338,7 +1326,15 @@ namespace DCSFlightpanels
         {
             try
             {
-                _profileHandler.OpenProfile();
+                try
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    _profileHandler.OpenProfile();
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                }
             }
             catch (Exception ex)
             {
