@@ -20,6 +20,7 @@
         Attached,
         Detached,
         Found,
+        ManuallyFound, // This is when the user explicitly searches for panels. Difference is that in this event chain [AllPanelsFound] will not be sent.
         Created,
         Disposed,
         AllPanelsFound

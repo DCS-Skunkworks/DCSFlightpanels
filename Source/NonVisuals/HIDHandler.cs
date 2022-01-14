@@ -52,7 +52,13 @@ namespace NonVisuals
             return stringBuilder.ToString();
         }
 
-        public void Startup(bool loadStreamDeck)
+        /// <summary>
+        /// searchForNew is used when panel has been detached => attached but not found again because there is no hook (new HID instance ID).
+        /// So already found panels should be left as is.
+        /// </summary>
+        /// <param name="loadStreamDeck"></param>
+        /// <param name="searchForNew"></param>
+        public void Startup(bool loadStreamDeck, bool searchForNew)
         {
             try
             {
@@ -88,15 +94,24 @@ namespace NonVisuals
                                     hidSkeleton.HIDWriteDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
                                     hidSkeleton.HIDWriteDevice.MonitorDeviceEvents = true;
                                 }
+
+                                if (searchForNew)
+                                {
+                                    //Broadcast that this panel was found.
+                                    AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.ManuallyFound);
+                                }
                             }
                         }
                     }
                 }
 
-                foreach (var hidSkeleton in HIDSkeletons)
+                if (!searchForNew)
                 {
-                    //Broadcast that this panel was found.
-                    AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Found);
+                    foreach (var hidSkeleton in HIDSkeletons)
+                    {
+                        //Broadcast that this panel was found.
+                        AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Found);
+                    }
                 }
 
                 //Broadcast that panel search is over and all panels have been found that exists.
@@ -107,7 +122,7 @@ namespace NonVisuals
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         public void Shutdown()
         {
             try

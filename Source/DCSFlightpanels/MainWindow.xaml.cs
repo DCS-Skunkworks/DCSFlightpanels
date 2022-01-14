@@ -1918,7 +1918,7 @@ namespace DCSFlightpanels
                             SetWindowTitle();
                             SetWindowState();
                             SetApplicationMode();
-                            HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck);
+                            HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck, false);
                             break;
                         }
                     case ProfileEventEnum.ProfileClosed:
@@ -1927,6 +1927,8 @@ namespace DCSFlightpanels
                             DisposePanels();
                             SetWindowTitle();
                             SetWindowState();
+
+                            ButtonSearchPanels.IsEnabled = false;
                             break;
                         }
                 }
@@ -1950,6 +1952,11 @@ namespace DCSFlightpanels
                         CreatePanel(e.HidSkeleton);
                         break;
                     }
+                case PanelEventType.ManuallyFound:
+                {
+                    CreatePanel(e.HidSkeleton);
+                    break;
+                }
                 case PanelEventType.Attached:
                     {
                         Dispatcher?.BeginInvoke((Action)(() => CreatePanel(e.HidSkeleton)));
@@ -1977,12 +1984,25 @@ namespace DCSFlightpanels
                             MessageBox.Show("StreamDeck's official software is running in the background.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                         }
 
+                        ButtonSearchPanels.IsEnabled = true;
                         break;
                     }
                 default: throw new Exception("Failed to understand PanelEventType in MainWindow");
             }
 
             Dispatcher?.BeginInvoke((Action)SetWindowState);
+        }
+
+        private void ButtonSearchPanels_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck, true);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }

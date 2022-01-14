@@ -867,6 +867,7 @@
     <Resource Include="Images\SA342_UHF.png" />
     <Resource Include="Images\SA342_VHF AM.png" />
     <Resource Include="Images\SA342_VHF FM.png" />
+    <Resource Include="Images\search_panels3.png" />
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

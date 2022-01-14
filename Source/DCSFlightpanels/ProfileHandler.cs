@@ -666,6 +666,11 @@ namespace NonVisuals
                     {
                         break;
                     }
+                case PanelEventType.ManuallyFound:
+                    {
+                        CheckHardwareConflicts();
+                        break;
+                    }
                 case PanelEventType.Attached:
                     {
                         BindingMappingManager.SendBinding(e.HidSkeleton);

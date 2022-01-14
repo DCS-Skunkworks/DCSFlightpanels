@@ -106,13 +106,19 @@ namespace NonVisuals
         public static bool VerifyBindings(ref bool settingsWereModified)
         {
             var problemsPersists = false;
+            var settingsWereModifiedLocal = false;
             foreach (var genericBinding in _genericBindings)
             {
                 if (genericBinding.InUse == false)
                 {
-                    if (!FindSolution(genericBinding, ref settingsWereModified))
+                    if (!FindSolution(genericBinding, ref settingsWereModifiedLocal))
                     {
                         problemsPersists = true;
+                    }
+
+                    if (settingsWereModifiedLocal)
+                    {
+                        settingsWereModified = true;
                     }
                 }
             }
