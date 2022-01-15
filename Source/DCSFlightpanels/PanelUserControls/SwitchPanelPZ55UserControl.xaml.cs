@@ -238,7 +238,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     image.Tag = "DARK";
                                 }
 
-                                Dispatcher?.Invoke(DispatcherPriority.Normal, (Action)Action);
+                                Dispatcher?.Invoke((Action)Action);
                                 break;
                             }
                         case PanelLEDColor.GREEN:
@@ -249,7 +249,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     image.Tag = "GREEN";
                                 }
 
-                                Dispatcher?.Invoke(DispatcherPriority.Normal, (Action)Action);
+                                Dispatcher?.Invoke((Action)Action);
                                 break;
                             }
                         case PanelLEDColor.YELLOW:
@@ -260,7 +260,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     image.Tag = "YELLOW";
                                 }
 
-                                Dispatcher?.Invoke(DispatcherPriority.Normal, (Action)Action);
+                                Dispatcher?.Invoke((Action)Action);
                                 break;
                             }
                         case PanelLEDColor.RED:
@@ -271,7 +271,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     image.Tag = "RED";
                                 }
 
-                                Dispatcher?.Invoke(DispatcherPriority.Normal, (Action)Action);
+                                Dispatcher?.Invoke((Action)Action);
                                 break;
                             }
                     }

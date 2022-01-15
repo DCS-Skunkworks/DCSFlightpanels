@@ -440,7 +440,7 @@ namespace NonVisuals
             }
         }
 
-        private void CheckHardwareConflicts()
+        private bool CheckHardwareConflicts()
         {
             var settingsWereModified = false;
             if (!BindingMappingManager.VerifyBindings(ref settingsWereModified))
@@ -454,8 +454,10 @@ namespace NonVisuals
             {
                 SetIsDirty();
             }
-        }
 
+            return settingsWereModified;
+        }
+        
         private void SetEmulationModeFlag()
         {
             if (DCSFPProfile.IsKeyEmulator(Profile))
@@ -675,15 +677,10 @@ namespace NonVisuals
                     {
                         break;
                     }
-                case PanelEventType.ManuallyFound:
-                    {
-                        CheckHardwareConflicts();
-                        break;
-                    }
                 case PanelEventType.Attached:
                 case PanelEventType.Created:
                     {
-                        BindingMappingManager.SendBinding(e.HidSkeleton);
+                        BindingMappingManager.SendBinding(e.HidInstance);
                         break;
                     }
                 case PanelEventType.Detached:
@@ -694,7 +691,16 @@ namespace NonVisuals
                     }
                 case PanelEventType.AllPanelsFound:
                     {
-                        CheckHardwareConflicts();
+                        if (CheckHardwareConflicts())
+                        {
+                            foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
+                            {
+                                if (genericPanelBinding.InUse == false)
+                                {
+                                    BindingMappingManager.SendBinding(genericPanelBinding.HIDInstance);
+                                }
+                            }
+                        }
                         break;
                     }
                 default: throw new Exception("Failed to understand PanelEventType in ProfileHandler");

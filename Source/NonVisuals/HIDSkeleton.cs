@@ -11,17 +11,21 @@ namespace NonVisuals
     public class HIDSkeleton
     {
         private readonly GamingPanelSkeleton _gamingPanelSkeleton;
+        public bool IsAttached { get; private set; }
 
         public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string hidInstance)
         {
             _gamingPanelSkeleton = gamingPanelSkeleton;
             HIDInstance = hidInstance;
+            IsAttached = true;
         }
 
         public void Close()
         {
             try
             {
+                IsAttached = false;
+
                 if (HIDReadDevice.IsOpen)
                 {
                     HIDReadDevice.CloseDevice();
@@ -54,6 +58,8 @@ namespace NonVisuals
 
         public GamingPanelSkeleton GamingPanelSkeleton => _gamingPanelSkeleton;
 
+        public GamingPanelEnum GamingPanelType => _gamingPanelSkeleton.GamingPanelType;
+
         public bool PanelHasBeenInstantiated { get; set; }
 
         
@@ -66,11 +72,13 @@ namespace NonVisuals
                 return;
             }
 
+            IsAttached = true;
             AppEventHandler.PanelEvent(this, HIDInstance, this, PanelEventType.Attached);
         }
 
         public void HIDDeviceOnRemoved()
         {
+            IsAttached = false;
             AppEventHandler.PanelEvent(this, HIDInstance, this, PanelEventType.Detached);
         }
     }

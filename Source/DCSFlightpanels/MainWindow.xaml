@@ -114,19 +114,6 @@
                     </Image.Style>
                 </Image>
             </Button>
-            <Button>
-                <Image Source="/dcsfp;component/Images/109_AllAnnotations_RedWarning_256.png" Name="ButtonImageDisable" MouseDown="ButtonImageDisableMouseDown"  ToolTip="Disable Forwarding of KeyPresses" Tag="False">
-                    <Image.Style>
-                        <Style TargetType="Image">
-                            <Style.Triggers>
-                                <Trigger Property="Tag" Value="False">
-                                    <Setter Property="Opacity" Value="0.5" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Image.Style>
-                </Image>
-            </Button>
 
             <Image Name="ImageDcsBiosConnected"  Source="/dcsfp;component/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
                 <Image.RenderTransform>

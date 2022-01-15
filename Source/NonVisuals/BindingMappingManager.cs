@@ -39,6 +39,20 @@ namespace NonVisuals
                 }
             }
         }
+        
+        public static void SendBinding(string hidInstance)
+        {
+            var hardwareFound = HIDHandler.GetInstance().HIDSkeletons
+                .Any(o => o.IsAttached && o.HIDInstance.Equals(hidInstance));
+            foreach (var genericPanelBinding in _genericBindings)
+            {
+                if (genericPanelBinding.HIDInstance.Equals(hidInstance) && genericPanelBinding.InUse == false && hardwareFound)
+                {
+                    genericPanelBinding.InUse = true;
+                    AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding, DCSFPProfile.SelectedProfile);
+                }
+            }
+        }
 
         /*
          * This to be used when loading from file.
@@ -130,7 +144,7 @@ namespace NonVisuals
 
             return true;
         }
-
+        
         public static void MergeModifiedBindings(List<ModifiedGenericBinding> modifiedGenericBindings)
         {
             bool modificationsMade = false;
@@ -194,13 +208,12 @@ namespace NonVisuals
             var count = _genericBindings.FindAll(o => (o.InUse == false) && (o.PanelType == genericBinding.PanelType)).Count;
             if (count == 1)
             {
-                var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType);
+                var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType && o.IsAttached);
                 if (hidSkeleton != null)
                 {
                     // This we can map ourselves!
                     genericBinding.HIDInstance = hidSkeleton.HIDInstance;
                     settingsWereModified = true;
-                    genericBinding.InUse = true;
                     MessageBox.Show("USB settings has changed. Please save the profile.", "USB changes found", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
@@ -213,6 +226,7 @@ namespace NonVisuals
 
             return false;
         }
+        
 
         public static GenericPanelBinding GetBinding(GamingPanel gamingPanel)
         {

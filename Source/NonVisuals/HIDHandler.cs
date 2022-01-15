@@ -1,4 +1,6 @@
-﻿using NonVisuals.EventArgs;
+﻿using System.Diagnostics;
+using System.Linq;
+using NonVisuals.EventArgs;
 
 namespace NonVisuals
 {
@@ -58,7 +60,7 @@ namespace NonVisuals
         /// </summary>
         /// <param name="loadStreamDeck"></param>
         /// <param name="searchForNew"></param>
-        public void Startup(bool loadStreamDeck, bool searchForNew)
+        public void Startup(bool loadStreamDeck)
         {
             try
             {
@@ -94,25 +96,20 @@ namespace NonVisuals
                                     hidSkeleton.HIDWriteDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
                                     hidSkeleton.HIDWriteDevice.MonitorDeviceEvents = true;
                                 }
-
-                                if (searchForNew)
-                                {
-                                    //Broadcast that this panel was found.
-                                    AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.ManuallyFound);
-                                }
                             }
                         }
                     }
                 }
 
-                if (!searchForNew)
+                foreach (var hidSkeleton in HIDSkeletons)
                 {
-                    foreach (var hidSkeleton in HIDSkeletons)
+                    if (hidSkeleton.IsAttached)
                     {
-                        //Broadcast that this panel was found.
-                        AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Found);
+                        Debug.WriteLine(hidSkeleton.GamingPanelType + "   " + hidSkeleton.HIDInstance);
                     }
                 }
+                //Broadcast that this panel was found.
+                HIDSkeletons.FindAll(o => o.IsAttached).ToList().ForEach(o => AppEventHandler.PanelEvent(this, o.HIDInstance, o, PanelEventType.Found));
 
                 //Broadcast that panel search is over and all panels have been found that exists.
                 AppEventHandler.PanelEvent(this, null, null, PanelEventType.AllPanelsFound);

@@ -392,7 +392,7 @@ namespace DCSFlightpanels
                 }
             }
 
-            Dispatcher?.Invoke(DispatcherPriority.Normal, (Action)Action);
+            Dispatcher?.BeginInvoke((Action)Action);
         }
 
         private void CreatePanel(HIDSkeleton hidSkeleton)
@@ -408,7 +408,7 @@ namespace DCSFlightpanels
                             _panelUserControls.Add(switchPanelPZ55UserControl);
                             tabItem.Content = switchPanelPZ55UserControl;
                             TabControlPanels.Items.Add(tabItem);
-                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                             AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
@@ -421,7 +421,7 @@ namespace DCSFlightpanels
                             _panelUserControls.Add(multiPanelUserControl);
                             tabItem.Content = multiPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
-                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                             AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
@@ -434,7 +434,7 @@ namespace DCSFlightpanels
                             _panelUserControls.Add(backLitPanelUserControl);
                             tabItem.Content = backLitPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
-                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                             AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
@@ -447,7 +447,7 @@ namespace DCSFlightpanels
                             _panelUserControls.Add(tpmPanelUserControl);
                             tabItem.Content = tpmPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
-                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                             AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
@@ -481,7 +481,7 @@ namespace DCSFlightpanels
                             _panelUserControls.Add(farmingSidePanelUserControl);
                             tabItem.Content = farmingSidePanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
-                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                             AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
@@ -496,7 +496,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -506,7 +506,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -516,7 +516,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -526,7 +526,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -536,7 +536,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -546,7 +546,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -556,7 +556,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -566,7 +566,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -576,7 +576,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -586,7 +586,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -596,7 +596,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -606,7 +606,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -616,7 +616,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -626,7 +626,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -636,7 +636,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -646,7 +646,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -656,7 +656,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -666,7 +666,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -676,7 +676,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -686,7 +686,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -696,7 +696,7 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
@@ -1398,22 +1398,6 @@ namespace DCSFlightpanels
             }
         }
 
-        private void ButtonImageDisableMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                var forwardKeys = bool.Parse(ButtonImageDisable.Tag.ToString());
-                forwardKeys = !forwardKeys;
-                ButtonImageDisable.Tag = forwardKeys ? "True" : "False";
-                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void OpenProfileInNotepad()
         {
             Process.Start(_profileHandler.Filename);
@@ -1905,7 +1889,7 @@ namespace DCSFlightpanels
                             SetWindowTitle();
                             SetWindowState();
                             SetApplicationMode();
-                            HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck, false);
+                            HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck);
                             break;
                         }
                     case ProfileEventEnum.ProfileClosed:
@@ -1930,24 +1914,31 @@ namespace DCSFlightpanels
             }
         }
 
+
         public void PanelEvent(object sender, PanelEventArgs e)
         {
             switch (e.EventType)
             {
                 case PanelEventType.Found:
-                case PanelEventType.ManuallyFound:
                     {
-                        CreatePanel(e.HidSkeleton);
+                        if (!_profileFileHIDInstances.Any(o => o.Key.Equals(e.HidSkeleton.HIDInstance)))
+                        {
+                            Dispatcher?.Invoke((Action)(() => CreatePanel(e.HidSkeleton))); 
+                        }
                         break;
                     }
                 case PanelEventType.Attached:
                     {
-                        Dispatcher?.BeginInvoke((Action)(() => CreatePanel(e.HidSkeleton)));
+                        if (!_profileFileHIDInstances.Any(o => o.Key.Equals(e.HidSkeleton.HIDInstance)))
+                        {
+                            Dispatcher?.Invoke((Action)(() => CreatePanel(e.HidSkeleton)));
+                        }
                         break;
                     }
                 case PanelEventType.Detached:
                     {
-                        DisposePanel(e.HidSkeleton);
+                        _profileFileHIDInstances.RemoveAll(o => o.Key.Equals(e.HidSkeleton.HIDInstance));
+                        Dispatcher?.Invoke((Action)(() => DisposePanel(e.HidSkeleton)));
                         break;
                     }
                 case PanelEventType.Created:
@@ -1980,7 +1971,7 @@ namespace DCSFlightpanels
                 try
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
-                    HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck, true);
+                    HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck);
                 }
                 finally
                 {
