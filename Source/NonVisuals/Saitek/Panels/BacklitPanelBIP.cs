@@ -65,7 +65,7 @@ namespace NonVisuals.Saitek.Panels
         public BacklitPanelBIP(uint ledBrightness, HIDSkeleton hidSkeleton)
             : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.BackLitPanel)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.BackLitPanel)
             {
                 throw new ArgumentException();
             }

@@ -53,7 +53,7 @@ namespace NonVisuals.Saitek.Panels
 
         public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
             {
                 throw new ArgumentException();
             }

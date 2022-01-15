@@ -26,7 +26,7 @@
 
         public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.TPM)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.TPM)
             {
                 throw new ArgumentException();
             }

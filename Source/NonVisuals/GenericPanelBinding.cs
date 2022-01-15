@@ -46,7 +46,7 @@
 
         public bool Match(HIDSkeleton hidSkeleton)
         {
-            return HIDInstance.Equals(hidSkeleton.HIDInstance) && PanelType == hidSkeleton.PanelInfo.GamingPanelType;
+            return HIDInstance.Equals(hidSkeleton.HIDInstance) && PanelType == hidSkeleton.GamingPanelType;
         }
 
         public bool Match(GenericPanelBinding genericPanelBinding)

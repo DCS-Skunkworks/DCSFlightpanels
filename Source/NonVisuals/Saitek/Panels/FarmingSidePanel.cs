@@ -25,7 +25,7 @@
 
         public FarmingSidePanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.FarmingPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.FarmingPanel)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.FarmingPanel)
             {
                 throw new ArgumentException();
             }

@@ -55,7 +55,7 @@
 
         public MultiPanelPZ70(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ70MultiPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ70MultiPanel)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ70MultiPanel)
             {
                 throw new ArgumentException();
             }

@@ -101,13 +101,13 @@ namespace NonVisuals
                     }
                 }
 
-                foreach (var hidSkeleton in HIDSkeletons)
+                /*foreach (var hidSkeleton in HIDSkeletons)
                 {
                     if (hidSkeleton.IsAttached)
                     {
                         Debug.WriteLine(hidSkeleton.GamingPanelType + "   " + hidSkeleton.HIDInstance);
                     }
-                }
+                }*/
                 //Broadcast that this panel was found.
                 HIDSkeletons.FindAll(o => o.IsAttached).ToList().ForEach(o => AppEventHandler.PanelEvent(this, o.HIDInstance, o, PanelEventType.Found));
 

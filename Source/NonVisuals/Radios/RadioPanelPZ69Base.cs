@@ -39,7 +39,7 @@
 
         protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ69RadioPanel)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ69RadioPanel)
             {
                 throw new ArgumentException();
             }
