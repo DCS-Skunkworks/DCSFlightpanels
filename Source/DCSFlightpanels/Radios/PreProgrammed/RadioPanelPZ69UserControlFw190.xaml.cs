@@ -82,7 +82,7 @@
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstance))
                 {
                     SetGraphicsState(e.Switches);
                 }
@@ -390,8 +390,8 @@
                 if (_radioPanelPZ69 != null)
                 {
                     TextBoxLogPZ69.Text = string.Empty;
-                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstanceId;
-                    Clipboard.SetText(_radioPanelPZ69.HIDInstanceId);
+                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstance;
+                    Clipboard.SetText(_radioPanelPZ69.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

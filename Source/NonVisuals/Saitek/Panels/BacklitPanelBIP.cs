@@ -75,6 +75,8 @@ namespace NonVisuals.Saitek.Panels
             _ledBrightness = ledBrightness;
             BipFactory.RegisterBip(this);
             Startup();
+
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         public sealed override void Startup()
@@ -98,6 +100,7 @@ namespace NonVisuals.Saitek.Panels
                 if (disposing)
                 {
                     BipFactory.DeRegisterBip(this);
+                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -133,7 +136,7 @@ namespace NonVisuals.Saitek.Panels
                 }
             }
 
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -605,7 +608,7 @@ namespace NonVisuals.Saitek.Panels
                 SendLEDData(finalArray);
 
 
-                AppEventHandler.LedLightChanged(this, HIDInstanceId, null, PanelLEDColor.DARK);
+                AppEventHandler.LedLightChanged(this, HIDInstance, null, PanelLEDColor.DARK);
             }
             catch (Exception ex)
             {

@@ -113,7 +113,7 @@ namespace NonVisuals.Radios
             }
 
             _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -242,7 +242,7 @@ namespace NonVisuals.Radios
                             {
                                 PluginManager.DoEvent(
                                     DCSFPProfile.SelectedProfile.Description, 
-                                    HIDInstanceId, 
+                                    HIDInstance, 
                                     (int)PluginGamingPanelEnum.PZ69RadioPanel, 
                                     (int)radioPanelKey.RadioPanelPZ69Knob, 
                                     radioPanelKey.IsOn, 
@@ -259,7 +259,7 @@ namespace NonVisuals.Radios
                     {
                         PluginManager.DoEvent(
                             DCSFPProfile.SelectedProfile.Description,
-                            HIDInstanceId,
+                            HIDInstance,
                             (int)PluginGamingPanelEnum.PZ69RadioPanel,
                             (int)radioPanelKey.RadioPanelPZ69Knob,
                             radioPanelKey.IsOn,

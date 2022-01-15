@@ -108,7 +108,7 @@
             }
 
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -241,7 +241,7 @@
                         {
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description, 
-                                HIDInstanceId, 
+                                HIDInstance, 
                                 (int)PluginGamingPanelEnum.TPM, 
                                 (int)tpmPanelSwitch.TPMSwitch, 
                                 tpmPanelSwitch.IsOn,
@@ -256,7 +256,7 @@
                 {
                     PluginManager.DoEvent(
                         DCSFPProfile.SelectedProfile.Description,
-                        HIDInstanceId,
+                        HIDInstance,
                         (int)PluginGamingPanelEnum.TPM,
                         (int)tpmPanelSwitch.TPMSwitch,
                         tpmPanelSwitch.IsOn,

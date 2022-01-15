@@ -58,7 +58,7 @@ namespace DCSFlightpanels
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
+        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new List<KeyValuePair<string, GamingPanelEnum>>();
         private readonly string _windowName = "DCSFlightpanels ";
         private readonly Timer _exceptionTimer = new Timer(1000);
         private readonly Timer _statusMessagesTimer = new Timer(1000);
@@ -282,45 +282,6 @@ namespace DCSFlightpanels
             }
         }
         
-        private void CloseTabItem(string instanceId)
-        {
-            try
-            {
-                var counter = 0;
-                while (TabControlPanels.Items.Count > counter)
-                {
-                    var tabItem = (TabItem)TabControlPanels.Items[counter];
-                    var userControl = (UserControlBase)tabItem.Content;
-                    var gamingPanelUserControl = (IGamingPanelUserControl)tabItem.Content;
-                    var gamingPanel = gamingPanelUserControl.GetGamingPanel();
-
-                    if (gamingPanel != null && gamingPanel.HIDInstanceId == instanceId)
-                    {
-                        TabControlPanels.Items.Remove(tabItem);
-                        userControl.Dispose();
-                        _panelUserControls.Remove(userControl);
-
-                        for (int i = 0; i < _profileFileInstanceIDs.Count; i++)
-                        {
-                            if (_profileFileInstanceIDs[i].Key == gamingPanel.HIDInstanceId)
-                            {
-                                _profileFileInstanceIDs.RemoveAt(i);
-                                break;
-                            }
-                        }
-
-                        break;
-                    }
-
-                    counter++;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private int DisposePanels()
         {
             var closedItemCount = 0;
@@ -345,7 +306,7 @@ namespace DCSFlightpanels
                     }
                     while (TabControlPanels.Items.Count > 0);
 
-                    _profileFileInstanceIDs.Clear();
+                    _profileFileHIDInstances.Clear();
                 }
             }
             catch (Exception ex)
@@ -421,11 +382,11 @@ namespace DCSFlightpanels
                     var tabItem = (TabItem) TabControlPanels.Items.GetItemAt(i);
                     var userControl = (IGamingPanelUserControl) tabItem.Content;
 
-                    if (userControl.GetGamingPanel().HIDInstanceId == hidSkeleton.InstanceId)
+                    if (userControl.GetGamingPanel().HIDInstance.Equals(hidSkeleton.HIDInstance))
                     {
                         userControl.Dispose();
                         TabControlPanels.Items.RemoveAt(i);
-                        AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Disposed);
+                        AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Disposed);
                         break;
                     }
                 }
@@ -447,9 +408,9 @@ namespace DCSFlightpanels
                             _panelUserControls.Add(switchPanelPZ55UserControl);
                             tabItem.Content = switchPanelPZ55UserControl;
                             TabControlPanels.Items.Add(tabItem);
-                            _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
                         }
 
@@ -460,9 +421,9 @@ namespace DCSFlightpanels
                             _panelUserControls.Add(multiPanelUserControl);
                             tabItem.Content = multiPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
-                            _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
                         }
 
@@ -473,9 +434,9 @@ namespace DCSFlightpanels
                             _panelUserControls.Add(backLitPanelUserControl);
                             tabItem.Content = backLitPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
-                            _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
                         }
 
@@ -486,9 +447,9 @@ namespace DCSFlightpanels
                             _panelUserControls.Add(tpmPanelUserControl);
                             tabItem.Content = tpmPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
-                            _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
                         }
 
@@ -505,9 +466,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(streamDeckUserControl);
                                 tabItemStreamDeck.Content = streamDeckUserControl;
                                 TabControlPanels.Items.Add(tabItemStreamDeck);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.InstanceId, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
 
                             break;
@@ -520,9 +481,9 @@ namespace DCSFlightpanels
                             _panelUserControls.Add(farmingSidePanelUserControl);
                             tabItem.Content = farmingSidePanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
-                            _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
                         }
 
@@ -535,9 +496,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsA10C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -545,9 +506,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsUH1H(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -555,9 +516,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsMiG21Bis(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -565,9 +526,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsKa50(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -575,9 +536,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsMi8MT(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -585,9 +546,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsBf109K4(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -595,9 +556,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsFW190D9(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -605,9 +566,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsP51D(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -615,9 +576,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsF86F(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -625,9 +586,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsSpitfireLFMkIX(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -635,9 +596,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsAJS37(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -645,9 +606,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsSA342(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -655,9 +616,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsFA18C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -665,9 +626,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsM2000C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -675,9 +636,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsF5E(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -685,9 +646,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsF14B(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -695,9 +656,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsAV8B(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -705,9 +666,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsP47D(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -715,9 +676,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsMi24P(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -725,9 +686,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else
                             {
@@ -735,9 +696,9 @@ namespace DCSFlightpanels
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Created);
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
 
                             break;

@@ -45,10 +45,10 @@
         public long ReportCounter = 0;
         public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); 
 
-        public string HIDInstanceId
+        public string HIDInstance
         {
-            get => HIDSkeletonBase.InstanceId;
-            set => HIDSkeletonBase.InstanceId = value;
+            get => HIDSkeletonBase.HIDInstance;
+            set => HIDSkeletonBase.HIDInstance = value;
         }
 
         public string BindingHash
@@ -97,7 +97,6 @@
             
             AppEventHandler.AttachForwardPanelEventListener(this);
             AppEventHandler.AttachSettingsConsumerListener(this);
-            BIOSEventHandler.AttachDataListener(this);
         }
 
         public void Dispose()
@@ -121,8 +120,7 @@
                 Closed = true; // Don't know if this is necessary atm. (2021)
                 AppEventHandler.DetachForwardPanelEventListener(this);
                 AppEventHandler.DetachSettingsConsumerListener(this);
-                BIOSEventHandler.DetachDataListener(this);
-                AppEventHandler.PanelEvent(this, HIDSkeletonBase.InstanceId, HIDSkeletonBase, PanelEventType.Disposed);
+                AppEventHandler.PanelEvent(this, HIDSkeletonBase.HIDInstance, HIDSkeletonBase, PanelEventType.Disposed);
             }
 
             _disposed = true;
@@ -151,7 +149,7 @@
                     else if (newCount - _count != 1)
                     {
                         // Not good
-                        AppEventHandler.UpdatesMissed(this, HIDSkeletonBase.InstanceId, TypeOfPanel, (int)(newCount - _count));
+                        AppEventHandler.UpdatesMissed(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, (int)(newCount - _count));
                         _count = newCount;
                     }
                 }
@@ -160,7 +158,7 @@
 
         public void SetIsDirty()
         {
-            AppEventHandler.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
+            AppEventHandler.SettingsChanged(this, HIDInstance, TypeOfPanel);
             IsDirty = true;
         }
         

@@ -122,7 +122,7 @@
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.TPM && e.HidInstance.Equals(_tpmPanel.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.TPM && e.HidInstance.Equals(_tpmPanel.HIDInstance))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -137,7 +137,7 @@
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.TPM && _tpmPanel.HIDInstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == GamingPanelEnum.TPM && _tpmPanel.HIDInstance.Equals(e.PanelBinding.HIDInstance))
                 {
                     ShowGraphicConfiguration();
                 }
@@ -152,7 +152,7 @@
         {
             try
             {
-                if (e.HidInstance.Equals(_tpmPanel.HIDInstanceId) && e.PanelType == GamingPanelEnum.TPM)
+                if (e.HidInstance.Equals(_tpmPanel.HIDInstance) && e.PanelType == GamingPanelEnum.TPM)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Text = string.Empty));
@@ -168,7 +168,7 @@
         {
             try
             {
-                if (_tpmPanel.HIDInstanceId == e.HidInstance)
+                if (_tpmPanel.HIDInstance.Equals(e.HidInstance))
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                 }
@@ -526,8 +526,8 @@
                 if (_tpmPanel != null)
                 {
                     TextBoxLogTPM.Text = string.Empty;
-                    TextBoxLogTPM.Text = _tpmPanel.HIDInstanceId;
-                    Clipboard.SetText(_tpmPanel.HIDInstanceId);
+                    TextBoxLogTPM.Text = _tpmPanel.HIDInstance;
+                    Clipboard.SetText(_tpmPanel.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

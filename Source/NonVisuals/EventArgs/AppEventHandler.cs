@@ -13,9 +13,9 @@ namespace NonVisuals.EventArgs
         public delegate void PanelEventHandler(object sender, PanelEventArgs e);
 
         public static event PanelEventHandler OnPanelEvent;
-        public static void PanelEvent(object sender, string hidInstanceId, HIDSkeleton hidSkeleton, PanelEventType panelEventType)
+        public static void PanelEvent(object sender, string hidInstance, HIDSkeleton hidSkeleton, PanelEventType panelEventType)
         {
-            OnPanelEvent?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstanceId, HidSkeleton = hidSkeleton, EventType = panelEventType});
+            OnPanelEvent?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstance, HidSkeleton = hidSkeleton, EventType = panelEventType});
         }
 
         public static void AttachPanelEventListener(IPanelEventListener panelEventListener)
@@ -34,9 +34,9 @@ namespace NonVisuals.EventArgs
         public delegate void SettingsHasModifiedEventHandler(object sender, PanelInfoArgs e);
 
         public static event SettingsHasModifiedEventHandler OnSettingsModified;
-        public static void SettingsChanged(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
+        public static void SettingsChanged(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum)
         {
-            OnSettingsModified?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
+            OnSettingsModified?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstance, PanelType = gamingPanelEnum });
         }
 
         public static void AttachSettingsModified(ISettingsModifiedListener settingsModifiedListener)
@@ -153,9 +153,9 @@ namespace NonVisuals.EventArgs
 
         public static event SwitchesHasBeenChangedEventHandler OnSwitchesChangedA;
 
-        public static void SwitchesChanged(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum, HashSet<object> hashSet)
+        public static void SwitchesChanged(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum, HashSet<object> hashSet)
         {
-            OnSwitchesChangedA?.Invoke(sender, new SwitchesChangedEventArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum, Switches = hashSet });
+            OnSwitchesChangedA?.Invoke(sender, new SwitchesChangedEventArgs { HidInstance = hidInstance, PanelType = gamingPanelEnum, Switches = hashSet });
         }
         
         /*
@@ -165,9 +165,9 @@ namespace NonVisuals.EventArgs
         public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelInfoArgs e);
 
         public static event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
-        public static void SettingsApplied(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum)
+        public static void SettingsApplied(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum)
         {
-            OnSettingsAppliedA?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstanceId, PanelType = gamingPanelEnum });
+            OnSettingsAppliedA?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstance, PanelType = gamingPanelEnum });
         }
 
         /*
@@ -178,11 +178,11 @@ namespace NonVisuals.EventArgs
 
         public static event UpdatesHasBeenMissedEventHandler OnUpdatesHasBeenMissed;
 
-        public static void UpdatesMissed(object sender, string hidInstanceId, GamingPanelEnum gamingPanelEnum, int missedUpdateCount)
+        public static void UpdatesMissed(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum, int missedUpdateCount)
         {
             OnUpdatesHasBeenMissed?.Invoke(
                 sender,
-                new DCSBIOSUpdatesMissedEventArgs { HidInstance = hidInstanceId, GamingPanelEnum = gamingPanelEnum, Count = missedUpdateCount });
+                new DCSBIOSUpdatesMissedEventArgs { HidInstance = hidInstance, GamingPanelEnum = gamingPanelEnum, Count = missedUpdateCount });
         }
 
         // For those that wants to listen to this panel
@@ -212,9 +212,9 @@ namespace NonVisuals.EventArgs
 
         public static event LedLightChangedEventHandler OnLedLightChangedA;
 
-        public static void LedLightChanged(object sender, string hidInstanceId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        public static void LedLightChanged(object sender, string hidInstance, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
-            OnLedLightChangedA?.Invoke(sender, new LedLightChangeEventArgs { HIDInstanceId = hidInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
+            OnLedLightChangedA?.Invoke(sender, new LedLightChangeEventArgs { HIDInstance = hidInstance, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
         }
         
         public static void AttachLEDLightListener(ILedLightPanelListener ledLightPanelListener)

@@ -64,6 +64,7 @@
             ProductId = 0xD06;
             CreateMultiKnobs();
             Startup();
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -74,6 +75,7 @@
             {
                 if (disposing)
                 {
+                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -191,7 +193,7 @@
 
             SettingsLoading = false;
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -847,7 +849,7 @@
                             {
                                 PluginManager.DoEvent(
                                     DCSFPProfile.SelectedProfile.Description,
-                                    HIDInstanceId,
+                                    HIDInstance,
                                     (int)PluginGamingPanelEnum.PZ70MultiPanel,
                                     (int)multiPanelKnob.MultiPanelPZ70Knob,
                                     multiPanelKnob.IsOn,
@@ -870,7 +872,7 @@
                 {
                     PluginManager.DoEvent(
                         DCSFPProfile.SelectedProfile.Description,
-                        HIDInstanceId,
+                        HIDInstance,
                         (int)PluginGamingPanelEnum.PZ70MultiPanel,
                         (int)multiPanelKnob.MultiPanelPZ70Knob,
                         multiPanelKnob.IsOn,

@@ -46,12 +46,12 @@
 
         public bool Match(HIDSkeleton hidSkeleton)
         {
-            return HIDInstance == hidSkeleton.InstanceId && PanelType == hidSkeleton.PanelInfo.GamingPanelType;
+            return HIDInstance.Equals(hidSkeleton.HIDInstance) && PanelType == hidSkeleton.PanelInfo.GamingPanelType;
         }
 
         public bool Match(GenericPanelBinding genericPanelBinding)
         {
-            return HIDInstance == genericPanelBinding.HIDInstance && PanelType == genericPanelBinding.PanelType;
+            return HIDInstance.Equals(genericPanelBinding.HIDInstance) && PanelType == genericPanelBinding.PanelType;
         }
 
         public void JSONAddLine(string jsonLine)

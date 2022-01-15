@@ -79,7 +79,7 @@ namespace NonVisuals.StreamDeck
             {
                 PluginManager.DoEvent(
                     DCSFPProfile.SelectedProfile.Description,
-                    StreamDeckPanelInstance.HIDInstanceId,
+                    StreamDeckPanelInstance.HIDInstance,
                     (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
                     (int)StreamDeckButtonName,
                     true,

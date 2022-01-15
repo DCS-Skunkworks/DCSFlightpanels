@@ -110,7 +110,7 @@
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstance))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -127,7 +127,7 @@
         {
             try
             {
-                if (e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ69RadioPanel)
+                if (e.HidInstance.Equals(_radioPanelPZ69.HIDInstance) && e.PanelType == GamingPanelEnum.PZ69RadioPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)ShowGraphicConfiguration);
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ69.Text = string.Empty));
@@ -143,7 +143,7 @@
         {
             try
             {
-                if (_radioPanelPZ69.HIDInstanceId == e.HidInstance)
+                if (_radioPanelPZ69.HIDInstance.Equals(e.HidInstance))
                 {
                     Dispatcher?.BeginInvoke((Action)ShowGraphicConfiguration);
                 }
@@ -993,8 +993,8 @@
                 if (_radioPanelPZ69 != null)
                 {
                     TextBoxLogPZ69.Text = string.Empty;
-                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstanceId;
-                    Clipboard.SetText(_radioPanelPZ69.HIDInstanceId);
+                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstance;
+                    Clipboard.SetText(_radioPanelPZ69.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

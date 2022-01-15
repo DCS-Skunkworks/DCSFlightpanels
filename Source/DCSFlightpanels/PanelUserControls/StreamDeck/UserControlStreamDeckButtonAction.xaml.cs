@@ -910,7 +910,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             modifiedList.AddRange(streamDeckList);
 
             //Remove current Streamdeck
-            modifiedList.RemoveAll(o => o.HIDInstanceId == _streamDeckPanel.HIDInstanceId);
+            modifiedList.RemoveAll(o => o.HIDInstance.Equals(_streamDeckPanel.HIDInstance));
 
             ComboBoxRemoteStreamDecks.ItemsSource = modifiedList;
             ComboBoxRemoteStreamDecks.Items.Refresh();

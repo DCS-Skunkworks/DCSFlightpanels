@@ -29,7 +29,7 @@ namespace NonVisuals
 
         private static DCSFPProfile _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
 
-        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
+        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new List<KeyValuePair<string, GamingPanelEnum>>();
         private readonly object _lockObject = new object();
 
         // Both directory and filename
@@ -168,7 +168,7 @@ namespace NonVisuals
 
         public void ClearAll()
         {
-            _profileFileInstanceIDs.Clear();
+            _profileFileHIDInstances.Clear();
         }
 
         public void ReloadProfile()
@@ -190,7 +190,7 @@ namespace NonVisuals
 
             _profileLoaded = false;
             _isNewProfile = false;
-            _profileFileInstanceIDs.Clear();
+            _profileFileHIDInstances.Clear();
             AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileClosed, null, DCSFPProfile.GetNoFrameLoadedYet());
 
             return true;
@@ -284,7 +284,7 @@ namespace NonVisuals
                 }
 
                 /*
-                 * Read all information and add InstanceID to all lines using BeginPanel and EndPanel
+                 * Read all information and add HIDInstance(ID) to all lines using BeginPanel and EndPanel
                  *             
                  * PanelType=PZ55SwitchPanel
                  * PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&3f11a32&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
@@ -299,7 +299,7 @@ namespace NonVisuals
                 Debug.WriteLine($"ProfileHandler reading file {_filename}");
                 var fileLines = File.ReadAllLines(_filename);
                 var currentPanelType = GamingPanelEnum.Unknown;
-                string currentPanelInstanceID = null;
+                string currentPanelInstance = null;
                 string currentBindingHash = null;
                 var insidePanel = false;
                 var insideJSONPanel = false;
@@ -352,9 +352,9 @@ namespace NonVisuals
                         }
                         else if (fileLine.StartsWith("PanelInstanceID="))
                         {
-                            currentPanelInstanceID = fileLine.Replace("PanelInstanceID=", string.Empty).Trim();
-                            genericPanelBinding.HIDInstance = currentPanelInstanceID;
-                            _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(currentPanelInstanceID, currentPanelType));
+                            currentPanelInstance = fileLine.Replace("PanelInstanceID=", string.Empty).Trim();
+                            genericPanelBinding.HIDInstance = currentPanelInstance;
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(currentPanelInstance, currentPanelType));
                         }
                         else if (fileLine.StartsWith("BindingHash="))
                         {
@@ -528,7 +528,7 @@ namespace NonVisuals
 
                     if (genericPanelBinding == null)
                     {
-                        genericPanelBinding = new GenericPanelBinding(gamingPanel.HIDInstanceId, gamingPanel.BindingHash, gamingPanel.TypeOfPanel);
+                        genericPanelBinding = new GenericPanelBinding(gamingPanel.HIDInstance, gamingPanel.BindingHash, gamingPanel.TypeOfPanel);
                         BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
@@ -556,7 +556,7 @@ namespace NonVisuals
 
                     if (genericPanelBinding == null)
                     {
-                        genericPanelBinding = new GenericPanelBinding(gamingPanel.HIDInstanceId, gamingPanel.BindingHash, gamingPanel.TypeOfPanel);
+                        genericPanelBinding = new GenericPanelBinding(gamingPanel.HIDInstance, gamingPanel.BindingHash, gamingPanel.TypeOfPanel);
                         BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 

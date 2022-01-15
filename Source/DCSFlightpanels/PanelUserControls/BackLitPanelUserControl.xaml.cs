@@ -104,7 +104,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!UserControlLoaded || _backlitPanelBIP.HIDInstanceId.Equals(e.HIDInstanceId))
+                if (!UserControlLoaded || _backlitPanelBIP.HIDInstance.Equals(e.HIDInstance))
                 {
                     return;
                 }
@@ -127,7 +127,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 if (e.PanelType == GamingPanelEnum.PZ69RadioPanel &&
-                    e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
+                    e.HidInstance.Equals(_backlitPanelBIP.HIDInstance))
                 {
                     Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
                 }
@@ -147,7 +147,7 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
 
-                if (_backlitPanelBIP.HIDInstanceId == e.HidInstance)
+                if (_backlitPanelBIP.HIDInstance.Equals(e.HidInstance))
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                 }
@@ -594,8 +594,8 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_backlitPanelBIP != null)
                 {
                     TextBoxLogBIP.Text = string.Empty;
-                    TextBoxLogBIP.Text = _backlitPanelBIP.HIDInstanceId;
-                    Clipboard.SetText(_backlitPanelBIP.HIDInstanceId);
+                    TextBoxLogBIP.Text = _backlitPanelBIP.HIDInstance;
+                    Clipboard.SetText(_backlitPanelBIP.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }
@@ -611,7 +611,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_backlitPanelBIP != null)
                 {
-                    Clipboard.SetText(Common.GetMd5Hash(_backlitPanelBIP.HIDInstanceId));
+                    Clipboard.SetText(Common.GetMd5Hash(_backlitPanelBIP.HIDInstance));
                     MessageBox.Show("The MD5 hash for the panel has been copied to the Clipboard.\nUse this value when you connect switches to B.I.P. lights.");
                 }
             }

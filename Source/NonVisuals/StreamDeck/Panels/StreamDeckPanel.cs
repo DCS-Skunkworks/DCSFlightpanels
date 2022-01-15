@@ -107,7 +107,7 @@
             };
 
             Startup();
-            _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
+            _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.HIDInstance, false);
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
             _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
             SDEventHandler.AttachStreamDeckListener(this);
@@ -321,7 +321,7 @@
             }
 
             SettingsLoading = false;
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         private string ExportJSONSettings()
@@ -402,7 +402,7 @@
 
         public string GetLayerHandlerInformation()
         {
-            return $"StreamDeckLayerHandler Instance ID = [{_streamDeckLayerHandler.InstanceId}] Counter = [{StreamDeckLayerHandler.InstanceIdCounter}]";
+            return $"StreamDeckLayerHandler Instance ID = [{_streamDeckLayerHandler.HIDInstance}] Counter = [{StreamDeckLayerHandler.HIDInstanceCounter}]";
         }
 
         public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName, string layerName)

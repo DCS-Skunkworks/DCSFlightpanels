@@ -169,7 +169,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstance))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -184,7 +184,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.HIDInstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.HIDInstance == e.PanelBinding.HIDInstance)
                 {
                     ShowGraphicConfiguration();
                 }
@@ -199,7 +199,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (_switchPanelPZ55.HIDInstanceId.Equals(e.HIDInstanceId))
+                if (_switchPanelPZ55.HIDInstance.Equals(e.HIDInstance))
                 {
                     var position = (SwitchPanelPZ55LEDPosition)e.LEDPosition.Position;
                     Image image;
@@ -288,7 +288,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstance))
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ55.Text = string.Empty));
@@ -304,7 +304,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (_switchPanelPZ55.HIDInstanceId == e.HidInstance)
+                if (_switchPanelPZ55.HIDInstance == e.HidInstance)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                 }
@@ -826,8 +826,8 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_switchPanelPZ55 != null)
                 {
                     TextBoxLogPZ55.Text = string.Empty;
-                    TextBoxLogPZ55.Text = _switchPanelPZ55.HIDInstanceId;
-                    Clipboard.SetText(_switchPanelPZ55.HIDInstanceId);
+                    TextBoxLogPZ55.Text = _switchPanelPZ55.HIDInstance;
+                    Clipboard.SetText(_switchPanelPZ55.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

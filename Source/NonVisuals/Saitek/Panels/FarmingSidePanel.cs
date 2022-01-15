@@ -35,6 +35,7 @@
             ProductId = 0x2218;
             CreateKeys();
             Startup();
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -45,6 +46,7 @@
             {
                 if (disposing)
                 {
+                    BIOSEventHandler.DetachDataListener(this);
                     Closed = true;
                 }
 
@@ -107,7 +109,7 @@
                 }
             }
 
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
             _keyBindings = KeyBindingFarmingPanel.SetNegators(_keyBindings);
 
         }
@@ -251,7 +253,7 @@
                         {
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description,
-                                HIDInstanceId,
+                                HIDInstance,
                                 (int)PluginGamingPanelEnum.FarmingPanel,
                                 (int)farmingPanelKey.FarmingPanelMKKey,
                                 farmingPanelKey.IsOn,
@@ -267,7 +269,7 @@
                 {
                     PluginManager.DoEvent(
                         DCSFPProfile.SelectedProfile.Description,
-                        HIDInstanceId,
+                        HIDInstance,
                         (int)PluginGamingPanelEnum.FarmingPanel,
                         (int)farmingPanelKey.FarmingPanelMKKey,
                         farmingPanelKey.IsOn,

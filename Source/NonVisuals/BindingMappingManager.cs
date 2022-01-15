@@ -198,7 +198,7 @@ namespace NonVisuals
                 if (hidSkeleton != null)
                 {
                     // This we can map ourselves!
-                    genericBinding.HIDInstance = hidSkeleton.InstanceId;
+                    genericBinding.HIDInstance = hidSkeleton.HIDInstance;
                     settingsWereModified = true;
                     genericBinding.InUse = true;
                     MessageBox.Show("USB settings has changed. Please save the profile.", "USB changes found", MessageBoxButton.OK, MessageBoxImage.Information);

@@ -63,6 +63,7 @@ namespace NonVisuals.Saitek.Panels
             ProductId = 0xD67;
             CreateSwitchKeys();
             Startup();
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -73,6 +74,7 @@ namespace NonVisuals.Saitek.Panels
             {
                 if (disposing)
                 {
+                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -160,7 +162,7 @@ namespace NonVisuals.Saitek.Panels
                 }
             }
 
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
         }
 
@@ -461,7 +463,7 @@ namespace NonVisuals.Saitek.Panels
                         {
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description, 
-                                HIDInstanceId, 
+                                HIDInstance, 
                                 (int)PluginGamingPanelEnum.PZ55SwitchPanel, 
                                 (int)switchPanelKey.SwitchPanelPZ55Key, 
                                 switchPanelKey.IsOn,
@@ -477,7 +479,7 @@ namespace NonVisuals.Saitek.Panels
                 {
                     PluginManager.DoEvent(
                         DCSFPProfile.SelectedProfile.Description,
-                        HIDInstanceId,
+                        HIDInstance,
                         (int)PluginGamingPanelEnum.PZ55SwitchPanel,
                         (int)switchPanelKey.SwitchPanelPZ55Key,
                         switchPanelKey.IsOn,
@@ -936,7 +938,7 @@ namespace NonVisuals.Saitek.Panels
                         }
                 }
 
-                AppEventHandler.LedLightChanged(this, HIDSkeletonBase.InstanceId, new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
+                AppEventHandler.LedLightChanged(this, HIDSkeletonBase.HIDInstance, new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
                 SetLandingGearLED(_ledUpperColor | _ledLeftColor | _ledRightColor);
             }
             catch (Exception ex)

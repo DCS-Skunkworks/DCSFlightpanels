@@ -163,7 +163,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelType == _streamDeckPanel.TypeOfPanel && e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId))
+                if (e.PanelType == _streamDeckPanel.TypeOfPanel && e.HidInstance.Equals(_streamDeckPanel.HIDInstance))
                 {
                     NotifyButtonChanges(e.Switches);
                 }
@@ -178,7 +178,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelBinding.PanelType == _streamDeckPanel.TypeOfPanel && _streamDeckPanel.HIDInstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == _streamDeckPanel.TypeOfPanel && _streamDeckPanel.HIDInstance == e.PanelBinding.HIDInstance)
                 {
                     LoadComboBoxLayers();
                 }
@@ -205,7 +205,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId) && e.PanelType == _streamDeckPanel.TypeOfPanel)
+                if (e.HidInstance.Equals(_streamDeckPanel.HIDInstance) && e.PanelType == _streamDeckPanel.TypeOfPanel)
                 {
                     SDEventHandler.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 }
@@ -224,7 +224,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     TextBoxLogStreamDeck.Text = string.Empty;
                     TextBoxLogStreamDeck.Text = _streamDeckPanel.BindingHash;
-                    Clipboard.SetText(_streamDeckPanel.HIDInstanceId);
+                    Clipboard.SetText(_streamDeckPanel.HIDInstance);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }
             }

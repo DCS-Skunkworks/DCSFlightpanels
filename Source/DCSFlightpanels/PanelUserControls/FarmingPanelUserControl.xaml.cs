@@ -110,7 +110,7 @@
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstance))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -125,7 +125,7 @@
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.FarmingPanel && _farmingSidePanel.HIDInstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == GamingPanelEnum.FarmingPanel && _farmingSidePanel.HIDInstance.Equals(e.PanelBinding.HIDInstance))
                 {
                     ShowGraphicConfiguration();
                 }
@@ -140,7 +140,7 @@
         {
             try
             {
-                if (e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId) && e.PanelType == GamingPanelEnum.FarmingPanel)
+                if (e.HidInstance.Equals(_farmingSidePanel.HIDInstance) && e.PanelType == GamingPanelEnum.FarmingPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogFarmingPanel.Text = string.Empty));
@@ -156,7 +156,7 @@
         {
             try
             {
-                if (_farmingSidePanel.HIDInstanceId == e.HidInstance)
+                if (_farmingSidePanel.HIDInstance.Equals(e.HidInstance))
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                 }
@@ -667,8 +667,8 @@
                 if (_farmingSidePanel != null)
                 {
                     TextBoxLogFarmingPanel.Text = string.Empty;
-                    TextBoxLogFarmingPanel.Text = _farmingSidePanel.HIDInstanceId;
-                    Clipboard.SetText(_farmingSidePanel.HIDInstanceId);
+                    TextBoxLogFarmingPanel.Text = _farmingSidePanel.HIDInstance;
+                    Clipboard.SetText(_farmingSidePanel.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

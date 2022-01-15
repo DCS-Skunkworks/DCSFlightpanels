@@ -12,10 +12,10 @@ namespace NonVisuals
     {
         private readonly GamingPanelSkeleton _gamingPanelSkeleton;
 
-        public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string instanceId)
+        public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string hidInstance)
         {
             _gamingPanelSkeleton = gamingPanelSkeleton;
-            InstanceId = instanceId;
+            HIDInstance = hidInstance;
         }
 
         public void Close()
@@ -46,7 +46,7 @@ namespace NonVisuals
             get => _gamingPanelSkeleton;
         }
 
-        public string InstanceId { get; set; }
+        public string HIDInstance { get; set; }
 
         public HidDevice HIDReadDevice { get; set; }
 
@@ -66,12 +66,12 @@ namespace NonVisuals
                 return;
             }
 
-            AppEventHandler.PanelEvent(this, InstanceId, this, PanelEventType.Attached);
+            AppEventHandler.PanelEvent(this, HIDInstance, this, PanelEventType.Attached);
         }
 
         public void HIDDeviceOnRemoved()
         {
-            AppEventHandler.PanelEvent(this, InstanceId, this, PanelEventType.Detached);
+            AppEventHandler.PanelEvent(this, HIDInstance, this, PanelEventType.Detached);
         }
     }
 

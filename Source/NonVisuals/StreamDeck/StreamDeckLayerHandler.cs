@@ -34,8 +34,8 @@ namespace NonVisuals.StreamDeck
 
         private bool _jsonImported;
 
-        private static int _instanceIdCounter;
-        private readonly int _instanceId;
+        private static int _hidInstanceCounter;
+        private readonly int _hidInstance;
 
 
         private readonly UnicodeEncoding _uniCodeEncoding = new();
@@ -51,8 +51,8 @@ namespace NonVisuals.StreamDeck
                                                                             }
                                                                     };
 
-        public static int InstanceIdCounter => _instanceIdCounter;
-        public int InstanceId => _instanceId;
+        public static int HIDInstanceCounter => _hidInstanceCounter;
+        public int HIDInstance => _hidInstance;
         public bool HasLayers => _layerList.Count > 0;
 
         public List<StreamDeckLayer> LayerList
@@ -83,7 +83,7 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckLayerHandler(StreamDeckPanel streamDeckPanel)
         {
-            _instanceId = _instanceIdCounter++;
+            _hidInstance = _hidInstanceCounter++;
             _streamDeckPanel = streamDeckPanel;
             _streamDeckBoard = streamDeckPanel.StreamDeckBoard;
         }

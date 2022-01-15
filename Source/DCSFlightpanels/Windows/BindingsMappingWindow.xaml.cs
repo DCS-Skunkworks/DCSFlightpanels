@@ -110,7 +110,7 @@
             {
                 return;
             }
-            LabelReplacementInformation.Content = gamingPanel.HIDInstanceId;
+            LabelReplacementInformation.Content = gamingPanel.HIDInstance;
         }
 
         private void ClearReplacementHardware()
@@ -128,7 +128,7 @@
                 if (genericPanelBinding.InUse)
                 {
                     //Remove those that has been mapped already so they can't be re-mapped
-                    sameTypeOfPanels.RemoveAll(o => o.HIDInstanceId == genericPanelBinding.HIDInstance && o.TypeOfPanel == genericPanelBinding.PanelType);
+                    sameTypeOfPanels.RemoveAll(o => o.HIDInstance.Equals(genericPanelBinding.HIDInstance) && o.TypeOfPanel == genericPanelBinding.PanelType);
                 }
             }
             ComboBoxReplacementHardware.ItemsSource = sameTypeOfPanels;
@@ -210,7 +210,7 @@
                     return;
                 }
 
-                genericBinding.HIDInstance = gamingPanel.HIDInstanceId;
+                genericBinding.HIDInstance = gamingPanel.HIDInstance;
                 genericBinding.InUse = true;
                 var modifiedGenericBinding = new ModifiedGenericBinding(GenericBindingStateEnum.Modified, genericBinding);
                 _modifiedGenericBindings.Add(modifiedGenericBinding);
@@ -281,7 +281,7 @@
                 }
                 var gamingPanel = (GamingPanel)ComboBoxReplacementHardware.SelectedItem;
                 
-                LabelReplacementInformation.Content = gamingPanel.HIDInstanceId;
+                LabelReplacementInformation.Content = gamingPanel.HIDInstance;
                 SetFormState();
             }
             catch (Exception ex)

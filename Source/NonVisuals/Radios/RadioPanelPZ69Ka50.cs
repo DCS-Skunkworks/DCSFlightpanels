@@ -225,6 +225,7 @@
         {
             CreateRadioKnobs();
             Startup();
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -236,6 +237,7 @@
                 if (disposing)
                 {
                     _shutdownR800L1Thread = true;
+                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -1034,7 +1036,7 @@
                         {
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description,
-                                HIDInstanceId,
+                                HIDInstance,
                                 (int)PluginGamingPanelEnum.PZ69RadioPanel,
                                 (int)radioPanelKnob.RadioPanelPZ69Knob,
                                 radioPanelKnob.IsOn,

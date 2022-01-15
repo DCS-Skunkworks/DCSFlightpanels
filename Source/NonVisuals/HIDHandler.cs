@@ -73,10 +73,10 @@ namespace NonVisuals
                                 continue;
                             }
 
-                            var instanceId = hidDevice.DevicePath;
-                            if (!HIDDeviceAlreadyExists(instanceId))
+                            var hidIinstance = hidDevice.DevicePath;
+                            if (!HIDDeviceAlreadyExists(hidIinstance))
                             {
-                                var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, instanceId);
+                                var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, hidIinstance);
                                 HIDSkeletons.Add(hidSkeleton);
 
                                 hidDevice.MonitorDeviceEvents = true;
@@ -98,7 +98,7 @@ namespace NonVisuals
                                 if (searchForNew)
                                 {
                                     //Broadcast that this panel was found.
-                                    AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.ManuallyFound);
+                                    AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.ManuallyFound);
                                 }
                             }
                         }
@@ -110,7 +110,7 @@ namespace NonVisuals
                     foreach (var hidSkeleton in HIDSkeletons)
                     {
                         //Broadcast that this panel was found.
-                        AppEventHandler.PanelEvent(this, hidSkeleton.InstanceId, hidSkeleton, PanelEventType.Found);
+                        AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Found);
                     }
                 }
 
@@ -146,16 +146,16 @@ namespace NonVisuals
         }
 
 
-        private bool HIDDeviceAlreadyExists(string instanceId)
+        private bool HIDDeviceAlreadyExists(string hidInstance)
         {
-            if (string.IsNullOrEmpty(instanceId))
+            if (string.IsNullOrEmpty(hidInstance))
             {
-                throw new Exception("Looking for empty/null InstanceId HIDDeviceAlreadyExists().");
+                throw new Exception("Looking for empty/null HIDInstance HIDDeviceAlreadyExists().");
             }
 
             foreach (var hidSkeleton in HIDSkeletons)
             {
-                if (hidSkeleton.InstanceId.Equals(instanceId))
+                if (hidSkeleton.HIDInstance.Equals(hidInstance))
                 {
                     return true;
                 }
