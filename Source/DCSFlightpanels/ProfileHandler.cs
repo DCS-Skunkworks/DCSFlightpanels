@@ -1,4 +1,5 @@
-﻿using DCSFlightpanels.Properties;
+﻿using System.Windows.Input;
+using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
 
 namespace NonVisuals
@@ -250,184 +251,192 @@ namespace NonVisuals
         {
             try
             {
-                /*
-                 * 0 Open specified filename (parameter) if not null
-                 * 1 If exists open last profile used (settings)
-                 * 2 Try and open default profile located in My Documents
-                 * 3 If none found create default file
-                 */
-
-                _isNewProfile = false;
-                ClearAll();
-
-                if (!string.IsNullOrEmpty(filename))
+                Mouse.OverrideCursor = Cursors.Wait;
+                try
                 {
-                    _filename = filename;
-                    _lastProfileUsed = filename;
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(_lastProfileUsed) && File.Exists(_lastProfileUsed))
+                    /*
+                     * 0 Open specified filename (parameter) if not null
+                     * 1 If exists open last profile used (settings)
+                     * 2 Try and open default profile located in My Documents
+                     * 3 If none found create default file
+                     */
+
+                    _isNewProfile = false;
+                    ClearAll();
+
+                    if (!string.IsNullOrEmpty(filename))
                     {
-                        _filename = _lastProfileUsed;
+                        _filename = filename;
+                        _lastProfileUsed = filename;
                     }
                     else
                     {
+                        if (!string.IsNullOrEmpty(_lastProfileUsed) && File.Exists(_lastProfileUsed))
+                        {
+                            _filename = _lastProfileUsed;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(_filename) || !File.Exists(_filename))
+                    {
+                        // Main window will handle this
                         return false;
                     }
-                }
 
-                if (string.IsNullOrEmpty(_filename) || !File.Exists(_filename))
-                {
-                    // Main window will handle this
-                    return false;
-                }
+                    /*
+                     * Read all information and add HIDInstance(ID) to all lines using BeginPanel and EndPanel
+                     *             
+                     * PanelType=PZ55SwitchPanel
+                     * PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&3f11a32&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                     * BeginPanel
+                     *      SwitchPanelKey{1KNOB_ENGINE_RIGHT}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_Q}
+                     *      SwitchPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{FiftyMilliSec,LCONTROL + VK_Q}
+                     *      SwitchPanelKey{1KNOB_ENGINE_BOTH}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_C}
+                     * EndPanel
+                     * 
+                     */
+                    _profileLoaded = true;
+                    Debug.WriteLine($"ProfileHandler reading file {_filename}");
+                    var fileLines = File.ReadAllLines(_filename);
+                    var currentPanelType = GamingPanelEnum.Unknown;
+                    string currentPanelInstance = null;
+                    string currentBindingHash = null;
+                    var insidePanel = false;
+                    var insideJSONPanel = false;
+                    DCSFPProfile tmpProfile = null;
+                    GenericPanelBinding genericPanelBinding = null;
 
-                /*
-                 * Read all information and add HIDInstance(ID) to all lines using BeginPanel and EndPanel
-                 *             
-                 * PanelType=PZ55SwitchPanel
-                 * PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&3f11a32&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                 * BeginPanel
-                 *      SwitchPanelKey{1KNOB_ENGINE_RIGHT}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_Q}
-                 *      SwitchPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{FiftyMilliSec,LCONTROL + VK_Q}
-                 *      SwitchPanelKey{1KNOB_ENGINE_BOTH}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_C}
-                 * EndPanel
-                 * 
-                 */
-                _profileLoaded = true;
-                Debug.WriteLine($"ProfileHandler reading file {_filename}");
-                var fileLines = File.ReadAllLines(_filename);
-                var currentPanelType = GamingPanelEnum.Unknown;
-                string currentPanelInstance = null;
-                string currentBindingHash = null;
-                var insidePanel = false;
-                var insideJSONPanel = false;
-                DCSFPProfile tmpProfile = null;
-                GenericPanelBinding genericPanelBinding = null;
-
-                foreach (var fileLine in fileLines)
-                {
-                    if (fileLine.StartsWith("Airframe="))
+                    foreach (var fileLine in fileLines)
                     {
-                        // <== Backward compability
-                        if (fileLine.StartsWith("Airframe=NONE"))
+                        if (fileLine.StartsWith("Airframe="))
                         {
-                            // Backward compability
-                            tmpProfile = DCSFPProfile.GetKeyEmulator();
-                        }
-                        else
-                        {
-                            // Backward compability
-                            var airframeAsString = fileLine.Replace("Airframe=", string.Empty).Trim();
-                            tmpProfile = DCSFPProfile.GetBackwardCompatible(airframeAsString);
-                        }
-                    }
-                    else if (fileLine.StartsWith("Profile="))
-                    {
-                        tmpProfile = DCSFPProfile.GetProfile(int.Parse(fileLine.Replace("Profile=", string.Empty)));
-                    }
-                    else if (fileLine.StartsWith("OperationLevelFlag="))
-                    {
-                        Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("OperationLevelFlag=", string.Empty).Trim())); // backward compat 13.03.2021
-                    }
-                    else if (fileLine.StartsWith("EmulationModesFlag="))
-                    {
-                        Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("EmulationModesFlag=", string.Empty).Trim()));
-                    }
-                    else if (fileLine.StartsWith("UseGenericRadio="))
-                    {
-                        tmpProfile.UseGenericRadio = bool.Parse(fileLine.Replace("UseGenericRadio=", string.Empty).Trim());
-                    }
-                    else if (!fileLine.StartsWith("#") && fileLine.Length > 0)
-                    {
-                        // Process all these lines.
-                        if (fileLine.StartsWith("PanelType="))
-                        {
-                            currentPanelType = (GamingPanelEnum)Enum.Parse(typeof(GamingPanelEnum), fileLine.Replace("PanelType=", string.Empty).Trim());
-                            genericPanelBinding = new GenericPanelBinding
+                            // <== Backward compability
+                            if (fileLine.StartsWith("Airframe=NONE"))
                             {
-                                PanelType = currentPanelType
-                            };
-                        }
-                        else if (fileLine.StartsWith("PanelInstanceID="))
-                        {
-                            currentPanelInstance = fileLine.Replace("PanelInstanceID=", string.Empty).Trim();
-                            genericPanelBinding.HIDInstance = currentPanelInstance;
-                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(currentPanelInstance, currentPanelType));
-                        }
-                        else if (fileLine.StartsWith("BindingHash="))
-                        {
-                            currentBindingHash = fileLine.Replace("BindingHash=", string.Empty).Trim();
-                            genericPanelBinding.BindingHash = currentBindingHash;
-                        }
-                        else if (fileLine.StartsWith("PanelSettingsVersion="))
-                        {
-                            // do nothing, this will be phased out
-                        }
-                        else if (fileLine.Equals("BeginPanel"))
-                        {
-                            insidePanel = true;
-                        }
-                        else if (fileLine.Equals("EndPanel"))
-                        {
-                            if (genericPanelBinding != null)
-                            {
-                                BindingMappingManager.RegisterBindingFromFile(genericPanelBinding);
+                                // Backward compability
+                                tmpProfile = DCSFPProfile.GetKeyEmulator();
                             }
-
-                            insidePanel = false;
-                        }
-                        else if (fileLine.Equals("BeginPanelJSON"))
-                        {
-                            insideJSONPanel = true;
-                        }
-                        else if (fileLine.Equals("EndPanelJSON"))
-                        {
-                            if (genericPanelBinding != null)
+                            else
                             {
-                                BindingMappingManager.RegisterBindingFromFile(genericPanelBinding);
+                                // Backward compability
+                                var airframeAsString = fileLine.Replace("Airframe=", string.Empty).Trim();
+                                tmpProfile = DCSFPProfile.GetBackwardCompatible(airframeAsString);
                             }
-
-                            insideJSONPanel = false;
                         }
-                        else
+                        else if (fileLine.StartsWith("Profile="))
                         {
-                            if (insidePanel)
+                            tmpProfile = DCSFPProfile.GetProfile(int.Parse(fileLine.Replace("Profile=", string.Empty)));
+                        }
+                        else if (fileLine.StartsWith("OperationLevelFlag="))
+                        {
+                            Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("OperationLevelFlag=", string.Empty).Trim())); // backward compat 13.03.2021
+                        }
+                        else if (fileLine.StartsWith("EmulationModesFlag="))
+                        {
+                            Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("EmulationModesFlag=", string.Empty).Trim()));
+                        }
+                        else if (fileLine.StartsWith("UseGenericRadio="))
+                        {
+                            tmpProfile.UseGenericRadio = bool.Parse(fileLine.Replace("UseGenericRadio=", string.Empty).Trim());
+                        }
+                        else if (!fileLine.StartsWith("#") && fileLine.Length > 0)
+                        {
+                            // Process all these lines.
+                            if (fileLine.StartsWith("PanelType="))
                             {
-                                var line = fileLine;
-                                if (line.StartsWith("\t"))
+                                currentPanelType = (GamingPanelEnum)Enum.Parse(typeof(GamingPanelEnum), fileLine.Replace("PanelType=", string.Empty).Trim());
+                                genericPanelBinding = new GenericPanelBinding
                                 {
-                                    line = line.Replace("\t", string.Empty);
+                                    PanelType = currentPanelType
+                                };
+                            }
+                            else if (fileLine.StartsWith("PanelInstanceID="))
+                            {
+                                currentPanelInstance = fileLine.Replace("PanelInstanceID=", string.Empty).Trim();
+                                genericPanelBinding.HIDInstance = currentPanelInstance;
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(currentPanelInstance, currentPanelType));
+                            }
+                            else if (fileLine.StartsWith("BindingHash="))
+                            {
+                                currentBindingHash = fileLine.Replace("BindingHash=", string.Empty).Trim();
+                                genericPanelBinding.BindingHash = currentBindingHash;
+                            }
+                            else if (fileLine.StartsWith("PanelSettingsVersion="))
+                            {
+                                // do nothing, this will be phased out
+                            }
+                            else if (fileLine.Equals("BeginPanel"))
+                            {
+                                insidePanel = true;
+                            }
+                            else if (fileLine.Equals("EndPanel"))
+                            {
+                                if (genericPanelBinding != null)
+                                {
+                                    BindingMappingManager.RegisterBindingFromFile(genericPanelBinding);
                                 }
 
-                                genericPanelBinding.Settings.Add(line);
+                                insidePanel = false;
                             }
-
-                            if (insideJSONPanel)
+                            else if (fileLine.Equals("BeginPanelJSON"))
                             {
-                                genericPanelBinding.JSONAddLine(fileLine);
+                                insideJSONPanel = true;
+                            }
+                            else if (fileLine.Equals("EndPanelJSON"))
+                            {
+                                if (genericPanelBinding != null)
+                                {
+                                    BindingMappingManager.RegisterBindingFromFile(genericPanelBinding);
+                                }
+
+                                insideJSONPanel = false;
+                            }
+                            else
+                            {
+                                if (insidePanel)
+                                {
+                                    var line = fileLine;
+                                    if (line.StartsWith("\t"))
+                                    {
+                                        line = line.Replace("\t", string.Empty);
+                                    }
+
+                                    genericPanelBinding.Settings.Add(line);
+                                }
+
+                                if (insideJSONPanel)
+                                {
+                                    genericPanelBinding.JSONAddLine(fileLine);
+                                }
                             }
                         }
                     }
-                }
 
-                // For backwards compability 10.11.2018
-                if (Common.GetEmulationModesFlag() == 0)
+                    // For backwards compability 10.11.2018
+                    if (Common.GetEmulationModesFlag() == 0)
+                    {
+                        SetEmulationModeFlag();
+                    }
+
+                    Profile = tmpProfile;
+
+                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
+
+                    return true;
+                }
+                catch (Exception ex)
                 {
-                    SetEmulationModeFlag();
+                    Common.ShowErrorMessageBox(ex);
+                    return false;
                 }
-
-                Profile = tmpProfile;
-
-                AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
-
-                return true;
             }
-            catch (Exception ex)
+            finally
             {
-                Common.ShowErrorMessageBox(ex);
-                return false;
+                Mouse.OverrideCursor = Cursors.Arrow;
             }
         }
 

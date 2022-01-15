@@ -281,7 +281,7 @@ namespace DCSFlightpanels
                 StartupDCSBIOS();
             }
         }
-        
+
         private int DisposePanels()
         {
             var closedItemCount = 0;
@@ -379,8 +379,8 @@ namespace DCSFlightpanels
             {
                 for (var i = 0; i < TabControlPanels.Items.Count; i++)
                 {
-                    var tabItem = (TabItem) TabControlPanels.Items.GetItemAt(i);
-                    var userControl = (IGamingPanelUserControl) tabItem.Content;
+                    var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
+                    var userControl = (IGamingPanelUserControl)tabItem.Content;
 
                     if (userControl.GetGamingPanel().HIDInstance.Equals(hidSkeleton.HIDInstance))
                     {
@@ -392,7 +392,7 @@ namespace DCSFlightpanels
                 }
             }
 
-            Dispatcher?.Invoke(DispatcherPriority.Normal, (Action) Action);
+            Dispatcher?.Invoke(DispatcherPriority.Normal, (Action)Action);
         }
 
         private void CreatePanel(HIDSkeleton hidSkeleton)
@@ -812,7 +812,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         public void SettingsModified(object sender, PanelInfoArgs e)
         {
             try
@@ -1185,7 +1185,15 @@ namespace DCSFlightpanels
         {
             try
             {
-                _profileHandler.OpenProfile();
+                try
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    _profileHandler.OpenProfile();
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                }
             }
             catch (Exception ex)
             {
@@ -1913,7 +1921,7 @@ namespace DCSFlightpanels
                 }
 
                 Dispatcher?.BeginInvoke((Action)(() => MenuItemUseNS430.IsChecked = _profileHandler.UseNS430));
-                
+
                 Dispatcher?.BeginInvoke((Action)SetWindowState);
             }
             catch (Exception ex)
