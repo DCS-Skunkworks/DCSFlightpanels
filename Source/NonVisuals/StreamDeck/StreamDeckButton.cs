@@ -42,7 +42,11 @@ namespace NonVisuals.StreamDeck
         public StreamDeckButton()
         {}
 
-        
+        /// <summary>
+        /// This is used when creating buttons for the UI that wasn't in the JSON
+        /// </summary>
+        /// <param name="enumStreamDeckButton"></param>
+        /// <param name="streamDeckPanel"></param>
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton, StreamDeckPanel streamDeckPanel)
         {
             _streamDeckButtonName = enumStreamDeckButton;
