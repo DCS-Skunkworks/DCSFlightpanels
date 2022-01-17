@@ -1017,5 +1017,15 @@ namespace DCSFlightpanels.PanelUserControls
             ManualLedDownLabel.Visibility = visibility;
             ManualLedTransSecondsLabel.Visibility = visibility;
         }
+
+        private void LandingLight_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void LandingLight_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Arrow;
+        }
     }
 }
