@@ -34,6 +34,9 @@ namespace NonVisuals.StreamDeck
         }
 
 
+        public virtual void Dispose(bool disposing) { }
+        public virtual void Dispose() { }
+
         public new int GetHash()
         {
             unchecked

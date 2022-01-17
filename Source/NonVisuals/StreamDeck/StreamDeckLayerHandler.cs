@@ -21,7 +21,7 @@ namespace NonVisuals.StreamDeck
 
     using StreamDeckSharp;
 
-    public class StreamDeckLayerHandler
+    public class StreamDeckLayerHandler : IDisposable
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -81,11 +81,29 @@ namespace NonVisuals.StreamDeck
             set => SetSelectedLayer(value.Name);
         }
 
+
+
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="streamDeckPanel"></param>
         public StreamDeckLayerHandler(StreamDeckPanel streamDeckPanel)
         {
             _hidInstance = _hidInstanceCounter++;
             _streamDeckPanel = streamDeckPanel;
             _streamDeckBoard = streamDeckPanel.StreamDeckBoard;
+        }
+
+
+        public void Dispose()
+        {
+            foreach (var streamDeckLayer in _layerList)
+            {
+                streamDeckLayer.Dispose();
+            }
         }
 
         public StreamDeckButton SelectedButton
@@ -587,6 +605,7 @@ namespace NonVisuals.StreamDeck
         {
             return _layerList.Exists(x => x.Name == layerName);
         }
+
     }
 
     public class ExcludeObsoletePropertiesResolver : DefaultContractResolver

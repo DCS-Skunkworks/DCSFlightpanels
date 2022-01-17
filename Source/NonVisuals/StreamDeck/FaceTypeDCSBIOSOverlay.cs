@@ -22,6 +22,14 @@ namespace NonVisuals.StreamDeck
         public FaceTypeDCSBIOSOverlay()
         { }
 
+
+
+        public new void Dispose()
+        {
+            // Call base class implementation.
+            base.Dispose();
+        }
+
         protected override void DrawBitmap()
         {
             if (_backgroundBitmap == null || _loadBackground)

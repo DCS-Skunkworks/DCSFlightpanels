@@ -30,7 +30,29 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public virtual void Dispose() {}
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
+        public new void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+        }
+
 
         [JsonIgnore]
         public string FaceDescription

@@ -20,6 +20,7 @@ namespace NonVisuals.Interfaces
         StreamDeckPanel StreamDeckPanelInstance { get; set; }
         EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
         bool IsVisible { get; set; }
+        
         void Dispose();
         bool ConfigurationOK { get; }
         string FaceDescription { get; }

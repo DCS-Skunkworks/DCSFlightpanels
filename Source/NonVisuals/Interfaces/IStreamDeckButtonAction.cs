@@ -15,6 +15,8 @@ namespace NonVisuals.Interfaces
 
     public interface IStreamDeckButtonAction
     {
+        void Dispose();
+
         EnumStreamDeckActionType ActionType { get; }
 
         string ActionDescription { get; }

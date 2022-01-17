@@ -36,9 +36,13 @@ namespace NonVisuals.StreamDeck
 
 
 
+        /// <summary>
+        /// For JSON
+        /// </summary>
+        public StreamDeckButton()
+        {}
 
-
-
+        
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton, StreamDeckPanel streamDeckPanel)
         {
             _streamDeckButtonName = enumStreamDeckButton;
@@ -63,18 +67,18 @@ namespace NonVisuals.StreamDeck
             // TODO release unmanaged resources here
         }
 
+
         private void Dispose(bool disposing)
         {
             ReleaseUnmanagedResources();
             if (disposing)
             {
+                StaticStreamDeckButtons.RemoveAll(o => o == this);
                 _cancellationTokenSource?.Dispose();
-                StaticStreamDeckButtons.Remove(this);
                 IsVisible = false;
                 _buttonFace?.Dispose();
-                _buttonActionForPress = null;
-                _buttonActionForRelease = null;
-                StaticStreamDeckButtons.Remove(this);
+                _buttonActionForPress?.Dispose();
+                _buttonActionForRelease?.Dispose();
             }
         }
 

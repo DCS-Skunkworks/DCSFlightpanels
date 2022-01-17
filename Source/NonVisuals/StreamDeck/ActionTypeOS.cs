@@ -29,7 +29,10 @@ namespace NonVisuals.StreamDeck
         {
             _streamDeckPanel = streamDeckPanel;
         }
-        
+
+        public virtual void Dispose(bool disposing) { }
+        public virtual void Dispose() { }
+
         public new int GetHash()
         {
             unchecked

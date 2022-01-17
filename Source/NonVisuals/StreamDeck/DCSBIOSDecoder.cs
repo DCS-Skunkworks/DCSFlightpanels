@@ -1,4 +1,5 @@
-﻿using NonVisuals.StreamDeck.Panels;
+﻿using System.Diagnostics;
+using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
 {
@@ -49,6 +50,7 @@ namespace NonVisuals.StreamDeck
 
         public DCSBIOSDecoder()
         {
+            Debug.WriteLine("CREATING DCSBIOSDecoder");
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();
             BIOSEventHandler.AttachDataListener(this);
@@ -56,22 +58,32 @@ namespace NonVisuals.StreamDeck
             SDEventHandler.AttachDCSBIOSDecoder(this);
         }
 
-        public override void Dispose()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _shutdownThread = true;
-            SDEventHandler.DetachDCSBIOSDecoder(this);
-            BIOSEventHandler.DetachStringListener(this);
-            BIOSEventHandler.DetachDataListener(this);
-
-            try
+            if (!_disposed)
             {
-            }
-            catch (Exception)
-            {
-                // ignored
+                if (disposing)
+                {
+                    Debug.WriteLine("DISPOSING DCSBIOSDecoder");
+                    _shutdownThread = true;
+                    SDEventHandler.DetachDCSBIOSDecoder(this);
+                    BIOSEventHandler.DetachStringListener(this);
+                    BIOSEventHandler.DetachDataListener(this);
+                }
+
+                _disposed = true;
             }
 
-            base.Dispose();
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
+        public new void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
         }
 
         [JsonIgnore]

@@ -31,6 +31,29 @@ namespace NonVisuals.StreamDeck
             _streamDeckPanel = streamDeckPanel;
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        
+        public override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
+        public new void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+        }
 
         [JsonIgnore]
         public string ActionDescription => Description;

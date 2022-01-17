@@ -25,7 +25,7 @@
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
-        protected override void Dispose(bool disposing)
+        public override void Dispose(bool disposing)
         {
             if (!_disposed)
             {

@@ -399,6 +399,11 @@ namespace DCSFlightpanels
         {
             try
             {
+                if (!hidSkeleton.IsAttached)
+                {
+                    return;
+                }
+
                 switch (hidSkeleton.GamingPanelType)
                 {
                     case GamingPanelEnum.PZ55SwitchPanel:

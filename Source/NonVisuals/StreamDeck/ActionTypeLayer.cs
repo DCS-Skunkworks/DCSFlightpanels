@@ -49,6 +49,9 @@ namespace NonVisuals.StreamDeck
         {
             _streamDeckPanel = streamDeckPanel;
         }
+        
+        public virtual void Dispose(bool disposing) { }
+        public virtual void Dispose() { }
 
         public int GetHash()
         {

@@ -14,7 +14,7 @@ namespace NonVisuals.StreamDeck
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck.Events;
 
-    public class StreamDeckLayer
+    public class StreamDeckLayer : IDisposable
     {
         private volatile bool _isVisible;
         [NonSerialized]
@@ -64,9 +64,23 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="streamDeckPanel"></param>
         public StreamDeckLayer(StreamDeckPanel streamDeckPanel)
         {
             _streamDeckPanel = streamDeckPanel;
+        }
+
+
+        public void Dispose()
+        {
+            foreach (var streamDeckButton in StreamDeckButtons)
+            {
+                streamDeckButton?.Dispose();
+            }
         }
 
         public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
@@ -323,6 +337,7 @@ namespace NonVisuals.StreamDeck
 
             throw new Exception($"StreamDeckLayer [{Name}] does not contain button [{streamDeckButtonName}].");
         }
+
     }
 
     public enum EnumButtonImportMode

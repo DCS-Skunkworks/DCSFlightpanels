@@ -93,7 +93,6 @@
 
         public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
         {
-
             _buttonCount = panelType switch
             {
                 GamingPanelEnum.StreamDeckMini => 6,
