@@ -22,8 +22,7 @@
         private string _stringDcsBiosValue = "PÖLKASD2!";
 
         public FaceTypeDCSBIOS()
-        {
-        }
+        {}
         
         [JsonIgnore]
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonTextTemplate) && _textFont != null;
