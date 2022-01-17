@@ -83,6 +83,8 @@ namespace NonVisuals.StreamDeck
                 _buttonFace?.Dispose();
                 _buttonActionForPress?.Dispose();
                 _buttonActionForRelease?.Dispose();
+
+                Debug.WriteLine("StaticStreamDeckButtons.Count = " + StaticStreamDeckButtons.Count);
             }
         }
 

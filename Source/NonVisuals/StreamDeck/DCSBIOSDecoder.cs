@@ -75,8 +75,8 @@ namespace NonVisuals.StreamDeck
                     {
                         Thread.Sleep(10);
                     }
-
-                    Debug.WriteLine("DISPOSING DCSBIOSDecoder. Instance count is " + _instanceCounter);
+                    
+                    Debug.WriteLine("DISPOSING DCSBIOSDecoder. Instance count is " + _instanceCounter + ". Type is " + _decoderOutputType);
                     SDEventHandler.DetachDCSBIOSDecoder(this);
                     BIOSEventHandler.DetachStringListener(this);
                     BIOSEventHandler.DetachDataListener(this);
@@ -628,7 +628,11 @@ namespace NonVisuals.StreamDeck
         public EnumDCSBIOSDecoderOutputType DecoderOutputType
         {
             get => _decoderOutputType;
-            set => _decoderOutputType = value;
+            set
+            {
+                _decoderOutputType = value;
+                Debug.WriteLine("DCSBIOSDecoderType is " + _decoderOutputType);
+            }
         }
 
 
