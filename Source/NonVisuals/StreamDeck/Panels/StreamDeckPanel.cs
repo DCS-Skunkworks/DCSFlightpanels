@@ -116,7 +116,7 @@ namespace NonVisuals.StreamDeck.Panels
 
             Startup();
             _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.HIDInstance, false);
-
+            
             var enumerator = StreamDeck.EnumerateDevices();
             var counter = 0;
             foreach (var streamDeckRefHandle in enumerator)
