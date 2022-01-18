@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
@@ -30,17 +31,20 @@ namespace NonVisuals.StreamDeck
         [NonSerialized] private StreamDeckPanel _streamDeckPanel;
         private volatile bool _isVisible;
 
-        [NonSerialized] private static readonly List<StreamDeckButton> StaticStreamDeckButtons = new List<StreamDeckButton>();
 
 
 
+        //private static int _instanceCounter = 0;
 
 
         /// <summary>
         /// For JSON
         /// </summary>
         public StreamDeckButton()
-        {}
+        {
+            //_instanceCounter++;
+            //Debug.WriteLine("CREATING StreamDeckButton. Instance count is " + _instanceCounter);
+        }
 
         /// <summary>
         /// This is used when creating buttons for the UI that wasn't in the JSON
@@ -49,21 +53,10 @@ namespace NonVisuals.StreamDeck
         /// <param name="streamDeckPanel"></param>
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton, StreamDeckPanel streamDeckPanel)
         {
+            //_instanceCounter++;
+            //Debug.WriteLine("CREATING StreamDeckButton. Instance count is " + _instanceCounter);
             _streamDeckButtonName = enumStreamDeckButton;
             _streamDeckPanel = streamDeckPanel;
-        }
-
-        /*
-         * Used for easier access to the buttons instead of having to go through the layer
-         */
-        public void RegisterButtonToStaticList()
-        {
-            if (StaticStreamDeckButtons.Exists(o => o == this))
-            {
-                return;
-            }
-
-            StaticStreamDeckButtons.Add(this);
         }
 
         private void ReleaseUnmanagedResources()
@@ -77,14 +70,13 @@ namespace NonVisuals.StreamDeck
             ReleaseUnmanagedResources();
             if (disposing)
             {
-                StaticStreamDeckButtons.RemoveAll(o => o == this);
+                //_instanceCounter--;
+                //Debug.WriteLine("DISPOSING StreamDeckButton. Instance count is " + _instanceCounter + ". Type is " + StreamDeckButtonName);
                 _cancellationTokenSource?.Dispose();
                 IsVisible = false;
                 _buttonFace?.Dispose();
                 _buttonActionForPress?.Dispose();
                 _buttonActionForRelease?.Dispose();
-
-                Debug.WriteLine("StaticStreamDeckButtons.Count = " + StaticStreamDeckButtons.Count);
             }
         }
 
@@ -98,36 +90,7 @@ namespace NonVisuals.StreamDeck
         {
             Dispose(false);
         }
-
-        public static StreamDeckButton GetStatic(EnumStreamDeckButtonNames streamDeckButtonName)
-        {
-            return StaticStreamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
-        }
-
-        public static void DisposeAll()
-        {
-            for (var i = 0; i < StaticStreamDeckButtons.Count; i++)
-            {
-                var streamDeckButton = StaticStreamDeckButtons[i];
-                streamDeckButton.Dispose();
-            }
-        }
-
-        public static List<StreamDeckButton> WarningGetStaticButtons()
-        {
-            return StaticStreamDeckButtons;
-        }
-
-        public static List<StreamDeckButton> GetStaticButtons(StreamDeckPanel streamDeckPanel)
-        {
-            if (streamDeckPanel == null)
-            {
-                return StaticStreamDeckButtons;
-            }
-
-            return StaticStreamDeckButtons.FindAll(o => o.StreamDeckPanelInstance.BindingHash == streamDeckPanel.BindingHash).ToList();
-        }
-
+        
         public void ClearConfiguration()
         {
             _buttonActionForPress = null;
@@ -191,7 +154,7 @@ namespace NonVisuals.StreamDeck
                 {
                     ActionForPress?.Execute(threadCancellationToken);
                 }
-                
+
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
                     break;
@@ -220,7 +183,8 @@ namespace NonVisuals.StreamDeck
                  */
                 if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
-                    PluginGamingPanelEnum pluginPanel = _streamDeckPanel.TypeOfPanel switch {
+                    PluginGamingPanelEnum pluginPanel = _streamDeckPanel.TypeOfPanel switch
+                    {
                         GamingPanelEnum.StreamDeckMini => PluginGamingPanelEnum.StreamDeckMini,
                         GamingPanelEnum.StreamDeck => PluginGamingPanelEnum.StreamDeck,
                         GamingPanelEnum.StreamDeckV2 => PluginGamingPanelEnum.StreamDeckV2,
@@ -228,7 +192,7 @@ namespace NonVisuals.StreamDeck
                         GamingPanelEnum.StreamDeckXL => PluginGamingPanelEnum.StreamDeckXL,
                         _ => PluginGamingPanelEnum.Unknown
                     };
- 
+
                     PluginManager.DoEvent(
                         DCSFPProfile.SelectedProfile.Description,
                         StreamDeckPanelInstance.HIDInstance,
@@ -284,7 +248,7 @@ namespace NonVisuals.StreamDeck
         public bool Consume(bool overwrite, StreamDeckButton streamDeckButton)
         {
             var result = false;
-            
+
             if (_buttonFace != null && streamDeckButton.Face != null)
             {
                 if (overwrite)

@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck.Panels
+﻿using System.Diagnostics;
+
+namespace NonVisuals.StreamDeck.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -36,7 +38,10 @@
         private readonly object _updateStreamDeckOledLockObject = new();
         private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly int _buttonCount;
+
+        private static readonly object LockObjectStreamDeckPanels = new();
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new();
+
         private readonly IStreamDeckBoard _streamDeckBoard;
         private static Bitmap _fileNotFoundBitMap;
         public IStreamDeckBoard StreamDeckBoard => _streamDeckBoard;
@@ -91,14 +96,18 @@
             get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
         }
 
+        private static int _instanceCounter = 0;
         public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
         {
+            _instanceCounter++;
+            Debug.WriteLine("CREATING " + panelType + ". Instance count is " + _instanceCounter);
+
             _buttonCount = panelType switch
             {
                 GamingPanelEnum.StreamDeckMini => 6,
-                
-                GamingPanelEnum.StreamDeck or 
-                GamingPanelEnum.StreamDeckV2 or 
+
+                GamingPanelEnum.StreamDeck or
+                GamingPanelEnum.StreamDeckV2 or
                 GamingPanelEnum.StreamDeckMK2 => 15,
 
                 GamingPanelEnum.StreamDeckXL => 32,
@@ -107,13 +116,27 @@
 
             Startup();
             _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.HIDInstance, false);
+
+            var enumerator = StreamDeck.EnumerateDevices();
+            var counter = 0;
+            foreach (var streamDeckRefHandle in enumerator)
+            {
+                counter++;
+                Debug.WriteLine("Device found => " + streamDeckRefHandle.DeviceName);
+            }
+            Debug.WriteLine("Total of " + counter + " Stream Deck devices found");
+
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
-            _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
             SDEventHandler.AttachStreamDeckListener(this);
             SDEventHandler.AttachStreamDeckConfigListener(this);
-            StreamDeckPanels.Add(this);
+
+            _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
+            lock (LockObjectStreamDeckPanels)
+            {
+                StreamDeckPanels.Add(this);
+            }
         }
-        
+
         private bool _disposed;
         protected override void Dispose(bool disposing)
         {
@@ -121,12 +144,19 @@
             {
                 if (disposing)
                 {
-                    StreamDeckButton.DisposeAll();
+                    _instanceCounter--;
+                    Debug.WriteLine("DISPOSING StreamDeckPanel. Instance count is " + _instanceCounter + ". Type is " + TypeOfPanel);
                     _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
-                    _streamDeckBoard?.Dispose();
-                    StreamDeckPanels.Remove(this);
                     SDEventHandler.DetachStreamDeckListener(this);
                     SDEventHandler.DetachStreamDeckConfigListener(this);
+
+                    _streamDeckLayerHandler.Dispose();
+                    _streamDeckBoard?.Dispose();
+                    lock (LockObjectStreamDeckPanels)
+                    {
+                        StreamDeckPanels.Remove(this);
+                    }
+
                     _disposed = true;
                 }
             }
@@ -137,7 +167,10 @@
 
         public static StreamDeckPanel GetInstance(string bindingHash)
         {
-            return StreamDeckPanels.FirstOrDefault(x => x.BindingHash == bindingHash);
+            lock (LockObjectStreamDeckPanels)
+            {
+                return StreamDeckPanels.FirstOrDefault(x => x.BindingHash == bindingHash);
+            }
         }
 
         public static StreamDeckPanel GetInstance(GamingPanel gamingPanel)
@@ -190,7 +223,10 @@
 
         public static List<StreamDeckPanel> GetStreamDeckPanels()
         {
-            return StreamDeckPanels;
+            lock (LockObjectStreamDeckPanels)
+            {
+                return StreamDeckPanels;
+            }
         }
 
         public sealed override void Startup()
@@ -219,7 +255,7 @@
         {
             _streamDeckLayerHandler.Export(compressedFilenameAndPath, buttonExports);
         }
-        
+
         private void StreamDeckKeyListener(object sender, KeyEventArgs e)
         {
             if (sender is not IMacroBoard)
@@ -365,7 +401,7 @@
             // and performs the actual actions for key presses
             // ADD METHOD ?
         }
-        
+
         public DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
             return null;
@@ -536,7 +572,6 @@
             }
         }
 
-
         public void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e)
         {
             try
@@ -563,6 +598,21 @@
             {
                 logger.Error(ex);
             }
+        }
+
+        public List<StreamDeckButton> GetButtons()
+        {
+            var result = new List<StreamDeckButton>();
+
+            foreach (var streamDeckLayer in _streamDeckLayerHandler.LayerList)
+            {
+                foreach (var streamDeckButton in streamDeckLayer.StreamDeckButtons)
+                {
+                    result.Add(streamDeckButton);
+                }
+            }
+
+            return result;
         }
     }
 }

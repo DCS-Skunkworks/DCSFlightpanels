@@ -138,18 +138,12 @@ namespace NonVisuals.StreamDeck
             _jsonSettings.MissingMemberHandling = MissingMemberHandling.Error;
             
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, _jsonSettings);
-            RegisterButtons();
             _layerList.SetPanel(_streamDeckPanel);
             _jsonImported = true;
             SetStreamDeckPanelInstance(_streamDeckPanel);
             CheckHomeLayerExists();
         }
-
-        private void RegisterButtons()
-        {
-            _layerList.ForEach(x => x.RegisterStreamDeckButtons());
-        }
-
+        
         public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
         {
             var importLayerNames = buttonExports.Select(o => o.LayerName).Distinct().ToList();
@@ -428,7 +422,7 @@ namespace NonVisuals.StreamDeck
             var stringBuilder = new StringBuilder(500);
             stringBuilder.Append("\n");
 
-            stringBuilder.Append($"Layer count : {_layerList.Count}, button count = {StreamDeckButton.GetStaticButtons(null).Count}\n");
+            stringBuilder.Append($"Layer count : {_layerList.Count}, button count = {_streamDeckPanel.GetButtons().Count}\n");
             stringBuilder.Append("Existing layers:\n");
             foreach (var streamDeckLayer in _layerList)
             {
@@ -457,9 +451,9 @@ namespace NonVisuals.StreamDeck
 
         private void MarkAllButtonsHiddenAndClearFaces()
         {
-            if (StreamDeckButton.GetStaticButtons(_streamDeckPanel) != null)
+            if (_streamDeckPanel.GetButtons() != null)
             {
-                StreamDeckButton.GetStaticButtons(_streamDeckPanel).ForEach(button => button.IsVisible = false);
+                _streamDeckPanel.GetButtons().ForEach(button => button.IsVisible = false);
                 ClearAllFaces();
             }
         }

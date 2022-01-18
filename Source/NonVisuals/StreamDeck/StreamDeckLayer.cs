@@ -90,8 +90,6 @@ namespace NonVisuals.StreamDeck
             {
                 ImportButtons(importMode, streamDeckButtons);
             }
-
-            RegisterStreamDeckButtons();
         }
         
         public void ImportButtons(EnumButtonImportMode importMode, List<StreamDeckButton> newStreamDeckButtons)
@@ -177,11 +175,7 @@ namespace NonVisuals.StreamDeck
         {
             SDEventHandler.NotifyStreamDeckConfigurationChange(this, _streamDeckPanel.BindingHash);
         }
-
-        public void RegisterStreamDeckButtons()
-        {
-            StreamDeckButtons.ForEach(button => button.RegisterButtonToStaticList());
-        }
+        
 
         [JsonProperty("TextFont", Required = Required.Default)]
         public Font TextFont
@@ -245,7 +239,6 @@ namespace NonVisuals.StreamDeck
 
         public void AddButton(StreamDeckButton streamDeckButton, bool silently = false)
         {
-            streamDeckButton.RegisterButtonToStaticList();
             streamDeckButton.IsVisible = _isVisible;
 
             var found = false;

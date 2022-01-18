@@ -71,7 +71,7 @@ namespace NonVisuals.StreamDeck
                 {
                     _instanceCounter--;
                     _shutdownThread = true;
-                    while (_imageUpdateTread != null && _imageUpdateTread.IsAlive)
+                    while (_imageUpdateTread is {IsAlive: true})
                     {
                         Thread.Sleep(10);
                     }
@@ -631,7 +631,6 @@ namespace NonVisuals.StreamDeck
             set
             {
                 _decoderOutputType = value;
-                Debug.WriteLine("DCSBIOSDecoderType is " + _decoderOutputType);
             }
         }
 

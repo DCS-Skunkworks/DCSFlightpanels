@@ -108,6 +108,7 @@ namespace NonVisuals
                         Debug.WriteLine(hidSkeleton.GamingPanelType + "   " + hidSkeleton.HIDInstance);
                     }
                 }*/
+                Debug.WriteLine("*** HIDSkeleton count is " + HIDSkeletons.Count);
                 //Broadcast that this panel was found.
                 HIDSkeletons.FindAll(o => o.IsAttached).ToList().ForEach(o => AppEventHandler.PanelEvent(this, o.HIDInstance, o, PanelEventType.Found));
 
