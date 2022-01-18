@@ -95,13 +95,9 @@ namespace NonVisuals.StreamDeck.Panels
         {
             get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
         }
-
-        private static int _instanceCounter = 0;
+        
         public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
         {
-            _instanceCounter++;
-            Debug.WriteLine("CREATING " + panelType + ". Instance count is " + _instanceCounter);
-
             _buttonCount = panelType switch
             {
                 GamingPanelEnum.StreamDeckMini => 6,
@@ -144,8 +140,6 @@ namespace NonVisuals.StreamDeck.Panels
             {
                 if (disposing)
                 {
-                    _instanceCounter--;
-                    Debug.WriteLine("DISPOSING StreamDeckPanel. Instance count is " + _instanceCounter + ". Type is " + TypeOfPanel);
                     _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
                     SDEventHandler.DetachStreamDeckListener(this);
                     SDEventHandler.DetachStreamDeckConfigListener(this);

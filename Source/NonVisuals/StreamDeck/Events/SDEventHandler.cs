@@ -80,7 +80,8 @@ namespace NonVisuals.StreamDeck.Events
         {
             OnDirtyConfigurationsEventHandler -= streamDeckListener.IsDirtyQueryReport;
             OnDirtyNotificationEventHandler -= streamDeckListener.SenderIsDirtyNotification;
-            OnStreamDeckShowNewLayerEventHandler -= streamDeckListener.LayerSwitched;
+            OnStreamDeckShowNewLayerEventHandler -= streamDeckListener.LayerSwitched; 
+            OnRemoteStreamDeckShowNewLayerEventHandler -= streamDeckListener.RemoteLayerSwitch;
             OnStreamDeckSelectedButtonChangedEventHandler -= streamDeckListener.SelectedButtonChanged;
             OnStreamDeckClearSettingsEventHandler -= streamDeckListener.ClearSettings;
         }

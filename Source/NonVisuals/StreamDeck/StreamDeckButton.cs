@@ -33,18 +33,13 @@ namespace NonVisuals.StreamDeck
 
 
 
-
-        //private static int _instanceCounter = 0;
-
+        
 
         /// <summary>
         /// For JSON
         /// </summary>
         public StreamDeckButton()
-        {
-            //_instanceCounter++;
-            //Debug.WriteLine("CREATING StreamDeckButton. Instance count is " + _instanceCounter);
-        }
+        { }
 
         /// <summary>
         /// This is used when creating buttons for the UI that wasn't in the JSON
@@ -53,8 +48,6 @@ namespace NonVisuals.StreamDeck
         /// <param name="streamDeckPanel"></param>
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton, StreamDeckPanel streamDeckPanel)
         {
-            //_instanceCounter++;
-            //Debug.WriteLine("CREATING StreamDeckButton. Instance count is " + _instanceCounter);
             _streamDeckButtonName = enumStreamDeckButton;
             _streamDeckPanel = streamDeckPanel;
         }
@@ -70,8 +63,6 @@ namespace NonVisuals.StreamDeck
             ReleaseUnmanagedResources();
             if (disposing)
             {
-                //_instanceCounter--;
-                //Debug.WriteLine("DISPOSING StreamDeckButton. Instance count is " + _instanceCounter + ". Type is " + StreamDeckButtonName);
                 _cancellationTokenSource?.Dispose();
                 IsVisible = false;
                 _buttonFace?.Dispose();

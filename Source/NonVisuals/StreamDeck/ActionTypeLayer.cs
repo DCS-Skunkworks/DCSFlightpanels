@@ -1,4 +1,5 @@
-﻿using NonVisuals.StreamDeck.Panels;
+﻿using System.Diagnostics;
+using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
 {
@@ -45,13 +46,38 @@ namespace NonVisuals.StreamDeck
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
+
+
+        private static int _instanceCounter = 0;
         public ActionTypeLayer(StreamDeckPanel streamDeckPanel)
         {
+            _instanceCounter++;
+            Debug.WriteLine("CREATING ActionTypeLayer. Instance count is " + _instanceCounter);
             _streamDeckPanel = streamDeckPanel;
         }
-        
-        public virtual void Dispose(bool disposing) { }
-        public virtual void Dispose() { }
+
+        private bool _disposed;
+        protected void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _instanceCounter--;
+                    Debug.WriteLine("DISPOSING ActionTypeLayer. Instance count is " + _instanceCounter + ". Type is " + StreamDeckButtonName);
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            //base.Dispose(disposing);
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+        }
 
         public int GetHash()
         {

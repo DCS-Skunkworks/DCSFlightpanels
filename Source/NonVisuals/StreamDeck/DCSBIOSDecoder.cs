@@ -47,13 +47,9 @@ namespace NonVisuals.StreamDeck
         {
             "0", "0.0", "0.00", "0.000", "0.0000", "0.00000"
         };*/
-
-        private static int _instanceCounter = 0;
-
+        
         public DCSBIOSDecoder()
         {
-            _instanceCounter++;
-            Debug.WriteLine("CREATING DCSBIOSDecoder. Instance count is " + _instanceCounter);
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();
             BIOSEventHandler.AttachDataListener(this);
@@ -69,14 +65,11 @@ namespace NonVisuals.StreamDeck
             {
                 if (disposing)
                 {
-                    _instanceCounter--;
                     _shutdownThread = true;
                     while (_imageUpdateTread is {IsAlive: true})
                     {
                         Thread.Sleep(10);
                     }
-                    
-                    Debug.WriteLine("DISPOSING DCSBIOSDecoder. Instance count is " + _instanceCounter + ". Type is " + _decoderOutputType);
                     SDEventHandler.DetachDCSBIOSDecoder(this);
                     BIOSEventHandler.DetachStringListener(this);
                     BIOSEventHandler.DetachDataListener(this);
