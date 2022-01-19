@@ -47,12 +47,9 @@ namespace NonVisuals.StreamDeck
         private StreamDeckPanel _streamDeckPanel;
 
 
-
-        private static int _instanceCounter = 0;
+        
         public ActionTypeLayer(StreamDeckPanel streamDeckPanel)
         {
-            _instanceCounter++;
-            Debug.WriteLine("CREATING ActionTypeLayer. Instance count is " + _instanceCounter);
             _streamDeckPanel = streamDeckPanel;
         }
 
@@ -63,8 +60,6 @@ namespace NonVisuals.StreamDeck
             {
                 if (disposing)
                 {
-                    _instanceCounter--;
-                    Debug.WriteLine("DISPOSING ActionTypeLayer. Instance count is " + _instanceCounter + ". Type is " + StreamDeckButtonName);
                 }
 
                 _disposed = true;

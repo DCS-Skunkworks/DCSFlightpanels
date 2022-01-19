@@ -113,15 +113,6 @@ namespace NonVisuals.StreamDeck.Panels
             Startup();
             _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.HIDInstance, false);
             
-            var enumerator = StreamDeck.EnumerateDevices();
-            var counter = 0;
-            foreach (var streamDeckRefHandle in enumerator)
-            {
-                counter++;
-                Debug.WriteLine("Device found => " + streamDeckRefHandle.DeviceName);
-            }
-            Debug.WriteLine("Total of " + counter + " Stream Deck devices found");
-
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
             SDEventHandler.AttachStreamDeckListener(this);
             SDEventHandler.AttachStreamDeckConfigListener(this);

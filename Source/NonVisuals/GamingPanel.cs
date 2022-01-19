@@ -81,8 +81,6 @@ namespace NonVisuals
 
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
-            Debug.WriteLine("CREATING " + hidSkeleton.GamingPanelType);
-
             TypeOfPanel = typeOfGamingPanel;
             HIDSkeletonBase = hidSkeleton;
             if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
@@ -121,7 +119,6 @@ namespace NonVisuals
 
             if (disposing)
             {
-                Debug.WriteLine("DISPOSING " + HIDSkeletonBase.GamingPanelType);
                 Closed = true; // Don't know if this is necessary atm. (2021)
                 AppEventHandler.DetachForwardPanelEventListener(this);
                 AppEventHandler.DetachSettingsConsumerListener(this);
