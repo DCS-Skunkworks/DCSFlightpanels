@@ -42,9 +42,7 @@ namespace DCSFlightpanels.PanelUserControls
             InitializeComponent();
             ParentTabItem = parentTabItem;
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
-
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-
+            
             AppEventHandler.AttachGamingPanelListener(this);
             AppEventHandler.AttachLEDLightListener(this);
         }

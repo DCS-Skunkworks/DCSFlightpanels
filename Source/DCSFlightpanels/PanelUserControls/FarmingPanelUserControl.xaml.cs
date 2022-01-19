@@ -42,7 +42,6 @@
         public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             ParentTabItem = parentTabItem;
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);

@@ -40,9 +40,7 @@
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
-
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-
+            
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
             AppEventHandler.AttachGamingPanelListener(this); 
 

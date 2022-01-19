@@ -34,9 +34,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
-
-            // no worky worky for this library hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-
+            
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
             
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);

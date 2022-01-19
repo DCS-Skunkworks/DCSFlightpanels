@@ -39,9 +39,7 @@
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
-
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-
+            
             _tpmPanel = new TPMPanel(hidSkeleton);
 
             AppEventHandler.AttachGamingPanelListener(this);

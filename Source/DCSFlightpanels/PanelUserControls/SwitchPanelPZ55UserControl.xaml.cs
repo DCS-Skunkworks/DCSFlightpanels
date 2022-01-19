@@ -50,7 +50,6 @@ namespace DCSFlightpanels.PanelUserControls
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             ParentTabItem = parentTabItem;
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);

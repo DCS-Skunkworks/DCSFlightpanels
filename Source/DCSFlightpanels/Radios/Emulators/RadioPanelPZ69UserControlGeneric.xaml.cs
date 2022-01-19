@@ -41,9 +41,7 @@
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
-
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-
+            
             HideAllImages();
 
             _radioPanelPZ69 = new RadioPanelPZ69Generic(hidSkeleton)
