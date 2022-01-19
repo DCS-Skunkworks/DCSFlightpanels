@@ -104,7 +104,7 @@ namespace Tests.ClassLibraryCommon
         [InlineData(new EmulationMode[] {
             EmulationMode.DCSBIOSInputEnabled,
             EmulationMode.DCSBIOSOutputEnabled,
-            EmulationMode.NS430Enabled }, 27)]
+            EmulationMode.NS430Enabled }, 19)]
         public void EmulationModes_SetMultipleValue_ShouldSet_ExpectedValue(EmulationMode[] modes, int expectedValue)
         {
             try
