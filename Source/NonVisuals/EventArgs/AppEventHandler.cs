@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using ClassLibraryCommon;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
@@ -61,6 +62,11 @@ namespace NonVisuals.EventArgs
         public static void ForwardKeyPressEvent(object sender, bool doForwardActions)
         {
             OnForwardPanelEventChanged?.Invoke(sender, new ForwardPanelEventArgs() { Forward = doForwardActions });
+        }
+
+        public static bool OnForwardPanelEventChangedSubscribed()
+        {
+            return OnForwardPanelEventChanged != null && OnForwardPanelEventChanged.GetInvocationList().Length > 0;
         }
 
         public static void AttachForwardPanelEventListener(GamingPanel gamingPanel)
