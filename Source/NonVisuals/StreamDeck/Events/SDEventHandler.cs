@@ -16,6 +16,15 @@ namespace NonVisuals.StreamDeck.Events
         /*
          * This is UI event within Stream Deck. Triggered when user changes value in Layer combobox when assigning a button for changing layer.
          */
+
+        public delegate void ActionTypeChangedEventHandler(object sender, ActionTypeChangedEventArgs e);
+        public static event ActionTypeChangedEventHandler OnActionTypeChanged;
+
+        public static bool OnActionTypeChangedEventSubscribed()
+        {
+            return OnActionTypeChanged != null && OnActionTypeChanged.GetInvocationList().Length > 0;
+        }
+
         public static void AttachActionTypeChangedListener(IStreamDeckButtonActionListener buttonActionListener)
         {
             OnActionTypeChanged += buttonActionListener.ActionTypeChangedEvent;
@@ -25,9 +34,6 @@ namespace NonVisuals.StreamDeck.Events
         {
             OnActionTypeChanged -= buttonActionListener.ActionTypeChangedEvent;
         }
-
-        public delegate void ActionTypeChangedEventHandler(object sender, ActionTypeChangedEventArgs e);
-        public static event ActionTypeChangedEventHandler OnActionTypeChanged;
 
 
         public static void ActionTypeChangedLayerNavigation (object sender, StreamDeckPanel streamDeckPanel, EnumStreamDeckActionType actionType, string layerName)
@@ -92,6 +98,11 @@ namespace NonVisuals.StreamDeck.Events
         public delegate void DirtyConfigurationsEventHandler(object sender, StreamDeckDirtyReportArgs e);
         public static event DirtyConfigurationsEventHandler OnDirtyConfigurationsEventHandler;
 
+        public static bool OnDirtyConfigurationsEventHandlerEventSubscribed()
+        {
+            return OnDirtyConfigurationsEventHandler != null && OnDirtyConfigurationsEventHandler.GetInvocationList().Length > 0;
+        }
+
         public static bool AreThereDirtyListeners(object sender)
         {
             if (OnDirtyConfigurationsEventHandler == null)
@@ -121,6 +132,11 @@ namespace NonVisuals.StreamDeck.Events
         public delegate void DirtyNotificationEventHandler(object sender, StreamDeckDirtyNotificationArgs e);
         public static event DirtyNotificationEventHandler OnDirtyNotificationEventHandler;
 
+        public static bool OnDirtyNotificationEventHandlerSubscribed()
+        {
+            return OnDirtyNotificationEventHandler != null && OnDirtyNotificationEventHandler.GetInvocationList().Length > 0;
+        }
+
         public static void SenderNotifiesIsDirty(object sender, EnumStreamDeckButtonNames buttonName, string layerName, string bindingHash)
         {
             var eventArguments = new StreamDeckDirtyNotificationArgs
@@ -140,6 +156,11 @@ namespace NonVisuals.StreamDeck.Events
         public delegate void StreamDeckShowNewLayerEventHandler(object sender, StreamDeckShowNewLayerArgs e);
         public static event StreamDeckShowNewLayerEventHandler OnStreamDeckShowNewLayerEventHandler;
 
+        public static bool OnStreamDeckShowNewLayerEventSubscribed()
+        {
+            return OnStreamDeckShowNewLayerEventHandler != null && OnStreamDeckShowNewLayerEventHandler.GetInvocationList().Length > 0;
+        }
+
         public static void LayerSwitched(object sender, string bindingHash, string layerName)
         {
             var eventArgs = new StreamDeckShowNewLayerArgs { SelectedLayerName = layerName, BindingHash = bindingHash };
@@ -151,6 +172,11 @@ namespace NonVisuals.StreamDeck.Events
          ********************************************************************************************/
         public delegate void RemoteStreamDeckShowNewLayerEventHandler(object sender, RemoteStreamDeckShowNewLayerArgs e);
         public static event RemoteStreamDeckShowNewLayerEventHandler OnRemoteStreamDeckShowNewLayerEventHandler;
+
+        public static bool OnRemoteStreamDeckShowNewLayerEventSubscribed()
+        {
+            return OnRemoteStreamDeckShowNewLayerEventHandler != null && OnRemoteStreamDeckShowNewLayerEventHandler.GetInvocationList().Length > 0;
+        }
 
         public static void RemoteLayerSwitch(object sender, string remoteBindingHash, string layerName)
         {
@@ -164,6 +190,11 @@ namespace NonVisuals.StreamDeck.Events
         public delegate void StreamDeckSelectedButtonChangedEventHandler(object sender, StreamDeckSelectedButtonChangedArgs e);
         public static event StreamDeckSelectedButtonChangedEventHandler OnStreamDeckSelectedButtonChangedEventHandler;
 
+        public static bool OnStreamDeckSelectedButtonChangedEventSubscribed()
+        {
+            return OnStreamDeckSelectedButtonChangedEventHandler != null && OnStreamDeckSelectedButtonChangedEventHandler.GetInvocationList().Length > 0;
+        }
+
         public static void SelectedButtonChanged(object sender, StreamDeckButton streamDeckButton, string bindingHash)
         {
             var eventArgs = new StreamDeckSelectedButtonChangedArgs { SelectedButton = streamDeckButton, BindingHash = bindingHash };
@@ -176,6 +207,11 @@ namespace NonVisuals.StreamDeck.Events
          ********************************************************************************************/
         public delegate void StreamDeckClearSettingsEventHandler(object sender, StreamDeckClearSettingsArgs e);
         public static event StreamDeckClearSettingsEventHandler OnStreamDeckClearSettingsEventHandler;
+
+        public static bool OnStreamDeckClearSettingsEventSubscribed()
+        {
+            return OnStreamDeckClearSettingsEventHandler != null && OnStreamDeckClearSettingsEventHandler.GetInvocationList().Length > 0;
+        }
 
         public static void ClearSettings(object sender, bool clearAction, bool clearFace, bool clearUI, string bindingHash)
         {
@@ -196,6 +232,12 @@ namespace NonVisuals.StreamDeck.Events
         ********************************************************************************************/
         public delegate void StreamDeckSyncConfigurationEventHandler(object sender, StreamDeckSyncConfigurationArgs e);
         public static event StreamDeckSyncConfigurationEventHandler OnStreamDeckSyncConfigurationEventHandler;
+
+        public static bool OnStreamDeckSyncConfigurationEventSubscribed()
+        {
+            return OnStreamDeckSyncConfigurationEventHandler != null && OnStreamDeckSyncConfigurationEventHandler.GetInvocationList().Length > 0;
+        }
+
 
         public static void NotifyToSyncConfiguration(object sender, string bindingHash)
         {
@@ -220,6 +262,11 @@ namespace NonVisuals.StreamDeck.Events
         public delegate void StreamDeckConfigurationChangeEventHandler(object sender, StreamDeckConfigurationChangedArgs e);
         public static event StreamDeckConfigurationChangeEventHandler OnStreamDeckConfigurationChangeEventHandler;
 
+        public static bool OnStreamDeckConfigurationChangeEventSubscribed()
+        {
+            return OnStreamDeckConfigurationChangeEventHandler != null && OnStreamDeckConfigurationChangeEventHandler.GetInvocationList().Length > 0;
+        }
+
         public static void NotifyStreamDeckConfigurationChange(object sender, string bindingHash)
         {
             OnStreamDeckConfigurationChangeEventHandler?.Invoke(sender, new StreamDeckConfigurationChangedArgs { BindingHash = bindingHash });
@@ -230,6 +277,11 @@ namespace NonVisuals.StreamDeck.Events
         ********************************************************************************************/
         public delegate void StreamDeckHideDecodersEventHandler(object sender, StreamDeckHideDecoderEventArgs e);
         public static event StreamDeckHideDecodersEventHandler OnStreamDeckHideDecodersEventHandler;
+
+        public static bool OnStreamDeckHideDecodersEventSubscribed()
+        {
+            return OnStreamDeckHideDecodersEventHandler != null && OnStreamDeckHideDecodersEventHandler.GetInvocationList().Length > 0;
+        }
 
         public static void AttachDCSBIOSDecoder(DCSBIOSDecoder dcsbiosDecoder)
         {

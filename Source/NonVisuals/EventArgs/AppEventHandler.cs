@@ -12,8 +12,13 @@ namespace NonVisuals.EventArgs
          * Used by by HIDHandler and others to announce a certain event regarding a panel. 
          */
         public delegate void PanelEventHandler(object sender, PanelEventArgs e);
-
         public static event PanelEventHandler OnPanelEvent;
+
+        public static bool OnPanelEventEventSubscribed()
+        {
+            return OnPanelEvent != null && OnPanelEvent.GetInvocationList().Length > 0;
+        }
+
         public static void PanelEvent(object sender, string hidInstance, HIDSkeleton hidSkeleton, PanelEventType panelEventType)
         {
             OnPanelEvent?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstance, HidSkeleton = hidSkeleton, EventType = panelEventType});
@@ -33,8 +38,13 @@ namespace NonVisuals.EventArgs
          * Used by ProfileHandler to detect changes in panel configurations.
          */
         public delegate void SettingsHasModifiedEventHandler(object sender, PanelInfoArgs e);
-
         public static event SettingsHasModifiedEventHandler OnSettingsModified;
+
+        public static bool OnSettingsModifiedEventSubscribed()
+        {
+            return OnSettingsModified != null && OnSettingsModified.GetInvocationList().Length > 0;
+        }
+
         public static void SettingsChanged(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum)
         {
             OnSettingsModified?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstance, PanelType = gamingPanelEnum });
@@ -56,17 +66,17 @@ namespace NonVisuals.EventArgs
          */
 
         public delegate void ForwardPanelActionChangedEventHandler(object sender, ForwardPanelEventArgs e);
-
         public static event ForwardPanelActionChangedEventHandler OnForwardPanelEventChanged;
-
-        public static void ForwardKeyPressEvent(object sender, bool doForwardActions)
-        {
-            OnForwardPanelEventChanged?.Invoke(sender, new ForwardPanelEventArgs() { Forward = doForwardActions });
-        }
 
         public static bool OnForwardPanelEventChangedSubscribed()
         {
             return OnForwardPanelEventChanged != null && OnForwardPanelEventChanged.GetInvocationList().Length > 0;
+        }
+
+
+        public static void ForwardKeyPressEvent(object sender, bool doForwardActions)
+        {
+            OnForwardPanelEventChanged?.Invoke(sender, new ForwardPanelEventArgs() { Forward = doForwardActions });
         }
 
         public static void AttachForwardPanelEventListener(GamingPanel gamingPanel)
@@ -89,33 +99,6 @@ namespace NonVisuals.EventArgs
         /_/   /_/   \____/_/ /_/_/\___/_/ /_/\__,_/_/ /_/\__,_/_/\___/_/      \__/_/  /_/\__, /\__, /\___/_/   \___/\__,_/   \___/|___/\___/_/ /_/\__/____/  
                                                                                 /____//____/                                                         
          */
-        
-        public delegate void ProfileEventHandler(object sender, ProfileEventArgs e);
-
-        public static event ProfileEventHandler OnProfileEvent;
-
-        public static void ProfileEvent(object sender, ProfileEventEnum profileEventType, GenericPanelBinding genericPanelBinding, DCSFPProfile dcsfpProfile)
-        {
-            OnProfileEvent?.Invoke(sender, new ProfileEventArgs { PanelBinding = genericPanelBinding, ProfileEventType = profileEventType, DCSProfile = dcsfpProfile});
-        }
-        
-        public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
-
-        public static event SavePanelSettingsEventHandler OnSavePanelSettings;
-
-        public static void SavePanelSettings(IProfileHandler profileHandler)
-        {
-            OnSavePanelSettings?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
-        }
-
-        public delegate void SavePanelSettingsEventHandlerJSON(object sender, ProfileHandlerEventArgs e);
-
-        public static event SavePanelSettingsEventHandlerJSON OnSavePanelSettingsJSON;
-
-        public static void SavePanelSettingsJSON(IProfileHandler profileHandler)
-        {
-            OnSavePanelSettingsJSON?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
-        }
 
         public static void AttachSettingsConsumerListener(GamingPanel gamingPanel)
         {
@@ -129,6 +112,45 @@ namespace NonVisuals.EventArgs
             OnProfileEvent -= gamingPanel.ProfileEvent;
             OnSavePanelSettings -= gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON -= gamingPanel.SavePanelSettingsJSON;
+        }
+
+        public delegate void ProfileEventHandler(object sender, ProfileEventArgs e);
+        public static event ProfileEventHandler OnProfileEvent;
+
+        public static bool OnProfileEventSubscribed()
+        {
+            return OnProfileEvent != null && OnProfileEvent.GetInvocationList().Length > 0;
+        }
+
+        public static void ProfileEvent(object sender, ProfileEventEnum profileEventType, GenericPanelBinding genericPanelBinding, DCSFPProfile dcsfpProfile)
+        {
+            OnProfileEvent?.Invoke(sender, new ProfileEventArgs { PanelBinding = genericPanelBinding, ProfileEventType = profileEventType, DCSProfile = dcsfpProfile});
+        }
+        
+        public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
+        public static event SavePanelSettingsEventHandler OnSavePanelSettings;
+
+        public static bool OnSavePanelSettingsSubscribed()
+        {
+            return OnSavePanelSettings != null && OnSavePanelSettings.GetInvocationList().Length > 0;
+        }
+
+        public static void SavePanelSettings(IProfileHandler profileHandler)
+        {
+            OnSavePanelSettings?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
+        }
+
+        public delegate void SavePanelSettingsEventHandlerJSON(object sender, ProfileHandlerEventArgs e);
+        public static event SavePanelSettingsEventHandlerJSON OnSavePanelSettingsJSON;
+
+        public static bool OnSavePanelSettingsJSONSubscribed()
+        {
+            return OnSavePanelSettingsJSON != null && OnSavePanelSettingsJSON.GetInvocationList().Length > 0;
+        }
+
+        public static void SavePanelSettingsJSON(IProfileHandler profileHandler)
+        {
+            OnSavePanelSettingsJSON?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
         }
 
         public static void AttachSettingsMonitoringListener(IProfileHandlerListener profileHandlerListener)

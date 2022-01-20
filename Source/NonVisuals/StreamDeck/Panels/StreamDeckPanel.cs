@@ -96,7 +96,7 @@ namespace NonVisuals.StreamDeck.Panels
             get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
         }
         
-        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
+        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, bool unitTesting = false) : base(panelType, hidSkeleton)
         {
             _buttonCount = panelType switch
             {
@@ -111,9 +111,12 @@ namespace NonVisuals.StreamDeck.Panels
             };
 
             Startup();
-            _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.HIDInstance, false);
-            
-            _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
+
+            if (!unitTesting)
+            {
+                _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.HIDInstance, false);
+                _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
+            }
             SDEventHandler.AttachStreamDeckListener(this);
             SDEventHandler.AttachStreamDeckConfigListener(this);
 
@@ -131,7 +134,10 @@ namespace NonVisuals.StreamDeck.Panels
             {
                 if (disposing)
                 {
-                    _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
+                    if (_streamDeckBoard != null) // Null when unit testing
+                    {
+                        _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
+                    }
                     SDEventHandler.DetachStreamDeckListener(this);
                     SDEventHandler.DetachStreamDeckConfigListener(this);
 
