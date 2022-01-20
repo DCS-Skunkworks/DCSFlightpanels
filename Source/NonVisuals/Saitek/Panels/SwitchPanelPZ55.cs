@@ -1,6 +1,4 @@
-﻿using NonVisuals.Interfaces;
-
-namespace NonVisuals.Saitek.Panels
+﻿namespace NonVisuals.Saitek.Panels
 {
     using System;
     using System.Collections.Generic;

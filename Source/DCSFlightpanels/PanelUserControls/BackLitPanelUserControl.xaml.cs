@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace DCSFlightpanels.PanelUserControls
+﻿namespace DCSFlightpanels.PanelUserControls
 {
     using System;
     using System.Collections.Generic;

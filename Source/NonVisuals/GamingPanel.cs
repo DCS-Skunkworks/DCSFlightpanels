@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
     using System;
     using System.Collections.Generic;

@@ -1,12 +1,9 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Text;
     using System.Threading;
 

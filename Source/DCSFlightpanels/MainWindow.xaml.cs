@@ -1,6 +1,4 @@
-﻿using System.Windows.Threading;
-
-namespace DCSFlightpanels
+﻿namespace DCSFlightpanels
 {
     /*
     Custom Resharper Naming abbreviations

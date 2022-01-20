@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using ClassLibraryCommon;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
