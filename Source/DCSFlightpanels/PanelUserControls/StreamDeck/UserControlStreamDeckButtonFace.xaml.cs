@@ -119,7 +119,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         private void DisplayImagePreview()
         {
-            if (TextBoxImageFace.Bill.ContainsImageFace())
+            if (TextBoxImageFace.Bill.ContainsImageFaceAndImageExists())
             {
                 var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
                 ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
