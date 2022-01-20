@@ -123,6 +123,18 @@
             return module;
         }
 
+        public static void SetNoFrameLoadedYetAsProfile()
+        {
+            var module = Modules.FirstOrDefault(x => IsNoFrameLoadedYet(x));
+            if (module == null)
+            {
+                LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
+            }
+
+            SelectedProfile = module;
+        }
+
+
         public static DCSFPProfile GetNoFrameLoadedYet()
         {
             var module = Modules.FirstOrDefault(x => IsNoFrameLoadedYet(x));
@@ -373,7 +385,7 @@
                 "F16C" => 17,
                 "FA18C" => 20,
                 "F86F" => 19,
-                "FC3_CD_SRS" => 4,
+                "FC3" => 4,
                 "Fw190a8" => 21,
                 "Fw190d9" => 22,
                 "Hercules" => 13,

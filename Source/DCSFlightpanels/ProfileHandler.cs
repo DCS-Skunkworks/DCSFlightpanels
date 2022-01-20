@@ -65,19 +65,7 @@ namespace NonVisuals
             set
             {
                 _dcsfpProfile = value;
-                /*// Called only when user creates a new profile
-                if (!DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile) && value != _dcsfpProfile)
-                {
-                    SetIsDirty();
-                }
-
-                ClearAll();
-                _dcsfpProfile = value;
-                DCSFPProfile.SelectedProfile = value;
-                Common.ResetEmulationModesFlag();
                 SetEmulationModeFlag();
-                DCSBIOSControlLocator.Profile = Profile;
-                AppEventHandler.AirframeSelected(this, _dcsfpProfile);*/
             }
         }
 
@@ -187,10 +175,13 @@ namespace NonVisuals
             }
 
             BindingMappingManager.ClearBindings();
-            Profile = DCSFPProfile.GetNoFrameLoadedYet();
-
+            DCSFPProfile.SetNoFrameLoadedYetAsProfile();
+            Common.ResetEmulationModesFlag();
+            Profile = DCSFPProfile.SelectedProfile;
+            
             _profileLoaded = false;
             _isNewProfile = false;
+            _isDirty = false;
             _profileFileHIDInstances.Clear();
             AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileClosed, null, DCSFPProfile.GetNoFrameLoadedYet());
 
@@ -232,10 +223,19 @@ namespace NonVisuals
             var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
             if (chooseProfileModuleWindow.ShowDialog() == true)
             {
+                Common.ResetEmulationModesFlag();
                 _isNewProfile = true;
                 Profile = chooseProfileModuleWindow.Profile;
 
-                AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
+                try
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = Cursors.Hand;
+                }
             }
         }
 
@@ -299,6 +299,7 @@ namespace NonVisuals
                      * EndPanel
                      * 
                      */
+                    Common.ResetEmulationModesFlag();
                     _profileLoaded = true;
                     Debug.WriteLine($"ProfileHandler reading file {_filename}");
                     var fileLines = File.ReadAllLines(_filename);
@@ -416,12 +417,7 @@ namespace NonVisuals
                         }
                     }
 
-                    // For backwards compability 10.11.2018
-                    if (Common.GetEmulationModesFlag() == 0)
-                    {
-                        SetEmulationModeFlag();
-                    }
-
+                    DCSFPProfile.SelectedProfile = tmpProfile;
                     Profile = tmpProfile;
 
                     AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
@@ -460,7 +456,11 @@ namespace NonVisuals
         
         private void SetEmulationModeFlag()
         {
-            if (DCSFPProfile.IsKeyEmulator(Profile))
+            if (DCSFPProfile.IsNoFrameLoadedYet(Profile))
+            {
+                Common.SetEmulationModes(EmulationMode.DCSBIOSInputEnabled | EmulationMode.DCSBIOSOutputEnabled);
+            }
+            else if (DCSFPProfile.IsKeyEmulator(Profile))
             {
                 Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
             }
