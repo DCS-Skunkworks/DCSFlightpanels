@@ -1205,38 +1205,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        /*
-        private bool CloseProfile()
-        {
-            if (_profileHandler.IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
-            {
-                return false;
-            }
-
-            try
-            {
-                CloseTabItems();
-                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, this);
-                _profileHandler.Init();
-                //_profileHandler.AttachUserMessageHandler(this);
-                _dcsfpProfile = _profileHandler.Profile;
-                SetApplicationMode(_dcsfpProfile);
-                SetWindowTitle();
-                SetWindowState();
-                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-                if (ex.InnerException != null)
-                    logger.Error(ex.InnerException);
-                throw;
-            }
-
-            return true;
-        }
-        */
+        
         private void MenuItemCloseProfile_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -1611,20 +1580,7 @@ namespace DCSFlightpanels
                 {
                     LoadProcessPriority();
                 }
-
-                if (settingsWindow.DCSBIOSChanged && Common.PartialDCSBIOSEnabled())
-                {
-                    // Refresh, make sure they are using the latest settings
-                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    _dcsBios.ReceiveFromIpUdp = Settings.Default.DCSBiosIPFrom;
-                    _dcsBios.ReceivePortUdp = int.Parse(Settings.Default.DCSBiosPortFrom);
-                    _dcsBios.SendToIpUdp = Settings.Default.DCSBiosIPTo;
-                    _dcsBios.SendPortUdp = int.Parse(Settings.Default.DCSBiosPortTo);
-                    _dcsBios.Shutdown();
-                    _dcsBios.Startup();
-                    _profileHandler.DCSBIOSJSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                }
-
+                
                 ConfigurePlugins();
             }
         }

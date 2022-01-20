@@ -10,46 +10,65 @@ namespace NonVisuals
 
     public static class BindingMappingManager
     {
+        private static object _genericBindingsLock = new object();
         private static volatile List<GenericPanelBinding> _genericBindings = new List<GenericPanelBinding>();
 
 
         public static void ClearBindings()
         {
-            _genericBindings.Clear();
+            lock (_genericBindingsLock)
+            {
+                _genericBindings.Clear();
+            }
         }
 
         public static bool UnusedBindingsExists()
         {
-            return _genericBindings.Any(o => o.InUse == false);
+            lock (_genericBindingsLock)
+            {
+                return _genericBindings.Any(o => o.InUse == false);
+            }
         }
 
         public static void SetNotInUse(HIDSkeleton hidSkeleton)
         {
-            _genericBindings.FindAll(o => o.Match(hidSkeleton)).ToList().ForEach(u => u.InUse = false);
+            lock (_genericBindingsLock)
+            {
+                _genericBindings.FindAll(o => o.Match(hidSkeleton)).ToList().ForEach(u => u.InUse = false);
+            }
         }
 
         public static void SendBinding(HIDSkeleton hidSkeleton)
         {
-            foreach (var genericPanelBinding in _genericBindings)
+            lock (_genericBindingsLock)
             {
-                if (genericPanelBinding.Match(hidSkeleton))
+                foreach (var genericPanelBinding in _genericBindings)
                 {
-                    genericPanelBinding.InUse = true;
-                    AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding, DCSFPProfile.SelectedProfile);
+                    if (genericPanelBinding.Match(hidSkeleton))
+                    {
+                        genericPanelBinding.InUse = true;
+                        AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
+                            DCSFPProfile.SelectedProfile);
+                    }
                 }
             }
         }
-        
+
         public static void SendBinding(string hidInstance)
         {
-            var hardwareFound = HIDHandler.GetInstance().HIDSkeletons
-                .Any(o => o.IsAttached && o.HIDInstance.Equals(hidInstance));
-            foreach (var genericPanelBinding in _genericBindings)
+            lock (_genericBindingsLock)
             {
-                if (genericPanelBinding.HIDInstance.Equals(hidInstance) && genericPanelBinding.InUse == false && hardwareFound)
+                var hardwareFound = HIDHandler.GetInstance().HIDSkeletons
+                    .Any(o => o.IsAttached && o.HIDInstance.Equals(hidInstance));
+                foreach (var genericPanelBinding in _genericBindings)
                 {
-                    genericPanelBinding.InUse = true;
-                    AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding, DCSFPProfile.SelectedProfile);
+                    if (genericPanelBinding.HIDInstance.Equals(hidInstance) && genericPanelBinding.InUse == false &&
+                        hardwareFound)
+                    {
+                        genericPanelBinding.InUse = true;
+                        AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
+                            DCSFPProfile.SelectedProfile);
+                    }
                 }
             }
         }
@@ -69,7 +88,10 @@ namespace NonVisuals
                         genericBinding.BindingHash = Common.GetRandomMd5Hash();
                     }
 
-                    _genericBindings.Add(genericBinding);
+                    lock (_genericBindingsLock)
+                    {
+                        _genericBindings.Add(genericBinding);
+                    }
                 }
             }
         }
@@ -78,39 +100,45 @@ namespace NonVisuals
         {
             if (genericBinding != null)
             {
-                if (Exists(genericBinding))
+                lock (_genericBindingsLock)
                 {
-                    foreach (var binding in _genericBindings)
+                    if (Exists(genericBinding))
                     {
-                        /*
-                         * Tricky considering old profiles that haven't got this property
-                         * In the future it should be phased out.
-                         */
-                        if (string.IsNullOrEmpty(binding.BindingHash))
+                        foreach (var binding in _genericBindings)
                         {
-                            binding.BindingHash = genericBinding.BindingHash;
-                            binding.Settings = genericBinding.Settings;
-                        }
-                        else if (binding.BindingHash == genericBinding.BindingHash)
-                        {
-                            binding.Settings = genericBinding.Settings;
+                            /*
+                             * Tricky considering old profiles that haven't got this property
+                             * In the future it should be phased out.
+                             */
+                            if (string.IsNullOrEmpty(binding.BindingHash))
+                            {
+                                binding.BindingHash = genericBinding.BindingHash;
+                                binding.Settings = genericBinding.Settings;
+                            }
+                            else if (binding.BindingHash == genericBinding.BindingHash)
+                            {
+                                binding.Settings = genericBinding.Settings;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    _genericBindings.Add(genericBinding);
+                    else
+                    {
+                        _genericBindings.Add(genericBinding);
+                    }
                 }
             }
         }
 
         public static bool Exists(GenericPanelBinding genericPanelBinding)
         {
-            foreach (var binding in _genericBindings)
+            lock (_genericBindingsLock)
             {
-                if (binding.Match(genericPanelBinding))
+                foreach (var binding in _genericBindings)
                 {
-                    return true;
+                    if (binding.Match(genericPanelBinding))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -121,18 +149,23 @@ namespace NonVisuals
         {
             var problemsPersists = false;
             var settingsWereModifiedLocal = false;
-            foreach (var genericBinding in _genericBindings)
-            {
-                if (genericBinding.InUse == false)
-                {
-                    if (!FindSolution(genericBinding, ref settingsWereModifiedLocal))
-                    {
-                        problemsPersists = true;
-                    }
 
-                    if (settingsWereModifiedLocal)
+
+            lock (_genericBindingsLock)
+            {
+                foreach (var genericBinding in _genericBindings)
+                {
+                    if (genericBinding.InUse == false)
                     {
-                        settingsWereModified = true;
+                        if (!FindSolution(genericBinding, ref settingsWereModifiedLocal))
+                        {
+                            problemsPersists = true;
+                        }
+
+                        if (settingsWereModifiedLocal)
+                        {
+                            settingsWereModified = true;
+                        }
                     }
                 }
             }
@@ -144,7 +177,7 @@ namespace NonVisuals
 
             return true;
         }
-        
+
         public static void MergeModifiedBindings(List<ModifiedGenericBinding> modifiedGenericBindings)
         {
             bool modificationsMade = false;
@@ -156,21 +189,23 @@ namespace NonVisuals
 
             foreach (var modifiedGenericBinding in modifiedGenericBindings)
             {
-                for (int i = 0; i < _genericBindings.Count; i++)
+                lock (_genericBindingsLock)
                 {
-                    var genericBinding = _genericBindings[i];
-                    if (modifiedGenericBinding.GenericPanelBinding.BindingHash == genericBinding.BindingHash)
+                    for (int i = 0; i < _genericBindings.Count; i++)
                     {
-                        switch (modifiedGenericBinding.State)
+                        var genericBinding = _genericBindings[i];
+                        if (modifiedGenericBinding.GenericPanelBinding.BindingHash == genericBinding.BindingHash)
                         {
-                            case GenericBindingStateEnum.New:
+                            switch (modifiedGenericBinding.State)
+                            {
+                                case GenericBindingStateEnum.New:
                                 {
                                     AddBinding(modifiedGenericBinding.GenericPanelBinding);
                                     modificationsMade = true;
                                     break;
                                 }
 
-                            case GenericBindingStateEnum.Modified:
+                                case GenericBindingStateEnum.Modified:
                                 {
                                     genericBinding.HIDInstance = modifiedGenericBinding.GenericPanelBinding.HIDInstance;
                                     genericBinding.Settings = modifiedGenericBinding.GenericPanelBinding.Settings;
@@ -178,12 +213,13 @@ namespace NonVisuals
                                     break;
                                 }
 
-                            case GenericBindingStateEnum.Deleted:
+                                case GenericBindingStateEnum.Deleted:
                                 {
                                     genericBinding.HasBeenDeleted = true;
                                     modificationsMade = true;
                                     break;
                                 }
+                            }
                         }
                     }
                 }
@@ -192,7 +228,7 @@ namespace NonVisuals
             if (modificationsMade)
             {
                 MessageBox.Show("USB settings has changed in the bindings file. Please save the profile and verify functionality.", "Save & Restart", MessageBoxButton.OK, MessageBoxImage.Information);
-                
+
             }
         }
 
@@ -205,7 +241,13 @@ namespace NonVisuals
              * 1) Check, are there multiple such panels where hardware does not match? If so user must map them
              *    If only 1, then we can map it without asking questions.
              */
-            var count = _genericBindings.FindAll(o => (o.InUse == false) && (o.PanelType == genericBinding.PanelType)).Count;
+            var count = 0;
+            lock (_genericBindingsLock)
+            {
+                count = _genericBindings
+                    .FindAll(o => (o.InUse == false) && (o.PanelType == genericBinding.PanelType)).Count;
+            }
+
             if (count == 1)
             {
                 var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType && o.IsAttached);
@@ -226,22 +268,33 @@ namespace NonVisuals
 
             return false;
         }
-        
+
 
         public static GenericPanelBinding GetBinding(GamingPanel gamingPanel)
         {
-            foreach (var genericPanelBinding in _genericBindings)
+            lock (_genericBindingsLock)
             {
-                if (genericPanelBinding.BindingHash == gamingPanel.BindingHash)
+                foreach (var genericPanelBinding in _genericBindings)
                 {
-                    return genericPanelBinding;
+                    if (genericPanelBinding.BindingHash == gamingPanel.BindingHash)
+                    {
+                        return genericPanelBinding;
+                    }
                 }
             }
 
             return null;
         }
 
-        public static List<GenericPanelBinding> PanelBindings => _genericBindings;
-
+        public static List<GenericPanelBinding> PanelBindings
+        {
+            get
+            {
+                lock (_genericBindingsLock)
+                {
+                    return _genericBindings;
+                }
+            }
+        }
     }
 }
