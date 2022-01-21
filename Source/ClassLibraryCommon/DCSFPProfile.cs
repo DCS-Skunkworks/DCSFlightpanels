@@ -124,7 +124,7 @@
             var module = Modules.FirstOrDefault(x => x.ID == id);
             if (module == null)
             {
-                LogErrorAndThrowException("Failed to determine profile ID (" + id + ") in your bindings file. Please check file BIOS.lua and update your bindings file. Example : Profile=5 equals A-10C.");
+                LogErrorAndThrowException("Failed to determine profile ID (" + id + ") in your bindings file.");
             }
             return module;
         }
@@ -420,7 +420,7 @@
             }
             else
             {
-                LogErrorAndThrowException("Failed to determine  profile ID (null) in your bindings file. Please check file BIOS.lua and update your bindings file. Example : Profile=20 equals F-18C");
+                LogErrorAndThrowException("Failed to determine  profile ID (null) in your bindings file.");
                 return null; //just to avoid compilation problem "error CS0161 not all code paths return a value"
             }
         }
