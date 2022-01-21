@@ -210,6 +210,11 @@
             return BitConverter.ToString(bytes).Replace("-", string.Empty).ToLower();
         }
 
+        public static void ShowMessageBox(string message)
+        {
+            MessageBox.Show(message, "", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         public static void ShowErrorMessageBox(Exception ex, string message = null)
         {
             logger.Error(ex, message);

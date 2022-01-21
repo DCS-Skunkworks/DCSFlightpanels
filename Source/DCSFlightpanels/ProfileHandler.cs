@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Linq;
+using System.Windows.Input;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
 
@@ -164,7 +165,7 @@ namespace NonVisuals
         {
             CloseProfile();
 
-            LoadProfile(null);
+            LoadProfile(null, out _);
         }
 
         public bool CloseProfile()
@@ -209,7 +210,7 @@ namespace NonVisuals
             {
                 Settings.Default.LastProfileDialogLocation = Path.GetDirectoryName(openFileDialog.FileName);
                 Settings.Default.Save();
-                LoadProfile(openFileDialog.FileName);
+                LoadProfile(openFileDialog.FileName, out _);
             }
         }
 
@@ -241,14 +242,23 @@ namespace NonVisuals
 
         public void FindProfile()
         {
-            if (!LoadProfile(Settings.Default.LastProfileFileUsed))
+            if (!LoadProfile(Settings.Default.LastProfileFileUsed, out var exceptionThrown))
             {
-                CreateNewProfile();
+                if (exceptionThrown == 0)
+                {
+                    CreateNewProfile();
+                }
             }
         }
 
-        private bool LoadProfile(string filename)
+        /*
+         * -1 not thrown
+         * 0 not thrown
+         * 1 thrown
+         */
+        private bool LoadProfile(string filename, out int exceptionThrown)
         {
+            exceptionThrown = 0;
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
@@ -426,6 +436,11 @@ namespace NonVisuals
                 }
                 catch (Exception ex)
                 {
+                    exceptionThrown = 1;
+                    CloseProfile();
+                    Common.ShowMessageBox(DCSFPProfile.DCSBIOSModulesCount == 0
+                        ? $"Failed to open profile. If you intended to use DCS-BIOS, check the settings. No DCS-BIOS modules were found."
+                        : $"Failed to open profile.");
                     Common.ShowErrorMessageBox(ex);
                     return false;
                 }
@@ -473,32 +488,7 @@ namespace NonVisuals
                 Common.SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled | EmulationMode.DCSBIOSInputEnabled);
             }
         }
-
-        public void SendBindingsReadEvent()
-        {
-            /*try
-            {
-                AppEventHandler.AirframeSelected(this, _dcsfpProfile);
-
-                foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
-                {
-                    try
-                    {
-                        AppEventHandler.ProfileLoaded(this, genericPanelBinding);
-                    }
-                    catch (Exception ex)
-                    {
-                        Common.ShowErrorMessageBox(ex, $"Error reading settings. Panel : {genericPanelBinding.PanelType}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }*/
-        }
-
-
+        
         public bool SaveAsNewProfile()
         {
             var saveFileDialog = new SaveFileDialog
@@ -635,7 +625,7 @@ namespace NonVisuals
                 _isNewProfile = false;
 
                 CloseProfile();
-                LoadProfile(_filename);
+                LoadProfile(_filename, out _);
             }
             catch (Exception ex)
             {

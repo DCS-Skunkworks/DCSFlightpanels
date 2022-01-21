@@ -45,6 +45,17 @@
                 }
             }
         }
+        
+        public static int DCSBIOSModulesCount
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return ModulesList.Count - 2; // Two profiles are not DCS-BIOS
+                }
+            }
+        }
 
         private static void AddInternalModules()
         {
@@ -113,11 +124,6 @@
             var module = Modules.FirstOrDefault(x => x.ID == id);
             if (module == null)
             {
-                logger.Error($"Module count is {Modules.Count}");
-                foreach (var dcsfpProfile in Modules)
-                {
-                    logger.Error($"{dcsfpProfile.ID} {dcsfpProfile.Description}");
-                }
                 LogErrorAndThrowException("Failed to determine profile ID (" + id + ") in your bindings file. Please check file BIOS.lua and update your bindings file. Example : Profile=5 equals A-10C.");
             }
             return module;
