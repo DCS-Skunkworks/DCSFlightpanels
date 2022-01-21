@@ -823,9 +823,6 @@
     <Resource Include="Images\F-14 RIO Datalink.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\dcs_screenshot_by_derbysieger.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -850,7 +847,6 @@
     </Resource>
     <Resource Include="Images\mi8_r863_freq_panel.png" />
     <Resource Include="Images\P47_radio.png" />
-    <SplashScreen Include="Images\dcs_screenshot_by_derbysieger_splash.png" />
     <Resource Include="Images\BIP Saitek2.jpg" />
     <Resource Include="Images\sidepanel.png" />
     <Content Include="Extensions\readme.txt">
@@ -868,6 +864,7 @@
     <Resource Include="Images\SA342_VHF AM.png" />
     <Resource Include="Images\SA342_VHF FM.png" />
     <Resource Include="Images\search_panels3.png" />
+    <SplashScreen Include="Images\apache_dcs2.png" />
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
