@@ -436,18 +436,45 @@ namespace NonVisuals
                 }
                 catch (Exception ex)
                 {
+                    Mouse.OverrideCursor = Cursors.Arrow;
                     exceptionThrown = 1;
                     CloseProfile();
-                    Common.ShowMessageBox(DCSFPProfile.DCSBIOSModulesCount == 0
-                        ? $"Failed to open profile. If you intended to use DCS-BIOS, check the settings. No DCS-BIOS modules were found."
-                        : $"Failed to open profile.");
                     Common.ShowErrorMessageBox(ex);
+
+                    if (DCSFPProfile.DCSBIOSModulesCount == 0)
+                    {
+                        if(MessageBox.Show("Failed to open profile. If you intended to use DCS - BIOS, check the Settings. No DCS - BIOS modules were found.\n\nDo you want to open Settings?"
+                        , "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            ShowSettingsWindow();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            $"Failed to open profile."
+                            , "", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    }
                     return false;
                 }
             }
             finally
             {
                 Mouse.OverrideCursor = Cursors.Arrow;
+            }
+        }
+
+        private void ShowSettingsWindow()
+        {
+            var settingsWindow = new SettingsWindow();
+            if (settingsWindow.ShowDialog() == true)
+            {
+                if (settingsWindow.DCSBIOSChanged)
+                {
+                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                    DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+                }
             }
         }
 

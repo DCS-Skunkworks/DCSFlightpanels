@@ -148,8 +148,7 @@
                 }
 
                 LoadSettings();
-
-
+                
                 DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 CheckErrorLogAndDCSBIOSLocation();
@@ -1574,6 +1573,11 @@
             var settingsWindow = new SettingsWindow();
             if (settingsWindow.ShowDialog() == true)
             {
+                if (settingsWindow.DCSBIOSChanged)
+                {
+                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                    DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+                }
                 if (settingsWindow.GeneralChanged)
                 {
                     LoadProcessPriority();
