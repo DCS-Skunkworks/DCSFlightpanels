@@ -165,7 +165,7 @@ namespace NonVisuals
         {
             CloseProfile();
 
-            LoadProfile(null, out _);
+            LoadProfile(null);
         }
 
         public bool CloseProfile()
@@ -179,7 +179,7 @@ namespace NonVisuals
             DCSFPProfile.SetNoFrameLoadedYetAsProfile();
             Common.ResetEmulationModesFlag();
             Profile = DCSFPProfile.SelectedProfile;
-            
+
             _profileLoaded = false;
             _isNewProfile = false;
             _isDirty = false;
@@ -210,7 +210,7 @@ namespace NonVisuals
             {
                 Settings.Default.LastProfileDialogLocation = Path.GetDirectoryName(openFileDialog.FileName);
                 Settings.Default.Save();
-                LoadProfile(openFileDialog.FileName, out _);
+                LoadProfile(openFileDialog.FileName);
             }
         }
 
@@ -242,23 +242,25 @@ namespace NonVisuals
 
         public void FindProfile()
         {
-            if (!LoadProfile(Settings.Default.LastProfileFileUsed, out var exceptionThrown))
+            if (LoadProfile(Settings.Default.LastProfileFileUsed) == 0)
             {
-                if (exceptionThrown == 0)
-                {
-                    CreateNewProfile();
-                }
+                CreateNewProfile();
             }
         }
 
         /*
+         * result:
+         * -1 do not show new profile dialog
+         * 0 show new profile dialog
+         * 1 successful load
+         *
+         * exceptionThrown :
          * -1 not thrown
          * 0 not thrown
          * 1 thrown
          */
-        private bool LoadProfile(string filename, out int exceptionThrown)
+        private int LoadProfile(string filename)
         {
-            exceptionThrown = 0;
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
@@ -287,14 +289,14 @@ namespace NonVisuals
                         }
                         else
                         {
-                            return false;
+                            return 0;
                         }
                     }
 
                     if (string.IsNullOrEmpty(_filename) || !File.Exists(_filename))
                     {
                         // Main window will handle this
-                        return false;
+                        return 0;
                     }
 
                     /*
@@ -432,18 +434,17 @@ namespace NonVisuals
 
                     AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
 
-                    return true;
+                    return 1;
                 }
                 catch (Exception ex)
                 {
                     Mouse.OverrideCursor = Cursors.Arrow;
-                    exceptionThrown = 1;
                     CloseProfile();
                     Common.ShowErrorMessageBox(ex);
 
                     if (DCSFPProfile.DCSBIOSModulesCount == 0)
                     {
-                        if(MessageBox.Show("Failed to open profile. If you intended to use DCS - BIOS, check the Settings. No DCS - BIOS modules were found.\n\nDo you want to open Settings?"
+                        if (MessageBox.Show("Failed to open profile. If you intended to use DCS - BIOS, check the Settings. No DCS - BIOS modules were found.\n\nDo you want to open Settings?"
                         , "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
                             ShowSettingsWindow();
@@ -456,7 +457,7 @@ namespace NonVisuals
                             , "", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     }
-                    return false;
+                    return -1;
                 }
             }
             finally
@@ -495,7 +496,7 @@ namespace NonVisuals
 
             return settingsWereModified;
         }
-        
+
         private void SetEmulationModeFlag()
         {
             if (DCSFPProfile.IsNoFrameLoadedYet(Profile))
@@ -515,7 +516,7 @@ namespace NonVisuals
                 Common.SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled | EmulationMode.DCSBIOSInputEnabled);
             }
         }
-        
+
         public bool SaveAsNewProfile()
         {
             var saveFileDialog = new SaveFileDialog
@@ -652,7 +653,7 @@ namespace NonVisuals
                 _isNewProfile = false;
 
                 CloseProfile();
-                LoadProfile(_filename, out _);
+                LoadProfile(_filename);
             }
             catch (Exception ex)
             {
