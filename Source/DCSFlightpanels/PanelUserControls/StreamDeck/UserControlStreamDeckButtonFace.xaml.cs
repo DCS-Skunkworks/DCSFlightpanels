@@ -74,6 +74,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     return;
                 }
+
+                if (Common.KeyEmulationOnly())
+                {
+                    RadioButtonDCSBIOSFace.Visibility = Visibility.Collapsed;
+                }
                 FillControlLists();
                 SetBills();
                 LoadFontSettings();

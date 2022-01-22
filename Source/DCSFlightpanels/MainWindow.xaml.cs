@@ -148,7 +148,7 @@
                 }
 
                 LoadSettings();
-                
+
                 DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 CheckErrorLogAndDCSBIOSLocation();
@@ -461,17 +461,14 @@
                     case GamingPanelEnum.StreamDeckV2:
                     case GamingPanelEnum.StreamDeckMK2:
                         {
-                            if (!DCSFPProfile.IsKeyEmulator(_profileHandler.Profile))
-                            {
-                                var tabItemStreamDeck = new TabItem { Header = hidSkeleton.GamingPanelType.GetEnumDescriptionField() };
-                                var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.GamingPanelType, hidSkeleton, tabItemStreamDeck);
-                                _panelUserControls.Add(streamDeckUserControl);
-                                tabItemStreamDeck.Content = streamDeckUserControl;
-                                TabControlPanels.Items.Add(tabItemStreamDeck);
-                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
+                            var tabItemStreamDeck = new TabItem { Header = hidSkeleton.GamingPanelType.GetEnumDescriptionField() };
+                            var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.GamingPanelType, hidSkeleton, tabItemStreamDeck);
+                            _panelUserControls.Add(streamDeckUserControl);
+                            tabItemStreamDeck.Content = streamDeckUserControl;
+                            TabControlPanels.Items.Add(tabItemStreamDeck);
+                            _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
-                            }
+                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
 
                             break;
                         }
@@ -1202,7 +1199,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void MenuItemCloseProfile_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -1582,7 +1579,7 @@
                 {
                     LoadProcessPriority();
                 }
-                
+
                 ConfigurePlugins();
             }
         }
@@ -1886,7 +1883,7 @@
                     {
                         if (!_profileFileHIDInstances.Any(o => o.Key.Equals(e.HidSkeleton.HIDInstance)))
                         {
-                            Dispatcher?.Invoke((Action)(() => CreatePanel(e.HidSkeleton))); 
+                            Dispatcher?.Invoke((Action)(() => CreatePanel(e.HidSkeleton)));
                         }
                         break;
                     }
