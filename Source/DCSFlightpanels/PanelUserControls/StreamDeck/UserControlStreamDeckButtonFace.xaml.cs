@@ -669,7 +669,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     SetIsDirty();
 
                     SetFormState();
-                    ButtonFocus.Focus();
                 }
             }
             catch (Exception ex)
