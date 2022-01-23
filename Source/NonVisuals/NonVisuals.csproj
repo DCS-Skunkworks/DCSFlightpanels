@@ -83,6 +83,7 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonVirtualKey.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingBase.cs" />
     <Compile Include="EventArgs\AirframeEventArgs.cs" />
     <Compile Include="BindingMappingManager.cs" />
@@ -140,7 +141,6 @@
     <Compile Include="Saitek\BIPLinkPZ69.cs" />
     <Compile Include="Saitek\BIPLinkPZ70.cs" />
     <Compile Include="Saitek\BIPLinkTPM.cs" />
-    <Compile Include="CommonVK.cs" />
     <Compile Include="Saitek\Panels\FarmingSidePanel.cs" />
     <Compile Include="Saitek\PZ70LCDButtonByteList.cs" />
     <Compile Include="Saitek\SaitekConstants.cs" />

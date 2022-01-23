@@ -194,9 +194,9 @@
                 for (var i = 0; i < virtualKeyCodes.Count(); i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
-                    if (CommonVK.IsModifierKey(virtualKeyCode))
+                    if (CommonVirtualKey.IsModifierKey(virtualKeyCode))
                     {
-                        if (CommonVK.IsExtendedKey(virtualKeyCode))
+                        if (CommonVirtualKey.IsExtendedKey(virtualKeyCode))
                         {
                             NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_EXTENDEDKEY | 0, 0);
                             // keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, 0);
@@ -216,7 +216,7 @@
                 for (var i = 0; i < virtualKeyCodes.Count(); i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
-                    if (!CommonVK.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
+                    if (!CommonVirtualKey.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
                     {
                         NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), 0, 0);
                     }
@@ -256,7 +256,7 @@
             for (var i = 0; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
-                if (!CommonVK.IsModifierKey(virtualKeyCode))
+                if (!CommonVirtualKey.IsModifierKey(virtualKeyCode))
                 {
                     NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_KEYUP, 0);
                 }
@@ -266,9 +266,9 @@
             for (var i = 0; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
-                if (CommonVK.IsModifierKey(virtualKeyCode))
+                if (CommonVirtualKey.IsModifierKey(virtualKeyCode))
                 {
-                    if (CommonVK.IsExtendedKey(virtualKeyCode))
+                    if (CommonVirtualKey.IsExtendedKey(virtualKeyCode))
                     {
                         NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)(NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP), 0);
                     }
@@ -637,7 +637,7 @@
                 var modifierCount = 0;
                 foreach (var virtualKeyCode in virtualKeyCodes)
                 {
-                    if (CommonVK.IsModifierKey(virtualKeyCode))
+                    if (CommonVirtualKey.IsModifierKey(virtualKeyCode))
                     {
                         modifierCount++;
                     }
@@ -647,12 +647,12 @@
                 for (var i = 0; i < virtualKeyCodes.Count(); i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
-                    if (CommonVK.IsModifierKey(virtualKeyCode))
+                    if (CommonVirtualKey.IsModifierKey(virtualKeyCode))
                     {
                         inputs[i].type = NativeMethods.INPUT_KEYBOARD;
                         inputs[i].InputUnion.ki.time = 0;
                         inputs[i].InputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_SCANCODE;
-                        if (CommonVK.IsExtendedKey(virtualKeyCode))
+                        if (CommonVirtualKey.IsExtendedKey(virtualKeyCode))
                         {
                             inputs[i].InputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_EXTENDEDKEY;
                         }
@@ -670,7 +670,7 @@
                 for (var i = modifierCount; i < virtualKeyCodes.Count(); i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
-                    if (!CommonVK.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
+                    if (!CommonVirtualKey.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
                     {
                         inputs[i].type = NativeMethods.INPUT_KEYBOARD;
                         inputs[i].InputUnion.ki.time = 0;

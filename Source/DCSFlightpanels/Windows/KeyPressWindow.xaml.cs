@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Windows
+﻿using System.Diagnostics;
+
+namespace DCSFlightpanels.Windows
 {
     using System;
     using System.Collections.Generic;
@@ -75,22 +77,25 @@
             }
         }
 
+
+
         private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                var textBox = ((TextBox)sender);
-                if (textBox.Tag == null)
-                {
-                    textBox.Tag = KeyPressLength.ThirtyTwoMilliSec;
-                }
+                var textBox = (TextBox)sender;
 
-                var keyPressed = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
+                var hashSetOfKeysPressed = new HashSet<string>();
+
+                var keyCode = KeyInterop.VirtualKeyFromKey(e.RealKey());
+
                 e.Handled = true;
 
-                var hashSetOfKeysPressed = new HashSet<string> {Enum.GetName(typeof(MEF.VirtualKeyCode), keyPressed)};
-
-                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
+                if (keyCode > 0)
+                {
+                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), keyCode));
+                }
+                var modifiers = CommonVirtualKey.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));
@@ -107,14 +112,15 @@
                         result = str + " " + result;
                     }
                 }
+
                 result = Common.RemoveLControl(result);
+
                 textBox.Text = result;
-                SetIsDirty();
                 SetFormState();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 

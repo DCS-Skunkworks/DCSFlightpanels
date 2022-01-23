@@ -105,7 +105,7 @@
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), keyCode));
                 }
-                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
+                var modifiers = CommonVirtualKey.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));

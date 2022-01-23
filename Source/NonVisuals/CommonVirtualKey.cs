@@ -5,7 +5,7 @@
 
     using MEF;
 
-    public static class CommonVK
+    public static class CommonVirtualKey
     {
 
         private static readonly HashSet<VirtualKeyCode> Modifiers = new HashSet<VirtualKeyCode>();
