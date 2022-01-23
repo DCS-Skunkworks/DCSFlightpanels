@@ -4,6 +4,7 @@ using DCS_BIOS.EventArgs;
 using DCS_BIOS.Interfaces;
 using DCS_BIOS.Json;
 using NLog;
+using NonVisuals.StreamDeck.Panels;
 
 namespace DCSFlightpanels.Windows.StreamDeck
 {

@@ -13,8 +13,8 @@
         private string _bindingHash;
         private List<string> _settings = new List<string>(50);
         private string _jsonString = string.Empty;
-        private bool _hardwareWasFound;
         private bool _hasBeenDeleted;
+
 
         public GenericPanelBinding()
         { }
@@ -44,6 +44,16 @@
             set => _settings = value;
         }
 
+        public bool Match(HIDSkeleton hidSkeleton)
+        {
+            return HIDInstance.Equals(hidSkeleton.HIDInstance) && PanelType == hidSkeleton.GamingPanelType;
+        }
+
+        public bool Match(GenericPanelBinding genericPanelBinding)
+        {
+            return HIDInstance.Equals(genericPanelBinding.HIDInstance) && PanelType == genericPanelBinding.PanelType;
+        }
+
         public void JSONAddLine(string jsonLine)
         {
             if (string.IsNullOrEmpty(_jsonString))
@@ -55,13 +65,7 @@
                 _jsonString = _jsonString + Environment.NewLine + jsonLine;
             }
         }
-
-        public bool HardwareWasFound
-        {
-            get => _hardwareWasFound;
-            set => _hardwareWasFound = value;
-        }
-
+        
         public GamingPanelEnum PanelType
         {
             get => _panelType;
@@ -73,6 +77,17 @@
             get => _hasBeenDeleted;
             set => _hasBeenDeleted = value;
         }
+
+        public string JSONString
+        {
+            get => _jsonString;
+            set => _jsonString = value;
+        }
+
+        /// <summary>
+        /// If a panel has been found with matching HID and type this will be true
+        /// </summary>
+        public bool InUse { get; set; }
 
         public string SettingsString
         {
@@ -96,12 +111,6 @@
         public bool IsJSON()
         {
             return (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL || PanelType == GamingPanelEnum.StreamDeckV2 || PanelType == GamingPanelEnum.StreamDeckMK2);
-        }
-
-        public string JSONString
-        {
-            get => _jsonString;
-            set => _jsonString = value;
         }
 
         public void ClearSettings()

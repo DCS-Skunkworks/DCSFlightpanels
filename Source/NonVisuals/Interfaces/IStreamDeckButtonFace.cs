@@ -1,8 +1,8 @@
-﻿namespace NonVisuals.Interfaces
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.Interfaces
 {
     using MEF;
-
-    using NonVisuals.StreamDeck;
 
     public enum EnumStreamDeckFaceType
     {
@@ -20,6 +20,7 @@
         StreamDeckPanel StreamDeckPanelInstance { get; set; }
         EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
         bool IsVisible { get; set; }
+        
         void Dispose();
         bool ConfigurationOK { get; }
         string FaceDescription { get; }

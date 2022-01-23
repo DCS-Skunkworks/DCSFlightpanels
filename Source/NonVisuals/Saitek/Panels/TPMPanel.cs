@@ -26,7 +26,7 @@
 
         public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.TPM)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.TPM)
             {
                 throw new ArgumentException();
             }
@@ -108,7 +108,7 @@
             }
 
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -240,8 +240,8 @@
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                ProfileHandler.SelectedProfile().Description, 
-                                HIDInstanceId, 
+                                DCSFPProfile.SelectedProfile.Description, 
+                                HIDInstance, 
                                 (int)PluginGamingPanelEnum.TPM, 
                                 (int)tpmPanelSwitch.TPMSwitch, 
                                 tpmPanelSwitch.IsOn,
@@ -255,8 +255,8 @@
                 if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        ProfileHandler.SelectedProfile().Description,
-                        HIDInstanceId,
+                        DCSFPProfile.SelectedProfile.Description,
+                        HIDInstance,
                         (int)PluginGamingPanelEnum.TPM,
                         (int)tpmPanelSwitch.TPMSwitch,
                         tpmPanelSwitch.IsOn,
@@ -612,17 +612,7 @@
         {
             TPMSwitchChanged(isFirstReport, hashSet);
         }
-
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose();
-        }
-
+        
         private void CreateSwitchKeys()
         {
             SaitekPanelKnobs = TPMPanelSwitch.GetTPMPanelSwitches();

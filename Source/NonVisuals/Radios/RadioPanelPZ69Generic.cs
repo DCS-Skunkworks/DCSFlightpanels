@@ -58,6 +58,7 @@ namespace NonVisuals.Radios
         {
             CreateSwitchKeys();
             Startup();
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -68,6 +69,7 @@ namespace NonVisuals.Radios
             {
                 if (disposing)
                 {
+                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -143,7 +145,7 @@ namespace NonVisuals.Radios
 
                 _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
                 _settingsAreBeingImported = false;
-                AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+                AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
             }
         }
 
@@ -408,8 +410,8 @@ namespace NonVisuals.Radios
                                 if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                                 {
                                     PluginManager.DoEvent(
-                                        ProfileHandler.SelectedProfile().Description,
-                                        HIDInstanceId,
+                                        DCSFPProfile.SelectedProfile.Description,
+                                        HIDInstance,
                                         (int)PluginGamingPanelEnum.PZ69RadioPanel,
                                         (int)radioPanelKey.RadioPanelPZ69Knob,
                                         radioPanelKey.IsOn,
@@ -426,8 +428,8 @@ namespace NonVisuals.Radios
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                ProfileHandler.SelectedProfile().Description,
-                                HIDInstanceId,
+                                DCSFPProfile.SelectedProfile.Description,
+                                HIDInstance,
                                 (int)PluginGamingPanelEnum.PZ69RadioPanel,
                                 (int)radioPanelKey.RadioPanelPZ69Knob,
                                 radioPanelKey.IsOn,

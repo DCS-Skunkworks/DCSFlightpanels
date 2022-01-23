@@ -1,4 +1,7 @@
-﻿namespace DCSFlightpanels.Bills
+﻿using System.IO;
+using NonVisuals.StreamDeck.Panels;
+
+namespace DCSFlightpanels.Bills
 {
     using System.Drawing;
     using System.Windows;
@@ -139,10 +142,15 @@
         {
             return _textFont != null && !string.IsNullOrEmpty(TextBox.Text);
         }
-
+        
         public bool ContainsImageFace()
         {
             return !string.IsNullOrEmpty(ImageFileRelativePath);
+        }
+
+        public bool ContainsImageFaceAndImageExists()
+        {
+            return !string.IsNullOrEmpty(ImageFileRelativePath) && File.Exists(ImageFileRelativePath);
         }
 
         public override bool ContainsDCSBIOS()

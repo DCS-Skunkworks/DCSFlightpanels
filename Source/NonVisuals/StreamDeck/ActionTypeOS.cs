@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.StreamDeck
 {
     using System;
     using System.IO;
@@ -27,7 +29,10 @@
         {
             _streamDeckPanel = streamDeckPanel;
         }
-        
+
+        public virtual void Dispose(bool disposing) { }
+        public virtual void Dispose() { }
+
         public new int GetHash()
         {
             unchecked

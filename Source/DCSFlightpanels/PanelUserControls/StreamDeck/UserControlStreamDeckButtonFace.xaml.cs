@@ -1,15 +1,14 @@
-﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     using System;
     using System.Collections.Generic;
     using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.IO;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Forms;
     using System.Windows.Input;
-    using System.Windows.Media.Imaging;
     using ClassLibraryCommon;
 
     using DCSFlightpanels.Bills;
@@ -75,6 +74,11 @@
                 {
                     return;
                 }
+
+                if (Common.KeyEmulationOnly())
+                {
+                    RadioButtonDCSBIOSFace.Visibility = Visibility.Collapsed;
+                }
                 FillControlLists();
                 SetBills();
                 LoadFontSettings();
@@ -120,7 +124,7 @@
 
         private void DisplayImagePreview()
         {
-            if (TextBoxImageFace.Bill.ContainsImageFace())
+            if (TextBoxImageFace.Bill.ContainsImageFaceAndImageExists())
             {
                 var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
                 ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
@@ -665,7 +669,6 @@
                     SetIsDirty();
 
                     SetFormState();
-                    ButtonFocus.Focus();
                 }
             }
             catch (Exception ex)

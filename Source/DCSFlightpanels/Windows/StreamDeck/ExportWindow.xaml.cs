@@ -9,6 +9,7 @@ using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
 using Microsoft.Win32;
 using NonVisuals.StreamDeck;
+using NonVisuals.StreamDeck.Panels;
 
 namespace DCSFlightpanels.Windows.StreamDeck
 {

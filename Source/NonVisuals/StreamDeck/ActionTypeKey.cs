@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -31,6 +33,9 @@
             _streamDeckPanel = streamDeckPanel;
         }
 
+
+        public virtual void Dispose(bool disposing) { }
+        public virtual void Dispose() { }
 
         public new int GetHash()
         {
@@ -76,8 +81,8 @@
             if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
             {
                 PluginManager.DoEvent(
-                    ProfileHandler.SelectedProfile().Description,
-                    StreamDeckPanelInstance.HIDInstanceId,
+                    DCSFPProfile.SelectedProfile.Description,
+                    StreamDeckPanelInstance.HIDInstance,
                     (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
                     (int)StreamDeckButtonName,
                     true,

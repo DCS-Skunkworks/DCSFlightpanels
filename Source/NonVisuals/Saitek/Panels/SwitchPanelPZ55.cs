@@ -51,7 +51,7 @@
 
         public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
             {
                 throw new ArgumentException();
             }
@@ -61,6 +61,7 @@
             ProductId = 0xD67;
             CreateSwitchKeys();
             Startup();
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -71,6 +72,7 @@
             {
                 if (disposing)
                 {
+                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -158,7 +160,7 @@
                 }
             }
 
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
         }
 
@@ -458,8 +460,8 @@
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                ProfileHandler.SelectedProfile().Description, 
-                                HIDInstanceId, 
+                                DCSFPProfile.SelectedProfile.Description, 
+                                HIDInstance, 
                                 (int)PluginGamingPanelEnum.PZ55SwitchPanel, 
                                 (int)switchPanelKey.SwitchPanelPZ55Key, 
                                 switchPanelKey.IsOn,
@@ -474,8 +476,8 @@
                 if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        ProfileHandler.SelectedProfile().Description,
-                        HIDInstanceId,
+                        DCSFPProfile.SelectedProfile.Description,
+                        HIDInstance,
                         (int)PluginGamingPanelEnum.PZ55SwitchPanel,
                         (int)switchPanelKey.SwitchPanelPZ55Key,
                         switchPanelKey.IsOn,
@@ -891,17 +893,7 @@
         {
             PZ55SwitchChanged(isFirstReport, hashSet);
         }
-
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose();
-        }
-
+        
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
             var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
@@ -943,7 +935,8 @@
                             break;
                         }
                 }
-                AppEventHandler.LedLightChanged(this, HIDSkeletonBase.InstanceId, new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
+
+                AppEventHandler.LedLightChanged(this, HIDSkeletonBase.HIDInstance, new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
                 SetLandingGearLED(_ledUpperColor | _ledLeftColor | _ledRightColor);
             }
             catch (Exception ex)

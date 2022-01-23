@@ -26,9 +26,6 @@ namespace DCSFlightpanels.PanelUserControls
                 }
             }
         }
-
-        public UserControlBase()
-        {}
         
         protected virtual void Dispose(bool disposing)
         {
@@ -49,12 +46,7 @@ namespace DCSFlightpanels.PanelUserControls
             // Dispose of unmanaged resources.
             Dispose(true);
         }
-
-        public void DeviceRemovedHandler()
-        {
-            Dispose();
-        }
-
+        
         public virtual GamingPanel GetGamingPanel()
         {
             return null;

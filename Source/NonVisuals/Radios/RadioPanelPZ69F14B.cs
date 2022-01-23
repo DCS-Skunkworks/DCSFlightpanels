@@ -253,6 +253,7 @@
             CreateRadioKnobs();
             Startup();
             BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -269,6 +270,7 @@
                     _shutdownRIOTACANThread = true;
                     _shutdownVUHFThread = true;
                     BIOSEventHandler.DetachStringListener(this);
+                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -3248,7 +3250,7 @@
                     
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.DoEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                        PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
 

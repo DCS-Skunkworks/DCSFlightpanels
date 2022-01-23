@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals.StreamDeck;
+using NonVisuals.StreamDeck.Panels;
 
 namespace DCSFlightpanels.Windows.StreamDeck
 {

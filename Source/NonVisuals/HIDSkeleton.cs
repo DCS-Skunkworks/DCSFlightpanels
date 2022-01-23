@@ -1,4 +1,6 @@
-﻿namespace NonVisuals
+﻿using NonVisuals.EventArgs;
+
+namespace NonVisuals
 {
     using System;
 
@@ -9,17 +11,21 @@
     public class HIDSkeleton
     {
         private readonly GamingPanelSkeleton _gamingPanelSkeleton;
+        public bool IsAttached { get; private set; }
 
-        public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string instanceId)
+        public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string hidInstance)
         {
             _gamingPanelSkeleton = gamingPanelSkeleton;
-            InstanceId = instanceId;
+            HIDInstance = hidInstance;
+            IsAttached = true;
         }
 
         public void Close()
         {
             try
             {
+                IsAttached = false;
+
                 if (HIDReadDevice.IsOpen)
                 {
                     HIDReadDevice.CloseDevice();
@@ -38,13 +44,13 @@
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
+        
         public GamingPanelSkeleton PanelInfo
         {
             get => _gamingPanelSkeleton;
         }
 
-        public string InstanceId { get; set; }
+        public string HIDInstance { get; set; }
 
         public HidDevice HIDReadDevice { get; set; }
 
@@ -52,7 +58,29 @@
 
         public GamingPanelSkeleton GamingPanelSkeleton => _gamingPanelSkeleton;
 
+        public GamingPanelEnum GamingPanelType => _gamingPanelSkeleton.GamingPanelType;
+
         public bool PanelHasBeenInstantiated { get; set; }
+
+        
+        private bool _once = true;
+        public void HIDDeviceOnInserted()
+        {
+            if (_once)
+            {
+                _once = false;
+                return;
+            }
+
+            IsAttached = true;
+            AppEventHandler.PanelEvent(this, HIDInstance, this, PanelEventType.Attached);
+        }
+
+        public void HIDDeviceOnRemoved()
+        {
+            IsAttached = false;
+            AppEventHandler.PanelEvent(this, HIDInstance, this, PanelEventType.Detached);
+        }
     }
 
 }

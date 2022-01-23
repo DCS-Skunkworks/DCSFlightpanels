@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Windows.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace DCSFlightpanels.Windows.StreamDeck
 {
     using System;
     using System.Drawing;

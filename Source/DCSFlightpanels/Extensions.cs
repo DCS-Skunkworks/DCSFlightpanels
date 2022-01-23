@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace DCSFlightpanels
 {
     using DCSFlightpanels.CustomControls;
 

@@ -69,6 +69,9 @@
       <HintPath>..\packages\StreamDeckSharp.3.2.0\lib\netstandard2.0\StreamDeckSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.6.0.0\lib\net461\System.Drawing.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="PresentationCore" />
@@ -76,9 +79,6 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Drawing" />
     <Reference Include="WindowsBase" />
-    <Reference Include="System.Drawing.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Drawing.Common.6.0.0-rc.2.21480.5\lib\net461\System.Drawing.Common.dll</HintPath>
-    </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
@@ -94,14 +94,18 @@
     <Compile Include="EventArgs\BipPanelRegisteredEventArgs.cs" />
     <Compile Include="EventArgs\DCSBIOSUpdatesMissedEventArgs.cs" />
     <Compile Include="EventArgs\ForwardPanelEventArgs.cs" />
-    <Compile Include="EventArgs\PanelBindingReadFromFileEventArgs.cs" />
+    <Compile Include="EventArgs\ProfileEventArgs.cs" />
     <Compile Include="EventArgs\PanelEventArgs.cs" />
+    <Compile Include="EventArgs\PanelInfoArgs.cs" />
     <Compile Include="EventArgs\SwitchesChangedEventArgs.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericPanelBinding.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
     <Compile Include="Interfaces\IHardwareConflictResolver.cs" />
+    <Compile Include="Interfaces\ILedLightPanelListener.cs" />
     <Compile Include="Interfaces\IOledImageListener.cs" />
+    <Compile Include="Interfaces\IPanelEventListener.cs" />
+    <Compile Include="Interfaces\IProfileHandler.cs" />
     <Compile Include="Interfaces\ISettingsModifiedListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonActionListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />
@@ -192,7 +196,6 @@
     <Compile Include="Saitek\BIPLight.cs" />
     <Compile Include="Saitek\PanelSwitchOnOff.cs" />
     <Compile Include="PerformanceTimer.cs" />
-    <Compile Include="ProfileHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -243,7 +246,7 @@
     <Compile Include="StreamDeck\StreamDeckConstants.cs" />
     <Compile Include="StreamDeck\StreamDeckLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckLayerHandler.cs" />
-    <Compile Include="StreamDeck\StreamDeckPanel.cs" />
+    <Compile Include="StreamDeck\Panels\StreamDeckPanel.cs" />
     <Compile Include="Saitek\Switches\TPMPanelSwitch.cs" />
     <Compile Include="Saitek\Switches\SwitchPanelKey.cs" />
     <Compile Include="Saitek\Panels\TPMPanel.cs" />

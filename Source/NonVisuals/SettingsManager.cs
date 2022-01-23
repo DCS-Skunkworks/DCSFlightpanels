@@ -38,20 +38,20 @@
 
         public static string LastImageFileDirectory
         {
-            get => Settings.Default.LastImageFileDialogLocation;
+            get => Settings.Default.LastProfileDialogLocation;
             set
             {
-                Settings.Default.LastImageFileDialogLocation = value;
+                Settings.Default.LastProfileDialogLocation = value;
                 Settings.Default.Save();
             }
         }
 
         public static string LastSoundFileDirectory
         {
-            get => Settings.Default.LastImageFileDialogLocation;
+            get => Settings.Default.LastProfileDialogLocation;
             set
             {
-                Settings.Default.LastImageFileDialogLocation = value;
+                Settings.Default.LastProfileDialogLocation = value;
                 Settings.Default.Save();
             }
         }

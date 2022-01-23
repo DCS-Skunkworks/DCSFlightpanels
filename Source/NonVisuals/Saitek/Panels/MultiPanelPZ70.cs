@@ -55,7 +55,7 @@
 
         public MultiPanelPZ70(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ70MultiPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ70MultiPanel)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ70MultiPanel)
             {
                 throw new ArgumentException();
             }
@@ -64,6 +64,7 @@
             ProductId = 0xD06;
             CreateMultiKnobs();
             Startup();
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -74,6 +75,7 @@
             {
                 if (disposing)
                 {
+                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -115,7 +117,7 @@
                     {
                         var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
                         dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(e.Data);
-                        if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
+                        if (tmp.CompareTo(dcsbiosBindingLCDPZ70.CurrentValue) != 0)
                         {
                             Interlocked.Increment(ref _doUpdatePanelLCD);
                         }
@@ -129,7 +131,7 @@
                         {
                             var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
                             dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate(false);
-                            if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
+                            if (tmp.CompareTo(dcsbiosBindingLCDPZ70.CurrentValue) != 0)
                             {
                                 Interlocked.Increment(ref _doUpdatePanelLCD);
                             }
@@ -138,6 +140,7 @@
                 }
             }
 
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             UpdateLCD();
         }
 
@@ -190,7 +193,7 @@
 
             SettingsLoading = false;
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -845,8 +848,8 @@
                             if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                             {
                                 PluginManager.DoEvent(
-                                    ProfileHandler.SelectedProfile().Description,
-                                    HIDInstanceId,
+                                    DCSFPProfile.SelectedProfile.Description,
+                                    HIDInstance,
                                     (int)PluginGamingPanelEnum.PZ70MultiPanel,
                                     (int)multiPanelKnob.MultiPanelPZ70Knob,
                                     multiPanelKnob.IsOn,
@@ -868,8 +871,8 @@
                 if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        ProfileHandler.SelectedProfile().Description,
-                        HIDInstanceId,
+                        DCSFPProfile.SelectedProfile.Description,
+                        HIDInstance,
                         (int)PluginGamingPanelEnum.PZ70MultiPanel,
                         (int)multiPanelKnob.MultiPanelPZ70Knob,
                         multiPanelKnob.IsOn,
@@ -1372,7 +1375,7 @@
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
-        public void SendLEDData(byte[] array)
+        private void SendLEDData(byte[] array)
         {
             try
             {
@@ -1389,20 +1392,7 @@
         {
             SaitekPanelKnobs = MultiPanelKnob.GetMultiPanelKnobs();
         }
-
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-
-            // IsAttached = true;
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose();
-
-            // IsAttached = false;
-        }
+        
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {

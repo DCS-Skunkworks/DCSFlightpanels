@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +14,7 @@
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck.Events;
 
-    public class StreamDeckLayer
+    public class StreamDeckLayer : IDisposable
     {
         private volatile bool _isVisible;
         [NonSerialized]
@@ -62,9 +64,23 @@
             }
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="streamDeckPanel"></param>
         public StreamDeckLayer(StreamDeckPanel streamDeckPanel)
         {
             _streamDeckPanel = streamDeckPanel;
+        }
+
+
+        public void Dispose()
+        {
+            foreach (var streamDeckButton in StreamDeckButtons)
+            {
+                streamDeckButton?.Dispose();
+            }
         }
 
         public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
@@ -74,8 +90,6 @@
             {
                 ImportButtons(importMode, streamDeckButtons);
             }
-
-            RegisterStreamDeckButtons();
         }
         
         public void ImportButtons(EnumButtonImportMode importMode, List<StreamDeckButton> newStreamDeckButtons)
@@ -161,11 +175,7 @@
         {
             SDEventHandler.NotifyStreamDeckConfigurationChange(this, _streamDeckPanel.BindingHash);
         }
-
-        public void RegisterStreamDeckButtons()
-        {
-            StreamDeckButtons.ForEach(button => button.RegisterButtonToStaticList());
-        }
+        
 
         [JsonProperty("TextFont", Required = Required.Default)]
         public Font TextFont
@@ -229,7 +239,6 @@
 
         public void AddButton(StreamDeckButton streamDeckButton, bool silently = false)
         {
-            streamDeckButton.RegisterButtonToStaticList();
             streamDeckButton.IsVisible = _isVisible;
 
             var found = false;
@@ -321,6 +330,7 @@
 
             throw new Exception($"StreamDeckLayer [{Name}] does not contain button [{streamDeckButtonName}].");
         }
+
     }
 
     public enum EnumButtonImportMode

@@ -1,9 +1,11 @@
-﻿namespace NonVisuals.EventArgs
+﻿using NonVisuals.Interfaces;
+
+namespace NonVisuals.EventArgs
 {
     using System;
 
     public class ProfileHandlerEventArgs : EventArgs
     {
-        public ProfileHandler ProfileHandlerCaller { get; set; }
+        public IProfileHandler ProfileHandlerCaller { get; set; }
     }
 }

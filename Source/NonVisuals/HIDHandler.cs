@@ -1,4 +1,8 @@
-﻿namespace NonVisuals
+﻿using System.Diagnostics;
+using System.Linq;
+using NonVisuals.EventArgs;
+
+namespace NonVisuals
 {
     using System;
     using System.Collections.Generic;
@@ -20,7 +24,7 @@
 
         public static HIDHandler GetInstance()
         {
-            return _instance ?? (_instance = new HIDHandler());
+            return _instance ??= new HIDHandler();
         }
 
         public HIDHandler()
@@ -50,6 +54,12 @@
             return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// searchForNew is used when panel has been detached => attached but not found again because there is no hook (new HID instance ID).
+        /// So already found panels should be left as is.
+        /// </summary>
+        /// <param name="loadStreamDeck"></param>
+        /// <param name="searchForNew"></param>
         public void Startup(bool loadStreamDeck)
         {
             try
@@ -65,11 +75,17 @@
                                 continue;
                             }
 
-                            var instanceId = hidDevice.DevicePath;
-                            if (!HIDDeviceAlreadyExists(instanceId))
+                            var hidIinstance = hidDevice.DevicePath;
+                            if (!HIDDeviceAlreadyExists(hidIinstance))
                             {
-                                var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, instanceId);
+                                var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, hidIinstance);
                                 HIDSkeletons.Add(hidSkeleton);
+
+                                hidDevice.MonitorDeviceEvents = true;
+                                hidDevice.Inserted += hidSkeleton.HIDDeviceOnInserted;
+                                hidDevice.Removed += hidSkeleton.HIDDeviceOnRemoved;
+
+                                //Only Saitek needs this hid library, Stream Deck uses an other. But Stream Deck is added in order to have references.
                                 if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.Saitek || hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.MadCatz)
                                 {
                                     hidSkeleton.HIDReadDevice = hidDevice;
@@ -84,6 +100,20 @@
                         }
                     }
                 }
+
+                /*foreach (var hidSkeleton in HIDSkeletons)
+                {
+                    if (hidSkeleton.IsAttached)
+                    {
+                        Debug.WriteLine(hidSkeleton.GamingPanelType + "   " + hidSkeleton.HIDInstance);
+                    }
+                }*/
+                Debug.WriteLine("*** HIDSkeleton count is " + HIDSkeletons.Count);
+                //Broadcast that this panel was found.
+                HIDSkeletons.FindAll(o => o.IsAttached).ToList().ForEach(o => AppEventHandler.PanelEvent(this, o.HIDInstance, o, PanelEventType.Found));
+
+                //Broadcast that panel search is over and all panels have been found that exists.
+                AppEventHandler.PanelEvent(this, null, null, PanelEventType.AllPanelsFound);
             }
             catch (Exception ex)
             {
@@ -114,16 +144,16 @@
         }
 
 
-        private bool HIDDeviceAlreadyExists(string instanceId)
+        private bool HIDDeviceAlreadyExists(string hidInstance)
         {
-            if (string.IsNullOrEmpty(instanceId))
+            if (string.IsNullOrEmpty(hidInstance))
             {
-                throw new Exception("Looking for empty/null InstanceId HIDDeviceAlreadyExists().");
+                throw new Exception("Looking for empty/null HIDInstance HIDDeviceAlreadyExists().");
             }
 
             foreach (var hidSkeleton in HIDSkeletons)
             {
-                if (hidSkeleton.InstanceId.Equals(instanceId))
+                if (hidSkeleton.HIDInstance.Equals(hidInstance))
                 {
                     return true;
                 }

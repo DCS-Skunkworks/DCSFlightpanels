@@ -25,7 +25,7 @@
 
         public FarmingSidePanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.FarmingPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.FarmingPanel)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.FarmingPanel)
             {
                 throw new ArgumentException();
             }
@@ -35,6 +35,7 @@
             ProductId = 0x2218;
             CreateKeys();
             Startup();
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -45,6 +46,7 @@
             {
                 if (disposing)
                 {
+                    BIOSEventHandler.DetachDataListener(this);
                     Closed = true;
                 }
 
@@ -107,7 +109,7 @@
                 }
             }
 
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
             _keyBindings = KeyBindingFarmingPanel.SetNegators(_keyBindings);
 
         }
@@ -250,8 +252,8 @@
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                ProfileHandler.SelectedProfile().Description,
-                                HIDInstanceId,
+                                DCSFPProfile.SelectedProfile.Description,
+                                HIDInstance,
                                 (int)PluginGamingPanelEnum.FarmingPanel,
                                 (int)farmingPanelKey.FarmingPanelMKKey,
                                 farmingPanelKey.IsOn,
@@ -266,8 +268,8 @@
                 if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        ProfileHandler.SelectedProfile().Description,
-                        HIDInstanceId,
+                        DCSFPProfile.SelectedProfile.Description,
+                        HIDInstance,
                         (int)PluginGamingPanelEnum.FarmingPanel,
                         (int)farmingPanelKey.FarmingPanelMKKey,
                         farmingPanelKey.IsOn,
@@ -599,20 +601,7 @@
         {
             FarmingSidePanelSwitchChanged(isFirstReport, hashSet);
         }
-
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-            AppEventHandler.DeviceAttached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose();
-            AppEventHandler.DeviceDetached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
-        }
-
-
+        
         private void CreateKeys()
         {
             SaitekPanelKnobs = FarmingPanelKey.GetPanelFarmingPanelKeys();

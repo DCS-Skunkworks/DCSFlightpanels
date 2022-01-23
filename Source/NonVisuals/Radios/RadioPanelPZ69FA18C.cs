@@ -115,6 +115,7 @@ namespace NonVisuals.Radios
         {
              CreateRadioKnobs();
             Startup();
+            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -126,6 +127,7 @@ namespace NonVisuals.Radios
                 if (disposing)
                 {
                     _shutdownILSThread = true;
+                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -1238,8 +1240,8 @@ namespace NonVisuals.Radios
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
                         PluginManager.DoEvent(
-                            ProfileHandler.SelectedProfile().Description,
-                            HIDInstanceId,
+                            DCSFPProfile.SelectedProfile.Description,
+                            HIDInstance,
                             (int)PluginGamingPanelEnum.PZ69RadioPanel,
                             (int)radioPanelKnob.RadioPanelPZ69Knob,
                             radioPanelKnob.IsOn,

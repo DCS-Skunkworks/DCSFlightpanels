@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -44,7 +46,7 @@
         {
             "0", "0.0", "0.00", "0.000", "0.0000", "0.00000"
         };*/
-
+        
         public DCSBIOSDecoder()
         {
             _imageUpdateTread = new Thread(ImageRefreshingThread);
@@ -54,22 +56,35 @@
             SDEventHandler.AttachDCSBIOSDecoder(this);
         }
 
-        public override void Dispose()
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
         {
-            _shutdownThread = true;
-            SDEventHandler.DetachDCSBIOSDecoder(this);
-            BIOSEventHandler.DetachStringListener(this);
-            BIOSEventHandler.DetachDataListener(this);
-
-            try
+            if (!_disposed)
             {
-            }
-            catch (Exception)
-            {
-                // ignored
+                if (disposing)
+                {
+                    _shutdownThread = true;
+                    while (_imageUpdateTread is {IsAlive: true})
+                    {
+                        Thread.Sleep(10);
+                    }
+                    SDEventHandler.DetachDCSBIOSDecoder(this);
+                    BIOSEventHandler.DetachStringListener(this);
+                    BIOSEventHandler.DetachDataListener(this);
+                }
+
+                _disposed = true;
             }
 
-            base.Dispose();
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
+        public new void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
         }
 
         [JsonIgnore]
@@ -605,7 +620,10 @@
         public EnumDCSBIOSDecoderOutputType DecoderOutputType
         {
             get => _decoderOutputType;
-            set => _decoderOutputType = value;
+            set
+            {
+                _decoderOutputType = value;
+            }
         }
 
 

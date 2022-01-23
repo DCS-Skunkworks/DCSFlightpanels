@@ -22,6 +22,26 @@ namespace DCS_BIOS
         private static string _jsonDirectory;
         public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
 
+
+        public static DCSFPProfile Profile
+        {
+            get => _dcsfpProfile;
+            set
+            {
+                if (_dcsfpProfile != value)
+                {
+                    _dcsfpProfile = value;
+                    Reset();
+                }
+            }
+        }
+
+        public static string JSONDirectory
+        {
+            get => _jsonDirectory;
+            set => _jsonDirectory = DBCommon.GetDCSBIOSJSONDirectory(value);
+        }
+
         private static void Reset()
         {
             DCSBIOSProfileLoadStatus.Clear();
@@ -298,25 +318,6 @@ namespace DCS_BIOS
             {
                 throw new Exception($"{DCSBIOSNotFoundErrorMessage} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
-        }
-
-        public static DCSFPProfile Profile
-        {
-            get => _dcsfpProfile;
-            set
-            {
-                if (_dcsfpProfile != value)
-                {
-                    _dcsfpProfile = value;
-                    Reset();
-                }
-            }
-        }
-
-        public static string JSONDirectory
-        {
-            get => _jsonDirectory;
-            set => _jsonDirectory = DBCommon.GetDCSBIOSJSONDirectory(value);
         }
         
         public static IEnumerable<DCSBIOSControl> GetControls()

@@ -39,7 +39,7 @@
 
         protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ69RadioPanel)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ69RadioPanel)
             {
                 throw new ArgumentException();
             }
@@ -273,18 +273,7 @@
         {
             e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
-
-        protected void DeviceAttachedHandler()
-        {
-            Startup();
-            // IsAttached = true;
-        }
-
-        protected void DeviceRemovedHandler()
-        {
-            Dispose();
-            // IsAttached = false;
-        }
+        
 
         protected void Reset(ref long syncVariable)
         {
@@ -345,3 +334,49 @@
         }
     }
 }
+/*
+    Information for writing on the LCD displays. (20 bytes with a header byte (0x0).)
+
+    1 byte (header byte 0x0)
+    5 bytes upper left LCD
+    5 bytes upper right LCD
+    5 bytes lower left LCD
+    5 bytes lower right LCD
+
+    0x01 - 0x09 displays the figure 1-9
+    0xD1 - 0xD9 displays the figure 1.-9. (figure followed by dot)
+    0xFF -> blank, nothing is shown in that spot.
+
+    Byte #1
+    00000000
+    ||||||||_ COM1 (upper) 
+    |||||||_ COM2 (upper)
+    ||||||_ NAV1 (upper)
+    |||||_ NAV2 (upper)
+    ||||_ ADF (upper)
+    |||_ DME (upper)
+    ||_ XPDR (upper)
+    |_ COM1 (lower) **!!!**!!!***!!!
+
+    Byte #2
+    00000000
+    ||||||||_ COM2 (lower) 
+    |||||||_ NAV1 (lower)
+    ||||||_ NAV2 (lower)
+    |||||_ ADF (lower)
+    ||||_ DME (lower)
+    |||_ XPDR (lower)
+    ||_ Switch (upper)
+    |_ Switch (lower)
+
+    Byte #3
+    00000000
+    ||||||||_ Little (+freq) (upper)
+    |||||||_ Little (-freq) (upper)
+    ||||||_ Big (+freq) (upper)
+    |||||_ Big (-freq) (upper)
+    ||||_ Little (+freq) (lower)
+    |||_ Little (-freq) (lower)
+    ||_ Big (+freq) (lower)
+    |_ Big (-freq) (lower)
+*/

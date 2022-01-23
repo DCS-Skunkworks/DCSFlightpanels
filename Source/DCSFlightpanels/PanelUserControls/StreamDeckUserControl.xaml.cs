@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.PanelUserControls
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace DCSFlightpanels.PanelUserControls
 {
     using System;
     using System.Collections.Generic;
@@ -32,9 +34,7 @@
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
-
-            // no worky worky for this library hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-
+            
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
             
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
@@ -156,23 +156,12 @@
         {
             return GetType().Name;
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                if (e.PanelType == _streamDeckPanel.TypeOfPanel && e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId))
+                if (e.PanelType == _streamDeckPanel.TypeOfPanel && e.HidInstance.Equals(_streamDeckPanel.HIDInstance))
                 {
                     NotifyButtonChanges(e.Switches);
                 }
@@ -183,11 +172,11 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
+        public void ProfileEvent(object sender, ProfileEventArgs e)
         {
             try
             {
-                if (e.PanelBinding.PanelType == _streamDeckPanel.TypeOfPanel && _streamDeckPanel.HIDInstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == _streamDeckPanel.TypeOfPanel && _streamDeckPanel.HIDInstance == e.PanelBinding.HIDInstance)
                 {
                     LoadComboBoxLayers();
                 }
@@ -197,10 +186,8 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
-
-        public void SettingsModified(object sender, PanelEventArgs e)
+        
+        public void SettingsModified(object sender, PanelInfoArgs e)
         {
             try
             {
@@ -212,11 +199,11 @@
             }
         }
         
-        public void SettingsApplied(object sender, PanelEventArgs e)
+        public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
             {
-                if (e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId) && e.PanelType == _streamDeckPanel.TypeOfPanel)
+                if (e.HidInstance.Equals(_streamDeckPanel.HIDInstance) && e.PanelType == _streamDeckPanel.TypeOfPanel)
                 {
                     SDEventHandler.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 }
@@ -226,11 +213,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void DeviceAttached(object sender, PanelEventArgs e) { }
-
-        public void DeviceDetached(object sender, PanelEventArgs e) { }
-
+        
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -239,7 +222,7 @@
                 {
                     TextBoxLogStreamDeck.Text = string.Empty;
                     TextBoxLogStreamDeck.Text = _streamDeckPanel.BindingHash;
-                    Clipboard.SetText(_streamDeckPanel.HIDInstanceId);
+                    Clipboard.SetText(_streamDeckPanel.HIDInstance);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }
             }

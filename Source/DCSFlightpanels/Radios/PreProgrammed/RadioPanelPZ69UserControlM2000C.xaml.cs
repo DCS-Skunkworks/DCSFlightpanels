@@ -30,9 +30,7 @@
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
-
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-
+            
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69M2000C(hidSkeleton)
             {
@@ -89,24 +87,12 @@
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-                //nada
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
+        
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstance))
                 {
                     SetGraphicsState(e.Switches);
                 }
@@ -117,20 +103,12 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) {}
-
-        public void SettingsCleared(object sender, PanelEventArgs e){}
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e){}
+        public void ProfileEvent(object sender, ProfileEventArgs e) {}
         
-        public void DeviceAttached(object sender, PanelEventArgs e){}
+        public void SettingsApplied(object sender, PanelInfoArgs e){}
 
-        public void SettingsApplied(object sender, PanelEventArgs e){}
-
-        public void SettingsModified(object sender, PanelEventArgs e){}
-
-        public void DeviceDetached(object sender, PanelEventArgs e){}
-
+        public void SettingsModified(object sender, PanelInfoArgs e){}
+        
         private void SetGraphicsState(HashSet<object> knobs)
         {
             try
@@ -422,8 +400,8 @@
                 if (_radioPanelPZ69 != null)
                 {
                     TextBoxLogPZ69.Text = string.Empty;
-                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstanceId;
-                    Clipboard.SetText(_radioPanelPZ69.HIDInstanceId);
+                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstance;
+                    Clipboard.SetText(_radioPanelPZ69.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

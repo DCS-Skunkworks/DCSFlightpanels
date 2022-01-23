@@ -394,5 +394,17 @@ namespace DCSFlightpanels.Properties {
                 this["DisableKeyboardAPI"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastProfileDialogLocation {
+            get {
+                return ((string)(this["LastProfileDialogLocation"]));
+            }
+            set {
+                this["LastProfileDialogLocation"] = value;
+            }
+        }
     }
 }

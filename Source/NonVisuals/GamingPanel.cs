@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Windows;
-
     using ClassLibraryCommon;
 
     using DCS_BIOS;
@@ -47,10 +45,10 @@
         public long ReportCounter = 0;
         public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); 
 
-        public string HIDInstanceId
+        public string HIDInstance
         {
-            get => HIDSkeletonBase.InstanceId;
-            set => HIDSkeletonBase.InstanceId = value;
+            get => HIDSkeletonBase.HIDInstance;
+            set => HIDSkeletonBase.HIDInstance = value;
         }
 
         public string BindingHash
@@ -96,15 +94,9 @@
             }
 
             GamingPanels.Add(this);
-
-            if (hidSkeleton.HIDReadDevice != null)
-            {
-                hidSkeleton.HIDReadDevice.Inserted += DeviceInsertedHandler;
-            }
-
+            
             AppEventHandler.AttachForwardPanelEventListener(this);
             AppEventHandler.AttachSettingsConsumerListener(this);
-            BIOSEventHandler.AttachDataListener(this);
         }
 
         public void Dispose()
@@ -128,20 +120,12 @@
                 Closed = true; // Don't know if this is necessary atm. (2021)
                 AppEventHandler.DetachForwardPanelEventListener(this);
                 AppEventHandler.DetachSettingsConsumerListener(this);
-                BIOSEventHandler.DetachDataListener(this);
+                AppEventHandler.PanelEvent(this, HIDSkeletonBase.HIDInstance, HIDSkeletonBase, PanelEventType.Disposed);
             }
 
             _disposed = true;
         }
-
-        public void DeviceInsertedHandler()
-        {
-            /*
-             * Not working, hidSkeleton deleted when panel is removed => no instance where this can be executed on. Regardless, restarting isn't a big of a deal.
-             */
-            MessageBox.Show("New device has been detected. Restart DCSFP to take it into use", "New hardware detected", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
+        
         protected void UpdateCounter(uint address, uint data)
         {
             lock (UpdateCounterLockObject)
@@ -165,7 +149,7 @@
                     else if (newCount - _count != 1)
                     {
                         // Not good
-                        AppEventHandler.UpdatesMissed(this, HIDSkeletonBase.InstanceId, TypeOfPanel, (int)(newCount - _count));
+                        AppEventHandler.UpdatesMissed(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, (int)(newCount - _count));
                         _count = newCount;
                     }
                 }
@@ -174,13 +158,10 @@
 
         public void SetIsDirty()
         {
-            AppEventHandler.SettingsChanged(this, HIDInstanceId, TypeOfPanel);
+            AppEventHandler.SettingsChanged(this, HIDInstance, TypeOfPanel);
             IsDirty = true;
         }
-
-        public virtual void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-        }
+        
 
         // User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
         public void SetForwardPanelEvent(object sender, ForwardPanelEventArgs e)
@@ -229,18 +210,12 @@
             IsDirty = false;
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
+        public void ProfileEvent(object sender, ProfileEventArgs e)
         {
-            if (e.PanelBinding.HIDInstance == HIDInstanceId)
+            if (e.ProfileEventType == ProfileEventEnum.ProfileSettings && e.PanelBinding.Match(HIDSkeletonBase))
             {
                 ImportSettings(e.PanelBinding);
             }
-        }
-
-        public void ClearPanelSettings(object sender)
-        {
-            ClearSettings();
-            AppEventHandler.SettingsChanged(sender, HIDInstanceId, TypeOfPanel);
         }
     }
 }

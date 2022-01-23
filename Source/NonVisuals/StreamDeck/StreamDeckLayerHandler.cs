@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -19,7 +21,7 @@
 
     using StreamDeckSharp;
 
-    public class StreamDeckLayerHandler
+    public class StreamDeckLayerHandler : IDisposable
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -32,8 +34,8 @@
 
         private bool _jsonImported;
 
-        private static int _instanceIdCounter;
-        private readonly int _instanceId;
+        private static int _hidInstanceCounter;
+        private readonly int _hidInstance;
 
 
         private readonly UnicodeEncoding _uniCodeEncoding = new();
@@ -49,8 +51,8 @@
                                                                             }
                                                                     };
 
-        public static int InstanceIdCounter => _instanceIdCounter;
-        public int InstanceId => _instanceId;
+        public static int HIDInstanceCounter => _hidInstanceCounter;
+        public int HIDInstance => _hidInstance;
         public bool HasLayers => _layerList.Count > 0;
 
         public List<StreamDeckLayer> LayerList
@@ -79,11 +81,29 @@
             set => SetSelectedLayer(value.Name);
         }
 
+
+
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="streamDeckPanel"></param>
         public StreamDeckLayerHandler(StreamDeckPanel streamDeckPanel)
         {
-            _instanceId = _instanceIdCounter++;
+            _hidInstance = _hidInstanceCounter++;
             _streamDeckPanel = streamDeckPanel;
             _streamDeckBoard = streamDeckPanel.StreamDeckBoard;
+        }
+
+
+        public void Dispose()
+        {
+            foreach (var streamDeckLayer in _layerList)
+            {
+                streamDeckLayer.Dispose();
+            }
         }
 
         public StreamDeckButton SelectedButton
@@ -118,18 +138,12 @@
             _jsonSettings.MissingMemberHandling = MissingMemberHandling.Error;
             
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, _jsonSettings);
-            RegisterButtons();
             _layerList.SetPanel(_streamDeckPanel);
             _jsonImported = true;
             SetStreamDeckPanelInstance(_streamDeckPanel);
             CheckHomeLayerExists();
         }
-
-        private void RegisterButtons()
-        {
-            _layerList.ForEach(x => x.RegisterStreamDeckButtons());
-        }
-
+        
         public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
         {
             var importLayerNames = buttonExports.Select(o => o.LayerName).Distinct().ToList();
@@ -408,7 +422,7 @@
             var stringBuilder = new StringBuilder(500);
             stringBuilder.Append("\n");
 
-            stringBuilder.Append($"Layer count : {_layerList.Count}, button count = {StreamDeckButton.GetStaticButtons(null).Count}\n");
+            stringBuilder.Append($"Layer count : {_layerList.Count}, button count = {_streamDeckPanel.GetButtons().Count}\n");
             stringBuilder.Append("Existing layers:\n");
             foreach (var streamDeckLayer in _layerList)
             {
@@ -437,9 +451,9 @@
 
         private void MarkAllButtonsHiddenAndClearFaces()
         {
-            if (StreamDeckButton.GetStaticButtons(_streamDeckPanel) != null)
+            if (_streamDeckPanel.GetButtons() != null)
             {
-                StreamDeckButton.GetStaticButtons(_streamDeckPanel).ForEach(button => button.IsVisible = false);
+                _streamDeckPanel.GetButtons().ForEach(button => button.IsVisible = false);
                 ClearAllFaces();
             }
         }
@@ -585,6 +599,7 @@
         {
             return _layerList.Exists(x => x.Name == layerName);
         }
+
     }
 
     public class ExcludeObsoletePropertiesResolver : DefaultContractResolver

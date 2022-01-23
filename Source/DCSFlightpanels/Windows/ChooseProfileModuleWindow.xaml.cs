@@ -82,8 +82,9 @@ namespace DCSFlightpanels.Windows
             if (IsLoaded && ComboBoxAirframe.SelectedItem != null)
             {
                 _dcsfpProfile = (DCSFPProfile)ComboBoxAirframe.SelectedItem;
-                DCSBIOSControlLocator.Profile = _dcsfpProfile;
                 _dcsfpProfile.UseGenericRadio = CheckBoxUseGenericRadio.IsChecked == true;
+                DCSFPProfile.SelectedProfile = _dcsfpProfile;
+                DCSBIOSControlLocator.Profile = _dcsfpProfile;
             }
         }
 

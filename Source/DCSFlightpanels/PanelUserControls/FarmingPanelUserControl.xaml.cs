@@ -42,7 +42,6 @@
         public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             ParentTabItem = parentTabItem;
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);
@@ -93,18 +92,7 @@
         {
             return GetType().Name;
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try
@@ -121,7 +109,7 @@
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstance))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -132,11 +120,11 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
+        public void ProfileEvent(object sender, ProfileEventArgs e)
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.FarmingPanel && _farmingSidePanel.HIDInstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == GamingPanelEnum.FarmingPanel && _farmingSidePanel.HIDInstance.Equals(e.PanelBinding.HIDInstance))
                 {
                     ShowGraphicConfiguration();
                 }
@@ -146,54 +134,12 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
         
-        public void DeviceAttached(object sender, PanelEventArgs e)
+        public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (connected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void DeviceDetached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.FarmingPanel && e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (disconnected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void SettingsApplied(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId) && e.PanelType == GamingPanelEnum.FarmingPanel)
+                if (e.HidInstance.Equals(_farmingSidePanel.HIDInstance) && e.PanelType == GamingPanelEnum.FarmingPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogFarmingPanel.Text = string.Empty));
@@ -205,11 +151,11 @@
             }
         }
 
-        public void SettingsModified(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelInfoArgs e)
         {
             try
             {
-                if (_farmingSidePanel.HIDInstanceId == e.HidInstance)
+                if (_farmingSidePanel.HIDInstance.Equals(e.HidInstance))
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                 }
@@ -720,8 +666,8 @@
                 if (_farmingSidePanel != null)
                 {
                     TextBoxLogFarmingPanel.Text = string.Empty;
-                    TextBoxLogFarmingPanel.Text = _farmingSidePanel.HIDInstanceId;
-                    Clipboard.SetText(_farmingSidePanel.HIDInstanceId);
+                    TextBoxLogFarmingPanel.Text = _farmingSidePanel.HIDInstance;
+                    Clipboard.SetText(_farmingSidePanel.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

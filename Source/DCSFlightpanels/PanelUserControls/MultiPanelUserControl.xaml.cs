@@ -40,11 +40,9 @@
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
-
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-
+            
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
-            AppEventHandler.AttachGamingPanelListener(this);
+            AppEventHandler.AttachGamingPanelListener(this); 
 
             HideAllImages();
         }
@@ -93,19 +91,7 @@
         {
             return GetType().Name;
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-                SetApplicationMode();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private void SetApplicationMode()
         {
             if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
@@ -124,7 +110,7 @@
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ70MultiPanel && e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ70MultiPanel && e.HidInstance.Equals(_multiPanelPZ70.HIDInstance))
                 {
                     NotifyKnobChanges(e.Switches);
                 }
@@ -135,11 +121,11 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
+        public void ProfileEvent(object sender, ProfileEventArgs e)
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ70MultiPanel && _multiPanelPZ70.HIDInstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ70MultiPanel && _multiPanelPZ70.HIDInstance.Equals(e.PanelBinding.HIDInstance))
                 {
                     ShowGraphicConfiguration();
                 }
@@ -190,22 +176,20 @@
             _textBoxBillsSet = true;
             
         }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
-
-        public void SettingsModified(object sender, PanelEventArgs e)
+        
+        public void SettingsModified(object sender, PanelInfoArgs e)
         {
-            if (e.HidInstance == _multiPanelPZ70.HIDInstanceId)
+            if (e.HidInstance.Equals(_multiPanelPZ70.HIDInstance))
             {
                 Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
             }
         }
         
-        public void SettingsApplied(object sender, PanelEventArgs e)
+        public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
             {
-                if (e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ70MultiPanel)
+                if (e.HidInstance.Equals(_multiPanelPZ70.HIDInstance) && e.PanelType == GamingPanelEnum.PZ70MultiPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = string.Empty));
@@ -216,11 +200,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void DeviceAttached(object sender, PanelEventArgs e) { }
-
-        public void DeviceDetached(object sender, PanelEventArgs e) { }
-
+        
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -228,8 +208,8 @@
                 if (_multiPanelPZ70 != null)
                 {
                     TextBoxLogPZ70.Text = string.Empty;
-                    TextBoxLogPZ70.Text = _multiPanelPZ70.HIDInstanceId;
-                    Clipboard.SetText(_multiPanelPZ70.HIDInstanceId);
+                    TextBoxLogPZ70.Text = _multiPanelPZ70.HIDInstance;
+                    Clipboard.SetText(_multiPanelPZ70.HIDInstance);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }
             }

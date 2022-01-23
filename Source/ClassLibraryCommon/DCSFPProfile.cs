@@ -9,8 +9,12 @@
     public class DCSFPProfile
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
+
+        private static object _lock = new object();
         private static readonly List<DCSFPProfile> ModulesList = new();
-        
+
+        public static DCSFPProfile SelectedProfile { get; set; }
+
         private DCSFPProfile(int id, string description, string jsonFilename)
         {
             ID = id;
@@ -31,20 +35,43 @@
 
         public bool UseGenericRadio { get; set; } = false;
 
-        public static List<DCSFPProfile> Modules => ModulesList;
+        public static List<DCSFPProfile> Modules
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return ModulesList;
+                }
+            }
+        }
+        
+        public static int DCSBIOSModulesCount
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return ModulesList.Count - 2; // Two profiles are not DCS-BIOS
+                }
+            }
+        }
 
         private static void AddInternalModules()
         {
-            if (!ModulesList.Exists(o => o.ID == 1))
+            lock (_lock)
             {
-                var module = new DCSFPProfile(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
-                ModulesList.Add(module);
-            }
+                if (!ModulesList.Exists(o => o.ID == 1))
+                {
+                    var module = new DCSFPProfile(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
+                    ModulesList.Add(module);
+                }
 
-            if (!ModulesList.Exists(o => o.ID == 2))
-            {
-                var module = new DCSFPProfile(2, "Key Emulation", "KEYEMULATOR");
-                ModulesList.Add(module);
+                if (!ModulesList.Exists(o => o.ID == 2))
+                {
+                    var module = new DCSFPProfile(2, "Key Emulation", "KEYEMULATOR");
+                    ModulesList.Add(module);
+                }
             }
         }
 
@@ -64,7 +91,7 @@
             {
                 if (!s.StartsWith("--") && s.ToLower().Contains(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower()) && s.Contains("ProperName"))
                 {
-                    var parts = s.Split(new string[]{"--"}, StringSplitOptions.RemoveEmptyEntries);
+                    var parts = s.Split(new string[] { "--" }, StringSplitOptions.RemoveEmptyEntries);
 
                     // dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]])
                     var json = parts[0].ToLower().Replace(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower(), string.Empty).Replace(".lua]])", string.Empty).Trim() + ".json";
@@ -78,7 +105,10 @@
                     // ProperName = A-10C Thunderbolt II
                     var properName = info[1].Split(new[] { "=" }, StringSplitOptions.None)[1].Trim();
 
-                    ModulesList.Add(new DCSFPProfile(id, properName, json));
+                    lock (_lock)
+                    {
+                        ModulesList.Add(new DCSFPProfile(id, properName, json));
+                    }
                 }
             }
         }
@@ -94,10 +124,22 @@
             var module = Modules.FirstOrDefault(x => x.ID == id);
             if (module == null)
             {
-                LogErrorAndThrowException("Failed to determine airplane/helicopter in your bindings file. Please check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile=5 equals A-10C.");
+                LogErrorAndThrowException("Failed to determine profile ID (" + id + ") in your bindings file.");
             }
             return module;
         }
+
+        public static void SetNoFrameLoadedYetAsProfile()
+        {
+            var module = Modules.FirstOrDefault(x => IsNoFrameLoadedYet(x));
+            if (module == null)
+            {
+                LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
+            }
+
+            SelectedProfile = module;
+        }
+
 
         public static DCSFPProfile GetNoFrameLoadedYet()
         {
@@ -132,10 +174,10 @@
 
         public static bool IsNoFrameLoadedYet(DCSFPProfile dcsfpModule)
         {
-            if (dcsfpModule == null)
+            /*if (dcsfpModule == null)
             {
                 LogErrorAndThrowException("DCSFPProfile IsNoFrameLoadedYet : Parameter dcsfpModule is null.");
-            }
+            }*/
             return dcsfpModule.ID == 1;
         }
 
@@ -193,7 +235,7 @@
         {
             return dcsfpModule.ID == 13;
         }
-        
+
         public static bool IsChristenEagleII(DCSFPProfile dcsfpModule)
         {
             return dcsfpModule.ID == 14;
@@ -324,7 +366,7 @@
             return dcsfpModule.ID == 39;
         }
 
-        public static bool IsMi24P(DCSFPProfile dcsfpModule) 
+        public static bool IsMi24P(DCSFPProfile dcsfpModule)
         {
             return dcsfpModule.ID == 42;
         }
@@ -349,7 +391,7 @@
                 "F16C" => 17,
                 "FA18C" => 20,
                 "F86F" => 19,
-                "FC3_CD_SRS" => 4,
+                "FC3" => 4,
                 "Fw190a8" => 21,
                 "Fw190d9" => 22,
                 "Hercules" => 13,
@@ -376,9 +418,9 @@
             {
                 return Modules.Find(o => o.ID == moduleNumber);
             }
-            else 
-            { 
-                LogErrorAndThrowException("Failed to determine airplane/helicopter in your bindings file. Please check file BIOS.lua and update your bindings file. Example a line in the file equal to Profile = 5 equals A-10C.");
+            else
+            {
+                LogErrorAndThrowException("Failed to determine  profile ID (null) in your bindings file.");
                 return null; //just to avoid compilation problem "error CS0161 not all code paths return a value"
             }
         }

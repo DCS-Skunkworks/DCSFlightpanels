@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.StreamDeck
 {
     using System;
     using System.Drawing;
@@ -19,6 +21,14 @@
 
         public FaceTypeDCSBIOSOverlay()
         { }
+
+
+
+        public new void Dispose()
+        {
+            // Call base class implementation.
+            base.Dispose();
+        }
 
         protected override void DrawBitmap()
         {

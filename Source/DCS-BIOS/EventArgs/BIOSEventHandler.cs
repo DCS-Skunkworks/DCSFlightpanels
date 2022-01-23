@@ -9,6 +9,11 @@ namespace DCS_BIOS.EventArgs
          */
         public delegate void DcsDataAddressValueEventHandler(object sender, DCSBIOSDataEventArgs e);
         public static event DcsDataAddressValueEventHandler OnDcsDataAddressValue;
+        
+        public static bool OnDcsDataAddressValueEventSubscribed()
+        {
+            return OnDcsDataAddressValue != null && OnDcsDataAddressValue.GetInvocationList().Length > 0;
+        }
 
         public static void AttachDataListener(IDcsBiosDataListener dcsBiosDataListener)
         {
@@ -31,6 +36,11 @@ namespace DCS_BIOS.EventArgs
         public delegate void DcsConnectionActiveEventHandler(object sender, DCSBIOSConnectionEventArgs e);
         public static event DcsConnectionActiveEventHandler OnDcsConnectionActive;
 
+        public static bool OnDcsConnectionActiveEventSubscribed()
+        {
+            return OnDcsConnectionActive != null && OnDcsConnectionActive.GetInvocationList().Length > 0;
+        }
+
         public static void AttachConnectionListener(IDcsBiosConnectionListener connectionListener)
         {
             OnDcsConnectionActive += connectionListener.DcsBiosConnectionActive;
@@ -50,8 +60,12 @@ namespace DCS_BIOS.EventArgs
          */
 
         public delegate void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e);
-
         public static event DCSBIOSStringReceived OnDCSBIOSStringReceived;
+
+        public static bool OnDCSBIOSStringReceivedEventSubscribed()
+        {
+            return OnDCSBIOSStringReceived != null && OnDCSBIOSStringReceived.GetInvocationList().Length > 0;
+        }
 
         public static void AttachStringListener(IDCSBIOSStringListener stringListener)
         {
@@ -65,7 +79,7 @@ namespace DCS_BIOS.EventArgs
 
         public static void DCSBIOSStringAvailable(object sender, uint address, string data)
         {
-            OnDCSBIOSStringReceived(sender, new DCSBIOSStringDataEventArgs() { Address = address, StringData = data });
+            OnDCSBIOSStringReceived?.Invoke(sender, new DCSBIOSStringDataEventArgs() { Address = address, StringData = data });
         }
     }
 }

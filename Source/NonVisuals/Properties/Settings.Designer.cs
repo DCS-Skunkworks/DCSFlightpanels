@@ -9,17 +9,13 @@
 //------------------------------------------------------------------------------
 
 namespace NonVisuals.Properties {
-    using System.CodeDom.Compiler;
-    using System.Configuration;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Runtime.CompilerServices;
-
-    [CompilerGenerated()]
-    [GeneratedCode("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
-    internal sealed partial class Settings : ApplicationSettingsBase {
+    
+    
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
-        private static Settings defaultInstance = ((Settings)(Synchronized(new Settings())));
+        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
         public static Settings Default {
             get {
@@ -27,105 +23,97 @@ namespace NonVisuals.Properties {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("Consolas, 12pt")]
-        public Font StreamDeckDefaultFont {
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Consolas, 12pt")]
+        public global::System.Drawing.Font StreamDeckDefaultFont {
             get {
-                return ((Font)(this["StreamDeckDefaultFont"]));
+                return ((global::System.Drawing.Font)(this["StreamDeckDefaultFont"]));
             }
-
             set {
                 this["StreamDeckDefaultFont"] = value;
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("Black")]
-        public Color StreamDeckDefaultFontColor {
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
+        public global::System.Drawing.Color StreamDeckDefaultFontColor {
             get {
-                return ((Color)(this["StreamDeckDefaultFontColor"]));
+                return ((global::System.Drawing.Color)(this["StreamDeckDefaultFontColor"]));
             }
-
             set {
                 this["StreamDeckDefaultFontColor"] = value;
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("White")]
-        public Color StreamDeckDefaultBackgroundColor {
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color StreamDeckDefaultBackgroundColor {
             get {
-                return ((Color)(this["StreamDeckDefaultBackgroundColor"]));
+                return ((global::System.Drawing.Color)(this["StreamDeckDefaultBackgroundColor"]));
             }
-
             set {
                 this["StreamDeckDefaultBackgroundColor"] = value;
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("0")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int ButtonFaceOffsetX {
             get {
                 return ((int)(this["ButtonFaceOffsetX"]));
             }
-
             set {
                 this["ButtonFaceOffsetX"] = value;
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("0")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int ButtonFaceOffsetY {
             get {
                 return ((int)(this["ButtonFaceOffsetY"]));
             }
-
             set {
                 this["ButtonFaceOffsetY"] = value;
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("")]
-        public string LastImageFileDialogLocation {
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastProfileDialogLocation {
             get {
-                return ((string)(this["LastImageFileDialogLocation"]));
+                return ((string)(this["LastProfileDialogLocation"]));
             }
-
             set {
-                this["LastImageFileDialogLocation"] = value;
+                this["LastProfileDialogLocation"] = value;
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("10")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public int OffsetX {
             get {
                 return ((int)(this["OffsetX"]));
             }
-
             set {
                 this["OffsetX"] = value;
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("22")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("22")]
         public int OffsetY {
             get {
                 return ((int)(this["OffsetY"]));
             }
-
             set {
                 this["OffsetY"] = value;
             }

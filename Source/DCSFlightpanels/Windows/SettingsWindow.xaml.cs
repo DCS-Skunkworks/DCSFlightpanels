@@ -44,10 +44,6 @@ namespace DCSFlightpanels.Windows
             {
                 ButtonOk.IsEnabled = false;
                 LoadSettings();
-                if (Common.NoDCSBIOSEnabled())
-                {
-                    LabelDCSBIOS.Visibility = Visibility.Collapsed;
-                }
                 StackPanelGeneralSettings.Visibility = Visibility.Visible;
                 StackPanelDCSBIOSSettings.Visibility = Visibility.Collapsed;
                 SetEventsHandlers();

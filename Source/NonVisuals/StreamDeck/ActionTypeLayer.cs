@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.StreamDeck
 {
     using System;
     using System.IO;
@@ -43,9 +45,32 @@
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
+
+        
         public ActionTypeLayer(StreamDeckPanel streamDeckPanel)
         {
             _streamDeckPanel = streamDeckPanel;
+        }
+
+        private bool _disposed;
+        protected void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            //base.Dispose(disposing);
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
         }
 
         public int GetHash()

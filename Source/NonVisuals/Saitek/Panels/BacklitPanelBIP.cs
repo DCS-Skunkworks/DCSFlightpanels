@@ -62,7 +62,7 @@
         public BacklitPanelBIP(uint ledBrightness, HIDSkeleton hidSkeleton)
             : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.BackLitPanel)
+            if (hidSkeleton.GamingPanelType != GamingPanelEnum.BackLitPanel)
             {
                 throw new ArgumentException();
             }
@@ -72,9 +72,10 @@
             _ledBrightness = ledBrightness;
             BipFactory.RegisterBip(this);
             Startup();
+
+            BIOSEventHandler.AttachDataListener(this);
         }
 
-        // sätta färg efter om Config finns
         public sealed override void Startup()
         {
             try
@@ -96,6 +97,7 @@
                 if (disposing)
                 {
                     BipFactory.DeRegisterBip(this);
+                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -131,7 +133,7 @@
                 }
             }
 
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -288,6 +290,13 @@
                         }
                 }
 
+                /*
+                 * 14 Jan 2022
+                 * Very weird problem, without this delay the panel GUI would show the previous color instead of current.
+                 * As if it had a reference to the array as it was before the change. Can't figure this out. Just a workaround.
+                 */
+                Thread.Sleep(1);
+
                 // [0] & [1] == 0  --> DARK
                 // [0] == 1, [1] == 0 --> GREEN
                 // [0] == 1, [1] == 1 --> YELLOW
@@ -296,11 +305,13 @@
                 {
                     if ((array[1] & mask) < 1)
                     {
+                        //Debug.WriteLine(bipLedPositionEnum + " is currently GREEN");
                         return PanelLEDColor.GREEN;
                     }
 
                     if ((array[1] & mask) > 1)
                     {
+                        //Debug.WriteLine(bipLedPositionEnum + " is currently YELLOW");
                         return PanelLEDColor.YELLOW;
                     }
                 }
@@ -309,14 +320,17 @@
                 {
                     if ((array[1] & mask) < 1)
                     {
+                        //Debug.WriteLine(bipLedPositionEnum + " is currently DARK");
                         return PanelLEDColor.DARK;
                     }
 
                     if ((array[1] & mask) > 1)
                     {
+                        //Debug.WriteLine(bipLedPositionEnum + " is currently RED");
                         return PanelLEDColor.RED;
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -589,6 +603,9 @@
                 finalArray[6] = _lowerRowBytes[1];
 
                 SendLEDData(finalArray);
+
+
+                AppEventHandler.LedLightChanged(this, HIDInstance, null, PanelLEDColor.DARK);
             }
             catch (Exception ex)
             {
@@ -606,18 +623,6 @@
             {
                 SetLastException(ex);
             }
-        }
-
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-            AppEventHandler.DeviceAttached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose(); 
-            AppEventHandler.DeviceDetached(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
         }
 
         private void SetLedStrength()

@@ -22,7 +22,7 @@
     /// <summary>
     /// Interaction logic for BackLitPanelUserControl.xaml
     /// </summary>
-    public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, ILedLightPanelListener
     {
         private readonly BacklitPanelBIP _backlitPanelBIP;
 
@@ -40,10 +40,9 @@
             InitializeComponent();
             ParentTabItem = parentTabItem;
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
-
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-
+            
             AppEventHandler.AttachGamingPanelListener(this);
+            AppEventHandler.AttachLEDLightListener(this);
         }
 
         private bool _disposed;
@@ -56,6 +55,7 @@
                 {
                     _backlitPanelBIP.Dispose(); 
                     AppEventHandler.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachLEDLightListener(this);
                 }
 
                 _disposed = true;
@@ -89,13 +89,10 @@
         {
             return GetType().Name;
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e) { }
-
-
+        
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
+        public void ProfileEvent(object sender, ProfileEventArgs e){}
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
         
@@ -103,7 +100,7 @@
         {
             try
             {
-                if (!UserControlLoaded)
+                if (!UserControlLoaded || _backlitPanelBIP.HIDInstance.Equals(e.HIDInstance))
                 {
                     return;
                 }
@@ -116,7 +113,7 @@
             }
         }
         
-        public void SettingsApplied(object sender, PanelEventArgs e)
+        public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
             {
@@ -126,7 +123,7 @@
                 }
 
                 if (e.PanelType == GamingPanelEnum.PZ69RadioPanel &&
-                    e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
+                    e.HidInstance.Equals(_backlitPanelBIP.HIDInstance))
                 {
                     Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
                 }
@@ -137,7 +134,7 @@
             }
         }
 
-        public void SettingsModified(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelInfoArgs e)
         {
             try
             {
@@ -146,7 +143,7 @@
                     return;
                 }
 
-                if (_backlitPanelBIP.HIDInstanceId == e.HidInstance)
+                if (_backlitPanelBIP.HIDInstance.Equals(e.HidInstance))
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                 }
@@ -156,37 +153,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void DeviceAttached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.BackLitPanel && e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (connected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void DeviceDetached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.BackLitPanel && e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (disconnected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private void Init()
         {
             var imageList = Common.FindVisualChildren<Image>(this);
@@ -212,7 +179,7 @@
                     return;
                 }
                 HideAllConfigurationExistsImages();
-                var bipPositions = ClassLibraryCommon.EnumEx.GetValues<BIPLedPositionEnum>();
+                var bipPositions = EnumEx.GetValues<BIPLedPositionEnum>();
                 foreach (var position in bipPositions)
                 {
                     SetLEDImage(position, _backlitPanelBIP.GetColor(position));
@@ -263,7 +230,7 @@
         {
             var result = BIPLedPositionEnum.Position_1_1;
             //ImagePosition3_4
-            var str = imageName.Remove(0, 13);
+            var str = imageName.Remove(0, 14);
             //3_4
             var row = int.Parse(str.Substring(0, 1));
             var index = int.Parse(str.Substring(2, 1));
@@ -471,7 +438,7 @@
                     newColor = PanelLEDColor.DARK;
                     image.Tag = "DARK";
                 }
-                SetLEDImage(image, newColor);
+
                 SetPhysicalLED(image, newColor);
             }
         }
@@ -484,6 +451,7 @@
                 if (tmpImage.Name.Contains(bipLedPositionEnum.ToString()))
                 {
                     image = tmpImage;
+                    break;
                 }
             }
             if (image != null)
@@ -622,8 +590,8 @@
                 if (_backlitPanelBIP != null)
                 {
                     TextBoxLogBIP.Text = string.Empty;
-                    TextBoxLogBIP.Text = _backlitPanelBIP.HIDInstanceId;
-                    Clipboard.SetText(_backlitPanelBIP.HIDInstanceId);
+                    TextBoxLogBIP.Text = _backlitPanelBIP.HIDInstance;
+                    Clipboard.SetText(_backlitPanelBIP.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }
@@ -639,7 +607,7 @@
             {
                 if (_backlitPanelBIP != null)
                 {
-                    Clipboard.SetText(Common.GetMd5Hash(_backlitPanelBIP.HIDInstanceId));
+                    Clipboard.SetText(Common.GetMd5Hash(_backlitPanelBIP.HIDInstance));
                     MessageBox.Show("The MD5 hash for the panel has been copied to the Clipboard.\nUse this value when you connect switches to B.I.P. lights.");
                 }
             }
@@ -702,6 +670,16 @@
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void BIPImageOnMouseEnter(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void BIPImage_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
     }
 }

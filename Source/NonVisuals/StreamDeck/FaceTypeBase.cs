@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.StreamDeck
 {
     using System;
     using System.Drawing;
@@ -10,7 +12,7 @@
     using NonVisuals.Interfaces;
 
     [Serializable]
-    public abstract class FaceTypeBase
+    public abstract class FaceTypeBase: IDisposable
     {
         [JsonProperty("FaceType", Required = Required.Default)]
         public EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Unknown;
@@ -31,6 +33,27 @@
         protected abstract void Show();
 
 
+
+        private bool _disposed;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+            }
+
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+        }
 
         [JsonIgnore]
         public Bitmap Bitmap

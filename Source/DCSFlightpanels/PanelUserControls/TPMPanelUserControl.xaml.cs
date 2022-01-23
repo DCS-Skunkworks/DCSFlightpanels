@@ -39,9 +39,7 @@
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
-
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-
+            
             _tpmPanel = new TPMPanel(hidSkeleton);
 
             AppEventHandler.AttachGamingPanelListener(this);
@@ -113,11 +111,7 @@
         {
             return GetType().Name;
         }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-        }
-
+        
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
         }
@@ -126,7 +120,7 @@
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.TPM && e.HidInstance.Equals(_tpmPanel.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.TPM && e.HidInstance.Equals(_tpmPanel.HIDInstance))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -137,11 +131,11 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
+        public void ProfileEvent(object sender, ProfileEventArgs e)
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.TPM && _tpmPanel.HIDInstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == GamingPanelEnum.TPM && _tpmPanel.HIDInstance.Equals(e.PanelBinding.HIDInstance))
                 {
                     ShowGraphicConfiguration();
                 }
@@ -152,18 +146,11 @@
             }
         }
         
-        
-        public void DeviceAttached(object sender, PanelEventArgs e) { }
-
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
-
-        public void DeviceDetached(object sender, PanelEventArgs e) { }
-
-        public void SettingsApplied(object sender, PanelEventArgs e)
+        public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
             {
-                if (e.HidInstance.Equals(_tpmPanel.HIDInstanceId) && e.PanelType == GamingPanelEnum.TPM)
+                if (e.HidInstance.Equals(_tpmPanel.HIDInstance) && e.PanelType == GamingPanelEnum.TPM)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Text = string.Empty));
@@ -175,11 +162,11 @@
             }
         }
 
-        public void SettingsModified(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelInfoArgs e)
         {
             try
             {
-                if (_tpmPanel.HIDInstanceId == e.HidInstance)
+                if (_tpmPanel.HIDInstance.Equals(e.HidInstance))
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                 }
@@ -537,8 +524,8 @@
                 if (_tpmPanel != null)
                 {
                     TextBoxLogTPM.Text = string.Empty;
-                    TextBoxLogTPM.Text = _tpmPanel.HIDInstanceId;
-                    Clipboard.SetText(_tpmPanel.HIDInstanceId);
+                    TextBoxLogTPM.Text = _tpmPanel.HIDInstance;
+                    Clipboard.SetText(_tpmPanel.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

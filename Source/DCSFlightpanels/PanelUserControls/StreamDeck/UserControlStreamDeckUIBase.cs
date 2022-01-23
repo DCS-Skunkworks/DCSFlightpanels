@@ -1,4 +1,5 @@
 ﻿using NonVisuals;
+using NonVisuals.StreamDeck.Panels;
 
 namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {

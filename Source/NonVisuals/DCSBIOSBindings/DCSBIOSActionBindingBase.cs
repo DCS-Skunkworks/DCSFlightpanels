@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace NonVisuals.DCSBIOSBindings
+﻿namespace NonVisuals.DCSBIOSBindings
 {
     using System;
     using System.Collections.Generic;
@@ -25,8 +23,10 @@ namespace NonVisuals.DCSBIOSBindings
         private bool _isSequenced;
         private int _sequenceIndex;
         private volatile bool _shutdownCommandsThread;
+
+
         private bool _disposed;
-        protected virtual void Dispose(bool disposing)
+        public virtual void Dispose(bool disposing)
         {
             if (_disposed)
             {

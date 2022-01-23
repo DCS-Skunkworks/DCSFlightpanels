@@ -1,4 +1,7 @@
-﻿namespace NonVisuals
+﻿using System.Linq;
+using NonVisuals.EventArgs;
+
+namespace NonVisuals
 {
     using System.Collections.Generic;
     using System.Windows;
@@ -7,7 +10,68 @@
 
     public static class BindingMappingManager
     {
+        private static object _genericBindingsLock = new object();
         private static volatile List<GenericPanelBinding> _genericBindings = new List<GenericPanelBinding>();
+
+
+        public static void ClearBindings()
+        {
+            lock (_genericBindingsLock)
+            {
+                _genericBindings.Clear();
+            }
+        }
+
+        public static bool UnusedBindingsExists()
+        {
+            lock (_genericBindingsLock)
+            {
+                return _genericBindings.Any(o => o.InUse == false);
+            }
+        }
+
+        public static void SetNotInUse(HIDSkeleton hidSkeleton)
+        {
+            lock (_genericBindingsLock)
+            {
+                _genericBindings.FindAll(o => o.Match(hidSkeleton)).ToList().ForEach(u => u.InUse = false);
+            }
+        }
+
+        public static void SendBinding(HIDSkeleton hidSkeleton)
+        {
+            lock (_genericBindingsLock)
+            {
+                foreach (var genericPanelBinding in _genericBindings)
+                {
+                    if (genericPanelBinding.Match(hidSkeleton))
+                    {
+                        genericPanelBinding.InUse = true;
+                        AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
+                            DCSFPProfile.SelectedProfile);
+                    }
+                }
+            }
+        }
+
+        public static void SendBinding(string hidInstance)
+        {
+            lock (_genericBindingsLock)
+            {
+                var hardwareFound = HIDHandler.GetInstance().HIDSkeletons
+                    .Any(o => o.IsAttached && o.HIDInstance.Equals(hidInstance));
+                foreach (var genericPanelBinding in _genericBindings)
+                {
+                    if (genericPanelBinding.HIDInstance.Equals(hidInstance) && genericPanelBinding.InUse == false &&
+                        hardwareFound)
+                    {
+                        genericPanelBinding.InUse = true;
+                        AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
+                            DCSFPProfile.SelectedProfile);
+                    }
+                }
+            }
+        }
 
         /*
          * This to be used when loading from file.
@@ -24,7 +88,10 @@
                         genericBinding.BindingHash = Common.GetRandomMd5Hash();
                     }
 
-                    _genericBindings.Add(genericBinding);
+                    lock (_genericBindingsLock)
+                    {
+                        _genericBindings.Add(genericBinding);
+                    }
                 }
             }
         }
@@ -33,39 +100,45 @@
         {
             if (genericBinding != null)
             {
-                if (Exists(genericBinding))
+                lock (_genericBindingsLock)
                 {
-                    foreach (var binding in _genericBindings)
+                    if (Exists(genericBinding))
                     {
-                        /*
-                         * Tricky considering old profiles that haven't got this property
-                         * In the future it should be phased out.
-                         */
-                        if (string.IsNullOrEmpty(binding.BindingHash))
+                        foreach (var binding in _genericBindings)
                         {
-                            binding.BindingHash = genericBinding.BindingHash;
-                            binding.Settings = genericBinding.Settings;
-                        }
-                        else if (binding.BindingHash == genericBinding.BindingHash)
-                        {
-                            binding.Settings = genericBinding.Settings;
+                            /*
+                             * Tricky considering old profiles that haven't got this property
+                             * In the future it should be phased out.
+                             */
+                            if (string.IsNullOrEmpty(binding.BindingHash))
+                            {
+                                binding.BindingHash = genericBinding.BindingHash;
+                                binding.Settings = genericBinding.Settings;
+                            }
+                            else if (binding.BindingHash == genericBinding.BindingHash)
+                            {
+                                binding.Settings = genericBinding.Settings;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    _genericBindings.Add(genericBinding);
+                    else
+                    {
+                        _genericBindings.Add(genericBinding);
+                    }
                 }
             }
         }
 
         public static bool Exists(GenericPanelBinding genericPanelBinding)
         {
-            foreach (var binding in _genericBindings)
+            lock (_genericBindingsLock)
             {
-                if (binding.HIDInstance == genericPanelBinding.HIDInstance)
+                foreach (var binding in _genericBindings)
                 {
-                    return true;
+                    if (binding.Match(genericPanelBinding))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -74,34 +147,25 @@
 
         public static bool VerifyBindings(ref bool settingsWereModified)
         {
-            foreach (var genericBinding in _genericBindings)
-            {
-                var found = false;
-
-                foreach (var hidSkeleton in HIDHandler.GetInstance().HIDSkeletons)
-                {
-                    if (genericBinding.HIDInstance == hidSkeleton.InstanceId)
-                    {
-                        genericBinding.HardwareWasFound = true;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found)
-                {
-                    genericBinding.HardwareWasFound = false;
-                }
-            }
-
             var problemsPersists = false;
-            foreach (var genericBinding in _genericBindings)
+            var settingsWereModifiedLocal = false;
+
+
+            lock (_genericBindingsLock)
             {
-                if (genericBinding.HardwareWasFound == false)
+                foreach (var genericBinding in _genericBindings)
                 {
-                    if (!FindSolution(genericBinding, ref settingsWereModified))
+                    if (genericBinding.InUse == false)
                     {
-                        problemsPersists = true;
+                        if (!FindSolution(genericBinding, ref settingsWereModifiedLocal))
+                        {
+                            problemsPersists = true;
+                        }
+
+                        if (settingsWereModifiedLocal)
+                        {
+                            settingsWereModified = true;
+                        }
                     }
                 }
             }
@@ -125,21 +189,23 @@
 
             foreach (var modifiedGenericBinding in modifiedGenericBindings)
             {
-                for (int i = 0; i < _genericBindings.Count; i++)
+                lock (_genericBindingsLock)
                 {
-                    var genericBinding = _genericBindings[i];
-                    if (modifiedGenericBinding.GenericPanelBinding.BindingHash == genericBinding.BindingHash)
+                    for (int i = 0; i < _genericBindings.Count; i++)
                     {
-                        switch (modifiedGenericBinding.State)
+                        var genericBinding = _genericBindings[i];
+                        if (modifiedGenericBinding.GenericPanelBinding.BindingHash == genericBinding.BindingHash)
                         {
-                            case GenericBindingStateEnum.New:
+                            switch (modifiedGenericBinding.State)
+                            {
+                                case GenericBindingStateEnum.New:
                                 {
                                     AddBinding(modifiedGenericBinding.GenericPanelBinding);
                                     modificationsMade = true;
                                     break;
                                 }
 
-                            case GenericBindingStateEnum.Modified:
+                                case GenericBindingStateEnum.Modified:
                                 {
                                     genericBinding.HIDInstance = modifiedGenericBinding.GenericPanelBinding.HIDInstance;
                                     genericBinding.Settings = modifiedGenericBinding.GenericPanelBinding.Settings;
@@ -147,12 +213,13 @@
                                     break;
                                 }
 
-                            case GenericBindingStateEnum.Deleted:
+                                case GenericBindingStateEnum.Deleted:
                                 {
                                     genericBinding.HasBeenDeleted = true;
                                     modificationsMade = true;
                                     break;
                                 }
+                            }
                         }
                     }
                 }
@@ -161,7 +228,7 @@
             if (modificationsMade)
             {
                 MessageBox.Show("USB settings has changed in the bindings file. Please save the profile and verify functionality.", "Save & Restart", MessageBoxButton.OK, MessageBoxImage.Information);
-                
+
             }
         }
 
@@ -174,14 +241,20 @@
              * 1) Check, are there multiple such panels where hardware does not match? If so user must map them
              *    If only 1, then we can map it without asking questions.
              */
-            var count = _genericBindings.FindAll(o => (o.HardwareWasFound == false) && (o.PanelType == genericBinding.PanelType)).Count;
+            var count = 0;
+            lock (_genericBindingsLock)
+            {
+                count = _genericBindings
+                    .FindAll(o => (o.InUse == false) && (o.PanelType == genericBinding.PanelType)).Count;
+            }
+
             if (count == 1)
             {
-                var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType);
+                var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType && o.IsAttached);
                 if (hidSkeleton != null)
                 {
                     // This we can map ourselves!
-                    genericBinding.HIDInstance = hidSkeleton.InstanceId;
+                    genericBinding.HIDInstance = hidSkeleton.HIDInstance;
                     settingsWereModified = true;
                     MessageBox.Show("USB settings has changed. Please save the profile.", "USB changes found", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -196,20 +269,32 @@
             return false;
         }
 
+
         public static GenericPanelBinding GetBinding(GamingPanel gamingPanel)
         {
-            foreach (var genericPanelBinding in _genericBindings)
+            lock (_genericBindingsLock)
             {
-                if (genericPanelBinding.BindingHash == gamingPanel.BindingHash)
+                foreach (var genericPanelBinding in _genericBindings)
                 {
-                    return genericPanelBinding;
+                    if (genericPanelBinding.BindingHash == gamingPanel.BindingHash)
+                    {
+                        return genericPanelBinding;
+                    }
                 }
             }
 
             return null;
         }
 
-        public static List<GenericPanelBinding> PanelBindings => _genericBindings;
-
+        public static List<GenericPanelBinding> PanelBindings
+        {
+            get
+            {
+                lock (_genericBindingsLock)
+                {
+                    return _genericBindings;
+                }
+            }
+        }
     }
 }

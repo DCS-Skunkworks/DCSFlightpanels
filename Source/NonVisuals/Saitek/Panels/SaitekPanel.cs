@@ -73,7 +73,7 @@
             {
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
-                    // Debug.Write("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType\n");
+                    //Debug.WriteLine("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType);
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
                 }
             }
@@ -93,7 +93,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.InstanceId, TypeOfPanel, hashSet);
+                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
@@ -106,7 +106,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.InstanceId, TypeOfPanel, hashSet);
+                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
@@ -119,7 +119,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.InstanceId, TypeOfPanel, hashSet);
+                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;

@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -69,6 +71,10 @@
                 return;
             }
 
+            if (Common.KeyEmulationOnly())
+            {
+                RadioButtonDCSBIOS.Visibility = Visibility.Collapsed;
+            }
             FillTextBoxList();
             SetTextBoxBills();
             _isLoaded = true;
@@ -908,7 +914,7 @@
             modifiedList.AddRange(streamDeckList);
 
             //Remove current Streamdeck
-            modifiedList.RemoveAll(o => o.HIDInstanceId == _streamDeckPanel.HIDInstanceId);
+            modifiedList.RemoveAll(o => o.HIDInstance.Equals(_streamDeckPanel.HIDInstance));
 
             ComboBoxRemoteStreamDecks.ItemsSource = modifiedList;
             ComboBoxRemoteStreamDecks.Items.Refresh();

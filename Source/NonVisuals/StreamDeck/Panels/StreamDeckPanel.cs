@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using System.Diagnostics;
+
+namespace NonVisuals.StreamDeck.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -36,7 +38,10 @@
         private readonly object _updateStreamDeckOledLockObject = new();
         private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly int _buttonCount;
+
+        private static readonly object LockObjectStreamDeckPanels = new();
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new();
+
         private readonly IStreamDeckBoard _streamDeckBoard;
         private static Bitmap _fileNotFoundBitMap;
         public IStreamDeckBoard StreamDeckBoard => _streamDeckBoard;
@@ -90,16 +95,15 @@
         {
             get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
         }
-
-        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
+        
+        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, bool unitTesting = false) : base(panelType, hidSkeleton)
         {
-
             _buttonCount = panelType switch
             {
                 GamingPanelEnum.StreamDeckMini => 6,
-                
-                GamingPanelEnum.StreamDeck or 
-                GamingPanelEnum.StreamDeckV2 or 
+
+                GamingPanelEnum.StreamDeck or
+                GamingPanelEnum.StreamDeckV2 or
                 GamingPanelEnum.StreamDeckMK2 => 15,
 
                 GamingPanelEnum.StreamDeckXL => 32,
@@ -107,14 +111,22 @@
             };
 
             Startup();
-            _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
-            _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
-            _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
+
+            if (!unitTesting)
+            {
+                _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.HIDInstance, false);
+                _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
+            }
             SDEventHandler.AttachStreamDeckListener(this);
             SDEventHandler.AttachStreamDeckConfigListener(this);
-            StreamDeckPanels.Add(this);
+
+            _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
+            lock (LockObjectStreamDeckPanels)
+            {
+                StreamDeckPanels.Add(this);
+            }
         }
-        
+
         private bool _disposed;
         protected override void Dispose(bool disposing)
         {
@@ -122,12 +134,20 @@
             {
                 if (disposing)
                 {
-                    StreamDeckButton.DisposeAll();
-                    _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
-                    _streamDeckBoard?.Dispose();
-                    StreamDeckPanels.Remove(this);
+                    if (_streamDeckBoard != null) // Null when unit testing
+                    {
+                        _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
+                    }
                     SDEventHandler.DetachStreamDeckListener(this);
                     SDEventHandler.DetachStreamDeckConfigListener(this);
+
+                    _streamDeckLayerHandler.Dispose();
+                    _streamDeckBoard?.Dispose();
+                    lock (LockObjectStreamDeckPanels)
+                    {
+                        StreamDeckPanels.Remove(this);
+                    }
+
                     _disposed = true;
                 }
             }
@@ -138,7 +158,10 @@
 
         public static StreamDeckPanel GetInstance(string bindingHash)
         {
-            return StreamDeckPanels.FirstOrDefault(x => x.BindingHash == bindingHash);
+            lock (LockObjectStreamDeckPanels)
+            {
+                return StreamDeckPanels.FirstOrDefault(x => x.BindingHash == bindingHash);
+            }
         }
 
         public static StreamDeckPanel GetInstance(GamingPanel gamingPanel)
@@ -191,7 +214,10 @@
 
         public static List<StreamDeckPanel> GetStreamDeckPanels()
         {
-            return StreamDeckPanels;
+            lock (LockObjectStreamDeckPanels)
+            {
+                return StreamDeckPanels;
+            }
         }
 
         public sealed override void Startup()
@@ -219,11 +245,6 @@
         public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
         {
             _streamDeckLayerHandler.Export(compressedFilenameAndPath, buttonExports);
-        }
-
-        public override void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            _streamDeckLayerHandler.ClearSettings();
         }
 
         private void StreamDeckKeyListener(object sender, KeyEventArgs e)
@@ -279,6 +300,7 @@
 
             lock (_updateStreamDeckOledLockObject)
             {
+                Debug.WriteLine($"Setting bitmap for button {streamDeckButtonName}. Bitmap is {(keyBitmap == null ? "null" : "not null")}" );
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
             }
         }
@@ -326,7 +348,7 @@
             }
 
             SettingsLoading = false;
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.InstanceId, TypeOfPanel);
+            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         private string ExportJSONSettings()
@@ -371,18 +393,6 @@
             // and performs the actual actions for key presses
             // ADD METHOD ?
         }
-        
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-            // IsAttached = true;
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Dispose();
-            // IsAttached = false;
-        }
 
         public DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
@@ -419,7 +429,7 @@
 
         public string GetLayerHandlerInformation()
         {
-            return $"StreamDeckLayerHandler Instance ID = [{_streamDeckLayerHandler.InstanceId}] Counter = [{StreamDeckLayerHandler.InstanceIdCounter}]";
+            return $"StreamDeckLayerHandler Instance ID = [{_streamDeckLayerHandler.HIDInstance}] Counter = [{StreamDeckLayerHandler.HIDInstanceCounter}]";
         }
 
         public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName, string layerName)
@@ -554,7 +564,6 @@
             }
         }
 
-
         public void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e)
         {
             try
@@ -581,6 +590,21 @@
             {
                 logger.Error(ex);
             }
+        }
+
+        public List<StreamDeckButton> GetButtons()
+        {
+            var result = new List<StreamDeckButton>();
+
+            foreach (var streamDeckLayer in _streamDeckLayerHandler.LayerList)
+            {
+                foreach (var streamDeckButton in streamDeckLayer.StreamDeckButtons)
+                {
+                    result.Add(streamDeckButton);
+                }
+            }
+
+            return result;
         }
     }
 }

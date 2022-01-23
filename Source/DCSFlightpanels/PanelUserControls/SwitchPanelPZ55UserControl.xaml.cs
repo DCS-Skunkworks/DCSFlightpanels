@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.PanelUserControls
+﻿using System.Windows.Media.Imaging;
+
+namespace DCSFlightpanels.PanelUserControls
 {
     using System;
     using System.Collections.Generic;
@@ -20,7 +22,7 @@
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
     using NonVisuals.Saitek.Switches;
-    
+
     using Brush = System.Windows.Media.Brush;
     using Brushes = System.Windows.Media.Brushes;
     using Image = System.Windows.Controls.Image;
@@ -29,15 +31,17 @@
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
-    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI, ILedLightPanelListener
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
 
-        private readonly Image[] _imageArrayUpper = new Image[4];
-        private readonly Image[] _imageArrayLeft = new Image[4];
-        private readonly Image[] _imageArrayRight = new Image[4];
         private bool _textBoxBillsSet;
+
+        private readonly BitmapImage _darkImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/black.png"));
+        private readonly BitmapImage _redImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/red.png"));
+        private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
+        private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
 
 
 
@@ -45,26 +49,12 @@
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
-            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             ParentTabItem = parentTabItem;
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
             AppEventHandler.AttachGamingPanelListener(this);
-            _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
-            _imageArrayUpper[1] = ImagePZ55LEDGreenUpper;
-            _imageArrayUpper[2] = ImagePZ55LEDYellowUpper;
-            _imageArrayUpper[3] = ImagePZ55LEDRedUpper;
-
-            _imageArrayLeft[0] = ImagePZ55LEDDarkLeft;
-            _imageArrayLeft[1] = ImagePZ55LEDGreenLeft;
-            _imageArrayLeft[2] = ImagePZ55LEDYellowLeft;
-            _imageArrayLeft[3] = ImagePZ55LEDRedLeft;
-
-            _imageArrayRight[0] = ImagePZ55LEDDarkRight;
-            _imageArrayRight[1] = ImagePZ55LEDGreenRight;
-            _imageArrayRight[2] = ImagePZ55LEDYellowRight;
-            _imageArrayRight[3] = ImagePZ55LEDRedRight;
+            AppEventHandler.AttachLEDLightListener(this);
         }
 
 
@@ -78,6 +68,7 @@
                 {
                     _switchPanelPZ55.Dispose();
                     AppEventHandler.DetachGamingPanelListener(this);
+                    AppEventHandler.DetachLEDLightListener(this);
                 }
 
                 _disposed = true;
@@ -86,7 +77,8 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
+        private bool _once = true;
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxBills();
@@ -94,6 +86,27 @@
             SetContextMenuClickHandlers();
             UserControlLoaded = true;
             ShowGraphicConfiguration();
+
+            if (_once)
+            {
+                _once = false;
+                foreach (var image in Common.FindVisualChildren<Image>(this))
+                {
+                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
+                    {
+                        image.ContextMenu = null;
+                    }
+                    else
+                    if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+                    {
+                        image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
+                        if (image.ContextMenu != null)
+                        {
+                            image.ContextMenu.Tag = image.Name;
+                        }
+                    }
+                }
+            }
         }
 
         private void LoadComboBoxesManualLeds()
@@ -121,7 +134,7 @@
             ManualLedDownCombo.SelectionChanged += ManualLedDownCombo_SelectionChanged;
             ManualLedTransSecondsCombo.SelectionChanged += ManualLedTransSecondsCombo_SelectionChanged;
         }
-        
+
 
         public override GamingPanel GetGamingPanel()
         {
@@ -136,33 +149,6 @@
         public string GetName()
         {
             return GetType().Name;
-        }
-
-        public void ProfileSelected(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-                foreach (var image in Common.FindVisualChildren<Image>(this))
-                {
-                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
-                    {
-                        image.ContextMenu = null;
-                    }
-                    else
-                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
-                    {
-                        image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
-                        if (image.ContextMenu != null)
-                        {
-                            image.ContextMenu.Tag = image.Name;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
         }
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
@@ -181,7 +167,7 @@
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstance))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -192,11 +178,11 @@
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
+        public void ProfileEvent(object sender, ProfileEventArgs e)
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.HIDInstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.HIDInstance == e.PanelBinding.HIDInstance)
                 {
                     ShowGraphicConfiguration();
                 }
@@ -211,28 +197,31 @@
         {
             try
             {
-                if (_switchPanelPZ55.HIDInstanceId.Equals(e.HIDInstanceId))
+                if (_switchPanelPZ55.HIDInstance.Equals(e.HIDInstance))
                 {
                     var position = (SwitchPanelPZ55LEDPosition)e.LEDPosition.Position;
-                    var imageArray = _imageArrayUpper;
+                    Image image;
 
                     switch (position)
                     {
                         case SwitchPanelPZ55LEDPosition.UP:
                             {
-                                HideLedImages(SwitchPanelPZ55LEDPosition.UP);
+                                image = ImagePZ55LEDUpper;
                                 break;
                             }
                         case SwitchPanelPZ55LEDPosition.LEFT:
                             {
-                                HideLedImages(SwitchPanelPZ55LEDPosition.LEFT);
-                                imageArray = _imageArrayLeft;
+                                image = ImagePZ55LEDLeft;
                                 break;
                             }
                         case SwitchPanelPZ55LEDPosition.RIGHT:
                             {
-                                HideLedImages(SwitchPanelPZ55LEDPosition.RIGHT);
-                                imageArray = _imageArrayRight;
+                                image = ImagePZ55LEDRight;
+                                break;
+                            }
+                        default:
+                            {
+                                image = ImagePZ55LEDRight;
                                 break;
                             }
                     }
@@ -241,22 +230,46 @@
                     {
                         case PanelLEDColor.DARK:
                             {
-                                Dispatcher?.BeginInvoke((Action)(() => imageArray[0].Visibility = Visibility.Visible));
+                                void Action()
+                                {
+                                    image.Source = _darkImage;
+                                    image.Tag = "DARK";
+                                }
+
+                                Dispatcher?.Invoke((Action)Action);
                                 break;
                             }
                         case PanelLEDColor.GREEN:
                             {
-                                Dispatcher?.BeginInvoke((Action)(() => imageArray[1].Visibility = Visibility.Visible));
+                                void Action()
+                                {
+                                    image.Source = _greenImage;
+                                    image.Tag = "GREEN";
+                                }
+
+                                Dispatcher?.Invoke((Action)Action);
                                 break;
                             }
                         case PanelLEDColor.YELLOW:
                             {
-                                Dispatcher?.BeginInvoke((Action)(() => imageArray[2].Visibility = Visibility.Visible));
+                                void Action()
+                                {
+                                    image.Source = _yellowImage;
+                                    image.Tag = "YELLOW";
+                                }
+
+                                Dispatcher?.Invoke((Action)Action);
                                 break;
                             }
                         case PanelLEDColor.RED:
                             {
-                                Dispatcher?.BeginInvoke((Action)(() => imageArray[3].Visibility = Visibility.Visible));
+                                void Action()
+                                {
+                                    image.Source = _redImage;
+                                    image.Tag = "RED";
+                                }
+
+                                Dispatcher?.Invoke((Action)Action);
                                 break;
                             }
                     }
@@ -269,69 +282,11 @@
             }
         }
 
-        private void HideLedImages(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition)
-        {
-            var imageArray = _imageArrayUpper;
-            switch (switchPanelPZ55LEDPosition)
-            {
-                case SwitchPanelPZ55LEDPosition.UP:
-                    {
-
-                        break;
-                    }
-                case SwitchPanelPZ55LEDPosition.LEFT:
-                    {
-                        imageArray = _imageArrayLeft;
-                        break;
-                    }
-                case SwitchPanelPZ55LEDPosition.RIGHT:
-                    {
-                        imageArray = _imageArrayRight;
-                        break;
-                    }
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                var image1 = imageArray[i];
-                Dispatcher?.BeginInvoke((Action)(() => image1.Visibility = Visibility.Collapsed));
-            }
-        }
-        
-        public void DeviceAttached(object sender, PanelEventArgs e)
+        public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (connected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void DeviceDetached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = ParentTabItemHeader + " (disconnected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void SettingsApplied(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstance))
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ55.Text = string.Empty));
@@ -343,11 +298,11 @@
             }
         }
 
-        public void SettingsModified(object sender, PanelEventArgs e)
+        public void SettingsModified(object sender, PanelInfoArgs e)
         {
             try
             {
-                if (_switchPanelPZ55.HIDInstanceId == e.HidInstance)
+                if (_switchPanelPZ55.HIDInstance == e.HidInstance)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                 }
@@ -445,7 +400,7 @@
                 {
                     position = SwitchPanelPZ55LEDPosition.RIGHT;
                 }
-                var ledConfigsWindow = new LEDConfigsWindow( "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
+                var ledConfigsWindow = new LEDConfigsWindow("Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position
@@ -458,7 +413,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void ImageLEDClick(object sender, MouseButtonEventArgs e)
         {
             try
@@ -468,75 +423,54 @@
                 {
                     return;
                 }
-                var imageArray = new Image[4];
+
                 var clickedImage = (Image)sender;
                 var position = SwitchPanelPZ55LEDPosition.UP;
-                //Name of graphics file
-                var imageSource = (string)clickedImage.Tag;
 
                 if (clickedImage.Name.Contains("Upper"))
                 {
                     position = SwitchPanelPZ55LEDPosition.UP;
-                    imageArray = _imageArrayUpper;
                 }
                 else if (clickedImage.Name.Contains("Left"))
                 {
                     position = SwitchPanelPZ55LEDPosition.LEFT;
-                    imageArray = _imageArrayLeft;
                 }
                 else if (clickedImage.Name.Contains("Right"))
                 {
                     position = SwitchPanelPZ55LEDPosition.RIGHT;
-                    imageArray = _imageArrayRight;
                 }
-                var nextImageIndex = 0;
-                HideLedImages(position);
-                for (int i = 0; i < 4; i++)
+
+                switch (clickedImage.Tag)
                 {
-                    var image = imageArray[i];
-                    if (clickedImage.Equals(image))
-                    {
-                        nextImageIndex = i + 1;
-                        if (nextImageIndex > 3)
+                    case "DARK":
                         {
-                            nextImageIndex = 0;
+                            clickedImage.Tag = "GREEN";
+                            clickedImage.Source = _greenImage;
+                            _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.GREEN);
+                            break;
                         }
-                    }
-                }
+                    case "GREEN":
+                        {
+                            clickedImage.Tag = "YELLOW";
+                            clickedImage.Source = _yellowImage;
+                            _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.YELLOW);
+                            break;
+                        }
+                    case "YELLOW":
+                        {
+                            clickedImage.Tag = "RED";
 
-                imageArray[nextImageIndex].Visibility = Visibility.Visible;
-
-
-                if (imageArray[nextImageIndex].Name.Contains("Dark"))
-                {
-                    _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.DARK);
-                }
-                else if (imageArray[nextImageIndex].Name.Contains("Green"))
-                {
-                    _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.GREEN);
-                }
-                else if (imageArray[nextImageIndex].Name.Contains("Yellow"))
-                {
-                    _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.YELLOW);
-                }
-                else if (imageArray[nextImageIndex].Name.Contains("Red"))
-                {
-                    _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.RED);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ButtonClearAllClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (MessageBox.Show("Clear all settings for the Switch Panel?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-                {
-                    ClearAll(true);
+                            clickedImage.Source = _redImage;
+                            _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.RED);
+                            break;
+                        }
+                    case "RED":
+                        {
+                            clickedImage.Tag = "DARK";
+                            clickedImage.Source = _darkImage;
+                            _switchPanelPZ55.SetLandingGearLED(position, PanelLEDColor.DARK);
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
@@ -890,8 +824,8 @@
                 if (_switchPanelPZ55 != null)
                 {
                     TextBoxLogPZ55.Text = string.Empty;
-                    TextBoxLogPZ55.Text = _switchPanelPZ55.HIDInstanceId;
-                    Clipboard.SetText(_switchPanelPZ55.HIDInstanceId);
+                    TextBoxLogPZ55.Text = _switchPanelPZ55.HIDInstance;
+                    Clipboard.SetText(_switchPanelPZ55.HIDInstance);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }
@@ -900,7 +834,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void CheckBoxManualLEDs_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -1080,6 +1014,16 @@
             ManualLedTransLabel.Visibility = visibility;
             ManualLedDownLabel.Visibility = visibility;
             ManualLedTransSecondsLabel.Visibility = visibility;
+        }
+
+        private void LandingLight_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void LandingLight_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
     }
 }

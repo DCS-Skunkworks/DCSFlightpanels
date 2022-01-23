@@ -1,8 +1,8 @@
-﻿namespace NonVisuals.Interfaces
+﻿using NonVisuals.StreamDeck.Panels;
+
+namespace NonVisuals.Interfaces
 {
     using System.Threading;
-
-    using NonVisuals.StreamDeck;
 
     public enum EnumStreamDeckActionType
     {
@@ -15,6 +15,8 @@
 
     public interface IStreamDeckButtonAction
     {
+        void Dispose();
+
         EnumStreamDeckActionType ActionType { get; }
 
         string ActionDescription { get; }
