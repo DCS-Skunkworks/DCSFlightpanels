@@ -39,7 +39,7 @@ namespace NonVisuals
                 throw new ArgumentException($"DeepClone error. The type must be serializable");
             }
 
-            string jsonString = JsonSerializer.Serialize(obj);
+            string jsonString = JsonSerializer.Serialize(source);
             return JsonSerializer.Deserialize<T>(jsonString);
         }
 
