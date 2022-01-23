@@ -42,6 +42,7 @@ Stream Deck Panels Supported:
 ---------------------------------------------
 * Mini
 * Stream Deck
+* Stream Deck MK2
 * XL
 
 
