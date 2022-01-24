@@ -111,6 +111,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 TextBoxKeyPress.Text = string.Empty;
+                TextBoxKeyPress.Focus();
                 SetFormState();
             }
             catch (Exception ex)
