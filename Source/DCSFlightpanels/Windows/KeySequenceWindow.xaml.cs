@@ -105,7 +105,7 @@
 
         private void AddKeyPress()
         {
-            var keyPressWindow = new KeyPressWindow(_supportIndefinite);
+            var keyPressWindow = new KeyPressReadingBigWindow(_supportIndefinite);
             keyPressWindow.ShowDialog();
             if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
             {
@@ -181,7 +181,7 @@
         private void EditKeyPress()
         {
             var keyValuePair = (KeyValuePair<int, IKeyPressInfo>)DataGridSequences.SelectedItem;
-            var keyPressWindow = new KeyPressWindow((KeyPressInfo)keyValuePair.Value);
+            var keyPressWindow = new KeyPressReadingBigWindow((KeyPressInfo)keyValuePair.Value);
             keyPressWindow.ShowDialog();
             if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
             {

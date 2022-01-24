@@ -448,14 +448,14 @@ namespace DCSFlightpanels.Bills
         {
             var supportIndefinite = _saitekPanel.TypeOfPanel != GamingPanelEnum.FarmingPanel;
 
-            KeyPressReadingWindow keyPressReadingWindow;
+            KeyPressReadingSmallWindow keyPressReadingWindow;
             if (ContainsKeyPress())
             {
-                keyPressReadingWindow = new KeyPressReadingWindow(GetKeyPress().LengthOfKeyPress, GetKeyPress().VirtualKeyCodesAsString, supportIndefinite);
+                keyPressReadingWindow = new KeyPressReadingSmallWindow(GetKeyPress().LengthOfKeyPress, GetKeyPress().VirtualKeyCodesAsString, supportIndefinite);
             }
             else
             {
-                keyPressReadingWindow = new KeyPressReadingWindow(supportIndefinite);
+                keyPressReadingWindow = new KeyPressReadingSmallWindow(supportIndefinite);
             }
 
             keyPressReadingWindow.ShowDialog();

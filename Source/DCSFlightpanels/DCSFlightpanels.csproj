@@ -184,8 +184,8 @@
     <Compile Include="Windows\JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\KeyPressReadingWindow.xaml.cs">
-      <DependentUpon>KeyPressReadingWindow.xaml</DependentUpon>
+    <Compile Include="Windows\KeyPressReadingSmallWindow.xaml.cs">
+      <DependentUpon>KeyPressReadingSmallWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\StreamDeck\ImportWindow.xaml.cs">
       <DependentUpon>ImportWindow.xaml</DependentUpon>
@@ -208,8 +208,8 @@
     <Compile Include="Windows\DCSBiosOutputTriggerWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputTriggerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\KeyPressWindow.xaml.cs">
-      <DependentUpon>KeyPressWindow.xaml</DependentUpon>
+    <Compile Include="Windows\KeyPressReadingBigWindow.xaml.cs">
+      <DependentUpon>KeyPressReadingBigWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\LEDConfigsWindow.xaml.cs">
       <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
@@ -399,7 +399,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\KeyPressReadingWindow.xaml">
+    <Page Include="Windows\KeyPressReadingSmallWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -423,7 +423,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\KeyPressWindow.xaml">
+    <Page Include="Windows\KeyPressReadingBigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

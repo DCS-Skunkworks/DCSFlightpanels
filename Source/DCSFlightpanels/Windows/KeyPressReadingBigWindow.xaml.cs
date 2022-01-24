@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
+using System.Windows.Media;
 
 namespace DCSFlightpanels.Windows
 {
@@ -8,63 +9,153 @@ namespace DCSFlightpanels.Windows
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
-    using System.Windows.Media;
 
     using ClassLibraryCommon;
 
     using MEF;
 
     using NonVisuals;
+    using NonVisuals.Interfaces;
 
     /// <summary>
-    /// Interaction logic for KeyPressReadingWindow.xaml
+    /// Interaction logic for KeyPressWindow.xaml
     /// </summary>
-    public partial class KeyPressReadingWindow : Window
+    public partial class KeyPressReadingBigWindow : Window, IIsDirty
     {
-        private bool _isDirty = false;
-        private bool _loaded = false;
-        private KeyPressLength _keyPressLength;
+        private bool _isDirty;
         private readonly bool _supportIndefinite;
         private bool _doOpenRecording;
 
-        public KeyPressReadingWindow(bool supportIndefinite = true)
+        public KeyPressReadingBigWindow(bool supportIndefinite = true)
         {
             InitializeComponent();
-            ComboBoxPressTimes.SelectedItem = KeyPressLength.ThirtyTwoMilliSec;
-            _keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
+            SetFormState();
+            TextBoxKeyPress.Focus();
+            ComboBoxBreak.SelectedIndex = 0;
+            ComboBoxKeyPressTime.SelectedIndex = 0;
             _supportIndefinite = supportIndefinite;
         }
 
-        public KeyPressReadingWindow(KeyPressLength keyPressLength, string keyPress, bool supportIndefinite = true)
+        public KeyPressReadingBigWindow(KeyPressInfo keyPressInfo, bool supportIndefinite = true)
         {
             InitializeComponent();
-            TextBoxKeyPress.Text = keyPress;
-            ComboBoxPressTimes.SelectedItem = keyPressLength;
-            _keyPressLength = keyPressLength;
+            //comboBoxBreak.ItemsSource = Enum.GetValues(typeof(KeyPressLength));
+            ComboBoxBreak.SelectedItem = keyPressInfo.LengthOfBreak;
+            TextBoxKeyPress.Text = keyPressInfo.VirtualKeyCodesAsString;
+            ComboBoxKeyPressTime.SelectedItem = keyPressInfo.LengthOfKeyPress;
             _supportIndefinite = supportIndefinite;
+            SetFormState();
+            TextBoxKeyPress.Focus();
         }
 
-        private void KeyPressReadingWindow_OnLoaded(object sender, RoutedEventArgs e)
+        private void ButtonOkClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (_loaded)
+                if (((KeyPressLength)ComboBoxKeyPressTime.SelectedItem) == KeyPressLength.Indefinite && !_supportIndefinite)
                 {
+                    MessageBox.Show("Indefinite is not supported for this device.", "Invalid value", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-
-                TextBoxKeyPress.Focus();
-                _loaded = true;
+                DialogResult = true;
+                Close();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+        private void ButtonCancelClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DialogResult = false;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        
+        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (e.ChangedButton == MouseButton.Left)
+                {
+                    ((TextBox)sender).Text = string.Empty;
+                    ((TextBox)sender).Tag = null;
+                    SetIsDirty();
+                    SetFormState();
+                }
+                else if (e.ChangedButton == MouseButton.Left)
+                {
+                    //((TextBox) sender).ContextMenu.sh
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
         private void SetFormState()
         {
-            ButtonDelete.IsEnabled = !string.IsNullOrEmpty(TextBoxKeyPress.Text);
+            ButtonOk.IsEnabled = !string.IsNullOrEmpty(TextBoxKeyPress.Text);
+        }
+
+        private void ComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                SetIsDirty();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void KeyPressWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!ButtonOk.IsEnabled && e.Key == Key.Escape)
+            {
+                DialogResult = false;
+                e.Handled = true;
+                Close();
+            }
+        }
+
+        private void ButtonAddNullKey_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TextBoxKeyPress.Text = "VK_NULL";
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void SetIsDirty()
+        {
+            _isDirty = true;
+        }
+
+        public bool IsDirty
+        {
+            get => _isDirty;
+            set => _isDirty = value;
+        }
+
+        public void StateSaved()
+        {
+            _isDirty = false;
         }
 
         private void TextBoxGotFocus(object sender, RoutedEventArgs e)
@@ -93,119 +184,9 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                _isDirty = true;
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                TextBoxKeyPress.Text = string.Empty;
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                DialogResult = false;
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ButtonOk_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if(_keyPressLength == KeyPressLength.Indefinite && !_supportIndefinite)
-                {
-                    MessageBox.Show("Indefinite is not supported for this device.", "Invalid value", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-                DialogResult = true;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public bool IsDirty => _isDirty;
-
-        private void ComboBoxPressTimes_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (!_loaded)
-                {
-                    return;
-                }
-                var tmpKeyPressLength = (KeyPressLength)ComboBoxPressTimes.SelectedItem;
-                if (tmpKeyPressLength != _keyPressLength)
-                {
-                    _keyPressLength = tmpKeyPressLength;
-                    _isDirty = true;
-                }
-
-
-                SetFormState();
-
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public string VirtualKeyCodesAsString
-        {
-            get => TextBoxKeyPress.Text;
-        }
-
-        public KeyPressLength LengthOfKeyPress
-        {
-            get => _keyPressLength;
-        }
-
-        private void KeyPressReadingWindow_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (e.Key == Key.Escape)
-                {
-                    e.Handled = true;
-                    DialogResult = false;
-                    Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void LabelOpenRecording_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            Process.Start($"https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Open-Recording-for-Key-Presses");
         }
 
         private void CheckBoxOpenRecording_OnChecked(object sender, RoutedEventArgs e)
@@ -219,7 +200,7 @@ namespace DCSFlightpanels.Windows
             _doOpenRecording = false;
             TextBoxKeyPress.Focus();
         }
-
+        
         private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -279,7 +260,7 @@ namespace DCSFlightpanels.Windows
                 var textBox = (TextBox)sender;
 
                 var hashSetOfKeysPressed = new HashSet<string>();
-                
+
                 var modifiers = CommonVirtualKey.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
@@ -325,6 +306,16 @@ namespace DCSFlightpanels.Windows
                 Debug.WriteLine($@"Appending text {textBox.Text}");
                 textBox.Text += " + " + key;
             }
+        }
+
+        private void LabelOpenRecording_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void LabelOpenRecording_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
     }
 }

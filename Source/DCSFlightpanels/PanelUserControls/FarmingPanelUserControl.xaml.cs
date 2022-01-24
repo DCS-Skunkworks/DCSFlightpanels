@@ -754,7 +754,7 @@
         {
             try
             {
-                var window = new KeyPressReadingWindow(KeyPressLength.SecondAndHalf, "ESC");
+                var window = new KeyPressReadingSmallWindow(KeyPressLength.SecondAndHalf, "ESC");
                 window.ShowDialog();
             }
             catch (Exception ex)
