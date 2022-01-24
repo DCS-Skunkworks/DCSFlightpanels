@@ -300,7 +300,6 @@ namespace NonVisuals.StreamDeck.Panels
 
             lock (_updateStreamDeckOledLockObject)
             {
-                Debug.WriteLine($"Setting bitmap for button {streamDeckButtonName}. Bitmap is {(keyBitmap == null ? "null" : "not null")}" );
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
             }
         }

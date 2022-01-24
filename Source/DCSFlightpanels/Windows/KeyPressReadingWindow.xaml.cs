@@ -1,4 +1,7 @@
-﻿namespace DCSFlightpanels.Windows
+﻿using System.Diagnostics;
+using System.Linq;
+
+namespace DCSFlightpanels.Windows
 {
     using System;
     using System.Collections.Generic;
@@ -22,6 +25,7 @@
         private bool _loaded = false;
         private KeyPressLength _keyPressLength;
         private readonly bool _supportIndefinite;
+        private bool _doOpenRecording;
 
         public KeyPressReadingWindow(bool supportIndefinite = true)
         {
@@ -81,51 +85,6 @@
             try
             {
                 ((TextBox)sender).Background = Brushes.White;
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                var textBox = (TextBox)sender;
-
-                var hashSetOfKeysPressed = new HashSet<string>();
-
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.RealKey());
-
-                e.Handled = true;
-
-                if (keyCode > 0)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), keyCode));
-                }
-                var modifiers = CommonVirtualKey.GetPressedVirtualKeyCodesThatAreModifiers();
-                foreach (var virtualKeyCode in modifiers)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));
-                }
-                var result = string.Empty;
-                foreach (var str in hashSetOfKeysPressed)
-                {
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        result = str + " + " + result;
-                    }
-                    else
-                    {
-                        result = str + " " + result;
-                    }
-                }
-
-                result = Common.RemoveLControl(result);
-
-                textBox.Text = result;
                 SetFormState();
             }
             catch (Exception ex)
@@ -241,6 +200,130 @@
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelOpenRecording_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void CheckBoxOpenRecording_OnChecked(object sender, RoutedEventArgs e)
+        {
+            _doOpenRecording = true;
+            TextBoxKeyPress.Focus();
+        }
+
+        private void CheckBoxOpenRecording_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            _doOpenRecording = false;
+            TextBoxKeyPress.Focus();
+        }
+
+        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (_doOpenRecording)
+                {
+                    TextBoxOpenRecording(sender, e);
+                    return;
+                }
+
+                var textBox = (TextBox)sender;
+
+                var hashSetOfKeysPressed = new HashSet<string>();
+
+                var keyCode = KeyInterop.VirtualKeyFromKey(e.RealKey());
+
+                e.Handled = true;
+
+                if (keyCode > 0)
+                {
+                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), keyCode));
+                }
+                var modifiers = CommonVirtualKey.GetPressedVirtualKeyCodesThatAreModifiers();
+                foreach (var virtualKeyCode in modifiers)
+                {
+                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));
+                }
+                var result = string.Empty;
+                foreach (var str in hashSetOfKeysPressed)
+                {
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        result = str + " + " + result;
+                    }
+                    else
+                    {
+                        result = str + " " + result;
+                    }
+                }
+
+                result = Common.RemoveLControl(result);
+
+                textBox.Text = result;
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxOpenRecording(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                e.Handled = true;
+                var textBox = (TextBox)sender;
+
+                var hashSetOfKeysPressed = new HashSet<string>();
+                
+                var modifiers = CommonVirtualKey.GetPressedVirtualKeyCodesThatAreModifiers();
+                foreach (var virtualKeyCode in modifiers)
+                {
+                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));
+                }
+
+                if (hashSetOfKeysPressed.Any())
+                {
+                    foreach (var virtualKeyCode in modifiers)
+                    {
+                        AddKey(textBox, Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));
+                    }
+                }
+                else
+                {
+                    var keyCode = KeyInterop.VirtualKeyFromKey(e.RealKey());
+
+                    if (keyCode > 0)
+                    {
+                        AddKey(textBox, Enum.GetName(typeof(MEF.VirtualKeyCode), keyCode));
+                    }
+                }
+
+                textBox.Text = Common.RemoveLControl(textBox.Text);
+                SetFormState();
+
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void AddKey(TextBox textBox, string key)
+        {
+            if (string.IsNullOrEmpty(textBox.Text))
+            {
+                Debug.WriteLine("Setting text");
+                textBox.Text = key;
+            }
+            else
+            {
+                Debug.WriteLine($@"Appending text {textBox.Text}");
+                textBox.Text += " + " + key;
             }
         }
     }

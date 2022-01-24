@@ -253,11 +253,6 @@ namespace NonVisuals
          * -1 do not show new profile dialog
          * 0 show new profile dialog
          * 1 successful load
-         *
-         * exceptionThrown :
-         * -1 not thrown
-         * 0 not thrown
-         * 1 thrown
          */
         private int LoadProfile(string filename)
         {
