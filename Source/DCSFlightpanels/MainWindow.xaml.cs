@@ -40,7 +40,7 @@
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
-
+    
     using Octokit;
 
     using Application = System.Windows.Application;
@@ -167,6 +167,7 @@
 
                 _profileHandler.FindProfile();
 
+                LabelDonate.IsEnabled = true;
                 _isLoaded = true;
             }
             catch (Exception ex)
@@ -1942,6 +1943,21 @@
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void LabelDonate_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void LabelDonate_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        private void LabelDonate_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start($"https://www.paypal.com/paypalme/jerkerdahlblom");
         }
     }
 }
