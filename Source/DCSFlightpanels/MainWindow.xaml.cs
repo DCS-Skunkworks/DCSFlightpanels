@@ -1959,5 +1959,10 @@
         {
             Process.Start($"https://www.paypal.com/paypalme/jerkerdahlblom");
         }
+
+        private void MenuItemDiscordServer_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start($"https://discord.gg/5svGwKX");
+        }
     }
 }

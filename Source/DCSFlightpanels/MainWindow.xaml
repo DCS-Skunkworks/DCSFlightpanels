@@ -51,6 +51,7 @@
             </MenuItem>
             <MenuItem Name="MenuItemPlugins" Header="Plugins"/>
             <MenuItem Header="Help">
+                <MenuItem Header="Discord Server" Click="MenuItemDiscordServer_OnClick" />
                 <MenuItem Header="Wiki (Github)" Click="MenuItemWikiClick" />
                 <MenuItem Header="About" Click="MenuItemAboutClick" />
             </MenuItem>
