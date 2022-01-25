@@ -156,7 +156,7 @@
                                         Storyboard.TargetName="LabelDonate"
                                         Storyboard.TargetProperty="(Canvas.Top)"
                                         From="-10"
-                                        To="10" 
+                                        To="7" 
                                         Duration="0:0:4" 
                                         AutoReverse="True"/>
                                     <DoubleAnimation
