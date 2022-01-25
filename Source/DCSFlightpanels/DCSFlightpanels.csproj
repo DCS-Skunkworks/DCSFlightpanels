@@ -99,7 +99,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AboutFPWindow.xaml.cs">
+    <Compile Include="Windows\AboutFPWindow.xaml.cs">
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bills\BillBaseInputStreamDeck.cs" />
@@ -315,7 +315,7 @@
     <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckButtonFace.xaml.cs">
       <DependentUpon>UserControlStreamDeckButtonFace.xaml</DependentUpon>
     </Compile>
-    <Page Include="AboutFPWindow.xaml">
+    <Page Include="Windows\AboutFPWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

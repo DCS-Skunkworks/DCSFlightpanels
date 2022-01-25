@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.Windows
 {
     /// <summary>
     /// Interaction logic for AboutFPWindow.xaml
