@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using DCSFlightpanels.Properties;
@@ -44,8 +45,6 @@ namespace DCSFlightpanels.Windows
             {
                 ButtonOk.IsEnabled = false;
                 LoadSettings();
-                StackPanelGeneralSettings.Visibility = Visibility.Visible;
-                StackPanelDCSBIOSSettings.Visibility = Visibility.Collapsed;
                 SetEventsHandlers();
             }
             catch (Exception exception)
@@ -129,17 +128,7 @@ namespace DCSFlightpanels.Windows
                 TextBoxDCSBIOSToPort.Text = Settings.Default.DCSBiosPortTo;
             }
         }
-
-        private void GeneralSettings_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            CollapseAllSettingsPanelExcept(StackPanelGeneralSettings);
-        }
-
-        private void DCSBIOS_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            CollapseAllSettingsPanelExcept(StackPanelDCSBIOSSettings);
-        }
-
+        
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
@@ -391,13 +380,11 @@ namespace DCSFlightpanels.Windows
             GeneralChanged = true;
             ButtonOk.IsEnabled = true;
         }
-
-        private void CollapseAllSettingsPanelExcept(StackPanel visibleStackPanel)
-        {
-            StackPanelGeneralSettings.Visibility = Visibility.Collapsed;
-            StackPanelDCSBIOSSettings.Visibility = Visibility.Collapsed;
         
-            visibleStackPanel.Visibility = Visibility.Visible;
+        private void HyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }
