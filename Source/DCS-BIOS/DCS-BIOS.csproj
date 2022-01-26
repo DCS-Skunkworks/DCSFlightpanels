@@ -63,7 +63,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBCommon.cs" />
+    <Compile Include="DCSBIOSCommon.cs" />
     <Compile Include="DCSBIOS.cs" />
     <Compile Include="DCSBIOSInputHandler.cs" />
     <Compile Include="DCSBIOSInputObject.cs" />

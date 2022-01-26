@@ -149,9 +149,7 @@
 
                 LoadSettings();
 
-                DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
-
-                CheckErrorLogAndDCSBIOSLocation();
+                DCSFPProfile.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 StartTimers();
 
@@ -228,36 +226,7 @@
             }
             return fileName;
         }
-
-        private void CheckErrorLogAndDCSBIOSLocation()
-        {
-            // FUGLY, I know but something quick to help the users
-            try
-            {
-                string errorLogFilePath = GetLogFilePathByTarget("error_logfile");
-                if (errorLogFilePath == null || !File.Exists(errorLogFilePath))
-                {
-                    return;
-                }
-
-                var loggerText = File.ReadAllText(errorLogFilePath);
-                if (loggerText.Contains(DCSBIOSControlLocator.DCSBIOSNotFoundErrorMessage))
-                {
-                    var window = new DCSBIOSNotFoundWindow(Settings.Default.DCSBiosJSONLocation);
-                    window.ShowDialog();
-                    MessageBox.Show(
-                        $"This warning will be shown as long as there are error messages in error log stating that DCS-BIOS can not be found. Delete or clear the error log{Environment.NewLine}{errorLogFilePath}{Environment.NewLine} once you have fixed the problem.",
-                        "Delete Error Log",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private void SetApplicationMode()
         {
             var dcsfpProfile = _profileHandler.Profile;
@@ -1036,7 +1005,6 @@
             {
                 Shutdown();
                 LogManager.Shutdown();
-                // Wtf is hanging?
                 Application.Current.Shutdown();
                 Environment.Exit(0);
             }
@@ -1568,13 +1536,13 @@
 
         private void MenuItemSettings_OnClick(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsWindow();
+            var settingsWindow = new SettingsWindow(0);
             if (settingsWindow.ShowDialog() == true)
             {
                 if (settingsWindow.DCSBIOSChanged)
                 {
-                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+                    _profileHandler.DCSBIOSJSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                    DCSFPProfile.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
                 }
                 if (settingsWindow.GeneralChanged)
                 {

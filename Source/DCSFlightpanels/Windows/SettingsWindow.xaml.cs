@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using DCS_BIOS;
@@ -34,23 +35,62 @@ namespace DCSFlightpanels.Windows
         public bool DCSBIOSChanged { get; private set; } = false;
         public bool StreamDeckChanged { get; private set; } = false;
 
-        public SettingsWindow()
+        private bool _isLoaded = false;
+        private readonly int _tabIndex;
+
+        public SettingsWindow(int tabIndex)
         {
             InitializeComponent();
+            _tabIndex = tabIndex;
+        }
+
+        private void SetFormState()
+        {
+            CheckDCSBIOSStatus();
         }
 
         private void SettingsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
+                if (_isLoaded)
+                {
+                    return;
+                }
+
+                TabControlSettings.SelectedIndex = _tabIndex;
                 ButtonOk.IsEnabled = false;
                 LoadSettings();
                 SetEventsHandlers();
+                SetFormState();
+                _isLoaded = true;
             }
             catch (Exception exception)
             {
                 MessageBox.Show(exception.Message + Environment.NewLine + exception.StackTrace);
             }
+        }
+
+        private void CheckDCSBIOSStatus()
+        {
+            var result = DCSBIOSCommon.CheckJSONDirectory(DCSBIOSCommon.GetDCSBIOSJSONDirectory(TextBoxDcsBiosJSONLocation.Text));
+
+            if (result.Item1 == false && result.Item2 == false)
+            {
+                LabelDCSBIOSNotFound.Foreground = Brushes.Red;
+                LabelDCSBIOSNotFound.Content = "<-- Warning, folder does not exist.";
+                return;
+            }
+
+            if (result.Item1 == true && result.Item2 == false)
+            {
+                LabelDCSBIOSNotFound.Foreground = Brushes.Red;
+                LabelDCSBIOSNotFound.Content = "<-- Warning, folder does not contain JSON files.";
+                return;
+            }
+
+            LabelDCSBIOSNotFound.Foreground = Brushes.LimeGreen;
+            LabelDCSBIOSNotFound.Content = " JSON files found in folder.";
         }
 
         private void SetEventsHandlers()
@@ -119,16 +159,13 @@ namespace DCSFlightpanels.Windows
             CheckBoxEnablePluginSupport.IsChecked = Settings.Default.EnablePlugin;
             CheckBoxDisableKeyboardAPI.IsChecked = Settings.Default.DisableKeyboardAPI;
 
-            if (Common.PartialDCSBIOSEnabled())
-            {
-                TextBoxDcsBiosJSONLocation.Text = Settings.Default.DCSBiosJSONLocation;
-                TextBoxDCSBIOSFromIP.Text = Settings.Default.DCSBiosIPFrom;
-                TextBoxDCSBIOSToIP.Text = Settings.Default.DCSBiosIPTo;
-                TextBoxDCSBIOSFromPort.Text = Settings.Default.DCSBiosPortFrom;
-                TextBoxDCSBIOSToPort.Text = Settings.Default.DCSBiosPortTo;
-            }
+            TextBoxDcsBiosJSONLocation.Text = Settings.Default.DCSBiosJSONLocation;
+            TextBoxDCSBIOSFromIP.Text = Settings.Default.DCSBiosIPFrom;
+            TextBoxDCSBIOSToIP.Text = Settings.Default.DCSBiosIPTo;
+            TextBoxDCSBIOSFromPort.Text = Settings.Default.DCSBiosPortFrom;
+            TextBoxDCSBIOSToPort.Text = Settings.Default.DCSBiosPortTo;
         }
-        
+
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
@@ -203,7 +240,7 @@ namespace DCSFlightpanels.Windows
                     Settings.Default.DCSBiosPortTo = PortToDCSBIOS;
                     Settings.Default.Save();
                 }
-                
+
                 if (StreamDeckChanged)
                 {
                     Settings.Default.Save();
@@ -226,49 +263,30 @@ namespace DCSFlightpanels.Windows
                     ShowNewFolderButton = false
                 };
 
-                if (!string.IsNullOrEmpty(DCS_BIOS.DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation)))
+                if (!string.IsNullOrEmpty(DCS_BIOS.DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation)))
                 {
-                    folderBrowserDialog.SelectedPath = DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);
+                    folderBrowserDialog.SelectedPath = DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);
                 }
 
                 if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    if (CheckJSONDirectory(folderBrowserDialog.SelectedPath))
+                    var result = DCSBIOSCommon.CheckJSONDirectory(folderBrowserDialog.SelectedPath);
+                    if (result.Item1 == true && result.Item2 == true)
                     {
                         TextBoxDcsBiosJSONLocation.Text = folderBrowserDialog.SelectedPath;
                     }
-                    else
+                    else if (result.Item1 == true && result.Item2 == false)
                     {
-                        MessageBox.Show("Cannot use selected directory as it did not contain json files.", "Invalid directory", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Cannot use selected directory as it did not contain JSON files.", "Invalid directory", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
+
+                SetFormState();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
-        }
-
-        private bool CheckJSONDirectory(string jsonDirectory)
-        {
-            jsonDirectory = DBCommon.GetDCSBIOSJSONDirectory(jsonDirectory);
-
-            if (string.IsNullOrEmpty(jsonDirectory) || !Directory.Exists(jsonDirectory))
-            {
-                return false;
-            }
-
-            var files = Directory.EnumerateFiles(jsonDirectory);
-
-            foreach (var filename in files)
-            {
-                if (filename.ToLower().EndsWith(".json"))
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         private void CheckValuesDCSBIOS()
@@ -353,7 +371,7 @@ namespace DCSFlightpanels.Windows
                 throw new Exception($"DCS-BIOS Error checking values : {Environment.NewLine}{ex.Message}");
             }
         }
-        
+
         private void DcsBiosDirty(object sender, TextChangedEventArgs e)
         {
             DCSBIOSChanged = true;
@@ -380,7 +398,7 @@ namespace DCSFlightpanels.Windows
             GeneralChanged = true;
             ButtonOk.IsEnabled = true;
         }
-        
+
         private void HyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));

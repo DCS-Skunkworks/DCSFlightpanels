@@ -79,7 +79,11 @@ namespace NonVisuals
         public string DCSBIOSJSONDirectory
         {
             get => DCSBIOSControlLocator.JSONDirectory;
-            set => DCSBIOSControlLocator.JSONDirectory = value;
+            set
+            {
+                DCSBIOSControlLocator.JSONDirectory = value;
+                VerifyDCSBIOSLocation();
+            }
         }
 
         public bool ProfileLoaded => _profileLoaded || _isNewProfile;
@@ -142,6 +146,7 @@ namespace NonVisuals
         public void Init()
         {
             DCSBIOSControlLocator.JSONDirectory = _dcsbiosJSONDirectory;
+            VerifyDCSBIOSLocation();
         }
 
         public void SettingsModified(object sender, PanelInfoArgs e)
@@ -439,11 +444,7 @@ namespace NonVisuals
 
                     if (DCSFPProfile.DCSBIOSModulesCount == 0)
                     {
-                        if (MessageBox.Show("Failed to open profile. If you intended to use DCS - BIOS, check the Settings. No DCS - BIOS modules were found.\n\nDo you want to open Settings?"
-                        , "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                        {
-                            ShowSettingsWindow();
-                        }
+                        VerifyDCSBIOSLocation();
                     }
                     else
                     {
@@ -458,19 +459,6 @@ namespace NonVisuals
             finally
             {
                 Mouse.OverrideCursor = Cursors.Arrow;
-            }
-        }
-
-        private void ShowSettingsWindow()
-        {
-            var settingsWindow = new SettingsWindow();
-            if (settingsWindow.ShowDialog() == true)
-            {
-                if (settingsWindow.DCSBIOSChanged)
-                {
-                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    DCSFPProfile.FillModulesListFromDcsBios(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
-                }
             }
         }
 
@@ -719,5 +707,46 @@ namespace NonVisuals
                 default: throw new Exception("Failed to understand PanelEventType in ProfileHandler");
             }
         }
+
+        private void VerifyDCSBIOSLocation()
+        {
+            var result = DCSBIOSCommon.CheckJSONDirectory(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+            if (result.Item1 == true && result.Item2 == true)
+            {
+                return;
+            }
+
+            var message = "";
+
+            if (result.Item1 == false && result.Item2 == false)
+            {
+                message = "The current DCS-BIOS folder in [Settings] does not exist.";
+            }
+
+            if (result.Item1 == true && result.Item2 == false)
+            {
+                message = "The DCS-BIOS folder in [Settings] contains no JSON files.";
+            }
+
+            if (MessageBox.Show($"Failed to open profile. {message}\nIf you intended to use DCS-BIOS, check the setting [DCS-BIOS JSON Location]. \nDo you want to open [Settings]?"
+                    , "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                ShowSettingsWindow(1);
+            }
+        }
+
+        private void ShowSettingsWindow(int tabIndex)
+        {
+            var settingsWindow = new SettingsWindow(tabIndex);
+            if (settingsWindow.ShowDialog() == true)
+            {
+                if (settingsWindow.DCSBIOSChanged)
+                {
+                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                    DCSFPProfile.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+                }
+            }
+        }
+
     }
 }

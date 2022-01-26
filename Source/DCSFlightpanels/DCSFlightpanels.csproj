@@ -165,9 +165,6 @@
     <Compile Include="Windows\DCSBiosInputWindow.xaml.cs">
       <DependentUpon>DCSBiosInputWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DCSBIOSNotFoundWindow.xaml.cs">
-      <DependentUpon>DCSBIOSNotFoundWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\DCSBiosOutputWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputWindow.xaml</DependentUpon>
     </Compile>
@@ -368,10 +365,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\DCSBiosInputWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\DCSBIOSNotFoundWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
