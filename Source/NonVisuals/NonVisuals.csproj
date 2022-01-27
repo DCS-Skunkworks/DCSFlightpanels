@@ -105,6 +105,7 @@
     <Compile Include="Interfaces\IHardwareConflictResolver.cs" />
     <Compile Include="Interfaces\ILedLightPanelListener.cs" />
     <Compile Include="Interfaces\IOledImageListener.cs" />
+    <Compile Include="Interfaces\IForwardPanelEventListener.cs" />
     <Compile Include="Interfaces\IPanelEventListener.cs" />
     <Compile Include="Interfaces\IProfileHandler.cs" />
     <Compile Include="Interfaces\ISettingsModifiedListener.cs" />

@@ -88,7 +88,15 @@ namespace NonVisuals.EventArgs
             OnForwardPanelEventChanged -= gamingPanel.SetForwardPanelEvent;
         }
 
+        public static void AttachForwardPanelEventListener(IForwardPanelEventListener forwardPanelEventListener)
+        {
+            OnForwardPanelEventChanged += forwardPanelEventListener.SetForwardPanelEvent;
+        }
 
+        public static void DetachForwardPanelEventListener(IForwardPanelEventListener forwardPanelEventListener)
+        {
+            OnForwardPanelEventChanged -= forwardPanelEventListener.SetForwardPanelEvent;
+        }
 
         /*
             ____             _____ __     __  __                ____             __       _                                __                        __      

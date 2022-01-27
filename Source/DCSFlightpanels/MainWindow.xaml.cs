@@ -40,7 +40,7 @@
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
-    
+
     using Octokit;
 
     using Application = System.Windows.Application;
@@ -52,7 +52,7 @@
     using Timer = System.Timers.Timer;
     using UserControl = System.Windows.Controls.UserControl;
 
-    public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener
+    public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -83,6 +83,7 @@
             AppEventHandler.AttachSettingsMonitoringListener(this);
             AppEventHandler.AttachSettingsModified(this);
             AppEventHandler.AttachPanelEventListener(this);
+            AppEventHandler.AttachForwardPanelEventListener(this);
             BIOSEventHandler.AttachConnectionListener(this);
         }
 
@@ -104,7 +105,8 @@
                     _dcsBios?.Dispose();
                     AppEventHandler.DetachPanelEventListener(this);
                     AppEventHandler.DetachSettingsMonitoringListener(this);
-                    AppEventHandler.DetachSettingsModified(this);
+                    AppEventHandler.DetachSettingsModified(this); 
+                    AppEventHandler.DetachForwardPanelEventListener(this);
                     BIOSEventHandler.DetachConnectionListener(this);
                 }
 
@@ -226,7 +228,7 @@
             }
             return fileName;
         }
-        
+
         private void SetApplicationMode()
         {
             var dcsfpProfile = _profileHandler.Profile;
@@ -1717,11 +1719,52 @@
             }
         }
 
+        public void SetForwardPanelEvent(object sender, ForwardPanelEventArgs e)
+        {
+            _disablePanelEventsFromBeingRouted = !e.Forward;
+            SetPanelInteractionMode(false);
+        }
+
+        private void MenuItemPlugin_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var pluginName = ((MenuItem)sender).Header;
+                foreach (var plugin in PluginManager.Get().Plugins)
+                {
+                    if (plugin.Metadata.Name.Equals(pluginName))
+                    {
+                        plugin.Value.Settings();
+                    }
+                }
+
+                SetWindowState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void ButtonDisableAllPanelInteractions_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 _disablePanelEventsFromBeingRouted = !_disablePanelEventsFromBeingRouted;
+                Settings.Default.DisableKeyboardAPI = _disablePanelEventsFromBeingRouted;
+                Settings.Default.Save();
+                SetPanelInteractionMode(true);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void SetPanelInteractionMode(bool sendEvent)
+        {
+            try
+            {
                 if (_disablePanelEventsFromBeingRouted)
                 {
                     ButtonDisablePanelEventsFromBeingRouted.Content = "Disabled!";
@@ -1733,8 +1776,14 @@
                     ButtonDisablePanelEventsFromBeingRouted.ToolTip = "Panel events are routed";
                 }
 
-                // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-                AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
+                /*
+                 * This event can be sent from somewhere else than MainWindow, if so MainWindow should NOT send the event again.
+                 */
+                if (sendEvent)
+                {
+                    // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
+                    AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
+                }
                 SetWindowState();
             }
             catch (Exception ex)
@@ -1786,26 +1835,6 @@
             return bindingsMappingWindow.ModifiedGenericBindings;
         }
 
-        private void MenuItemPlugin_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var pluginName = ((MenuItem)sender).Header;
-                foreach (var plugin in PluginManager.Get().Plugins)
-                {
-                    if (plugin.Metadata.Name.Equals(pluginName))
-                    {
-                        plugin.Value.Settings();
-                    }
-                }
-
-                SetWindowState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
 
         public void ProfileEvent(object sender, ProfileEventArgs e)
         {

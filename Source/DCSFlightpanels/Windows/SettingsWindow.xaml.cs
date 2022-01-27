@@ -11,6 +11,7 @@ using System.Windows.Navigation;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using DCSFlightpanels.Properties;
+using NonVisuals.EventArgs;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
 
@@ -106,8 +107,6 @@ namespace DCSFlightpanels.Windows
             CheckBoxMinimizeToTray.Unchecked += GeneralDirty;
             CheckBoxEnablePluginSupport.Checked += GeneralDirty;
             CheckBoxEnablePluginSupport.Unchecked += GeneralDirty;
-            CheckBoxDisableKeyboardAPI.Checked += GeneralDirty;
-            CheckBoxDisableKeyboardAPI.Unchecked += GeneralDirty;
 
             TextBoxDcsBiosJSONLocation.TextChanged += DcsBiosDirty;
             TextBoxDCSBIOSFromIP.TextChanged += DcsBiosDirty;
@@ -403,6 +402,32 @@ namespace DCSFlightpanels.Windows
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        private void CheckBoxDisableKeyboardAPI_OnChecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                AppEventHandler.ForwardKeyPressEvent(this, false);
+                GeneralDirty(sender, e);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void CheckBoxDisableKeyboardAPI_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                AppEventHandler.ForwardKeyPressEvent(this, true);
+                GeneralDirty(sender, e);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }

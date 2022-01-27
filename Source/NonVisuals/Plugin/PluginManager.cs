@@ -15,7 +15,7 @@
     public class PluginManager
     {
         [ImportMany(typeof(IPanelEventHandler))]
-        private readonly IEnumerable<Lazy<IPanelEventHandler, IPanelEventHandlerMetaData>> _pluginList;
+        private IEnumerable<Lazy<IPanelEventHandler, IPanelEventHandlerMetaData>> _pluginList;
 
         private static PluginManager _pluginManager;
         

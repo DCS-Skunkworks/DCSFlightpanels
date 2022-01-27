@@ -33,7 +33,7 @@
                     <GroupBox Header="Plugin Settings" Margin="0,10,0,0">
                         <StackPanel>
                             <CheckBox Content="Enable Plugin Support (see Github Wiki for more info)" Name="CheckBoxEnablePluginSupport" IsChecked="False" Margin="0,5,0,0" />
-                            <CheckBox Content="Disable DCSFP keyboard API" Name="CheckBoxDisableKeyboardAPI" IsChecked="False" Margin="0,5,0,0" />
+                            <CheckBox Content="Disable DCSFP keyboard API" Name="CheckBoxDisableKeyboardAPI" Checked="CheckBoxDisableKeyboardAPI_OnChecked" Unchecked="CheckBoxDisableKeyboardAPI_OnUnchecked" IsChecked="False" Margin="0,5,0,0" />
                         </StackPanel>
                     </GroupBox>
 
