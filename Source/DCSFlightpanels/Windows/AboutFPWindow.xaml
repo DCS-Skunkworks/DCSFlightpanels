@@ -40,7 +40,7 @@
                 <LineBreak/>
                 <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCSFlightpanels/dcs-bios">
                     -
-                    <Bold>[FSF]Ian's DCS-BIOS project</Bold>
+                    <Bold>DCS-BIOS Flightpanels Fork</Bold>
                 </Hyperlink>
                 <LineBreak/>
                 <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/mikeobrien/HidLibrary">
