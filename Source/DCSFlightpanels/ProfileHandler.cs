@@ -79,11 +79,7 @@ namespace NonVisuals
         public string DCSBIOSJSONDirectory
         {
             get => DCSBIOSControlLocator.JSONDirectory;
-            set
-            {
-                DCSBIOSControlLocator.JSONDirectory = value;
-                VerifyDCSBIOSLocation();
-            }
+            set => DCSBIOSControlLocator.JSONDirectory = value;
         }
 
         public bool ProfileLoaded => _profileLoaded || _isNewProfile;
@@ -146,7 +142,6 @@ namespace NonVisuals
         public void Init()
         {
             DCSBIOSControlLocator.JSONDirectory = _dcsbiosJSONDirectory;
-            VerifyDCSBIOSLocation();
         }
 
         public void SettingsModified(object sender, PanelInfoArgs e)
@@ -347,10 +342,20 @@ namespace NonVisuals
                         else if (fileLine.StartsWith("OperationLevelFlag="))
                         {
                             Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("OperationLevelFlag=", string.Empty).Trim())); // backward compat 13.03.2021
+
+                            if (Common.PartialDCSBIOSEnabled() || Common.FullDCSBIOSEnabled())
+                            {
+                                VerifyDCSBIOSLocation();
+                            }
                         }
                         else if (fileLine.StartsWith("EmulationModesFlag="))
                         {
                             Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("EmulationModesFlag=", string.Empty).Trim()));
+
+                            if (Common.PartialDCSBIOSEnabled() || Common.FullDCSBIOSEnabled())
+                            {
+                                VerifyDCSBIOSLocation();
+                            }
                         }
                         else if (fileLine.StartsWith("UseGenericRadio="))
                         {
