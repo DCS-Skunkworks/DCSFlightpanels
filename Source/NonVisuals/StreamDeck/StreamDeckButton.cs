@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
@@ -123,7 +125,6 @@ namespace NonVisuals.StreamDeck
             {
                 _cancellationTokenSource = new CancellationTokenSource();
                 var threadCancellationToken = _cancellationTokenSource.Token;
-                Debug.WriteLine("New Thread ThreadedPress");
                 _keyPressedThread = new Thread(() => ThreadedPress(threadCancellationToken));
                 _keyPressedThread.Start();
             }
@@ -136,16 +137,11 @@ namespace NonVisuals.StreamDeck
         private void ThreadedPress(CancellationToken threadCancellationToken)
         {
             var first = true;
-            while (true)
+            while (!threadCancellationToken.IsCancellationRequested)
             {
                 if (!ActionForPress.IsRunning())
                 {
                     ActionForPress?.Execute(threadCancellationToken);
-                }
-
-                if (_cancellationTokenSource.IsCancellationRequested)
-                {
-                    break;
                 }
 
                 if (first)
@@ -162,7 +158,11 @@ namespace NonVisuals.StreamDeck
 
         public void DoRelease()
         {
-            _cancellationTokenSource?.Cancel();
+            while (_keyPressedThread != null)
+            {
+                _cancellationTokenSource?.Cancel();
+                _keyPressedThread = null;
+            }
 
             if (ActionForRelease == null)
             {
@@ -197,16 +197,19 @@ namespace NonVisuals.StreamDeck
                 _cancellationTokenSource?.Cancel();
             }
 
-            if (ActionForRelease.IsRepeatable())
+            /*
+             * Can ActionForRelease really be repeatable??
+             */
+            /*if (ActionForRelease.IsRepeatable())
             {
                 _cancellationTokenSource = new CancellationTokenSource();
                 var threadCancellationToken = _cancellationTokenSource.Token;
                 ActionForRelease?.Execute(threadCancellationToken);
             }
             else
-            {
+            {*/
                 ActionForRelease.Execute(CancellationToken.None);
-            }
+            //}
         }
 
         public bool CheckIfWouldOverwrite(StreamDeckButton newStreamDeckButton)
@@ -430,8 +433,4 @@ namespace NonVisuals.StreamDeck
             }
         }
     }
-
-
-
-
 }

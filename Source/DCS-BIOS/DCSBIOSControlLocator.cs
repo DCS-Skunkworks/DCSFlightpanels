@@ -185,7 +185,7 @@ namespace DCS_BIOS
 
                 if (Common.IsEmulationModesFlagSet(EmulationMode.NS430Enabled))
                 {
-                    ReadDataFromJsonFile(DCSFPProfile.GetNS430().JSONFilename);
+                    //ReadDataFromJsonFile(DCSFPProfile.GetNS430().JSONFilename);
                 }
 
                 if (DCSFPProfile.IsFlamingCliff(Profile))
