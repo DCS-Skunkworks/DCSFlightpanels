@@ -257,6 +257,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 if (MessageBox.Show("Delete button" + streamDeckButton.StreamDeckButtonName.ToString() + "?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     _streamDeckPanel.SelectedLayer.RemoveButton(streamDeckButton);
+                    SDEventHandler.ClearSettings(this, true, true, true, _streamDeckPanel.BindingHash); 
                 }
             }
             catch (Exception ex)
@@ -536,7 +537,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 logger.Error(ex);
             }
         }
-
+        
         public void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e)
         {
             try
