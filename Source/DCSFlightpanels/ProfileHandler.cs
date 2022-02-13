@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
 

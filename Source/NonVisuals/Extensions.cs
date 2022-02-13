@@ -5,8 +5,6 @@ namespace NonVisuals
 {
     using System.Collections.Generic;
     using System.Globalization;
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
     using System.Windows.Forms;
 
     using NonVisuals.StreamDeck;

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using NonVisuals.StreamDeck.Panels;
+﻿using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
 {
