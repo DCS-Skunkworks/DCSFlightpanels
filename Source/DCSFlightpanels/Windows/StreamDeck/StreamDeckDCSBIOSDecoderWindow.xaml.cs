@@ -610,7 +610,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
-                    DCSBIOSConverter dcsbiosConverter = window.DCSBIOSConverter.DeepClone();
+                    DCSBIOSConverter dcsbiosConverter = window.DCSBIOSConverter.CloneJson();
                     dcsbiosConverter.StreamDeckPanelInstance = _streamDeckPanel;
                     _dcsbiosDecoder.Add(dcsbiosConverter);
                     window.DCSBIOSConverter = null;

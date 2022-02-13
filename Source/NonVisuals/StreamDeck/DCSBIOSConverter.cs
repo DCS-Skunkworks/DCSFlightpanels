@@ -117,7 +117,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public Bitmap Get()
+        public Bitmap Get(NumberFormatInfo numberFormatInfoFormula)
         {
             if (!_criteria1IsOk || (_comparator2 != EnumComparator.NotSet && !_criteria2IsOk))
             {
@@ -141,14 +141,28 @@ namespace NonVisuals.StreamDeck
 
                 case EnumConverterOutputType.ImageOverlay:
                     {
-                        _faceTypeDCSBIOSOverlay.ButtonFinalText = _faceTypeDCSBIOSOverlay.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _dcsbiosValue.ToString(CultureInfo.InvariantCulture));
+                        if (numberFormatInfoFormula != null)
+                        {
+                            _faceTypeDCSBIOSOverlay.ButtonFinalText = _faceTypeDCSBIOSOverlay.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, string.Format(numberFormatInfoFormula, "{0:N}", _dcsbiosValue));
+                        }
+                        else
+                        {
+                            _faceTypeDCSBIOSOverlay.ButtonFinalText = _faceTypeDCSBIOSOverlay.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _dcsbiosValue.ToString(CultureInfo.InvariantCulture));
+                        }
                         result = _faceTypeDCSBIOSOverlay.Bitmap;
                         break;
                     }
 
                 case EnumConverterOutputType.Raw:
                     {
-                        _faceTypeText.ButtonFinalText = _faceTypeText.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _dcsbiosValue.ToString(CultureInfo.InvariantCulture));
+                        if (numberFormatInfoFormula != null)
+                        {
+                            _faceTypeText.ButtonFinalText = _faceTypeText.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, string.Format(numberFormatInfoFormula, "{0:N}", _dcsbiosValue));
+                        }
+                        else
+                        {
+                            _faceTypeText.ButtonFinalText = _faceTypeText.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _dcsbiosValue.ToString(CultureInfo.InvariantCulture));
+                        }
                         result = _faceTypeText.Bitmap;
                         break;
                     }

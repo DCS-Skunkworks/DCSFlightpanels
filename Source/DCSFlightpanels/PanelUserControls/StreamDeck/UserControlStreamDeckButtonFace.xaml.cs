@@ -453,7 +453,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         DCSBIOSDecoder result = null;
                         if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
                         {
-                            result = TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.DeepClone();
+                            result = TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.CloneJson();
                             result.StreamDeckPanelInstance = _streamDeckPanel;
                             DCSBIOSDecoder.ShowOnly(result, _streamDeckPanel);
                             TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.IsVisible = false;
@@ -637,9 +637,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 if (streamDeckDCSBIOSDecoderWindow.DialogResult == true)
                 {
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder?.Dispose();
-                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.DeepClone();
-                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.AfterClone();
+                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.CloneJson();
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.StreamDeckPanelInstance = _streamDeckPanel;
+                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.AfterClone();
                     streamDeckDCSBIOSDecoderWindow.Dispose();
                     SetIsDirty();
                 }

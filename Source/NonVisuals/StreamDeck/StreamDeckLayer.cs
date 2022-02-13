@@ -130,22 +130,21 @@ namespace NonVisuals.StreamDeck
                         {
                             if (oldStreamDeckButton.Face == null && newStreamDeckButton.Face != null)
                             {
-                                var face = newStreamDeckButton.Face.DeepClone();
-                                face.AfterClone();
+                                var face = newStreamDeckButton.Face.CloneJson();
                                 oldStreamDeckButton.Face = face;
                                 changesMade = true;
                             }
 
                             if (oldStreamDeckButton.ActionForPress == null && newStreamDeckButton.ActionForPress != null)
                             {
-                                oldStreamDeckButton.ActionForPress = newStreamDeckButton.ActionForPress.DeepClone();
+                                oldStreamDeckButton.ActionForPress = newStreamDeckButton.ActionForPress.CloneJson();
 
                                 changesMade = true;
                             }
 
                             if (oldStreamDeckButton.ActionForRelease == null && newStreamDeckButton.ActionForRelease != null)
                             {
-                                oldStreamDeckButton.ActionForRelease = newStreamDeckButton.ActionForRelease.DeepClone();
+                                oldStreamDeckButton.ActionForRelease = newStreamDeckButton.ActionForRelease.CloneJson();
 
                                 changesMade = true;
                             }
@@ -268,6 +267,7 @@ namespace NonVisuals.StreamDeck
         {
             streamDeckButton.Dispose();
             StreamDeckButtons.Remove(streamDeckButton);
+            _streamDeckPanel.ClearFace(streamDeckButton.StreamDeckButtonName);
             NotifyChanges();
         }
 

@@ -169,7 +169,7 @@ namespace NonVisuals.StreamDeck
             {
                 streamDeckLayer.GetButtonsWithConfig().ForEach(
                     x => result.Add(
-                    new ButtonExport(streamDeckLayer.Name, x.DeepClone())
+                    new ButtonExport(streamDeckLayer.Name, x.CloneJson())
                     )
                 );
             }
@@ -186,7 +186,7 @@ namespace NonVisuals.StreamDeck
                          * Close because the list changes below. If not then subsequent operations by the user
                          * will cause null exceptions since image path is reset.
                          */
-            var clonedButtonExports = buttonExports.DeepClone();
+            var clonedButtonExports = buttonExports.CloneJson();
 
             foreach (var buttonExport in clonedButtonExports)
             {

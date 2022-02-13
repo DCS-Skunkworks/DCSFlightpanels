@@ -343,7 +343,7 @@
             try
             {
                 var dcsBIOSInput = DCSBIOSInputs[DataGridValues.SelectedIndex];
-                var newDcsBIOSInput = dcsBIOSInput.DeepClone();
+                var newDcsBIOSInput = dcsBIOSInput.CloneJson();
                 DCSBIOSInputs.Add(newDcsBIOSInput);
                 ShowItems();
             }

@@ -416,7 +416,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             var streamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (streamDeckButton != null)
             {
-                Clipboard.SetDataObject(streamDeckButton.DeepClone());
+                Clipboard.SetDataObject(streamDeckButton.CloneJson());
             }
         }
 

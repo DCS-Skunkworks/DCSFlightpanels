@@ -46,7 +46,7 @@ namespace NonVisuals.StreamDeck
         {
             "0", "0.0", "0.00", "0.000", "0.0000", "0.00000"
         };*/
-        
+
         public DCSBIOSDecoder()
         {
             _imageUpdateTread = new Thread(ImageRefreshingThread);
@@ -65,7 +65,7 @@ namespace NonVisuals.StreamDeck
                 if (disposing)
                 {
                     _shutdownThread = true;
-                    while (_imageUpdateTread is {IsAlive: true})
+                    while (_imageUpdateTread is { IsAlive: true })
                     {
                         Thread.Sleep(10);
                     }
@@ -167,6 +167,8 @@ namespace NonVisuals.StreamDeck
                 Thread.Sleep(StreamDeckConstants.IMAGE_UPDATING_THREAD_SLEEP_TIME);
             }
         }
+
+
 
         /*
          * 18 Nov 2021
@@ -306,7 +308,7 @@ namespace NonVisuals.StreamDeck
                     {
                         if (dcsbiosConverter.CriteriaFulfilled(UseFormula ? FormulaResult : UintDcsBiosValue))
                         {
-                            _converterBitmap = dcsbiosConverter.Get();
+                            _converterBitmap = dcsbiosConverter.Get(_useFormula && _limitDecimalPlaces ? _numberFormatInfoFormula : null);
                             break;
                         }
                     }
