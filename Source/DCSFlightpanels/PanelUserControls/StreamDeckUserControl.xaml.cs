@@ -329,6 +329,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (MessageBox.Show("Delete layer " + ComboBoxLayers.Text + "?", "Can not be undone!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     _streamDeckPanel.DeleteLayer(ComboBoxLayers.Text);
+                    UCStreamDeckButtonAction.Update();
                 }
             }
             catch (Exception ex)

@@ -475,7 +475,7 @@ namespace NonVisuals.StreamDeck
              */
             if (string.IsNullOrEmpty(layerName))
             {
-                throw new Exception("Internal Error : StreamDeckLayerHandler : Trying to set an empty or null layer selected.");
+                throw new Exception("Internal Error : StreamDeckLayerHandler : Trying to select an empty or null layer.");
             }
 
             /*
