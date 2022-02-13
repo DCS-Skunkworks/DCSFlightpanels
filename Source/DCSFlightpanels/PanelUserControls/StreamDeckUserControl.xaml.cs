@@ -312,6 +312,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (layerWindow.DialogResult == true)
                 {
                     _streamDeckPanel.AddLayer(layerWindow.NewLayer);
+                    UCStreamDeckButtonAction.Update();
                     SetFormState();
                 }
             }
