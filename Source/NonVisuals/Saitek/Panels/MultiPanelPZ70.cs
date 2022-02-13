@@ -97,6 +97,9 @@
             }
         }
 
+        private readonly int _refreshIntervalLCD = 20;
+        private int _intervalCounter = 0;
+
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             if (SettingsLoading)
@@ -115,11 +118,13 @@
                 {
                     lock (_lcdDataVariablesLockObject)
                     {
+                        _intervalCounter++;
                         var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
                         dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(e.Data);
-                        if (tmp.CompareTo(dcsbiosBindingLCDPZ70.CurrentValue) != 0)
+                        if (tmp.CompareTo(dcsbiosBindingLCDPZ70.CurrentValue) != 0 || _intervalCounter > _refreshIntervalLCD)
                         {
                             Interlocked.Increment(ref _doUpdatePanelLCD);
+                            _intervalCounter = 0;
                         }
                     }
                 }
@@ -129,11 +134,13 @@
                     {
                         lock (_lcdDataVariablesLockObject)
                         {
+                            _intervalCounter++;
                             var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
                             dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate(false);
-                            if (tmp.CompareTo(dcsbiosBindingLCDPZ70.CurrentValue) != 0)
+                            if (tmp.CompareTo(dcsbiosBindingLCDPZ70.CurrentValue) != 0 || _intervalCounter > _refreshIntervalLCD)
                             {
                                 Interlocked.Increment(ref _doUpdatePanelLCD);
+                                _intervalCounter = 0;
                             }
                         }
                     }
