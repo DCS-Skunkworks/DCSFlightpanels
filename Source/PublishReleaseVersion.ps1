@@ -13,7 +13,7 @@ if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env
 #---------------------------------
 #Get Path to csproj
 $projectFilePath = $scriptPath+"\DCSFlightpanels\DCSFlightpanels.csproj"
-If(-not(Test-Path $projectPath)){
+If(-not(Test-Path $projectFilePath)){
 	Write-Host "Fatal error. Project path not found: $projectPath" -foregroundcolor "Red"
 	exit
 }
