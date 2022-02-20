@@ -621,7 +621,12 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = e.Uri.AbsoluteUri,
+                    UseShellExecute = true
+                });
+                
                 e.Handled = true;
             }
             catch (Exception ex)

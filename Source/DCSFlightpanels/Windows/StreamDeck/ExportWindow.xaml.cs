@@ -179,7 +179,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
             {
                 if (!string.IsNullOrEmpty(_zipFileName) && File.Exists(_zipFileName))
                 {
-                    Process.Start(_zipFileName);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = _zipFileName,
+                        UseShellExecute = true
+                    });
                 }
             }
             catch (Exception ex)

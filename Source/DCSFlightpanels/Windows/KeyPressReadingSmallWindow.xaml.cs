@@ -206,7 +206,12 @@ namespace DCSFlightpanels.Windows
 
         private void LabelOpenRecording_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Process.Start($"https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Open-Recording-for-Key-Presses");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Open-Recording-for-Key-Presses",
+                UseShellExecute = true
+            });
+            
         }
 
         private void CheckBoxOpenRecording_OnChecked(object sender, RoutedEventArgs e)

@@ -1195,7 +1195,11 @@
         {
             try
             {
-                Process.Start("https://github.com/DCSFlightpanels/DCSFlightpanels/wiki");
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "https://github.com/DCSFlightpanels/DCSFlightpanels/wiki",
+                    UseShellExecute = true
+                });
             }
             catch (Exception ex)
             {
@@ -1339,7 +1343,11 @@
 
         private void OpenProfileInNotepad()
         {
-            Process.Start(_profileHandler.Filename);
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = _profileHandler.Filename,
+                UseShellExecute = true
+            });
         }
 
         private void SetWindowState()
@@ -1450,7 +1458,11 @@
                     MessageBox.Show($"No log file found {errorLogFilePath}", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
-                Process.Start(errorLogFilePath);
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = errorLogFilePath,
+                    UseShellExecute = true
+                });
             }
             catch (Exception ex)
             {
@@ -1484,7 +1496,11 @@
         {
             try
             {
-                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = e.Uri.AbsoluteUri,
+                    UseShellExecute = true
+                });
                 e.Handled = true;
             }
             catch (Exception ex)
@@ -1954,12 +1970,20 @@
 
         private void LabelDonate_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Process.Start($"https://www.paypal.com/paypalme/jerkerdahlblom");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://www.paypal.com/paypalme/jerkerdahlblom",
+                UseShellExecute = true
+            });
         }
 
         private void MenuItemDiscordServer_OnClick(object sender, RoutedEventArgs e)
         {
-            Process.Start($"https://discord.gg/5svGwKX");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://discord.gg/5svGwKX",
+                UseShellExecute = true
+            });
         }
     }
 }

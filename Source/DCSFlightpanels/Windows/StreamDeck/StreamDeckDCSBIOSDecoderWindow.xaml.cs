@@ -543,7 +543,12 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = e.Uri.AbsoluteUri,
+                    UseShellExecute = true
+                });
+                
                 e.Handled = true;
             }
             catch (Exception ex)
@@ -757,7 +762,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                Process.Start(_formulaFile);
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = _formulaFile,
+                    UseShellExecute = true
+                });
             }
             catch (Exception ex)
             {
