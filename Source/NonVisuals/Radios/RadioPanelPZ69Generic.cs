@@ -54,7 +54,7 @@ namespace NonVisuals.Radios
 
         private bool _settingsAreBeingImported;
 
-        public RadioPanelPZ69Generic(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69Generic(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(hidSkeleton, appEventHandler)
         {
             CreateSwitchKeys();
             Startup();
@@ -145,7 +145,7 @@ namespace NonVisuals.Radios
 
                 _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
                 _settingsAreBeingImported = false;
-                AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
+                _appEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
             }
         }
 
