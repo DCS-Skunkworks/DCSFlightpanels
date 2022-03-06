@@ -23,7 +23,7 @@
         private HashSet<BIPLinkFarmingPanel> _bipLinks = new HashSet<BIPLinkFarmingPanel>();
         private readonly object _dcsBiosDataReceivedLock = new object();
 
-        public FarmingSidePanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.FarmingPanel, hidSkeleton)
+        public FarmingSidePanel(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(GamingPanelEnum.FarmingPanel, hidSkeleton, appEventHandler)
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.FarmingPanel)
             {
@@ -109,7 +109,7 @@
                 }
             }
 
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
+            _appEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
             _keyBindings = KeyBindingFarmingPanel.SetNegators(_keyBindings);
 
         }

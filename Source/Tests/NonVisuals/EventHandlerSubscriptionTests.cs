@@ -18,37 +18,39 @@ namespace Tests.NonVisuals
         [Fact]
         public void Event_SwitchPanel_SettingsModified_Proper_Attachment()
         {
+            AppEventHandler appEventHandler = new();
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel);
-            var switchPanel = new SwitchPanelPZ55(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+            var switchPanel = new SwitchPanelPZ55(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler);
 
             //SwitchPanel
             Assert.True(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
 
             //GamingPanel
-            Assert.True(AppEventHandler.OnForwardPanelEventChangedSubscribed());
-            Assert.True(AppEventHandler.OnProfileEventSubscribed());
-            Assert.True(AppEventHandler.OnSavePanelSettingsSubscribed());
-            Assert.True(AppEventHandler.OnSavePanelSettingsJSONSubscribed());
+            Assert.True(appEventHandler.OnForwardPanelEventChangedSubscribed());
+            Assert.True(appEventHandler.OnProfileEventSubscribed());
+            Assert.True(appEventHandler.OnSavePanelSettingsSubscribed());
+            Assert.True(appEventHandler.OnSavePanelSettingsJSONSubscribed());
         }
 
-        //[Fact]
-        //public void Event_SwitchPanel_SettingsModified_Proper_Detachment()
-        //{
-        //    var gamingPanelSkeleton =
-        //        new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel);
-        //    var switchPanel = new SwitchPanelPZ55(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-        //    switchPanel.Dispose();
+        [Fact]
+        public void Event_SwitchPanel_SettingsModified_Proper_Detachment()
+        {
+            AppEventHandler appEventHandler = new();
+            var gamingPanelSkeleton =
+                new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel);
+            var switchPanel = new SwitchPanelPZ55(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler);
+            switchPanel.Dispose();
 
-        //    //SwitchPanel
-        //    Assert.False(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
+            //SwitchPanel
+            Assert.False(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
 
-        //    //GamingPanel
-        //    Assert.False(AppEventHandler.OnForwardPanelEventChangedSubscribed());
-        //    Assert.False(AppEventHandler.OnProfileEventSubscribed());
-        //    Assert.False(AppEventHandler.OnSavePanelSettingsSubscribed());
-        //    Assert.False(AppEventHandler.OnSavePanelSettingsJSONSubscribed());
-        //}
+            //GamingPanel
+            Assert.False(appEventHandler.OnForwardPanelEventChangedSubscribed());
+            Assert.False(appEventHandler.OnProfileEventSubscribed());
+            Assert.False(appEventHandler.OnSavePanelSettingsSubscribed());
+            Assert.False(appEventHandler.OnSavePanelSettingsJSONSubscribed());
+        }
 
 
         /*************************************************************************************************
@@ -58,37 +60,39 @@ namespace Tests.NonVisuals
         [Fact]
         public void Event_MultiPanel_SettingsModified_Proper_Attachment()
         {
+            AppEventHandler appEventHandler = new();
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
-            var multiPanelPZ70 = new MultiPanelPZ70(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+            var multiPanelPZ70 = new MultiPanelPZ70(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler);
 
             //MultiPanel
             Assert.True(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
-            Assert.True(AppEventHandler.OnForwardPanelEventChangedSubscribed());
+            Assert.True(appEventHandler.OnForwardPanelEventChangedSubscribed());
 
             //GamingPanel
-            Assert.True(AppEventHandler.OnProfileEventSubscribed());
-            Assert.True(AppEventHandler.OnSavePanelSettingsSubscribed());
-            Assert.True(AppEventHandler.OnSavePanelSettingsJSONSubscribed());
+            Assert.True(appEventHandler.OnProfileEventSubscribed());
+            Assert.True(appEventHandler.OnSavePanelSettingsSubscribed());
+            Assert.True(appEventHandler.OnSavePanelSettingsJSONSubscribed());
         }
 
-        //[Fact]
-        //public void Event_MultiPanel_SettingsModified_Proper_Detachment()
-        //{
-        //    var gamingPanelSkeleton =
-        //        new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
-        //    var multiPanelPZ70 = new MultiPanelPZ70(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-        //    multiPanelPZ70.Dispose();
+        [Fact]
+        public void Event_MultiPanel_SettingsModified_Proper_Detachment()
+        {
+            AppEventHandler appEventHandler = new();
+            var gamingPanelSkeleton =
+                new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
+            var multiPanelPZ70 = new MultiPanelPZ70(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler);
+            multiPanelPZ70.Dispose();
 
-        //    //MultiPanel
-        //    Assert.False(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
+            //MultiPanel
+            Assert.False(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
 
-        //    //GamingPanel
-        //    Assert.False(AppEventHandler.OnForwardPanelEventChangedSubscribed());
-        //    Assert.False(AppEventHandler.OnProfileEventSubscribed());
-        //    Assert.False(AppEventHandler.OnSavePanelSettingsSubscribed());
-        //    Assert.False(AppEventHandler.OnSavePanelSettingsJSONSubscribed());
-        //}
+            //GamingPanel
+            Assert.False(appEventHandler.OnForwardPanelEventChangedSubscribed());
+            Assert.False(appEventHandler.OnProfileEventSubscribed());
+            Assert.False(appEventHandler.OnSavePanelSettingsSubscribed());
+            Assert.False(appEventHandler.OnSavePanelSettingsJSONSubscribed());
+        }
 
 
         /*************************************************************************************************
@@ -98,14 +102,15 @@ namespace Tests.NonVisuals
         [Fact]
         public void Event_StreamDeck_OnDirtyConfigurations_Proper_Attachment()
         {
+            AppEventHandler appEventHandler = new();
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
-            var streamDeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), true);
+            var streamDeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler, true);
             
             //GamingPanel
-            Assert.True(AppEventHandler.OnProfileEventSubscribed());
-            Assert.True(AppEventHandler.OnSavePanelSettingsSubscribed());
-            Assert.True(AppEventHandler.OnSavePanelSettingsJSONSubscribed());
+            Assert.True(appEventHandler.OnProfileEventSubscribed());
+            Assert.True(appEventHandler.OnSavePanelSettingsSubscribed());
+            Assert.True(appEventHandler.OnSavePanelSettingsJSONSubscribed());
 
             //StreamDeckPanel
             Assert.True(SDEventHandler.OnStreamDeckSyncConfigurationEventSubscribed());
@@ -117,28 +122,29 @@ namespace Tests.NonVisuals
             Assert.True(SDEventHandler.OnStreamDeckClearSettingsEventSubscribed());
         }
 
-        //[Fact]
-        //public void Event_StreamDeck_SettingsModified_Proper_Detachment()
-        //{
-        //    var gamingPanelSkeleton =
-        //        new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
-        //    var streamDeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), true);
-        //    streamDeckPanel.Dispose();
+        [Fact]
+        public void Event_StreamDeck_SettingsModified_Proper_Detachment()
+        {
+            AppEventHandler appEventHandler = new();
+            var gamingPanelSkeleton =
+                new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
+            var streamDeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler, true);
+            streamDeckPanel.Dispose();
 
-        //    //GamingPanel
-        //    Assert.False(AppEventHandler.OnForwardPanelEventChangedSubscribed());
-        //    Assert.False(AppEventHandler.OnProfileEventSubscribed());
-        //    Assert.False(AppEventHandler.OnSavePanelSettingsSubscribed());
-        //    Assert.False(AppEventHandler.OnSavePanelSettingsJSONSubscribed());
+            //GamingPanel
+            Assert.False(appEventHandler.OnForwardPanelEventChangedSubscribed());
+            Assert.False(appEventHandler.OnProfileEventSubscribed());
+            Assert.False(appEventHandler.OnSavePanelSettingsSubscribed());
+            Assert.False(appEventHandler.OnSavePanelSettingsJSONSubscribed());
 
-        //    //StreamDeckPanel
-        //    Assert.False(SDEventHandler.OnStreamDeckSyncConfigurationEventSubscribed());
-        //    Assert.False(SDEventHandler.OnDirtyConfigurationsEventHandlerEventSubscribed());
-        //    Assert.False(SDEventHandler.OnDirtyNotificationEventHandlerSubscribed());
-        //    Assert.False(SDEventHandler.OnStreamDeckShowNewLayerEventSubscribed());
-        //    Assert.False(SDEventHandler.OnRemoteStreamDeckShowNewLayerEventSubscribed());
-        //    Assert.False(SDEventHandler.OnStreamDeckSelectedButtonChangedEventSubscribed());
-        //    Assert.False(SDEventHandler.OnStreamDeckClearSettingsEventSubscribed());
-        //}
+            //StreamDeckPanel
+            Assert.False(SDEventHandler.OnStreamDeckSyncConfigurationEventSubscribed());
+            Assert.False(SDEventHandler.OnDirtyConfigurationsEventHandlerEventSubscribed());
+            Assert.False(SDEventHandler.OnDirtyNotificationEventHandlerSubscribed());
+            Assert.False(SDEventHandler.OnStreamDeckShowNewLayerEventSubscribed());
+            Assert.False(SDEventHandler.OnRemoteStreamDeckShowNewLayerEventSubscribed());
+            Assert.False(SDEventHandler.OnStreamDeckSelectedButtonChangedEventSubscribed());
+            Assert.False(SDEventHandler.OnStreamDeckClearSettingsEventSubscribed());
+        }
     }
 }
