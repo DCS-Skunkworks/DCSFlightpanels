@@ -113,7 +113,7 @@ namespace NonVisuals.Radios
             }
 
             _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
+            _appEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
