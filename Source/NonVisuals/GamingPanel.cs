@@ -13,7 +13,7 @@
 
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty, IDisposable
     {
-        private AppEventHandler _appEventHandler;
+        internal AppEventHandler _appEventHandler;
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
         public abstract void Startup();

@@ -59,8 +59,8 @@
          * 00000000
          *
          */
-        public BacklitPanelBIP(uint ledBrightness, HIDSkeleton hidSkeleton)
-            : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
+        public BacklitPanelBIP(uint ledBrightness, HIDSkeleton hidSkeleton, AppEventHandler appEventHandler)
+            : base(GamingPanelEnum.BackLitPanel, hidSkeleton, appEventHandler)
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.BackLitPanel)
             {
@@ -133,7 +133,7 @@
                 }
             }
 
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
+            _appEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
@@ -605,7 +605,7 @@
                 SendLEDData(finalArray);
 
 
-                AppEventHandler.LedLightChanged(this, HIDInstance, null, PanelLEDColor.DARK);
+                _appEventHandler.LedLightChanged(this, HIDInstance, null, PanelLEDColor.DARK);
             }
             catch (Exception ex)
             {
