@@ -38,22 +38,6 @@ namespace NonVisuals
             }
         }
 
-        public static void SendBinding(HIDSkeleton hidSkeleton)
-        {
-            lock (_genericBindingsLock)
-            {
-                foreach (var genericPanelBinding in _genericBindings)
-                {
-                    if (genericPanelBinding.Match(hidSkeleton))
-                    {
-                        genericPanelBinding.InUse = true;
-                        AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
-                            DCSFPProfile.SelectedProfile);
-                    }
-                }
-            }
-        }
-
         public static void SendBinding(string hidInstance)
         {
             lock (_genericBindingsLock)
