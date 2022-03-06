@@ -49,7 +49,7 @@
             Trans
         }
 
-        public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton)
+        public SwitchPanelPZ55(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton, appEventHandler)
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
             {
@@ -160,7 +160,7 @@
                 }
             }
 
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
+            _appEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
         }
 
@@ -936,7 +936,7 @@
                         }
                 }
 
-                AppEventHandler.LedLightChanged(this, HIDSkeletonBase.HIDInstance, new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
+                _appEventHandler.LedLightChanged(this, HIDSkeletonBase.HIDInstance, new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
                 SetLandingGearLED(_ledUpperColor | _ledLeftColor | _ledRightColor);
             }
             catch (Exception ex)

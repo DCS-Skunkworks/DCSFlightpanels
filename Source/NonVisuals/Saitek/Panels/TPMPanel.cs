@@ -24,7 +24,7 @@
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
 
 
-        public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)
+        public TPMPanel(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(GamingPanelEnum.TPM, hidSkeleton, appEventHandler)
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.TPM)
             {
@@ -108,7 +108,7 @@
             }
 
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
+            _appEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()

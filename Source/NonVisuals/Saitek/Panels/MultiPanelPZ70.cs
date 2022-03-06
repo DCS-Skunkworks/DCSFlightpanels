@@ -53,7 +53,7 @@
         
         private long _doUpdatePanelLCD;
 
-        public MultiPanelPZ70(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ70MultiPanel, hidSkeleton)
+        public MultiPanelPZ70(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(GamingPanelEnum.PZ70MultiPanel, hidSkeleton, appEventHandler)
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ70MultiPanel)
             {
@@ -200,7 +200,7 @@
 
             SettingsLoading = false;
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
-            AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
+            _appEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
         public override List<string> ExportSettings()
