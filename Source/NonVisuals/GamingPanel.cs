@@ -13,6 +13,7 @@
 
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty, IDisposable
     {
+        private AppEventHandler _appEventHandler;
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
         public abstract void Startup();
@@ -76,8 +77,9 @@
             }
         }
 
-        protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
+        protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton, AppEventHandler appEventHandler)
         {
+            _appEventHandler = appEventHandler;
             TypeOfPanel = typeOfGamingPanel;
             HIDSkeletonBase = hidSkeleton;
             if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
@@ -93,9 +95,9 @@
             }
 
             GamingPanels.Add(this);
-            
-            AppEventHandler.AttachForwardPanelEventListener(this);
-            AppEventHandler.AttachSettingsConsumerListener(this);
+
+            _appEventHandler.AttachForwardPanelEventListener(this);
+            _appEventHandler.AttachSettingsConsumerListener(this);
         }
 
         public void Dispose()
@@ -117,9 +119,9 @@
             if (disposing)
             {
                 Closed = true; // Don't know if this is necessary atm. (2021)
-                AppEventHandler.DetachForwardPanelEventListener(this);
-                AppEventHandler.DetachSettingsConsumerListener(this);
-                AppEventHandler.PanelEvent(this, HIDSkeletonBase.HIDInstance, HIDSkeletonBase, PanelEventType.Disposed);
+                _appEventHandler.DetachForwardPanelEventListener(this);
+                _appEventHandler.DetachSettingsConsumerListener(this);
+                _appEventHandler.PanelEvent(this, HIDSkeletonBase.HIDInstance, HIDSkeletonBase, PanelEventType.Disposed);
             }
 
             _disposed = true;
@@ -148,7 +150,7 @@
                     else if (newCount - _count != 1)
                     {
                         // Not good
-                        AppEventHandler.UpdatesMissed(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, (int)(newCount - _count));
+                        _appEventHandler.UpdatesMissed(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, (int)(newCount - _count));
                         _count = newCount;
                     }
                 }
@@ -157,7 +159,7 @@
 
         public void SetIsDirty()
         {
-            AppEventHandler.SettingsChanged(this, HIDInstance, TypeOfPanel);
+            _appEventHandler.SettingsChanged(this, HIDInstance, TypeOfPanel);
             IsDirty = true;
         }
         
