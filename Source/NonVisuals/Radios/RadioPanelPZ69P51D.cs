@@ -10,6 +10,7 @@ namespace NonVisuals.Radios
     using DCS_BIOS.EventArgs;
 
     using MEF;
+    using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
@@ -36,7 +37,8 @@ namespace NonVisuals.Radios
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69P51D(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69P51D(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) 
+            : base(hidSkeleton, appEventHandler)
         {
             CreateRadioKnobs();
             Startup();

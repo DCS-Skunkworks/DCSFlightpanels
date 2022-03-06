@@ -13,6 +13,7 @@
     using DCS_BIOS.Interfaces;
 
     using MEF;
+    using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
@@ -327,7 +328,8 @@
 
         // private const int SKIP_CONSTANT = 0;
 
-        public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) 
+            : base(hidSkeleton, appEventHandler)
         {
             CreateRadioKnobs();
             Startup();

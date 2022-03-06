@@ -11,6 +11,7 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
+    using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
@@ -220,8 +221,8 @@
 
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69Ka50(HIDSkeleton hidSkeleton)
-            : base(hidSkeleton)
+        public RadioPanelPZ69Ka50(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler)
+            : base(hidSkeleton, appEventHandler)
         {
             CreateRadioKnobs();
             Startup();
