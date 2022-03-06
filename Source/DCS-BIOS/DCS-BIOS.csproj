@@ -46,6 +46,9 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
   <PropertyGroup>
     <Description>For using DCS-BIOS from C# based projects</Description>
     <Company>ArturDCS (Jerker Dahlblom)</Company>

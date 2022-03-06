@@ -61,7 +61,7 @@
         private DCSBIOS _dcsBios;
         private bool _disablePanelEventsFromBeingRouted;
         private bool _isLoaded = false;
-
+        private AppEventHandler _appEventHandler = new();
         public MainWindow()
         {
             InitializeComponent();
@@ -71,10 +71,10 @@
             // Stop annoying "Cannot find source for binding with reference .... " from being shown
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
 
-            AppEventHandler.AttachSettingsMonitoringListener(this);
-            AppEventHandler.AttachSettingsModified(this);
-            AppEventHandler.AttachPanelEventListener(this);
-            AppEventHandler.AttachForwardPanelEventListener(this);
+            _appEventHandler.AttachSettingsMonitoringListener(this);
+            _appEventHandler.AttachSettingsModified(this);
+            _appEventHandler.AttachPanelEventListener(this);
+            _appEventHandler.AttachForwardPanelEventListener(this);
             BIOSEventHandler.AttachConnectionListener(this);
         }
 
@@ -94,10 +94,10 @@
                     _statusMessagesTimer.Dispose();
                     _exceptionTimer.Dispose();
                     _dcsBios?.Dispose();
-                    AppEventHandler.DetachPanelEventListener(this);
-                    AppEventHandler.DetachSettingsMonitoringListener(this);
-                    AppEventHandler.DetachSettingsModified(this); 
-                    AppEventHandler.DetachForwardPanelEventListener(this);
+                    _appEventHandler.DetachPanelEventListener(this);
+                    _appEventHandler.DetachSettingsMonitoringListener(this);
+                    _appEventHandler.DetachSettingsModified(this);
+                    _appEventHandler.DetachForwardPanelEventListener(this);
                     BIOSEventHandler.DetachConnectionListener(this);
                 }
 
@@ -346,7 +346,7 @@
                     {
                         userControl.Dispose();
                         TabControlPanels.Items.RemoveAt(i);
-                        AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Disposed);
+                        _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Disposed);
                         break;
                     }
                 }
@@ -375,7 +375,7 @@
                             TabControlPanels.Items.Add(tabItem);
                             _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
                         }
 
@@ -388,7 +388,7 @@
                             TabControlPanels.Items.Add(tabItem);
                             _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
                         }
 
@@ -401,7 +401,7 @@
                             TabControlPanels.Items.Add(tabItem);
                             _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
                         }
 
@@ -414,7 +414,7 @@
                             TabControlPanels.Items.Add(tabItem);
                             _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
                         }
 
@@ -431,7 +431,7 @@
                             TabControlPanels.Items.Add(tabItemStreamDeck);
                             _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
 
                             break;
                         }
@@ -445,7 +445,7 @@
                             TabControlPanels.Items.Add(tabItem);
                             _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                            AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             break;
                         }
 
@@ -460,7 +460,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsA10C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -470,7 +470,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsUH1H(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -480,7 +480,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsMiG21Bis(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -490,7 +490,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsKa50(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -500,7 +500,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsMi8MT(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -510,7 +510,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsBf109K4(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -520,7 +520,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsFW190D9(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -530,7 +530,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsP51D(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -540,7 +540,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsF86F(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -550,7 +550,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsSpitfireLFMkIX(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -560,7 +560,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsAJS37(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -570,7 +570,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsSA342(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -580,7 +580,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsFA18C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -590,7 +590,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsM2000C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -600,7 +600,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsF5E(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -610,7 +610,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsF14B(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -620,7 +620,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsAV8B(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -630,7 +630,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsP47D(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -640,7 +640,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSFPProfile.IsMi24P(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
@@ -650,7 +650,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else
                             {
@@ -660,7 +660,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
-                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                                _appEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
 
                             break;
@@ -1789,7 +1789,7 @@
                 if (sendEvent)
                 {
                     // Disabling can be used when user want to reset panel switches and does not want that resetting switches affects the game.
-                    AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
+                    _appEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
                 }
                 SetWindowState();
             }
@@ -1913,7 +1913,7 @@
                     }
                 case PanelEventType.AllPanelsFound:
                     {
-                        AppEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
+                        _appEventHandler.ForwardKeyPressEvent(this, !_disablePanelEventsFromBeingRouted);
 
                         if (Settings.Default.LoadStreamDeck == true && Process.GetProcessesByName("StreamDeck").Length >= 1 && HIDHandler.GetInstance().HIDSkeletons.Any(o => o.GamingPanelSkeleton.VendorId == (int)GamingPanelVendorEnum.Elgato))
                         {
