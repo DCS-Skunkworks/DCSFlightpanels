@@ -205,13 +205,11 @@ namespace Tests.NonVisuals
             //More or less good frequencies to display with realistic number of digits and decimals
             yield return new object[] { "00-01-02-D3-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.00"*/, 123.00, 2, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
             yield return new object[] { "00-01-02-D3-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.00"*/, 123, 2, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
-            yield return new object[] { "00-01-D2-00-05-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.050"*/, 12.050, 3, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-D2-00-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.000"*/, 12, 3, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
             yield return new object[] { "00-01-D2-00-00-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.005"*/, 12.005, 3, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-D2-00-05-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.050"*/, 12.05, 3, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-D2-05-00-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.500"*/, 12.5, 3, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-02-D3-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.45"*/, 123.45, 2, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
-            yield return new object[] { "00-01-02-D3-04-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.40"*/, 123.40, 2, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
             yield return new object[] { "00-01-02-D3-04-00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"123.40"*/, 123.4, 2, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT }; 
             yield return new object[] { "00-01-D2-03-04-05-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8"/*"12.345"*/, 12.345, 3, DEIGHTS, PZ69LCDPosition.UPPER_ACTIVE_LEFT };
         }
