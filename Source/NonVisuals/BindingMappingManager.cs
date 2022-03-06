@@ -38,7 +38,7 @@ namespace NonVisuals
             }
         }
 
-        public static void SendBinding(string hidInstance)
+        public static void SendBinding(string hidInstance, AppEventHandler appEventHandler)
         {
             lock (_genericBindingsLock)
             {
@@ -50,7 +50,7 @@ namespace NonVisuals
                         hardwareFound)
                     {
                         genericPanelBinding.InUse = true;
-                        AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
+                        appEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
                             DCSFPProfile.SelectedProfile);
                     }
                 }
