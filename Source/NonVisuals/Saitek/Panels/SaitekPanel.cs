@@ -45,7 +45,7 @@
 
         protected byte[] NewPanelValueFarmingPanel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton) : base(typeOfGamingPanel, hidSkeleton)
+        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(typeOfGamingPanel, hidSkeleton, appEventHandler)
         {
             hidSkeleton.PanelHasBeenInstantiated = true;
         }
@@ -93,7 +93,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
+                    _appEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
@@ -106,7 +106,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
+                    _appEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
@@ -119,7 +119,7 @@
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
-                    AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
+                    _appEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
                 }
 
                 FirstReportHasBeenRead = true;
