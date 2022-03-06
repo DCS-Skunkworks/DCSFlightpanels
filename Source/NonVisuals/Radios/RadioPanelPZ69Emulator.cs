@@ -37,7 +37,7 @@ namespace NonVisuals.Radios
         private double _lowerActive = -1;
         private double _lowerStandby = -1;
 
-        public RadioPanelPZ69Emulator(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69Emulator(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(hidSkeleton, appEventHandler)
         {
             CreateSwitchKeys();
             Startup();
