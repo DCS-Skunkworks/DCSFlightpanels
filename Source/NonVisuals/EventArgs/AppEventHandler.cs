@@ -5,30 +5,30 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.EventArgs
 {
-    public static class AppEventHandler
+    public class AppEventHandler
     {
         /*
          * Used by by HIDHandler and others to announce a certain event regarding a panel. 
          */
         public delegate void PanelEventHandler(object sender, PanelEventArgs e);
-        public static event PanelEventHandler OnPanelEvent;
+        public event PanelEventHandler OnPanelEvent;
 
-        public static bool OnPanelEventEventSubscribed()
+        public bool OnPanelEventEventSubscribed()
         {
             return OnPanelEvent != null && OnPanelEvent.GetInvocationList().Length > 0;
         }
 
-        public static void PanelEvent(object sender, string hidInstance, HIDSkeleton hidSkeleton, PanelEventType panelEventType)
+        public void PanelEvent(object sender, string hidInstance, HIDSkeleton hidSkeleton, PanelEventType panelEventType)
         {
             OnPanelEvent?.Invoke(sender, new PanelEventArgs { HidInstance = hidInstance, HidSkeleton = hidSkeleton, EventType = panelEventType});
         }
 
-        public static void AttachPanelEventListener(IPanelEventListener panelEventListener)
+        public void AttachPanelEventListener(IPanelEventListener panelEventListener)
         {
             OnPanelEvent += panelEventListener.PanelEvent;
         }
 
-        public static void DetachPanelEventListener(IPanelEventListener panelEventListener)
+        public void DetachPanelEventListener(IPanelEventListener panelEventListener)
         {
             OnPanelEvent -= panelEventListener.PanelEvent;
         }
@@ -37,24 +37,24 @@ namespace NonVisuals.EventArgs
          * Used by ProfileHandler to detect changes in panel configurations.
          */
         public delegate void SettingsHasModifiedEventHandler(object sender, PanelInfoArgs e);
-        public static event SettingsHasModifiedEventHandler OnSettingsModified;
+        public event SettingsHasModifiedEventHandler OnSettingsModified;
 
-        public static bool OnSettingsModifiedEventSubscribed()
+        public bool OnSettingsModifiedEventSubscribed()
         {
             return OnSettingsModified != null && OnSettingsModified.GetInvocationList().Length > 0;
         }
 
-        public static void SettingsChanged(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum)
+        public void SettingsChanged(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum)
         {
             OnSettingsModified?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstance, PanelType = gamingPanelEnum });
         }
 
-        public static void AttachSettingsModified(ISettingsModifiedListener settingsModifiedListener)
+        public void AttachSettingsModified(ISettingsModifiedListener settingsModifiedListener)
         {
             OnSettingsModified += settingsModifiedListener.SettingsModified;
         }
 
-        public static void DetachSettingsModified(ISettingsModifiedListener settingsModifiedListener)
+        public void DetachSettingsModified(ISettingsModifiedListener settingsModifiedListener)
         {
             OnSettingsModified -= settingsModifiedListener.SettingsModified;
         }
@@ -65,35 +65,35 @@ namespace NonVisuals.EventArgs
          */
 
         public delegate void ForwardPanelActionChangedEventHandler(object sender, ForwardPanelEventArgs e);
-        public static event ForwardPanelActionChangedEventHandler OnForwardPanelEventChanged;
+        public event ForwardPanelActionChangedEventHandler OnForwardPanelEventChanged;
 
-        public static bool OnForwardPanelEventChangedSubscribed()
+        public bool OnForwardPanelEventChangedSubscribed()
         {
             return OnForwardPanelEventChanged != null && OnForwardPanelEventChanged.GetInvocationList().Length > 0;
         }
 
 
-        public static void ForwardKeyPressEvent(object sender, bool doForwardActions)
+        public void ForwardKeyPressEvent(object sender, bool doForwardActions)
         {
             OnForwardPanelEventChanged?.Invoke(sender, new ForwardPanelEventArgs() { Forward = doForwardActions });
         }
 
-        public static void AttachForwardPanelEventListener(GamingPanel gamingPanel)
+        public void AttachForwardPanelEventListener(GamingPanel gamingPanel)
         {
             OnForwardPanelEventChanged += gamingPanel.SetForwardPanelEvent;
         }
 
-        public static void DetachForwardPanelEventListener(GamingPanel gamingPanel)
+        public void DetachForwardPanelEventListener(GamingPanel gamingPanel)
         {
             OnForwardPanelEventChanged -= gamingPanel.SetForwardPanelEvent;
         }
 
-        public static void AttachForwardPanelEventListener(IForwardPanelEventListener forwardPanelEventListener)
+        public void AttachForwardPanelEventListener(IForwardPanelEventListener forwardPanelEventListener)
         {
             OnForwardPanelEventChanged += forwardPanelEventListener.SetForwardPanelEvent;
         }
 
-        public static void DetachForwardPanelEventListener(IForwardPanelEventListener forwardPanelEventListener)
+        public void DetachForwardPanelEventListener(IForwardPanelEventListener forwardPanelEventListener)
         {
             OnForwardPanelEventChanged -= forwardPanelEventListener.SetForwardPanelEvent;
         }
@@ -107,14 +107,14 @@ namespace NonVisuals.EventArgs
                                                                                 /____//____/                                                         
          */
 
-        public static void AttachSettingsConsumerListener(GamingPanel gamingPanel)
+        public void AttachSettingsConsumerListener(GamingPanel gamingPanel)
         {
             OnProfileEvent += gamingPanel.ProfileEvent;
             OnSavePanelSettings += gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON += gamingPanel.SavePanelSettingsJSON;
         }
 
-        public static void DetachSettingsConsumerListener(GamingPanel gamingPanel)
+        public void DetachSettingsConsumerListener(GamingPanel gamingPanel)
         {
             OnProfileEvent -= gamingPanel.ProfileEvent;
             OnSavePanelSettings -= gamingPanel.SavePanelSettings;
@@ -122,50 +122,50 @@ namespace NonVisuals.EventArgs
         }
 
         public delegate void ProfileEventHandler(object sender, ProfileEventArgs e);
-        public static event ProfileEventHandler OnProfileEvent;
+        public event ProfileEventHandler OnProfileEvent;
 
-        public static bool OnProfileEventSubscribed()
+        public bool OnProfileEventSubscribed()
         {
             return OnProfileEvent != null && OnProfileEvent.GetInvocationList().Length > 0;
         }
 
-        public static void ProfileEvent(object sender, ProfileEventEnum profileEventType, GenericPanelBinding genericPanelBinding, DCSFPProfile dcsfpProfile)
+        public void ProfileEvent(object sender, ProfileEventEnum profileEventType, GenericPanelBinding genericPanelBinding, DCSFPProfile dcsfpProfile)
         {
             OnProfileEvent?.Invoke(sender, new ProfileEventArgs { PanelBinding = genericPanelBinding, ProfileEventType = profileEventType, DCSProfile = dcsfpProfile});
         }
         
         public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
-        public static event SavePanelSettingsEventHandler OnSavePanelSettings;
+        public event SavePanelSettingsEventHandler OnSavePanelSettings;
 
-        public static bool OnSavePanelSettingsSubscribed()
+        public bool OnSavePanelSettingsSubscribed()
         {
             return OnSavePanelSettings != null && OnSavePanelSettings.GetInvocationList().Length > 0;
         }
 
-        public static void SavePanelSettings(IProfileHandler profileHandler)
+        public void SavePanelSettings(IProfileHandler profileHandler)
         {
             OnSavePanelSettings?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
         }
 
         public delegate void SavePanelSettingsEventHandlerJSON(object sender, ProfileHandlerEventArgs e);
-        public static event SavePanelSettingsEventHandlerJSON OnSavePanelSettingsJSON;
+        public event SavePanelSettingsEventHandlerJSON OnSavePanelSettingsJSON;
 
-        public static bool OnSavePanelSettingsJSONSubscribed()
+        public bool OnSavePanelSettingsJSONSubscribed()
         {
             return OnSavePanelSettingsJSON != null && OnSavePanelSettingsJSON.GetInvocationList().Length > 0;
         }
 
-        public static void SavePanelSettingsJSON(IProfileHandler profileHandler)
+        public void SavePanelSettingsJSON(IProfileHandler profileHandler)
         {
             OnSavePanelSettingsJSON?.Invoke(profileHandler, new ProfileHandlerEventArgs { ProfileHandlerCaller = profileHandler });
         }
 
-        public static void AttachSettingsMonitoringListener(IProfileHandlerListener profileHandlerListener)
+        public void AttachSettingsMonitoringListener(IProfileHandlerListener profileHandlerListener)
         {
             OnProfileEvent += profileHandlerListener.ProfileEvent;
         }
 
-        public static void DetachSettingsMonitoringListener(IProfileHandlerListener profileHandlerListener)
+        public void DetachSettingsMonitoringListener(IProfileHandlerListener profileHandlerListener)
         {
             OnProfileEvent -= profileHandlerListener.ProfileEvent;
         }
@@ -187,9 +187,9 @@ namespace NonVisuals.EventArgs
          */
         public delegate void SwitchesHasBeenChangedEventHandler(object sender, SwitchesChangedEventArgs e);
 
-        public static event SwitchesHasBeenChangedEventHandler OnSwitchesChangedA;
+        public event SwitchesHasBeenChangedEventHandler OnSwitchesChangedA;
 
-        public static void SwitchesChanged(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum, HashSet<object> hashSet)
+        public void SwitchesChanged(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum, HashSet<object> hashSet)
         {
             OnSwitchesChangedA?.Invoke(sender, new SwitchesChangedEventArgs { HidInstance = hidInstance, PanelType = gamingPanelEnum, Switches = hashSet });
         }
@@ -200,8 +200,8 @@ namespace NonVisuals.EventArgs
          */
         public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelInfoArgs e);
 
-        public static event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
-        public static void SettingsApplied(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum)
+        public event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
+        public void SettingsApplied(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum)
         {
             OnSettingsAppliedA?.Invoke(sender, new PanelInfoArgs { HidInstance = hidInstance, PanelType = gamingPanelEnum });
         }
@@ -212,9 +212,9 @@ namespace NonVisuals.EventArgs
          */
         public delegate void UpdatesHasBeenMissedEventHandler(object sender, DCSBIOSUpdatesMissedEventArgs e);
 
-        public static event UpdatesHasBeenMissedEventHandler OnUpdatesHasBeenMissed;
+        public event UpdatesHasBeenMissedEventHandler OnUpdatesHasBeenMissed;
 
-        public static void UpdatesMissed(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum, int missedUpdateCount)
+        public void UpdatesMissed(object sender, string hidInstance, GamingPanelEnum gamingPanelEnum, int missedUpdateCount)
         {
             OnUpdatesHasBeenMissed?.Invoke(
                 sender,
@@ -222,7 +222,7 @@ namespace NonVisuals.EventArgs
         }
 
         // For those that wants to listen to this panel
-        public static void AttachGamingPanelListener(IGamingPanelListener gamingPanelListener)
+        public void AttachGamingPanelListener(IGamingPanelListener gamingPanelListener)
         {
             OnSwitchesChangedA += gamingPanelListener.SwitchesChanged;
             OnSettingsAppliedA += gamingPanelListener.SettingsApplied;
@@ -230,7 +230,7 @@ namespace NonVisuals.EventArgs
             OnUpdatesHasBeenMissed += gamingPanelListener.UpdatesHasBeenMissed;
         }
         
-        public static void DetachGamingPanelListener(IGamingPanelListener gamingPanelListener)
+        public void DetachGamingPanelListener(IGamingPanelListener gamingPanelListener)
         {
             OnSwitchesChangedA -= gamingPanelListener.SwitchesChanged;
             OnSettingsAppliedA -= gamingPanelListener.SettingsApplied;
@@ -246,19 +246,19 @@ namespace NonVisuals.EventArgs
          */
         public delegate void LedLightChangedEventHandler(object sender, LedLightChangeEventArgs e);
 
-        public static event LedLightChangedEventHandler OnLedLightChangedA;
+        public event LedLightChangedEventHandler OnLedLightChangedA;
 
-        public static void LedLightChanged(object sender, string hidInstance, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        public void LedLightChanged(object sender, string hidInstance, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
             OnLedLightChangedA?.Invoke(sender, new LedLightChangeEventArgs { HIDInstance = hidInstance, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
         }
         
-        public static void AttachLEDLightListener(ILedLightPanelListener ledLightPanelListener)
+        public void AttachLEDLightListener(ILedLightPanelListener ledLightPanelListener)
         {
             OnLedLightChangedA += ledLightPanelListener.LedLightChanged;
         }
 
-        public static void DetachLEDLightListener(ILedLightPanelListener ledLightPanelListener)
+        public void DetachLEDLightListener(ILedLightPanelListener ledLightPanelListener)
         {
             OnLedLightChangedA -= ledLightPanelListener.LedLightChanged;
         }
