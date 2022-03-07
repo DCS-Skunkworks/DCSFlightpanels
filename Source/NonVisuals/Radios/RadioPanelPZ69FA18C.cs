@@ -111,8 +111,8 @@ namespace NonVisuals.Radios
 
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69FA18C(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler)
-            : base(hidSkeleton, appEventHandler)
+        public RadioPanelPZ69FA18C(HIDSkeleton hidSkeleton)
+            : base(hidSkeleton)
         {
              CreateRadioKnobs();
             Startup();

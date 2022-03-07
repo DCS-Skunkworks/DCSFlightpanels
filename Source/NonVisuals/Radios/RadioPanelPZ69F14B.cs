@@ -249,8 +249,8 @@
 
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69F14B(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) 
-            : base(hidSkeleton, appEventHandler)
+        public RadioPanelPZ69F14B(HIDSkeleton hidSkeleton) 
+            : base(hidSkeleton)
         {
             CreateRadioKnobs();
             Startup();

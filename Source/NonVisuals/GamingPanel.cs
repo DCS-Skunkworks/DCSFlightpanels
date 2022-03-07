@@ -77,9 +77,9 @@
             }
         }
 
-        protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton, AppEventHandler appEventHandler)
+        protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
-            _appEventHandler = appEventHandler;
+            _appEventHandler = hidSkeleton.AppEventHandler;
             TypeOfPanel = typeOfGamingPanel;
             HIDSkeletonBase = hidSkeleton;
             if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))

@@ -24,7 +24,7 @@
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
 
 
-        public TPMPanel(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(GamingPanelEnum.TPM, hidSkeleton, appEventHandler)
+        public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.TPM)
             {

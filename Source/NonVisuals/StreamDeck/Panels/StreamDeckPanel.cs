@@ -94,7 +94,7 @@
             get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
         }
         
-        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, AppEventHandler appEventHandler, bool unitTesting = false) : base(panelType, hidSkeleton, appEventHandler)
+        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, bool unitTesting = false) : base(panelType, hidSkeleton)
         {
             _buttonCount = panelType switch
             {

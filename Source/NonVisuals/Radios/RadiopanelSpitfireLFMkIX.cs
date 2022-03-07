@@ -103,8 +103,8 @@
 
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69SpitfireLFMkIX(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler)
-            : base(hidSkeleton, appEventHandler)
+        public RadioPanelPZ69SpitfireLFMkIX(HIDSkeleton hidSkeleton)
+            : base(hidSkeleton)
         {
             CreateRadioKnobs();
             Startup();

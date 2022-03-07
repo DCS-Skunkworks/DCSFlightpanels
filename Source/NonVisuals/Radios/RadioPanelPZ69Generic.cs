@@ -54,7 +54,7 @@ namespace NonVisuals.Radios
 
         private bool _settingsAreBeingImported;
 
-        public RadioPanelPZ69Generic(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(hidSkeleton, appEventHandler)
+        public RadioPanelPZ69Generic(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             CreateSwitchKeys();
             Startup();

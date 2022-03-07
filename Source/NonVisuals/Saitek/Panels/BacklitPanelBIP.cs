@@ -59,8 +59,8 @@
          * 00000000
          *
          */
-        public BacklitPanelBIP(uint ledBrightness, HIDSkeleton hidSkeleton, AppEventHandler appEventHandler)
-            : base(GamingPanelEnum.BackLitPanel, hidSkeleton, appEventHandler)
+        public BacklitPanelBIP(uint ledBrightness, HIDSkeleton hidSkeleton)
+            : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.BackLitPanel)
             {

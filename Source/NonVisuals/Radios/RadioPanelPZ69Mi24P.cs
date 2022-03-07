@@ -152,8 +152,8 @@
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69Mi24P(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) 
-            : base(hidSkeleton, appEventHandler)
+        public RadioPanelPZ69Mi24P(HIDSkeleton hidSkeleton) 
+            : base(hidSkeleton)
         {
             CreateRadioKnobs();
             Startup();

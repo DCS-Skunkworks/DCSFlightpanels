@@ -45,7 +45,7 @@
 
         protected byte[] NewPanelValueFarmingPanel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(typeOfGamingPanel, hidSkeleton, appEventHandler)
+        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton) : base(typeOfGamingPanel, hidSkeleton)
         {
             hidSkeleton.PanelHasBeenInstantiated = true;
         }

@@ -328,8 +328,8 @@
 
         // private const int SKIP_CONSTANT = 0;
 
-        public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) 
-            : base(hidSkeleton, appEventHandler)
+        public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton) 
+            : base(hidSkeleton)
         {
             CreateRadioKnobs();
             Startup();

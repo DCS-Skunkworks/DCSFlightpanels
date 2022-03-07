@@ -100,8 +100,8 @@
         private bool _upperFreqSwitchPressedDown;
         private bool _lowerFreqSwitchPressedDown;
 
-        public RadioPanelPZ69M2000C(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) 
-            : base(hidSkeleton, appEventHandler)
+        public RadioPanelPZ69M2000C(HIDSkeleton hidSkeleton) 
+            : base(hidSkeleton)
         {
             CreateRadioKnobs();
             Startup();

@@ -37,7 +37,7 @@
         private long _syncOKDelayTimeout = 50000000; // 5s
         private readonly PZ69DisplayBytes _pZ69DisplayBytes = new PZ69DisplayBytes();
 
-        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton, appEventHandler)
+        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ69RadioPanel)
             {

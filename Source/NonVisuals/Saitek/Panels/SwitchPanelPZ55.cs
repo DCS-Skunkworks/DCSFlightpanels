@@ -49,7 +49,7 @@
             Trans
         }
 
-        public SwitchPanelPZ55(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton, appEventHandler)
+        public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton)
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
             {

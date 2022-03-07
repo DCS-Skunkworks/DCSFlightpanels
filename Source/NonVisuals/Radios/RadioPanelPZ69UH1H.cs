@@ -280,8 +280,8 @@ namespace NonVisuals.Radios
 
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69UH1H(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler)
-            : base(hidSkeleton, appEventHandler)
+        public RadioPanelPZ69UH1H(HIDSkeleton hidSkeleton)
+            : base(hidSkeleton)
         {
             CreateRadioKnobs();
             Startup();
