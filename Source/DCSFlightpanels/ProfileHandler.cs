@@ -42,6 +42,7 @@ namespace NonVisuals
         private bool _profileLoaded;
 
         private readonly IHardwareConflictResolver _hardwareConflictResolver;
+        private readonly AppEventHandler _appEventHandler;
 
         public bool IsNewProfile => _isNewProfile;
 
@@ -106,29 +107,23 @@ namespace NonVisuals
             get => _dcsfpProfile;
         }
 
-        public ProfileHandler(string dcsbiosJSONDirectory, IHardwareConflictResolver hardwareConflictResolver)
-        {
-            _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
-            _hardwareConflictResolver = hardwareConflictResolver;
-            AppEventHandler.AttachSettingsModified(this);
-            AppEventHandler.AttachPanelEventListener(this);
-        }
-
-        public ProfileHandler(string dcsbiosJSONDirectory, string lastProfileUsed, IHardwareConflictResolver hardwareConflictResolver)
+        public ProfileHandler(string dcsbiosJSONDirectory, string lastProfileUsed, IHardwareConflictResolver hardwareConflictResolver, AppEventHandler appEventHandler)
         {
             _dcsbiosJSONDirectory = dcsbiosJSONDirectory;
             _hardwareConflictResolver = hardwareConflictResolver;
             _lastProfileUsed = lastProfileUsed;
-            AppEventHandler.AttachSettingsModified(this);
-            AppEventHandler.AttachPanelEventListener(this);
+            _appEventHandler = appEventHandler;
+
+            _appEventHandler.AttachSettingsModified(this);
+            _appEventHandler.AttachPanelEventListener(this);
         }
 
         protected void Dispose(bool disposing)
         {
             if (disposing)
             {
-                AppEventHandler.DetachSettingsModified(this);
-                AppEventHandler.DetachPanelEventListener(this);
+                _appEventHandler.DetachSettingsModified(this);
+                _appEventHandler.DetachPanelEventListener(this);
             }
         }
 
@@ -183,7 +178,7 @@ namespace NonVisuals
             _isNewProfile = false;
             _isDirty = false;
             _profileFileHIDInstances.Clear();
-            AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileClosed, null, DCSFPProfile.GetNoFrameLoadedYet());
+            _appEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileClosed, null, DCSFPProfile.GetNoFrameLoadedYet());
 
             return true;
         }
@@ -230,7 +225,7 @@ namespace NonVisuals
                 try
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
-                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
+                    _appEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
                 }
                 finally
                 {
@@ -436,7 +431,7 @@ namespace NonVisuals
                     DCSFPProfile.SelectedProfile = tmpProfile;
                     Profile = tmpProfile;
 
-                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
+                    _appEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
 
                     return 1;
                 }
@@ -529,8 +524,8 @@ namespace NonVisuals
 
         public void SendEventRegardingSavingPanelConfigurations()
         {
-            AppEventHandler.SavePanelSettings(this);
-            AppEventHandler.SavePanelSettingsJSON(this);
+            _appEventHandler.SavePanelSettings(this);
+            _appEventHandler.SavePanelSettingsJSON(this);
         }
 
 
@@ -685,7 +680,7 @@ namespace NonVisuals
                 case PanelEventType.Attached:
                 case PanelEventType.Created:
                     {
-                        BindingMappingManager.SendBinding(e.HidInstance);
+                        BindingMappingManager.SendBinding(e.HidInstance, _appEventHandler);
                         break;
                     }
                 case PanelEventType.Detached:
@@ -702,7 +697,7 @@ namespace NonVisuals
                             {
                                 if (genericPanelBinding.InUse == false)
                                 {
-                                    BindingMappingManager.SendBinding(genericPanelBinding.HIDInstance);
+                                    BindingMappingManager.SendBinding(genericPanelBinding.HIDInstance, _appEventHandler);
                                 }
                             }
                         }
@@ -741,7 +736,7 @@ namespace NonVisuals
 
         private void ShowSettingsWindow(int tabIndex)
         {
-            var settingsWindow = new SettingsWindow(tabIndex);
+            var settingsWindow = new SettingsWindow(tabIndex, _appEventHandler);
             if (settingsWindow.ShowDialog() == true)
             {
                 if (settingsWindow.DCSBIOSChanged)

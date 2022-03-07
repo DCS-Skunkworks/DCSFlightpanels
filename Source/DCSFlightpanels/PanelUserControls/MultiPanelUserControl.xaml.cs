@@ -32,9 +32,8 @@
     public partial class MultiPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
-
+        private readonly AppEventHandler _appEventHandler;
         private bool _textBoxBillsSet;
-
 
         public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
@@ -42,8 +41,9 @@
             ParentTabItem = parentTabItem;
             
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
-            AppEventHandler.AttachGamingPanelListener(this); 
+            _appEventHandler = hidSkeleton.AppEventHandler;
 
+            _appEventHandler.AttachGamingPanelListener(this); 
             HideAllImages();
         }
 
@@ -56,12 +56,10 @@
                 if (disposing)
                 {
                     _multiPanelPZ70.Dispose();
-                    AppEventHandler.DetachGamingPanelListener(this);
+                    _appEventHandler.DetachGamingPanelListener(this);
                 }
-
                 _disposed = true;
             }
-
             // Call base class implementation.
             base.Dispose(disposing);
         }

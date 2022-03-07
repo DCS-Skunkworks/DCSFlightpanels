@@ -79,7 +79,7 @@
 
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
-            _appEventHandler = hidSkeleton.AppEventHandler;
+          
             TypeOfPanel = typeOfGamingPanel;
             HIDSkeletonBase = hidSkeleton;
             if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
@@ -95,7 +95,7 @@
             }
 
             GamingPanels.Add(this);
-
+            _appEventHandler = hidSkeleton.AppEventHandler;
             _appEventHandler.AttachForwardPanelEventListener(this);
             _appEventHandler.AttachSettingsConsumerListener(this);
         }
@@ -123,7 +123,6 @@
                 _appEventHandler.DetachSettingsConsumerListener(this);
                 _appEventHandler.PanelEvent(this, HIDSkeletonBase.HIDInstance, HIDSkeletonBase, PanelEventType.Disposed);
             }
-
             _disposed = true;
         }
         

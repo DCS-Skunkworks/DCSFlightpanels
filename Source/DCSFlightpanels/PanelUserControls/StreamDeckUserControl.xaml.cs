@@ -28,6 +28,7 @@ namespace DCSFlightpanels.PanelUserControls
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly UserControlStreamDeckUIBase _uiButtonGrid;
+        private readonly AppEventHandler _appEventHandler;
         private string _comboBoxLayerTextComparison;
 
         public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem)
@@ -69,7 +70,7 @@ namespace DCSFlightpanels.PanelUserControls
                         break;
                     }
             }
-
+            _appEventHandler = hidSkeleton.AppEventHandler;
 
             SDEventHandler.AttachStreamDeckListener(UCStreamDeckButtonAction);
             SDEventHandler.AttachStreamDeckListener(UCStreamDeckButtonFace);
@@ -77,7 +78,7 @@ namespace DCSFlightpanels.PanelUserControls
             SDEventHandler.AttachStreamDeckConfigListener(_uiButtonGrid);
             SDEventHandler.AttachStreamDeckListener(this);
             SDEventHandler.AttachActionTypeChangedListener(UCStreamDeckButtonFace);
-            AppEventHandler.AttachGamingPanelListener(this);
+            _appEventHandler.AttachGamingPanelListener(this);
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
 
@@ -98,13 +99,11 @@ namespace DCSFlightpanels.PanelUserControls
                     SDEventHandler.DetachStreamDeckConfigListener(_uiButtonGrid);
                     SDEventHandler.DetachStreamDeckListener(this);
                     SDEventHandler.DetachActionTypeChangedListener(UCStreamDeckButtonFace);
-                    AppEventHandler.DetachGamingPanelListener(this);
+                    _appEventHandler.DetachGamingPanelListener(this);
                     _streamDeckPanel.Dispose();
                 }
-
                 _disposed = true;
             }
-
             // Call base class implementation.
             base.Dispose(disposing);
         }

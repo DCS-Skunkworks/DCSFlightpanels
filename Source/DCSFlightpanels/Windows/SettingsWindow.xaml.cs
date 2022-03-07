@@ -36,10 +36,12 @@ namespace DCSFlightpanels.Windows
 
         private bool _isLoaded = false;
         private readonly int _tabIndex;
+        private readonly AppEventHandler _appEventHandler;
 
-        public SettingsWindow(int tabIndex)
+        public SettingsWindow(int tabIndex, AppEventHandler appEventHandler)
         {
             InitializeComponent();
+            _appEventHandler = appEventHandler;
             _tabIndex = tabIndex;
         }
 
@@ -411,7 +413,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                AppEventHandler.ForwardKeyPressEvent(this, false);
+                _appEventHandler.ForwardKeyPressEvent(this, false);
                 GeneralDirty(sender, e);
             }
             catch (Exception ex)
@@ -424,7 +426,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                AppEventHandler.ForwardKeyPressEvent(this, true);
+                _appEventHandler.ForwardKeyPressEvent(this, true);
                 GeneralDirty(sender, e);
             }
             catch (Exception ex)

@@ -33,8 +33,8 @@ namespace DCSFlightpanels.PanelUserControls
     /// </summary>
     public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI, ILedLightPanelListener
     {
-
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
+        private readonly AppEventHandler _appEventHandler;
 
         private bool _textBoxBillsSet;
 
@@ -43,18 +43,16 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
         private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
 
-
-
-
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
 
             ParentTabItem = parentTabItem;
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
+            _appEventHandler = hidSkeleton.AppEventHandler;
 
-            AppEventHandler.AttachGamingPanelListener(this);
-            AppEventHandler.AttachLEDLightListener(this);
+            _appEventHandler.AttachGamingPanelListener(this);
+            _appEventHandler.AttachLEDLightListener(this);
         }
 
 
@@ -67,13 +65,11 @@ namespace DCSFlightpanels.PanelUserControls
                 if (disposing)
                 {
                     _switchPanelPZ55.Dispose();
-                    AppEventHandler.DetachGamingPanelListener(this);
-                    AppEventHandler.DetachLEDLightListener(this);
+                    _appEventHandler.DetachGamingPanelListener(this);
+                    _appEventHandler.DetachLEDLightListener(this);
                 }
-
                 _disposed = true;
             }
-
             // Call base class implementation.
             base.Dispose(disposing);
         }

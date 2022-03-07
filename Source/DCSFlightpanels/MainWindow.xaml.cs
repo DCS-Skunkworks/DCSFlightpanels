@@ -146,7 +146,7 @@
 
                 StartTimers();
 
-                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed, this);
+                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed, this, _appEventHandler);
                 _profileHandler.Init();
 
                 SetWindowTitle();
@@ -1545,7 +1545,7 @@
 
         private void MenuItemSettings_OnClick(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsWindow(0);
+            var settingsWindow = new SettingsWindow(0, _appEventHandler);
             if (settingsWindow.ShowDialog() == true)
             {
                 if (settingsWindow.DCSBIOSChanged)

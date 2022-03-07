@@ -25,6 +25,7 @@
     public partial class RadioPanelPZ69UserControlM2000C : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69M2000C _radioPanelPZ69;
+        private readonly AppEventHandler _appEventHandler;
 
         public RadioPanelPZ69UserControlM2000C(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
@@ -36,8 +37,8 @@
             {
                 FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
             };
-            
-            AppEventHandler.AttachGamingPanelListener(this);
+            _appEventHandler = hidSkeleton.AppEventHandler;
+            _appEventHandler.AttachGamingPanelListener(this);
 
             //LoadConfiguration();
         }
@@ -51,12 +52,10 @@
                 if (disposing)
                 {
                     _radioPanelPZ69.Dispose();
-                    AppEventHandler.DetachGamingPanelListener(this);
+                    _appEventHandler.DetachGamingPanelListener(this);
                 }
-
                 _disposed = true;
             }
-
             // Call base class implementation.
             base.Dispose(disposing);
         }

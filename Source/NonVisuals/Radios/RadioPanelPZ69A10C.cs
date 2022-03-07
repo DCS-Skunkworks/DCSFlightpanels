@@ -221,7 +221,7 @@
 
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69A10C(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler) 
+        public RadioPanelPZ69A10C(HIDSkeleton hidSkeleton) 
             : base(hidSkeleton)
         {
             CreateRadioKnobs();

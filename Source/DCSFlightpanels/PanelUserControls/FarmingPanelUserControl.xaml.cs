@@ -31,22 +31,18 @@
     /// </summary>
     public partial class FarmingPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
-
         private readonly FarmingSidePanel _farmingSidePanel;
-
+        private readonly AppEventHandler _appEventHandler;
         private bool _textBoxBillsSet;
-
-
-
 
         public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
-
             ParentTabItem = parentTabItem;
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);
+            _appEventHandler = hidSkeleton.AppEventHandler;
 
-            AppEventHandler.AttachGamingPanelListener(this);
+            _appEventHandler.AttachGamingPanelListener(this);
             HideAllImages();
         }
 
@@ -59,12 +55,10 @@
                 if (disposing)
                 {
                     _farmingSidePanel.Dispose();
-                    AppEventHandler.DetachGamingPanelListener(this);
+                    _appEventHandler.DetachGamingPanelListener(this);
                 }
-
                 _disposed = true;
             }
-
             // Call base class implementation.
             base.Dispose(disposing);
         }

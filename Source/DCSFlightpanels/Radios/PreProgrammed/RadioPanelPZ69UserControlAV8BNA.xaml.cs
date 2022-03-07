@@ -25,6 +25,7 @@
     public partial class RadioPanelPZ69UserControlAV8BNA : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69AV8BNA _radioPanelPZ69;
+        private readonly AppEventHandler _appEventHandler;
         private bool _userControlLoaded;
 
         public RadioPanelPZ69UserControlAV8BNA(HIDSkeleton hidSkeleton, TabItem parentTabItem)
@@ -37,8 +38,8 @@
             {
                 FrequencyKnobSensitivity = -1//doesn't work with 0 value Settings.Default.RadioFrequencyKnobSensitivity;
             };
-            
-            AppEventHandler.AttachGamingPanelListener(this);
+            _appEventHandler = hidSkeleton.AppEventHandler;
+            _appEventHandler.AttachGamingPanelListener(this);
         }
 
         private bool _disposed;
@@ -50,12 +51,10 @@
                 if (disposing)
                 {
                     _radioPanelPZ69.Dispose();
-                    AppEventHandler.DetachGamingPanelListener(this);
+                    _appEventHandler.DetachGamingPanelListener(this);
                 }
-
                 _disposed = true;
             }
-
             // Call base class implementation.
             base.Dispose(disposing);
         }

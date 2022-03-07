@@ -30,10 +30,9 @@
     public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly TPMPanel _tpmPanel;
+        private readonly AppEventHandler _appEventHandler;
         private bool _once;
         private bool _textBoxBillsSet;
-
-
 
         public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
@@ -41,8 +40,9 @@
             ParentTabItem = parentTabItem;
             
             _tpmPanel = new TPMPanel(hidSkeleton);
+            _appEventHandler = hidSkeleton.AppEventHandler;
 
-            AppEventHandler.AttachGamingPanelListener(this);
+            _appEventHandler.AttachGamingPanelListener(this);
         }
 
 
@@ -55,12 +55,10 @@
                 if (disposing)
                 {
                     _tpmPanel.Dispose();
-                    AppEventHandler.DetachGamingPanelListener(this);
+                    _appEventHandler.DetachGamingPanelListener(this);
                 }
-
                 _disposed = true;
             }
-
             // Call base class implementation.
             base.Dispose(disposing);
         }

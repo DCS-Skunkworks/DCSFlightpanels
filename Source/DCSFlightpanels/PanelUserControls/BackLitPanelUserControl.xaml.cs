@@ -25,7 +25,7 @@
     public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, ILedLightPanelListener
     {
         private readonly BacklitPanelBIP _backlitPanelBIP;
-
+        private readonly AppEventHandler _appEventHandler;
         private readonly List<Image> _colorImages = new List<Image>();
         private readonly List<Image> _configurationIndicatorImages = new List<Image>();
         private readonly BitmapImage _blackImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/black.png"));
@@ -40,9 +40,10 @@
             InitializeComponent();
             ParentTabItem = parentTabItem;
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
-            
-            AppEventHandler.AttachGamingPanelListener(this);
-            AppEventHandler.AttachLEDLightListener(this);
+            _appEventHandler = hidSkeleton.AppEventHandler;
+
+            _appEventHandler.AttachGamingPanelListener(this);
+            _appEventHandler.AttachLEDLightListener(this);
         }
 
         private bool _disposed;
@@ -53,14 +54,12 @@
             {
                 if (disposing)
                 {
-                    _backlitPanelBIP.Dispose(); 
-                    AppEventHandler.DetachGamingPanelListener(this);
-                    AppEventHandler.DetachLEDLightListener(this);
+                    _backlitPanelBIP.Dispose();
+                    _appEventHandler.DetachGamingPanelListener(this);
+                    _appEventHandler.DetachLEDLightListener(this);
                 }
-
                 _disposed = true;
             }
-
             // Call base class implementation.
             base.Dispose(disposing);
         }
