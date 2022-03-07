@@ -10,13 +10,13 @@ namespace NonVisuals
 
     public class HIDSkeleton
     {
-        private AppEventHandler _appEventHandler;
+        public AppEventHandler AppEventHandler { get; private set; }
         private readonly GamingPanelSkeleton _gamingPanelSkeleton;
         public bool IsAttached { get; private set; }
 
         public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string hidInstance, AppEventHandler appEventHandler)
         {
-            _appEventHandler = appEventHandler;
+            AppEventHandler = appEventHandler;
             _gamingPanelSkeleton = gamingPanelSkeleton;
             HIDInstance = hidInstance;
             IsAttached = true;
@@ -75,13 +75,13 @@ namespace NonVisuals
             }
 
             IsAttached = true;
-            _appEventHandler.PanelEvent(this, HIDInstance, this, PanelEventType.Attached);
+            AppEventHandler.PanelEvent(this, HIDInstance, this, PanelEventType.Attached);
         }
 
         public void HIDDeviceOnRemoved()
         {
             IsAttached = false;
-            _appEventHandler.PanelEvent(this, HIDInstance, this, PanelEventType.Detached);
+            AppEventHandler.PanelEvent(this, HIDInstance, this, PanelEventType.Detached);
         }
     }
 
