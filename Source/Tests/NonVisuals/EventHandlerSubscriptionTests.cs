@@ -21,7 +21,7 @@ namespace Tests.NonVisuals
             AppEventHandler appEventHandler = new();
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel);
-            var switchPanel = new SwitchPanelPZ55(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler);
+            var switchPanel = new SwitchPanelPZ55(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", appEventHandler), appEventHandler);
 
             //SwitchPanel
             Assert.True(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
@@ -39,7 +39,7 @@ namespace Tests.NonVisuals
             AppEventHandler appEventHandler = new();
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel);
-            var switchPanel = new SwitchPanelPZ55(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler);
+            var switchPanel = new SwitchPanelPZ55(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", appEventHandler), appEventHandler);
             switchPanel.Dispose();
 
             //SwitchPanel
@@ -63,7 +63,7 @@ namespace Tests.NonVisuals
             AppEventHandler appEventHandler = new();
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
-            var multiPanelPZ70 = new MultiPanelPZ70(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler);
+            var multiPanelPZ70 = new MultiPanelPZ70(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", appEventHandler), appEventHandler);
 
             //MultiPanel
             Assert.True(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
@@ -81,7 +81,7 @@ namespace Tests.NonVisuals
             AppEventHandler appEventHandler = new();
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
-            var multiPanelPZ70 = new MultiPanelPZ70(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler);
+            var multiPanelPZ70 = new MultiPanelPZ70(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", appEventHandler), appEventHandler);
             multiPanelPZ70.Dispose();
 
             //MultiPanel
@@ -105,7 +105,7 @@ namespace Tests.NonVisuals
             AppEventHandler appEventHandler = new();
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
-            var streamDeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler, true);
+            var streamDeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",appEventHandler), appEventHandler, true);
             
             //GamingPanel
             Assert.True(appEventHandler.OnProfileEventSubscribed());
@@ -128,7 +128,7 @@ namespace Tests.NonVisuals
             AppEventHandler appEventHandler = new();
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
-            var streamDeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), appEventHandler, true);
+            var streamDeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", appEventHandler), appEventHandler, true);
             streamDeckPanel.Dispose();
 
             //GamingPanel
