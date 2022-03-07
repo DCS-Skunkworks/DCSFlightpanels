@@ -24,7 +24,7 @@ namespace Tests.NonVisuals
             var switchPanel = new SwitchPanelPZ55(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", appEventHandler), appEventHandler);
 
             //SwitchPanel
-            Assert.True(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
+            // Assert.True(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
 
             //GamingPanel
             Assert.True(appEventHandler.OnForwardPanelEventChangedSubscribed());
@@ -43,7 +43,7 @@ namespace Tests.NonVisuals
             switchPanel.Dispose();
 
             //SwitchPanel
-            Assert.False(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
+            //Assert.False(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
 
             //GamingPanel
             Assert.False(appEventHandler.OnForwardPanelEventChangedSubscribed());
@@ -66,10 +66,10 @@ namespace Tests.NonVisuals
             var multiPanelPZ70 = new MultiPanelPZ70(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", appEventHandler), appEventHandler);
 
             //MultiPanel
-            Assert.True(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
-            Assert.True(appEventHandler.OnForwardPanelEventChangedSubscribed());
+            //Assert.True(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
 
             //GamingPanel
+            Assert.True(appEventHandler.OnForwardPanelEventChangedSubscribed());
             Assert.True(appEventHandler.OnProfileEventSubscribed());
             Assert.True(appEventHandler.OnSavePanelSettingsSubscribed());
             Assert.True(appEventHandler.OnSavePanelSettingsJSONSubscribed());
@@ -85,7 +85,7 @@ namespace Tests.NonVisuals
             multiPanelPZ70.Dispose();
 
             //MultiPanel
-            Assert.False(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
+            //Assert.False(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
 
             //GamingPanel
             Assert.False(appEventHandler.OnForwardPanelEventChangedSubscribed());
@@ -113,13 +113,13 @@ namespace Tests.NonVisuals
             Assert.True(appEventHandler.OnSavePanelSettingsJSONSubscribed());
 
             //StreamDeckPanel
-            Assert.True(SDEventHandler.OnStreamDeckSyncConfigurationEventSubscribed());
-            Assert.True(SDEventHandler.OnDirtyConfigurationsEventHandlerEventSubscribed());
-            Assert.True(SDEventHandler.OnDirtyNotificationEventHandlerSubscribed());
-            Assert.True(SDEventHandler.OnStreamDeckShowNewLayerEventSubscribed());
-            Assert.True(SDEventHandler.OnRemoteStreamDeckShowNewLayerEventSubscribed());
-            Assert.True(SDEventHandler.OnStreamDeckSelectedButtonChangedEventSubscribed());
-            Assert.True(SDEventHandler.OnStreamDeckClearSettingsEventSubscribed());
+            //Assert.True(SDEventHandler.OnStreamDeckSyncConfigurationEventSubscribed());
+            //Assert.True(SDEventHandler.OnDirtyConfigurationsEventHandlerEventSubscribed());
+            //Assert.True(SDEventHandler.OnDirtyNotificationEventHandlerSubscribed());
+            //Assert.True(SDEventHandler.OnStreamDeckShowNewLayerEventSubscribed());
+            //Assert.True(SDEventHandler.OnRemoteStreamDeckShowNewLayerEventSubscribed());
+            //Assert.True(SDEventHandler.OnStreamDeckSelectedButtonChangedEventSubscribed());
+            //Assert.True(SDEventHandler.OnStreamDeckClearSettingsEventSubscribed());
         }
 
         [Fact]
@@ -138,13 +138,13 @@ namespace Tests.NonVisuals
             Assert.False(appEventHandler.OnSavePanelSettingsJSONSubscribed());
 
             //StreamDeckPanel
-            Assert.False(SDEventHandler.OnStreamDeckSyncConfigurationEventSubscribed());
-            Assert.False(SDEventHandler.OnDirtyConfigurationsEventHandlerEventSubscribed());
-            Assert.False(SDEventHandler.OnDirtyNotificationEventHandlerSubscribed());
-            Assert.False(SDEventHandler.OnStreamDeckShowNewLayerEventSubscribed());
-            Assert.False(SDEventHandler.OnRemoteStreamDeckShowNewLayerEventSubscribed());
-            Assert.False(SDEventHandler.OnStreamDeckSelectedButtonChangedEventSubscribed());
-            Assert.False(SDEventHandler.OnStreamDeckClearSettingsEventSubscribed());
+            //Assert.False(SDEventHandler.OnStreamDeckSyncConfigurationEventSubscribed());
+            //Assert.False(SDEventHandler.OnDirtyConfigurationsEventHandlerEventSubscribed());
+            //Assert.False(SDEventHandler.OnDirtyNotificationEventHandlerSubscribed());
+            //Assert.False(SDEventHandler.OnStreamDeckShowNewLayerEventSubscribed());
+            //Assert.False(SDEventHandler.OnRemoteStreamDeckShowNewLayerEventSubscribed());
+            //Assert.False(SDEventHandler.OnStreamDeckSelectedButtonChangedEventSubscribed());
+            //Assert.False(SDEventHandler.OnStreamDeckClearSettingsEventSubscribed());
         }
     }
 }
