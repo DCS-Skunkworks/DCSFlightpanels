@@ -1854,7 +1854,7 @@
                             SetWindowTitle();
                             SetWindowState();
                             SetApplicationMode();
-                            HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck);
+                            HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck, _appEventHandler);
                             break;
                         }
                     case ProfileEventEnum.ProfileClosed:
@@ -1936,7 +1936,7 @@
                 try
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
-                    HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck);
+                    HIDHandler.GetInstance().Startup(Settings.Default.LoadStreamDeck, _appEventHandler);
                 }
                 finally
                 {

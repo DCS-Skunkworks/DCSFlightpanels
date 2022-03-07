@@ -60,7 +60,7 @@ namespace NonVisuals
         /// </summary>
         /// <param name="loadStreamDeck"></param>
         /// <param name="searchForNew"></param>
-        public void Startup(bool loadStreamDeck)
+        public void Startup(bool loadStreamDeck, AppEventHandler appEventHandler)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace NonVisuals
                             var hidIinstance = hidDevice.DevicePath;
                             if (!HIDDeviceAlreadyExists(hidIinstance))
                             {
-                                var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, hidIinstance);
+                                var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, hidIinstance, appEventHandler);
                                 HIDSkeletons.Add(hidSkeleton);
 
                                 hidDevice.MonitorDeviceEvents = true;
@@ -110,10 +110,10 @@ namespace NonVisuals
                 }*/
                 Debug.WriteLine("*** HIDSkeleton count is " + HIDSkeletons.Count);
                 //Broadcast that this panel was found.
-                HIDSkeletons.FindAll(o => o.IsAttached).ToList().ForEach(o => AppEventHandler.PanelEvent(this, o.HIDInstance, o, PanelEventType.Found));
+                HIDSkeletons.FindAll(o => o.IsAttached).ToList().ForEach(o => appEventHandler.PanelEvent(this, o.HIDInstance, o, PanelEventType.Found));
 
                 //Broadcast that panel search is over and all panels have been found that exists.
-                AppEventHandler.PanelEvent(this, null, null, PanelEventType.AllPanelsFound);
+                appEventHandler.PanelEvent(this, null, null, PanelEventType.AllPanelsFound);
             }
             catch (Exception ex)
             {
