@@ -1,19 +1,14 @@
-﻿using Newtonsoft.Json;
-using NonVisuals.StreamDeck.Panels;
+﻿using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Text.Json;
     using System.Windows.Forms;
-
     using NonVisuals.StreamDeck;
-
     using TextBox = System.Windows.Controls.TextBox;
+    using Newtonsoft.Json;
 
     public static class Extensions
     {
@@ -34,13 +29,20 @@ namespace NonVisuals
         /// <returns>The copied object.</returns>
         public static T CloneJson<T>(this T source)
         {
+            //Note to devs: Use Newtonsoft.Json to clone the object, not System.Text.Json; because there are a lot of Newtonsoft.Json [JsonIgnore] attributes that are ignored
+            //by the System.Text.Json serializer. This could lead to recursive serialization of unwanted properties that raises an exception.
+
             if (!typeof(T).IsSerializable)
             {
                 throw new ArgumentException($"DeepClone error. The type must be serializable");
             }
 
-            string jsonString = JsonSerializer.Serialize(source);
-            return JsonSerializer.Deserialize<T>(jsonString);
+            //Following line fixes "Could not create an instance of type xxx Type is an interface or abstract class and cannot be instantiated."
+            //when deepcloning IKeyPressInfo from  AddKeySequence(string description, SortedList<int, IKeyPressInfo> keySequence)
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+
+            var jsonString = JsonConvert.SerializeObject(source, settings);
+            return JsonConvert.DeserializeObject<T>(jsonString, settings);
         }
 
         public static bool ValidateDouble(this TextBox textBox, bool ignoreIfEmpty)
