@@ -27,6 +27,14 @@
 
         public static bool DisableKeyboardAPI { get; set; }
 
+        /// <summary>
+        /// Just here to suppress warning about never assigned _pluginList
+        /// </summary>
+        public PluginManager() {
+            
+            _pluginList = new List<Lazy<IPanelEventHandler, IPanelEventHandlerMetaData>>();
+        }
+
         public static bool HasPlugin()
         {
             return Get().Plugins != null && Get().Plugins.Any();
