@@ -7,6 +7,21 @@ if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env
 	Write-Host "Fatal error. Destination folder does not exists. Please set environment variable 'dcsfpReleaseDestinationFolderPath' to a valid value" -foregroundcolor "Red"
 	exit
 }
+#---------------------------------
+#Running Test
+#---------------------------------
+Write-Host "Running tests" -foregroundcolor "Green"
+$testPath = $scriptPath+"\Tests"
+Set-Location -Path $testPath
+dotnet test
+$testsLastExitCode = $LastExitCode
+Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
+if ( 0 -ne $testsLastExitCode )
+{
+  Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
+  exit
+}
+Write-Host "Done running tests" -foregroundcolor "Green"
 
 #---------------------------------
 #Start of release version management
@@ -63,6 +78,7 @@ Write-Host "Project file updated" -foregroundcolor "Green"
 #Calling Publish on project
 Write-Host "Publishing release version" -foregroundcolor "Green"
 
+Set-Location -Path $scriptPath
 dotnet publish DCSFlightpanels\DCSFlightpanels.csproj --self-contained false -f net6.0-windows -r win-x64 -c Release -o $publishPath /p:DebugType=None /p:DebugSymbols=false
 $buildLastExitCode = $LastExitCode
 
