@@ -1,6 +1,4 @@
-﻿using NonVisuals.StreamDeck.Panels;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
     using System;
     using System.Collections.Generic;
@@ -11,15 +9,6 @@ namespace NonVisuals
 
     public static class Extensions
     {
-
-        public static void SetPanel(this List<StreamDeckLayer> list, StreamDeckPanel streamDeckPanel)
-        {
-            foreach (var streamDeckLayer in list)
-            {
-                streamDeckLayer.StreamDeckPanelInstance = streamDeckPanel;
-            }
-        }
-
         /// <summary>
         /// Perform a deep Copy of the object, using Json as a serialization method. NOTE: Private members are not cloned using this method.
         /// </summary>
