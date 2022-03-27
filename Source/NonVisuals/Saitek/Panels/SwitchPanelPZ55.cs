@@ -488,7 +488,7 @@
                 {
                     if (!isFirstReport && operatingSystemCommand.OSCommandObject != null && operatingSystemCommand.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && operatingSystemCommand.WhenTurnedOn == switchPanelKey.IsOn)
                     {
-                        operatingSystemCommand.OSCommandObject.Execute(new CancellationToken());
+                        operatingSystemCommand.OSCommandObject.ExecuteCommand(new CancellationToken());
                         found = true;
                         break;
                     }

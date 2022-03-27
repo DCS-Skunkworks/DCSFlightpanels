@@ -904,7 +904,7 @@
                     if (!isFirstReport && operatingSystemCommand.DialPosition == _pz70DialPosition && operatingSystemCommand.OSCommandObject != null
                         && operatingSystemCommand.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && operatingSystemCommand.WhenTurnedOn == multiPanelKnob.IsOn)
                     {
-                        operatingSystemCommand.OSCommandObject.Execute(new CancellationToken());
+                        operatingSystemCommand.OSCommandObject.ExecuteCommand(new CancellationToken());
                         found = true;
                         break;
                     }

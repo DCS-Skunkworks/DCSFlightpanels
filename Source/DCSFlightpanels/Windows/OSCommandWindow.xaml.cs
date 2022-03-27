@@ -67,7 +67,7 @@
             try
             {
                 var operatingSystemCommand = new OSCommand(TextBoxCommand.Text, TextBoxArguments.Text, string.Empty);
-                TextBoxResult.Text = operatingSystemCommand.Execute(new CancellationToken());
+                TextBoxResult.Text = operatingSystemCommand.ExecuteCommand(new CancellationToken());
             }
             catch (Exception ex)
             {
