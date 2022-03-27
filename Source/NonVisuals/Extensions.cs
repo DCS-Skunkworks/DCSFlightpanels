@@ -5,7 +5,6 @@ namespace NonVisuals
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Windows.Forms;
     using NonVisuals.StreamDeck;
     using TextBox = System.Windows.Controls.TextBox;
     using Newtonsoft.Json;
@@ -44,18 +43,19 @@ namespace NonVisuals
             var jsonString = JsonConvert.SerializeObject(source, settings);
             return JsonConvert.DeserializeObject<T>(jsonString, settings);
         }
-
-        public static bool ValidateDouble(this TextBox textBox, bool ignoreIfEmpty)
+        
+        /// <summary>
+        /// US Culture used. Decimal separator is '.'
+        /// </summary>
+        public static bool ValidateDouble(this TextBox textBox)
         {
-            if (ignoreIfEmpty && string.IsNullOrEmpty(textBox.Text))
+            if (string.IsNullOrEmpty(textBox.Text))
             {
                 return true;
             }
             
             if (!double.TryParse(textBox.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out _))
             {
-                MessageBox.Show("Please enter valid number.", "Invalid number.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBox.SelectAll();
                 return false;
             }
 
