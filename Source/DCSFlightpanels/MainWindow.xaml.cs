@@ -46,7 +46,6 @@
     using Application = System.Windows.Application;
     using Cursors = System.Windows.Input.Cursors;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using MenuItem = System.Windows.Controls.MenuItem;
     using MessageBox = System.Windows.MessageBox;
     using MouseEventArgs = System.Windows.Input.MouseEventArgs;
     using Timer = System.Timers.Timer;

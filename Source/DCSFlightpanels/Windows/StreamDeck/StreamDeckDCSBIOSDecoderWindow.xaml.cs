@@ -34,7 +34,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
     using Color = System.Drawing.Color;
     using Cursors = System.Windows.Input.Cursors;
-    using DataGrid = System.Windows.Controls.DataGrid;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
     using MessageBox = System.Windows.MessageBox;
     using MouseEventArgs = System.Windows.Input.MouseEventArgs;
