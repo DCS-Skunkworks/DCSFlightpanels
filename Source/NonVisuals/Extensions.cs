@@ -1,7 +1,6 @@
 ﻿namespace NonVisuals
 {
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
     using NonVisuals.StreamDeck;
     using TextBox = System.Windows.Controls.TextBox;
