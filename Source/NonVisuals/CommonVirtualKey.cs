@@ -7,46 +7,24 @@
 
     public static class CommonVirtualKey
     {
-
-        private static readonly HashSet<VirtualKeyCode> Modifiers = new HashSet<VirtualKeyCode>();
-
-        public static bool IsModifierKeyDown()
-        {
-            foreach (var modifier in Modifiers)
-            {
-                if (Keyboard.IsKeyDown(KeyInterop.KeyFromVirtualKey((int)modifier)))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        private static readonly HashSet<VirtualKeyCode> _modifiers = new();
 
         public static bool IsModifierKey(VirtualKeyCode virtualKeyCode)
         {
-            if (Modifiers.Count == 0)
-            {
-                PopulateModifiersHashSet();
-            }
-
-            foreach (var modifier in Modifiers)
+            PopulateModifiersHashSetIfEmpty();
+            foreach (var modifier in _modifiers)
             {
                 if (virtualKeyCode == modifier)
                 {
                     return true;
                 }
             }
-
             return false;
         }
 
         public static bool IsExtendedKey(VirtualKeyCode virtualKeyCode)
         {
-            if (Modifiers.Count == 0)
-            {
-                PopulateModifiersHashSet();
-            }
+            PopulateModifiersHashSetIfEmpty();
 
             /*Extended-Key Flag
                 The extended-key flag indicates whether the keystroke message originated from one of the additional keys on the 
@@ -65,7 +43,6 @@
             {
                 return true;
             }
-
             return false;
 
             // All modifiers except LSHIFT / RSHIFT are extended keys.                    
@@ -205,41 +182,35 @@
             return virtualKeyCodeHolders;
         }
 
-        public static HashSet<VirtualKeyCode> ModifierList()
+        private static void PopulateModifiersHashSetIfEmpty()
         {
-            if (Modifiers.Count == 0)
+            if (_modifiers.Count > 0)
             {
-                PopulateModifiersHashSet();
+                return;
             }
 
-            return Modifiers;
+            _modifiers.Add(VirtualKeyCode.LSHIFT);
+            _modifiers.Add(VirtualKeyCode.RSHIFT);
+            _modifiers.Add(VirtualKeyCode.LCONTROL);
+            _modifiers.Add(VirtualKeyCode.RCONTROL);
+            _modifiers.Add(VirtualKeyCode.LWIN);
+            _modifiers.Add(VirtualKeyCode.RWIN);
+            _modifiers.Add(VirtualKeyCode.END);
+            _modifiers.Add(VirtualKeyCode.DELETE);
+            _modifiers.Add(VirtualKeyCode.INSERT);
+            _modifiers.Add(VirtualKeyCode.HOME);
+            _modifiers.Add(VirtualKeyCode.LEFT);
+            _modifiers.Add(VirtualKeyCode.RIGHT);
+            _modifiers.Add(VirtualKeyCode.UP);
+            _modifiers.Add(VirtualKeyCode.DOWN);
+            _modifiers.Add(VirtualKeyCode.DIVIDE);
+            _modifiers.Add(VirtualKeyCode.MULTIPLY);
+            _modifiers.Add(VirtualKeyCode.SUBTRACT);
+            _modifiers.Add(VirtualKeyCode.ADD);
+            _modifiers.Add(VirtualKeyCode.RETURN);
+            _modifiers.Add(VirtualKeyCode.NUMLOCK);
+            _modifiers.Add(VirtualKeyCode.LMENU);
+            _modifiers.Add(VirtualKeyCode.RMENU);
         }
-
-        private static void PopulateModifiersHashSet()
-        {
-            Modifiers.Add(VirtualKeyCode.LSHIFT);
-            Modifiers.Add(VirtualKeyCode.RSHIFT);
-            Modifiers.Add(VirtualKeyCode.LCONTROL);
-            Modifiers.Add(VirtualKeyCode.RCONTROL);
-            Modifiers.Add(VirtualKeyCode.LWIN);
-            Modifiers.Add(VirtualKeyCode.RWIN);
-            Modifiers.Add(VirtualKeyCode.END);
-            Modifiers.Add(VirtualKeyCode.DELETE);
-            Modifiers.Add(VirtualKeyCode.INSERT);
-            Modifiers.Add(VirtualKeyCode.HOME);
-            Modifiers.Add(VirtualKeyCode.LEFT);
-            Modifiers.Add(VirtualKeyCode.RIGHT);
-            Modifiers.Add(VirtualKeyCode.UP);
-            Modifiers.Add(VirtualKeyCode.DOWN);
-            Modifiers.Add(VirtualKeyCode.DIVIDE);
-            Modifiers.Add(VirtualKeyCode.MULTIPLY);
-            Modifiers.Add(VirtualKeyCode.SUBTRACT);
-            Modifiers.Add(VirtualKeyCode.ADD);
-            Modifiers.Add(VirtualKeyCode.RETURN);
-            Modifiers.Add(VirtualKeyCode.NUMLOCK);
-            Modifiers.Add(VirtualKeyCode.LMENU);
-            Modifiers.Add(VirtualKeyCode.RMENU);
-        }
-
     }
 }
