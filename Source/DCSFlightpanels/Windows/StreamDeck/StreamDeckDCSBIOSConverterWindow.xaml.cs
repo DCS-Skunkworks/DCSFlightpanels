@@ -9,21 +9,12 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Input;
-
     using ClassLibraryCommon;
-
     using DCSFlightpanels.Shared;
-
     using MEF;
-
     using NonVisuals;
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck;
-
-    using ComboBox = System.Windows.Controls.ComboBox;
-    using Cursors = System.Windows.Input.Cursors;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
     public partial class StreamDeckDCSBIOSConverterWindow : Window, IIsDirty
     {
@@ -32,8 +23,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private bool _isLoaded = false;
         private DCSBIOSConverter _dcsbiosConverter = null;
         private bool _isDirty;
-
-
 
         public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, StreamDeckPanel streamDeckPanel)
         {

@@ -125,7 +125,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         public StreamDeckLayer NewLayer => _newLayer;
 
-
         private void StreamDeckLayerWindow_OnKeyUp(object sender, KeyEventArgs e)
         {
             try

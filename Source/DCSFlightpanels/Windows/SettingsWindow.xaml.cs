@@ -12,8 +12,6 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using DCSFlightpanels.Properties;
 using NonVisuals.EventArgs;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MessageBox = System.Windows.MessageBox;
 
 namespace DCSFlightpanels.Windows
 {
@@ -68,7 +66,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message + Environment.NewLine + exception.StackTrace);
+                System.Windows.MessageBox.Show(exception.Message + Environment.NewLine + exception.StackTrace);
             }
         }
 
@@ -249,7 +247,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception exception)
             {
-                MessageBox.Show($"{exception.Message}{Environment.NewLine}{exception.StackTrace}");
+                System.Windows.MessageBox.Show($"{exception.Message}{Environment.NewLine}{exception.StackTrace}");
             }
         }
 
@@ -276,7 +274,7 @@ namespace DCSFlightpanels.Windows
                     }
                     else if (result.Item1 == true && result.Item2 == false)
                     {
-                        MessageBox.Show("Cannot use selected directory as it did not contain JSON files.", "Invalid directory", MessageBoxButton.OK, MessageBoxImage.Error);
+                        System.Windows.MessageBox.Show("Cannot use selected directory as it did not contain JSON files.", "Invalid directory", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
 
@@ -382,7 +380,7 @@ namespace DCSFlightpanels.Windows
             ButtonOk.IsEnabled = true;
         }
 
-        private void SettingsWindow_OnKeyDown(object sender, KeyEventArgs e)
+        private void SettingsWindow_OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (!ButtonOk.IsEnabled && e.Key == Key.Escape)
             {

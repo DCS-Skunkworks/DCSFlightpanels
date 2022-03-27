@@ -20,25 +20,12 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
-
     using ClassLibraryCommon;
-
-
     using DCS_BIOS;
     using DCSFlightpanels.Shared;
-
-
     using NonVisuals;
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck;
-
-    using Color = System.Drawing.Color;
-    using Cursors = System.Windows.Input.Cursors;
-    using DataGrid = System.Windows.Controls.DataGrid;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using MessageBox = System.Windows.MessageBox;
-    using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-    using TextBox = System.Windows.Controls.TextBox;
 
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.
@@ -55,13 +42,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private DCSBIOSControl _dcsbiosControl;
         private bool _isDirty = false;
         private bool _populatingData = false;
-
         private DCSBIOSDecoder _dcsbiosDecoder = null;
         private bool _closing = false;
         private System.Windows.Threading.DispatcherTimer _dispatcherTimer;
-
-
-
 
         public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeckPanel)
         {
@@ -503,7 +486,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                var color = Color.Transparent;
+                var color = System.Drawing.Color.Transparent;
 
                 if (StreamDeckUICommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
@@ -523,7 +506,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                var color = Color.Transparent;
+                var color = System.Drawing.Color.Transparent;
 
                 if (StreamDeckUICommon.SetBackgroundColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {

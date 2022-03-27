@@ -31,43 +31,36 @@ namespace NonVisuals.StreamDeck
         /// </summary>
         public void LockBits()
         {
-            try
+            // Get width and height of bitmap
+            Width = _source.Width;
+            Height = _source.Height;
+
+            // get total locked pixels count
+            int pixelCount = Width * Height;
+
+            // Create rectangle to lock
+            Rectangle rect = new Rectangle(0, 0, Width, Height);
+
+            // get source bitmap pixel format size
+            Depth = Image.GetPixelFormatSize(_source.PixelFormat);
+
+            // Check if bpp (Bits Per Pixel) is 8, 24, or 32
+            if (Depth != 8 && Depth != 24 && Depth != 32)
             {
-                // Get width and height of bitmap
-                Width = _source.Width;
-                Height = _source.Height;
-
-                // get total locked pixels count
-                int pixelCount = Width * Height;
-
-                // Create rectangle to lock
-                Rectangle rect = new Rectangle(0, 0, Width, Height);
-
-                // get source bitmap pixel format size
-                Depth = Image.GetPixelFormatSize(_source.PixelFormat);
-
-                // Check if bpp (Bits Per Pixel) is 8, 24, or 32
-                if (Depth != 8 && Depth != 24 && Depth != 32)
-                {
-                    throw new ArgumentException("Only 8, 24 and 32 bpp images are supported.");
-                }
-
-                // Lock bitmap and return bitmap data
-                _bitmapData = _source.LockBits(rect, ImageLockMode.ReadWrite,
-                                             _source.PixelFormat);
-
-                // create byte array to copy pixel values
-                int step = Depth / 8;
-                Pixels = new byte[pixelCount * step];
-                _intPtr = _bitmapData.Scan0;
-
-                // Copy data from pointer to array
-                Marshal.Copy(_intPtr, Pixels, 0, Pixels.Length);
+                throw new ArgumentException("Only 8, 24 and 32 bpp images are supported.");
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            // Lock bitmap and return bitmap data
+            _bitmapData = _source.LockBits(rect, ImageLockMode.ReadWrite,
+                                            _source.PixelFormat);
+
+            // create byte array to copy pixel values
+            int step = Depth / 8;
+            Pixels = new byte[pixelCount * step];
+            _intPtr = _bitmapData.Scan0;
+
+            // Copy data from pointer to array
+            Marshal.Copy(_intPtr, Pixels, 0, Pixels.Length);
         }
 
         /// <summary>
@@ -75,18 +68,11 @@ namespace NonVisuals.StreamDeck
         /// </summary>
         public void UnlockBits()
         {
-            try
-            {
-                // Copy data from byte array to pointer
-                Marshal.Copy(Pixels, 0, _intPtr, Pixels.Length);
+            // Copy data from byte array to pointer
+            Marshal.Copy(Pixels, 0, _intPtr, Pixels.Length);
 
-                // Unlock bitmap data
-                _source.UnlockBits(_bitmapData);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            // Unlock bitmap data
+            _source.UnlockBits(_bitmapData);
         }
 
         /// <summary>
