@@ -2,6 +2,9 @@
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 $publishPath = $scriptPath+"\_PublishTemp_\"
 
+#---------------------------------
+# Pre-checks
+#---------------------------------
 #Checking destination folder first
 if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env:dcsfpReleaseDestinationFolderPath))){
 	Write-Host "Fatal error. Destination folder does not exists. Please set environment variable 'dcsfpReleaseDestinationFolderPath' to a valid value" -foregroundcolor "Red"
@@ -9,8 +12,25 @@ if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env
 }
 
 #---------------------------------
-#Start of release version management
+# Tests execution
 #---------------------------------
+Write-Host "Starting test execution" -foregroundcolor "Green"
+$testPath = $scriptPath+"\Tests"
+Set-Location -Path $testPath
+dotnet test
+$testsLastExitCode = $LastExitCode
+Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
+if ( 0 -ne $testsLastExitCode )
+{
+  Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
+  exit
+}
+Write-Host "Finished test execution" -foregroundcolor "Green"
+
+#---------------------------------
+# Release version management
+#---------------------------------
+Write-Host "Starting release version management" -foregroundcolor "Green"
 #Get Path to csproj
 $projectFilePath = $scriptPath+"\DCSFlightpanels\DCSFlightpanels.csproj"
 If(-not(Test-Path $projectFilePath)){
@@ -55,14 +75,15 @@ Write-Host "New assembly version is $assemblyVersion" -foregroundcolor "Green"
 #Saving project file
 $xml.Save($projectFilePath)
 Write-Host "Project file updated" -foregroundcolor "Green"
+Write-Host "Finished release version management" -foregroundcolor "Green"
 
 #---------------------------------
-#End of release version management
+# Publish-Build & Zip
 #---------------------------------
-
 #Calling Publish on project
-Write-Host "Publishing release version" -foregroundcolor "Green"
+Write-Host "Starting publishing release version" -foregroundcolor "Green"
 
+Set-Location -Path $scriptPath
 dotnet publish DCSFlightpanels\DCSFlightpanels.csproj --self-contained false -f net6.0-windows -r win-x64 -c Release -o $publishPath /p:DebugType=None /p:DebugSymbols=false
 $buildLastExitCode = $LastExitCode
 
@@ -82,5 +103,7 @@ Write-Host "File version is $file_version" -foregroundcolor "Green"
 #Compressing release folder to destination
 Write-Host "Destination for zip file:" $env:dcsfpReleaseDestinationFolderPath"\DCSFlightpanels_x64_$file_version.zip" -foregroundcolor "Green"
 Compress-Archive -Force -Path $publishPath\* -DestinationPath $env:dcsfpReleaseDestinationFolderPath"\DCSFlightpanels_x64_$file_version.zip"
+
+Write-Host "Finished publishing release version" -foregroundcolor "Green"
 
 Write-Host "Script end" -foregroundcolor "Green"
