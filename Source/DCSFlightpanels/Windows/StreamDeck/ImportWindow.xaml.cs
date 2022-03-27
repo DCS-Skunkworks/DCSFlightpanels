@@ -22,11 +22,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
     using NonVisuals.StreamDeck;
 
-    using Cursors = System.Windows.Input.Cursors;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using MessageBox = System.Windows.MessageBox;
-    using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-
     /// <summary>
     /// Interaction logic for ExportWindow.xaml
     /// </summary>
@@ -133,7 +128,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     stringBuilder.Append("WARNING !\n\n");
                     stringBuilder.Append("A failed import can corrupt a bindings file.\n");
                     stringBuilder.Append("Before you import, make a copy of your bindings file");
-                    MessageBox.Show(stringBuilder.ToString(), "Make backup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    System.Windows.MessageBox.Show(stringBuilder.ToString(), "Make backup", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
                 CopyFilesToNewLocation();
@@ -162,7 +157,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                 StreamDeckPanel.GetInstance(_bindingHash).ImportButtons(importMode, selectedButtonExports);
 
-                MessageBox.Show("Import was completed", "Import successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                System.Windows.MessageBox.Show("Import was completed", "Import successful", MessageBoxButton.OK, MessageBoxImage.Information);
                 SetFormState();
             }
             catch (Exception ex)
@@ -242,7 +237,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             try
             {
                 var zipFileName = string.Empty;
-                var openFileDialog = new OpenFileDialog
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog
                 {
                     InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastStreamDeckImportFolder) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastStreamDeckImportFolder,
                     Filter = @"Compressed File|*.zip"
@@ -250,7 +245,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    Mouse.OverrideCursor = Cursors.Wait;
+                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
                     zipFileName = openFileDialog.FileName;
                     Settings.Default.LastStreamDeckImportFolder = Path.GetDirectoryName(openFileDialog.FileName);
                     Settings.Default.Save();
@@ -271,7 +266,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                 if (!VerifyImportArchive(filename))
                 {
-                    MessageBox.Show("Archive does not contain button data file " + StreamDeckConstants.BUTTON_EXPORT_FILENAME + ". Choose an other file.", "Invalid export file", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show("Archive does not contain button data file " + StreamDeckConstants.BUTTON_EXPORT_FILENAME + ". Choose an other file.", "Invalid export file", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 /*
@@ -305,7 +300,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
             finally
             {
-                Mouse.OverrideCursor = Cursors.Arrow;
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
             }
         }
 
@@ -415,7 +410,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             ComboBoxLayers.DropDownClosed += ComboBoxLayers_OnDropDownClosed;
         }
 
-        private void ImportWindow_OnKeyDown(object sender, KeyEventArgs e)
+        private void ImportWindow_OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             try
             {
@@ -597,7 +592,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
             if (show)
             {
-                MessageBox.Show(stringBuilder.ToString(), "File already exists", MessageBoxButton.OK, MessageBoxImage.Information);
+                System.Windows.MessageBox.Show(stringBuilder.ToString(), "File already exists", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }

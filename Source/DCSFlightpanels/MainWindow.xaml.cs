@@ -42,15 +42,7 @@
     using NonVisuals.Plugin;
 
     using Octokit;
-
-    using Application = System.Windows.Application;
-    using Cursors = System.Windows.Input.Cursors;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using MessageBox = System.Windows.MessageBox;
-    using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-    using Timer = System.Timers.Timer;
-    using UserControl = System.Windows.Controls.UserControl;
-
+    
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
@@ -1006,7 +998,7 @@
             {
                 Shutdown();
                 LogManager.Shutdown();
-                Application.Current.Shutdown();
+                System.Windows.Application.Current.Shutdown();
                 Environment.Exit(0);
             }
             catch (Exception ex)
@@ -1066,7 +1058,7 @@
             try
             {
                 Shutdown();
-                Application.Current.Shutdown();
+                System.Windows.Application.Current.Shutdown();
             }
             catch (Exception ex)
             {

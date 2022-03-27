@@ -20,11 +20,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck;
 
-    using ComboBox = System.Windows.Controls.ComboBox;
-    using Cursors = System.Windows.Input.Cursors;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-
     public partial class StreamDeckDCSBIOSConverterWindow : Window, IIsDirty
     {
         private readonly StreamDeckPanel _streamDeckPanel;

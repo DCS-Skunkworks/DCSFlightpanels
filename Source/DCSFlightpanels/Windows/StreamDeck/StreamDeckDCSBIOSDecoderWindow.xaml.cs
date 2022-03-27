@@ -32,13 +32,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck;
 
-    using Color = System.Drawing.Color;
-    using Cursors = System.Windows.Input.Cursors;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using MessageBox = System.Windows.MessageBox;
-    using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-    using TextBox = System.Windows.Controls.TextBox;
-
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.
     /// </summary>
@@ -502,7 +495,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                var color = Color.Transparent;
+                var color = System.Drawing.Color.Transparent;
 
                 if (StreamDeckUICommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
@@ -522,7 +515,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                var color = Color.Transparent;
+                var color = System.Drawing.Color.Transparent;
 
                 if (StreamDeckUICommon.SetBackgroundColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
