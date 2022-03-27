@@ -2,29 +2,62 @@
 {
     using System.Collections.Generic;
     using System.Windows.Input;
-
     using MEF;
 
     public static class CommonVirtualKey
     {
-        private static readonly HashSet<VirtualKeyCode> _modifiers = new();
+        private static readonly HashSet<VirtualKeyCode> _modifiers = new()
+        {
+            VirtualKeyCode.LSHIFT,
+            VirtualKeyCode.RSHIFT,
+            VirtualKeyCode.LCONTROL,
+            VirtualKeyCode.RCONTROL,
+            VirtualKeyCode.LWIN,
+            VirtualKeyCode.RWIN,
+            VirtualKeyCode.END,
+            VirtualKeyCode.DELETE,
+            VirtualKeyCode.INSERT,
+            VirtualKeyCode.HOME,
+            VirtualKeyCode.LEFT,
+            VirtualKeyCode.RIGHT,
+            VirtualKeyCode.UP,
+            VirtualKeyCode.DOWN,
+            VirtualKeyCode.DIVIDE,
+            VirtualKeyCode.MULTIPLY,
+            VirtualKeyCode.SUBTRACT,
+            VirtualKeyCode.ADD,
+            VirtualKeyCode.RETURN,
+            VirtualKeyCode.NUMLOCK,
+            VirtualKeyCode.LMENU,
+            VirtualKeyCode.RMENU,
+        };
+
+        private static readonly HashSet<VirtualKeyCode> _extended = new()
+        {
+            VirtualKeyCode.RCONTROL,
+            VirtualKeyCode.END,
+            VirtualKeyCode.DELETE,
+            VirtualKeyCode.INSERT,
+            VirtualKeyCode.HOME,
+            VirtualKeyCode.LEFT,
+            VirtualKeyCode.RIGHT,
+            VirtualKeyCode.UP,
+            VirtualKeyCode.DOWN,
+            VirtualKeyCode.DIVIDE,
+            VirtualKeyCode.MULTIPLY,
+            VirtualKeyCode.RETURN,
+            VirtualKeyCode.NUMLOCK,
+            VirtualKeyCode.RMENU,
+        };
 
         public static bool IsModifierKey(VirtualKeyCode virtualKeyCode)
         {
-            PopulateModifiersHashSetIfEmpty();
-            foreach (var modifier in _modifiers)
-            {
-                if (virtualKeyCode == modifier)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return _modifiers.Contains(virtualKeyCode);
         }
 
         public static bool IsExtendedKey(VirtualKeyCode virtualKeyCode)
         {
-            PopulateModifiersHashSetIfEmpty();
+            return _extended.Contains(virtualKeyCode);
 
             /*Extended-Key Flag
                 The extended-key flag indicates whether the keystroke message originated from one of the additional keys on the 
@@ -34,16 +67,6 @@
              * The INS, DEL, HOME, END, PAGE UP, PAGE DOWN, and arrow keys in the clusters to the left of the numeric keypad; 
              * the NUM LOCK key; the BREAK (CTRL+PAUSE) key; the PRINT SCRN key; and the divide (/) and ENTER keys in the numeric
              * keypad. The extended-key flag is set if the key is an extended key.*/
-            if (IsModifierKey(virtualKeyCode) && (virtualKeyCode == VirtualKeyCode.RMENU || virtualKeyCode == VirtualKeyCode.RCONTROL || virtualKeyCode == VirtualKeyCode.INSERT
-                                                  || virtualKeyCode == VirtualKeyCode.DELETE || virtualKeyCode == VirtualKeyCode.HOME || virtualKeyCode == VirtualKeyCode.END
-                                                  || virtualKeyCode == VirtualKeyCode.PRIOR || virtualKeyCode == VirtualKeyCode.NEXT || virtualKeyCode == VirtualKeyCode.LEFT
-                                                  || virtualKeyCode == VirtualKeyCode.UP || virtualKeyCode == VirtualKeyCode.RIGHT || virtualKeyCode == VirtualKeyCode.DOWN
-                                                  || virtualKeyCode == VirtualKeyCode.NUMLOCK || virtualKeyCode == VirtualKeyCode.PRINT || virtualKeyCode == VirtualKeyCode.DIVIDE
-                                                  || virtualKeyCode == VirtualKeyCode.MULTIPLY || virtualKeyCode == VirtualKeyCode.RETURN))
-            {
-                return true;
-            }
-            return false;
 
             // All modifiers except LSHIFT / RSHIFT are extended keys.                    
             /* EXTENDED KEYS :
@@ -180,37 +203,6 @@
             }
 
             return virtualKeyCodeHolders;
-        }
-
-        private static void PopulateModifiersHashSetIfEmpty()
-        {
-            if (_modifiers.Count > 0)
-            {
-                return;
-            }
-
-            _modifiers.Add(VirtualKeyCode.LSHIFT);
-            _modifiers.Add(VirtualKeyCode.RSHIFT);
-            _modifiers.Add(VirtualKeyCode.LCONTROL);
-            _modifiers.Add(VirtualKeyCode.RCONTROL);
-            _modifiers.Add(VirtualKeyCode.LWIN);
-            _modifiers.Add(VirtualKeyCode.RWIN);
-            _modifiers.Add(VirtualKeyCode.END);
-            _modifiers.Add(VirtualKeyCode.DELETE);
-            _modifiers.Add(VirtualKeyCode.INSERT);
-            _modifiers.Add(VirtualKeyCode.HOME);
-            _modifiers.Add(VirtualKeyCode.LEFT);
-            _modifiers.Add(VirtualKeyCode.RIGHT);
-            _modifiers.Add(VirtualKeyCode.UP);
-            _modifiers.Add(VirtualKeyCode.DOWN);
-            _modifiers.Add(VirtualKeyCode.DIVIDE);
-            _modifiers.Add(VirtualKeyCode.MULTIPLY);
-            _modifiers.Add(VirtualKeyCode.SUBTRACT);
-            _modifiers.Add(VirtualKeyCode.ADD);
-            _modifiers.Add(VirtualKeyCode.RETURN);
-            _modifiers.Add(VirtualKeyCode.NUMLOCK);
-            _modifiers.Add(VirtualKeyCode.LMENU);
-            _modifiers.Add(VirtualKeyCode.RMENU);
         }
     }
 }
