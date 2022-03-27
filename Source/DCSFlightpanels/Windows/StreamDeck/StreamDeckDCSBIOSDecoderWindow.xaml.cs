@@ -20,14 +20,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
-
     using ClassLibraryCommon;
-
-
     using DCS_BIOS;
     using DCSFlightpanels.Shared;
-
-
     using NonVisuals;
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck;
@@ -47,13 +42,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private DCSBIOSControl _dcsbiosControl;
         private bool _isDirty = false;
         private bool _populatingData = false;
-
         private DCSBIOSDecoder _dcsbiosDecoder = null;
         private bool _closing = false;
         private System.Windows.Threading.DispatcherTimer _dispatcherTimer;
-
-
-
 
         public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeckPanel)
         {

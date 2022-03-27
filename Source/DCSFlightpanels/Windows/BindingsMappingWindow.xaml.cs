@@ -6,9 +6,7 @@
     using System.Media;
     using System.Windows;
     using System.Windows.Input;
-
     using ClassLibraryCommon;
-
     using NonVisuals;
 
     /// <summary>
@@ -21,7 +19,6 @@
         private readonly List<GenericPanelBinding> _genericBindings;
         private readonly List<ModifiedGenericBinding> _modifiedGenericBindings = new List<ModifiedGenericBinding>();
         private readonly List<GamingPanel> _gamingPanels;
-
 
         public BindingsMappingWindow(List<GenericPanelBinding> genericBindings, List<GamingPanel> gamingPanels)
         {
@@ -306,7 +303,5 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
     }
 }

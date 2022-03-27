@@ -5,11 +5,8 @@
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
-
     using ClassLibraryCommon;
-
     using DCS_BIOS;
-
     using NonVisuals;
     using NonVisuals.Interfaces;
 

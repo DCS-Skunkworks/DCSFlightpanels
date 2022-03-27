@@ -9,13 +9,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Input;
-
     using ClassLibraryCommon;
-
     using DCSFlightpanels.Shared;
-
     using MEF;
-
     using NonVisuals;
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck;
@@ -27,8 +23,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private bool _isLoaded = false;
         private DCSBIOSConverter _dcsbiosConverter = null;
         private bool _isDirty;
-
-
 
         public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, StreamDeckPanel streamDeckPanel)
         {

@@ -4,9 +4,7 @@
     using System.Threading;
     using System.Windows;
     using System.Windows.Input;
-
     using ClassLibraryCommon;
-
     using NonVisuals;
     using NonVisuals.Interfaces;
 

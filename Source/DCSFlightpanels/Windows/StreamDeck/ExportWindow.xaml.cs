@@ -22,8 +22,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private readonly StreamDeckPanel _streamDeckPanel;
         private string _zipFileName = string.Empty;
 
-
-
         public ExportWindow(StreamDeckPanel streamDeckPanel)
         {
             InitializeComponent();

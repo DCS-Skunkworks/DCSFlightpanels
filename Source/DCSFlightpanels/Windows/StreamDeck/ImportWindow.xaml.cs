@@ -11,15 +11,10 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System.Windows.Controls;
     using System.Windows.Forms;
     using System.Windows.Input;
-
     using ClassLibraryCommon;
-
     using DCSFlightpanels.Properties;
-
     using MEF;
-
     using Newtonsoft.Json;
-
     using NonVisuals.StreamDeck;
 
     /// <summary>
@@ -30,11 +25,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private readonly string _bindingHash;
         private bool _formLoaded = false;
         private List<ButtonExport> _buttonExports = new List<ButtonExport>();
-
         private string _extractedFilesFolder = string.Empty;
-
-
-
 
         public ImportWindow(string bindingHash)
         {

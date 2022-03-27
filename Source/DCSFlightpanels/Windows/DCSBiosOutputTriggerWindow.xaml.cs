@@ -12,11 +12,8 @@ namespace DCSFlightpanels.Windows
     using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
-
     using ClassLibraryCommon;
-
     using DCS_BIOS;
-
     using EnumEx = ClassLibraryCommon.EnumEx;
 
     /// <summary>
@@ -74,9 +71,6 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
-
-
 
         private void ShowValues1()
         {
@@ -381,6 +375,5 @@ namespace DCSFlightpanels.Windows
                 Close();
             }
         }
-
     }
 }

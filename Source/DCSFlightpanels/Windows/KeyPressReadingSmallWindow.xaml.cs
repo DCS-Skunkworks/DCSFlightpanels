@@ -9,11 +9,8 @@ namespace DCSFlightpanels.Windows
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
-
     using ClassLibraryCommon;
-
     using MEF;
-
     using NonVisuals;
 
     /// <summary>
