@@ -280,7 +280,7 @@
                 {
                     if (!isFirstReport && operatingSystemCommand.OSCommandObject != null && operatingSystemCommand.FarmingPanelKey == farmingPanelKey.FarmingPanelMKKey && operatingSystemCommand.WhenTurnedOn == farmingPanelKey.IsOn)
                     {
-                        operatingSystemCommand.OSCommandObject.Execute(new CancellationToken());
+                        operatingSystemCommand.OSCommandObject.ExecuteCommand(new CancellationToken());
                         found = true;
                         break;
                     }

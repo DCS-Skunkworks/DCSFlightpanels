@@ -143,6 +143,13 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private string _lastChecked1 = string.Empty;
         private string _lastChecked2 = string.Empty;
+
+        private void IssueInvalidDoubleTextBoxWarning(TextBox textBox)
+        {
+            System.Windows.Forms.MessageBox.Show("Please enter a valid number.", "Invalid number.", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+            textBox.SelectAll();
+        }
+
         private void TextBoxReferenceValue_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
@@ -154,14 +161,14 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                 if (sender.Equals(TextBoxReferenceValue1))
                 {
-                    if (_lastChecked1 != TextBoxReferenceValue1.Text && !TextBoxReferenceValue1.ValidateDouble(true))
+                    if (_lastChecked1 != TextBoxReferenceValue1.Text && !TextBoxReferenceValue1.ValidateDouble())
                     {
+                        IssueInvalidDoubleTextBoxWarning(TextBoxReferenceValue1);
                         _lastChecked1 = TextBoxReferenceValue1.Text;
                         return;
                     }
 
-                    //this is necessary?  var validateResult2 = double.TryParse(TextBoxReferenceValue1.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out _);
-                    if (double.TryParse(TextBoxReferenceValue1.Text,NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var result))
+                    if (double.TryParse(TextBoxReferenceValue1.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var result))
                     {
                         _dcsbiosConverter.ReferenceValue1 = result;
                         SetIsDirty();
@@ -169,13 +176,14 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 }
                 if (sender.Equals(TextBoxReferenceValue2))
                 {
-                    if (_lastChecked2 != TextBoxReferenceValue2.Text && !TextBoxReferenceValue2.ValidateDouble(true))
+                    if (_lastChecked2 != TextBoxReferenceValue2.Text && !TextBoxReferenceValue2.ValidateDouble())
                     {
+                        IssueInvalidDoubleTextBoxWarning(TextBoxReferenceValue2);
                         _lastChecked2 = TextBoxReferenceValue2.Text;
                         return;
                     }
 
-                    if (double.TryParse(TextBoxReferenceValue2.Text, out var result))
+                    if (double.TryParse(TextBoxReferenceValue2.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var result))
                     {
                         _dcsbiosConverter.ReferenceValue2 = result;
                         SetIsDirty();

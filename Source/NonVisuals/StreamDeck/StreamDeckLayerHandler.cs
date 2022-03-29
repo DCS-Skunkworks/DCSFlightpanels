@@ -138,7 +138,7 @@ namespace NonVisuals.StreamDeck
             _jsonSettings.MissingMemberHandling = MissingMemberHandling.Error;
             
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, _jsonSettings);
-            _layerList.SetPanel(_streamDeckPanel);
+            _layerList.ForEach(layer => layer.StreamDeckPanelInstance = _streamDeckPanel);
             _jsonImported = true;
             SetStreamDeckPanelInstance(_streamDeckPanel);
             CheckHomeLayerExists();

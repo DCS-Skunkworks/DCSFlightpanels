@@ -6,24 +6,13 @@
     public class ClickSpeedDetector
     {
         private readonly List<long> _clicksTimeTicksList = new List<long>();
-        private int _maxClicksToKeep = 200;
-        private int _defaultPeriod = 2000;
-        private int _clickCountThreshold = 20;
-
-        public ClickSpeedDetector()
-        {
-        }
+        private int _maxClicksToKeep { get; set; } = 200;
+        private int _defaultPeriod { get; set; } = 2000;
+        private int _clickCountThreshold { get; set; } = 20;
 
         public ClickSpeedDetector(int upperClickThreshold)
         {
             _clickCountThreshold = upperClickThreshold;
-        }
-
-        public ClickSpeedDetector(int maxClicksToKeep, int defaultPeriod, int clickCountThreshold)
-        {
-            _maxClicksToKeep = maxClicksToKeep;
-            _defaultPeriod = defaultPeriod;
-            _clickCountThreshold = clickCountThreshold;
         }
 
         public int ClicksWithinLastPeriod(int millisecondPeriod)
@@ -38,11 +27,10 @@
                     result++;
                 }
             }
-
             return result;
         }
 
-        public int ClicksWithinDefaultPeriod()
+        private int ClicksWithinDefaultPeriod()
         {
             var result = 0;
             var millisecNow = DateTime.Now.Ticks / 10000;
@@ -54,7 +42,6 @@
                     result++;
                 }
             }
-
             return result;
         }
 
@@ -82,24 +69,6 @@
             {
                 _clicksTimeTicksList.RemoveAt(0);
             }
-        }
-
-        public int MaxClicksToKeep
-        {
-            get => _maxClicksToKeep;
-            set => _maxClicksToKeep = value;
-        }
-
-        public int DefaultPeriod
-        {
-            get => _defaultPeriod;
-            set => _defaultPeriod = value;
-        }
-
-        public int ClickCountThreshold
-        {
-            get => _clickCountThreshold;
-            set => _clickCountThreshold = value;
         }
     }
 }

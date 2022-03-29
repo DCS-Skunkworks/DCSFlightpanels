@@ -68,7 +68,7 @@ namespace NonVisuals.StreamDeck
         public void Execute(CancellationToken threadCancellationToken)
         {
             Common.PlaySoundFile(SoundFile, Volume);
-            OSCommandObject.Execute(threadCancellationToken);
+            OSCommandObject.ExecuteCommand(threadCancellationToken);
         }
 
         internal override void ImportSettings(string settings) { }

@@ -267,7 +267,7 @@
                 {
                     if (!isFirstReport && operatingSystemCommand.OSCommandObject != null && operatingSystemCommand.TPMSwitch == tpmPanelSwitch.TPMSwitch && operatingSystemCommand.WhenTurnedOn == tpmPanelSwitch.IsOn)
                     {
-                        operatingSystemCommand.OSCommandObject.Execute(new CancellationToken());
+                        operatingSystemCommand.OSCommandObject.ExecuteCommand(new CancellationToken());
                         found = true;
                         break;
                     }
