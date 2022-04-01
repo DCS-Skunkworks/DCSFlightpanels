@@ -15,7 +15,7 @@
 
         public static DCSFPProfile SelectedProfile { get; set; }
 
-        private DCSFPProfile(int id, string description, string jsonFilename)
+        internal DCSFPProfile(int id, string description, string jsonFilename)
         {
             ID = id;
             JSONFilename = jsonFilename;
@@ -77,40 +77,14 @@
 
         public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder)
         {
-            var biosLua = Path.Combine(dcsbiosJsonFolder, "..\\..\\", "BIOS.lua");
-
-            if (!File.Exists(biosLua))
+            var modules = new DcsBiosLuaFileReader().GetModulesListFromDcsBiosLua(dcsbiosJsonFolder);
+            foreach (var module in modules)
             {
-                return;
-            }
-
-            var stringArray = File.ReadAllLines(biosLua);
-
-            // dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]]) -- ID = 5, ProperName = A-10C Thunderbolt II
-            foreach (var s in stringArray)
-            {
-                if (!s.StartsWith("--") && s.ToLower().Contains(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower()) && s.Contains("ProperName"))
+                lock (_lock)
                 {
-                    var parts = s.Split(new string[] { "--" }, StringSplitOptions.RemoveEmptyEntries);
-
-                    // dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]])
-                    var json = parts[0].ToLower().Replace(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower(), string.Empty).Replace(".lua]])", string.Empty).Trim() + ".json";
-
-                    // ID = 5, ProperName = A-10C Thunderbolt II
-                    var info = parts[1].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-
-                    // ID = 5
-                    var id = int.Parse(info[0].Split(new[] { "=" }, StringSplitOptions.None)[1]);
-
-                    // ProperName = A-10C Thunderbolt II
-                    var properName = info[1].Split(new[] { "=" }, StringSplitOptions.None)[1].Trim();
-
-                    lock (_lock)
-                    {
-                        ModulesList.Add(new DCSFPProfile(id, properName, json));
-                    }
+                    ModulesList.Add(module);
                 }
-            }
+            }      
         }
 
         private static void LogErrorAndThrowException(string message)

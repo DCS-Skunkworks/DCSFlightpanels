@@ -28,5 +28,15 @@ namespace Tests.ClassLibraryCommon
             DCSFPProfile.FillModulesListFromDcsBios(_dcsBiosJsonFolderPath);
             Assert.Equal(39, DCSFPProfile.Modules.Count);
         }
+
+        [Fact]
+        public void DcsBiosLuaFileReader_Sould_Return_A_List_Of_DCSProfiles()
+        {
+            DcsBiosLuaFileReader dcsbiosLuaFileReader = new();
+            var listofProfiles = dcsbiosLuaFileReader.GetModulesListFromDcsBiosLua(_dcsBiosJsonFolderPath);
+            Assert.Equal(39, listofProfiles.Count);
+        }
+        
+
     }
 }
