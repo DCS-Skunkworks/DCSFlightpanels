@@ -1,5 +1,6 @@
 ﻿namespace ClassLibraryCommon
 {
+    using ClassLibraryCommon.Enums;
     using NLog;
     using System;
     using System.Collections.Generic;
@@ -105,7 +106,7 @@
 
         public static void SetNoFrameLoadedYetAsProfile()
         {
-            var module = Modules.FirstOrDefault(x => IsNoFrameLoadedYet(x));
+            var module = Modules.FirstOrDefault(x => x.IsModule(ManagedModule.NoFrameLoadedYet));
             if (module == null)
             {
                 LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
@@ -117,7 +118,7 @@
 
         public static DCSFPProfile GetNoFrameLoadedYet()
         {
-            var module = Modules.FirstOrDefault(x => IsNoFrameLoadedYet(x));
+            var module = Modules.FirstOrDefault(x => x.IsModule(ManagedModule.NoFrameLoadedYet));
             if (module == null)
             {
                 LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
@@ -127,7 +128,7 @@
 
         public static DCSFPProfile GetKeyEmulator()
         {
-            var module = Modules.FirstOrDefault(x => IsKeyEmulator(x));
+            var module = Modules.FirstOrDefault(x => x.IsModule(ManagedModule.KeyEmulator));
             if (module == null)
             {
                 LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module KeyEmulator. Modules loaded : {Modules.Count}");
@@ -137,212 +138,17 @@
 
         public static bool HasNS430()
         {
-            return Modules.Exists(x => IsNS430(x));
+            return Modules.Exists(x => x.IsModule(ManagedModule.NS430));
         }
 
         public static DCSFPProfile GetNS430()
         {
-            return Modules.FirstOrDefault(x => IsNS430(x));
+            return Modules.FirstOrDefault(x => x.IsModule(ManagedModule.NS430));
         }
 
-
-        public static bool IsNoFrameLoadedYet(DCSFPProfile dcsfpModule)
+        public bool IsModule(ManagedModule module)
         {
-            /*if (dcsfpModule == null)
-            {
-                LogErrorAndThrowException("DCSFPProfile IsNoFrameLoadedYet : Parameter dcsfpModule is null.");
-            }*/
-            return dcsfpModule.ID == 1;
-        }
-
-        public static bool IsKeyEmulator(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 2;
-        }
-
-        public static bool IsFlamingCliff(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 4;
-        }
-
-        public static bool IsA10C(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 5;
-        }
-
-        public static bool IsA4E(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 6;
-        }
-
-        public static bool IsAH6(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 7;
-        }
-
-        public static bool IsAJS37(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 8;
-        }
-
-        public static bool IsAlphajet(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 9;
-        }
-
-        public static bool IsAV8B(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 10;
-        }
-
-        public static bool IsBf109K4(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 11;
-        }
-
-        public static bool IsC101(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 12;
-        }
-
-        public static bool IsC130(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 13;
-        }
-
-        public static bool IsChristenEagleII(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 14;
-        }
-
-        public static bool IsEdge540(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 15;
-        }
-
-        public static bool IsF14B(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 16;
-        }
-
-        public static bool IsF16C(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 17;
-        }
-
-        public static bool IsF5E(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 18;
-        }
-
-        public static bool IsF86F(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 19;
-        }
-
-        public static bool IsFA18C(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 20;
-        }
-
-        public static bool IsFW190A8(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 21;
-        }
-
-        public static bool IsFW190D9(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 22;
-        }
-
-        public static bool IsI16(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 23;
-        }
-
-        public static bool IsJF17(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 24;
-        }
-
-        public static bool IsKa50(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 25;
-        }
-
-        public static bool IsL39(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 26;
-        }
-
-        public static bool IsM2000C(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 27;
-        }
-
-        public static bool IsMB339PAN(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 28;
-        }
-
-        public static bool IsMi8MT(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 29;
-        }
-
-        public static bool IsMiG15bis(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 30;
-        }
-
-        public static bool IsMiG19P(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 31;
-        }
-
-        public static bool IsMiG21Bis(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 32;
-        }
-
-        public static bool IsNS430(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 33;
-        }
-
-        public static bool IsP47D(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 34;
-        }
-
-        public static bool IsP51D(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 35;
-        }
-
-        public static bool IsSA342(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 36;
-        }
-
-        public static bool IsSpitfireLFMkIX(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 37;
-        }
-
-        public static bool IsUH1H(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 38;
-        }
-
-        public static bool IsYak52(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 39;
-        }
-
-        public static bool IsMi24P(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.ID == 42;
+            return ID == (int)module;
         }
 
         public static DCSFPProfile GetBackwardCompatible(string oldEnumValue)

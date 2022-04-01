@@ -40,9 +40,9 @@
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
-
     using Octokit;
-    
+    using ClassLibraryCommon.Enums;
+
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
@@ -229,13 +229,13 @@
                 return;
             }
 
-            LabelAirframe.Content = DCSFPProfile.IsNoFrameLoadedYet(dcsfpProfile) ? string.Empty : dcsfpProfile.Description;
+            LabelAirframe.Content = dcsfpProfile.IsModule(ManagedModule.NoFrameLoadedYet) ? string.Empty : dcsfpProfile.Description;
 
-            if (DCSFPProfile.IsNoFrameLoadedYet(dcsfpProfile) || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
+            if (dcsfpProfile.IsModule(ManagedModule.NoFrameLoadedYet) || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
             {
                 ShutdownDCSBIOS();
             }
-            else if (!DCSFPProfile.IsNoFrameLoadedYet(dcsfpProfile))
+            else if (!dcsfpProfile.IsModule(ManagedModule.NoFrameLoadedYet))
             {
                 CreateDCSBIOS();
                 StartupDCSBIOS();
@@ -452,7 +452,7 @@
                     case GamingPanelEnum.PZ69RadioPanel:
                         {
                             var tabItem = new TabItem { Header = "PZ69" };
-                            if (DCSFPProfile.IsKeyEmulator(_profileHandler.Profile))
+                            if (_profileHandler.Profile.IsModule(ManagedModule.KeyEmulator))
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -462,7 +462,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsA10C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.A10C) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -472,7 +472,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsUH1H(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.UH1H) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlUH1H(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -482,7 +482,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsMiG21Bis(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.MiG21Bis) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMiG21Bis(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -492,7 +492,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsKa50(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.Ka50) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlKa50(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -502,7 +502,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsMi8MT(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.Mi8MT) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi8(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -512,7 +512,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsBf109K4(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.Bf109K4) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlBf109(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -522,7 +522,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsFW190D9(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.FW190D9) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFw190(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -532,7 +532,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsP51D(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.P51D) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP51D(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -542,7 +542,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsF86F(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.F86F) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF86F(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -552,7 +552,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsSpitfireLFMkIX(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.SpitfireLFMkIX) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSpitfireLFMkIX(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -562,7 +562,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsAJS37(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.AJS37) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAJS37(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -572,7 +572,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsSA342(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.SA342) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSA342(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -582,7 +582,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsFA18C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.FA18C) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFA18C(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -592,7 +592,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsM2000C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.M2000C) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlM2000C(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -602,7 +602,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsF5E(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.F5E) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF5E(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -612,7 +612,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsF14B(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.F14B) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF14B(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -622,7 +622,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsAV8B(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.AV8B) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAV8BNA(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -632,7 +632,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsP47D(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.P47D) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP47D(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -642,7 +642,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSFPProfile.IsMi24P(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (_profileHandler.Profile.IsModule(ManagedModule.Mi24P) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi24P(hidSkeleton, tabItem);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -931,7 +931,7 @@
 
         private void SetWindowTitle()
         {
-            if (DCSFPProfile.IsNoFrameLoadedYet(_profileHandler.Profile))
+            if (_profileHandler.Profile.IsModule(ManagedModule.NoFrameLoadedYet))
             {
                 Title = string.Empty;
             }

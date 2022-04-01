@@ -8,7 +8,7 @@ namespace DCS_BIOS
     using System.Linq;
     using System.Text;
     using ClassLibraryCommon;
-
+    using ClassLibraryCommon.Enums;
     using Newtonsoft.Json;
     using NLog;
 
@@ -163,7 +163,7 @@ namespace DCS_BIOS
              */
             try
             {
-                if (DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile) ||
+                if (_dcsfpProfile.IsModule(ManagedModule.NoFrameLoadedYet) ||
                     Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
                 {
                     return;
@@ -188,7 +188,7 @@ namespace DCS_BIOS
                     //ReadDataFromJsonFile(DCSFPProfile.GetNS430().JSONFilename);
                 }
 
-                if (DCSFPProfile.IsFlamingCliff(Profile))
+                if (Profile.IsModule(ManagedModule.FlamingCliff))
                 {
                     LoadCommonData(_jsonDirectory);
                     LoadMetaDataEnd(_jsonDirectory);
@@ -268,7 +268,9 @@ namespace DCS_BIOS
         
         private static void LoadMetaDataEnd(string jsonDirectory)
         {
-            if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
+            if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") 
+                || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) 
+                || _dcsfpProfile.IsModule(ManagedModule.NoFrameLoadedYet))
             {
                 return;
             }
@@ -301,7 +303,9 @@ namespace DCS_BIOS
 
         private static void LoadCommonData(string jsonDirectory)
         {
-            if (DCSBIOSProfileLoadStatus.IsLoaded("CommonData") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
+            if (DCSBIOSProfileLoadStatus.IsLoaded("CommonData") 
+                || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) 
+                || _dcsfpProfile.IsModule(ManagedModule.NoFrameLoadedYet))
             {
                 return;
             }

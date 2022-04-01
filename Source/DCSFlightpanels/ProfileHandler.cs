@@ -12,7 +12,7 @@ namespace NonVisuals
     using System.Windows;
 
     using ClassLibraryCommon;
-
+    using ClassLibraryCommon.Enums;
     using DCS_BIOS;
 
     using MEF;
@@ -486,15 +486,15 @@ namespace NonVisuals
 
         private void SetEmulationModeFlag()
         {
-            if (DCSFPProfile.IsNoFrameLoadedYet(Profile))
+            if (Profile.IsModule(ManagedModule.NoFrameLoadedYet))
             {
                 Common.SetEmulationModes(EmulationMode.DCSBIOSInputEnabled | EmulationMode.DCSBIOSOutputEnabled);
             }
-            else if (DCSFPProfile.IsKeyEmulator(Profile))
+            else if (Profile.IsModule(ManagedModule.KeyEmulator))
             {
                 Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
             }
-            else if (DCSFPProfile.IsFlamingCliff(Profile))
+            else if (Profile.IsModule(ManagedModule.FlamingCliff))
             {
                 Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
             }

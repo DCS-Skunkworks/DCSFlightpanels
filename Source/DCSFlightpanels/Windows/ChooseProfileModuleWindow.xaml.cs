@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using ClassLibraryCommon.Enums;
 using DCS_BIOS;
 
 namespace DCSFlightpanels.Windows
@@ -63,12 +65,10 @@ namespace DCSFlightpanels.Windows
             var itemsSource = new List<DCSFPProfile>();
             ComboBoxAirframe.SelectionChanged -= ComboBoxAirframe_OnSelectionChanged;
             ComboBoxAirframe.Items.Clear();
-            foreach (var module in DCSFPProfile.Modules)
-            {
-                if (!DCSFPProfile.IsNoFrameLoadedYet(module)) //!DCSFPProfile.IsNS430(module) &&  
-                {
-                    itemsSource.Add(module);
-                }
+
+            foreach (var module in DCSFPProfile.Modules.Where(x => !x.IsModule(ManagedModule.NoFrameLoadedYet)))
+            { 
+                itemsSource.Add(module);
             }
 
             ComboBoxAirframe.DisplayMemberPath = "Description";
@@ -93,8 +93,8 @@ namespace DCSFlightpanels.Windows
             try
             {
                 SetAirframe();
-                if (!DCSFPProfile.IsFlamingCliff(_dcsfpProfile) &&
-                    !DCSFPProfile.IsKeyEmulator(_dcsfpProfile))
+                if (!_dcsfpProfile.IsModule(ManagedModule.FlamingCliff) &&
+                    !_dcsfpProfile.IsModule(ManagedModule.KeyEmulator))
                 {
                     //User has chosen a DCS-BIOS compatible module
                     StackPanelUseGenericRadio.Visibility = Visibility.Visible;
