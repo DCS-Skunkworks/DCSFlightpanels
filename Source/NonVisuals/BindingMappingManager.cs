@@ -48,7 +48,7 @@ namespace NonVisuals
                     {
                         genericPanelBinding.InUse = true;
                         AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
-                            DCSFPProfile.SelectedProfile);
+                            DCSFPProfile.SelectedModule);
                     }
                 }
             }
@@ -67,7 +67,7 @@ namespace NonVisuals
                     {
                         genericPanelBinding.InUse = true;
                         AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
-                            DCSFPProfile.SelectedProfile);
+                            DCSFPProfile.SelectedModule);
                     }
                 }
             }

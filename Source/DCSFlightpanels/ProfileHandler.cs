@@ -28,7 +28,7 @@ namespace NonVisuals
         private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
         private const string OPEN_FILE_DIALOG_FILTER = "DCSFlightpanels (.bindings)|*.bindings";
 
-        private static DCSFPModule _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
+        private static DCSFPModule _dcsfpModule = DCSFPProfile.GetNoFrameLoadedYet();
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new List<KeyValuePair<string, GamingPanelEnum>>();
         private readonly object _lockObject = new object();
@@ -59,12 +59,12 @@ namespace NonVisuals
             }
         }
 
-        public DCSFPModule Profile
+        public DCSFPModule Module
         {
-            get => _dcsfpProfile;
+            get => _dcsfpModule;
             set
             {
-                _dcsfpProfile = value;
+                _dcsfpModule = value;
                 SetEmulationModeFlag();
             }
         }
@@ -101,9 +101,9 @@ namespace NonVisuals
             }
         }
 
-        public static DCSFPModule ActiveDCSFPProfile
+        public static DCSFPModule ActiveDCSFPModule
         {
-            get => _dcsfpProfile;
+            get => _dcsfpModule;
         }
 
         public ProfileHandler(string dcsbiosJSONDirectory, IHardwareConflictResolver hardwareConflictResolver)
@@ -177,7 +177,7 @@ namespace NonVisuals
             BindingMappingManager.ClearBindings();
             DCSFPProfile.SetNoFrameLoadedYetAsProfile();
             Common.ResetEmulationModesFlag();
-            Profile = DCSFPProfile.SelectedProfile;
+            Module = DCSFPProfile.SelectedModule;
 
             _profileLoaded = false;
             _isNewProfile = false;
@@ -225,12 +225,12 @@ namespace NonVisuals
             {
                 Common.ResetEmulationModesFlag();
                 _isNewProfile = true;
-                Profile = chooseProfileModuleWindow.Profile;
+                Module = chooseProfileModuleWindow.Module;
 
                 try
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
-                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
+                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Module);
                 }
                 finally
                 {
@@ -433,10 +433,10 @@ namespace NonVisuals
                         }
                     }
 
-                    DCSFPProfile.SelectedProfile = tmpProfile;
-                    Profile = tmpProfile;
+                    DCSFPProfile.SelectedModule = tmpProfile;
+                    Module = tmpProfile;
 
-                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
+                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Module);
 
                     return 1;
                 }
@@ -486,15 +486,15 @@ namespace NonVisuals
 
         private void SetEmulationModeFlag()
         {
-            if (Profile.IsModule(ManagedModule.NoFrameLoadedYet))
+            if (Module.IsModule(ManagedModule.NoFrameLoadedYet))
             {
                 Common.SetEmulationModes(EmulationMode.DCSBIOSInputEnabled | EmulationMode.DCSBIOSOutputEnabled);
             }
-            else if (Profile.IsModule(ManagedModule.KeyEmulator))
+            else if (Module.IsModule(ManagedModule.KeyEmulator))
             {
                 Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
             }
-            else if (Profile.IsModule(ManagedModule.FlamingCliff))
+            else if (Module.IsModule(ManagedModule.FlamingCliff))
             {
                 Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
             }
@@ -621,9 +621,9 @@ namespace NonVisuals
                 var stringBuilder = new StringBuilder();
                 stringBuilder.AppendLine(headerStringBuilder.ToString());
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
-                stringBuilder.AppendLine("Profile=" + Profile.ID);
+                stringBuilder.AppendLine("Profile=" + Module.ID);
                 stringBuilder.AppendLine("EmulationModesFlag=" + Common.GetEmulationModesFlag());
-                stringBuilder.AppendLine("UseGenericRadio=" + Profile.UseGenericRadio + Environment.NewLine);
+                stringBuilder.AppendLine("UseGenericRadio=" + Module.UseGenericRadio + Environment.NewLine);
 
                 foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                 {

@@ -59,7 +59,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                LabelProfileDescription.Content = ProfileHandler.ActiveDCSFPProfile.Description;
+                LabelProfileDescription.Content = ProfileHandler.ActiveDCSFPModule.Description;
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
                 _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));

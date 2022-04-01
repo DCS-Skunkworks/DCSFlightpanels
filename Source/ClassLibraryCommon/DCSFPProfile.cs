@@ -12,7 +12,7 @@
 
         private static object _lock = new object();
         private static readonly List<DCSFPModule> ModulesList = new();
-        public static DCSFPModule SelectedProfile { get; set; }
+        public static DCSFPModule SelectedModule { get; set; }
 
         public static void Init()
         {
@@ -95,7 +95,7 @@
                 LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
             }
 
-            SelectedProfile = module;
+            SelectedModule = module;
         }
 
 
