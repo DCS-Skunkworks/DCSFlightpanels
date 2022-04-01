@@ -11,27 +11,15 @@
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
         private static object _lock = new object();
-        private static readonly List<DCSFPProfile> ModulesList = new();
-        public static DCSFPProfile SelectedProfile { get; set; }
-
-        internal DCSFPProfile(int id, string description, string jsonFilename)
-        {
-            ID = id;
-            JSONFilename = jsonFilename;
-            Description = description;
-        }
+        private static readonly List<DCSFPModule> ModulesList = new();
+        public static DCSFPModule SelectedProfile { get; set; }
 
         public static void Init()
         {
             AddInternalModules();
         }
 
-        public int ID { get; set; }
-        public string JSONFilename { get; set; }
-        public string Description { get; set; }
-        public bool UseGenericRadio { get; set; } = false;
-
-        public static List<DCSFPProfile> Modules
+        public static List<DCSFPModule> Modules
         {
             get
             {
@@ -59,13 +47,13 @@
             {
                 if (!ModulesList.Exists(o => o.ID == (int)ManagedModule.NoFrameLoadedYet))
                 {
-                    var module = new DCSFPProfile(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
+                    var module = new DCSFPModule(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
                     ModulesList.Add(module);
                 }
 
                 if (!ModulesList.Exists(o => o.ID == (int)ManagedModule.KeyEmulator))
                 {
-                    var module = new DCSFPProfile(2, "Key Emulation", "KEYEMULATOR");
+                    var module = new DCSFPModule(2, "Key Emulation", "KEYEMULATOR");
                     ModulesList.Add(module);
                 }
             }
@@ -89,7 +77,7 @@
             throw new Exception(message);
         }
 
-        public static DCSFPProfile GetProfile(int id)
+        public static DCSFPModule GetProfile(int id)
         {
             var module = Modules.FirstOrDefault(x => x.ID == id);
             if (module == null)
@@ -111,7 +99,7 @@
         }
 
 
-        public static DCSFPProfile GetNoFrameLoadedYet()
+        public static DCSFPModule GetNoFrameLoadedYet()
         {
             var module = Modules.FirstOrDefault(x => x.IsModule(ManagedModule.NoFrameLoadedYet));
             if (module == null)
@@ -121,7 +109,7 @@
             return module;
         }
 
-        public static DCSFPProfile GetKeyEmulator()
+        public static DCSFPModule GetKeyEmulator()
         {
             var module = Modules.FirstOrDefault(x => x.IsModule(ManagedModule.KeyEmulator));
             if (module == null)
@@ -136,17 +124,12 @@
             return Modules.Exists(x => x.IsModule(ManagedModule.NS430));
         }
 
-        public static DCSFPProfile GetNS430()
+        public static DCSFPModule GetNS430()
         {
             return Modules.FirstOrDefault(x => x.IsModule(ManagedModule.NS430));
         }
 
-        public bool IsModule(ManagedModule module)
-        {
-            return ID == (int)module;
-        }
-
-        public static DCSFPProfile GetBackwardCompatible(string oldEnumValue)
+        public static DCSFPModule GetBackwardCompatible(string oldEnumValue)
         {
             int? moduleNumber = oldEnumValue switch
             {

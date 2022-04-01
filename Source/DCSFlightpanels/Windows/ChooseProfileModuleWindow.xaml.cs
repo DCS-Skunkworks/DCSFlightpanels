@@ -15,7 +15,7 @@ namespace DCSFlightpanels.Windows
     /// </summary>
     public partial class ChooseProfileModuleWindow : Window
     {
-        private DCSFPProfile _dcsfpProfile;
+        private DCSFPModule _dcsfpProfile;
 
         public ChooseProfileModuleWindow()
         {
@@ -62,7 +62,7 @@ namespace DCSFlightpanels.Windows
                 return;
             }
 
-            var itemsSource = new List<DCSFPProfile>();
+            var itemsSource = new List<DCSFPModule>();
             ComboBoxAirframe.SelectionChanged -= ComboBoxAirframe_OnSelectionChanged;
             ComboBoxAirframe.Items.Clear();
 
@@ -81,7 +81,7 @@ namespace DCSFlightpanels.Windows
         {
             if (IsLoaded && ComboBoxAirframe.SelectedItem != null)
             {
-                _dcsfpProfile = (DCSFPProfile)ComboBoxAirframe.SelectedItem;
+                _dcsfpProfile = (DCSFPModule)ComboBoxAirframe.SelectedItem;
                 _dcsfpProfile.UseGenericRadio = CheckBoxUseGenericRadio.IsChecked == true;
                 DCSFPProfile.SelectedProfile = _dcsfpProfile;
                 DCSBIOSControlLocator.Profile = _dcsfpProfile;
@@ -106,7 +106,7 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        public DCSFPProfile Profile
+        public DCSFPModule Profile
         {
             get { return _dcsfpProfile; }
         }

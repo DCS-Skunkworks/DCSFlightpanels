@@ -28,7 +28,7 @@ namespace NonVisuals
         private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
         private const string OPEN_FILE_DIALOG_FILTER = "DCSFlightpanels (.bindings)|*.bindings";
 
-        private static DCSFPProfile _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
+        private static DCSFPModule _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new List<KeyValuePair<string, GamingPanelEnum>>();
         private readonly object _lockObject = new object();
@@ -59,7 +59,7 @@ namespace NonVisuals
             }
         }
 
-        public DCSFPProfile Profile
+        public DCSFPModule Profile
         {
             get => _dcsfpProfile;
             set
@@ -101,7 +101,7 @@ namespace NonVisuals
             }
         }
 
-        public static DCSFPProfile ActiveDCSFPProfile
+        public static DCSFPModule ActiveDCSFPProfile
         {
             get => _dcsfpProfile;
         }
@@ -314,7 +314,7 @@ namespace NonVisuals
                     string currentBindingHash = null;
                     var insidePanel = false;
                     var insideJSONPanel = false;
-                    DCSFPProfile tmpProfile = null;
+                    DCSFPModule tmpProfile = null;
                     GenericPanelBinding genericPanelBinding = null;
 
                     foreach (var fileLine in fileLines)

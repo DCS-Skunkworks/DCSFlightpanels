@@ -6,14 +6,14 @@ namespace ClassLibraryCommon
 {
     public class DcsBiosLuaFileReader
     {
-        public List<DCSFPProfile> GetModulesListFromDcsBiosLua(string dcsbiosJsonFolder)
+        public List<DCSFPModule> GetModulesListFromDcsBiosLua(string dcsbiosJsonFolder)
         {
-            List<DCSFPProfile> dCSFPProfiles= new();
+            List<DCSFPModule> dCSFPModules= new();
             var biosLua = Path.Combine(dcsbiosJsonFolder, "..\\..\\", "BIOS.lua");
 
             if (!File.Exists(biosLua))
             {
-                return dCSFPProfiles; // Empty list
+                return dCSFPModules; // Empty list
             }
 
             var stringArray = File.ReadAllLines(biosLua);
@@ -37,10 +37,10 @@ namespace ClassLibraryCommon
                     // ProperName = A-10C Thunderbolt II
                     var properName = info[1].Split(new[] { "=" }, StringSplitOptions.None)[1].Trim();
 
-                    dCSFPProfiles.Add(new DCSFPProfile(id, properName, json));
+                    dCSFPModules.Add(new DCSFPModule(id, properName, json));
                 }
             }
-            return dCSFPProfiles;
+            return dCSFPModules;
         }
     }
 }

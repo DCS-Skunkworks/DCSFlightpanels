@@ -18,12 +18,12 @@ namespace DCS_BIOS
 
         private static readonly List<DCSBIOSControl> DCSBIOSControls = new();
         private static readonly object LockObject = new();
-        private static DCSFPProfile _dcsfpProfile;
+        private static DCSFPModule _dcsfpProfile;
         private static string _jsonDirectory;
         public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
 
 
-        public static DCSFPProfile Profile
+        public static DCSFPModule Profile
         {
             get => _dcsfpProfile;
             set
