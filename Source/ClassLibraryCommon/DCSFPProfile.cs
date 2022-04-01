@@ -4,7 +4,6 @@
     using NLog;
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
 
     public class DCSFPProfile
@@ -13,7 +12,6 @@
 
         private static object _lock = new object();
         private static readonly List<DCSFPProfile> ModulesList = new();
-
         public static DCSFPProfile SelectedProfile { get; set; }
 
         internal DCSFPProfile(int id, string description, string jsonFilename)
@@ -29,11 +27,8 @@
         }
 
         public int ID { get; set; }
-
         public string JSONFilename { get; set; }
-
         public string Description { get; set; }
-
         public bool UseGenericRadio { get; set; } = false;
 
         public static List<DCSFPProfile> Modules
@@ -62,13 +57,13 @@
         {
             lock (_lock)
             {
-                if (!ModulesList.Exists(o => o.ID == 1))
+                if (!ModulesList.Exists(o => o.ID == (int)ManagedModule.NoFrameLoadedYet))
                 {
                     var module = new DCSFPProfile(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
                     ModulesList.Add(module);
                 }
 
-                if (!ModulesList.Exists(o => o.ID == 2))
+                if (!ModulesList.Exists(o => o.ID == (int)ManagedModule.KeyEmulator))
                 {
                     var module = new DCSFPProfile(2, "Key Emulation", "KEYEMULATOR");
                     ModulesList.Add(module);
@@ -99,7 +94,7 @@
             var module = Modules.FirstOrDefault(x => x.ID == id);
             if (module == null)
             {
-                LogErrorAndThrowException("Failed to determine profile ID (" + id + ") in your bindings file.");
+                LogErrorAndThrowException($"Failed to determine profile ID ({id}) in your bindings file.");
             }
             return module;
         }
