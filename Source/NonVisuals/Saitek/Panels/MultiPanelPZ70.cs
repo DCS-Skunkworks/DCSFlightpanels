@@ -855,7 +855,7 @@
                             if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                             {
                                 PluginManager.DoEvent(
-                                    DCSFPProfile.SelectedProfile.Description,
+                                    DCSFPProfile.SelectedModule.Description,
                                     HIDInstance,
                                     (int)PluginGamingPanelEnum.PZ70MultiPanel,
                                     (int)multiPanelKnob.MultiPanelPZ70Knob,
@@ -878,7 +878,7 @@
                 if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        DCSFPProfile.SelectedProfile.Description,
+                        DCSFPProfile.SelectedModule.Description,
                         HIDInstance,
                         (int)PluginGamingPanelEnum.PZ70MultiPanel,
                         (int)multiPanelKnob.MultiPanelPZ70Knob,

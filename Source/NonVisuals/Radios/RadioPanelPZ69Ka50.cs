@@ -1036,7 +1036,7 @@
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                DCSFPProfile.SelectedProfile.Description,
+                                DCSFPProfile.SelectedModule.Description,
                                 HIDInstance,
                                 (int)PluginGamingPanelEnum.PZ69RadioPanel,
                                 (int)radioPanelKnob.RadioPanelPZ69Knob,

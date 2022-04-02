@@ -46,15 +46,6 @@
             }
         }
 
-        public static bool IsStreamDeck(GamingPanelEnum panelType)
-        {
-            return panelType == GamingPanelEnum.StreamDeckMini
-                || panelType == GamingPanelEnum.StreamDeck
-                || panelType == GamingPanelEnum.StreamDeckXL
-                || panelType == GamingPanelEnum.StreamDeckV2
-                || panelType == GamingPanelEnum.StreamDeckMK2;
-        }
-
         public static string RemoveLControl(string keySequence)
         {
             return true switch
@@ -90,34 +81,6 @@
                     throw new Exception($"Invalid emulation modes flag : {_emulationModesFlag}");
                 }
             }
-        }
-
-        public static void SetEmulationModes(DCSFPProfile dcsfpProfile)
-        {
-            ResetEmulationModesFlag();
-            switch (dcsfpProfile.ID)
-            {
-                case 1: //No profile loaded
-                    {
-                        break;
-                    }
-                case 2:
-                    {
-                        SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
-                        break;
-                    }
-                case 4:
-                    {
-                        SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled);
-                        break;
-                    }
-                default:
-                    {
-                        SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled | EmulationMode.DCSBIOSOutputEnabled);
-                        break;
-                    }
-            }
-            ValidateEmulationModeFlag();
         }
 
         public static void SetEmulationModesFlag(int flag)
@@ -203,11 +166,6 @@
         {
             var bytes = RandomNumberGenerator.GetBytes(16);
             return BitConverter.ToString(bytes).Replace("-", string.Empty).ToLower();
-        }
-
-        public static void ShowMessageBox(string message)
-        {
-            MessageBox.Show(message, "", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public static void ShowErrorMessageBox(Exception ex, string message = null)

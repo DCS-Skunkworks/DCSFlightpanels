@@ -38,6 +38,22 @@ namespace NonVisuals
             }
         }
 
+        public static void SendBinding(HIDSkeleton hidSkeleton, AppEventHandler appEventHandler)
+        {
+            lock (_genericBindingsLock)
+            {
+                foreach (var genericPanelBinding in _genericBindings)
+                {
+                    if (genericPanelBinding.Match(hidSkeleton))
+                    {
+                        genericPanelBinding.InUse = true;
+                        appEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
+                            DCSFPProfile.SelectedModule);
+                    }
+                }
+            }
+        }
+
         public static void SendBinding(string hidInstance, AppEventHandler appEventHandler)
         {
             lock (_genericBindingsLock)
@@ -51,7 +67,7 @@ namespace NonVisuals
                     {
                         genericPanelBinding.InUse = true;
                         appEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
-                            DCSFPProfile.SelectedProfile);
+                            DCSFPProfile.SelectedModule);
                     }
                 }
             }

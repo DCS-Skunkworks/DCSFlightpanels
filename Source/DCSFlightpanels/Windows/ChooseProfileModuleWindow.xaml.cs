@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using ClassLibraryCommon.Enums;
 using DCS_BIOS;
 
 namespace DCSFlightpanels.Windows
@@ -13,7 +15,7 @@ namespace DCSFlightpanels.Windows
     /// </summary>
     public partial class ChooseProfileModuleWindow : Window
     {
-        private DCSFPProfile _dcsfpProfile;
+        public DCSFPModule Module { get; private set; }
 
         public ChooseProfileModuleWindow()
         {
@@ -60,15 +62,13 @@ namespace DCSFlightpanels.Windows
                 return;
             }
 
-            var itemsSource = new List<DCSFPProfile>();
+            var itemsSource = new List<DCSFPModule>();
             ComboBoxAirframe.SelectionChanged -= ComboBoxAirframe_OnSelectionChanged;
             ComboBoxAirframe.Items.Clear();
-            foreach (var module in DCSFPProfile.Modules)
-            {
-                if (!DCSFPProfile.IsNoFrameLoadedYet(module)) //!DCSFPProfile.IsNS430(module) &&  
-                {
-                    itemsSource.Add(module);
-                }
+
+            foreach (var module in DCSFPProfile.Modules.Where(x => !x.IsModule(ManagedModule.NoFrameLoadedYet)))
+            { 
+                itemsSource.Add(module);
             }
 
             ComboBoxAirframe.DisplayMemberPath = "Description";
@@ -81,10 +81,10 @@ namespace DCSFlightpanels.Windows
         {
             if (IsLoaded && ComboBoxAirframe.SelectedItem != null)
             {
-                _dcsfpProfile = (DCSFPProfile)ComboBoxAirframe.SelectedItem;
-                _dcsfpProfile.UseGenericRadio = CheckBoxUseGenericRadio.IsChecked == true;
-                DCSFPProfile.SelectedProfile = _dcsfpProfile;
-                DCSBIOSControlLocator.Profile = _dcsfpProfile;
+                Module = (DCSFPModule)ComboBoxAirframe.SelectedItem;
+                Module.UseGenericRadio = CheckBoxUseGenericRadio.IsChecked == true;
+                DCSFPProfile.SelectedModule = Module;
+                DCSBIOSControlLocator.Module = Module;
             }
         }
 
@@ -93,8 +93,8 @@ namespace DCSFlightpanels.Windows
             try
             {
                 SetAirframe();
-                if (!DCSFPProfile.IsFlamingCliff(_dcsfpProfile) &&
-                    !DCSFPProfile.IsKeyEmulator(_dcsfpProfile))
+                if (!Module.IsModule(ManagedModule.FlamingCliff) &&
+                    !Module.IsModule(ManagedModule.KeyEmulator))
                 {
                     //User has chosen a DCS-BIOS compatible module
                     StackPanelUseGenericRadio.Visibility = Visibility.Visible;
@@ -106,10 +106,6 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        public DCSFPProfile Profile
-        {
-            get { return _dcsfpProfile; }
-        }
 
         private void ChooseProfileModuleWindow_OnKeyDown(object sender, KeyEventArgs e)
         {

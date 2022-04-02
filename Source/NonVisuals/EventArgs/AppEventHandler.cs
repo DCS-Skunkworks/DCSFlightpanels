@@ -129,7 +129,7 @@ namespace NonVisuals.EventArgs
             return OnProfileEvent != null && OnProfileEvent.GetInvocationList().Length > 0;
         }
 
-        public void ProfileEvent(object sender, ProfileEventEnum profileEventType, GenericPanelBinding genericPanelBinding, DCSFPProfile dcsfpProfile)
+        public void ProfileEvent(object sender, ProfileEventEnum profileEventType, GenericPanelBinding genericPanelBinding, DCSFPModule dcsfpProfile)
         {
             OnProfileEvent?.Invoke(sender, new ProfileEventArgs { PanelBinding = genericPanelBinding, ProfileEventType = profileEventType, DCSProfile = dcsfpProfile});
         }

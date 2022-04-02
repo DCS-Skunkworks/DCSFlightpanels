@@ -16,6 +16,11 @@
 			.allowedextension
 		</AllowedReferenceRelatedFileExtensions>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="ClassLibraryCommon\Resources\doc\**" />
+	  <EmbeddedResource Remove="ClassLibraryCommon\Resources\doc\**" />
+	  <None Remove="ClassLibraryCommon\Resources\doc\**" />
+	</ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="xunit" Version="2.4.2-pre.12" />
@@ -32,6 +37,21 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NonVisuals\NonVisuals.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ClassLibraryCommon\Resources\DCS-Bios_Folder Structure\BIOS.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ClassLibraryCommon\Resources\DCS-Bios_Folder Structure\doc\json\A-10C.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ClassLibraryCommon\TestsResources\DCS-Bios_Folder Structure\BIOS.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ClassLibraryCommon\TestsResources\DCS-Bios_Folder Structure\doc\json\A-10C.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

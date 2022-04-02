@@ -8,7 +8,7 @@ namespace DCS_BIOS
     using System.Linq;
     using System.Text;
     using ClassLibraryCommon;
-
+    using ClassLibraryCommon.Enums;
     using Newtonsoft.Json;
     using NLog;
 
@@ -18,19 +18,19 @@ namespace DCS_BIOS
 
         private static readonly List<DCSBIOSControl> DCSBIOSControls = new();
         private static readonly object LockObject = new();
-        private static DCSFPProfile _dcsfpProfile;
+        private static DCSFPModule _dcsfpModule;
         private static string _jsonDirectory;
         public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
 
 
-        public static DCSFPProfile Profile
+        public static DCSFPModule Module
         {
-            get => _dcsfpProfile;
+            get => _dcsfpModule;
             set
             {
-                if (_dcsfpProfile != value)
+                if (_dcsfpModule != value)
                 {
-                    _dcsfpProfile = value;
+                    _dcsfpModule = value;
                     Reset();
                 }
             }
@@ -78,14 +78,14 @@ namespace DCS_BIOS
                     PrintDuplicateControlIdentifiers(_dcsbiosControls, true);*/
                     if (!DCSBIOSControls.Exists(controlObject => controlObject.Identifier.Equals(controlId)))
                     {
-                        throw new Exception($"Error, control {controlId} does not exist. ({Profile.Description})");
+                        throw new Exception($"Error, control {controlId} does not exist. ({Module.Description})");
                     }
 
                     return DCSBIOSControls.Single(controlObject => controlObject.Identifier.Equals(controlId));
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    throw new Exception($"Check DCS-BIOS version. Failed to find control {controlId} for airframe {Profile.Description} ({Profile.JSONFilename}). Did you switch airframe type for the profile and have existing control(s) for the previous type saved?{Environment.NewLine}{ioe.Message}");
+                    throw new Exception($"Check DCS-BIOS version. Failed to find control {controlId} for airframe {Module.Description} ({Module.JSONFilename}). Did you switch airframe type for the profile and have existing control(s) for the previous type saved?{Environment.NewLine}{ioe.Message}");
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace DCS_BIOS
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    throw new Exception($"Check DCS-BIOS version. Failed to create DCSBIOSOutput based on control {controlId} for profile {Profile.JSONFilename}{Environment.NewLine}{ioe.Message}");
+                    throw new Exception($"Check DCS-BIOS version. Failed to create DCSBIOSOutput based on control {controlId} for profile {Module.JSONFilename}{Environment.NewLine}{ioe.Message}");
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace DCS_BIOS
              */
             try
             {
-                if (DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile) ||
+                if (_dcsfpModule.IsModule(ManagedModule.NoFrameLoadedYet) ||
                     Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
                 {
                     return;
@@ -188,7 +188,7 @@ namespace DCS_BIOS
                     //ReadDataFromJsonFile(DCSFPProfile.GetNS430().JSONFilename);
                 }
 
-                if (DCSFPProfile.IsFlamingCliff(Profile))
+                if (Module.IsModule(ManagedModule.FlamingCliff))
                 {
                     LoadCommonData(_jsonDirectory);
                     LoadMetaDataEnd(_jsonDirectory);
@@ -199,7 +199,7 @@ namespace DCS_BIOS
                     LoadMetaDataEnd(_jsonDirectory);
 
                     // Load the controls for the actual aircraft/helicopter
-                    ReadDataFromJsonFile(Profile.JSONFilename);
+                    ReadDataFromJsonFile(Module.JSONFilename);
                 }
 
                 // Remove duplicates which may come from loading NS430 or other additional profiles
@@ -257,8 +257,8 @@ namespace DCS_BIOS
             if (dupes.Count > 0)
             {
                 StringBuilder message = new();
-                message.AppendLine($"Below is a list of duplicate identifiers found in the {Profile.JSONFilename} profile (DCS-BIOS)");
-                message.AppendLine($"The identifier must be unique, please correct the profile {Profile.JSONFilename} in the DCS-BIOS lib folder");
+                message.AppendLine($"Below is a list of duplicate identifiers found in the {Module.JSONFilename} profile (DCS-BIOS)");
+                message.AppendLine($"The identifier must be unique, please correct the profile {Module.JSONFilename} in the DCS-BIOS lib folder");
                 message.AppendLine("---------------------------------------------");
                 dupes.ForEach(dupe => message.AppendLine(dupe));
                 message.AppendLine("---------------------------------------------");
@@ -268,7 +268,9 @@ namespace DCS_BIOS
         
         private static void LoadMetaDataEnd(string jsonDirectory)
         {
-            if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
+            if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") 
+                || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) 
+                || _dcsfpModule.IsModule(ManagedModule.NoFrameLoadedYet))
             {
                 return;
             }
@@ -301,7 +303,9 @@ namespace DCS_BIOS
 
         private static void LoadCommonData(string jsonDirectory)
         {
-            if (DCSBIOSProfileLoadStatus.IsLoaded("CommonData") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
+            if (DCSBIOSProfileLoadStatus.IsLoaded("CommonData") 
+                || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) 
+                || _dcsfpModule.IsModule(ManagedModule.NoFrameLoadedYet))
             {
                 return;
             }
