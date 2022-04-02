@@ -2,6 +2,7 @@
 using DCS_BIOS;
 using MEF;
 using NonVisuals;
+using NonVisuals.EventArgs;
 using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Panels;
@@ -143,7 +144,8 @@ namespace Tests.NonVisuals {
         public void DCSBIOSConverter_MustBe_Clonable() {
             var gamingPanelSkeleton =
                new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
-            StreamDeckPanel streamdeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), true);
+            AppEventHandler appEventHandler = new();
+            StreamDeckPanel streamdeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", appEventHandler), true);
             DCSBIOSConverter source = new(streamdeckPanel);
             source.ConverterOutputType = EnumConverterOutputType.Image;
             source.BackgroundColor = _colorValue1;

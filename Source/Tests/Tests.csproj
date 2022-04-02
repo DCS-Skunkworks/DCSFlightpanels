@@ -16,12 +16,6 @@
 			.allowedextension
 		</AllowedReferenceRelatedFileExtensions>
 	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Remove="NonVisuals\RadiosPZ69DisplayBytesTests.cs" />
-	</ItemGroup>
-	<ItemGroup>
-	  <None Include="NonVisuals\RadiosPZ69DisplayBytesTests.cs" />
-	</ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="xunit" Version="2.4.2-pre.12" />
