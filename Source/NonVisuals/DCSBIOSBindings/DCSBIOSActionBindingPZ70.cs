@@ -122,12 +122,6 @@
             var stringBuilder = new StringBuilder();
             foreach (var dcsbiosInput in DCSBIOSInputs)
             {
-
-                if (dcsbiosInput == null)
-                {
-                    Debugger.Break();
-                }
-
                 stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + dcsbiosInput);
             }
 

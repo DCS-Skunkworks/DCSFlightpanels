@@ -1,4 +1,6 @@
-﻿namespace NonVisuals
+﻿using System.Diagnostics;
+
+namespace NonVisuals
 {
     using System;
     using System.Collections.Generic;
@@ -54,13 +56,20 @@
 
         public KeyPress(string keycodes, KeyPressLength keyPressLength = KeyPressLength.FiftyMilliSec, string description = null)
         {
-            var keyPressInfo = new KeyPressInfo
+            try
             {
-                VirtualKeyCodes = SplitStringKeyCodes(keycodes)
-            };
-            _sortedKeyPressInfoList.Add(GetNewKeyValue(), keyPressInfo);
-            keyPressInfo.LengthOfKeyPress = keyPressLength;
-            _description = description;
+                var keyPressInfo = new KeyPressInfo
+                {
+                    VirtualKeyCodes = SplitStringKeyCodes(keycodes)
+                };
+                _sortedKeyPressInfoList.Add(GetNewKeyValue(), keyPressInfo);
+                keyPressInfo.LengthOfKeyPress = keyPressLength;
+                _description = description;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error creating KeyPress object. " + e.Message);
+            }
         }
 
         public KeyPress(string information, SortedList<int, IKeyPressInfo> sortedList)
@@ -99,8 +108,15 @@
         {
             try
             {
+                Debug.WriteLine("Looking for negators. Count is " + _negatorOSKeyPresses.Count);
                 foreach (var negatorOSKeyPress in _negatorOSKeyPresses)
                 {
+                    /*if (negatorOSKeyPress.KeyPressSequence.Count == 0)
+                    {
+                        Debugger.Break();
+                    }
+                    Debug.WriteLine("Current negatorOSKeyPress.KeyPressSequence count is " + negatorOSKeyPress.KeyPressSequence.Count);
+                    Debug.WriteLine("Aborting keypress : " + negatorOSKeyPress.KeyPressSequence[0].VirtualKeyCodesAsString);*/
                     negatorOSKeyPress.Abort = true;
                 }
 

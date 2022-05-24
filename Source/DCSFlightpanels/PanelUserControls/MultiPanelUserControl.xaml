@@ -175,6 +175,8 @@
                         <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True"  x:Name="TextBoxAutoThrottleOff" />
                         <Label Content="Flaps UP" FontSize="10" Height="23" />
                         <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFlapsUp"   />
+                        <Label Content="Flaps DOWN" FontSize="10" Height="23" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFlapsDown"  />
                         <Label Content="Pitch Trim Up" FontSize="10" Height="23"  />
                         <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxPitchTrimUp"   />
 
@@ -185,8 +187,10 @@
                         <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxLcdKnobIncrease"   />
                         <Label Content="Auto Throttle ARM" FontSize="10" Height="23" />
                         <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAutoThrottleOn" />
-                        <Label Content="Flaps DOWN" FontSize="10" Height="23" />
-                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFlapsDown"  />
+                        <Label Content="Flaps UP Release" FontSize="10" Height="23" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFlapsUpRelease"   />
+                        <Label Content="Flaps DOWN Release" FontSize="10" Height="23" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFlapsDownRelease"   />
                         <Label Content="Pitch Trim Down" FontSize="10" Height="23"  />
                         <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxPitchTrimDown"  />
 

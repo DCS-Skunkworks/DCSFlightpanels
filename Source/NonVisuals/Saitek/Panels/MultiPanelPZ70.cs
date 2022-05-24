@@ -199,7 +199,7 @@
             }
 
             SettingsLoading = false;
-            _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
+            KeyBindingPZ70.SetNegators(ref _knobBindings);
             AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
         }
 
@@ -414,7 +414,7 @@
                 _knobBindings.Add(knobBinding);
             }
 
-            _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
+            KeyBindingPZ70.SetNegators(ref _knobBindings);
             SetIsDirty();
         }
 
@@ -460,7 +460,7 @@
                 _knobBindings.Add(knobBinding);
             }
 
-            _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
+            KeyBindingPZ70.SetNegators(ref _knobBindings);
             SetIsDirty();
         }
 
