@@ -7,7 +7,8 @@
         public bool EditDCSBIOSVisible = false;
         public bool EditBIPVisible = false;
         public bool EditOSCommandVisible = false;
-        public bool CopyVisible = false;
+        public bool CopySingleVisible = false;
+        public bool CopySubMenuVisible = false;
         public bool CopyKeyStrokeVisible = false;
         public bool CopyKeySequenceVisible = false;
         public bool CopyDCSBIOSVisible = false;

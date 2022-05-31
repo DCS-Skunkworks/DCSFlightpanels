@@ -51,7 +51,9 @@
                 }
                 else if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
                 {
+                    var dummy = 0;
                     var menuItemVisibilities = ((ContextMenuPanelTextBox)textBox.ContextMenu).GetVisibility(
+                        ref dummy,
                         textBox.GetBill.IsEmpty(), 
                         textBox.GetBill.ContainsKeyStroke(), 
                         textBox.GetBill.ContainsKeySequence(), 

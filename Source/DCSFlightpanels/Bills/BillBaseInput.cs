@@ -325,13 +325,45 @@ namespace DCSFlightpanels.Bills
                     return;
                 }
 
-                _contextMenu.SetVisibility(
+                /*
+                 * User convenience!
+                 * The deal with this objectCount is this; a textbox can have multiple configurations and when a user copies
+                 * from one of these the user will see a submenu to copy where the items are listed and he can choose which to copy.
+                 * Now, mostly there are only one item and for those there will not be a copy menu with subitems, just a "Copy" menu.
+                 */
+                var objectCount = _contextMenu.SetVisibility(
                     IsEmpty(),
                     ContainsKeyStroke(),
                     ContainsKeySequence(),
                     ContainsDCSBIOS(),
                     ContainsBIPLink(),
                     ContainsOSCommand());
+
+                if (objectCount == 1)
+                {
+                    //Show only simple copy menu and set correct event handler.
+                    if (ContainsKeyStroke())
+                    {
+                        _contextMenu.ContextMenuItemCopySingle.Click += MenuItemCopyKeyStroke_OnClick;
+                    }
+                    else if (ContainsKeySequence())
+                    {
+                        _contextMenu.ContextMenuItemCopySingle.Click += MenuItemCopyKeySequence_OnClick;
+                    }
+                    else if (ContainsDCSBIOS())
+                    {
+                        _contextMenu.ContextMenuItemCopySingle.Click += MenuItemCopyDCSBIOS_OnClick;
+                    }
+                    else if (ContainsBIPLink())
+                    {
+                        _contextMenu.ContextMenuItemCopySingle.Click += MenuItemCopyBIPLink_OnClick;
+                    }
+                    else if (ContainsOSCommand())
+                    {
+                        _contextMenu.ContextMenuItemCopySingle.Click += MenuItemCopyOSCommand_OnClick;
+                    }
+                }
+                
             }
             catch (Exception ex)
             {
@@ -584,7 +616,27 @@ namespace DCSFlightpanels.Bills
 
         private void AddBipLink(BIPLink bipLink)
         {
-            BipLink = bipLink.CloneJson();
+            //Don't know how to get around this. Json can't clone an abstract class.
+            if (bipLink.GetType() == typeof(BIPLinkPZ55))
+            {
+                BipLink = ((BIPLinkPZ55)bipLink).CloneJson();
+            }
+            else if (bipLink.GetType() == typeof(BIPLinkPZ70))
+            {
+                BipLink = ((BIPLinkPZ70)bipLink).CloneJson();
+            }
+            else if (bipLink.GetType() == typeof(BIPLinkPZ69))
+            {
+                BipLink = ((BIPLinkPZ69)bipLink).CloneJson();
+            }
+            else if (bipLink.GetType() == typeof(BIPLinkFarmingPanel))
+            {
+                BipLink = ((BIPLinkFarmingPanel)bipLink).CloneJson();
+            }
+            else if (bipLink.GetType() == typeof(BIPLinkTPM))
+            {
+                BipLink = ((BIPLinkTPM)bipLink).CloneJson();
+            }
             UpdateBIPLinkBindings();
         }
 

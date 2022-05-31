@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels
+﻿using System.Diagnostics;
+
+namespace DCSFlightpanels
 {
     using System;
     using System.Windows;
@@ -18,7 +20,8 @@
         private MenuItem _contextMenuItemEditDCSBIOS;
         private MenuItem _contextMenuItemEditBIP;
         private MenuItem _contextMenuItemEditOSCommand;
-        private MenuItem _contextMenuItemCopy;
+        private MenuItem _contextMenuItemCopySingle;
+        private MenuItem _contextMenuItemCopySubMenu;
         private MenuItem _contextMenuItemCopyKeyStroke;
         private MenuItem _contextMenuItemCopyKeySequence;
         private MenuItem _contextMenuItemCopyDCSBIOS;
@@ -45,19 +48,21 @@
             _contextMenuItemEditOSCommand = new MenuItem() { Header = "Edit OS Command" };
             Items.Add(_contextMenuItemEditOSCommand);
 
+            _contextMenuItemCopySingle = new MenuItem() { Header = "Copy" };
+            Items.Add(_contextMenuItemCopySingle);
 
-            _contextMenuItemCopy = new MenuItem() { Header = "Copy" };
-            Items.Add(_contextMenuItemCopy);
+            _contextMenuItemCopySubMenu = new MenuItem() { Header = "Copy" };
+            Items.Add(_contextMenuItemCopySubMenu);
             _contextMenuItemCopyKeyStroke = new MenuItem() { Header = "Key Stroke" };
-            _contextMenuItemCopy.Items.Add(_contextMenuItemCopyKeyStroke);
+            _contextMenuItemCopySubMenu.Items.Add(_contextMenuItemCopyKeyStroke);
             _contextMenuItemCopyKeySequence = new MenuItem() { Header = "Key Sequence" };
-            _contextMenuItemCopy.Items.Add(_contextMenuItemCopyKeySequence);
+            _contextMenuItemCopySubMenu.Items.Add(_contextMenuItemCopyKeySequence);
             _contextMenuItemCopyDCSBIOS = new MenuItem() { Header = "DCS-BIOS" };
-            _contextMenuItemCopy.Items.Add(_contextMenuItemCopyDCSBIOS);
+            _contextMenuItemCopySubMenu.Items.Add(_contextMenuItemCopyDCSBIOS);
             _contextMenuItemCopyBIPLink = new MenuItem() { Header = "BIP Link" };
-            _contextMenuItemCopy.Items.Add(_contextMenuItemCopyBIPLink);
+            _contextMenuItemCopySubMenu.Items.Add(_contextMenuItemCopyBIPLink);
             _contextMenuItemCopyOSCommand = new MenuItem() { Header = "OS Command" };
-            _contextMenuItemCopy.Items.Add(_contextMenuItemCopyOSCommand);
+            _contextMenuItemCopySubMenu.Items.Add(_contextMenuItemCopyOSCommand);
 
             _contextMenuItemPaste = new MenuItem() { Header = "Paste" };
             Items.Add(_contextMenuItemPaste);
@@ -68,23 +73,25 @@
 
         public void OpenCopySubMenuItem()
         {
-            _contextMenuItemCopy.IsSubmenuOpen = true;
+            _contextMenuItemCopySubMenu.IsSubmenuOpen = true;
         }
 
-        public void SetVisibility(bool isEmpty, bool containsKeystroke, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
+        public int SetVisibility(bool isEmpty, bool containsKeystroke, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
         {
+            var objectCount = 0;
             try
             {
                 HideAll();
 
-                var menuItemVisibilities = GetVisibility(isEmpty, containsKeystroke, containsKeySequence, containsDCSBIOS, containsBIPLink, containsOSCommand);
+                var menuItemVisibilities = GetVisibility(ref objectCount, isEmpty, containsKeystroke, containsKeySequence, containsDCSBIOS, containsBIPLink, containsOSCommand);
 
                 _contextMenuItemAddNullKey.Visibility = menuItemVisibilities.AddNullKeyVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemEditSequence.Visibility = menuItemVisibilities.EditSequenceVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemEditDCSBIOS.Visibility = menuItemVisibilities.EditDCSBIOSVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemEditBIP.Visibility = menuItemVisibilities.EditBIPVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemEditOSCommand.Visibility = menuItemVisibilities.EditOSCommandVisible ? Visibility.Visible : Visibility.Collapsed;
-                _contextMenuItemCopy.Visibility = menuItemVisibilities.CopyVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemCopySingle.Visibility = menuItemVisibilities.CopySingleVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemCopySubMenu.Visibility = menuItemVisibilities.CopySubMenuVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemCopyKeyStroke.Visibility = menuItemVisibilities.CopyKeyStrokeVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemCopyKeySequence.Visibility = menuItemVisibilities.CopyKeySequenceVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemCopyDCSBIOS.Visibility = menuItemVisibilities.CopyDCSBIOSVisible ? Visibility.Visible : Visibility.Collapsed;
@@ -92,15 +99,17 @@
                 _contextMenuItemCopyOSCommand.Visibility = menuItemVisibilities.CopyOSCommandVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemPaste.Visibility = menuItemVisibilities.PasteVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemDeleteSettings.Visibility = menuItemVisibilities.DeleteSettingsVisible ? Visibility.Visible : Visibility.Collapsed;
+
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
+            return objectCount;
         }
 
 
-        public DCSFPContextMenuVisibility GetVisibility(bool isEmpty, bool containsKeyStroke, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
+        public DCSFPContextMenuVisibility GetVisibility(ref int objectCount, bool isEmpty, bool containsKeyStroke, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
         {
             var result = new DCSFPContextMenuVisibility();
             try
@@ -110,11 +119,21 @@
                 if (dataObject != null && dataObject.GetDataPresent("NonVisuals.CopyPackage"))
                 {
                     copyPackage = (CopyPackage)dataObject.GetData("NonVisuals.CopyPackage");
+                    /*
+                    31052022
+                    In PZ70 you can paste into the same textbox under different knob positions like ALT VS IAS etc. 
                     if (copyPackage?.SourceName == TextBox.Name)
                     {
                         copyPackage = null;
-                    }
+                    }*/
                 }
+
+                objectCount = 0;
+                objectCount += containsKeyStroke ? 1 : 0;
+                objectCount += containsKeySequence ? 1 : 0;
+                objectCount += containsDCSBIOS ? 1 : 0;
+                objectCount += containsBIPLink ? 1 : 0;
+                objectCount += containsOSCommand ? 1 : 0;
 
                 if (isEmpty)
                 {
@@ -137,7 +156,7 @@
                         result.PasteVisible = true;
                     }
                 }
-
+                
                 if (containsKeyStroke)
                 {
                     if (BipFactory.HasBips())
@@ -145,8 +164,15 @@
                         result.EditBIPVisible = true;
                     }
 
-                    result.CopyVisible = true;
-                    result.CopyKeyStrokeVisible = true;
+                    if (objectCount > 1)
+                    {
+                        result.CopySubMenuVisible = true;
+                        result.CopyKeyStrokeVisible = true;
+                    }
+                    else
+                    {
+                        result.CopySingleVisible = true;
+                    }
 
                     if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
                     {
@@ -162,8 +188,15 @@
                         result.EditBIPVisible = true;
                     }
 
-                    result.CopyVisible = true;
-                    result.CopyKeySequenceVisible = true;
+                    if (objectCount > 1)
+                    {
+                        result.CopySubMenuVisible = true;
+                        result.CopyKeySequenceVisible = true;
+                    }
+                    else
+                    {
+                        result.CopySingleVisible = true;
+                    }
 
                     if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
                     {
@@ -176,8 +209,16 @@
                     if (!_keyboardEmulationOnly)
                     {
                         result.EditDCSBIOSVisible = true;
-                        result.CopyVisible = true;
-                        result.CopyDCSBIOSVisible = true;
+                        
+                        if (objectCount > 1)
+                        {
+                            result.CopySubMenuVisible = true;
+                            result.CopyDCSBIOSVisible = true;
+                        }
+                        else
+                        {
+                            result.CopySingleVisible = true;
+                        }
                     }
 
                     if (BipFactory.HasBips())
@@ -194,8 +235,15 @@
                 if (containsBIPLink)
                 {
                     result.EditBIPVisible = true;
-                    result.CopyVisible = true;
-                    result.CopyBIPLinkVisible = true;
+                    if (objectCount > 1)
+                    {
+                        result.CopySubMenuVisible = true;
+                        result.CopyBIPLinkVisible = true;
+                    }
+                    else
+                    {
+                        result.CopySingleVisible = true;
+                    }
 
                     if (copyPackage != null)
                     {
@@ -240,8 +288,15 @@
                 if (containsOSCommand)
                 {
                     result.EditOSCommandVisible = true;
-                    result.CopyVisible = true;
-                    result.CopyOSCommandVisible = true;
+                    if (objectCount > 1)
+                    {
+                        result.CopySubMenuVisible = true;
+                        result.CopyOSCommandVisible = true;
+                    }
+                    else
+                    {
+                        result.CopySingleVisible = true;
+                    }
 
                     if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
                     {
@@ -253,7 +308,6 @@
                 {
                     result.DeleteSettingsVisible = true;
                 }
-
             }
             catch (Exception ex)
             {
@@ -293,11 +347,16 @@
             get => _contextMenuItemEditOSCommand;
             set => _contextMenuItemEditOSCommand = value;
         }
-
-        public MenuItem ContextMenuItemCopy
+        public MenuItem ContextMenuItemCopySingle
         {
-            get => _contextMenuItemCopy;
-            set => _contextMenuItemCopy = value;
+            get => _contextMenuItemCopySingle;
+            set => _contextMenuItemCopySingle = value;
+        }
+
+        public MenuItem ContextMenuItemCopySubMenu
+        {
+            get => _contextMenuItemCopySubMenu;
+            set => _contextMenuItemCopySubMenu = value;
         }
 
         public MenuItem ContextMenuItemCopyKeyStroke
