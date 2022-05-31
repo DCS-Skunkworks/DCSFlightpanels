@@ -187,6 +187,10 @@ namespace DCS_BIOS
                                 _dcsProtocolParser.AddArray(byteData);
                             }
                         }
+                        else
+                        {
+                            Thread.Sleep(1); // Minimizes CPU hit, dirty fix.
+                        }
                     }
                     catch (SocketException)
                     {
