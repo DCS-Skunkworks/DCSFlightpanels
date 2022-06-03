@@ -1836,6 +1836,7 @@
 
         public List<ModifiedGenericBinding> ResolveConflicts()
         {
+            Mouse.OverrideCursor = Cursors.Arrow;
             var bindingsMappingWindow = new BindingsMappingWindow(BindingMappingManager.PanelBindings, GamingPanel.GamingPanels);
             bindingsMappingWindow.ShowDialog();
 

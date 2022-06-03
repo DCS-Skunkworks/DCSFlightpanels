@@ -168,6 +168,10 @@ namespace NonVisuals
                         }
                     }
                 }
+
+                // Here we delete the configurations that may have been marked as deleted by earlier function call FindSolution().
+                _genericBindings.RemoveAll(o => o.HasBeenDeleted == true);
+
             }
 
             if (problemsPersists)
@@ -261,8 +265,20 @@ namespace NonVisuals
                 else
                 {
                     MessageBox.Show("Reference found in bindings file to a " + genericBinding.PanelType.GetEnumDescriptionField() + ", no such hardware found.", "Hardware missing", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                }
+                    if (MessageBox.Show(
+                            "Do you want to remove the configuration(s) for the " +
+                            genericBinding.PanelType.GetEnumDescriptionField() + ".", "Delete configuration",
+                            MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        settingsWereModified = true;
+                        genericBinding.HasBeenDeleted = true;
 
+                        MessageBox.Show(
+                            "Profile has been changed, please save the profile.",
+                            "Panel Removed", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                
                 return true;
             }
 
