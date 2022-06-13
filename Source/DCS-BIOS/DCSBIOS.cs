@@ -15,6 +15,7 @@ namespace DCS_BIOS
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
+    using System.Timers;
 
     [Flags]
     public enum DcsBiosNotificationMode
@@ -37,6 +38,8 @@ namespace DCS_BIOS
         private UdpClient _udpReceiveClient;
         private UdpClient _udpSendClient;
         private Thread _dcsbiosListeningThread;
+        private System.Timers.Timer _udpReceiveThrottleTimer = new(10) { AutoReset = true }; //Throttle UDP receive every 10 ms in case nothing is available
+        private AutoResetEvent _udpReceiveThrottleAutoResetEvent = new(false);
         public string ReceiveFromIpUdp { get; set; } = "239.255.50.10";
         public string SendToIpUdp { get; set; } = "127.0.0.1";
         public int ReceivePortUdp { get; set; } = 5010;
@@ -129,6 +132,8 @@ namespace DCS_BIOS
                 _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                 _udpSendClient.EnableBroadcast = true;
 
+                _udpReceiveThrottleTimer.Elapsed += UdpReceiveThrottleTimer_Elapsed;
+                _udpReceiveThrottleTimer.Start();
                 _dcsbiosListeningThread = new Thread(ReceiveDataUdp);
 
                 _isRunning = true;
@@ -163,12 +168,18 @@ namespace DCS_BIOS
                 _udpReceiveClient = null;
                 _udpReceiveClient = null;
                 _dcsProtocolParser = null;
+                _udpReceiveThrottleTimer.Stop();
             }
             catch (Exception ex)
             {
                 SetLastException(ex);
                 logger.Error(ex, "DCSBIOS.Shutdown()");
             }
+        }
+
+        private void UdpReceiveThrottleTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            _udpReceiveThrottleAutoResetEvent.Set();
         }
 
         public void ReceiveDataUdp()
@@ -186,11 +197,9 @@ namespace DCS_BIOS
                             {
                                 _dcsProtocolParser.AddArray(byteData);
                             }
+                            continue;
                         }
-                        else
-                        {
-                            Thread.Sleep(1); // Minimizes CPU hit, dirty fix.
-                        }
+                        _udpReceiveThrottleAutoResetEvent.WaitOne(); // Minimizes CPU hit
                     }
                     catch (SocketException)
                     {
