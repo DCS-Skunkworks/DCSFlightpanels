@@ -1,4 +1,5 @@
-﻿using NonVisuals.StreamDeck.Panels;
+﻿using System.Diagnostics;
+using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
 {
@@ -49,6 +50,7 @@ namespace NonVisuals.StreamDeck
 
         public DCSBIOSDecoder()
         {
+            Debug.WriteLine("Creating Image Update Thread for Streamdeck #2");
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();
             BIOSEventHandler.AttachDataListener(this);
@@ -138,6 +140,7 @@ namespace NonVisuals.StreamDeck
                 }
             }
 
+            Debug.WriteLine("Creating Image Update Thread for Streamdeck #1");
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();
         }

@@ -40,8 +40,15 @@ namespace NonVisuals.StreamDeck
 
             if (_bitmap == null || RefreshBitmap)
             {
-                _bitmap = BitMapCreator.CreateStreamDeckBitmap(ButtonFinalText, TextFont, FontColor, OffsetX, OffsetY, _backgroundBitmap);
-                RefreshBitmap = false;
+                if (string.IsNullOrEmpty(_backgroundBitmapPath)) //User maybe only wants text displayed.
+                {
+                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(ButtonFinalText, TextFont, FontColor, Color.LightGray, OffsetX, OffsetY);
+                }
+                else
+                {
+                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(ButtonFinalText, TextFont, FontColor, OffsetX, OffsetY, _backgroundBitmap);
+                }
+                RefreshBitmap = true;
             }
         }
 

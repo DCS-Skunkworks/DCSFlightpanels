@@ -1,4 +1,5 @@
-﻿using NonVisuals.StreamDeck.Panels;
+﻿using System.Diagnostics;
+using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
 {
@@ -122,6 +123,7 @@ namespace NonVisuals.StreamDeck
             {
                 _cancellationTokenSource = new CancellationTokenSource();
                 var threadCancellationToken = _cancellationTokenSource.Token;
+                Debug.WriteLine("Creating Key Press Thread for Streamdeck");
                 _keyPressedThread = new Thread(() => ThreadedPress(threadCancellationToken));
                 _keyPressedThread.Start();
             }
