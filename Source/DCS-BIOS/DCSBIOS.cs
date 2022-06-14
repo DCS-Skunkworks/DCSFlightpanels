@@ -193,13 +193,13 @@ namespace DCS_BIOS
                         if (_udpReceiveClient.Available > 0)
                         {
                             var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
-                            if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.AddressValue) == DcsBiosNotificationMode.AddressValue)
-                            {
+                            //if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.AddressValue) == DcsBiosNotificationMode.AddressValue)
+                            //{
                                 _dcsProtocolParser.AddArray(byteData);
-                            }
+                            //}
                             continue;
                         }
-                        _udpReceiveThrottleAutoResetEvent.WaitOne(); // Minimizes CPU hit
+                        //_udpReceiveThrottleAutoResetEvent.WaitOne(); // Minimizes CPU hit
                     }
                     catch (SocketException)
                     {

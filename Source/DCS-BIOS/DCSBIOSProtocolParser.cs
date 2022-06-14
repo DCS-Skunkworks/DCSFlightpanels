@@ -3,6 +3,9 @@
 /*
  * Do not adhere to naming standard in DCS-BIOS code, standard are based on DCS-BIOS json files and byte streamnaming
  */
+
+using System.Diagnostics;
+
 namespace DCS_BIOS
 {
     using System;
@@ -203,13 +206,12 @@ namespace DCS_BIOS
                     case DCSBiosStateEnum.DATA_HIGH:
                         _data = (uint)(b << 8) | _data;
                         _count--;
-                        //_iDcsBiosDataListener.DcsBiosDataReceived(_address, _data);
 
                         BIOSEventHandler.ConnectionActive(this);
 
                         if (IsBroadcastable(_address) && _data != 0x55)
                         {
-                            /*if (_address == 25332)
+                            /*if (_address == 4346)
                             {
                                 Debug.Print("SENDING FROM DCS-BIOS address & value --> " + _address + "  " + _data);
                             }*/

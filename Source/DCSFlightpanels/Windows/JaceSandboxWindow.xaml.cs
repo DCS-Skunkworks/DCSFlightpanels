@@ -2,6 +2,10 @@
 
 namespace DCSFlightpanels.Windows
 {
+    using ClassLibraryCommon;
+    using DCS_BIOS;
+    using DCS_BIOS.EventArgs;
+    using DCS_BIOS.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -14,10 +18,6 @@ namespace DCSFlightpanels.Windows
     using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Navigation;
-    using ClassLibraryCommon;
-    using DCS_BIOS;
-    using DCS_BIOS.EventArgs;
-    using DCS_BIOS.Interfaces;
 
     /// <summary>
     /// Interaction logic for JaceSandbox.xaml
@@ -255,9 +255,9 @@ namespace DCSFlightpanels.Windows
         {
             if (_dcsbiosOutput1?.Address == e.Address)
             {
-                if (!Equals(_value1, e.Data))
+                if (!Equals(_value1, _dcsbiosOutput1.GetUIntValue(e.Data)))
                 {
-                    _value1 = e.Data;
+                    _value1 = _dcsbiosOutput1.GetUIntValue(e.Data);
                     _dataChanged = true;
                     Dispatcher?.BeginInvoke(
                         (Action)delegate
@@ -268,9 +268,9 @@ namespace DCSFlightpanels.Windows
             }
             if (_dcsbiosOutput2?.Address == e.Address)
             {
-                if (!Equals(_value2, e.Data))
+                if (!Equals(_value2, _dcsbiosOutput2.GetUIntValue(e.Data)))
                 {
-                    _value2 = e.Data;
+                    _value2 = _dcsbiosOutput2.GetUIntValue(e.Data);
                     _dataChanged = true;
                     Dispatcher?.BeginInvoke(
                         (Action)delegate
@@ -281,9 +281,9 @@ namespace DCSFlightpanels.Windows
             }
             if (_dcsbiosOutput3?.Address == e.Address)
             {
-                if (!Equals(_value3, e.Data))
+                if (!Equals(_value3, _dcsbiosOutput3.GetUIntValue(e.Data)))
                 {
-                    _value3 = e.Data;
+                    _value3 = _dcsbiosOutput3.GetUIntValue(e.Data);
                     _dataChanged = true;
                     Dispatcher?.BeginInvoke(
                         (Action)delegate
@@ -294,9 +294,9 @@ namespace DCSFlightpanels.Windows
             }
             if (_dcsbiosOutput4?.Address == e.Address)
             {
-                if (!Equals(_value4, e.Data))
+                if (!Equals(_value4, _dcsbiosOutput4.GetUIntValue(e.Data)))
                 {
-                    _value4 = e.Data;
+                    _value4 = _dcsbiosOutput4.GetUIntValue(e.Data);
                     _dataChanged = true;
                     Dispatcher?.BeginInvoke(
                         (Action)delegate
@@ -307,9 +307,9 @@ namespace DCSFlightpanels.Windows
             }
             if (_dcsbiosOutput5?.Address == e.Address)
             {
-                if (!Equals(_value5, e.Data))
+                if (!Equals(_value5, _dcsbiosOutput5.GetUIntValue(e.Data)))
                 {
-                    _value5 = e.Data;
+                    _value5 = _dcsbiosOutput5.GetUIntValue(e.Data);
                     _dataChanged = true;
                     Dispatcher?.BeginInvoke(
                         (Action)delegate
