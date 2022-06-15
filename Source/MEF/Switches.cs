@@ -925,45 +925,6 @@
         LOWER_FREQ_SWITCH = 4194304
     }
 
-    /*
-     *
-     */
-    public enum CurrentA10RadioMode
-    {
-        UHF = 0,
-        VHFFM = 2,
-        VHFAM = 4,
-        TACAN = 8,
-        ILS = 16
-    }
-
-    public enum RadioPanelPZ69KnobsA10C
-    {
-        UPPER_VHFAM = 0,
-        UPPER_UHF = 2,
-        UPPER_VHFFM = 4,
-        UPPER_ILS = 8,
-        UPPER_TACAN = 16,
-        UPPER_DME = 32,
-        UPPER_XPDR = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_VHFAM = 4096,
-        LOWER_UHF = 8192,
-        LOWER_VHFFM = 16384,
-        LOWER_ILS = 32768,
-        LOWER_TACAN = 65536,
-        LOWER_DME = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
 
     public enum CurrentMi24PRadioMode
     {

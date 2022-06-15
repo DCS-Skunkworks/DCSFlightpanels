@@ -18,6 +18,15 @@
 
     public class RadioPanelPZ69A10C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentA10RadioMode
+        {
+            UHF,
+            VHFFM,
+            VHFAM,
+            TACAN,
+            ILS
+        }
+
         private CurrentA10RadioMode _currentUpperRadioMode = CurrentA10RadioMode.UHF;
         private CurrentA10RadioMode _currentLowerRadioMode = CurrentA10RadioMode.UHF;
 
