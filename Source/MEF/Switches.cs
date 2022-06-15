@@ -254,47 +254,6 @@
     /*
      *
      */
-    public enum CurrentUH1HRadioMode
-    {
-        INTERCOMM = 0,
-        VHFCOMM = 2,
-        UHF = 4,
-        VHFFM = 8,
-        VHFNAV = 16,
-        ADF = 32
-    }
-
-    public enum RadioPanelPZ69KnobsUH1H
-    {
-        UPPER_VHFCOMM = 0,
-        UPPER_UHF = 2,
-        UPPER_VHFNAV = 4,
-        UPPER_VHFFM = 8,
-        UPPER_ADF = 16,
-        UPPER_DME = 32,
-        UPPER_INTERCOMM = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_VHFCOMM = 4096,
-        LOWER_UHF = 8192,
-        LOWER_VHFNAV = 16384,
-        LOWER_VHFFM = 32768,
-        LOWER_ADF = 65536,
-        LOWER_DME = 131072,
-        LOWER_INTERCOMM = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
     public enum CurrentSRSRadioMode
     {
         COM1 = 0,
