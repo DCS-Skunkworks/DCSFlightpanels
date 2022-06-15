@@ -924,45 +924,4 @@
         LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
         LOWER_FREQ_SWITCH = 4194304
     }
-
-
-    public enum CurrentMi24PRadioMode
-    {
-        R863_MANUAL = 0,
-        R863_PRESET = 2,
-        YADRO1A = 4,
-        R828_PRESETS = 8,
-        ADF_ARK15_HIGH = 16,
-        DME_ARK15_LOW = 32,
-        SPU8 = 64,
-        NOUSE = 128
-    }
-
-    public enum RadioPanelPZ69KnobsMi24P
-    {
-        UPPER_R863_MANUAL = 0,      //COM1
-        UPPER_R863_PRESET = 2,      //COM2
-        UPPER_YADRO1A = 4,          //NAV1
-        UPPER_R828 = 8,             //NAV2
-        UPPER_ADF_ARK15 = 16,       //ADF
-        UPPER_ARK_UD = 32,          //DME_
-        UPPER_SPU8 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_R863_MANUAL = 4096,   //COM1
-        LOWER_R863_PRESET = 8192,   //COM2
-        LOWER_YADRO1A = 16384,      //NAV1
-        LOWER_R828 = 32768,          //NAV2
-        LOWER_ADF_ARK15 = 65536,    //ADF
-        LOWER_ARK_UD = 131072,      //DME_
-        LOWER_SPU8 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
 }
