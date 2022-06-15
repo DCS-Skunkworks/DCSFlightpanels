@@ -199,7 +199,7 @@ namespace DCS_BIOS
                             //}
                             continue;
                         }
-                        //_udpReceiveThrottleAutoResetEvent.WaitOne(); // Minimizes CPU hit
+                        _udpReceiveThrottleAutoResetEvent.WaitOne(); // Minimizes CPU hit
                     }
                     catch (SocketException)
                     {
