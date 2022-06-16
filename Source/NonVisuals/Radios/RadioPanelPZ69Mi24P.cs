@@ -16,6 +16,18 @@
 
     public class RadioPanelPZ69Mi24P : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentMi24PRadioMode
+        {
+            R863_MANUAL,
+            R863_PRESET,
+            YADRO1A,
+            R828_PRESETS,
+            ADF_ARK15_HIGH,
+            DME_ARK15_LOW,
+            SPU8,
+            NOUSE
+        }
+
         private CurrentMi24PRadioMode _currentUpperRadioMode = CurrentMi24PRadioMode.R863_MANUAL;
         private CurrentMi24PRadioMode _currentLowerRadioMode = CurrentMi24PRadioMode.R863_MANUAL;
         const int CHANGE_VALUE = 10;

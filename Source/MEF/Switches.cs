@@ -254,47 +254,6 @@
     /*
      *
      */
-    public enum CurrentUH1HRadioMode
-    {
-        INTERCOMM = 0,
-        VHFCOMM = 2,
-        UHF = 4,
-        VHFFM = 8,
-        VHFNAV = 16,
-        ADF = 32
-    }
-
-    public enum RadioPanelPZ69KnobsUH1H
-    {
-        UPPER_VHFCOMM = 0,
-        UPPER_UHF = 2,
-        UPPER_VHFNAV = 4,
-        UPPER_VHFFM = 8,
-        UPPER_ADF = 16,
-        UPPER_DME = 32,
-        UPPER_INTERCOMM = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_VHFCOMM = 4096,
-        LOWER_UHF = 8192,
-        LOWER_VHFNAV = 16384,
-        LOWER_VHFFM = 32768,
-        LOWER_ADF = 65536,
-        LOWER_DME = 131072,
-        LOWER_INTERCOMM = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
     public enum CurrentSRSRadioMode
     {
         COM1 = 0,
@@ -528,48 +487,6 @@
         LowerFreqSwitch = 4194304
     }
 
-    /*
-     *
-     */
-    public enum CurrentMi8RadioMode
-    {
-        R863_MANUAL = 0,
-        R863_PRESET = 2,
-        YADRO1A = 4,
-        R828_PRESETS = 8,
-        ADF_ARK9 = 16,
-        ARK_UD = 32,
-        SPU7 = 64,
-        NOUSE = 128
-    }
-
-    public enum RadioPanelPZ69KnobsMi8
-    {
-        UPPER_R863_MANUAL = 0,      //COM1
-        UPPER_R863_PRESET = 2,      //COM2
-        UPPER_YADRO1A = 4,          //NAV1
-        UPPER_R828 = 8,             //NAV2
-        UPPER_ADF_ARK9 = 16,       //ADF
-        UPPER_ARK_UD = 32,          //DME_
-        UPPER_SPU7 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_R863_MANUAL = 4096,   //COM1
-        LOWER_R863_PRESET = 8192,   //COM2
-        LOWER_YADRO1A = 16384,      //NAV1
-        LOWER_R828 = 32768,          //NAV2
-        LOWER_ADF_ARK9 = 65536,    //ADF
-        LOWER_ARK_UD = 131072,      //DME_
-        LOWER_SPU7 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
 
     /*
      *
@@ -960,86 +877,6 @@
         LOWER_NO_USE1 = 65536,    //ADF
         LOWER_NO_USE2 = 131072,      //DME_
         LOWER_NO_USE3 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentA10RadioMode
-    {
-        UHF = 0,
-        VHFFM = 2,
-        VHFAM = 4,
-        TACAN = 8,
-        ILS = 16
-    }
-
-    public enum RadioPanelPZ69KnobsA10C
-    {
-        UPPER_VHFAM = 0,
-        UPPER_UHF = 2,
-        UPPER_VHFFM = 4,
-        UPPER_ILS = 8,
-        UPPER_TACAN = 16,
-        UPPER_DME = 32,
-        UPPER_XPDR = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_VHFAM = 4096,
-        LOWER_UHF = 8192,
-        LOWER_VHFFM = 16384,
-        LOWER_ILS = 32768,
-        LOWER_TACAN = 65536,
-        LOWER_DME = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    public enum CurrentMi24PRadioMode
-    {
-        R863_MANUAL = 0,
-        R863_PRESET = 2,
-        YADRO1A = 4,
-        R828_PRESETS = 8,
-        ADF_ARK15_HIGH = 16,
-        DME_ARK15_LOW = 32,
-        SPU8 = 64,
-        NOUSE = 128
-    }
-
-    public enum RadioPanelPZ69KnobsMi24P
-    {
-        UPPER_R863_MANUAL = 0,      //COM1
-        UPPER_R863_PRESET = 2,      //COM2
-        UPPER_YADRO1A = 4,          //NAV1
-        UPPER_R828 = 8,             //NAV2
-        UPPER_ADF_ARK15 = 16,       //ADF
-        UPPER_ARK_UD = 32,          //DME_
-        UPPER_SPU8 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_R863_MANUAL = 4096,   //COM1
-        LOWER_R863_PRESET = 8192,   //COM2
-        LOWER_YADRO1A = 16384,      //NAV1
-        LOWER_R828 = 32768,          //NAV2
-        LOWER_ADF_ARK15 = 65536,    //ADF
-        LOWER_ARK_UD = 131072,      //DME_
-        LOWER_SPU8 = 262144,        //XPDR
         LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
         LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
         LOWER_LARGE_FREQ_WHEEL_INC = 1048576,

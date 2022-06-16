@@ -19,6 +19,18 @@
 
     public class RadioPanelPZ69Mi8 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentMi8RadioMode
+        {
+            R863_MANUAL,
+            R863_PRESET,
+            YADRO1A,
+            R828_PRESETS,
+            ADF_ARK9,
+            ARK_UD,
+            SPU7,
+            NOUSE
+        }
+
         private CurrentMi8RadioMode _currentUpperRadioMode = CurrentMi8RadioMode.R863_MANUAL;
         private CurrentMi8RadioMode _currentLowerRadioMode = CurrentMi8RadioMode.R863_MANUAL;
 

@@ -19,6 +19,16 @@ namespace NonVisuals.Radios
 
     public class RadioPanelPZ69UH1H : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentUH1HRadioMode
+        {
+            INTERCOMM,
+            VHFCOMM,
+            UHF,
+            VHFFM,
+            VHFNAV,
+            ADF
+        }
+
         private CurrentUH1HRadioMode _currentUpperRadioMode = CurrentUH1HRadioMode.UHF;
         private CurrentUH1HRadioMode _currentLowerRadioMode = CurrentUH1HRadioMode.UHF;
 
