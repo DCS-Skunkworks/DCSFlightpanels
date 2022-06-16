@@ -33,11 +33,11 @@ namespace DCSFlightpanels.Windows
         private DCSBIOSOutput _dcsbiosOutput3 = null;
         private DCSBIOSOutput _dcsbiosOutput4 = null;
         private DCSBIOSOutput _dcsbiosOutput5 = null;
-        private volatile uint _value1 = 0;
-        private volatile uint _value2 = 0;
-        private volatile uint _value3 = 0;
-        private volatile uint _value4 = 0;
-        private volatile uint _value5 = 0;
+        private volatile uint _value1 = UInt32.MaxValue;
+        private volatile uint _value2 = UInt32.MaxValue;
+        private volatile uint _value3 = UInt32.MaxValue;
+        private volatile uint _value4 = UInt32.MaxValue;
+        private volatile uint _value5 = UInt32.MaxValue;
         private bool _dataChanged;
         private bool _formLoaded;
         private bool _isLooping;
@@ -255,6 +255,7 @@ namespace DCSFlightpanels.Windows
         {
             if (_dcsbiosOutput1?.Address == e.Address)
             {
+                Debug.WriteLine(_dcsbiosOutput1.GetUIntValue(e.Data));
                 if (!Equals(_value1, _dcsbiosOutput1.GetUIntValue(e.Data)))
                 {
                     _value1 = _dcsbiosOutput1.GetUIntValue(e.Data);

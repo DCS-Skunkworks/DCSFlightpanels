@@ -209,12 +209,13 @@ namespace DCS_BIOS
 
                         BIOSEventHandler.ConnectionActive(this);
 
-                        if (IsBroadcastable(_address) && _data != 0x55)
+                        
+                        if (IsBroadcastable(_address))
                         {
-                            /*if (_address == 4346)
+                            if (_address == 5352)
                             {
                                 Debug.Print("SENDING FROM DCS-BIOS address & value --> " + _address + "  " + _data);
-                            }*/
+                            }
                             try
                             {
                                 BIOSEventHandler.DCSBIOSDataAvailable(this, _address, _data);
