@@ -1,11 +1,36 @@
 ﻿namespace NonVisuals.Radios.Knobs
 {
-    using System;
     using System.Collections.Generic;
 
-    using MEF;
-
     using NonVisuals.Interfaces;
+
+    public enum RadioPanelPZ69KnobsMiG21Bis
+    {
+        UpperRadio,
+        UpperCom2,
+        UpperRsbn,
+        UpperNav2,
+        UpperArc,
+        UpperDme,
+        UpperXpdr,
+        UpperSmallFreqWheelInc,
+        UpperSmallFreqWheelDec,
+        UpperLargeFreqWheelInc,
+        UpperLargeFreqWheelDec,
+        UpperFreqSwitch,
+        LowerRadio,
+        LowerCom2,
+        LowerRsbn,
+        LowerNav2,
+        LowerArc,
+        LowerDme,
+        LowerXpdr,
+        LowerSmallFreqWheelInc,
+        LowerSmallFreqWheelDec,
+        LowerLargeFreqWheelInc,
+        LowerLargeFreqWheelDec,
+        LowerFreqSwitch
+    }
 
     public class RadioPanelKnobMiG21Bis : ISaitekPanelKnob
     {

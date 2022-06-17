@@ -1,11 +1,36 @@
 ﻿namespace NonVisuals.Radios.Knobs
 {
-    using System;
     using System.Collections.Generic;
 
-    using MEF;
-
     using NonVisuals.Interfaces;
+
+    public enum RadioPanelPZ69KnobsAV8BNA
+    {
+        UPPER_COMM1,
+        UPPER_COMM2,
+        UPPER_NAV1,
+        UPPER_NAV2,
+        UPPER_ADF,
+        UPPER_DME,
+        UPPER_XPDR,
+        UPPER_SMALL_FREQ_WHEEL_INC ,
+        UPPER_SMALL_FREQ_WHEEL_DEC,
+        UPPER_LARGE_FREQ_WHEEL_INC,
+        UPPER_LARGE_FREQ_WHEEL_DEC,
+        UPPER_FREQ_SWITCH,
+        LOWER_COMM1,
+        LOWER_COMM2,
+        LOWER_NAV1,
+        LOWER_NAV2,
+        LOWER_ADF,
+        LOWER_DME,
+        LOWER_XPDR,
+        LOWER_SMALL_FREQ_WHEEL_INC,
+        LOWER_SMALL_FREQ_WHEEL_DEC,
+        LOWER_LARGE_FREQ_WHEEL_INC,
+        LOWER_LARGE_FREQ_WHEEL_DEC,
+        LOWER_FREQ_SWITCH
+    }
 
     public class RadioPanelKnobAV8BNA : ISaitekPanelKnob
     {

@@ -1,11 +1,36 @@
 ﻿namespace NonVisuals.Radios.Knobs
 {
-    using System;
     using System.Collections.Generic;
 
-    using MEF;
-
     using NonVisuals.Interfaces;
+
+    public enum RadioPanelPZ69KnobsF86F
+    {
+        UPPER_ARC27_PRESET,      //COM1
+        UPPER_ARC27_VOL,      //COM2
+        UPPER_ARN6,          //NAV1
+        UPPER_ARN6_MODES,             //NAV2
+        UPPER_ADF_APX6,       //ADF
+        UPPER_NO_USE1,          //DME_
+        UPPER_NO_USE2,            //XPDR
+        UPPER_SMALL_FREQ_WHEEL_INC,
+        UPPER_SMALL_FREQ_WHEEL_DEC ,
+        UPPER_LARGE_FREQ_WHEEL_INC,
+        UPPER_LARGE_FREQ_WHEEL_DEC,
+        UPPER_FREQ_SWITCH,
+        LOWER_ARC27_PRESET,   //COM1
+        LOWER_ARC27_VOL,   //COM2
+        LOWER_ARN6,      //NAV1
+        LOWER_ARN6_MODES ,          //NAV2
+        LOWER_ADF_APX6,    //ADF
+        LOWER_NO_USE1,      //DME_
+        LOWER_NO_USE2,        //XPDR
+        LOWER_SMALL_FREQ_WHEEL_INC,
+        LOWER_SMALL_FREQ_WHEEL_DEC,
+        LOWER_LARGE_FREQ_WHEEL_INC,
+        LOWER_LARGE_FREQ_WHEEL_DEC,
+        LOWER_FREQ_SWITCH
+    }
 
     public class RadioPanelKnobF86F : ISaitekPanelKnob
     {

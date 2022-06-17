@@ -7,6 +7,34 @@
 
     using NonVisuals.Interfaces;
 
+    public enum RadioPanelPZ69KnobsAJS37
+    {
+        UPPER_FR22,      //COM1
+        UPPER_FR24,      //COM2
+        UPPER_TILS,          //NAV1
+        UPPER_NO_USE0,             //NAV2
+        UPPER_NO_USE1,       //ADF
+        UPPER_NO_USE2,          //DME_
+        UPPER_NO_USE3,            //XPDR
+        UPPER_SMALL_FREQ_WHEEL_INC,
+        UPPER_SMALL_FREQ_WHEEL_DEC,
+        UPPER_LARGE_FREQ_WHEEL_INC,
+        UPPER_LARGE_FREQ_WHEEL_DEC,
+        UPPER_FREQ_SWITCH,
+        LOWER_FR22,   //COM1
+        LOWER_FR24,   //COM2
+        LOWER_TILS,      //NAV1
+        LOWER_NO_USE0,          //NAV2
+        LOWER_NO_USE1,    //ADF
+        LOWER_NO_USE2,      //DME_
+        LOWER_NO_USE3,        //XPDR
+        LOWER_SMALL_FREQ_WHEEL_INC,
+        LOWER_SMALL_FREQ_WHEEL_DEC,
+        LOWER_LARGE_FREQ_WHEEL_INC,
+        LOWER_LARGE_FREQ_WHEEL_DEC,
+        LOWER_FREQ_SWITCH
+    }
+
     public class RadioPanelKnobAJS37 : ISaitekPanelKnob
     {
         public RadioPanelKnobAJS37(int group, int mask, bool isOn, RadioPanelPZ69KnobsAJS37 radioPanelPZ69Knob)

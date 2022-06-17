@@ -1,11 +1,36 @@
 ﻿namespace NonVisuals.Radios.Knobs
 {
-    using System;
-    using System.Collections.Generic;
-
-    using MEF;
+     using System.Collections.Generic;
 
     using NonVisuals.Interfaces;
+
+    public enum RadioPanelPZ69KnobsF5E
+    {
+        UPPER_UHF,
+        UPPER_NOUSE1,
+        UPPER_NOUSE2,
+        UPPER_NOUSE3,
+        UPPER_TACAN,
+        UPPER_NOUSE4,
+        UPPER_NOUSE5,
+        UPPER_SMALL_FREQ_WHEEL_INC,
+        UPPER_SMALL_FREQ_WHEEL_DEC,
+        UPPER_LARGE_FREQ_WHEEL_INC,
+        UPPER_LARGE_FREQ_WHEEL_DEC,
+        UPPER_FREQ_SWITCH,
+        LOWER_UHF,
+        LOWER_NOUSE1,
+        LOWER_NOUSE2,
+        LOWER_NOUSE3,
+        LOWER_TACAN,
+        LOWER_NOUSE4,
+        LOWER_NOUSE5,
+        LOWER_SMALL_FREQ_WHEEL_INC,
+        LOWER_SMALL_FREQ_WHEEL_DEC,
+        LOWER_LARGE_FREQ_WHEEL_INC,
+        LOWER_LARGE_FREQ_WHEEL_DEC,
+        LOWER_FREQ_SWITCH
+    }
 
     public class RadioPanelKnobF5E : ISaitekPanelKnob
     {

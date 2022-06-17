@@ -1,11 +1,35 @@
 ﻿namespace NonVisuals.Radios.Knobs
 {
-    using System;
     using System.Collections.Generic;
 
-    using MEF;
-
     using NonVisuals.Interfaces;
+    public enum RadioPanelPZ69KnobsKa50
+    {
+        UPPER_VHF1_R828,   //COM1
+        UPPER_VHF2_R800L1,  //COM2
+        UPPER_ABRIS, //NAV1
+        UPPER_DATALINK, //NAV2
+        UPPER_ADF_ARK22, //ADF
+        UPPER_NO_USE3 , //DME_
+        UPPER_NO_USE4, //XPDR
+        UPPER_SMALL_FREQ_WHEEL_INC,
+        UPPER_SMALL_FREQ_WHEEL_DEC,
+        UPPER_LARGE_FREQ_WHEEL_INC,
+        UPPER_LARGE_FREQ_WHEEL_DEC,
+        UPPER_FREQ_SWITCH,
+        LOWER_VHF1_R828,
+        LOWER_VHF2_R800L1,
+        LOWER_ABRIS,
+        LOWER_DATALINK,
+        LOWER_ADF_ARK22,
+        LOWER_NO_USE3,
+        LOWER_NO_USE4,
+        LOWER_SMALL_FREQ_WHEEL_INC,
+        LOWER_SMALL_FREQ_WHEEL_DEC,
+        LOWER_LARGE_FREQ_WHEEL_INC,
+        LOWER_LARGE_FREQ_WHEEL_DEC,
+        LOWER_FREQ_SWITCH
+    }
 
     public class RadioPanelKnobKa50 : ISaitekPanelKnob
     {
