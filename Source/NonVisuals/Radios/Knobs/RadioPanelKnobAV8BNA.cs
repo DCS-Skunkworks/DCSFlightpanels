@@ -31,32 +31,32 @@
             var result = new HashSet<ISaitekPanelKnob>
             {
                 // Group 0
-                new RadioPanelKnobAV8BNA(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_INC),
-                new RadioPanelKnobAV8BNA(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_DEC),
-                new RadioPanelKnobAV8BNA(2, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_INC),
-                new RadioPanelKnobAV8BNA(2, Convert.ToInt32("1000", 2), false, RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_DEC),
-                new RadioPanelKnobAV8BNA(2, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_INC),
-                new RadioPanelKnobAV8BNA(2, Convert.ToInt32("100000", 2), false, RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_DEC),
-                new RadioPanelKnobAV8BNA(2, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_INC),
-                new RadioPanelKnobAV8BNA(2, Convert.ToInt32("10000000", 2), false, RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_DEC),
+                new RadioPanelKnobAV8BNA(2, 1 << 0, true, RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_INC),
+                new RadioPanelKnobAV8BNA(2, 1 << 1, false, RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_DEC),
+                new RadioPanelKnobAV8BNA(2, 1 << 2, true, RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_INC),
+                new RadioPanelKnobAV8BNA(2, 1 << 3, false, RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_DEC),
+                new RadioPanelKnobAV8BNA(2, 1 << 4, true, RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_INC),
+                new RadioPanelKnobAV8BNA(2, 1 << 5, false, RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_DEC),
+                new RadioPanelKnobAV8BNA(2, 1 << 6, true, RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_INC),
+                new RadioPanelKnobAV8BNA(2, 1 << 7, false, RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_DEC),
                 // Group 1
-                new RadioPanelKnobAV8BNA(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsAV8BNA.LOWER_COMM2),
-                new RadioPanelKnobAV8BNA(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsAV8BNA.LOWER_NAV1),
-                new RadioPanelKnobAV8BNA(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsAV8BNA.LOWER_NAV2),
-                new RadioPanelKnobAV8BNA(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsAV8BNA.LOWER_ADF),
-                new RadioPanelKnobAV8BNA(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsAV8BNA.LOWER_DME),
-                new RadioPanelKnobAV8BNA(1, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsAV8BNA.LOWER_XPDR),
-                new RadioPanelKnobAV8BNA(1, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsAV8BNA.UPPER_FREQ_SWITCH),
-                new RadioPanelKnobAV8BNA(1, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsAV8BNA.LOWER_FREQ_SWITCH),
+                new RadioPanelKnobAV8BNA(1, 1 << 0, true, RadioPanelPZ69KnobsAV8BNA.LOWER_COMM2),
+                new RadioPanelKnobAV8BNA(1, 1 << 1, true, RadioPanelPZ69KnobsAV8BNA.LOWER_NAV1),
+                new RadioPanelKnobAV8BNA(1, 1 << 2, true, RadioPanelPZ69KnobsAV8BNA.LOWER_NAV2),
+                new RadioPanelKnobAV8BNA(1, 1 << 3, true, RadioPanelPZ69KnobsAV8BNA.LOWER_ADF),
+                new RadioPanelKnobAV8BNA(1, 1 << 4, true, RadioPanelPZ69KnobsAV8BNA.LOWER_DME),
+                new RadioPanelKnobAV8BNA(1, 1 << 5, true, RadioPanelPZ69KnobsAV8BNA.LOWER_XPDR),
+                new RadioPanelKnobAV8BNA(1, 1 << 6, true, RadioPanelPZ69KnobsAV8BNA.UPPER_FREQ_SWITCH),
+                new RadioPanelKnobAV8BNA(1, 1 << 7, true, RadioPanelPZ69KnobsAV8BNA.LOWER_FREQ_SWITCH),
                 // Group 2
-                new RadioPanelKnobAV8BNA(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsAV8BNA.UPPER_COMM1), // UPPER COM 1
-                new RadioPanelKnobAV8BNA(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsAV8BNA.UPPER_COMM2), // UPPER COM 2
-                new RadioPanelKnobAV8BNA(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsAV8BNA.UPPER_NAV1), // UPPER NAV 1
-                new RadioPanelKnobAV8BNA(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsAV8BNA.UPPER_NAV2), // UPPER NAV 2
-                new RadioPanelKnobAV8BNA(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsAV8BNA.UPPER_ADF), // UPPER ADF
-                new RadioPanelKnobAV8BNA(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsAV8BNA.UPPER_DME), // UPPER DME
-                new RadioPanelKnobAV8BNA(0, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsAV8BNA.UPPER_XPDR), // UPPER XPDR
-                new RadioPanelKnobAV8BNA(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsAV8BNA.LOWER_COMM1) // LOWER COM 1 
+                new RadioPanelKnobAV8BNA(0, 1 << 0, true, RadioPanelPZ69KnobsAV8BNA.UPPER_COMM1), // UPPER COM 1
+                new RadioPanelKnobAV8BNA(0, 1 << 1, true, RadioPanelPZ69KnobsAV8BNA.UPPER_COMM2), // UPPER COM 2
+                new RadioPanelKnobAV8BNA(0, 1 << 2, true, RadioPanelPZ69KnobsAV8BNA.UPPER_NAV1), // UPPER NAV 1
+                new RadioPanelKnobAV8BNA(0, 1 << 3, true, RadioPanelPZ69KnobsAV8BNA.UPPER_NAV2), // UPPER NAV 2
+                new RadioPanelKnobAV8BNA(0, 1 << 4, true, RadioPanelPZ69KnobsAV8BNA.UPPER_ADF), // UPPER ADF
+                new RadioPanelKnobAV8BNA(0, 1 << 5, true, RadioPanelPZ69KnobsAV8BNA.UPPER_DME), // UPPER DME
+                new RadioPanelKnobAV8BNA(0, 1 << 6, true, RadioPanelPZ69KnobsAV8BNA.UPPER_XPDR), // UPPER XPDR
+                new RadioPanelKnobAV8BNA(0, 1 << 7, true, RadioPanelPZ69KnobsAV8BNA.LOWER_COMM1) // LOWER COM 1 
             };
 
             return result;
