@@ -59,28 +59,28 @@
             var result = new HashSet<ISaitekPanelKnob>
             {
                 // Group 0
-                new MultiPanelKnob(0, Convert.ToInt32("1", 2), true, MultiPanelPZ70Knobs.KNOB_ALT),
-                new MultiPanelKnob(0, Convert.ToInt32("10", 2), false, MultiPanelPZ70Knobs.KNOB_VS),
-                new MultiPanelKnob(0, Convert.ToInt32("100", 2), true, MultiPanelPZ70Knobs.KNOB_IAS),
-                new MultiPanelKnob(0, Convert.ToInt32("1000", 2), false, MultiPanelPZ70Knobs.KNOB_HDG),
-                new MultiPanelKnob(0, Convert.ToInt32("10000", 2), true, MultiPanelPZ70Knobs.KNOB_CRS),
-                new MultiPanelKnob(0, Convert.ToInt32("100000", 2), false, MultiPanelPZ70Knobs.LCD_WHEEL_INC),
-                new MultiPanelKnob(0, Convert.ToInt32("1000000", 2), true, MultiPanelPZ70Knobs.LCD_WHEEL_DEC),
-                new MultiPanelKnob(0, Convert.ToInt32("10000000", 2), false, MultiPanelPZ70Knobs.AP_BUTTON),
+                new MultiPanelKnob(0, 1 << 0, true, MultiPanelPZ70Knobs.KNOB_ALT),
+                new MultiPanelKnob(0, 1 << 1, false, MultiPanelPZ70Knobs.KNOB_VS),
+                new MultiPanelKnob(0, 1 << 2, true, MultiPanelPZ70Knobs.KNOB_IAS),
+                new MultiPanelKnob(0, 1 << 3, false, MultiPanelPZ70Knobs.KNOB_HDG),
+                new MultiPanelKnob(0, 1 << 4, true, MultiPanelPZ70Knobs.KNOB_CRS),
+                new MultiPanelKnob(0, 1 << 5, false, MultiPanelPZ70Knobs.LCD_WHEEL_INC),
+                new MultiPanelKnob(0, 1 << 6, true, MultiPanelPZ70Knobs.LCD_WHEEL_DEC),
+                new MultiPanelKnob(0, 1 << 7, false, MultiPanelPZ70Knobs.AP_BUTTON),
                 // Group 1
-                new MultiPanelKnob(1, Convert.ToInt32("1", 2), true, MultiPanelPZ70Knobs.HDG_BUTTON),
-                new MultiPanelKnob(1, Convert.ToInt32("10", 2), true, MultiPanelPZ70Knobs.NAV_BUTTON),
-                new MultiPanelKnob(1, Convert.ToInt32("100", 2), true, MultiPanelPZ70Knobs.IAS_BUTTON),
-                new MultiPanelKnob(1, Convert.ToInt32("1000", 2), true, MultiPanelPZ70Knobs.ALT_BUTTON),
-                new MultiPanelKnob(1, Convert.ToInt32("10000", 2), true, MultiPanelPZ70Knobs.VS_BUTTON),
-                new MultiPanelKnob(1, Convert.ToInt32("100000", 2), true, MultiPanelPZ70Knobs.APR_BUTTON),
-                new MultiPanelKnob(1, Convert.ToInt32("1000000", 2), true, MultiPanelPZ70Knobs.REV_BUTTON),
-                new MultiPanelKnob(1, Convert.ToInt32("10000000", 2), true, MultiPanelPZ70Knobs.AUTO_THROTTLE),
+                new MultiPanelKnob(1, 1 << 0, true, MultiPanelPZ70Knobs.HDG_BUTTON),
+                new MultiPanelKnob(1, 1 << 1, true, MultiPanelPZ70Knobs.NAV_BUTTON),
+                new MultiPanelKnob(1, 1 << 2, true, MultiPanelPZ70Knobs.IAS_BUTTON),
+                new MultiPanelKnob(1, 1 << 3, true, MultiPanelPZ70Knobs.ALT_BUTTON),
+                new MultiPanelKnob(1, 1 << 4, true, MultiPanelPZ70Knobs.VS_BUTTON),
+                new MultiPanelKnob(1, 1 << 5, true, MultiPanelPZ70Knobs.APR_BUTTON),
+                new MultiPanelKnob(1, 1 << 6, true, MultiPanelPZ70Knobs.REV_BUTTON),
+                new MultiPanelKnob(1, 1 << 7, true, MultiPanelPZ70Knobs.AUTO_THROTTLE),
                 // Group 2
-                new MultiPanelKnob(2, Convert.ToInt32("1", 2), true, MultiPanelPZ70Knobs.FLAPS_LEVER_UP),
-                new MultiPanelKnob(2, Convert.ToInt32("10", 2), true, MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN),
-                new MultiPanelKnob(2, Convert.ToInt32("100", 2), true, MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP),
-                new MultiPanelKnob(2, Convert.ToInt32("1000", 2), true, MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN)
+                new MultiPanelKnob(2, 1 << 0, true, MultiPanelPZ70Knobs.FLAPS_LEVER_UP),
+                new MultiPanelKnob(2, 1 << 1, true, MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN),
+                new MultiPanelKnob(2, 1 << 2, true, MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP),
+                new MultiPanelKnob(2, 1 << 3, true, MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN)
             };
 
             return result;
