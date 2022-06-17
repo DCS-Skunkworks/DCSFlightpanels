@@ -17,6 +17,14 @@
 
     public class RadioPanelPZ69Bf109 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentBf109RadioMode
+        {
+            FUG16ZY,
+            IFF,
+            HOMING,
+            NOUSE
+        }
+
         private CurrentBf109RadioMode _currentUpperRadioMode = CurrentBf109RadioMode.FUG16ZY;
         private CurrentBf109RadioMode _currentLowerRadioMode = CurrentBf109RadioMode.FUG16ZY;
 

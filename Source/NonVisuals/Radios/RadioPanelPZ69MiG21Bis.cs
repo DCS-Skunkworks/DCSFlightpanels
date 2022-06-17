@@ -17,6 +17,13 @@ namespace NonVisuals.Radios
 
     public class RadioPanelPZ69MiG21Bis : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentMiG21BisRadioMode
+        {
+            Radio,
+            RSBN,
+            ARC
+        }
+
         private CurrentMiG21BisRadioMode _currentUpperRadioMode = CurrentMiG21BisRadioMode.Radio;
         private CurrentMiG21BisRadioMode _currentLowerRadioMode = CurrentMiG21BisRadioMode.Radio;
 

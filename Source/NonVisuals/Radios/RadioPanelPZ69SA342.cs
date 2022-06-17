@@ -18,6 +18,16 @@
 
     public class RadioPanelPZ69SA342 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentSA342RadioMode
+        {
+            VHFFM,
+            VHFAM,
+            UHF,
+            ADF,
+            NADIR,
+            NOUSE
+        }
+
         private CurrentSA342RadioMode _currentUpperRadioMode = CurrentSA342RadioMode.VHFAM;
         private CurrentSA342RadioMode _currentLowerRadioMode = CurrentSA342RadioMode.VHFAM;
 

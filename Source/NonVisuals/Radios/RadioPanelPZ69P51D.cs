@@ -16,6 +16,12 @@ namespace NonVisuals.Radios
 
     public class RadioPanelPZ69P51D : RadioPanelPZ69Base
     {
+        private enum CurrentP51DRadioMode
+        {
+            VHF,
+            NOUSE
+        }
+
         private CurrentP51DRadioMode _currentUpperRadioMode = CurrentP51DRadioMode.VHF;
         private CurrentP51DRadioMode _currentLowerRadioMode = CurrentP51DRadioMode.VHF;
 

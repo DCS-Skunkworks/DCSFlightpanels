@@ -17,6 +17,16 @@
 
     public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base
     {
+        private enum CurrentKa50RadioMode
+        {
+            VHF1_R828,
+            VHF2_R800L1,
+            ADF_ARK22,
+            ABRIS,
+            DATALINK,
+            NOUSE
+        }
+
         private CurrentKa50RadioMode _currentUpperRadioMode = CurrentKa50RadioMode.VHF1_R828;
         private CurrentKa50RadioMode _currentLowerRadioMode = CurrentKa50RadioMode.VHF1_R828;
 

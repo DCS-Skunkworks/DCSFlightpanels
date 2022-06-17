@@ -296,14 +296,6 @@
     /*
      *
      */
-    public enum CurrentSpitfireLFMkIXRadioMode
-    {
-        HFRADIO = 0,
-        HFRADIO2 = 2,
-        IFF = 4,
-        NOUSE = 64
-    }
-
     public enum RadioPanelPZ69KnobsSpitfireLFMkIX
     {
         UPPER_HFRADIO = 0,      //COM1
@@ -335,16 +327,6 @@
     /*
      *
      */
-    public enum CurrentSA342RadioMode
-    {
-        VHFFM = 2,
-        VHFAM = 4,
-        UHF = 8,
-        ADF = 16,
-        NADIR = 32,
-        NOUSE
-    }
-
     public enum RadioPanelPZ69KnobsSA342
     {
         UPPER_VHFAM = 0,
@@ -376,12 +358,6 @@
     /*
      *
      */
-    public enum CurrentP51DRadioMode
-    {
-        VHF = 0,
-        NOUSE = 2
-    }
-
     public enum RadioPanelPZ69KnobsP51D
     {
         UPPER_VHF = 0,   //COM1
@@ -413,14 +389,6 @@
     /*
      *
      */
-    public enum CurrentP47DRadioMode
-    {
-        HFRADIO = 0,
-        HFRADIO2 = 2,
-        //IFF = 4,
-        NOUSE = 64
-    }
-
     public enum RadioPanelPZ69KnobsP47D
     {
         UPPER_HFRADIO = 0,      //COM1
@@ -452,13 +420,6 @@
     /*
      *
      */
-    public enum CurrentMiG21BisRadioMode
-    {
-        Radio = 0,
-        RSBN = 2,
-        ARC = 4
-    }
-
     public enum RadioPanelPZ69KnobsMiG21Bis
     {
         UpperRadio = 0,
@@ -491,15 +452,6 @@
     /*
      *
      */
-    public enum CurrentM2000CRadioMode
-    {
-        VUHF = 0,
-        UHF = 2,
-        TACAN = 4,
-        VOR = 8,
-        NOUSE = 32
-    }
-
     public enum RadioPanelPZ69KnobsM2000C
     {
         UPPER_VUHF = 0,      //COM1
@@ -531,16 +483,6 @@
     /*
      *
      */
-    public enum CurrentKa50RadioMode
-    {
-        VHF1_R828 = 0,
-        VHF2_R800L1 = 2,
-        ADF_ARK22 = 4,
-        ABRIS = 8,
-        DATALINK = 16,
-        NOUSE = 32
-    }
-
     public enum RadioPanelPZ69KnobsKa50
     {
         UPPER_VHF1_R828 = 0,   //COM1
@@ -572,14 +514,6 @@
     /*
      *
      */
-    public enum CurrentFw190RadioMode
-    {
-        FUG16ZY = 0,
-        IFF = 2,
-        HOMING = 4,
-        NOUSE = 64
-    }
-
     public enum RadioPanelPZ69KnobsFw190
     {
         UPPER_FUG16ZY = 0,      //COM1
@@ -611,15 +545,6 @@
     /*
      *
      */
-    public enum CurrentFA18CRadioMode
-    {
-        COMM2 = 0,
-        VHFFM = 2,
-        COMM1 = 4,
-        TACAN = 8,
-        ILS = 16
-    }
-
     public enum RadioPanelPZ69KnobsFA18C
     {
         UPPER_COMM1 = 0,
@@ -651,16 +576,6 @@
     /*
      *
      */
-    public enum CurrentF86FRadioMode
-    {
-        ARC27_PRESET = 0,
-        ARC27_VOL = 2,
-        ARN6 = 4,
-        ARN6_MODES = 8,
-        ADF_APX6 = 16,
-        NOUSE = 32
-    }
-
     public enum RadioPanelPZ69KnobsF86F
     {
         UPPER_ARC27_PRESET = 0,      //COM1
@@ -692,13 +607,6 @@
     /*
      *
      */
-    public enum CurrentF5ERadioMode
-    {
-        UHF = 0,
-        TACAN = 8,
-        NO_USE = 16
-    }
-
     public enum RadioPanelPZ69KnobsF5E
     {
         UPPER_UHF = 0,
@@ -730,16 +638,6 @@
     /*
      *
      */
-    public enum CurrentF14RadioMode
-    {
-        UHF = 0,
-        VUHF = 2,
-        PLT_TACAN = 4,
-        RIO_TACAN = 8,
-        LINK4 = 16,
-        NOUSE = 32
-    }
-
     public enum RadioPanelPZ69KnobsF14B
     {
         UPPER_UHF = 0,
@@ -771,14 +669,6 @@
     /*
      *
      */
-    public enum CurrentBf109RadioMode
-    {
-        FUG16ZY = 0,
-        IFF = 2,
-        HOMING = 4,
-        NOUSE = 64
-    }
-
     public enum RadioPanelPZ69KnobsBf109
     {
         UPPER_FUG16ZY = 0,      //COM1
@@ -810,13 +700,6 @@
     /*
      *
      */
-    public enum CurrentAV8BNARadioMode
-    {
-        COMM1 = 0,
-        COMM2 = 2,
-        NOUSE = 4
-    }
-
     public enum RadioPanelPZ69KnobsAV8BNA
     {
         UPPER_COMM1 = 0,
@@ -848,14 +731,6 @@
     /*
      *
      */
-    public enum CurrentAJS37RadioMode
-    {
-        FR22 = 0,
-        FR24 = 2,
-        TILS = 4,
-        NOUSE = 64
-    }
-
     public enum RadioPanelPZ69KnobsAJS37
     {
         UPPER_FR22 = 0,      //COM1

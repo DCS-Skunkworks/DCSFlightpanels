@@ -18,6 +18,15 @@
 
     public class RadioPanelPZ69M2000C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentM2000CRadioMode
+        {
+            VUHF,
+            UHF,
+            TACAN,
+            VOR,
+            NOUSE
+        }
+
         private CurrentM2000CRadioMode _currentUpperRadioMode = CurrentM2000CRadioMode.VUHF;
         private CurrentM2000CRadioMode _currentLowerRadioMode = CurrentM2000CRadioMode.VUHF;
 

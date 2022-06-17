@@ -21,6 +21,15 @@ namespace NonVisuals.Radios
 
     public class RadioPanelPZ69FA18C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentFA18CRadioMode
+        {
+            COMM2,
+            VHFFM,
+            COMM1,
+            TACAN,
+            ILS
+        }
+
         private CurrentFA18CRadioMode _currentUpperRadioMode = CurrentFA18CRadioMode.COMM1;
 
         private CurrentFA18CRadioMode _currentLowerRadioMode = CurrentFA18CRadioMode.COMM2;

@@ -17,6 +17,13 @@
 
     public class RadioPanelPZ69AV8BNA : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentAV8BNARadioMode
+        {
+            COMM1,
+            COMM2,
+            NOUSE
+        }
+
         private CurrentAV8BNARadioMode _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM1;
         private CurrentAV8BNARadioMode _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM1;
         

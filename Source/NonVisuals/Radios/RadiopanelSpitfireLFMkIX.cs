@@ -17,6 +17,14 @@
 
     public class RadioPanelPZ69SpitfireLFMkIX : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentSpitfireLFMkIXRadioMode
+        {
+            HFRADIO,
+            HFRADIO2,
+            IFF,
+            NOUSE
+        }
+
         private CurrentSpitfireLFMkIXRadioMode _currentUpperRadioMode = CurrentSpitfireLFMkIXRadioMode.HFRADIO;
         private CurrentSpitfireLFMkIXRadioMode _currentLowerRadioMode = CurrentSpitfireLFMkIXRadioMode.HFRADIO;
 

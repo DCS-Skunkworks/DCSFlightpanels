@@ -18,6 +18,16 @@
 
     public class RadioPanelPZ69F14B : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentF14RadioMode
+        {
+            UHF,
+            VUHF,
+            PLT_TACAN,
+            RIO_TACAN,
+            LINK4,
+            NOUSE
+        }
+
         private CurrentF14RadioMode _currentUpperRadioMode = CurrentF14RadioMode.UHF;
         private CurrentF14RadioMode _currentLowerRadioMode = CurrentF14RadioMode.UHF;
 

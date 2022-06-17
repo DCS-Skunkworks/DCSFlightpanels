@@ -17,6 +17,14 @@
 
     public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentAJS37RadioMode
+        {
+            FR22,
+            FR24,
+            TILS,
+            NOUSE
+        }
+
         private CurrentAJS37RadioMode _currentUpperRadioMode = CurrentAJS37RadioMode.FR22;
         private CurrentAJS37RadioMode _currentLowerRadioMode = CurrentAJS37RadioMode.FR22;
 

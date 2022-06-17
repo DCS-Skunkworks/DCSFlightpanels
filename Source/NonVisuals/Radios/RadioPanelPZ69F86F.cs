@@ -17,6 +17,16 @@
 
     public class RadioPanelPZ69F86F : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentF86FRadioMode
+        {
+            ARC27_PRESET,
+            ARC27_VOL,
+            ARN6,
+            ARN6_MODES,
+            ADF_APX6,
+            NOUSE
+        }
+
         private CurrentF86FRadioMode _currentUpperRadioMode = CurrentF86FRadioMode.ARC27_PRESET;
         private CurrentF86FRadioMode _currentLowerRadioMode = CurrentF86FRadioMode.ARC27_PRESET;
 
