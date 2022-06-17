@@ -5,6 +5,7 @@
     using System.IO;
 
     using MEF;
+    using NonVisuals.Radios.Knobs;
 
     public class PanelEventFileWriter
     {
@@ -97,6 +98,11 @@
                 case PluginGamingPanelEnum.FarmingPanel:
                     {
                         result = result + " " + Enum.GetName(typeof(FarmingPanelMKKeys), switchId) + "  " + (pressed == false ? "RELEASED" : "PRESSED") + "  ";
+                        break;
+                    }
+                case PluginGamingPanelEnum.PZ69RadioPanel_MI24P:
+                    {
+                        result = result + " " + Enum.GetName(typeof(RadioPanelPZ69KnobsMi24P), switchId) + "  " + (pressed == false ? "RELEASED" : "PRESSED") + "  ";
                         break;
                     }
             }

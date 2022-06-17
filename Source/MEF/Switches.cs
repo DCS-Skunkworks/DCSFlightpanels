@@ -27,7 +27,10 @@
         [Description("StreamDeck XL")]
         StreamDeckXL = 10,
         [Description("Logitech Farming Side Panel")]
-        FarmingPanel = 11
+        FarmingPanel = 11,
+        
+        [Description("Saitek PZ69 Radio Panel MI24P")]
+        PZ69RadioPanel_MI24P = 12,
     }
 
     /*
