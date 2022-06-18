@@ -20,7 +20,7 @@
             /*
              * Your code here
              */
-            MessageBox.Show(profile + " PanelID : " + panel + " SwitchId : " + switchId + " Action : " + (pressed ? "Pressed" : "Released"));
+            MessageBox.Show($"Profile : {profile}\nPanelID : {panel}\nSwitchId : {switchId}\nAction : {(pressed ? "Pressed" : "Released")}");
         }
 
         public void Settings()
