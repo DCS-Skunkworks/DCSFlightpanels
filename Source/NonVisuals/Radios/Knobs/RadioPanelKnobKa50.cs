@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using NonVisuals.Interfaces;
+
     public enum RadioPanelPZ69KnobsKa50
     {
         UPPER_VHF1_R828,   //COM1

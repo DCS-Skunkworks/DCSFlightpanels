@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-     using NonVisuals.Interfaces;
+    using NonVisuals.Interfaces;
 
     public enum RadioPanelPZ69KnobsFw190
     {

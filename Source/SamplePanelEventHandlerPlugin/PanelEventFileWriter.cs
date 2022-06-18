@@ -20,7 +20,7 @@
         }
 
 
-        public static void WriteInfo(string profile, string panelHidId, PluginGamingPanelEnum panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
+        public static void WriteEventInfoToFile(string profile, string panelHidId, PluginGamingPanelEnum panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
         {
             if (_panelEventFileWriter == null)
             {

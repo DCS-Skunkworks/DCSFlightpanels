@@ -1,6 +1,5 @@
 ﻿namespace NonVisuals.Radios.Knobs
 {
-    using System;
     using System.Collections.Generic;
 
     using MEF;

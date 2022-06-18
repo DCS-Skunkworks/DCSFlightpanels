@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using NonVisuals.Interfaces;
+   
     public enum RadioPanelPZ69KnobsSRS
     {
         UPPER_COM1,   //COM1
