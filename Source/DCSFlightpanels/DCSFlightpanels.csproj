@@ -327,4 +327,7 @@
     <RootNamespace>DCSFlightpanels</RootNamespace>
     <Description>Saitek Pro Flight &amp; Streamdeck with DCS-BIOS or as keyemulator</Description>
   </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y &quot;$(TargetDir)SamplePanelEventPlugin.dll&quot; &quot;$(TargetDir)\Extensions\SamplePanelEventPlugin.dll&quot;" />
+  </Target>
 </Project>
