@@ -95,6 +95,10 @@ if ( 0 -ne $buildLastExitCode )
   exit
 }
 
+# Move SamplePanelEventPlugin.dll to Extensions folder
+Write-Host "Including SamplePanelEventPlugin.dll" -foregroundcolor "Green"
+Move-Item -Path $publishPath\SamplePanelEventPlugin.dll -Destination $publishPath\Extensions\SamplePanelEventPlugin.dll
+
 #Getting file info & remove revision from file_version
 Write-Host "Getting file info" -foregroundcolor "Green"
 $file_version = (Get-Command $publishPath\dcsfp.exe).FileVersionInfo.FileVersion
