@@ -133,6 +133,7 @@
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
     <ProjectReference Include="..\MEF\MEF.csproj" />
     <ProjectReference Include="..\NonVisuals\NonVisuals.csproj" />
+    <ProjectReference Include="..\SamplePanelEventHandlerPlugin\SamplePanelEventPlugin.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\gear-image.png" />
