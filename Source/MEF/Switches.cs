@@ -5,31 +5,68 @@
     public enum PluginGamingPanelEnum
     {
         [Description("Unknown Panel")]
-        Unknown = 0,
+        Unknown,
         [Description("Saitek PZ55 Switch Panel")]
-        PZ55SwitchPanel = 1,
+        PZ55SwitchPanel,
         [Description("Saitek PZ69 Radio Panel")]
-        PZ69RadioPanel = 2,
+        PZ69RadioPanel,
         [Description("Saitek PZ70 Multi Panel")]
-        PZ70MultiPanel = 3,
+        PZ70MultiPanel,
         [Description("Saitek BIP Back Lit Panel")]
-        BackLitPanel = 4,
+        BackLitPanel,
         [Description("Saitek TPM Panel")]
-        TPM = 5,
+        TPM,
         [Description("StreamDeck Mini")]
-        StreamDeckMini = 6,
+        StreamDeckMini,
         [Description("StreamDeck")]
-        StreamDeck = 7,
+        StreamDeck,
         [Description("StreamDeck V2")]
-        StreamDeckV2 = 8,
+        StreamDeckV2,
         [Description("StreamDeck MK.2")]
-        StreamDeckMK2 = 9,
+        StreamDeckMK2,
         [Description("StreamDeck XL")]
-        StreamDeckXL = 10,
+        StreamDeckXL,
         [Description("Logitech Farming Side Panel")]
-        FarmingPanel = 11,
-        [Description("Saitek PZ69 Radio Panel MI24P")]
-        PZ69RadioPanel_PreProg_MI24P = 12,
+        FarmingPanel,
+        [Description("Saitek PZ69 Radio PreProg Panel A10C")]
+        PZ69RadioPanel_PreProg_A10C,
+        [Description("Saitek PZ69 Radio PreProg Panel AJS37")]
+        PZ69RadioPanel_PreProg_AJS37,
+        [Description("Saitek PZ69 Radio PreProg Panel AV8BNA")]
+        PZ69RadioPanel_PreProg_AV8BNA,
+        [Description("Saitek PZ69 Radio PreProg Panel Bf109")]
+        PZ69RadioPanel_PreProg_BF109,
+        [Description("Saitek PZ69 Radio PreProg Panel F14B")]
+        PZ69RadioPanel_PreProg_F14B,
+        [Description("Saitek PZ69 Radio PreProg Panel F5E")]
+        PZ69RadioPanel_PreProg_F5E,
+        [Description("Saitek PZ69 Radio PreProg Panel F86F")]
+        PZ69RadioPanel_PreProg_F86F,
+        [Description("Saitek PZ69 Radio PreProg Panel FA18C")]
+        PZ69RadioPanel_PreProg_FA18C,
+        [Description("Saitek PZ69 Radio PreProg Panel Fw190")]
+        PZ69RadioPanel_PreProg_FW190,
+        [Description("Saitek PZ69 Radio PreProg Panel Ka50")]
+        PZ69RadioPanel_PreProg_KA50,
+        [Description("Saitek PZ69 Radio PreProg Panel M2000C")]
+        PZ69RadioPanel_PreProg_M2000C,
+        [Description("Saitek PZ69 Radio PreProg Panel MI24P")]
+        PZ69RadioPanel_PreProg_MI24P,
+        [Description("Saitek PZ69 Radio PreProg Panel MI8")]
+        PZ69RadioPanel_PreProg_MI8,
+        [Description("Saitek PZ69 Radio PreProg Panel MiG21Bis")]
+        PZ69RadioPanel_PreProg_MIG21BIS,
+        [Description("Saitek PZ69 Radio PreProg Panel P47D")]
+        PZ69RadioPanel_PreProg_P47D,
+        [Description("Saitek PZ69 Radio PreProg Panel P51D")]
+        PZ69RadioPanel_PreProg_P51D,
+        [Description("Saitek PZ69 Radio PreProg Panel SA342")]
+        PZ69RadioPanel_PreProg_SA342,
+        [Description("Saitek PZ69 Radio PreProg Panel UH1H")]
+        PZ69RadioPanel_PreProg_UH1H,
+        [Description("Saitek PZ69 Radio PreProg Panel SpitfireLFMkIX")]
+        PZ69RadioPanel_PreProg_SPITFIRELFMKIX,
+
     }
 
     /*

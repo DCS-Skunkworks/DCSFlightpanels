@@ -53,7 +53,7 @@
 
         private string GetEventString<Type>(int switchId, bool pressed)
         {
-            return $" xxxxxxxxxxxxxx {Enum.GetName(typeof(Type), switchId)}  {(pressed == false ? "RELEASED" : "PRESSED")}  ";
+            return $" {Enum.GetName(typeof(Type), switchId)}  {(pressed == false ? "RELEASED" : "PRESSED")}  ";
         }
 
         private string GetInfoFromEnums(string profile, string panelHidId, PluginGamingPanelEnum panel, int switchId, bool pressed)
@@ -75,9 +75,27 @@
                 or PluginGamingPanelEnum.StreamDeckXL => GetEventString<EnumStreamDeckButtonNames>(switchId, pressed),
                 
                 PluginGamingPanelEnum.BackLitPanel => "BIP Event - ATTN : this panel cannot produce events",
-                
+
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_A10C => GetEventString<RadioPanelPZ69KnobsA10C>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AJS37 => GetEventString<RadioPanelPZ69KnobsAJS37>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AV8BNA => GetEventString<RadioPanelPZ69KnobsAV8BNA>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_BF109 => GetEventString<RadioPanelPZ69KnobsBf109>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_F14B => GetEventString<RadioPanelPZ69KnobsF14B>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_F5E => GetEventString<RadioPanelPZ69KnobsF5E>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_F86F => GetEventString<RadioPanelPZ69KnobsF86F>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_FA18C => GetEventString<RadioPanelPZ69KnobsFA18C>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_FW190 => GetEventString<RadioPanelPZ69KnobsFw190>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_KA50 => GetEventString<RadioPanelPZ69KnobsKa50>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_M2000C => GetEventString<RadioPanelPZ69KnobsM2000C>(switchId, pressed),
                 PluginGamingPanelEnum.PZ69RadioPanel_PreProg_MI24P => GetEventString<RadioPanelPZ69KnobsMi24P>(switchId, pressed),
-                
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_MI8 => GetEventString<RadioPanelPZ69KnobsMi8>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_MIG21BIS => GetEventString<RadioPanelPZ69KnobsMiG21Bis>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_P47D => GetEventString<RadioPanelPZ69KnobsP47D>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_P51D => GetEventString<RadioPanelPZ69KnobsP51D>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_SA342 => GetEventString<RadioPanelPZ69KnobsSA342>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_UH1H => GetEventString<RadioPanelPZ69KnobsUH1H>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_SPITFIRELFMKIX => GetEventString<RadioPanelPZ69KnobsSpitfireLFMkIX>(switchId, pressed),
+
                 PluginGamingPanelEnum.Unknown 
                 or _ => "Unknown panel."
             };

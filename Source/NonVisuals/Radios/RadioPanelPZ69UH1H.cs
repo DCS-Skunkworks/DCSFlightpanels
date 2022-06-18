@@ -3123,7 +3123,7 @@ namespace NonVisuals.Radios
                         PluginManager.DoEvent(
                             DCSFPProfile.SelectedProfile.Description,
                             HIDInstance,
-                            PluginGamingPanelEnum.PZ69RadioPanel,
+                            PluginGamingPanelEnum.PZ69RadioPanel_PreProg_UH1H,
                             (int)radioPanelKnob.RadioPanelPZ69Knob,
                             radioPanelKnob.IsOn,
                             null);
