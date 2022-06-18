@@ -20,7 +20,7 @@
         }
 
 
-        public static void WriteInfo(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
+        public static void WriteInfo(string profile, string panelHidId, PluginGamingPanelEnum panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
         {
             if (_panelEventFileWriter == null)
             {
@@ -29,7 +29,7 @@
             _panelEventFileWriter.WriteInfoToFile(profile, panelHidId, panelId, switchId, pressed, keySequence);
         }
 
-        private void WriteInfoToFile(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
+        private void WriteInfoToFile(string profile, string panelHidId, PluginGamingPanelEnum panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
         {
             lock (_lockObject)
             {
@@ -53,13 +53,12 @@
 
         private string GetEventString<Type>(int switchId, bool pressed)
         {
-            return $" {Enum.GetName(typeof(Type), switchId)}  {(pressed == false ? "RELEASED" : "PRESSED")}  ";
+            return $" xxxxxxxxxxxxxx {Enum.GetName(typeof(Type), switchId)}  {(pressed == false ? "RELEASED" : "PRESSED")}  ";
         }
 
-        private string GetInfoFromEnums(string profile, string panelHidId, int panelId, int switchId, bool pressed)
+        private string GetInfoFromEnums(string profile, string panelHidId, PluginGamingPanelEnum panel, int switchId, bool pressed)
         {
-            var panel = (PluginGamingPanelEnum)panelId; // Enum.GetName(typeof(GamingPanelInternalEnum), panelId);
-            var result = $"{DateTime.Now:dd.MM.yyyy hh:mm:ss} {profile} {Enum.GetName(typeof(PluginGamingPanelEnum), panelId)}  ";
+            var result = $"{DateTime.Now:dd.MM.yyyy hh:mm:ss} {profile} {Enum.GetName(typeof(PluginGamingPanelEnum), panel)}  ";
 
             result += panel switch
             {

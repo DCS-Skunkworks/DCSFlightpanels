@@ -254,7 +254,7 @@
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description,
                                 HIDInstance,
-                                (int)PluginGamingPanelEnum.FarmingPanel,
+                                PluginGamingPanelEnum.FarmingPanel,
                                 (int)farmingPanelKey.FarmingPanelMKKey,
                                 farmingPanelKey.IsOn,
                                 keyBinding.OSKeyPress.KeyPressSequence);
@@ -270,7 +270,7 @@
                     PluginManager.DoEvent(
                         DCSFPProfile.SelectedProfile.Description,
                         HIDInstance,
-                        (int)PluginGamingPanelEnum.FarmingPanel,
+                        PluginGamingPanelEnum.FarmingPanel,
                         (int)farmingPanelKey.FarmingPanelMKKey,
                         farmingPanelKey.IsOn,
                         null);

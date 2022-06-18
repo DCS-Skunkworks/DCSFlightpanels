@@ -15,7 +15,7 @@
     [ExportMetadata("Name", "Sample Plugin 1")]
     public class PanelEventHandler1 : IPanelEventHandler
     {
-        public void PanelEvent(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
+        public void PanelEvent(string profile, string panelHidId, PluginGamingPanelEnum panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
         {
             /*
              * Your code here

@@ -83,7 +83,7 @@ namespace NonVisuals.StreamDeck
                 PluginManager.DoEvent(
                     DCSFPProfile.SelectedProfile.Description,
                     StreamDeckPanelInstance.HIDInstance,
-                    (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
+                    StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
                     (int)StreamDeckButtonName,
                     true,
                     OSKeyPress.KeyPressSequence);

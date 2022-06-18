@@ -462,7 +462,7 @@
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description, 
                                 HIDInstance, 
-                                (int)PluginGamingPanelEnum.PZ55SwitchPanel, 
+                                PluginGamingPanelEnum.PZ55SwitchPanel, 
                                 (int)switchPanelKey.SwitchPanelPZ55Key, 
                                 switchPanelKey.IsOn,
                                 keyBinding.OSKeyPress.KeyPressSequence);
@@ -478,7 +478,7 @@
                     PluginManager.DoEvent(
                         DCSFPProfile.SelectedProfile.Description,
                         HIDInstance,
-                        (int)PluginGamingPanelEnum.PZ55SwitchPanel,
+                        PluginGamingPanelEnum.PZ55SwitchPanel,
                         (int)switchPanelKey.SwitchPanelPZ55Key,
                         switchPanelKey.IsOn,
                         null);

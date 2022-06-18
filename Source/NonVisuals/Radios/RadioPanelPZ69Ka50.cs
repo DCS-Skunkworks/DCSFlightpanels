@@ -1047,7 +1047,7 @@
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description,
                                 HIDInstance,
-                                (int)PluginGamingPanelEnum.PZ69RadioPanel,
+                                PluginGamingPanelEnum.PZ69RadioPanel,
                                 (int)radioPanelKnob.RadioPanelPZ69Knob,
                                 radioPanelKnob.IsOn,
                                 null);
