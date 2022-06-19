@@ -12,24 +12,28 @@
      * Reference the MEF project where the interface and necessary files are located.
      */
     [Export(typeof(IPanelEventHandler))]
-    [ExportMetadata("Name", "Sample Plugin 2")]
+    [ExportMetadata("Name", "Sample Plugin 2 - MessageBox events to user")]
     public class PanelEventHandler2 : IPanelEventHandler
     {
-        public void PanelEvent(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
+        private string PluginName { get {
+                return (string)GetType()
+                    .GetCustomAttributes(false)
+                    .OfType<ExportMetadataAttribute>()
+                    .Single(attribute => attribute.Name == "Name").Value;
+            }
+        }
+
+        public void PanelEvent(string profile, string panelHidId, PluginGamingPanelEnum panel, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
         {
             /*
              * Your code here
              */
-            MessageBox.Show(profile + " PanelID : " + panelId + " SwitchId : " + switchId + " Action : " + (pressed ? "Pressed" : "Released"));
+            MessageBox.Show($"Profile : {profile}\nPanelID : {panel}\nSwitchId : {switchId}\nAction : {(pressed ? "Pressed" : "Released")}", $"This is a message from {PluginName}");
         }
 
         public void Settings()
         {
-            var name = GetType()
-                .GetCustomAttributes(false)
-                .OfType<ExportMetadataAttribute>()
-                .Single(attribute => attribute.Name == "Name").Value;
-            MessageBox.Show("This would be the settings for plugin " + name, "You clicked the plugin menu.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"This would be the settings for plugin {PluginName}", "You clicked the plugin menu.", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

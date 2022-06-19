@@ -17,6 +17,14 @@
 
     public class RadioPanelPZ69SpitfireLFMkIX : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentSpitfireLFMkIXRadioMode
+        {
+            HFRADIO,
+            HFRADIO2,
+            IFF,
+            NOUSE
+        }
+
         private CurrentSpitfireLFMkIXRadioMode _currentUpperRadioMode = CurrentSpitfireLFMkIXRadioMode.HFRADIO;
         private CurrentSpitfireLFMkIXRadioMode _currentLowerRadioMode = CurrentSpitfireLFMkIXRadioMode.HFRADIO;
 
@@ -405,7 +413,7 @@
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description,
                                 HIDInstance,
-                                (int)PluginGamingPanelEnum.PZ69RadioPanel,
+                                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_SPITFIRELFMKIX,
                                 (int)radioPanelKnob.RadioPanelPZ69Knob,
                                 radioPanelKnob.IsOn,
                                 null);

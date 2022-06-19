@@ -18,6 +18,13 @@
 
     public class RadioPanelPZ69F5E : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentF5ERadioMode
+        {
+            UHF,
+            TACAN,
+            NO_USE
+        }
+
         private CurrentF5ERadioMode _currentUpperRadioMode = CurrentF5ERadioMode.UHF;
         private CurrentF5ERadioMode _currentLowerRadioMode = CurrentF5ERadioMode.UHF;
 
@@ -1921,7 +1928,7 @@
 
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                        PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_F5E, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
 

@@ -75,28 +75,28 @@
             var result = new HashSet<ISaitekPanelKnob>
             {
                 // Group 0
-                new SwitchPanelKey(0, Convert.ToInt32("1", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT),
-                new SwitchPanelKey(0, Convert.ToInt32("10", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT),
-                new SwitchPanelKey(0, Convert.ToInt32("100", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER),
-                new SwitchPanelKey(0, Convert.ToInt32("1000", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP),
-                new SwitchPanelKey(0, Convert.ToInt32("10000", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE),
-                new SwitchPanelKey(0, Convert.ToInt32("100000", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT),
-                new SwitchPanelKey(0, Convert.ToInt32("1000000", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL),
-                new SwitchPanelKey(0, Convert.ToInt32("10000000", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL),
+                new SwitchPanelKey(0, 1 << 0, false, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT),
+                new SwitchPanelKey(0, 1 << 1, false, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT),
+                new SwitchPanelKey(0, 1 << 2, false, SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER),
+                new SwitchPanelKey(0, 1 << 3, false, SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP),
+                new SwitchPanelKey(0, 1 << 4, false, SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE),
+                new SwitchPanelKey(0, 1 << 5, false, SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT),
+                new SwitchPanelKey(0, 1 << 6, false, SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL),
+                new SwitchPanelKey(0, 1 << 7, false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL),
                 // Group 1
-                new SwitchPanelKey(1, Convert.ToInt32("1", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON),
-                new SwitchPanelKey(1, Convert.ToInt32("10", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV),
-                new SwitchPanelKey(1, Convert.ToInt32("100", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE),
-                new SwitchPanelKey(1, Convert.ToInt32("1000", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI),
-                new SwitchPanelKey(1, Convert.ToInt32("10000", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING),
-                new SwitchPanelKey(1, Convert.ToInt32("100000", 2), false, SwitchPanelPZ55Keys.KNOB_ENGINE_OFF),
-                new SwitchPanelKey(1, Convert.ToInt32("1000000", 2), false, SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT),
-                new SwitchPanelKey(1, Convert.ToInt32("10000000", 2), false, SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT),
+                new SwitchPanelKey(1, 1 << 0, false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON),
+                new SwitchPanelKey(1, 1 << 1, false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV),
+                new SwitchPanelKey(1, 1 << 2, false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE),
+                new SwitchPanelKey(1, 1 << 3, false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI),
+                new SwitchPanelKey(1, 1 << 4, false, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING),
+                new SwitchPanelKey(1, 1 << 5, false, SwitchPanelPZ55Keys.KNOB_ENGINE_OFF),
+                new SwitchPanelKey(1, 1 << 6, false, SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT),
+                new SwitchPanelKey(1, 1 << 7, false, SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT),
                 // Group 2
-                new SwitchPanelKey(2, Convert.ToInt32("1", 2), false, SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH),
-                new SwitchPanelKey(2, Convert.ToInt32("10", 2), false, SwitchPanelPZ55Keys.KNOB_ENGINE_START),
-                new SwitchPanelKey(2, Convert.ToInt32("100", 2), false, SwitchPanelPZ55Keys.LEVER_GEAR_UP),
-                new SwitchPanelKey(2, Convert.ToInt32("1000", 2), false, SwitchPanelPZ55Keys.LEVER_GEAR_DOWN)
+                new SwitchPanelKey(2, 1 << 0, false, SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH),
+                new SwitchPanelKey(2, 1 << 1, false, SwitchPanelPZ55Keys.KNOB_ENGINE_START),
+                new SwitchPanelKey(2, 1 << 2, false, SwitchPanelPZ55Keys.LEVER_GEAR_UP),
+                new SwitchPanelKey(2, 1 << 3, false, SwitchPanelPZ55Keys.LEVER_GEAR_DOWN)
             };
 
             return result;

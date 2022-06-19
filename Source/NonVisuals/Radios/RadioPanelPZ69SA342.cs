@@ -18,6 +18,16 @@
 
     public class RadioPanelPZ69SA342 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentSA342RadioMode
+        {
+            VHFFM,
+            VHFAM,
+            UHF,
+            ADF,
+            NADIR,
+            NOUSE
+        }
+
         private CurrentSA342RadioMode _currentUpperRadioMode = CurrentSA342RadioMode.VHFAM;
         private CurrentSA342RadioMode _currentLowerRadioMode = CurrentSA342RadioMode.VHFAM;
 
@@ -1869,7 +1879,7 @@
                         PluginManager.DoEvent(
                             DCSFPProfile.SelectedProfile.Description,
                             HIDInstance,
-                            (int)PluginGamingPanelEnum.PZ69RadioPanel,
+                            PluginGamingPanelEnum.PZ69RadioPanel_PreProg_SA342,
                             (int)radioPanelKnob.RadioPanelPZ69Knob,
                             radioPanelKnob.IsOn,
                             null);

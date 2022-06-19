@@ -19,7 +19,7 @@
         /// The panel hid id. As there can be multiple panels of same type this will
         /// enable you to differentiate them.
         /// </param>
-        /// <param name="panelId">
+        /// <param name="panel">
         /// From the enum PluginGamingPanelEnum (Switches.cs)
         /// </param>
         /// <param name="switchId">
@@ -32,7 +32,7 @@
         /// List of keys including delays
         /// Is NULL if nothing is associated with the key/switch/knob
         /// </param>
-        void PanelEvent(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence);
+        void PanelEvent(string profile, string panelHidId, PluginGamingPanelEnum panel, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence);
 
         /// <summary>
         /// Called by DCSFP when someone clicks the plugin's menu. So user can change settings, plugin may bring up a window, settings file.

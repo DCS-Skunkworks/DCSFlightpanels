@@ -17,6 +17,14 @@
 
     public class RadioPanelPZ69P47D : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentP47DRadioMode
+        {
+            HFRADIO,
+            HFRADIO2,
+            //IFF,
+            NOUSE
+        }
+
         private CurrentP47DRadioMode _currentUpperRadioMode = CurrentP47DRadioMode.HFRADIO;
         private CurrentP47DRadioMode _currentLowerRadioMode = CurrentP47DRadioMode.HFRADIO;
 
@@ -376,7 +384,7 @@
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description,
                                 HIDInstance,
-                                (int)PluginGamingPanelEnum.PZ69RadioPanel,
+                                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_P47D,
                                 (int)radioPanelKnob.RadioPanelPZ69Knob,
                                 radioPanelKnob.IsOn,
                                 null);

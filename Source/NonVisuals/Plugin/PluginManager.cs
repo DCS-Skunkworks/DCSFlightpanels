@@ -53,7 +53,7 @@
             return _pluginManager;
         }
 
-        public static void DoEvent(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
+        public static void DoEvent(string profile, string panelHidId, PluginGamingPanelEnum panel, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
         {
             if (Get().Plugins == null)
             {
@@ -62,7 +62,7 @@
 
             foreach (Lazy<IPanelEventHandler, IPanelEventHandlerMetaData> plugin in Get().Plugins)
             {
-                plugin.Value.PanelEvent(profile, panelHidId, panelId, switchId, pressed, keySequence);
+                plugin.Value.PanelEvent(profile, panelHidId, panel, switchId, pressed, keySequence);
             }
         }
 

@@ -17,6 +17,14 @@
 
     public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentAJS37RadioMode
+        {
+            FR22,
+            FR24,
+            TILS,
+            NOUSE
+        }
+
         private CurrentAJS37RadioMode _currentUpperRadioMode = CurrentAJS37RadioMode.FR22;
         private CurrentAJS37RadioMode _currentLowerRadioMode = CurrentAJS37RadioMode.FR22;
 
@@ -428,7 +436,7 @@
                         
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                            PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AJS37, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                         }
                     }
 

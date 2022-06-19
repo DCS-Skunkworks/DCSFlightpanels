@@ -243,7 +243,7 @@ namespace NonVisuals.Radios
                                 PluginManager.DoEvent(
                                     DCSFPProfile.SelectedProfile.Description, 
                                     HIDInstance, 
-                                    (int)PluginGamingPanelEnum.PZ69RadioPanel, 
+                                    PluginGamingPanelEnum.PZ69RadioPanel, 
                                     (int)radioPanelKey.RadioPanelPZ69Knob, 
                                     radioPanelKey.IsOn, 
                                     keyBinding.OSKeyPress.KeyPressSequence);
@@ -260,7 +260,7 @@ namespace NonVisuals.Radios
                         PluginManager.DoEvent(
                             DCSFPProfile.SelectedProfile.Description,
                             HIDInstance,
-                            (int)PluginGamingPanelEnum.PZ69RadioPanel,
+                            PluginGamingPanelEnum.PZ69RadioPanel,
                             (int)radioPanelKey.RadioPanelPZ69Knob,
                             radioPanelKey.IsOn,
                             null);

@@ -5,29 +5,68 @@
     public enum PluginGamingPanelEnum
     {
         [Description("Unknown Panel")]
-        Unknown = 0,
+        Unknown,
         [Description("Saitek PZ55 Switch Panel")]
-        PZ55SwitchPanel = 1,
+        PZ55SwitchPanel,
         [Description("Saitek PZ69 Radio Panel")]
-        PZ69RadioPanel = 2,
+        PZ69RadioPanel,
         [Description("Saitek PZ70 Multi Panel")]
-        PZ70MultiPanel = 3,
+        PZ70MultiPanel,
         [Description("Saitek BIP Back Lit Panel")]
-        BackLitPanel = 4,
+        BackLitPanel,
         [Description("Saitek TPM Panel")]
-        TPM = 5,
+        TPM,
         [Description("StreamDeck Mini")]
-        StreamDeckMini = 6,
+        StreamDeckMini,
         [Description("StreamDeck")]
-        StreamDeck = 7,
+        StreamDeck,
         [Description("StreamDeck V2")]
-        StreamDeckV2 = 8,
+        StreamDeckV2,
         [Description("StreamDeck MK.2")]
-        StreamDeckMK2 = 9,
+        StreamDeckMK2,
         [Description("StreamDeck XL")]
-        StreamDeckXL = 10,
+        StreamDeckXL,
         [Description("Logitech Farming Side Panel")]
-        FarmingPanel = 11
+        FarmingPanel,
+        [Description("Saitek PZ69 Radio PreProg Panel A10C")]
+        PZ69RadioPanel_PreProg_A10C,
+        [Description("Saitek PZ69 Radio PreProg Panel AJS37")]
+        PZ69RadioPanel_PreProg_AJS37,
+        [Description("Saitek PZ69 Radio PreProg Panel AV8BNA")]
+        PZ69RadioPanel_PreProg_AV8BNA,
+        [Description("Saitek PZ69 Radio PreProg Panel Bf109")]
+        PZ69RadioPanel_PreProg_BF109,
+        [Description("Saitek PZ69 Radio PreProg Panel F14B")]
+        PZ69RadioPanel_PreProg_F14B,
+        [Description("Saitek PZ69 Radio PreProg Panel F5E")]
+        PZ69RadioPanel_PreProg_F5E,
+        [Description("Saitek PZ69 Radio PreProg Panel F86F")]
+        PZ69RadioPanel_PreProg_F86F,
+        [Description("Saitek PZ69 Radio PreProg Panel FA18C")]
+        PZ69RadioPanel_PreProg_FA18C,
+        [Description("Saitek PZ69 Radio PreProg Panel Fw190")]
+        PZ69RadioPanel_PreProg_FW190,
+        [Description("Saitek PZ69 Radio PreProg Panel Ka50")]
+        PZ69RadioPanel_PreProg_KA50,
+        [Description("Saitek PZ69 Radio PreProg Panel M2000C")]
+        PZ69RadioPanel_PreProg_M2000C,
+        [Description("Saitek PZ69 Radio PreProg Panel MI24P")]
+        PZ69RadioPanel_PreProg_MI24P,
+        [Description("Saitek PZ69 Radio PreProg Panel MI8")]
+        PZ69RadioPanel_PreProg_MI8,
+        [Description("Saitek PZ69 Radio PreProg Panel MiG21Bis")]
+        PZ69RadioPanel_PreProg_MIG21BIS,
+        [Description("Saitek PZ69 Radio PreProg Panel P47D")]
+        PZ69RadioPanel_PreProg_P47D,
+        [Description("Saitek PZ69 Radio PreProg Panel P51D")]
+        PZ69RadioPanel_PreProg_P51D,
+        [Description("Saitek PZ69 Radio PreProg Panel SA342")]
+        PZ69RadioPanel_PreProg_SA342,
+        [Description("Saitek PZ69 Radio PreProg Panel UH1H")]
+        PZ69RadioPanel_PreProg_UH1H,
+        [Description("Saitek PZ69 Radio PreProg Panel SpitfireLFMkIX")]
+        PZ69RadioPanel_PreProg_SPITFIRELFMKIX,
+
     }
 
     /*
@@ -264,623 +303,5 @@
         DME = 32,
         XPDR = 64
     }
-
-    public enum RadioPanelPZ69KnobsSRS
-    {
-        UPPER_COM1 = 0,   //COM1
-        UPPER_COM2 = 2,  //COM2
-        UPPER_NAV1 = 4, //NAV1
-        UPPER_NAV2 = 8, //NAV2
-        UPPER_ADF = 16, //ADF
-        UPPER_DME = 32, //DME_
-        UPPER_XPDR = 64, //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_COM1 = 4096,
-        LOWER_COM2 = 8192,
-        LOWER_NAV1 = 16384,
-        LOWER_NAV2 = 32768,
-        LOWER_ADF = 65536,
-        LOWER_DME = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentSpitfireLFMkIXRadioMode
-    {
-        HFRADIO = 0,
-        HFRADIO2 = 2,
-        IFF = 4,
-        NOUSE = 64
-    }
-
-    public enum RadioPanelPZ69KnobsSpitfireLFMkIX
-    {
-        UPPER_HFRADIO = 0,      //COM1
-        UPPER_IFF = 2,      //COM2
-        UPPER_NO_USE0 = 4,          //NAV1
-        UPPER_NO_USE1 = 8,             //NAV2
-        UPPER_NO_USE2 = 16,       //ADF
-        UPPER_NO_USE3 = 32,          //DME_
-        UPPER_NO_USE4 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_HFRADIO = 4096,   //COM1
-        LOWER_IFF = 8192,   //COM2
-        LOWER_NO_USE0 = 16384,      //NAV1
-        LOWER_NO_USE1 = 32768,          //NAV2
-        LOWER_NO_USE2 = 65536,    //ADF
-        LOWER_NO_USE3 = 131072,      //DME_
-        LOWER_NO_USE4 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentSA342RadioMode
-    {
-        VHFFM = 2,
-        VHFAM = 4,
-        UHF = 8,
-        ADF = 16,
-        NADIR = 32,
-        NOUSE
-    }
-
-    public enum RadioPanelPZ69KnobsSA342
-    {
-        UPPER_VHFAM = 0,
-        UPPER_VHFFM = 2,
-        UPPER_UHF = 4,
-        UPPER_NAV2 = 8,
-        UPPER_ADF = 16,
-        UPPER_NADIR = 32,
-        UPPER_XPDR = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_VHFAM = 4096,
-        LOWER_VHFFM = 8192,
-        LOWER_UHF = 16384,
-        LOWER_NAV2 = 32768,
-        LOWER_ADF = 65536,
-        LOWER_NADIR = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentP51DRadioMode
-    {
-        VHF = 0,
-        NOUSE = 2
-    }
-
-    public enum RadioPanelPZ69KnobsP51D
-    {
-        UPPER_VHF = 0,   //COM1
-        UPPER_NO_USE0 = 2,  //COM2
-        UPPER_NO_USE1 = 4, //NAV1
-        UPPER_NO_USE2 = 8, //NAV2
-        UPPER_NO_USE3 = 16, //ADF
-        UPPER_NO_USE4 = 32, //DME_
-        UPPER_NO_USE5 = 64, //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_VHF = 4096,
-        LOWER_NO_USE0 = 8192,
-        LOWER_NO_USE1 = 16384,
-        LOWER_NO_USE2 = 32768,
-        LOWER_NO_USE3 = 65536,
-        LOWER_NO_USE4 = 131072,
-        LOWER_NO_USE5 = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentP47DRadioMode
-    {
-        HFRADIO = 0,
-        HFRADIO2 = 2,
-        //IFF = 4,
-        NOUSE = 64
-    }
-
-    public enum RadioPanelPZ69KnobsP47D
-    {
-        UPPER_HFRADIO = 0,      //COM1
-        UPPER_NO_USE5 = 2, //IFF = 2,      //COM2
-        UPPER_NO_USE0 = 4,          //NAV1
-        UPPER_NO_USE1 = 8,             //NAV2
-        UPPER_NO_USE2 = 16,       //ADF
-        UPPER_NO_USE3 = 32,          //DME_
-        UPPER_NO_USE4 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_HFRADIO = 4096,   //COM1
-        LOWER_NO_USE5 = 8192, //IFF = 8192,   //COM2
-        LOWER_NO_USE0 = 16384,      //NAV1
-        LOWER_NO_USE1 = 32768,          //NAV2
-        LOWER_NO_USE2 = 65536,    //ADF
-        LOWER_NO_USE3 = 131072,      //DME_
-        LOWER_NO_USE4 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentMiG21BisRadioMode
-    {
-        Radio = 0,
-        RSBN = 2,
-        ARC = 4
-    }
-
-    public enum RadioPanelPZ69KnobsMiG21Bis
-    {
-        UpperRadio = 0,
-        UpperCom2 = 2,
-        UpperRsbn = 4,
-        UpperNav2 = 8,
-        UpperArc = 16,
-        UpperDme = 32,
-        UpperXpdr = 64,
-        UpperSmallFreqWheelInc = 128,
-        UpperSmallFreqWheelDec = 256,
-        UpperLargeFreqWheelInc = 512,
-        UpperLargeFreqWheelDec = 1024,
-        UpperFreqSwitch = 2056,
-        LowerRadio = 4096,
-        LowerCom2 = 8192,
-        LowerRsbn = 16384,
-        LowerNav2 = 32768,
-        LowerArc = 65536,
-        LowerDme = 131072,
-        LowerXpdr = 262144,
-        LowerSmallFreqWheelInc = 8388608,
-        LowerSmallFreqWheelDec = 524288,
-        LowerLargeFreqWheelInc = 1048576,
-        LowerLargeFreqWheelDec = 2097152,
-        LowerFreqSwitch = 4194304
-    }
-
-
-    /*
-     *
-     */
-    public enum CurrentM2000CRadioMode
-    {
-        VUHF = 0,
-        UHF = 2,
-        TACAN = 4,
-        VOR = 8,
-        NOUSE = 32
-    }
-
-    public enum RadioPanelPZ69KnobsM2000C
-    {
-        UPPER_VUHF = 0,      //COM1
-        UPPER_UHF = 2,      //COM2
-        UPPER_TACAN = 4,          //NAV1
-        UPPER_VOR = 8,             //NAV2
-        UPPER_NO_USE2 = 16,       //ADF
-        UPPER_NO_USE3 = 32,          //DME_
-        UPPER_NO_USE4 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_VUHF = 4096,   //COM1
-        LOWER_UHF = 8192,   //COM2
-        LOWER_TACAN = 16384,      //NAV1
-        LOWER_VOR = 32768,          //NAV2
-        LOWER_NO_USE2 = 65536,    //ADF
-        LOWER_NO_USE3 = 131072,      //DME_
-        LOWER_NO_USE4 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentKa50RadioMode
-    {
-        VHF1_R828 = 0,
-        VHF2_R800L1 = 2,
-        ADF_ARK22 = 4,
-        ABRIS = 8,
-        DATALINK = 16,
-        NOUSE = 32
-    }
-
-    public enum RadioPanelPZ69KnobsKa50
-    {
-        UPPER_VHF1_R828 = 0,   //COM1
-        UPPER_VHF2_R800L1 = 2,  //COM2
-        UPPER_ABRIS = 4, //NAV1
-        UPPER_DATALINK = 8, //NAV2
-        UPPER_ADF_ARK22 = 16, //ADF
-        UPPER_NO_USE3 = 32, //DME_
-        UPPER_NO_USE4 = 64, //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_VHF1_R828 = 4096,
-        LOWER_VHF2_R800L1 = 8192,
-        LOWER_ABRIS = 16384,
-        LOWER_DATALINK = 32768,
-        LOWER_ADF_ARK22 = 65536,
-        LOWER_NO_USE3 = 131072,
-        LOWER_NO_USE4 = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentFw190RadioMode
-    {
-        FUG16ZY = 0,
-        IFF = 2,
-        HOMING = 4,
-        NOUSE = 64
-    }
-
-    public enum RadioPanelPZ69KnobsFw190
-    {
-        UPPER_FUG16ZY = 0,      //COM1
-        UPPER_IFF = 2,      //COM2
-        UPPER_HOMING = 4,          //NAV1
-        UPPER_NO_USE1 = 8,             //NAV2
-        UPPER_NO_USE2 = 16,       //ADF
-        UPPER_NO_USE3 = 32,          //DME_
-        UPPER_NO_USE4 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_FUG16ZY = 4096,   //COM1
-        LOWER_IFF = 8192,   //COM2
-        LOWER_HOMING = 16384,      //NAV1
-        LOWER_NO_USE1 = 32768,          //NAV2
-        LOWER_NO_USE2 = 65536,    //ADF
-        LOWER_NO_USE3 = 131072,      //DME_
-        LOWER_NO_USE4 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentFA18CRadioMode
-    {
-        COMM2 = 0,
-        VHFFM = 2,
-        COMM1 = 4,
-        TACAN = 8,
-        ILS = 16
-    }
-
-    public enum RadioPanelPZ69KnobsFA18C
-    {
-        UPPER_COMM1 = 0,
-        UPPER_COMM2 = 2,
-        UPPER_VHFFM = 4,
-        UPPER_ILS = 8,
-        UPPER_TACAN = 16,
-        UPPER_DME = 32,
-        UPPER_XPDR = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_COMM1 = 4096,
-        LOWER_COMM2 = 8192,
-        LOWER_VHFFM = 16384,
-        LOWER_ILS = 32768,
-        LOWER_TACAN = 65536,
-        LOWER_DME = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentF86FRadioMode
-    {
-        ARC27_PRESET = 0,
-        ARC27_VOL = 2,
-        ARN6 = 4,
-        ARN6_MODES = 8,
-        ADF_APX6 = 16,
-        NOUSE = 32
-    }
-
-    public enum RadioPanelPZ69KnobsF86F
-    {
-        UPPER_ARC27_PRESET = 0,      //COM1
-        UPPER_ARC27_VOL = 2,      //COM2
-        UPPER_ARN6 = 4,          //NAV1
-        UPPER_ARN6_MODES = 8,             //NAV2
-        UPPER_ADF_APX6 = 16,       //ADF
-        UPPER_NO_USE1 = 32,          //DME_
-        UPPER_NO_USE2 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_ARC27_PRESET = 4096,   //COM1
-        LOWER_ARC27_VOL = 8192,   //COM2
-        LOWER_ARN6 = 16384,      //NAV1
-        LOWER_ARN6_MODES = 32768,          //NAV2
-        LOWER_ADF_APX6 = 65536,    //ADF
-        LOWER_NO_USE1 = 131072,      //DME_
-        LOWER_NO_USE2 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentF5ERadioMode
-    {
-        UHF = 0,
-        TACAN = 8,
-        NO_USE = 16
-    }
-
-    public enum RadioPanelPZ69KnobsF5E
-    {
-        UPPER_UHF = 0,
-        UPPER_NOUSE1 = 2,
-        UPPER_NOUSE2 = 4,
-        UPPER_NOUSE3 = 8,
-        UPPER_TACAN = 16,
-        UPPER_NOUSE4 = 32,
-        UPPER_NOUSE5 = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_UHF = 4096,
-        LOWER_NOUSE1 = 8192,
-        LOWER_NOUSE2 = 16384,
-        LOWER_NOUSE3 = 32768,
-        LOWER_TACAN = 65536,
-        LOWER_NOUSE4 = 131072,
-        LOWER_NOUSE5 = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentF14RadioMode
-    {
-        UHF = 0,
-        VUHF = 2,
-        PLT_TACAN = 4,
-        RIO_TACAN = 8,
-        LINK4 = 16,
-        NOUSE = 32
-    }
-
-    public enum RadioPanelPZ69KnobsF14B
-    {
-        UPPER_UHF = 0,
-        UPPER_VUHF = 2,
-        UPPER_PLT_TACAN = 4,
-        UPPER_RIO_TACAN = 8,
-        UPPER_ADF = 16,
-        UPPER_LINK4 = 32,
-        UPPER_XPDR = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_UHF = 4096,
-        LOWER_VUHF = 8192,
-        LOWER_PLT_TACAN = 16384,
-        LOWER_RIO_TACAN = 32768,
-        LOWER_ADF = 65536,
-        LOWER_LINK4 = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentBf109RadioMode
-    {
-        FUG16ZY = 0,
-        IFF = 2,
-        HOMING = 4,
-        NOUSE = 64
-    }
-
-    public enum RadioPanelPZ69KnobsBf109
-    {
-        UPPER_FUG16ZY = 0,      //COM1
-        UPPER_IFF = 2,      //COM2
-        UPPER_HOMING = 4,          //NAV1
-        UPPER_NO_USE1 = 8,             //NAV2
-        UPPER_NO_USE2 = 16,       //ADF
-        UPPER_NO_USE3 = 32,          //DME_
-        UPPER_NO_USE4 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_FUG16ZY = 4096,   //COM1
-        LOWER_IFF = 8192,   //COM2
-        LOWER_HOMING = 16384,      //NAV1
-        LOWER_NO_USE1 = 32768,          //NAV2
-        LOWER_NO_USE2 = 65536,    //ADF
-        LOWER_NO_USE3 = 131072,      //DME_
-        LOWER_NO_USE4 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentAV8BNARadioMode
-    {
-        COMM1 = 0,
-        COMM2 = 2,
-        NOUSE = 4
-    }
-
-    public enum RadioPanelPZ69KnobsAV8BNA
-    {
-        UPPER_COMM1 = 0,
-        UPPER_COMM2 = 2,
-        UPPER_NAV1 = 4,
-        UPPER_NAV2 = 8,
-        UPPER_ADF = 16,
-        UPPER_DME = 32,
-        UPPER_XPDR = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_COMM1 = 4096,
-        LOWER_COMM2 = 8192,
-        LOWER_NAV1 = 16384,
-        LOWER_NAV2 = 32768,
-        LOWER_ADF = 65536,
-        LOWER_DME = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    /*
-     *
-     */
-    public enum CurrentAJS37RadioMode
-    {
-        FR22 = 0,
-        FR24 = 2,
-        TILS = 4,
-        NOUSE = 64
-    }
-
-    public enum RadioPanelPZ69KnobsAJS37
-    {
-        UPPER_FR22 = 0,      //COM1
-        UPPER_FR24 = 2,      //COM2
-        UPPER_TILS = 4,          //NAV1
-        UPPER_NO_USE0 = 8,             //NAV2
-        UPPER_NO_USE1 = 16,       //ADF
-        UPPER_NO_USE2 = 32,          //DME_
-        UPPER_NO_USE3 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_FR22 = 4096,   //COM1
-        LOWER_FR24 = 8192,   //COM2
-        LOWER_TILS = 16384,      //NAV1
-        LOWER_NO_USE0 = 32768,          //NAV2
-        LOWER_NO_USE1 = 65536,    //ADF
-        LOWER_NO_USE2 = 131072,      //DME_
-        LOWER_NO_USE3 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
+ 
 }

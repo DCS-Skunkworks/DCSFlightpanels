@@ -17,6 +17,13 @@ namespace NonVisuals.Radios
 
     public class RadioPanelPZ69MiG21Bis : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentMiG21BisRadioMode
+        {
+            Radio,
+            RSBN,
+            ARC
+        }
+
         private CurrentMiG21BisRadioMode _currentUpperRadioMode = CurrentMiG21BisRadioMode.Radio;
         private CurrentMiG21BisRadioMode _currentLowerRadioMode = CurrentMiG21BisRadioMode.Radio;
 
@@ -774,7 +781,7 @@ namespace NonVisuals.Radios
 
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                        PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_MIG21BIS, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
 

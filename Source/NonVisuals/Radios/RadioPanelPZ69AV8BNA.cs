@@ -17,6 +17,13 @@
 
     public class RadioPanelPZ69AV8BNA : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentAV8BNARadioMode
+        {
+            COMM1,
+            COMM2,
+            NOUSE
+        }
+
         private CurrentAV8BNARadioMode _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM1;
         private CurrentAV8BNARadioMode _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM1;
         
@@ -680,7 +687,7 @@
 
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                        PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AV8BNA, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
 

@@ -17,6 +17,16 @@
 
     public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base
     {
+        private enum CurrentKa50RadioMode
+        {
+            VHF1_R828,
+            VHF2_R800L1,
+            ADF_ARK22,
+            ABRIS,
+            DATALINK,
+            NOUSE
+        }
+
         private CurrentKa50RadioMode _currentUpperRadioMode = CurrentKa50RadioMode.VHF1_R828;
         private CurrentKa50RadioMode _currentLowerRadioMode = CurrentKa50RadioMode.VHF1_R828;
 
@@ -1037,7 +1047,7 @@
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description,
                                 HIDInstance,
-                                (int)PluginGamingPanelEnum.PZ69RadioPanel,
+                                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_KA50,
                                 (int)radioPanelKnob.RadioPanelPZ69Knob,
                                 radioPanelKnob.IsOn,
                                 null);

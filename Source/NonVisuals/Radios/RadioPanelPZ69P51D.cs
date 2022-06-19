@@ -16,6 +16,12 @@ namespace NonVisuals.Radios
 
     public class RadioPanelPZ69P51D : RadioPanelPZ69Base
     {
+        private enum CurrentP51DRadioMode
+        {
+            VHF,
+            NOUSE
+        }
+
         private CurrentP51DRadioMode _currentUpperRadioMode = CurrentP51DRadioMode.VHF;
         private CurrentP51DRadioMode _currentLowerRadioMode = CurrentP51DRadioMode.VHF;
 
@@ -289,7 +295,7 @@ namespace NonVisuals.Radios
 
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                            PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_P51D, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                         }
                     }
 

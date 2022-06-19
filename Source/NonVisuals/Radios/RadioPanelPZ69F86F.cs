@@ -17,6 +17,16 @@
 
     public class RadioPanelPZ69F86F : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentF86FRadioMode
+        {
+            ARC27_PRESET,
+            ARC27_VOL,
+            ARN6,
+            ARN6_MODES,
+            ADF_APX6,
+            NOUSE
+        }
+
         private CurrentF86FRadioMode _currentUpperRadioMode = CurrentF86FRadioMode.ARC27_PRESET;
         private CurrentF86FRadioMode _currentLowerRadioMode = CurrentF86FRadioMode.ARC27_PRESET;
 
@@ -517,7 +527,7 @@
 
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                            PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_F86F, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                         }
                     }
 

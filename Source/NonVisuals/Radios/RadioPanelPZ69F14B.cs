@@ -18,6 +18,16 @@
 
     public class RadioPanelPZ69F14B : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentF14RadioMode
+        {
+            UHF,
+            VUHF,
+            PLT_TACAN,
+            RIO_TACAN,
+            LINK4,
+            NOUSE
+        }
+
         private CurrentF14RadioMode _currentUpperRadioMode = CurrentF14RadioMode.UHF;
         private CurrentF14RadioMode _currentLowerRadioMode = CurrentF14RadioMode.UHF;
 
@@ -3250,7 +3260,7 @@
                     
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                        PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_F14B, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
 

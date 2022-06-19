@@ -857,7 +857,7 @@
                                 PluginManager.DoEvent(
                                     DCSFPProfile.SelectedProfile.Description,
                                     HIDInstance,
-                                    (int)PluginGamingPanelEnum.PZ70MultiPanel,
+                                    PluginGamingPanelEnum.PZ70MultiPanel,
                                     (int)multiPanelKnob.MultiPanelPZ70Knob,
                                     multiPanelKnob.IsOn,
                                     knobBinding.OSKeyPress.KeyPressSequence);
@@ -880,7 +880,7 @@
                     PluginManager.DoEvent(
                         DCSFPProfile.SelectedProfile.Description,
                         HIDInstance,
-                        (int)PluginGamingPanelEnum.PZ70MultiPanel,
+                        PluginGamingPanelEnum.PZ70MultiPanel,
                         (int)multiPanelKnob.MultiPanelPZ70Knob,
                         multiPanelKnob.IsOn,
                         null);

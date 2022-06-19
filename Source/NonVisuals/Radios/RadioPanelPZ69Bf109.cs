@@ -17,6 +17,14 @@
 
     public class RadioPanelPZ69Bf109 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentBf109RadioMode
+        {
+            FUG16ZY,
+            IFF,
+            HOMING,
+            NOUSE
+        }
+
         private CurrentBf109RadioMode _currentUpperRadioMode = CurrentBf109RadioMode.FUG16ZY;
         private CurrentBf109RadioMode _currentLowerRadioMode = CurrentBf109RadioMode.FUG16ZY;
 
@@ -379,7 +387,7 @@
 
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                            PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_BF109, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                         }
                     }
 

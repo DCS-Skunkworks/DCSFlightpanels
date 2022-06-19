@@ -18,6 +18,15 @@
 
     public class RadioPanelPZ69M2000C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
+        private enum CurrentM2000CRadioMode
+        {
+            VUHF,
+            UHF,
+            TACAN,
+            VOR,
+            NOUSE
+        }
+
         private CurrentM2000CRadioMode _currentUpperRadioMode = CurrentM2000CRadioMode.VUHF;
         private CurrentM2000CRadioMode _currentLowerRadioMode = CurrentM2000CRadioMode.VUHF;
 
@@ -563,7 +572,7 @@
 
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                            PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_M2000C, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                         }
                     }
 

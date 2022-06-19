@@ -61,16 +61,16 @@
             var result = new HashSet<ISaitekPanelKnob>
             {
                 // Group 1
-                new TPMPanelSwitch(3, Convert.ToInt32("00001000", 2), false, TPMPanelSwitches.G1),
-                new TPMPanelSwitch(3, Convert.ToInt32("00010000", 2), false, TPMPanelSwitches.G2),
-                new TPMPanelSwitch(3, Convert.ToInt32("00100000", 2), false, TPMPanelSwitches.G3),
-                new TPMPanelSwitch(3, Convert.ToInt32("01000000", 2), false, TPMPanelSwitches.G4),
-                new TPMPanelSwitch(3, Convert.ToInt32("10000000", 2), false, TPMPanelSwitches.G5),
+                new TPMPanelSwitch(3, 1 << 3, false, TPMPanelSwitches.G1),
+                new TPMPanelSwitch(3, 1 << 4, false, TPMPanelSwitches.G2),
+                new TPMPanelSwitch(3, 1 << 5, false, TPMPanelSwitches.G3),
+                new TPMPanelSwitch(3, 1 << 6, false, TPMPanelSwitches.G4),
+                new TPMPanelSwitch(3, 1 << 7, false, TPMPanelSwitches.G5),
                 // Group 0
-                new TPMPanelSwitch(4, Convert.ToInt32("1", 2), false, TPMPanelSwitches.G6),
-                new TPMPanelSwitch(4, Convert.ToInt32("10", 2), false, TPMPanelSwitches.G7),
-                new TPMPanelSwitch(4, Convert.ToInt32("100", 2), false, TPMPanelSwitches.G8),
-                new TPMPanelSwitch(4, Convert.ToInt32("1000", 2), false, TPMPanelSwitches.G9)
+                new TPMPanelSwitch(4, 1 << 0, false, TPMPanelSwitches.G6),
+                new TPMPanelSwitch(4, 1 << 1, false, TPMPanelSwitches.G7),
+                new TPMPanelSwitch(4, 1 << 2, false, TPMPanelSwitches.G8),
+                new TPMPanelSwitch(4, 1 << 3, false, TPMPanelSwitches.G9)
             };
 
             return result;

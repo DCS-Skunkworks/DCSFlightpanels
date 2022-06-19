@@ -242,7 +242,7 @@
                             PluginManager.DoEvent(
                                 DCSFPProfile.SelectedProfile.Description, 
                                 HIDInstance, 
-                                (int)PluginGamingPanelEnum.TPM, 
+                                PluginGamingPanelEnum.TPM, 
                                 (int)tpmPanelSwitch.TPMSwitch, 
                                 tpmPanelSwitch.IsOn,
                                 keyBinding.OSKeyPress.KeyPressSequence);
@@ -257,7 +257,7 @@
                     PluginManager.DoEvent(
                         DCSFPProfile.SelectedProfile.Description,
                         HIDInstance,
-                        (int)PluginGamingPanelEnum.TPM,
+                        PluginGamingPanelEnum.TPM,
                         (int)tpmPanelSwitch.TPMSwitch,
                         tpmPanelSwitch.IsOn,
                         null);
