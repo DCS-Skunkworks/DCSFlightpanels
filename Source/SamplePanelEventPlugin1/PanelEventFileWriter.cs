@@ -1,4 +1,4 @@
-﻿namespace SamplePanelEventPlugin
+﻿namespace SamplePanelEventPlugin1
 {
     using System;
     using System.Collections.Generic;

@@ -95,9 +95,10 @@ if ( 0 -ne $buildLastExitCode )
   exit
 }
 
-# Move SamplePanelEventPlugin.dll to Extensions folder
+# Move SamplePanelEventPluginxxx.dll(s) to Extensions folder
 Write-Host "Including SamplePanelEventPlugin.dll" -foregroundcolor "Green"
-Move-Item -Path $publishPath\SamplePanelEventPlugin.dll -Destination $publishPath\Extensions\SamplePanelEventPlugin.dll
+Move-Item -Path $publishPath\SamplePanelEventPlugin1.dll -Destination $publishPath\Extensions\SamplePanelEventPlugin1.dll
+Move-Item -Path $publishPath\SamplePanelEventPlugin2.dll -Destination $publishPath\Extensions\SamplePanelEventPlugin2.dll
 
 #Getting file info & remove revision from file_version
 Write-Host "Getting file info" -foregroundcolor "Green"

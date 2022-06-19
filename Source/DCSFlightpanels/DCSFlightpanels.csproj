@@ -133,7 +133,8 @@
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
     <ProjectReference Include="..\MEF\MEF.csproj" />
     <ProjectReference Include="..\NonVisuals\NonVisuals.csproj" />
-    <ProjectReference Include="..\SamplePanelEventHandlerPlugin\SamplePanelEventPlugin.csproj" />
+    <ProjectReference Include="..\SamplePanelEventPlugin1\SamplePanelEventPlugin1.csproj" />
+    <ProjectReference Include="..\SamplePanelEventPlugin2\SamplePanelEventPlugin2.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\gear-image.png" />
@@ -328,6 +329,6 @@
     <Description>Saitek Pro Flight &amp; Streamdeck with DCS-BIOS or as keyemulator</Description>
   </PropertyGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /Y &quot;$(TargetDir)SamplePanelEventPlugin.dll&quot; &quot;$(TargetDir)\Extensions\SamplePanelEventPlugin.dll&quot;" />
+    <Exec Command="copy /Y &quot;$(TargetDir)SamplePanelEventPlugin1.dll&quot; &quot;$(TargetDir)\Extensions\SamplePanelEventPlugin1.dll&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)SamplePanelEventPlugin2.dll&quot; &quot;$(TargetDir)\Extensions\SamplePanelEventPlugin2.dll&quot;" />
   </Target>
 </Project>
