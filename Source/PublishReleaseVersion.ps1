@@ -80,9 +80,17 @@ Write-Host "Finished release version management" -foregroundcolor "Green"
 #---------------------------------
 # Publish-Build & Zip
 #---------------------------------
-#Calling Publish on project
-Write-Host "Starting publishing release version" -foregroundcolor "Green"
+#Cleaning previous publish
+Write-Host "Starting cleaning previous build" -foregroundcolor "Green"
+Set-Location -Path $scriptPath
+dotnet clean DCSFlightpanels\DCSFlightpanels.csproj -o $publishPath
 
+#Removing eventual previous non-splitted sample extensions
+Write-Host "Starting Removing eventual previous non-splitted sample extensions" -foregroundcolor "Green"
+remove-Item -Path $publishPath\Extensions\SamplePanelEventPlugin.dll -ErrorAction Ignore 
+
+
+Write-Host "Starting Publish" -foregroundcolor "Green"
 Set-Location -Path $scriptPath
 dotnet publish DCSFlightpanels\DCSFlightpanels.csproj --self-contained false -f net6.0-windows -r win-x64 -c Release -o $publishPath /p:DebugType=None /p:DebugSymbols=false
 $buildLastExitCode = $LastExitCode
@@ -95,9 +103,10 @@ if ( 0 -ne $buildLastExitCode )
   exit
 }
 
-# Move SamplePanelEventPlugin.dll to Extensions folder
-Write-Host "Including SamplePanelEventPlugin.dll" -foregroundcolor "Green"
-Move-Item -Path $publishPath\SamplePanelEventPlugin.dll -Destination $publishPath\Extensions\SamplePanelEventPlugin.dll
+# Copy SamplePanelEventPluginxxx.dll(s) to Extensions folder
+Write-Host "Including SamplePanelEventPlugin.dll(s)" -foregroundcolor "Green"
+Copy-Item -Path $publishPath\SamplePanelEventPlugin1.dll -Destination $publishPath\Extensions\SamplePanelEventPlugin1.dll
+Copy-Item -Path $publishPath\SamplePanelEventPlugin2.dll -Destination $publishPath\Extensions\SamplePanelEventPlugin2.dll
 
 #Getting file info & remove revision from file_version
 Write-Host "Getting file info" -foregroundcolor "Green"

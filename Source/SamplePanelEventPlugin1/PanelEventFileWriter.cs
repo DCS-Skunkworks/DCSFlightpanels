@@ -1,4 +1,4 @@
-﻿namespace SamplePanelEventPlugin
+﻿namespace SamplePanelEventPlugin1
 {
     using System;
     using System.Collections.Generic;
@@ -51,12 +51,12 @@
             }
         }
 
-        private string GetEventString<Type>(int switchId, bool pressed)
+        private static string GetEventString<T>(int switchId, bool pressed)
         {
-            return $" {Enum.GetName(typeof(Type), switchId)}  {(pressed == false ? "RELEASED" : "PRESSED")}  ";
+            return $" {Enum.GetName(typeof(T), switchId)}  {(pressed == false ? "RELEASED" : "PRESSED")}  ";
         }
 
-        private string GetInfoFromEnums(string profile, string panelHidId, PluginGamingPanelEnum panel, int switchId, bool pressed)
+        private static string GetInfoFromEnums(string profile, string panelHidId, PluginGamingPanelEnum panel, int switchId, bool pressed)
         {
             var result = $"{DateTime.Now:dd.MM.yyyy hh:mm:ss} {profile} {Enum.GetName(typeof(PluginGamingPanelEnum), panel)}  ";
 
