@@ -773,117 +773,60 @@
                         switch (radioPanelKnob.RadioPanelPZ69Knob)
                         {
                             case RadioPanelPZ69KnobsMi24P.UPPER_R863_MANUAL:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.R863_MANUAL);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_MANUAL);
+                                break;
+               
                             case RadioPanelPZ69KnobsMi24P.UPPER_R863_PRESET:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.R863_PRESET);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_PRESET);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_YADRO1A:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.YADRO1A);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.YADRO1A);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_R828:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.R828_PRESETS);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R828_PRESETS);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_ADF_ARK15:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.ADF_ARK15_HIGH);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.ADF_ARK15_HIGH);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_SPU8:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.SPU8);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.SPU8);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_R863_MANUAL:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.R863_MANUAL);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_MANUAL);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_R863_PRESET:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.R863_PRESET);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_PRESET);
+                                break;
                             case RadioPanelPZ69KnobsMi24P.LOWER_YADRO1A:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.YADRO1A);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.YADRO1A);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_R828:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.R828_PRESETS);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R828_PRESETS);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_ADF_ARK15:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.ADF_ARK15_HIGH);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.ADF_ARK15_HIGH);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_SPU8:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.SPU8);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.SPU8);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_ARK_UD:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.DME_ARK15_LOW);
-                                    }
-                                    break;
-                                }
+                                   SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.DME_ARK15_LOW);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_ARK_UD:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.DME_ARK15_LOW);
-                                    }
-                                    break;
-                                }
+                                   SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.DME_ARK15_LOW);
+                                break;
+ 
                             case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_DEC:
                             case RadioPanelPZ69KnobsMi24P.UPPER_SMALL_FREQ_WHEEL_INC:
@@ -1745,16 +1688,6 @@
                                         {
                                             _ark15_HighFrequency = _adfMainCockpitPresetDial1Pos.ToString();
                                         }
-                                    }
-                                    else
-                                    {
-                                        lock (_lockADFBackupDialObject1)
-                                        {
-                                            _ark15_HighFrequency = _adfBackupCockpitPresetDial1Pos.ToString();
-                                        }
-                                    }
-                                    if (_adfBackupMainCockpitDial1Pos == 1)
-                                    {
                                         lock (_lockADFMainDialObject2)
                                         {
                                             _ark15_HighFrequency += _adfMainCockpitPresetDial2Pos.ToString();
@@ -1762,6 +1695,10 @@
                                     }
                                     else
                                     {
+                                        lock (_lockADFBackupDialObject1)
+                                        {
+                                            _ark15_HighFrequency = _adfBackupCockpitPresetDial1Pos.ToString();
+                                        }
                                         lock (_lockADFBackupDialObject2)
                                         {
                                             _ark15_HighFrequency += _adfBackupCockpitPresetDial2Pos.ToString();
@@ -1904,8 +1841,13 @@
             SaitekPanelKnobs = RadioPanelKnobMi24P.GetRadioPanelKnobs();
         }
 
-        private void SetUpperRadioMode(CurrentMi24PRadioMode CurrentMi24PRadioMode)
+        private void SetUpperRadioMode(bool radioKnobIsOn, CurrentMi24PRadioMode CurrentMi24PRadioMode)
         {
+            if (!radioKnobIsOn)
+            {
+                return;
+            }
+
             try
             {
                 _currentUpperRadioMode = CurrentMi24PRadioMode;
@@ -1916,8 +1858,12 @@
             }
         }
 
-        private void SetLowerRadioMode(CurrentMi24PRadioMode CurrentMi24PRadioMode)
+        private void SetLowerRadioMode(bool radioKnobIsOn, CurrentMi24PRadioMode CurrentMi24PRadioMode)
         {
+            if (!radioKnobIsOn)
+            {
+                return;
+            }
             try
             {
                 _currentLowerRadioMode = CurrentMi24PRadioMode;
