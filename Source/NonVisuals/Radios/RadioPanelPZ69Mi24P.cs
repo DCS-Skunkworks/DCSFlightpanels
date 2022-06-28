@@ -35,7 +35,7 @@
         /*Mi-24P VHF/UHF R-863 PRESETS COM2*/
         //Large dial 1-10 [step of 1]
         //Small dial volume control
-        private readonly object _lockR863Preset1DialObject1 = new object();
+        private readonly object _lockR863Preset1DialObject1 = new();
         private DCSBIOSOutput _r863Preset1DcsbiosOutputPresetDial;
         private volatile uint _r863PresetCockpitDialPos = 0;
         private const string R863_PRESET_COMMAND_INC = "PLT_R863_CHAN INC\n";
@@ -54,10 +54,10 @@
         private uint _yadro1ASmallFrequencyStandby;
         private volatile uint _yadro1ASavedCockpitBigFrequency;
         private volatile uint _yadro1ASavedCockpitSmallFrequency;
-        private readonly object _lockYadro1ADialsObject1 = new object();
-        private readonly object _lockYadro1ADialsObject2 = new object();
-        private readonly object _lockYadro1ADialsObject3 = new object();
-        private readonly object _lockYadro1ADialsObject4 = new object();
+        private readonly object _lockYadro1ADialsObject1 = new();
+        private readonly object _lockYadro1ADialsObject2 = new();
+        private readonly object _lockYadro1ADialsObject3 = new();
+        private readonly object _lockYadro1ADialsObject4 = new();
         private volatile uint _yadro1ACockpitFreq1DialPos = 1;
         private volatile uint _yadro1ACockpitFreq2DialPos = 1;
         private volatile uint _yadro1ACockpitFreq3DialPos = 1;
@@ -79,7 +79,7 @@
         //Large dial 1-10 [step of 1]
         //Small dial volume control
         //ACT/STBY AGC, automatic gain control
-        private readonly object _lockR828Preset1DialObject1 = new object();
+        private readonly object _lockR828Preset1DialObject1 = new();
         private DCSBIOSOutput _r828Preset1DcsbiosOutputDial;
         private volatile uint _r828PresetCockpitDialPos = 0;
         private const string R828_PRESET_COMMAND_INC = "PLT_R828_CHAN INC\n";
@@ -92,8 +92,8 @@
         /*Mi-24P ARK-15 ADF*/
         //Large 100KHz 0 -> 17
         //Medium 10Khz 0 -> 9 (10 steps)
-        private readonly object _lockADFMainDialObject1 = new object();
-        private readonly object _lockADFMainDialObject2 = new object();
+        private readonly object _lockADFMainDialObject1 = new();
+        private readonly object _lockADFMainDialObject2 = new();
         private DCSBIOSOutput _adfMainDcsbiosOutputPresetDial1;
         private DCSBIOSOutput _adfMainDcsbiosOutputPresetDial2;
         private volatile uint _adfMainCockpitPresetDial1Pos = 0;
@@ -105,8 +105,8 @@
         private string _ark15_HighFrequency = string.Empty;
         private string _ark15_LowFrequency = string.Empty;
         /* ARK-15 ADF BACKUP */
-        private readonly object _lockADFBackupDialObject1 = new object();
-        private readonly object _lockADFBackupDialObject2 = new object();
+        private readonly object _lockADFBackupDialObject1 = new();
+        private readonly object _lockADFBackupDialObject2 = new();
         private DCSBIOSOutput _adfBackupDcsbiosOutputPresetDial1;
         private DCSBIOSOutput _adfBackupDcsbiosOutputPresetDial2;
         private volatile uint _adfBackupCockpitPresetDial1Pos = 0;
@@ -121,14 +121,14 @@
 
         //0 = Backup ADF
         //1 = Main ADF
-        private readonly object _lockADFBackupMainDialObject = new object();
+        private readonly object _lockADFBackupMainDialObject = new();
         private DCSBIOSOutput _adfBackupMainDcsbiosOutputPresetDial;
         private volatile uint _adfBackupMainCockpitDial1Pos = 0;
         private const string ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND = "PLT_ARC_CHAN TOGGLE\n";
 
         /*Mi-24P ARK-15 1KHz DME MAIN*/
         //Large 1Khz 0 -> 19 (20 steps)
-        private readonly object _lockDMEMainDialObject1 = new object();
+        private readonly object _lockDMEMainDialObject1 = new();
         private DCSBIOSOutput _dmeMainDcsbiosOutputPresetDial1;
         private volatile uint _dmeMainCockpitPresetDial1Pos = 0;
         private const string DME_MAIN1_KHZ_PRESET_COMMAND_INC = "PLT_ARC_FREQ_L_1 INC\n";
@@ -136,7 +136,7 @@
         private int _dmePresetDial1Skipper;
 
         /*Mi-24P ARK-15 1KHz DME BACKUP*/
-        private readonly object _lockDMEBackupDialObject1 = new object();
+        private readonly object _lockDMEBackupDialObject1 = new();
         private DCSBIOSOutput _dmeBackupDcsbiosOutputPresetDial1;
         private volatile uint _dmeBackupCockpitPresetDial1Pos = 0;
         private const string DME_BACKUP1_KHZ_PRESET_COMMAND_INC = "PLT_ARC_FREQ_R_1 INC\n";
@@ -147,7 +147,7 @@
         //Large dial 0-5 [step of 1]
         //Small dial volume control
         //ACT/STBY Toggle Radio/ICS Switch
-        private readonly object _lockSpu8DialObject1 = new object();
+        private readonly object _lockSpu8DialObject1 = new();
         private DCSBIOSOutput _spu8DcsbiosOutputPresetDial;
         private volatile uint _spu8CockpitDialPos = 0;
         private int _spu8DialSkipper;
@@ -155,12 +155,12 @@
         private const string SPU8_COMMAND_DEC = "PLT_SPU8_MODE DEC\n";
         private const string SPU8_VOLUME_KNOB_COMMAND_INC = "PLT_SPU8_RADIO_VOL +2500\n";
         private const string SPU8_VOLUME_KNOB_COMMAND_DEC = "PLT_SPU8_RADIO_VOL -2500\n";
-        private readonly object _lockSpu8ICSSwitchObject = new object();
+        private readonly object _lockSpu8ICSSwitchObject = new();
         private DCSBIOSOutput _spu8ICSSwitchDcsbiosOutput;
         private volatile uint _spu8ICSSwitchCockpitDialPos = 0;
         private const string SPU8_ICS_SWITCH_TOGGLE_COMMAND = "PLT_SPU8_ICS TOGGLE\n";
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Mi24P(HIDSkeleton hidSkeleton) : base(hidSkeleton)
