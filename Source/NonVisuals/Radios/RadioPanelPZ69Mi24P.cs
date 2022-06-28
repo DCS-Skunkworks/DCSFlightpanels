@@ -921,6 +921,28 @@
             _yadro1ABigFrequencyStandby++;
         }
 
+        private void YADRO1A_SmallFrequencyIncrease()
+        {
+            if (_yadro1ASmallFrequencyStandby >= 99)
+            {
+                //At max value
+                _yadro1ASmallFrequencyStandby = 0;
+                return;
+            }
+            _yadro1ASmallFrequencyStandby++;
+        }
+
+        private void YADRO1A_SmallFrequencyDecrease()
+        {
+            if (_yadro1ASmallFrequencyStandby <= 0)
+            {
+                //At min value
+                _yadro1ASmallFrequencyStandby = 99;
+                return;
+            }
+            _yadro1ASmallFrequencyStandby--;
+        }
+
         private void YADRO1A_BigFrequencyDecrease()
         {
             var changeFaster = false;
@@ -1094,13 +1116,7 @@
                                             }
                                         case CurrentMi24PRadioMode.YADRO1A:
                                             {
-                                                if (_yadro1ASmallFrequencyStandby >= 99)
-                                                {
-                                                    //At max value
-                                                    _yadro1ASmallFrequencyStandby = 0;
-                                                    break;
-                                                }
-                                                _yadro1ASmallFrequencyStandby++;
+                                                YADRO1A_SmallFrequencyIncrease();
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
@@ -1147,13 +1163,7 @@
                                             }
                                         case CurrentMi24PRadioMode.YADRO1A:
                                             {
-                                                if (_yadro1ASmallFrequencyStandby <= 0)
-                                                {
-                                                    //At min value
-                                                    _yadro1ASmallFrequencyStandby = 99;
-                                                    break;
-                                                }
-                                                _yadro1ASmallFrequencyStandby--;
+                                                YADRO1A_SmallFrequencyDecrease();
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
@@ -1320,13 +1330,7 @@
                                             }
                                         case CurrentMi24PRadioMode.YADRO1A:
                                             {
-                                                if (_yadro1ASmallFrequencyStandby >= 99)
-                                                {
-                                                    //At max value
-                                                    _yadro1ASmallFrequencyStandby = 0;
-                                                    break;
-                                                }
-                                                _yadro1ASmallFrequencyStandby++;
+                                                YADRO1A_SmallFrequencyIncrease();
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
@@ -1373,13 +1377,7 @@
                                             }
                                         case CurrentMi24PRadioMode.YADRO1A:
                                             {
-                                                if (_yadro1ASmallFrequencyStandby <= 0)
-                                                {
-                                                    //At min value
-                                                    _yadro1ASmallFrequencyStandby = 99;
-                                                    break;
-                                                }
-                                                _yadro1ASmallFrequencyStandby--;
+                                                YADRO1A_SmallFrequencyDecrease();
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
