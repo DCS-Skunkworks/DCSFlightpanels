@@ -1368,7 +1368,7 @@
                                             }
                                         case CurrentMi24PRadioMode.DME_ARK15_LOW:
                                             {
-                                                 break;
+                                                break;
                                             }
                                         case CurrentMi24PRadioMode.SPU8:
                                             {
@@ -1973,16 +1973,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.R863_PRESET || _currentLowerRadioMode == CurrentMi24PRadioMode.R863_PRESET)
+                if (_r863PresetDialSkipper > 2)
                 {
-                    if (_r863PresetDialSkipper > 2)
-                    {
-                        _r863PresetDialSkipper = 0;
-                        return false;
-                    }
-                    _r863PresetDialSkipper++;
-                    return true;
+                    _r863PresetDialSkipper = 0;
+                    return false;
                 }
+                _r863PresetDialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
@@ -1995,16 +1992,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.R828_PRESETS || _currentLowerRadioMode == CurrentMi24PRadioMode.R828_PRESETS)
+                if (_r828PresetDialSkipper > 2)
                 {
-                    if (_r828PresetDialSkipper > 2)
-                    {
-                        _r828PresetDialSkipper = 0;
-                        return false;
-                    }
-                    _r828PresetDialSkipper++;
-                    return true;
+                    _r828PresetDialSkipper = 0;
+                    return false;
                 }
+                _r828PresetDialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
@@ -2017,16 +2011,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH || _currentLowerRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH)
+                if (_adfPresetDial1Skipper > 2)
                 {
-                    if (_adfPresetDial1Skipper > 2)
-                    {
-                        _adfPresetDial1Skipper = 0;
-                        return false;
-                    }
-                    _adfPresetDial1Skipper++;
-                    return true;
+                    _adfPresetDial1Skipper = 0;
+                    return false;
                 }
+                _adfPresetDial1Skipper++;
+                return true;
             }
             catch (Exception ex)
             {
@@ -2039,16 +2030,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.DME_ARK15_LOW || _currentLowerRadioMode == CurrentMi24PRadioMode.DME_ARK15_LOW)
+                if (_dmePresetDial1Skipper > 2)
                 {
-                    if (_dmePresetDial1Skipper > 2)
-                    {
-                        _dmePresetDial1Skipper = 0;
-                        return false;
-                    }
-                    _dmePresetDial1Skipper++;
-                    return true;
+                    _dmePresetDial1Skipper = 0;
+                    return false;
                 }
+                _dmePresetDial1Skipper++;
+                return true;
             }
             catch (Exception ex)
             {
@@ -2061,16 +2049,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH || _currentLowerRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH)
+                if (_adfPresetDial2Skipper > 2)
                 {
-                    if (_adfPresetDial2Skipper > 2)
-                    {
-                        _adfPresetDial2Skipper = 0;
-                        return false;
-                    }
-                    _adfPresetDial2Skipper++;
-                    return true;
+                    _adfPresetDial2Skipper = 0;
+                    return false;
                 }
+                _adfPresetDial2Skipper++;
+                return true;
             }
             catch (Exception ex)
             {
@@ -2083,16 +2068,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.SPU8 || _currentLowerRadioMode == CurrentMi24PRadioMode.SPU8)
+                if (_spu8DialSkipper > 2)
                 {
-                    if (_spu8DialSkipper > 2)
-                    {
-                        _spu8DialSkipper = 0;
-                        return false;
-                    }
-                    _spu8DialSkipper++;
-                    return true;
+                    _spu8DialSkipper = 0;
+                    return false;
                 }
+                _spu8DialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
