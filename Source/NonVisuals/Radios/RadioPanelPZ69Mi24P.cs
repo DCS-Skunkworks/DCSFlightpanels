@@ -899,6 +899,50 @@
             }
         }
 
+        private void YADRO1A_BigFrequencyIncrease()
+        {
+            var changeFaster = false;
+            _yadro1ABigFreqIncreaseChangeMonitor.Click();
+            if (_yadro1ABigFreqIncreaseChangeMonitor.ClickThresholdReached())
+            {
+                //Change faster
+                changeFaster = true;
+            }
+            if (changeFaster)
+            {
+                _yadro1ABigFrequencyStandby += CHANGE_VALUE;
+            }
+            if (_yadro1ABigFrequencyStandby >= 179)
+            {
+                //@ max value
+                _yadro1ABigFrequencyStandby = 179;
+                return;
+            }
+            _yadro1ABigFrequencyStandby++;
+        }
+
+        private void YADRO1A_BigFrequencyDecrease()
+        {
+            var changeFaster = false;
+            _yadro1ABigFreqDecreaseChangeMonitor.Click();
+            if (_yadro1ABigFreqDecreaseChangeMonitor.ClickThresholdReached())
+            {
+                //Change faster
+                changeFaster = true;
+            }
+            if (changeFaster)
+            {
+                _yadro1ABigFrequencyStandby -= CHANGE_VALUE;
+            }
+            if (_yadro1ABigFrequencyStandby <= 20)
+            {
+                //@ max value
+                _yadro1ABigFrequencyStandby = 20;
+                return;
+            }
+            _yadro1ABigFrequencyStandby--;
+        }
+
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
@@ -933,24 +977,7 @@
                                             }
                                         case CurrentMi24PRadioMode.YADRO1A:
                                             {
-                                                var changeFaster = false;
-                                                _yadro1ABigFreqIncreaseChangeMonitor.Click();
-                                                if (_yadro1ABigFreqIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    _yadro1ABigFrequencyStandby += CHANGE_VALUE;
-                                                }
-                                                if (_yadro1ABigFrequencyStandby >= 179)
-                                                {
-                                                    //@ max value
-                                                    _yadro1ABigFrequencyStandby = 179;
-                                                    break;
-                                                }
-                                                _yadro1ABigFrequencyStandby++;
+                                                YADRO1A_BigFrequencyIncrease();
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
@@ -1010,24 +1037,7 @@
                                             }
                                         case CurrentMi24PRadioMode.YADRO1A:
                                             {
-                                                var changeFaster = false;
-                                                _yadro1ABigFreqDecreaseChangeMonitor.Click();
-                                                if (_yadro1ABigFreqDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    _yadro1ABigFrequencyStandby -= CHANGE_VALUE;
-                                                }
-                                                if (_yadro1ABigFrequencyStandby <= 20)
-                                                {
-                                                    //@ max value
-                                                    _yadro1ABigFrequencyStandby = 20;
-                                                    break;
-                                                }
-                                                _yadro1ABigFrequencyStandby--;
+                                                YADRO1A_BigFrequencyDecrease();
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
@@ -1193,24 +1203,7 @@
                                             }
                                         case CurrentMi24PRadioMode.YADRO1A:
                                             {
-                                                var changeFaster = false;
-                                                _yadro1ABigFreqIncreaseChangeMonitor.Click();
-                                                if (_yadro1ABigFreqIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    _yadro1ABigFrequencyStandby += CHANGE_VALUE;
-                                                }
-                                                if (_yadro1ABigFrequencyStandby >= 179)
-                                                {
-                                                    //@ max value
-                                                    _yadro1ABigFrequencyStandby = 179;
-                                                    break;
-                                                }
-                                                _yadro1ABigFrequencyStandby++;
+                                                YADRO1A_BigFrequencyIncrease();
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
@@ -1270,24 +1263,7 @@
                                             }
                                         case CurrentMi24PRadioMode.YADRO1A:
                                             {
-                                                var changeFaster = false;
-                                                _yadro1ABigFreqDecreaseChangeMonitor.Click();
-                                                if (_yadro1ABigFreqDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    _yadro1ABigFrequencyStandby -= CHANGE_VALUE;
-                                                }
-                                                if (_yadro1ABigFrequencyStandby <= 20)
-                                                {
-                                                    //@ max value
-                                                    _yadro1ABigFrequencyStandby = 20;
-                                                    break;
-                                                }
-                                                _yadro1ABigFrequencyStandby--;
+                                                YADRO1A_BigFrequencyDecrease();
                                                 break;
                                             }
                                         case CurrentMi24PRadioMode.R828_PRESETS:
