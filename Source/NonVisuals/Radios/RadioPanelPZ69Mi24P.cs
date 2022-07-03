@@ -35,7 +35,7 @@
         /*Mi-24P VHF/UHF R-863 PRESETS COM2*/
         //Large dial 1-10 [step of 1]
         //Small dial volume control
-        private readonly object _lockR863Preset1DialObject1 = new object();
+        private readonly object _lockR863Preset1DialObject1 = new();
         private DCSBIOSOutput _r863Preset1DcsbiosOutputPresetDial;
         private volatile uint _r863PresetCockpitDialPos = 0;
         private const string R863_PRESET_COMMAND_INC = "PLT_R863_CHAN INC\n";
@@ -54,10 +54,10 @@
         private uint _yadro1ASmallFrequencyStandby;
         private volatile uint _yadro1ASavedCockpitBigFrequency;
         private volatile uint _yadro1ASavedCockpitSmallFrequency;
-        private readonly object _lockYadro1ADialsObject1 = new object();
-        private readonly object _lockYadro1ADialsObject2 = new object();
-        private readonly object _lockYadro1ADialsObject3 = new object();
-        private readonly object _lockYadro1ADialsObject4 = new object();
+        private readonly object _lockYadro1ADialsObject1 = new();
+        private readonly object _lockYadro1ADialsObject2 = new();
+        private readonly object _lockYadro1ADialsObject3 = new();
+        private readonly object _lockYadro1ADialsObject4 = new();
         private volatile uint _yadro1ACockpitFreq1DialPos = 1;
         private volatile uint _yadro1ACockpitFreq2DialPos = 1;
         private volatile uint _yadro1ACockpitFreq3DialPos = 1;
@@ -79,7 +79,7 @@
         //Large dial 1-10 [step of 1]
         //Small dial volume control
         //ACT/STBY AGC, automatic gain control
-        private readonly object _lockR828Preset1DialObject1 = new object();
+        private readonly object _lockR828Preset1DialObject1 = new();
         private DCSBIOSOutput _r828Preset1DcsbiosOutputDial;
         private volatile uint _r828PresetCockpitDialPos = 0;
         private const string R828_PRESET_COMMAND_INC = "PLT_R828_CHAN INC\n";
@@ -92,8 +92,8 @@
         /*Mi-24P ARK-15 ADF*/
         //Large 100KHz 0 -> 17
         //Medium 10Khz 0 -> 9 (10 steps)
-        private readonly object _lockADFMainDialObject1 = new object();
-        private readonly object _lockADFMainDialObject2 = new object();
+        private readonly object _lockADFMainDialObject1 = new();
+        private readonly object _lockADFMainDialObject2 = new();
         private DCSBIOSOutput _adfMainDcsbiosOutputPresetDial1;
         private DCSBIOSOutput _adfMainDcsbiosOutputPresetDial2;
         private volatile uint _adfMainCockpitPresetDial1Pos = 0;
@@ -105,8 +105,8 @@
         private string _ark15_HighFrequency = string.Empty;
         private string _ark15_LowFrequency = string.Empty;
         /* ARK-15 ADF BACKUP */
-        private readonly object _lockADFBackupDialObject1 = new object();
-        private readonly object _lockADFBackupDialObject2 = new object();
+        private readonly object _lockADFBackupDialObject1 = new();
+        private readonly object _lockADFBackupDialObject2 = new();
         private DCSBIOSOutput _adfBackupDcsbiosOutputPresetDial1;
         private DCSBIOSOutput _adfBackupDcsbiosOutputPresetDial2;
         private volatile uint _adfBackupCockpitPresetDial1Pos = 0;
@@ -121,14 +121,14 @@
 
         //0 = Backup ADF
         //1 = Main ADF
-        private readonly object _lockADFBackupMainDialObject = new object();
+        private readonly object _lockADFBackupMainDialObject = new();
         private DCSBIOSOutput _adfBackupMainDcsbiosOutputPresetDial;
         private volatile uint _adfBackupMainCockpitDial1Pos = 0;
         private const string ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND = "PLT_ARC_CHAN TOGGLE\n";
 
         /*Mi-24P ARK-15 1KHz DME MAIN*/
         //Large 1Khz 0 -> 19 (20 steps)
-        private readonly object _lockDMEMainDialObject1 = new object();
+        private readonly object _lockDMEMainDialObject1 = new();
         private DCSBIOSOutput _dmeMainDcsbiosOutputPresetDial1;
         private volatile uint _dmeMainCockpitPresetDial1Pos = 0;
         private const string DME_MAIN1_KHZ_PRESET_COMMAND_INC = "PLT_ARC_FREQ_L_1 INC\n";
@@ -136,7 +136,7 @@
         private int _dmePresetDial1Skipper;
 
         /*Mi-24P ARK-15 1KHz DME BACKUP*/
-        private readonly object _lockDMEBackupDialObject1 = new object();
+        private readonly object _lockDMEBackupDialObject1 = new();
         private DCSBIOSOutput _dmeBackupDcsbiosOutputPresetDial1;
         private volatile uint _dmeBackupCockpitPresetDial1Pos = 0;
         private const string DME_BACKUP1_KHZ_PRESET_COMMAND_INC = "PLT_ARC_FREQ_R_1 INC\n";
@@ -147,7 +147,7 @@
         //Large dial 0-5 [step of 1]
         //Small dial volume control
         //ACT/STBY Toggle Radio/ICS Switch
-        private readonly object _lockSpu8DialObject1 = new object();
+        private readonly object _lockSpu8DialObject1 = new();
         private DCSBIOSOutput _spu8DcsbiosOutputPresetDial;
         private volatile uint _spu8CockpitDialPos = 0;
         private int _spu8DialSkipper;
@@ -155,12 +155,12 @@
         private const string SPU8_COMMAND_DEC = "PLT_SPU8_MODE DEC\n";
         private const string SPU8_VOLUME_KNOB_COMMAND_INC = "PLT_SPU8_RADIO_VOL +2500\n";
         private const string SPU8_VOLUME_KNOB_COMMAND_DEC = "PLT_SPU8_RADIO_VOL -2500\n";
-        private readonly object _lockSpu8ICSSwitchObject = new object();
+        private readonly object _lockSpu8ICSSwitchObject = new();
         private DCSBIOSOutput _spu8ICSSwitchDcsbiosOutput;
         private volatile uint _spu8ICSSwitchCockpitDialPos = 0;
         private const string SPU8_ICS_SWITCH_TOGGLE_COMMAND = "PLT_SPU8_ICS TOGGLE\n";
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Mi24P(HIDSkeleton hidSkeleton) : base(hidSkeleton)
@@ -183,7 +183,6 @@
                     BIOSEventHandler.DetachStringListener(this);
                     BIOSEventHandler.DetachDataListener(this);
                 }
-
                 _disposed = true;
             }
 
@@ -204,7 +203,7 @@
                 {
                     // "02000.0" - "17999.9"
                     // Last digit not used in panel
-                    var tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
+                    double tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     if (!tmpFreq.Equals(_yadro1ACockpitFrequency))
                     {
                         Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -218,7 +217,7 @@
                     lock (_lockYadro1ADialsObject1)
                     {
                         // "02000.0" - "*17*999.9"
-                        var tmp = _yadro1ACockpitFreq1DialPos;
+                        uint tmp = _yadro1ACockpitFreq1DialPos;
                         _yadro1ACockpitFreq1DialPos = uint.Parse(e.StringData.Substring(0, 2));
                         if (tmp != _yadro1ACockpitFreq1DialPos)
                         {
@@ -229,7 +228,7 @@
                     lock (_lockYadro1ADialsObject2)
                     {
                         // "02000.0" - "17*9*99.9"  
-                        var tmp = _yadro1ACockpitFreq2DialPos;
+                        uint tmp = _yadro1ACockpitFreq2DialPos;
                         _yadro1ACockpitFreq2DialPos = uint.Parse(e.StringData.Substring(2, 1));
                         if (tmp != _yadro1ACockpitFreq2DialPos)
                         {
@@ -240,7 +239,7 @@
                     lock (_lockYadro1ADialsObject3)
                     {
                         // "02000.0" - "179*9*9.9"  
-                        var tmp = _yadro1ACockpitFreq3DialPos;
+                        uint tmp = _yadro1ACockpitFreq3DialPos;
                         _yadro1ACockpitFreq3DialPos = uint.Parse(e.StringData.Substring(3, 1));
                         if (tmp != _yadro1ACockpitFreq3DialPos)
                         {
@@ -251,7 +250,7 @@
                     lock (_lockYadro1ADialsObject4)
                     {
                         // "02000.0" - "1799*9*.9"  
-                        var tmp = _yadro1ACockpitFreq4DialPos;
+                        uint tmp = _yadro1ACockpitFreq4DialPos;
                         _yadro1ACockpitFreq4DialPos = uint.Parse(e.StringData.Substring(4, 1));
                         if (tmp != _yadro1ACockpitFreq4DialPos)
                         {
@@ -773,117 +772,60 @@
                         switch (radioPanelKnob.RadioPanelPZ69Knob)
                         {
                             case RadioPanelPZ69KnobsMi24P.UPPER_R863_MANUAL:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.R863_MANUAL);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_MANUAL);
+                                break;
+               
                             case RadioPanelPZ69KnobsMi24P.UPPER_R863_PRESET:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.R863_PRESET);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_PRESET);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_YADRO1A:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.YADRO1A);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.YADRO1A);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_R828:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.R828_PRESETS);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R828_PRESETS);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_ADF_ARK15:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.ADF_ARK15_HIGH);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.ADF_ARK15_HIGH);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_SPU8:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.SPU8);
-                                    }
-                                    break;
-                                }
+                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.SPU8);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_R863_MANUAL:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.R863_MANUAL);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_MANUAL);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_R863_PRESET:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.R863_PRESET);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_PRESET);
+                                break;
                             case RadioPanelPZ69KnobsMi24P.LOWER_YADRO1A:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.YADRO1A);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.YADRO1A);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_R828:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.R828_PRESETS);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R828_PRESETS);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_ADF_ARK15:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.ADF_ARK15_HIGH);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.ADF_ARK15_HIGH);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_SPU8:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.SPU8);
-                                    }
-                                    break;
-                                }
+                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.SPU8);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_ARK_UD:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi24PRadioMode.DME_ARK15_LOW);
-                                    }
-                                    break;
-                                }
+                                   SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.DME_ARK15_LOW);
+                                break;
+
                             case RadioPanelPZ69KnobsMi24P.LOWER_ARK_UD:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi24PRadioMode.DME_ARK15_LOW);
-                                    }
-                                    break;
-                                }
+                                   SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.DME_ARK15_LOW);
+                                break;
+ 
                             case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_DEC:
                             case RadioPanelPZ69KnobsMi24P.UPPER_SMALL_FREQ_WHEEL_INC:
@@ -900,9 +842,6 @@
                                 {
                                     if (_currentUpperRadioMode == CurrentMi24PRadioMode.R863_PRESET)
                                     {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                        }
                                     }
                                     else if (_currentUpperRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH && radioPanelKnob.IsOn)
                                     {
@@ -910,7 +849,6 @@
                                     }
                                     else if (_currentUpperRadioMode == CurrentMi24PRadioMode.DME_ARK15_LOW && radioPanelKnob.IsOn)
                                     {
-                                        //DCSBIOS.Send(ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE);
                                     }
                                     else
                                     {
@@ -922,9 +860,6 @@
                                 {
                                     if (_currentLowerRadioMode == CurrentMi24PRadioMode.R863_PRESET)
                                     {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                        }
                                     }
                                     else if (_currentLowerRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH && radioPanelKnob.IsOn)
                                     {
@@ -932,7 +867,6 @@
                                     }
                                     else if (_currentLowerRadioMode == CurrentMi24PRadioMode.DME_ARK15_LOW && radioPanelKnob.IsOn)
                                     {
-                                        //DCSBIOS.Send(ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE);
                                     }
                                     else
                                     {
@@ -956,6 +890,72 @@
             }
         }
 
+        private void YADRO1A_BigFrequencyIncrease()
+        {
+            bool changeFaster = false;
+            _yadro1ABigFreqIncreaseChangeMonitor.Click();
+            if (_yadro1ABigFreqIncreaseChangeMonitor.ClickThresholdReached())
+            {
+                //Change faster
+                changeFaster = true;
+            }
+            if (changeFaster)
+            {
+                _yadro1ABigFrequencyStandby += CHANGE_VALUE;
+            }
+            if (_yadro1ABigFrequencyStandby >= 179)
+            {
+                //@ max value
+                _yadro1ABigFrequencyStandby = 179;
+                return;
+            }
+            _yadro1ABigFrequencyStandby++;
+        }
+
+        private void YADRO1A_SmallFrequencyIncrease()
+        {
+            if (_yadro1ASmallFrequencyStandby >= 99)
+            {
+                //At max value
+                _yadro1ASmallFrequencyStandby = 0;
+                return;
+            }
+            _yadro1ASmallFrequencyStandby++;
+        }
+
+        private void YADRO1A_SmallFrequencyDecrease()
+        {
+            if (_yadro1ASmallFrequencyStandby <= 0)
+            {
+                //At min value
+                _yadro1ASmallFrequencyStandby = 99;
+                return;
+            }
+            _yadro1ASmallFrequencyStandby--;
+        }
+
+        private void YADRO1A_BigFrequencyDecrease()
+        {
+            bool changeFaster = false;
+            _yadro1ABigFreqDecreaseChangeMonitor.Click();
+            if (_yadro1ABigFreqDecreaseChangeMonitor.ClickThresholdReached())
+            {
+                //Change faster
+                changeFaster = true;
+            }
+            if (changeFaster)
+            {
+                _yadro1ABigFrequencyStandby -= CHANGE_VALUE;
+            }
+            if (_yadro1ABigFrequencyStandby <= 20)
+            {
+                //@ max value
+                _yadro1ABigFrequencyStandby = 20;
+                return;
+            }
+            _yadro1ABigFrequencyStandby--;
+        }
+
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
@@ -968,531 +968,440 @@
                 foreach (var o in hashSet)
                 {
                     var radioPanelKnobMi24P = (RadioPanelKnobMi24P)o;
-                    if (radioPanelKnobMi24P.IsOn)
+                    if (!radioPanelKnobMi24P.IsOn)
                     {
-                        switch (radioPanelKnobMi24P.RadioPanelPZ69Knob)
-                        {
-                            case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_INC:
+                        continue;
+                    }
+                    switch (radioPanelKnobMi24P.RadioPanelPZ69Knob)
+                    {
+                        case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_INC:
+                            {
+                                switch (_currentUpperRadioMode)
                                 {
-                                    switch (_currentUpperRadioMode)
-                                    {
-                                        case CurrentMi24PRadioMode.R863_MANUAL:
+                                    case CurrentMi24PRadioMode.R863_MANUAL:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R863_PRESET:
+                                        {
+                                            if (!SkipR863PresetDialChange())
                                             {
-                                                break;
+                                                DCSBIOS.Send(R863_PRESET_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.R863_PRESET:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.YADRO1A:
+                                        {
+                                            YADRO1A_BigFrequencyIncrease();
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R828_PRESETS:
+                                        {
+                                            if (!SkipR828PresetDialChange())
                                             {
-                                                if (!SkipR863PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R863_PRESET_COMMAND_INC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(R828_PRESET_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.YADRO1A:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                        {
+                                            if (!SkipADFPresetDial1Change())
                                             {
-                                                var changeFaster = false;
-                                                _yadro1ABigFreqIncreaseChangeMonitor.Click();
-                                                if (_yadro1ABigFreqIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    _yadro1ABigFrequencyStandby += CHANGE_VALUE;
-                                                }
-                                                if (_yadro1ABigFrequencyStandby >= 179)
-                                                {
-                                                    //@ max value
-                                                    _yadro1ABigFrequencyStandby = 179;
-                                                    break;
-                                                }
-                                                _yadro1ABigFrequencyStandby++;
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.R828_PRESETS:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.DME_ARK15_LOW:
+                                        {
+                                            if (!SkipDMEPresetDial1Change())
                                             {
-                                                if (!SkipR828PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R828_PRESET_COMMAND_INC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_INC : DME_BACKUP1_KHZ_PRESET_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.SPU8:
+                                        {
+                                            if (!SkipSpu8PresetDialChange())
                                             {
-                                                if (!SkipADFPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(SPU8_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.DME_ARK15_LOW:
-                                            {
-                                                if (!SkipDMEPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_INC : DME_BACKUP1_KHZ_PRESET_COMMAND_INC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.SPU8:
-                                            {
-                                                if (!SkipSpu8PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(SPU8_COMMAND_INC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.NOUSE:
-                                            {
-                                                break;
-                                            }
-                                    }
-                                    break;
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.NOUSE:
+                                        {
+                                            break;
+                                        }
                                 }
-                            case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_DEC:
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_DEC:
+                            {
+                                switch (_currentUpperRadioMode)
                                 {
-                                    switch (_currentUpperRadioMode)
-                                    {
-                                        case CurrentMi24PRadioMode.R863_MANUAL:
+                                    case CurrentMi24PRadioMode.R863_MANUAL:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R863_PRESET:
+                                        {
+                                            if (!SkipR863PresetDialChange())
                                             {
-                                                break;
+                                                DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.R863_PRESET:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.YADRO1A:
+                                        {
+                                            YADRO1A_BigFrequencyDecrease();
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R828_PRESETS:
+                                        {
+                                            if (!SkipR828PresetDialChange())
                                             {
-                                                if (!SkipR863PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.YADRO1A:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                        {
+                                            if (!SkipADFPresetDial1Change())
                                             {
-                                                var changeFaster = false;
-                                                _yadro1ABigFreqDecreaseChangeMonitor.Click();
-                                                if (_yadro1ABigFreqDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    _yadro1ABigFrequencyStandby -= CHANGE_VALUE;
-                                                }
-                                                if (_yadro1ABigFrequencyStandby <= 20)
-                                                {
-                                                    //@ max value
-                                                    _yadro1ABigFrequencyStandby = 20;
-                                                    break;
-                                                }
-                                                _yadro1ABigFrequencyStandby--;
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.R828_PRESETS:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.DME_ARK15_LOW:
+                                        {
+                                            if (!SkipDMEPresetDial1Change())
                                             {
-                                                if (!SkipR828PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_DEC : DME_BACKUP1_KHZ_PRESET_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.SPU8:
+                                        {
+                                            if (!SkipSpu8PresetDialChange())
                                             {
-                                                if (!SkipADFPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(SPU8_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.DME_ARK15_LOW:
-                                            {
-                                                if (!SkipDMEPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_DEC : DME_BACKUP1_KHZ_PRESET_COMMAND_DEC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.SPU8:
-                                            {
-                                                if (!SkipSpu8PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(SPU8_COMMAND_DEC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.NOUSE:
-                                            {
-                                                break;
-                                            }
-                                    }
-                                    break;
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.NOUSE:
+                                        {
+                                            break;
+                                        }
                                 }
-                            case RadioPanelPZ69KnobsMi24P.UPPER_SMALL_FREQ_WHEEL_INC:
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_SMALL_FREQ_WHEEL_INC:
+                            {
+                                switch (_currentUpperRadioMode)
                                 {
-                                    switch (_currentUpperRadioMode)
-                                    {
-                                        case CurrentMi24PRadioMode.R863_MANUAL:
+                                    case CurrentMi24PRadioMode.R863_MANUAL:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R863_PRESET:
+                                        {
+                                            DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.YADRO1A:
+                                        {
+                                            YADRO1A_SmallFrequencyIncrease();
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R828_PRESETS:
+                                        {
+                                            DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                        {
+                                            if (!SkipADFPresetDial2Change())
                                             {
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.R863_PRESET:
-                                            {
-                                                DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.YADRO1A:
-                                            {
-                                                if (_yadro1ASmallFrequencyStandby >= 99)
-                                                {
-                                                    //At max value
-                                                    _yadro1ASmallFrequencyStandby = 0;
-                                                    break;
-                                                }
-                                                _yadro1ASmallFrequencyStandby++;
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.R828_PRESETS:
-                                            {
-                                                DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
-                                            {
-                                                if (!SkipADFPresetDial2Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.DME_ARK15_LOW:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.SPU8:
-                                            {
-                                                DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_INC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.NOUSE:
-                                            {
-                                                break;
-                                            }
-                                    }
-                                    break;
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.DME_ARK15_LOW:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.SPU8:
+                                        {
+                                            DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_INC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.NOUSE:
+                                        {
+                                            break;
+                                        }
                                 }
-                            case RadioPanelPZ69KnobsMi24P.UPPER_SMALL_FREQ_WHEEL_DEC:
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.UPPER_SMALL_FREQ_WHEEL_DEC:
+                            {
+                                switch (_currentUpperRadioMode)
                                 {
-                                    switch (_currentUpperRadioMode)
-                                    {
-                                        case CurrentMi24PRadioMode.R863_MANUAL:
+                                    case CurrentMi24PRadioMode.R863_MANUAL:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R863_PRESET:
+                                        {
+                                            DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.YADRO1A:
+                                        {
+                                            YADRO1A_SmallFrequencyDecrease();
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R828_PRESETS:
+                                        {
+                                            DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                        {
+                                            if (!SkipADFPresetDial2Change())
                                             {
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.R863_PRESET:
-                                            {
-                                                DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.YADRO1A:
-                                            {
-                                                if (_yadro1ASmallFrequencyStandby <= 0)
-                                                {
-                                                    //At min value
-                                                    _yadro1ASmallFrequencyStandby = 99;
-                                                    break;
-                                                }
-                                                _yadro1ASmallFrequencyStandby--;
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.R828_PRESETS:
-                                            {
-                                                DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
-                                            {
-                                                if (!SkipADFPresetDial2Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.DME_ARK15_LOW:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.SPU8:
-                                            {
-                                                DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_DEC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.NOUSE:
-                                            {
-                                                break;
-                                            }
-                                    }
-                                    break;
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.DME_ARK15_LOW:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.SPU8:
+                                        {
+                                            DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_DEC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.NOUSE:
+                                        {
+                                            break;
+                                        }
                                 }
-                            case RadioPanelPZ69KnobsMi24P.LOWER_LARGE_FREQ_WHEEL_INC:
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_LARGE_FREQ_WHEEL_INC:
+                            {
+                                switch (_currentLowerRadioMode)
                                 {
-                                    switch (_currentLowerRadioMode)
-                                    {
-                                        case CurrentMi24PRadioMode.R863_MANUAL:
+                                    case CurrentMi24PRadioMode.R863_MANUAL:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R863_PRESET:
+                                        {
+                                            if (!SkipR863PresetDialChange())
                                             {
-                                                break;
+                                                DCSBIOS.Send(R863_PRESET_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.R863_PRESET:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.YADRO1A:
+                                        {
+                                            YADRO1A_BigFrequencyIncrease();
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R828_PRESETS:
+                                        {
+                                            if (!SkipR828PresetDialChange())
                                             {
-                                                if (!SkipR863PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R863_PRESET_COMMAND_INC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(R828_PRESET_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.YADRO1A:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                        {
+                                            if (!SkipADFPresetDial1Change())
                                             {
-                                                var changeFaster = false;
-                                                _yadro1ABigFreqIncreaseChangeMonitor.Click();
-                                                if (_yadro1ABigFreqIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    _yadro1ABigFrequencyStandby += CHANGE_VALUE;
-                                                }
-                                                if (_yadro1ABigFrequencyStandby >= 179)
-                                                {
-                                                    //@ max value
-                                                    _yadro1ABigFrequencyStandby = 179;
-                                                    break;
-                                                }
-                                                _yadro1ABigFrequencyStandby++;
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.R828_PRESETS:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.DME_ARK15_LOW:
+                                        {
+                                            if (!SkipDMEPresetDial1Change())
                                             {
-                                                if (!SkipR828PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R828_PRESET_COMMAND_INC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_INC : DME_BACKUP1_KHZ_PRESET_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.SPU8:
+                                        {
+                                            if (!SkipSpu8PresetDialChange())
                                             {
-                                                if (!SkipADFPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(SPU8_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.DME_ARK15_LOW:
-                                            {
-                                                if (!SkipDMEPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_INC : DME_BACKUP1_KHZ_PRESET_COMMAND_INC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.SPU8:
-                                            {
-                                                if (!SkipSpu8PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(SPU8_COMMAND_INC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.NOUSE:
-                                            {
-                                                break;
-                                            }
-                                    }
-                                    break;
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.NOUSE:
+                                        {
+                                            break;
+                                        }
                                 }
-                            case RadioPanelPZ69KnobsMi24P.LOWER_LARGE_FREQ_WHEEL_DEC:
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_LARGE_FREQ_WHEEL_DEC:
+                            {
+                                switch (_currentLowerRadioMode)
                                 {
-                                    switch (_currentLowerRadioMode)
-                                    {
-                                        case CurrentMi24PRadioMode.R863_MANUAL:
+                                    case CurrentMi24PRadioMode.R863_MANUAL:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R863_PRESET:
+                                        {
+                                            if (!SkipR863PresetDialChange())
                                             {
-                                                break;
+                                                DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.R863_PRESET:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.YADRO1A:
+                                        {
+                                            YADRO1A_BigFrequencyDecrease();
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R828_PRESETS:
+                                        {
+                                            if (!SkipR828PresetDialChange())
                                             {
-                                                if (!SkipR863PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.YADRO1A:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                        {
+                                            if (!SkipADFPresetDial1Change())
                                             {
-                                                var changeFaster = false;
-                                                _yadro1ABigFreqDecreaseChangeMonitor.Click();
-                                                if (_yadro1ABigFreqDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    _yadro1ABigFrequencyStandby -= CHANGE_VALUE;
-                                                }
-                                                if (_yadro1ABigFrequencyStandby <= 20)
-                                                {
-                                                    //@ max value
-                                                    _yadro1ABigFrequencyStandby = 20;
-                                                    break;
-                                                }
-                                                _yadro1ABigFrequencyStandby--;
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.R828_PRESETS:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.DME_ARK15_LOW:
+                                        {
+                                            if (!SkipDMEPresetDial1Change())
                                             {
-                                                if (!SkipR828PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_DEC : DME_BACKUP1_KHZ_PRESET_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.SPU8:
+                                        {
+                                            if (!SkipSpu8PresetDialChange())
                                             {
-                                                if (!SkipADFPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
-                                                }
-                                                break;
+                                                DCSBIOS.Send(SPU8_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.DME_ARK15_LOW:
-                                            {
-                                                if (!SkipDMEPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_DEC : DME_BACKUP1_KHZ_PRESET_COMMAND_DEC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.SPU8:
-                                            {
-                                                if (!SkipSpu8PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(SPU8_COMMAND_DEC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.NOUSE:
-                                            {
-                                                break;
-                                            }
-                                    }
-                                    break;
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.NOUSE:
+                                        {
+                                            break;
+                                        }
                                 }
-                            case RadioPanelPZ69KnobsMi24P.LOWER_SMALL_FREQ_WHEEL_INC:
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_SMALL_FREQ_WHEEL_INC:
+                            {
+                                switch (_currentLowerRadioMode)
                                 {
-                                    switch (_currentLowerRadioMode)
-                                    {
-                                        case CurrentMi24PRadioMode.R863_MANUAL:
+                                    case CurrentMi24PRadioMode.R863_MANUAL:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R863_PRESET:
+                                        {
+                                            DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.YADRO1A:
+                                        {
+                                            YADRO1A_SmallFrequencyIncrease();
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R828_PRESETS:
+                                        {
+                                            DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                        {
+                                            if (!SkipADFPresetDial2Change())
                                             {
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                             }
-                                        case CurrentMi24PRadioMode.R863_PRESET:
-                                            {
-                                                DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.YADRO1A:
-                                            {
-                                                if (_yadro1ASmallFrequencyStandby >= 99)
-                                                {
-                                                    //At max value
-                                                    _yadro1ASmallFrequencyStandby = 0;
-                                                    break;
-                                                }
-                                                _yadro1ASmallFrequencyStandby++;
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.R828_PRESETS:
-                                            {
-                                                DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
-                                            {
-                                                if (!SkipADFPresetDial2Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.DME_ARK15_LOW:
-                                            {
-                                                 break;
-                                            }
-                                        case CurrentMi24PRadioMode.SPU8:
-                                            {
-                                                DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_INC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.NOUSE:
-                                            {
-                                                break;
-                                            }
-                                    }
-                                    break;
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.DME_ARK15_LOW:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.SPU8:
+                                        {
+                                            DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_INC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.NOUSE:
+                                        {
+                                            break;
+                                        }
                                 }
-                            case RadioPanelPZ69KnobsMi24P.LOWER_SMALL_FREQ_WHEEL_DEC:
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsMi24P.LOWER_SMALL_FREQ_WHEEL_DEC:
+                            {
+                                switch (_currentLowerRadioMode)
                                 {
-                                    switch (_currentLowerRadioMode)
-                                    {
-                                        case CurrentMi24PRadioMode.R863_MANUAL:
+                                    case CurrentMi24PRadioMode.R863_MANUAL:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R863_PRESET:
+                                        {
+                                            DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.YADRO1A:
+                                        {
+                                            YADRO1A_SmallFrequencyDecrease();
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.R828_PRESETS:
+                                        {
+                                            DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
+                                        {
+                                            if (!SkipADFPresetDial2Change())
                                             {
-                                                break;
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                             }
-                                        case CurrentMi24PRadioMode.R863_PRESET:
-                                            {
-                                                DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.YADRO1A:
-                                            {
-                                                if (_yadro1ASmallFrequencyStandby <= 0)
-                                                {
-                                                    //At min value
-                                                    _yadro1ASmallFrequencyStandby = 99;
-                                                    break;
-                                                }
-                                                _yadro1ASmallFrequencyStandby--;
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.R828_PRESETS:
-                                            {
-                                                DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
-                                            {
-                                                if (!SkipADFPresetDial2Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.DME_ARK15_LOW:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.SPU8:
-                                            {
-                                                DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_DEC);
-                                                break;
-                                            }
-                                        case CurrentMi24PRadioMode.NOUSE:
-                                            {
-                                                break;
-                                            }
-                                    }
-                                    break;
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.DME_ARK15_LOW:
+                                        {
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.SPU8:
+                                        {
+                                            DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_DEC);
+                                            break;
+                                        }
+                                    case CurrentMi24PRadioMode.NOUSE:
+                                        {
+                                            break;
+                                        }
                                 }
-                        }
+                                break;
+                            }
                     }
                 }
                 ShowFrequenciesOnPanel();
@@ -1511,13 +1420,11 @@
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-
                         return;
                     }
 
                     if (!FirstReportHasBeenRead)
                     {
-
                         return;
                     }
 
@@ -1557,7 +1464,6 @@
                                             {
                                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, (uint)_yadro1ACockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_yadro1ABigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1ASmallFrequencyStandby.ToString().PadLeft(2, '0')), PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                                //SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_yadro1aBigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1aSmallFrequencyStandby.ToString().PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
                                             }
                                         }
                                     }
@@ -1710,7 +1616,6 @@
                                             {
                                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, (uint)_yadro1ACockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_yadro1ABigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1ASmallFrequencyStandby.ToString().PadLeft(2, '0')), PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                                //SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_yadro1aBigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1aSmallFrequencyStandby.ToString().PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
                                             }
                                         }
                                     }
@@ -1745,16 +1650,6 @@
                                         {
                                             _ark15_HighFrequency = _adfMainCockpitPresetDial1Pos.ToString();
                                         }
-                                    }
-                                    else
-                                    {
-                                        lock (_lockADFBackupDialObject1)
-                                        {
-                                            _ark15_HighFrequency = _adfBackupCockpitPresetDial1Pos.ToString();
-                                        }
-                                    }
-                                    if (_adfBackupMainCockpitDial1Pos == 1)
-                                    {
                                         lock (_lockADFMainDialObject2)
                                         {
                                             _ark15_HighFrequency += _adfMainCockpitPresetDial2Pos.ToString();
@@ -1762,6 +1657,10 @@
                                     }
                                     else
                                     {
+                                        lock (_lockADFBackupDialObject1)
+                                        {
+                                            _ark15_HighFrequency = _adfBackupCockpitPresetDial1Pos.ToString();
+                                        }
                                         lock (_lockADFBackupDialObject2)
                                         {
                                             _ark15_HighFrequency += _adfBackupCockpitPresetDial2Pos.ToString();
@@ -1904,8 +1803,13 @@
             SaitekPanelKnobs = RadioPanelKnobMi24P.GetRadioPanelKnobs();
         }
 
-        private void SetUpperRadioMode(CurrentMi24PRadioMode CurrentMi24PRadioMode)
+        private void SetUpperRadioMode(bool radioKnobIsOn, CurrentMi24PRadioMode CurrentMi24PRadioMode)
         {
+            if (!radioKnobIsOn)
+            {
+                return;
+            }
+
             try
             {
                 _currentUpperRadioMode = CurrentMi24PRadioMode;
@@ -1916,13 +1820,15 @@
             }
         }
 
-        private void SetLowerRadioMode(CurrentMi24PRadioMode CurrentMi24PRadioMode)
+        private void SetLowerRadioMode(bool radioKnobIsOn, CurrentMi24PRadioMode CurrentMi24PRadioMode)
         {
+            if (!radioKnobIsOn)
+            {
+                return;
+            }
             try
             {
                 _currentLowerRadioMode = CurrentMi24PRadioMode;
-                //If NOUSE then send next round of data to the panel in order to clear the LCD.
-                //_sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
             {
@@ -1983,8 +1889,8 @@
         {
             try
             {
-                var tmpActualDialPositionUp = actualDialPosition;
-                var upCount = actualDialPosition;
+                uint tmpActualDialPositionUp = actualDialPosition;
+                uint upCount = actualDialPosition;
                 do
                 {
                     if (tmpActualDialPositionUp == 9)
@@ -1999,7 +1905,7 @@
                 } while (tmpActualDialPositionUp != desiredDialPosition);
 
                 tmpActualDialPositionUp = actualDialPosition;
-                var downCount = actualDialPosition;
+                uint downCount = actualDialPosition;
                 do
                 {
                     if (tmpActualDialPositionUp == 0)
@@ -2010,7 +1916,6 @@
                     {
                         tmpActualDialPositionUp--;
                     }
-
                     downCount++;
                 } while (tmpActualDialPositionUp != desiredDialPosition);
 
@@ -2027,16 +1932,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.R863_PRESET || _currentLowerRadioMode == CurrentMi24PRadioMode.R863_PRESET)
+                if (_r863PresetDialSkipper > 2)
                 {
-                    if (_r863PresetDialSkipper > 2)
-                    {
-                        _r863PresetDialSkipper = 0;
-                        return false;
-                    }
-                    _r863PresetDialSkipper++;
-                    return true;
+                    _r863PresetDialSkipper = 0;
+                    return false;
                 }
+                _r863PresetDialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
@@ -2049,16 +1951,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.R828_PRESETS || _currentLowerRadioMode == CurrentMi24PRadioMode.R828_PRESETS)
+                if (_r828PresetDialSkipper > 2)
                 {
-                    if (_r828PresetDialSkipper > 2)
-                    {
-                        _r828PresetDialSkipper = 0;
-                        return false;
-                    }
-                    _r828PresetDialSkipper++;
-                    return true;
+                    _r828PresetDialSkipper = 0;
+                    return false;
                 }
+                _r828PresetDialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
@@ -2071,16 +1970,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH || _currentLowerRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH)
+                if (_adfPresetDial1Skipper > 2)
                 {
-                    if (_adfPresetDial1Skipper > 2)
-                    {
-                        _adfPresetDial1Skipper = 0;
-                        return false;
-                    }
-                    _adfPresetDial1Skipper++;
-                    return true;
+                    _adfPresetDial1Skipper = 0;
+                    return false;
                 }
+                _adfPresetDial1Skipper++;
+                return true;
             }
             catch (Exception ex)
             {
@@ -2093,16 +1989,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.DME_ARK15_LOW || _currentLowerRadioMode == CurrentMi24PRadioMode.DME_ARK15_LOW)
+                if (_dmePresetDial1Skipper > 2)
                 {
-                    if (_dmePresetDial1Skipper > 2)
-                    {
-                        _dmePresetDial1Skipper = 0;
-                        return false;
-                    }
-                    _dmePresetDial1Skipper++;
-                    return true;
+                    _dmePresetDial1Skipper = 0;
+                    return false;
                 }
+                _dmePresetDial1Skipper++;
+                return true;
             }
             catch (Exception ex)
             {
@@ -2115,16 +2008,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH || _currentLowerRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH)
+                if (_adfPresetDial2Skipper > 2)
                 {
-                    if (_adfPresetDial2Skipper > 2)
-                    {
-                        _adfPresetDial2Skipper = 0;
-                        return false;
-                    }
-                    _adfPresetDial2Skipper++;
-                    return true;
+                    _adfPresetDial2Skipper = 0;
+                    return false;
                 }
+                _adfPresetDial2Skipper++;
+                return true;
             }
             catch (Exception ex)
             {
@@ -2137,16 +2027,13 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentMi24PRadioMode.SPU8 || _currentLowerRadioMode == CurrentMi24PRadioMode.SPU8)
+                if (_spu8DialSkipper > 2)
                 {
-                    if (_spu8DialSkipper > 2)
-                    {
-                        _spu8DialSkipper = 0;
-                        return false;
-                    }
-                    _spu8DialSkipper++;
-                    return true;
+                    _spu8DialSkipper = 0;
+                    return false;
                 }
+                _spu8DialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
