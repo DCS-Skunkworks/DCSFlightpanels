@@ -700,7 +700,6 @@
                                     {
                                         SendVhfAmToDCSBIOS();
                                     }
-
                                     break;
                                 }
 
@@ -710,7 +709,6 @@
                                     {
                                         SendUhfToDCSBIOS();
                                     }
-
                                     break;
                                 }
 
@@ -720,7 +718,6 @@
                                     {
                                         SendVhfFmToDCSBIOS();
                                     }
-
                                     break;
                                 }
 
@@ -749,7 +746,6 @@
                                     {
                                         SendVhfAmToDCSBIOS();
                                     }
-
                                     break;
                                 }
 
@@ -759,7 +755,6 @@
                                     {
                                         SendUhfToDCSBIOS();
                                     }
-
                                     break;
                                 }
 
@@ -769,7 +764,6 @@
                                     {
                                         SendVhfFmToDCSBIOS();
                                     }
-
                                     break;
                                 }
 
@@ -844,39 +838,14 @@
                 tmp = int.Parse(frequencyAsString.Substring(5, 1));
             }
 
-            switch (tmp)
+            desiredPositionDial4 = tmp switch
             {
-                case 0:
-                    {
-                        desiredPositionDial4 = 0;
-                        break;
-                    }
-
-                case 2:
-                    {
-                        desiredPositionDial4 = 1;
-                        break;
-                    }
-
-                case 5:
-                    {
-                        desiredPositionDial4 = 2;
-                        break;
-                    }
-
-                case 7:
-                    {
-                        desiredPositionDial4 = 3;
-                        break;
-                    }
-
-                default:
-                    {
-                        // Safeguard in case it is in a invalid position
-                        desiredPositionDial4 = 0;
-                        break;
-                    }
-            }
+                0 => 0,
+                2 => 1,
+                5 => 2,
+                7 => 3,
+                _ => 0
+            };
 
             // #1
             _shutdownVHFAMThread = true;
@@ -1149,7 +1118,7 @@
 
                 default:
                     {
-                        throw new Exception("Failed to find separator in frequency string " + frequencyAsString);
+                        throw new Exception($"Failed to find separator in frequency string {frequencyAsString}");
                     }
             }
 
@@ -1494,32 +1463,15 @@
                 desiredPositionDial2 = int.Parse(frequencyAsString.Substring(1, 1));
                 desiredPositionDial3 = int.Parse(frequencyAsString.Substring(3, 1));
                 var tmpPosition = int.Parse(frequencyAsString.Substring(4, 2));
-                switch (tmpPosition)
+
+                desiredPositionDial4 = tmpPosition switch
                 {
-                    case 0:
-                        {
-                            desiredPositionDial4 = 0;
-                            break;
-                        }
+                    0 => 0,
+                    25 => 1,
+                    50 => 2,
+                    75 => 3
+                };
 
-                    case 25:
-                        {
-                            desiredPositionDial4 = 1;
-                            break;
-                        }
-
-                    case 50:
-                        {
-                            desiredPositionDial4 = 2;
-                            break;
-                        }
-
-                    case 75:
-                        {
-                            desiredPositionDial4 = 3;
-                            break;
-                        }
-                }
             }
             else
             {
@@ -2823,71 +2775,19 @@
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                                            switch (_ilsSmallFrequencyStandby)
-                                            {
-                                                case 10:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 15;
-                                                        break;
-                                                    }
-
-                                                case 15:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 30;
-                                                        break;
-                                                    }
-
-                                                case 30:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 35;
-                                                        break;
-                                                    }
-
-                                                case 35:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 50;
-                                                        break;
-                                                    }
-
-                                                case 50:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 55;
-                                                        break;
-                                                    }
-
-                                                case 55:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 70;
-                                                        break;
-                                                    }
-
-                                                case 70:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 75;
-                                                        break;
-                                                    }
-
-                                                case 75:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 90;
-                                                        break;
-                                                    }
-
-                                                case 90:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 95;
-                                                        break;
-                                                    }
-
-                                                case 95:
-                                                case 100:
-                                                case 105:
-                                                    {
-                                                        // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
-                                                        _ilsSmallFrequencyStandby = 10;
-                                                        break;
-                                                    }
-                                            }
+                                            _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch 
+                                            { 
+                                                10 => 15,
+                                                15 => 30,
+                                                30 => 35,
+                                                35 => 50,
+                                                50 => 55,
+                                                55 => 70,
+                                                70 => 75,
+                                                75 => 90,
+                                                90 => 95,
+                                                95 or 100 or 105 => 10 // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
+                                            };
                                             break;
                                         }
 
@@ -2984,70 +2884,19 @@
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                                            switch (_ilsSmallFrequencyStandby)
+                                            _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
-                                                case 0:
-                                                case 5:
-                                                case 10:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 95;
-                                                        break;
-                                                    }
-
-                                                case 15:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 10;
-                                                        break;
-                                                    }
-
-                                                case 30:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 15;
-                                                        break;
-                                                    }
-
-                                                case 35:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 30;
-                                                        break;
-                                                    }
-
-                                                case 50:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 35;
-                                                        break;
-                                                    }
-
-                                                case 55:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 50;
-                                                        break;
-                                                    }
-
-                                                case 70:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 55;
-                                                        break;
-                                                    }
-
-                                                case 75:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 70;
-                                                        break;
-                                                    }
-
-                                                case 90:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 75;
-                                                        break;
-                                                    }
-
-                                                case 95:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 90;
-                                                        break;
-                                                    }
-                                            }
+                                                0 or 5 or 10 => 95,
+                                                15 => 10,
+                                                30 => 15,
+                                                35 => 30,
+                                                50 => 35,
+                                                55 => 50,
+                                                70 => 55,
+                                                75 => 70,
+                                                90 => 75,
+                                                95 => 90
+                                            };
                                             break;
                                         }
 
@@ -3401,71 +3250,19 @@
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                                            switch (_ilsSmallFrequencyStandby)
+                                            _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
-                                                case 10:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 15;
-                                                        break;
-                                                    }
-
-                                                case 15:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 30;
-                                                        break;
-                                                    }
-
-                                                case 30:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 35;
-                                                        break;
-                                                    }
-
-                                                case 35:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 50;
-                                                        break;
-                                                    }
-
-                                                case 50:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 55;
-                                                        break;
-                                                    }
-
-                                                case 55:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 70;
-                                                        break;
-                                                    }
-
-                                                case 70:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 75;
-                                                        break;
-                                                    }
-
-                                                case 75:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 90;
-                                                        break;
-                                                    }
-
-                                                case 90:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 95;
-                                                        break;
-                                                    }
-
-                                                case 95:
-                                                case 100:
-                                                case 105:
-                                                    {
-                                                        // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
-                                                        _ilsSmallFrequencyStandby = 10;
-                                                        break;
-                                                    }
-                                            }
+                                                10 => 15,
+                                                15 => 30,
+                                                30 => 35,
+                                                35 => 50,
+                                                50 => 55,
+                                                55 => 70,
+                                                70 => 75,
+                                                75 => 90,
+                                                90 => 95,
+                                                95 or 100 or 105 => 10 // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
+                                            };
                                             break;
                                         }
 
@@ -3562,70 +3359,19 @@
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                                            switch (_ilsSmallFrequencyStandby)
+                                            _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
-                                                case 0:
-                                                case 5:
-                                                case 10:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 95;
-                                                        break;
-                                                    }
-
-                                                case 15:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 10;
-                                                        break;
-                                                    }
-
-                                                case 30:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 15;
-                                                        break;
-                                                    }
-
-                                                case 35:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 30;
-                                                        break;
-                                                    }
-
-                                                case 50:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 35;
-                                                        break;
-                                                    }
-
-                                                case 55:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 50;
-                                                        break;
-                                                    }
-
-                                                case 70:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 55;
-                                                        break;
-                                                    }
-
-                                                case 75:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 70;
-                                                        break;
-                                                    }
-
-                                                case 90:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 75;
-                                                        break;
-                                                    }
-
-                                                case 95:
-                                                    {
-                                                        _ilsSmallFrequencyStandby = 90;
-                                                        break;
-                                                    }
-                                            }
+                                                0 or 5 or 10 => 95,
+                                                15 => 10,
+                                                30 => 15,
+                                                35 => 30,
+                                                50 => 35,
+                                                55 => 50,
+                                                70 => 55,
+                                                75 => 70,
+                                                90 => 75,
+                                                95 => 90
+                                            };
                                             break;
                                         }
 
@@ -4153,74 +3899,22 @@
             {
                 case 1:
                     {
-                        switch (position)
+                        return position switch
                         {
-                            case 0:
-                                {
-                                    return "3";
-                                }
-
-                            case 1:
-                                {
-                                    return "4";
-                                }
-
-                            case 2:
-                                {
-                                    return "5";
-                                }
-
-                            case 3:
-                                {
-                                    return "6";
-                                }
-
-                            case 4:
-                                {
-                                    return "7";
-                                }
-
-                            case 5:
-                                {
-                                    return "8";
-                                }
-
-                            case 6:
-                                {
-                                    return "9";
-                                }
-
-                            case 7:
-                                {
-                                    return "10";
-                                }
-
-                            case 8:
-                                {
-                                    return "11";
-                                }
-
-                            case 9:
-                                {
-                                    return "12";
-                                }
-
-                            case 10:
-                                {
-                                    return "13";
-                                }
-
-                            case 11:
-                                {
-                                    return "14";
-                                }
-
-                            case 12:
-                                {
-                                    return "15";
-                                }
-                        }
-                        break;
+                            0 => "3",
+                            1 => "4",
+                            2 => "5",
+                            3 => "6",
+                            4 => "7",
+                            5 => "8",
+                            6 => "9",
+                            7 => "10",
+                            8 => "11",
+                            9 => "12",
+                            10 => "13",
+                            11 => "14",
+                            12 => "15"
+                        };
                     }
 
                 case 2:
@@ -4235,33 +3929,16 @@
 
                 case 4:
                     {
-                        switch (position)
+                        // "00" "25" "50" "75", 0 2 5 7 used.
+                        // Pos     0    1    2    3
+                        return position switch
                         {
-                            // "00" "25" "50" "75", 0 2 5 7 used.
-                            // Pos     0    1    2    3
-                            case 0:
-                                {
-                                    return "0";
-                                }
-
-                            case 1:
-                                {
-                                    return "2";
-                                }
-
-                            case 2:
-                                {
-                                    return "5";
-                                }
-
-                            case 3:
-                                {
-                                    return "7";
-                                }
-                        }
+                            0 => "0",
+                            1 => "2",
+                            2 => "5",
+                            3 => "7"                        
+                        };
                     }
-
-                    break;
             }
             return string.Empty;
         }
@@ -4289,25 +3966,12 @@
             {
                 case 1:
                     {
-                        switch (position)
+                        return position switch
                         {
-                            case 0:
-                                {
-                                    return "2";
-                                }
-
-                            case 1:
-                                {
-                                    return "3";
-                                }
-
-                            case 2:
-                                {
-                                    // throw new NotImplementedException("check how A should be treated.");
-                                    return "0";// should be "A"
-                                }
-                        }
-                        break;
+                            0 => "2",
+                            1 => "3",
+                            2 => "0" // should be "A" // throw new NotImplementedException("check how A should be treated.");
+                        };
                     }
 
                 case 2:
@@ -4319,33 +3983,16 @@
 
                 case 5:
                     {
-                        switch (position)
+                        // "00" "25" "50" "75", only "00" and "50" used.
+                        // Pos     0    1    2    3
+                        return position switch
                         {
-                            // "00" "25" "50" "75", only "00" and "50" used.
-                            // Pos     0    1    2    3
-                            case 0:
-                                {
-                                    return "00";
-                                }
-
-                            case 1:
-                                {
-                                    return "25";
-                                }
-
-                            case 2:
-                                {
-                                    return "50";
-                                }
-
-                            case 3:
-                                {
-                                    return "75";
-                                }
-                        }
+                            0 => "00",
+                            1 => "25",
+                            2 => "50",
+                            3 => "75"
+                        };
                     }
-
-                    break;
             }
 
             return string.Empty;
@@ -4371,74 +4018,22 @@
             {
                 case 1:
                     {
-                        switch (position)
+                        return position switch
                         {
-                            case 0:
-                                {
-                                    return "3";
-                                }
-
-                            case 1:
-                                {
-                                    return "4";
-                                }
-
-                            case 2:
-                                {
-                                    return "5";
-                                }
-
-                            case 3:
-                                {
-                                    return "6";
-                                }
-
-                            case 4:
-                                {
-                                    return "7";
-                                }
-
-                            case 5:
-                                {
-                                    return "8";
-                                }
-
-                            case 6:
-                                {
-                                    return "9";
-                                }
-
-                            case 7:
-                                {
-                                    return "10";
-                                }
-
-                            case 8:
-                                {
-                                    return "11";
-                                }
-
-                            case 9:
-                                {
-                                    return "12";
-                                }
-
-                            case 10:
-                                {
-                                    return "13";
-                                }
-
-                            case 11:
-                                {
-                                    return "14";
-                                }
-
-                            case 12:
-                                {
-                                    return "15";
-                                }
-                        }
-                        break;
+                            0 => "3",
+                            1 => "4",
+                            2 => "5",
+                            3 => "6",
+                            4 => "7",
+                            5 => "8",
+                            6 => "9",
+                            7 => "10",
+                            8 => "11",
+                            9 => "12",
+                            10 => "13",
+                            11 => "14",
+                            12 => "15"
+                        };                   
                     }
 
                 case 2:
@@ -4453,33 +4048,16 @@
 
                 case 4:
                     {
-                        switch (position)
+                        // "00" "25" "50" "75"
+                        // Pos     0    1    2    3
+                        return position switch
                         {
-                            // "00" "25" "50" "75"
-                            // Pos     0    1    2    3
-                            case 0:
-                                {
-                                    return "0";
-                                }
-
-                            case 1:
-                                {
-                                    return "25";
-                                }
-
-                            case 2:
-                                {
-                                    return "50";
-                                }
-
-                            case 3:
-                                {
-                                    return "75";
-                                }
-                        }
+                            0 => "00",
+                            1 => "25",
+                            2 => "50",
+                            3 => "75"
+                        };
                     }
-
-                    break;
             }
 
             return string.Empty;
@@ -4495,92 +4073,34 @@
             {
                 case 1:
                     {
-                        switch (position)
+                        return position switch
                         {
-                            case 0:
-                                {
-                                    return "108";
-                                }
-
-                            case 1:
-                                {
-                                    return "109";
-                                }
-
-                            case 2:
-                                {
-                                    return "110";
-                                }
-
-                            case 3:
-                                {
-                                    return "111";
-                                }
-                        }
-                        break;
+                            0 => "108",
+                            1 => "109",
+                            2 => "110",
+                            3 => "111"
+                        };
                     }
 
                 case 2:
                     {
                         // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
                         // 0    1    2    3    4    5    6    7    8    9
-                        switch (position)
+                        return position switch
                         {
-                            case 0:
-                                {
-                                    return "10";
-                                }
-
-                            case 1:
-                                {
-                                    return "15";
-                                }
-
-                            case 2:
-                                {
-                                    return "30";
-                                }
-
-                            case 3:
-                                {
-                                    return "35";
-                                }
-
-                            case 4:
-                                {
-                                    return "50";
-                                }
-
-                            case 5:
-                                {
-                                    return "55";
-                                }
-
-                            case 6:
-                                {
-                                    return "70";
-                                }
-
-                            case 7:
-                                {
-                                    return "75";
-                                }
-
-                            case 8:
-                                {
-                                    return "90";
-                                }
-
-                            case 9:
-                                {
-                                    return "95";
-                                }
-                        }
+                            0 => "10",
+                            1 => "15",
+                            2 => "30",
+                            3 => "35",
+                            4 => "50",
+                            5 => "55",
+                            6 => "70",
+                            7 => "75",
+                            8 => "90",
+                            9 => "95"
+                        };
                     }
-
-                    break;
             }
-
             return string.Empty;
         }
 
@@ -4594,90 +4114,33 @@
             {
                 case 1:
                     {
-                        switch (freq)
+                        return freq switch
                         {
-                            case 108:
-                                {
-                                    return 0;
-                                }
-
-                            case 109:
-                                {
-                                    return 1;
-                                }
-
-                            case 110:
-                                {
-                                    return 2;
-                                }
-
-                            case 111:
-                                {
-                                    return 3;
-                                }
-                        }
-                        break;
+                            108 => 0,
+                            109 => 1,
+                            110 => 2,
+                            111 => 3
+                        };
                     }
 
                 case 2:
                     {
                         // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
                         // 0    1    2    3    4    5    6    7    8    9
-                        switch (freq)
+                        return freq switch
                         {
-                            case 10:
-                                {
-                                    return 0;
-                                }
-
-                            case 15:
-                                {
-                                    return 1;
-                                }
-
-                            case 30:
-                                {
-                                    return 2;
-                                }
-
-                            case 35:
-                                {
-                                    return 3;
-                                }
-
-                            case 50:
-                                {
-                                    return 4;
-                                }
-
-                            case 55:
-                                {
-                                    return 5;
-                                }
-
-                            case 70:
-                                {
-                                    return 6;
-                                }
-
-                            case 75:
-                                {
-                                    return 7;
-                                }
-
-                            case 90:
-                                {
-                                    return 8;
-                                }
-
-                            case 95:
-                                {
-                                    return 9;
-                                }
-                        }
+                            10 => 0,
+                            15 => 1,
+                            30 => 2,
+                            35 => 3,
+                            50 => 4,
+                            55 => 5,
+                            70 => 6,
+                            75 => 7,
+                            90 => 8,
+                            95 => 9
+                        };
                     }
-
-                    break;
             }
             return 0;
         }
@@ -5529,33 +4992,13 @@
                         {
                             uint dial4 = 0;
 
-                            switch (_vhfAmCockpitFreq4DialPos)
+                            dial4 = _vhfAmCockpitFreq4DialPos switch
                             {
-                                case 0:
-                                    {
-                                        dial4 = 0;
-                                        break;
-                                    }
-
-                                case 1:
-                                    {
-                                        dial4 = 25;
-                                        break;
-                                    }
-
-                                case 2:
-                                    {
-                                        // 25
-                                        dial4 = 50;
-                                        break;
-                                    }
-
-                                case 3:
-                                    {
-                                        dial4 = 75;
-                                        break;
-                                    }
-                            }
+                                0 => 0,
+                                1 => 25,
+                                2 => 50,
+                                3 => 75
+                            };                            
                             _vhfAmSavedCockpitBigFrequency = double.Parse((_vhfAmCockpitFreq1DialPos + 3) + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfAmSavedCockpitSmallFrequency = double.Parse(_vhfAmCockpitFreq3DialPos + dial4.ToString(NumberFormatInfoFullDisplay).PadLeft(2, '0'), NumberFormatInfoFullDisplay);
                         }
@@ -5670,32 +5113,14 @@
                         lock (_lockVhfFmDialsObject4)
                         {
                             uint dial4 = 0;
-                            switch (_vhfFmCockpitFreq4DialPos)
+                            dial4 = _vhfFmCockpitFreq4DialPos switch
                             {
-                                case 0:
-                                    {
-                                        dial4 = 0;
-                                        break;
-                                    }
-
-                                case 1:
-                                    {
-                                        dial4 = 25;
-                                        break;
-                                    }
-
-                                case 2:
-                                    {
-                                        dial4 = 50;
-                                        break;
-                                    }
-
-                                case 3:
-                                    {
-                                        dial4 = 75;
-                                        break;
-                                    }
-                            }
+                                0 => 0,
+                                1 => 25,
+                                2 => 50,
+                                3 => 75
+                            };
+                           
                             _vhfFmSavedCockpitBigFrequency = uint.Parse((_vhfFmCockpitFreq1DialPos + 3) + _vhfFmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfFmSavedCockpitSmallFrequency = uint.Parse((_vhfFmCockpitFreq3DialPos.ToString() + dial4).PadLeft(3, '0'), NumberFormatInfoFullDisplay);
                         }
@@ -5824,7 +5249,5 @@
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
-
     }
-
 }
