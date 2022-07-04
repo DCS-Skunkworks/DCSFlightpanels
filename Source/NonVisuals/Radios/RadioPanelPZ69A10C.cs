@@ -42,10 +42,10 @@
         private double _vhfAmSmallFrequencyStandby;
         private double _vhfAmSavedCockpitBigFrequency;
         private double _vhfAmSavedCockpitSmallFrequency;
-        private readonly object _lockVhfAmDialsObject1 = new object();
-        private readonly object _lockVhfAmDialsObject2 = new object();
-        private readonly object _lockVhfAmDialsObject3 = new object();
-        private readonly object _lockVhfAmDialsObject4 = new object();
+        private readonly object _lockVhfAmDialsObject1 = new();
+        private readonly object _lockVhfAmDialsObject2 = new();
+        private readonly object _lockVhfAmDialsObject3 = new();
+        private readonly object _lockVhfAmDialsObject4 = new();
         private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial1;
         private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial2;
         private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial3;
@@ -88,11 +88,11 @@
         private double _uhfSmallFrequencyStandby;
         private double _uhfSavedCockpitBigFrequency;
         private double _uhfSavedCockpitSmallFrequency;
-        private readonly object _lockUhfDialsObject1 = new object();
-        private readonly object _lockUhfDialsObject2 = new object();
-        private readonly object _lockUhfDialsObject3 = new object();
-        private readonly object _lockUhfDialsObject4 = new object();
-        private readonly object _lockUhfDialsObject5 = new object();
+        private readonly object _lockUhfDialsObject1 = new();
+        private readonly object _lockUhfDialsObject2 = new();
+        private readonly object _lockUhfDialsObject3 = new();
+        private readonly object _lockUhfDialsObject4 = new();
+        private readonly object _lockUhfDialsObject5 = new();
         private DCSBIOSOutput _uhfDcsbiosOutputFreqDial1;
         private DCSBIOSOutput _uhfDcsbiosOutputFreqDial2;
         private DCSBIOSOutput _uhfDcsbiosOutputFreqDial3;
@@ -139,10 +139,10 @@
         private uint _vhfFmSmallFrequencyStandby;
         private uint _vhfFmSavedCockpitBigFrequency;
         private uint _vhfFmSavedCockpitSmallFrequency;
-        private readonly object _lockVhfFmDialsObject1 = new object();
-        private readonly object _lockVhfFmDialsObject2 = new object();
-        private readonly object _lockVhfFmDialsObject3 = new object();
-        private readonly object _lockVhfFmDialsObject4 = new object();
+        private readonly object _lockVhfFmDialsObject1 = new();
+        private readonly object _lockVhfFmDialsObject2 = new();
+        private readonly object _lockVhfFmDialsObject3 = new();
+        private readonly object _lockVhfFmDialsObject4 = new();
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial1;
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial2;
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial3;
@@ -185,8 +185,8 @@
         private uint _ilsSmallFrequencyStandby = 10; // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
         private uint _ilsSavedCockpitBigFrequency = 108; // "108" "109" "110" "111"
         private uint _ilsSavedCockpitSmallFrequency = 10; // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-        private readonly object _lockIlsDialsObject1 = new object();
-        private readonly object _lockIlsDialsObject2 = new object();
+        private readonly object _lockIlsDialsObject1 = new();
+        private readonly object _lockIlsDialsObject2 = new();
         private DCSBIOSOutput _ilsDcsbiosOutputFreqDial1;
         private DCSBIOSOutput _ilsDcsbiosOutputFreqDial2;
         private volatile uint _ilsCockpitFreq1DialPos = 1;
@@ -209,9 +209,9 @@
         private int _tacanSavedCockpitBigFrequency = 6;
         private int _tacanSavedCockpitSmallFrequency = 5;
         private int _tacanSavedCockpitXY;
-        private readonly object _lockTacanDialsObject1 = new object();
-        private readonly object _lockTacanDialsObject2 = new object();
-        private readonly object _lockTacanDialsObject3 = new object();
+        private readonly object _lockTacanDialsObject1 = new();
+        private readonly object _lockTacanDialsObject2 = new();
+        private readonly object _lockTacanDialsObject3 = new();
         private DCSBIOSOutput _tacanDcsbiosOutputFreqChannel;
         private volatile uint _tacanCockpitFreq1DialPos = 1;
         private volatile uint _tacanCockpitFreq2DialPos = 1;
@@ -225,7 +225,7 @@
         private long _tacanDial2WaitingForFeedback;
         private long _tacanDial3WaitingForFeedback;
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
 
         private long _doUpdatePanelLCD;
 

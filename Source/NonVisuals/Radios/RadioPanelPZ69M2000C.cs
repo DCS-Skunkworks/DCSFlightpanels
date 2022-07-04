@@ -33,8 +33,8 @@
         /*M-2000C VHF PRESETS COM1*/
         // Large dial PRESETS [step of 1]
         // Small dial Volume
-        private readonly object _lockVUHFPresetFreqObject = new object();
-        private readonly object _lockVUHFPresetDialObject = new object();
+        private readonly object _lockVUHFPresetFreqObject = new();
+        private readonly object _lockVUHFPresetDialObject = new();
         private DCSBIOSOutput _vhfDcsbiosOutputPresetFreqString;
         private DCSBIOSOutput _vhfDcsbiosOutputPresetDial;
         private string _vhfPresetCockpitFrequency = string.Empty;
@@ -49,8 +49,8 @@
         /*M2000C UHF PRESETS COM2*/
         // Large dial PRESETS [step of 1]
         // Small dial Volume
-        private readonly object _lockUHFPresetFreqObject = new object();
-        private readonly object _lockUHFPresetDialObject = new object();
+        private readonly object _lockUHFPresetFreqObject = new();
+        private readonly object _lockUHFPresetDialObject = new();
         private DCSBIOSOutput _uhfDcsbiosOutputPresetFreqString;
         private DCSBIOSOutput _uhfDcsbiosOutputPresetDial;
         private string _uhfPresetCockpitFrequency = string.Empty;
@@ -64,7 +64,7 @@
         // definePotentiometer("UHF_RADIO_VOL_KNOB", 16, 3706, 706, { 0, 1}, "AUDIO PANEL", "I - UHF - Radio Volume Knob")
 
         /*M-2000C TACAN NAV1*/
-        private readonly object _lockTACANDialObject = new object();
+        private readonly object _lockTACANDialObject = new();
         private DCSBIOSOutput _tacanDcsbiosOutputDialTens;
         private DCSBIOSOutput _tacanDcsbiosOutputDialOnes;
         private volatile uint _tacanTensCockpitDialPos = 1;
@@ -84,7 +84,7 @@
         private const string TACANXY_SELECT_COMMAND_DEC = "TAC_X_Y_SEL DEC\n";
 
         /*M-2000C VOR.ILS NAV2*/
-        private readonly object _lockVoRialObject = new object();
+        private readonly object _lockVoRialObject = new();
         private DCSBIOSOutput _vorDcsbiosOutputDialDecimals;
         private DCSBIOSOutput _vorDcsbiosOutputDialOnes;
         private volatile uint _vorDecimalsCockpitDialPos = 1;
@@ -102,7 +102,7 @@
         private const string VOR_POWER_COMMAND_DEC = "VORILS_PWR_DIAL DEC\n";
         private const string VOR_TEST_COMMAND_INC = "VORILS_TEST_DIAL INC\n";
         private const string VOR_TEST_COMMAND_DEC = "VORILS_TEST_DIAL DEC\n";
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         private bool _upperFreqSwitchPressedDown;

@@ -24,7 +24,7 @@
         private readonly NumberFormatInfo _numberFormatInfoFullDisplay;
         private int _frequencyKnobSensitivity;
         private volatile int _frequencySensitivitySkipper;
-        protected readonly object LockLCDUpdateObject = new object();
+        protected readonly object LockLCDUpdateObject = new();
         protected bool DataHasBeenReceivedFromDCSBIOS;
 
         /// <summary>
@@ -35,7 +35,7 @@
         public long ResetSyncTimeout { get; set; } = 35000000;
 
         private long _syncOKDelayTimeout = 50000000; // 5s
-        private readonly PZ69DisplayBytes _pZ69DisplayBytes = new PZ69DisplayBytes();
+        private readonly PZ69DisplayBytes _pZ69DisplayBytes = new();
 
         protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
         {

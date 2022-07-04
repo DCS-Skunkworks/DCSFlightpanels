@@ -35,22 +35,16 @@
         private enum VhfAmDigit
         {
             First,
-
             Second,
-
             Third,
-
             Fourth,
-
             LastTwoSpecial
         }
 
         private enum AdfDigit
         {
             Digit100S,
-
             Digit10S,
-
             Digits1S
         }
 
@@ -58,139 +52,78 @@
         // Large dial 118-143
         // Small dial 0-975
         private readonly int[] _dialPositionsWholeNumbers = { 0, 6553, 13107, 19660, 26214, 32767, 39321, 45874, 52428, 58981 };
-
         private readonly int[] _dialPositionsDecial100S = { 0, 16383, 32767, 49151 };
-
         private double _vhfAmBigFrequencyStandby = 118;
-
         private double _vhfAmSmallFrequencyStandby;
-
         private double _vhfAmSavedCockpitBigFrequency;
-
         private double _vhfAmSavedCockpitSmallFrequency;
-
         private DCSBIOSOutput _vhfAmDcsbiosOutputReading10S; // 1[1]8.375
-
         private DCSBIOSOutput _vhfAmDcsbiosOutputReading1S; // 11[8].375
-
         private DCSBIOSOutput _vhfAmDcsbiosOutputReadingDecimal10S; // 118.[3]75
-
         private DCSBIOSOutput _vhfAmDcsbiosOutputReadingDecimal100S; // 118.3[75]
-
         private const string VHF_AM_LEFT_DIAL_DIAL_COMMAND_INC = "AM_RADIO_FREQUENCY_DIAL_LEFT +3200\n";
-
         private const string VHF_AM_LEFT_DIAL_DIAL_COMMAND_DEC = "AM_RADIO_FREQUENCY_DIAL_LEFT -3200\n";
-
         private const string VHF_AM_RIGHT_DIAL_DIAL_COMMAND_INC = "AM_RADIO_FREQUENCY_DIAL_RIGHT +3200\n";
-
         private const string VHF_AM_RIGHT_DIAL_DIAL_COMMAND_DEC = "AM_RADIO_FREQUENCY_DIAL_RIGHT -3200\n";
-
-        private readonly object _lockVhfAm10SObject = new object();
-
-        private readonly object _lockVhfAm1SObject = new object();
-
-        private readonly object _lockVhfAmDecimal10SObject = new object();
-
-        private readonly object _lockVhfAmDecimal100SObject = new object();
-
+        private readonly object _lockVhfAm10SObject = new();
+        private readonly object _lockVhfAm1SObject = new();
+        private readonly object _lockVhfAmDecimal10SObject = new();
+        private readonly object _lockVhfAmDecimal100SObject = new();
         private volatile uint _vhfAmCockpit10SFrequencyValue = 6553;
-
         private volatile uint _vhfAmCockpit1SFrequencyValue = 6553;
-
         private volatile uint _vhfAmCockpitDecimal10SFrequencyValue = 6553;
-
         private volatile uint _vhfAmCockpitDecimal100SFrequencyValue = 6553;
 
         private Thread _vhfAmSyncThread;
-
         private long _vhfAmThreadNowSynching;
-
         private long _vhfAmValue1WaitingForFeedback; // 10s
-
         private long _vhfAmValue2WaitingForFeedback; // 1s
-
         private long _vhfAmValue3WaitingForFeedback; // Decimal 10s
-
         private long _vhfAmValue4WaitingForFeedback; // Decimal 100s
-
         private int _vhfAmLeftDialSkipper;
-
         private int _vhfAmRightDialSkipper;
 
         /*COM2 SA342 FM PR4G Radio*/
         // Large dial 0-7 Presets 1, 2, 3, 4, 5, 6, 0, RG
         // Small dial 
         private DCSBIOSOutput _fmRadioPresetDcsbiosOutput;
-
         private volatile uint _fmRadioPresetCockpitDialPos = 1;
-
         private const string FM_RADIO_PRESET_COMMAND_INC = "FM_RADIO_CHANNEL INC\n";
-
         private const string FM_RADIO_PRESET_COMMAND_DEC = "FM_RADIO_CHANNEL DEC\n";
-
-        private readonly object _lockFmRadioPresetObject = new object();
+        private readonly object _lockFmRadioPresetObject = new();
 
         /*NAV1 SA342 UHF Radio*/
         // Large dial 225-399
         // Small dial 000-975 where only 2 digits can be used
         private readonly ClickSpeedDetector _uhfBigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-
         private readonly ClickSpeedDetector _uhfBigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-
         private readonly ClickSpeedDetector _uhfSmallFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-
         private readonly ClickSpeedDetector _uhfSmallFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-
         private double _uhfBigFrequencyStandby = 225;
-
         private double _uhfSmallFrequencyStandby;
-
         private const string UHF_BUTTON0_COMMAND_ON = "UHF_RADIO_BUTTON_0 1\n";
-
         private const string UHF_BUTTON0_COMMAND_OFF = "UHF_RADIO_BUTTON_0 0\n";
-
         private const string UHF_BUTTON1_COMMAND_ON = "UHF_RADIO_BUTTON_1 1\n";
-
         private const string UHF_BUTTON1_COMMAND_OFF = "UHF_RADIO_BUTTON_1 0\n";
-
         private const string UHF_BUTTON2_COMMAND_ON = "UHF_RADIO_BUTTON_2 1\n";
-
         private const string UHF_BUTTON2_COMMAND_OFF = "UHF_RADIO_BUTTON_2 0\n";
-
         private const string UHF_BUTTON3_COMMAND_ON = "UHF_RADIO_BUTTON_3 1\n";
-
         private const string UHF_BUTTON3_COMMAND_OFF = "UHF_RADIO_BUTTON_3 0\n";
-
         private const string UHF_BUTTON4_COMMAND_ON = "UHF_RADIO_BUTTON_4 1\n";
-
         private const string UHF_BUTTON4_COMMAND_OFF = "UHF_RADIO_BUTTON_4 0\n";
-
         private const string UHF_BUTTON5_COMMAND_ON = "UHF_RADIO_BUTTON_5 1\n";
-
         private const string UHF_BUTTON5_COMMAND_OFF = "UHF_RADIO_BUTTON_5 0\n";
-
         private const string UHF_BUTTON6_COMMAND_ON = "UHF_RADIO_BUTTON_6 1\n";
-
         private const string UHF_BUTTON6_COMMAND_OFF = "UHF_RADIO_BUTTON_6 0\n";
-
         private const string UHF_BUTTON7_COMMAND_ON = "UHF_RADIO_BUTTON_7 1\n";
-
         private const string UHF_BUTTON7_COMMAND_OFF = "UHF_RADIO_BUTTON_7 0\n";
-
         private const string UHF_BUTTON8_COMMAND_ON = "UHF_RADIO_BUTTON_8 1\n";
-
         private const string UHF_BUTTON8_COMMAND_OFF = "UHF_RADIO_BUTTON_8 0\n";
-
         private const string UHF_BUTTON9_COMMAND_ON = "UHF_RADIO_BUTTON_9 1\n";
-
         private const string UHF_BUTTON9_COMMAND_OFF = "UHF_RADIO_BUTTON_9 0\n";
-
         private const string UHF_BUTTON_VALIDATE_COMMAND_ON = "UHF_RADIO_BUTTON_VLD 1\n";
-
         private const string UHF_BUTTON_VALIDATE_COMMAND_OFF = "UHF_RADIO_BUTTON_VLD 0\n";
-
         private int _uhfBigFrequencySkipper;
-
         private int _uhfSmallFrequencySkipper;
 
         /*ADF SA342*/
@@ -198,33 +131,19 @@
         /*Large dial Clockwise 10s increase*/
         /*Small dial 1s and decimals*/
         private const string ADF1_UNIT100_S_INCREASE = "ADF_NAV1_100 +3200\n";
-
         private const string ADF1_UNIT10_S_INCREASE = "ADF_NAV1_10 +3200\n";
-
         private const string ADF1_UNIT1_S_DECIMALS_INCREASE = "ADF_NAV1_1 +3200\n";
-
         private const string ADF1_UNIT1_S_DECIMALS_DECREASE = "ADF_NAV1_1 -3200\n";
-
         private const string ADF2_UNIT100_S_INCREASE = "ADF_NAV2_100 +3200\n";
-
         private const string ADF2_UNIT10_S_INCREASE = "ADF_NAV2_10 +3200\n";
-
         private const string ADF2_UNIT1_S_DECIMALS_INCREASE = "ADF_NAV2_1 +3200\n";
-
         private const string ADF2_UNIT1_S_DECIMALS_DECREASE = "ADF_NAV2_1 -3200\n";
-
         private const string ADF_SWITCH_UNIT_COMMAND = "ADF1_ADF2_SELECT TOGGLE\n";
-
-        private readonly object _lockAdfUnitObject = new object();
-
+        private readonly object _lockAdfUnitObject = new();
         private volatile uint _adfCockpitSelectedUnitValue = 1;
-
         private DCSBIOSOutput _adfSwitchUnitDcsbiosOutput;
-
         private int _adf100SDialSkipper;
-
         private int _adf10SDialSkipper;
-
         private int _adf1SDialSkipper;
 
         // DME NADIR
@@ -232,26 +151,17 @@
         // Small dial Doppler modes ARRET, VEILLE, TERRE, MER, ANEMO,TEST SOL.
         // Large
         private const string NADIR_MODE_COMMAND_INC = "NADIR_PARAMETER INC\n";
-
         private const string NADIR_MODE_COMMAND_DEC = "NADIR_PARAMETER DEC\n";
 
         // Small
         private const string NADIR_DOPPLER_COMMAND_INC = "NADIR_DOPPLER_MODE INC\n";
-
         private const string NADIR_DOPPLER_COMMAND_DEC = "NADIR_DOPPLER_MODE DEC\n";
-
         private volatile uint _nadirModeCockpitValue;
-
         private volatile uint _nadirDopplerModeCockpitValue;
-
         private DCSBIOSOutput _nadirModeDcsbiosOutput;
-
         private DCSBIOSOutput _nadirDopplerModeDcsbiosOutput;
-
-        private readonly object _lockNADIRUnitObject = new object();
-
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
-
+        private readonly object _lockNADIRUnitObject = new();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69SA342(HIDSkeleton hidSkeleton)
@@ -280,7 +190,7 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+       
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {

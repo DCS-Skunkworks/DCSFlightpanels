@@ -52,10 +52,10 @@
         private uint _uhfSavedCockpitDial2Frequency;
         private uint _uhfSavedCockpitDial3Frequency;
         private uint _uhfSavedCockpitDial4Frequency;
-        private readonly object _lockUhfDialBigFreqObject = new object();
-        private readonly object _lockUhfDial3FreqObject = new object();
-        private readonly object _lockUhfDial4FreqObject = new object();
-        private readonly object _lockUhfPresetObject = new object();
+        private readonly object _lockUhfDialBigFreqObject = new();
+        private readonly object _lockUhfDial3FreqObject = new();
+        private readonly object _lockUhfDial4FreqObject = new();
+        private readonly object _lockUhfPresetObject = new();
         private DCSBIOSOutput _uhfDcsbiosOutputBigFrequencyNumber;
         private DCSBIOSOutput _uhfDcsbiosOutputDial3FrequencyNumber;
         private DCSBIOSOutput _uhfDcsbiosOutputDial4FrequencyNumber;
@@ -120,10 +120,10 @@
         private uint _vuhfSavedCockpitDial2Frequency;
         private uint _vuhfSavedCockpitDial3Frequency;
         private uint _vuhfSavedCockpitDial4Frequency;
-        private readonly object _lockVuhfBigFreqObject = new object();
-        private readonly object _lockVuhfDial3FreqObject = new object();
-        private readonly object _lockVuhfDial4FreqObject = new object();
-        private readonly object _lockVuhfPresetObject = new object();
+        private readonly object _lockVuhfBigFreqObject = new();
+        private readonly object _lockVuhfDial3FreqObject = new();
+        private readonly object _lockVuhfDial4FreqObject = new();
+        private readonly object _lockVuhfPresetObject = new();
         private DCSBIOSOutput _vuhfDcsbiosOutputBigFrequencyNumber;
         private DCSBIOSOutput _vuhfDcsbiosOutputDial3FrequencyNumber;
         private DCSBIOSOutput _vuhfDcsbiosOutputDial4FrequencyNumber;
@@ -176,9 +176,9 @@
         private int _pilotTacanSavedCockpitTensFrequency = 6;
         private int _pilotTacanSavedCockpitOnesFrequency = 5;
         private int _pilotTacanSavedCockpitXY;
-        private readonly object _lockPilotTacanTensDialObject = new object();
-        private readonly object _lockPilotTacanOnesObject = new object();
-        private readonly object _lockPilotTacanXYDialObject = new object();
+        private readonly object _lockPilotTacanTensDialObject = new();
+        private readonly object _lockPilotTacanOnesObject = new();
+        private readonly object _lockPilotTacanXYDialObject = new();
         private DCSBIOSOutput _pilotTacanDcsbiosOutputTensDial;
         private DCSBIOSOutput _pilotTacanDcsbiosOutputOnesDial;
         private DCSBIOSOutput _pilotTacanDcsbiosOutputXYDial;
@@ -204,9 +204,9 @@
         private int _rioTacanSavedCockpitTensFrequency = 6;
         private int _rioTacanSavedCockpitOnesFrequency = 5;
         private int _rioTacanSavedCockpitXY;
-        private readonly object _lockRioTacanTensDialObject = new object();
-        private readonly object _lockRioTacanOnesObject = new object();
-        private readonly object _lockRioTacanXYDialObject = new object();
+        private readonly object _lockRioTacanTensDialObject = new();
+        private readonly object _lockRioTacanOnesObject = new();
+        private readonly object _lockRioTacanXYDialObject = new();
         private DCSBIOSOutput _rioTacanDcsbiosOutputTensDial;
         private DCSBIOSOutput _rioTacanDcsbiosOutputOnesDial;
         private DCSBIOSOutput _rioTacanDcsbiosOutputXYDial;
@@ -230,9 +230,9 @@
         private int _rioLink4TensAndOnesFrequencyStandby;
         private int _rioLink4SavedCockpitHundredsFrequency;
         private int _rioLink4SavedCockpitTensAndOnesFrequency;
-        private readonly object _lockRioLink4HundredsDial = new object();
-        private readonly object _lockRioLink4TensDial = new object();
-        private readonly object _lockRioLink4OnesDial = new object();
+        private readonly object _lockRioLink4HundredsDial = new();
+        private readonly object _lockRioLink4TensDial = new();
+        private readonly object _lockRioLink4OnesDial = new();
         private DCSBIOSOutput _rioLink4DcsbiosOutputHundredsDial;
         private DCSBIOSOutput _rioLink4DcsbiosOutputTensDial;
         private DCSBIOSOutput _rioLink4DcsbiosOutputOnesDial;
@@ -254,7 +254,7 @@
         private readonly ClickSpeedDetector _rioLink4TensAndOnesClickSpeedDetector = new ClickSpeedDetector(20);
         private byte _skipRioLink4TensAndOnesFreqChange;
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
 
         private long _doUpdatePanelLCD;
 

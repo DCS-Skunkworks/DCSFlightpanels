@@ -36,7 +36,7 @@
         private const string COMM1_VOL_DEC = "UFC_COM1_VOL -4000\n";
         private const string COMM1_PULL_PRESS = "UFC_COM1_PULL INC\n";
         private const string COMM1_PULL_RELEASE = "UFC_COM1_PULL DEC\n";
-        private readonly object _lockCOMM1DialsObject = new object();
+        private readonly object _lockCOMM1DialsObject = new();
         private DCSBIOSOutput _comm1DcsbiosOutputFreq;
         private string _comm1Frequency = "225.000";
         private readonly ClickSpeedDetector _comm1ChannelClickSpeedDetector = new ClickSpeedDetector(8);
@@ -50,12 +50,12 @@
         private const string COMM2_VOL_DEC = "UFC_COM2_VOL -4000\n";
         private const string COMM2_PULL_PRESS = "UFC_COM2_PULL INC\n";
         private const string COMM2_PULL_RELEASE = "UFC_COM2_PULL DEC\n";
-        private readonly object _lockCOMM2DialsObject = new object();
+        private readonly object _lockCOMM2DialsObject = new();
         private DCSBIOSOutput _comm2DcsbiosOutputFreq;
         private string _comm2Frequency = "225.000";
         private readonly ClickSpeedDetector _comm2ChannelClickSpeedDetector = new ClickSpeedDetector(8);
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
 
         private long _doUpdatePanelLCD;
 

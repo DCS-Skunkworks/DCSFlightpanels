@@ -28,7 +28,7 @@ namespace NonVisuals.Radios
         /*P-51D VHF Presets 1-4*/
         // Large dial 1-4 [step of 1]
         // Small dial volume control
-        private readonly object _lockVhf1DialObject1 = new object();
+        private readonly object _lockVhf1DialObject1 = new();
         private DCSBIOSOutput _vhf1DcsbiosOutputPresetButton0;
         private DCSBIOSOutput _vhf1DcsbiosOutputPresetButton1;
         private DCSBIOSOutput _vhf1DcsbiosOutputPresetButton2;
@@ -39,7 +39,7 @@ namespace NonVisuals.Radios
         private const string VHF1_VOLUME_KNOB_COMMAND_INC = "RADIO_VOLUME +2000\n";
         private const string VHF1_VOLUME_KNOB_COMMAND_DEC = "RADIO_VOLUME -2000\n";
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69P51D(HIDSkeleton hidSkeleton) : base(hidSkeleton)

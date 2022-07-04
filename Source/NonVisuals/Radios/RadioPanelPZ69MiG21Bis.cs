@@ -32,7 +32,7 @@ namespace NonVisuals.Radios
         // Small dial Radio volume RAD_VOL +/- 
         // STBY/ACT, radio on/off RAD_PWR TOGGLE
         private volatile uint _radioFreqSelectorPositionCockpit;
-        private readonly object _lockRadioFreqSelectorPositionObject = new object();
+        private readonly object _lockRadioFreqSelectorPositionObject = new();
         private DCSBIOSOutput _radioDcsbiosOutputFreqSelectorPosition;
         private const string RADIO_FREQ_SELECTOR_POSITION_COMMAND_INC = "RAD_CHAN INC\n";
         private const string RADIO_FREQ_SELECTOR_POSITION_COMMAND_DEC = "RAD_CHAN DEC\n";
@@ -45,10 +45,10 @@ namespace NonVisuals.Radios
         // Small dial RSBN ILS PRMG_CHAN
         // STBY/ACT, RSBN/ARC switch  RSBN_ARC_SEL
         private volatile uint _rsbnNavChannelCockpit = 1;
-        private readonly object _lockRsbnNavChannelObject = new object();
+        private readonly object _lockRsbnNavChannelObject = new();
         private DCSBIOSOutput _rsbnNavChannelCockpitOutput;
         private volatile uint _rsbnILSChannelCockpit = 1;
-        private readonly object _lockRsbnilsChannelObject = new object();
+        private readonly object _lockRsbnilsChannelObject = new();
         private DCSBIOSOutput _rsbnILSChannelCockpitOutput;
         private const string RSBN_NAV_CHANNEL_COMMAND_INC = "RSBN_CHAN INC\n";
         private const string RSBN_NAV_CHANNEL_COMMAND_DEC = "RSBN_CHAN DEC\n";
@@ -61,10 +61,10 @@ namespace NonVisuals.Radios
         // Small dial ARC Preset ARC_CHAN
         // STBY/ACT, RSBN/ARC switch  RSBN_ARC_SEL 1
         private volatile uint _arcSectorCockpit = 1;
-        private readonly object _lockARCSectorObject = new object();
+        private readonly object _lockARCSectorObject = new();
         private DCSBIOSOutput _arcSectorCockpitOutput;
         private volatile uint _arcPresetChannelCockpit = 1;
-        private readonly object _lockARCPresetChannelObject = new object();
+        private readonly object _lockARCPresetChannelObject = new();
         private DCSBIOSOutput _arcPresetChannelCockpitOutput;
         private const string ARC_SECTOR_COMMAND_INC = "ARC_ZONE INC\n";
         private const string ARC_SECTOR_COMMAND_DEC = "ARC_ZONE DEC\n";
@@ -72,7 +72,7 @@ namespace NonVisuals.Radios
         private const string ARC_PRESET_CHANNEL_COMMAND_DEC = "ARC_CHAN DEC\n";
         private const string SELECT_ARC_COMMAND = "RSBN_ARC_SEL DEC\n";
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69MiG21Bis(HIDSkeleton hidSkeleton) : base(hidSkeleton)

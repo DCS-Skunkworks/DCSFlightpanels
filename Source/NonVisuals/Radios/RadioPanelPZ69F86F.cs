@@ -33,13 +33,13 @@
         /*F-86F UHF ARC-27 PRESETS COM1*/
         // Large dial 1-18 [step of 1]
         // Small dial Power/Mode control
-        private readonly object _lockARC27PresetDialObject1 = new object();
+        private readonly object _lockARC27PresetDialObject1 = new();
         private DCSBIOSOutput _arc27PresetDcsbiosOutputPresetDial;
         private volatile uint _arc27PresetCockpitDialPos = 1;
         private const string ARC27_PRESET_COMMAND_INC = "ARC27_CHAN_SEL INC\n";
         private const string ARC27_PRESET_COMMAND_DEC = "ARC27_CHAN_SEL DEC\n";
         private int _arc27PresetDialSkipper;
-        private readonly object _lockARC27ModeDialObject1 = new object();
+        private readonly object _lockARC27ModeDialObject1 = new();
         private DCSBIOSOutput _arc27ModeDcsbiosOutputDial;
         private volatile uint _arc27ModeCockpitDialPos = 1;
         private const string ARC27_MODE_COMMAND_INC = "ARC27_PWR_SEL INC\n";
@@ -56,8 +56,8 @@
         // Small dial -> bands
         private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
         private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly object _lockARN6FrequencyObject = new object();
-        private readonly object _lockARN6BandObject = new object();
+        private readonly object _lockARN6FrequencyObject = new();
+        private readonly object _lockARN6BandObject = new();
         private volatile uint _arn6CockpitFrequency = 108;
         private volatile uint _arn6CockpitBand;
         private DCSBIOSOutput _arn6ManualDcsbiosOutputCockpitFrequency;
@@ -73,7 +73,7 @@
         /*F-86F ARN-6 MODES NAV2*/
         // Large dial MODES
         // Small dial volume control
-        private readonly object _lockARN6ModeObject = new object();
+        private readonly object _lockARN6ModeObject = new();
         private DCSBIOSOutput _arn6ModeDcsbiosOutputPresetDial;
         private volatile uint _arn6ModeCockpitDialPos = 1;
         private const string ARN6_MODE_COMMAND_INC = "ARN6_FUNC_SEL INC\n";
@@ -87,14 +87,14 @@
         // Small - No Use
         // ACT-STBY, Toggles IFF Dial Stop Button, button must be depressed to go into Emergency Mode.
         private volatile uint _apx6ModeCockpitDialPos = 1;
-        private readonly object _lockAPX6ModeObject = new object();
+        private readonly object _lockAPX6ModeObject = new();
         private int _apx6ModeDialSkipper;
         private DCSBIOSOutput _apx6ModeDcsbiosOutputCockpit;
         private const string APX6_MODE_DIAL_COMMAND_INC = "APX6_MASTER INC\n";
         private const string APX6_MODE_DIAL_COMMAND_DEC = "APX6_MASTER DEC\n";
         private const string APX_6DIAL_STOP_TOGGLE_COMMAND = "APX_6_IFF_DIAL_STOP TOGGLE\n";
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69F86F(HIDSkeleton hidSkeleton) : base(hidSkeleton)

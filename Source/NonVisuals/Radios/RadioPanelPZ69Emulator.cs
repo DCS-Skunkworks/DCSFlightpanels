@@ -21,15 +21,15 @@ namespace NonVisuals.Radios
 
     public class RadioPanelPZ69Emulator : RadioPanelPZ69Base
     {
-        private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
-        private readonly HashSet<BIPLinkPZ69> _bipLinks = new HashSet<BIPLinkPZ69>();
-        private readonly object _dcsBiosDataReceivedLock = new object();
+        private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new();
+        private readonly HashSet<BIPLinkPZ69> _bipLinks = new();
+        private readonly object _dcsBiosDataReceivedLock = new();
 
-        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new List<RadioPanelPZ69KnobsEmulator> { RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR };
-        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesLower = new List<RadioPanelPZ69KnobsEmulator> { RadioPanelPZ69KnobsEmulator.LowerCOM1, RadioPanelPZ69KnobsEmulator.LowerCOM2, RadioPanelPZ69KnobsEmulator.LowerNAV1, RadioPanelPZ69KnobsEmulator.LowerNAV2, RadioPanelPZ69KnobsEmulator.LowerADF, RadioPanelPZ69KnobsEmulator.LowerDME, RadioPanelPZ69KnobsEmulator.LowerXPDR };
+        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new() { RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR };
+        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesLower = new() { RadioPanelPZ69KnobsEmulator.LowerCOM1, RadioPanelPZ69KnobsEmulator.LowerCOM2, RadioPanelPZ69KnobsEmulator.LowerNAV1, RadioPanelPZ69KnobsEmulator.LowerNAV2, RadioPanelPZ69KnobsEmulator.LowerADF, RadioPanelPZ69KnobsEmulator.LowerDME, RadioPanelPZ69KnobsEmulator.LowerXPDR };
 
-        private HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
-        private List<OSCommandBindingPZ69Emulator> _operatingSystemCommandBindings = new List<OSCommandBindingPZ69Emulator>();
+        private HashSet<KeyBindingPZ69> _keyBindings = new();
+        private List<OSCommandBindingPZ69Emulator> _operatingSystemCommandBindings = new();
 
 
         private double _upperActive = -1;

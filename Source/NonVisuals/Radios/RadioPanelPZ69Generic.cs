@@ -34,16 +34,16 @@ namespace NonVisuals.Radios
          * - BIP Link.
          */
         // private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
-        private HashSet<KeyBindingPZ69DialPosition> _keyBindings = new HashSet<KeyBindingPZ69DialPosition>();
-        private List<OSCommandBindingPZ69FullEmulator> _operatingSystemCommandBindings = new List<OSCommandBindingPZ69FullEmulator>();
-        private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
-        private HashSet<DCSBIOSOutputBindingPZ69> _dcsBiosLcdBindings = new HashSet<DCSBIOSOutputBindingPZ69>();
-        private HashSet<DCSBIOSActionBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ69>();
-        private readonly HashSet<BIPLinkPZ69> _bipLinks = new HashSet<BIPLinkPZ69>();
-        private readonly object _lcdDataVariablesLockObject = new object();
+        private HashSet<KeyBindingPZ69DialPosition> _keyBindings = new();
+        private List<OSCommandBindingPZ69FullEmulator> _operatingSystemCommandBindings = new();
+        private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new();
+        private HashSet<DCSBIOSOutputBindingPZ69> _dcsBiosLcdBindings = new();
+        private HashSet<DCSBIOSActionBindingPZ69> _dcsBiosBindings = new();
+        private readonly HashSet<BIPLinkPZ69> _bipLinks = new();
+        private readonly object _lcdDataVariablesLockObject = new();
 
-        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new List<RadioPanelPZ69KnobsEmulator> { RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR };
-        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesLower = new List<RadioPanelPZ69KnobsEmulator> { RadioPanelPZ69KnobsEmulator.LowerCOM1, RadioPanelPZ69KnobsEmulator.LowerCOM2, RadioPanelPZ69KnobsEmulator.LowerNAV1, RadioPanelPZ69KnobsEmulator.LowerNAV2, RadioPanelPZ69KnobsEmulator.LowerADF, RadioPanelPZ69KnobsEmulator.LowerDME, RadioPanelPZ69KnobsEmulator.LowerXPDR };
+        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new() { RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR };
+        private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesLower = new() { RadioPanelPZ69KnobsEmulator.LowerCOM1, RadioPanelPZ69KnobsEmulator.LowerCOM2, RadioPanelPZ69KnobsEmulator.LowerNAV1, RadioPanelPZ69KnobsEmulator.LowerNAV2, RadioPanelPZ69KnobsEmulator.LowerADF, RadioPanelPZ69KnobsEmulator.LowerDME, RadioPanelPZ69KnobsEmulator.LowerXPDR };
         private double _upperActive = -1;
         private double _upperStandby = -1;
         private double _lowerActive = -1;

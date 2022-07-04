@@ -45,11 +45,11 @@
         private double _uhfSmallFrequencyStandby;
         private double _uhfSavedCockpitBigFrequency;
         private double _uhfSavedCockpitSmallFrequency;
-        private readonly object _lockUhfDialsObject1 = new object();
-        private readonly object _lockUhfDialsObject2 = new object();
-        private readonly object _lockUhfDialsObject3 = new object();
-        private readonly object _lockUhfDialsObject4 = new object();
-        private readonly object _lockUhfDialsObject5 = new object();
+        private readonly object _lockUhfDialsObject1 = new();
+        private readonly object _lockUhfDialsObject2 = new();
+        private readonly object _lockUhfDialsObject3 = new();
+        private readonly object _lockUhfDialsObject4 = new();
+        private readonly object _lockUhfDialsObject5 = new();
         private DCSBIOSOutput _uhfDcsbiosOutputFreqDial1;
         private DCSBIOSOutput _uhfDcsbiosOutputFreqDial2;
         private DCSBIOSOutput _uhfDcsbiosOutputFreqDial3;
@@ -101,9 +101,9 @@
         private int _tacanSavedCockpitBigFrequency = 6;
         private int _tacanSavedCockpitSmallFrequency = 5;
         private int _tacanSavedCockpitXY;
-        private readonly object _lockTacanDialsObject1 = new object();
-        private readonly object _lockTacanDialsObject2 = new object();
-        private readonly object _lockTacanDialsObject3 = new object();
+        private readonly object _lockTacanDialsObject1 = new();
+        private readonly object _lockTacanDialsObject2 = new();
+        private readonly object _lockTacanDialsObject3 = new();
         private DCSBIOSOutput _tacanDcsbiosOutputFreqChannel;
         private volatile uint _tacanCockpitFreq1DialPos = 1;
         private volatile uint _tacanCockpitFreq2DialPos = 1;
@@ -117,7 +117,7 @@
         private long _tacanDial2WaitingForFeedback;
         private long _tacanDial3WaitingForFeedback;
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
 
         private long _doUpdatePanelLCD;
 

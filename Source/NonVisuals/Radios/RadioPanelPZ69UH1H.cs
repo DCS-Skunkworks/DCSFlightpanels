@@ -35,202 +35,115 @@ namespace NonVisuals.Radios
         /*UH-1H INTERCOMM*/
         // PVT INT 1 2 3 4  (6 positions 0-5)
         private volatile int _interCommSkipper;
-
-        private readonly object _lockIntercommDialObject = new object();
-        
+        private readonly object _lockIntercommDialObject = new();
         private DCSBIOSOutput _interCommDcsbiosOutputCockpitPos;
-
         private volatile uint _interCommCockpitDial1Pos;
-
         private const string INTERCOMM_DIAL_COMMAND_INC = "INT_MODE INC\n";
-
         private const string INTERCOMM_DIAL_COMMAND_DEC = "INT_MODE DEC\n";
-        
         private long _interCommDialWaitingForFeedback;
-
         private const string INTERCOMM_VOLUME_KNOB_COMMAND_INC = "INT_VOL +2500\n";
-
         private const string INTERCOMM_VOLUME_KNOB_COMMAND_DEC = "INT_VOL -2500\n";
 
         /*UH-1H AN/ARC-134 VHF Comm Radio Set Left side of lower control panel */
         // Large dial 116-149 [step of 1]
         // Small dial 0.00-0.95 [step 0 2 5 7]
-        private readonly object _lockVhfCommDialsObject1 = new object();
-
-        private readonly object _lockVhfCommDialsObject2 = new object();
-
+        private readonly object _lockVhfCommDialsObject1 = new();
+        private readonly object _lockVhfCommDialsObject2 = new();
         private volatile uint _vhfCommBigFrequencyStandby = 116;
-
         private volatile uint _vhfCommSmallFrequencyStandby;
-
         private volatile uint _vhfCommSavedCockpitSmallFrequency;
-
         private volatile uint _vhfCommSavedCockpitBigFrequency = 116;
-
         private double _vhfCommCockpitFrequency = 116.00;
-
         private long _vhfCommThreadNowSynching;
-
         private volatile uint _vhfCommCockpitDial1Frequency = 116;
-
         private volatile uint _vhfCommCockpitDial2Frequency = 95;
-
         private long _vhfCommDial1FreqWaitingForFeedback;
-
         private long _vhfCommDial2FreqWaitingForFeedback;
-
         private DCSBIOSOutput _vhfCommDcsbiosOutputCockpitFrequency;
-
         private const string VHF_COMM_FREQ1_DIAL_COMMAND = "VHFCOMM_MHZ ";
-
         private const string VHF_COMM_FREQ2_DIAL_COMMAND = "VHFCOMM_KHZ ";
-
         private Thread _vhfCommSyncThread;
 
         /*AN/ARC-51BX UHF radio set*/
         // Large dial 200-399 [step of 1]
         // Small dial 0.00-0.95 [step 0.05]
         private bool _uhfIncreasePresetChannel;
-
         private uint _uhfCockpitPresetChannel = 1;
-
         private const string UHF_PRESET_DIAL_COMMAND_INC = "UHF_PRESET INC\n";
-
         private const string UHF_PRESET_DIAL_COMMAND_DEC = "UHF_PRESET DEC\n";
-
         private DCSBIOSOutput _uhfDcsbiosOutputCockpitPresetChannel;
-
-        private readonly object _lockUhfPresetChannelObject = new object();
+        private readonly object _lockUhfPresetChannelObject = new();
 
         // private Thread _uhfPresetChannelSyncThread;
         // private long _uhfPresetChannelThreadNowSynching = 0;
         // private long _uhfPresetChannelWaitingForFeedback = 0;
-        private readonly object _lockUhfDialsObject1 = new object();
-
-        private readonly object _lockUhfDialsObject2 = new object();
-
-        private readonly object _lockUhfDialsObject3 = new object();
-
+        private readonly object _lockUhfDialsObject1 = new();
+        private readonly object _lockUhfDialsObject2 = new();
+        private readonly object _lockUhfDialsObject3 = new();
         private uint _uhfBigFrequencyStandby = 200;
-
         private uint _uhfSmallFrequencyStandby;
-
         private volatile uint _uhfSavedCockpitBigFrequency = 200;
-
         private volatile uint _uhfSavedCockpitSmallFrequency;
-
         private DCSBIOSOutput _uhfDcsbiosOutputCockpitFrequency;
-
         private double _uhfCockpitFrequency = 225.00;
-
         private volatile uint _uhfCockpitDial1Frequency = 22;
-
         private volatile uint _uhfCockpitDial2Frequency = 5;
-
         private volatile uint _uhfCockpitDial3Frequency;
-
         private const string UHF_FREQ1_DIAL_COMMAND = "UHF_10MHZ "; // 20-39
-
         private const string UHF_FREQ2_DIAL_COMMAND = "UHF_1MHZ "; // 0 1 2 3 4 5 6 7 8 9
-
         private const string UHF_FREQ3_DIAL_COMMAND = "UHF_50KHZ "; // 00 - 95
-
         private Thread _uhfSyncThread;
-
         private long _uhfThreadNowSynching;
-
         private long _uhfDial1WaitingForFeedback;
-
         private long _uhfDial2WaitingForFeedback;
-
         private long _uhfDial3WaitingForFeedback;
 
         /*UH-1H AN/ARN-82 VHF Navigation Set*/
         // Large dial 107-126 [step of 1]
         // Small dial 0.00-0.95 [step of 0.05]
-        private readonly object _lockVhfNavDialsObject1 = new object();
-
-        private readonly object _lockVhfNavDialsObject2 = new object();
-
+        private readonly object _lockVhfNavDialsObject1 = new();
+        private readonly object _lockVhfNavDialsObject2 = new();
         private volatile uint _vhfNavBigFrequencyStandby = 107;
-
         private volatile uint _vhfNavSmallFrequencyStandby;
-
         private volatile uint _vhfNavSavedCockpitBigFrequency = 107;
-
         private volatile uint _vhfNavSavedCockpitSmallFrequency;
-
         private DCSBIOSOutput _vhfNavDcsbiosOutputCockpitFrequency;
-
         private double _vhfNavCockpitFrequency = 107.00;
-
         private volatile uint _vhfNavCockpitDial1Frequency = 107;
-
         private volatile uint _vhfNavCockpitDial2Frequency;
-
         private const string VHF_NAV_FREQ1_DIAL_COMMAND = "VHFNAV_MHZ ";
-
         private const string VHF_NAV_FREQ2_DIAL_COMMAND = "VHFNAV_KHZ ";
-
         private Thread _vhfNavSyncThread;
-
         private long _vhfNavThreadNowSynching;
-
         private long _vhfNavDial1WaitingForFeedback;
-
         private long _vhfNavDial2WaitingForFeedback;
 
         /*UH-1H ARC-131 VHF FM*/
         private uint _vhfFmBigFrequencyStandby = 30;
-
         private uint _vhfFmSmallFrequencyStandby;
-
         private uint _vhfFmSavedCockpitBigFrequency = 30;
-
         private uint _vhfFmSavedCockpitSmallFrequency;
-
-        private readonly object _lockVhfFmDialsObject1 = new object();
-
-        private readonly object _lockVhfFmDialsObject2 = new object();
-
-        private readonly object _lockVhfFmDialsObject3 = new object();
-
-        private readonly object _lockVhfFmDialsObject4 = new object();
-
+        private readonly object _lockVhfFmDialsObject1 = new();
+        private readonly object _lockVhfFmDialsObject2 = new();
+        private readonly object _lockVhfFmDialsObject3 = new();
+        private readonly object _lockVhfFmDialsObject4 = new();
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial1;
-
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial2;
-
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial3;
-
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial4;
-
         private volatile uint _vhfFmCockpitFreq1DialPos = 1;
-
         private volatile uint _vhfFmCockpitFreq2DialPos = 1;
-
         private volatile uint _vhfFmCockpitFreq3DialPos = 1;
-
         private volatile uint _vhfFmCockpitFreq4DialPos = 1;
-
         private const string VHF_FM_FREQ_1DIAL_COMMAND = "VHFFM_FREQ1 "; // 3 4 5 6
-
         private const string VHF_FM_FREQ_2DIAL_COMMAND = "VHFFM_FREQ2 "; // 0 1 2 3 4 5 6 7 8 9
-
         private const string VHF_FM_FREQ_3DIAL_COMMAND = "VHFFM_FREQ3 "; // 0 1 2 3 4 5 6 7 8 9
-
         private const string VHF_FM_FREQ_4DIAL_COMMAND = "VHFFM_FREQ4 "; // 0 5
-
         private Thread _vhfFmSyncThread;
-
         private long _vhfFmThreadNowSynching;
-
         private long _vhfFmDial1WaitingForFeedback;
-
         private long _vhfFmDial2WaitingForFeedback;
-
         private long _vhfFmDial3WaitingForFeedback;
-
         private long _vhfFmDial4WaitingForFeedback;
 
         /*UH-1H ADF*/
@@ -244,49 +157,27 @@ namespace NonVisuals.Radios
             190-1800 kHz
          */
         private bool _increaseAdfBand;
-
-        private readonly object _lockAdfFrequencyBandObject = new object();
-
-        private readonly object _lockAdfCockpitFrequencyObject = new object();
-
-        private readonly object _lockAdfSignalStrengthObject = new object();
-
+        private readonly object _lockAdfFrequencyBandObject = new();
+        private readonly object _lockAdfCockpitFrequencyObject = new();
+        private readonly object _lockAdfSignalStrengthObject = new();
         private DCSBIOSOutput _adfDcsbiosOutputCockpitFrequencyBand;
-
         private DCSBIOSOutput _adfDcsbiosOutputCockpitFrequency;
-
         private DCSBIOSOutput _adfDcsbiosOutputSignalStrength;
-
         private volatile uint _adfCockpitFrequencyRaw = 0;
-
         private double _adfCockpitFrequency;
-
         private volatile uint _adfSignalStrengthRaw;
-
         private double _adfSignalStrength;
-
         private volatile uint _adfCockpitFrequencyBand;
-
         private volatile uint _adfStandbyFrequencyBand;
-
         private const string ADF_TUNE_KNOB_COMMAND_INC = "ADF_TUNE -1000\n";
-
         private const string ADF_TUNE_KNOB_COMMAND_DEC = "ADF_TUNE +1000\n";
-
         private const string ADF_GAIN_KNOB_COMMAND_INC = "ADF_GAIN -2000\n";
-
         private const string ADF_GAIN_KNOB_COMMAND_DEC = "ADF_GAIN +2000\n";
-
         private const string ADF_FREQUENCY_BAND_COMMAND = "ADF_BAND ";
-
         private Thread _adfSyncThread;
-
         private long _adfThreadNowSynching;
-
         private long _adfFrequencyBandWaitingForFeedback;
-
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
-
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69UH1H(HIDSkeleton hidSkeleton)

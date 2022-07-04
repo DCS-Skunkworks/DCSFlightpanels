@@ -33,25 +33,16 @@
         /*COM1 Ka-50 VHF 1 R-828*/
         // Large dial 1-10 [step of 1]
         // Small dial volume control
-        private readonly object _lockVhf1DialObject1 = new object();
-
+        private readonly object _lockVhf1DialObject1 = new();
         private DCSBIOSOutput _vhf1DcsbiosOutputPresetDial;
-
         private volatile uint _vhf1CockpitPresetDialPos = 1;
-
         private const string VHF1_PRESET_COMMAND_INC = "R828_CHANNEL INC\n";
-
         private const string VHF1_PRESET_COMMAND_DEC = "R828_CHANNEL DEC\n";
-
         private int _vhf1PresetDialSkipper;
-
         // private DCSBIOSOutput _vhf1DcsbiosOutputVolumeDial;
         private const string VHF1_VOLUME_KNOB_COMMAND_INC = "R828_VOLUME +2500\n";
-
         private const string VHF1_VOLUME_KNOB_COMMAND_DEC = "R828_VOLUME -2500\n";
-
         private const string VHF1_TUNER_BUTTON_PRESS = "R828_TUNER INC\n";
-
         private const string VHF1_TUNER_BUTTON_RELEASE = "R828_TUNER DEC\n";
 
         /*COM2 Ka-50 VHF 2 R-800L1*/
@@ -63,99 +54,59 @@
             //
         };*/
         private readonly ClickSpeedDetector _r800L1BigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-
         private readonly ClickSpeedDetector _r800L1BigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-
         const int CHANGE_VALUE = 10;
 
         // private long _changesWithinLastticksSinceLastChangeLargeDial;
         private readonly int[] _r800L1Freq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
-
         private uint _r800L1BigFrequencyStandby = 108;
-
         private uint _r800L1SmallFrequencyStandby;
-
         private volatile uint _r800L1SavedCockpitBigFrequency;
-
         private volatile uint _r800L1SavedCockpitSmallFrequency;
-
-        private readonly object _lockR800L1DialsObject1 = new object();
-
-        private readonly object _lockR800L1DialsObject2 = new object();
-
-        private readonly object _lockR800L1DialsObject3 = new object();
-
-        private readonly object _lockR800L1DialsObject4 = new object();
-
+        private readonly object _lockR800L1DialsObject1 = new();
+        private readonly object _lockR800L1DialsObject2 = new();
+        private readonly object _lockR800L1DialsObject3 = new();
+        private readonly object _lockR800L1DialsObject4 = new();
         private DCSBIOSOutput _r800L1DcsbiosOutputFreqDial1;
-
         private DCSBIOSOutput _r800L1DcsbiosOutputFreqDial2;
-
         private DCSBIOSOutput _r800L1DcsbiosOutputFreqDial3;
-
         private DCSBIOSOutput _r800L1DcsbiosOutputFreqDial4;
-
         private volatile uint _r800L1CockpitFreq1DialPos = 1;
-
         private volatile uint _r800L1CockpitFreq2DialPos = 1;
-
         private volatile uint _r800L1CockpitFreq3DialPos = 1;
-
         private volatile uint _r800L1CockpitFreq4DialPos = 1;
-
         private const string R800_L1_FREQ_1DIAL_COMMAND = "R800_FREQ1 ";
-
         private const string R800_L1_FREQ_2DIAL_COMMAND = "R800_FREQ2 ";
-
         private const string R800_L1_FREQ_3DIAL_COMMAND = "R800_FREQ3 ";
-
         private const string R800_L1_FREQ_4DIAL_COMMAND = "R800_FREQ4 ";
-
         private Thread _r800L1SyncThread;
-
         private long _r800L1ThreadNowSynching;
-
         private long _r800L1Dial1WaitingForFeedback;
-
         private long _r800L1Dial2WaitingForFeedback;
-
         private long _r800L1Dial3WaitingForFeedback;
-
         private long _r800L1Dial4WaitingForFeedback;
 
         /*ADF Ka-50 ARK-22 ADF*/
         // Large dial 0-9 [step of 1]
         // Small dial volume control
         // ACT/STBY Switch between ADF Modes Inner Auto Outer
-        private readonly object _lockADFDialObject1 = new object();
-
+        private readonly object _lockADFDialObject1 = new();
         private DCSBIOSOutput _adfDcsbiosOutputPresetDial;
-
         private volatile uint _adfCockpitPresetDialPos = 1;
-
         private const string ADF_PRESET_COMMAND_INC = "ADF_CHANNEL INC\n";
-
         private const string ADF_PRESET_COMMAND_DEC = "ADF_CHANNEL DEC\n";
-
         private int _adfPresetDialSkipper;
-
         private const string ADF_VOLUME_KNOB_COMMAND_INC = "ADF_VOLUME +2500\n";
-
         private const string ADF_VOLUME_KNOB_COMMAND_DEC = "ADF_VOLUME -2500\n";
 
         /*private const string ADFModeSwitchAntenna = "ADF_CMPS_ANT INC\n";
         private const string ADFModeSwitchCompass = "ADF_CMPS_ANT DEC\n";
         private string _adfModeSwitchLastSent = string.Empty;*/
-        private readonly object _lockADFModeDialObject = new object();
-
+        private readonly object _lockADFModeDialObject = new();
         private DCSBIOSOutput _adfModeDcsbiosOutput;
-
         private volatile uint _adfModeCockpitPos = 1;
-
         private const string ADF_MODE_INC = "ADF_NDB_MODE INC\n";
-
         private const string ADF_MODE_DEC = "ADF_NDB_MODE DEC\n";
-
         private bool _adfModeSwitchDirectionUp;
 
         /*NAV1 Ka-50 ABRIS NAV1 (Not radio but programmed as there are so few radio systems on the KA-50*/
@@ -163,71 +114,44 @@
         // Small ABRIS Right Dial
         // ACT/STBY Push Right ABRIS Dial IN/OUT
         private readonly ClickSpeedDetector _abrisLeftDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
-
         private readonly ClickSpeedDetector _abrisLeftDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
 
         private const string ABRIS_LEFT_DIAL_COMMAND_INC_MORE = "ABRIS_BRIGHTNESS +2500\n";
-
         private const string ABRIS_LEFT_DIAL_COMMAND_DEC_MORE = "ABRIS_BRIGHTNESS -2500\n";
-
         private const string ABRIS_LEFT_DIAL_COMMAND_INC = "ABRIS_BRIGHTNESS +1000\n";
-
         private const string ABRIS_LEFT_DIAL_COMMAND_DEC = "ABRIS_BRIGHTNESS -1000\n";
 
         private readonly ClickSpeedDetector _abrisRightDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
-
         private readonly ClickSpeedDetector _abrisRightDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
 
         private const string ABRIS_RIGHT_DIAL_COMMAND_INC_MORE = "ABRIS_CURSOR_ROT +2500\n";
-
         private const string ABRIS_RIGHT_DIAL_COMMAND_DEC_MORE = "ABRIS_CURSOR_ROT -2500\n";
-
         private const string ABRIS_RIGHT_DIAL_COMMAND_INC = "ABRIS_CURSOR_ROT +5000\n";
-
         private const string ABRIS_RIGHT_DIAL_COMMAND_DEC = "ABRIS_CURSOR_ROT -5000\n";
-
         private const string ABRIS_RIGHT_DIAL_PUSH_TOGGLE_ON_COMMAND = "ABRIS_CURSOR_BTN 1\n";
-
         private const string ABRIS_RIGHT_DIAL_PUSH_TOGGLE_OFF_COMMAND = "ABRIS_CURSOR_BTN 0\n";
 
         /*NAV2 Ka-50 Datalink Operation*/
         // Large dial Datalink Master Mode 0-3
         // Small dial Datalink Self ID
         // ACT/STBY Datalink ON/OFF
-        private readonly object _lockDatalinkMasterModeObject = new object();
-
+        private readonly object _lockDatalinkMasterModeObject = new();
         private DCSBIOSOutput _datalinkMasterModeDcsbiosOutput;
-
         private volatile uint _datalinkMasterModeCockpitPos = 1;
-
         private const string DATALINK_MASTER_MODE_COMMAND_INC = "DLNK_MASTER_MODE INC\n";
-
         private const string DATALINK_MASTER_MODE_COMMAND_DEC = "DLNK_MASTER_MODE DEC\n";
-
         private int _datalinkMasterModeDialSkipper;
-
-        private readonly object _lockDatalinkSelfIdObject = new object();
-
+        private readonly object _lockDatalinkSelfIdObject = new();
         private DCSBIOSOutput _datalinkSelfIdDcsbiosOutput;
-
         private volatile uint _datalinkSelfIdCockpitPos = 1;
-
         private const string DATALINK_SELF_ID_COMMAND_INC = "DLNK_SELF_ID INC\n";
-
         private const string DATALINK_SELF_ID_COMMAND_DEC = "DLNK_SELF_ID DEC\n";
-
         private int _datalinkSelfIdDialSkipper;
-
-        private readonly object _lockDatalinkPowerOnOffObject = new object();
-
+        private readonly object _lockDatalinkPowerOnOffObject = new();
         private DCSBIOSOutput _datalinkPowerOnOffDcsbiosOutput;
-
         private volatile uint _datalinkPowerOnOffCockpitPos = 1;
-
         private const string DATALINK_POWER_ON_OFF_COMMAND_TOGGLE = "PVI_POWER TOGGLE\n";
-
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
-
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Ka50(HIDSkeleton hidSkeleton)

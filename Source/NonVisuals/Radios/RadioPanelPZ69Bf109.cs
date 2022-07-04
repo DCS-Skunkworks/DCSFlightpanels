@@ -66,13 +66,13 @@
         // Small dial Fine tuning
         private readonly ClickSpeedDetector _fineTuneIncreaseChangeMonitor = new ClickSpeedDetector(20);
         private readonly ClickSpeedDetector _fineTuneDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly object _lockFug16ZyPresetDialObject1 = new object();
+        private readonly object _lockFug16ZyPresetDialObject1 = new();
         private DCSBIOSOutput _fug16ZyPresetDcsbiosOutputPresetDial;
         private volatile uint _fug16ZyPresetCockpitDialPos = 1;
         private const string FUG16_ZY_PRESET_COMMAND_INC = "RADIO_MODE INC\n";
         private const string FUG16_ZY_PRESET_COMMAND_DEC = "RADIO_MODE DEC\n";
         private int _fug16ZyPresetDialSkipper;
-        private readonly object _lockFug16ZyFineTuneDialObject1 = new object();
+        private readonly object _lockFug16ZyFineTuneDialObject1 = new();
         private DCSBIOSOutput _fug16ZyFineTuneDcsbiosOutputDial;
         private volatile uint _fug16ZyFineTuneCockpitDialPos = 1;
         private const string FUG16_ZY_FINE_TUNE_COMMAND_INC = "FUG16_TUNING +300\n";
@@ -84,7 +84,7 @@
         // Large dial 0-1 [step of 1]
         // Small dial Volume control
         // ACT/STBY IFF Test Button
-        private readonly object _lockFUG25AIFFDialObject1 = new object();
+        private readonly object _lockFUG25AIFFDialObject1 = new();
         private DCSBIOSOutput _fug25aIFFDcsbiosOutputDial;
         private volatile uint _fug25aIFFCockpitDialPos = 1;
         private const string FUG25AIFFCommandInc = "FUG25_MODE INC\n";
@@ -99,13 +99,13 @@
         // Large dial N/A
         // Small dial N/A
         // ACT/STBY Homing Switch
-        private readonly object _lockHomingDialObject1 = new object();
+        private readonly object _lockHomingDialObject1 = new();
         private DCSBIOSOutput _homingDcsbiosOutputPresetDial;
         private volatile uint _homingCockpitDialPos = 1;
         private const string HOMING_COMMAND_INC = "FT_ZF_SWITCH INC\n";
         private const string HOMING_COMMAND_DEC = "FT_ZF_SWITCH DEC\n";
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Bf109(HIDSkeleton hidSkeleton) : base(hidSkeleton)

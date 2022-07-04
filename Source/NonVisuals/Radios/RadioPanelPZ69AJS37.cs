@@ -65,9 +65,9 @@
         private volatile uint _tilsChannelCockpitValue;
         private volatile uint _tilsChannelLayerSelectorCockpitValue;
         private volatile uint _masterModeSelectorCockpitValue;
-        private readonly object _lockTilsChannelSelectorDialObject1 = new object();
-        private readonly object _lockTilsChannelLayerSelectorObject2 = new object();
-        private readonly object _lockMasterModeSelectorObject = new object();
+        private readonly object _lockTilsChannelSelectorDialObject1 = new();
+        private readonly object _lockTilsChannelLayerSelectorObject2 = new();
+        private readonly object _lockMasterModeSelectorObject = new();
         private DCSBIOSOutput _tilsChannelSelectorDcsbiosOutput;
         private DCSBIOSOutput _tilsChannelLayerSelectorDcsbiosOutput;
         private DCSBIOSOutput _masterModeSelectorDcsbiosOutput;
@@ -79,7 +79,7 @@
         private int _tilsChannelDialSkipper;
         private int _masterModeSelectorDialSkipper;
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69AJS37(HIDSkeleton hidSkeleton) : base(hidSkeleton)

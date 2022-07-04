@@ -45,42 +45,24 @@
         *  COM1 Small Fine Channel/OFF 0 => 4
         *  Freq. Selector Light Switch        
         */
-        private readonly object _lockHFRadioPresetDialObject1 = new object();
-
+        private readonly object _lockHFRadioPresetDialObject1 = new();
         private DCSBIOSOutput _hfRadioOffDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelAPresetDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelBPresetDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelCPresetDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelDPresetDcsbiosOutput;
-
         private volatile uint _hfRadioOffCockpitButton = 1;
-
         private volatile uint _hfRadioChannelACockpitButton;
-
         private volatile uint _hfRadioChannelBCockpitButton;
-
         private volatile uint _hfRadioChannelCCockpitButton;
-
         private volatile uint _hfRadioChannelDCockpitButton;
-
         private int _hfRadioChannelPresetDialSkipper;
-
         private const string HF_RADIO_LIGHT_SWITCH_COMMAND = "RCTRL_DIM TOGGLE\n";
-
-        private readonly object _lockHFRadioModeDialObject1 = new object();
-
+        private readonly object _lockHFRadioModeDialObject1 = new();
         private volatile uint _hfRadioModeCockpitDialPosition = 1;
-
         private DCSBIOSOutput _hfRadioModeDialPresetDcsbiosOutput;
-
         private int _hfRadioModePresetDialSkipper;
-
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
-
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69P47D(HIDSkeleton hidSkeleton)

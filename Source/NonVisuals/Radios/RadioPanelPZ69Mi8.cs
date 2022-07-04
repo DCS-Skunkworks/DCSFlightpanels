@@ -40,58 +40,34 @@
          * Small dial 0 - 95
          */
         private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-
         private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-
         private const int CHANGE_VALUE = 10;
 
         // private int[] _r863ManualFreq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
         private uint _r863ManualBigFrequencyStandby = 108;
-
         private uint _r863ManualSmallFrequencyStandby;
 
         private volatile uint _r863ManualSavedCockpitBigFrequency;
-
         private volatile uint _r863ManualSavedCockpitSmallFrequency;
-
-        private readonly object _lockR863ManualDialsObject1 = new object();
-
-        private readonly object _lockR863ManualDialsObject2 = new object();
-
-        private readonly object _lockR863ManualDialsObject3 = new object();
-
-        private readonly object _lockR863ManualDialsObject4 = new object();
-
+        private readonly object _lockR863ManualDialsObject1 = new();
+        private readonly object _lockR863ManualDialsObject2 = new();
+        private readonly object _lockR863ManualDialsObject3 = new();
+        private readonly object _lockR863ManualDialsObject4 = new();
         private volatile uint _r863ManualCockpitFreq1DialPos = 1;
-
         private volatile uint _r863ManualCockpitFreq2DialPos = 1;
-
         private volatile uint _r863ManualCockpitFreq3DialPos = 1;
-
         private volatile uint _r863ManualCockpitFreq4DialPos;
-
         private double _r863ManualCockpitFrequency = 100.000;
-
         private DCSBIOSOutput _r863ManualDcsbiosOutputCockpitFrequency;
-
         private const string R863_MANUAL_FREQ_1DIAL_COMMAND = "R863_FREQ1 ";
-
         private const string R863_MANUAL_FREQ_2DIAL_COMMAND = "R863_FREQ2 ";
-
         private const string R863_MANUAL_FREQ_3DIAL_COMMAND = "R863_FREQ3 ";
-
         private const string R863_MANUAL_FREQ_4DIAL_COMMAND = "R863_FREQ4 ";
-
         private Thread _r863ManualSyncThread;
-
         private long _r863ManualThreadNowSynching;
-
         private long _r863ManualDial1WaitingForFeedback;
-
         private long _r863ManualDial2WaitingForFeedback;
-
         private long _r863ManualDial3WaitingForFeedback;
-
         private long _r863ManualDial4WaitingForFeedback;
 
         /*
@@ -100,28 +76,19 @@
          * Small dial volume control
          * ACT/STBY Unit Switch, DIAL/MEMORY
          */
-        private readonly object _lockR863Preset1DialObject1 = new object();
-
+        private readonly object _lockR863Preset1DialObject1 = new();
         private DCSBIOSOutput _r863Preset1DcsbiosOutputPresetDial;
-
         private volatile uint _r863PresetCockpitDialPos = 1;
-
         private const string R863_PRESET_COMMAND_INC = "R863_CNL_SEL INC\n";
-
         private const string R863_PRESET_COMMAND_DEC = "R863_CNL_SEL DEC\n";
 
         // private int _r863PresetDialSkipper;
 
         private const string R863_PRESET_VOLUME_KNOB_COMMAND_INC = "R863_VOL +2500\n";
-
         private const string R863_PRESET_VOLUME_KNOB_COMMAND_DEC = "R863_VOL -2500\n";
-
-        private readonly object _lockR863UnitSwitchObject = new object();
-
+        private readonly object _lockR863UnitSwitchObject = new();
         private DCSBIOSOutput _r863UnitSwitchDcsbiosOutput;
-
         private volatile uint _r863UnitSwitchCockpitPos = 1;
-
         private const string R863_UNIT_SWITCH_COMMAND_TOGGLE = "R863_UNIT_SWITCH TOGGLE\n";
 
         /*
@@ -130,55 +97,30 @@
          * Small dial 0 - 99
          */
         private readonly ClickSpeedDetector _yadro1ABigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-
         private readonly ClickSpeedDetector _yadro1ABigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-
         private uint _yadro1ABigFrequencyStandby = 100;
-
         private uint _yadro1ASmallFrequencyStandby;
-
         private volatile uint _yadro1ASavedCockpitBigFrequency;
-
         private volatile uint _yadro1ASavedCockpitSmallFrequency;
-
-        private readonly object _lockYadro1ADialsObject1 = new object();
-
-        private readonly object _lockYadro1ADialsObject2 = new object();
-
-        private readonly object _lockYadro1ADialsObject3 = new object();
-
-        private readonly object _lockYadro1ADialsObject4 = new object();
-
+        private readonly object _lockYadro1ADialsObject1 = new();
+        private readonly object _lockYadro1ADialsObject2 = new();
+        private readonly object _lockYadro1ADialsObject3 = new();
+        private readonly object _lockYadro1ADialsObject4 = new();
         private volatile uint _yadro1ACockpitFreq1DialPos = 1;
-
         private volatile uint _yadro1ACockpitFreq2DialPos = 1;
-
         private volatile uint _yadro1ACockpitFreq3DialPos = 1;
-
         private volatile uint _yadro1ACockpitFreq4DialPos = 1;
-
         private double _yadro1ACockpitFrequency = 100;
-
         private DCSBIOSOutput _yadro1ADcsbiosOutputCockpitFrequency;
-
         private const string YADRO1_A_FREQ_1DIAL_COMMAND = "YADRO1A_FREQ1 ";
-
         private const string YADRO1_A_FREQ_2DIAL_COMMAND = "YADRO1A_FREQ2 ";
-
         private const string YADRO1_A_FREQ_3DIAL_COMMAND = "YADRO1A_FREQ3 ";
-
         private const string YADRO1_A_FREQ_4DIAL_COMMAND = "YADRO1A_FREQ4 ";
-
         private Thread _yadro1ASyncThread;
-
         private long _yadro1AThreadNowSynching;
-
         private long _yadro1ADial1WaitingForFeedback;
-
         private long _yadro1ADial2WaitingForFeedback;
-
         private long _yadro1ADial3WaitingForFeedback;
-
         private long _yadro1ADial4WaitingForFeedback;
 
         /*
@@ -187,24 +129,16 @@
          * Small dial volume control
          * ACT/STBY AGC, automatic gain control
          */
-        private readonly object _lockR828Preset1DialObject1 = new object();
-
+        private readonly object _lockR828Preset1DialObject1 = new();
         private DCSBIOSOutput _r828Preset1DcsbiosOutputDial;
-
         private volatile uint _r828PresetCockpitDialPos = 1;
-
         private const string R828_PRESET_COMMAND_INC = "R828_PRST_CHAN_SEL INC\n";
-
         private const string R828_PRESET_COMMAND_DEC = "R828_PRST_CHAN_SEL DEC\n";
-
         // private int _r828PresetDialSkipper;
 
         private const string R828_PRESET_VOLUME_KNOB_COMMAND_INC = "R828_VOL +2500\n";
-
         private const string R828_PRESET_VOLUME_KNOB_COMMAND_DEC = "R828_VOL -2500\n";
-
         private const string R828_GAIN_CONTROL_COMMAND_ON = "R828_TUNER INC\n";
-
         private const string R828_GAIN_CONTROL_COMMAND_OFF = "R828_TUNER DEC\n";
 
         /*
@@ -212,95 +146,62 @@
          * Large 100KHz 01 -> 12
          * Small 10Khz 00 -> 90 (10 steps)
          */
-        private readonly object _lockADFMainDialObject1 = new object();
-
-        private readonly object _lockADFMainDialObject2 = new object();
-
+        private readonly object _lockADFMainDialObject1 = new();
+        private readonly object _lockADFMainDialObject2 = new();
         private DCSBIOSOutput _adfMainDcsbiosOutputPresetDial1;
-
         private DCSBIOSOutput _adfMainDcsbiosOutputPresetDial2;
-
         private volatile uint _adfMainCockpitPresetDial1Pos = 1;
-
         private volatile uint _adfMainCockpitPresetDial2Pos = 1;
-
         private const string ADF_MAIN100_KHZ_PRESET_COMMAND_INC = "ARC_MAIN_100KHZ INC\n";
-
         private const string ADF_MAIN100_KHZ_PRESET_COMMAND_DEC = "ARC_MAIN_100KHZ DEC\n";
-
         private const string ADF_MAIN10_KHZ_PRESET_COMMAND_INC = "ARC_MAIN_10KHZ INC\n";
-
         private const string ADF_MAIN10_KHZ_PRESET_COMMAND_DEC = "ARC_MAIN_10KHZ DEC\n";
 
         /*
          *  ADF BACKUP
          */
-        private readonly object _lockADFBackupDialObject1 = new object();
-
-        private readonly object _lockADFBackupDialObject2 = new object();
-
+        private readonly object _lockADFBackupDialObject1 = new();
+        private readonly object _lockADFBackupDialObject2 = new();
         private DCSBIOSOutput _adfBackupDcsbiosOutputPresetDial1;
-
         private DCSBIOSOutput _adfBackupDcsbiosOutputPresetDial2;
-
         private volatile uint _adfBackupCockpitPresetDial1Pos = 1;
-
         private volatile uint _adfBackupCockpitPresetDial2Pos = 1;
-
         private const string ADF_BACKUP100_KHZ_PRESET_COMMAND_INC = "ARC_BCK_100KHZ INC\n";
-
         private const string ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC = "ARC_BCK_100KHZ DEC\n";
-
         private const string ADF_BACKUP10_KHZ_PRESET_COMMAND_INC = "ARC_BCK_10KHZ INC\n";
-
         private const string ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC = "ARC_BCK_10KHZ DEC\n";
 
         /*
          * 0 = Backup ADF
          * 1 = Main ADF
          */
-        private readonly object _lockADFBackupMainDialObject = new object();
-
+        private readonly object _lockADFBackupMainDialObject = new();
         private DCSBIOSOutput _adfBackupMainDcsbiosOutputPresetDial;
-
         private volatile uint _adfBackupMainCockpitDial1Pos;
-
         private const string ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND = "ARC9_MAIN_BACKUP TOGGLE\n";
 
         /*Mi-8 ARK-UD VHF Homing (DME)*/
         // Large Frequency 1-6
         // Small Mode
         // ACT/STBY   VHF/UHF
-        private readonly object _lockArkudPresetDialObject = new object();
-
+        private readonly object _lockArkudPresetDialObject = new();
         private DCSBIOSOutput _arkUdPresetDcsbiosOutputPresetDial;
-
         private volatile uint _arkUdPresetCockpitDial1Pos;
-
         private const string ARKUD_PRESET_COMMAND_INC = "ARCUD_CHL INC\n";
-
         private const string ARKUD_PRESET_COMMAND_DEC = "ARCUD_CHL DEC\n";
 
         // private int _arkUdPresetDialSkipper;
 
-        private readonly object _lockArkudModeDialObject = new object();
-
+        private readonly object _lockArkudModeDialObject = new();
         private DCSBIOSOutput _arkUdModeDcsbiosOutputDial;
-
         private volatile uint _arkUdModeCockpitDial1Pos;
-
         private const string ARKUD_MODE_COMMAND_INC = "ARCUD_MODE INC\n";
-
         private const string ARKUD_MODE_COMMAND_DEC = "ARCUD_MODE DEC\n";
 
         // private int _arkUdModeDialSkipper;
-
-        private readonly object _lockArkudVhfUhfModeDialObject = new object();
-
+        private readonly object _lockArkudVhfUhfModeDialObject = new();
         private DCSBIOSOutput _arkUdVhfUhfModeDcsbiosOutputDial;
-
         private volatile uint _arkUdVhfUhfModeCockpitDial1Pos;
-
         private const string ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE = "ARCUD_WAVE TOGGLE\n";
 
         /* XPDR
@@ -309,34 +210,22 @@
            Small dial volume control
            ACT/STBY Toggle Radio/ICS Switch
         */
-        private readonly object _lockSpu7DialObject1 = new object();
-
+        private readonly object _lockSpu7DialObject1 = new();
         private DCSBIOSOutput _spu7DcsbiosOutputPresetDial;
-
         private volatile uint _spu7CockpitDialPos;
 
         // private int _spu7DialSkipper;
 
         private const string SPU7_COMMAND_INC = "RADIO_SEL_R INC\n";
-
         private const string SPU7_COMMAND_DEC = "RADIO_SEL_R DEC\n";
-
         private const string SPU7_VOLUME_KNOB_COMMAND_INC = "LST_VOL_KNOB_L +2500\n";
-
         private const string SPU7_VOLUME_KNOB_COMMAND_DEC = "LST_VOL_KNOB_L -2500\n";
-
-        private readonly object _lockSpu7ICSSwitchObject = new object();
-
+        private readonly object _lockSpu7ICSSwitchObject = new();
         private DCSBIOSOutput _spu7ICSSwitchDcsbiosOutput;
-
         private volatile uint _spu7ICSSwitchCockpitDialPos;
-
         private const string SPU7_ICS_SWITCH_TOGGLE_COMMAND = "SPU7_L_ICS TOGGLE\n";
-
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
-
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
-
         // private const int SKIP_CONSTANT = 0;
 
         public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton) : base(hidSkeleton)

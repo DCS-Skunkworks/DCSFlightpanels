@@ -31,92 +31,55 @@ namespace NonVisuals.Radios
         }
 
         private CurrentFA18CRadioMode _currentUpperRadioMode = CurrentFA18CRadioMode.COMM1;
-
         private CurrentFA18CRadioMode _currentLowerRadioMode = CurrentFA18CRadioMode.COMM2;
-
         private bool _upperButtonPressed;
-
         private bool _lowerButtonPressed;
-
         private bool _upperButtonPressedAndDialRotated;
-
         private bool _lowerButtonPressedAndDialRotated;
 
         /*FA-18C COMM1 radio*/
         private const string COMM1_CHANNEL_INC = "UFC_COMM1_CHANNEL_SELECT INC\n";
-
         private const string COMM1_CHANNEL_DEC = "UFC_COMM1_CHANNEL_SELECT DEC\n";
-
         private const string COMM1_VOL_INC = "UFC_COMM1_VOL +4000\n";
-
         private const string COMM1_VOL_DEC = "UFC_COMM1_VOL -4000\n";
-
         private const string COMM1_PULL_PRESS = "UFC_COMM1_PULL INC\n";
-
         private const string COMM1_PULL_RELEASE = "UFC_COMM1_PULL DEC\n";
-        
-        private readonly object _lockCOMM1DialsObject = new object();
-
+        private readonly object _lockCOMM1DialsObject = new();
         private DCSBIOSOutput _comm1DcsbiosOutputFreq; // comm1 frequency from DCSbios
-
         private DCSBIOSOutput _comm1DcsbiosOutputChannel; // comm1 channel 1 to 24 from CDSbios
-
         private volatile uint _comm1CockpitFreq = 12400;
-
         private volatile uint _comm1CockpitChannel = 1; // channel number 1 to 24
-        
         private long _comm1DialWaitingForFeedback;
-        
+       
         /*FA-18C COMM2 radio*/
         private const string COMM2_CHANNEL_INC = "UFC_COMM2_CHANNEL_SELECT INC\n";
-
         private const string COMM2_CHANNEL_DEC = "UFC_COMM2_CHANNEL_SELECT DEC\n";
-
         private const string COMM2_VOL_INC = "UFC_COMM2_VOL +4000\n";
-
         private const string COMM2_VOL_DEC = "UFC_COMM2_VOL -4000\n";
-
         private const string COMM2_PULL_PRESS = "UFC_COMM2_PULL INC\n";
-
         private const string COMM2_PULL_RELEASE = "UFC_COMM2_PULL DEC\n";
-
         private double _comm2BigFrequencyStandby = 255;
-        
-        private readonly object _lockComm2DialObject = new object();
-
+        private readonly object _lockComm2DialObject = new();
         private DCSBIOSOutput _comm2DcsbiosOutputFreq; // comm2 frequency from DCSbios
-
         private DCSBIOSOutput _comm2DcsbiosOutputChannel; // comm2 channel 1 to 24
 
         // private DCSBIOSOutput _comm2DcsbiosOutputPull;  // comm2 pull button
         // private DCSBIOSOutput _comm2DcsbiosOutputVol;   // comm2 volume
         private volatile uint _comm2CockpitFreq = 12400;
-
         private volatile uint _comm2CockpitChannel = 1; // channel number 1 to 24
-        
         private long _comm2DialWaitingForFeedback;
 
         /*FA-18C ILS*/
         private uint _ilsChannelStandby = 10;
-
         private uint _ilsSavedCockpitChannel = 1;
-
-        private readonly object _lockIlsDialsObject = new object();
-
+        private readonly object _lockIlsDialsObject = new();
         private DCSBIOSOutput _ilsDcsbiosOutputChannel;
-
         private volatile uint _ilsCockpitChannel = 1;
-
         private const string ILS_CHANNEL_COMMAND = "COM_ILS_CHANNEL_SW ";
-
         private Thread _ilsSyncThread;
-
         private long _ilsThreadNowSynching;
-
         private long _ilsDialWaitingForFeedback;
-
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
-
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69FA18C(HIDSkeleton hidSkeleton)
