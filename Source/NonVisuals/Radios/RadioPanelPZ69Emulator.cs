@@ -31,7 +31,6 @@ namespace NonVisuals.Radios
         private HashSet<KeyBindingPZ69> _keyBindings = new();
         private List<OSCommandBindingPZ69Emulator> _operatingSystemCommandBindings = new();
 
-
         private double _upperActive = -1;
         private double _upperStandby = -1;
         private double _lowerActive = -1;
@@ -78,13 +77,12 @@ namespace NonVisuals.Radios
 
             BindingHash = genericPanelBinding.BindingHash;
 
-            var settings = genericPanelBinding.Settings;
+            List<string> settings = genericPanelBinding.Settings;
 
-            foreach (var setting in settings)
+            foreach (string setting in settings)
             {
                 if (!setting.StartsWith("#") && setting.Length > 2)
                 {
-
                     if (setting.StartsWith("RadioPanelKey{"))
                     {
                         var keyBinding = new KeyBindingPZ69();
@@ -123,7 +121,7 @@ namespace NonVisuals.Radios
                 return null;
             }
 
-            var result = new List<string>();
+            List<string> result = new();
 
             foreach (var keyBinding in _keyBindings)
             {
@@ -143,7 +141,7 @@ namespace NonVisuals.Radios
 
             foreach (var displayValue in _displayValues)
             {
-                var tmp = displayValue.ExportSettings();
+                string tmp = displayValue.ExportSettings();
                 if (!string.IsNullOrEmpty(tmp))
                 {
                     result.Add(tmp);
@@ -152,7 +150,7 @@ namespace NonVisuals.Radios
 
             foreach (var bipLink in _bipLinks)
             {
-                var tmp = bipLink.ExportSettings();
+                string tmp = bipLink.ExportSettings();
                 if (!string.IsNullOrEmpty(tmp))
                 {
                     result.Add(tmp);
@@ -202,12 +200,11 @@ namespace NonVisuals.Radios
 
         public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet => _displayValues;
 
-
         private void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (ForwardPanelEvent)
             {
-                foreach (var radioPanelKeyObject in hashSet)
+                foreach (object radioPanelKeyObject in hashSet)
                 {
                     // Looks which switches has been switched and sees whether any key emulation has been tied to them.
                     var radioPanelKey = (RadioPanelPZ69KnobEmulator)radioPanelKeyObject;
@@ -227,8 +224,8 @@ namespace NonVisuals.Radios
                         }
                     }
 
-                    var keyBindingFound = false;
-                    foreach (var keyBinding in _keyBindings)
+                    bool keyBindingFound = false;
+                    foreach (KeyBindingPZ69 keyBinding in _keyBindings)
                     {
                         if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
                         {
@@ -248,7 +245,6 @@ namespace NonVisuals.Radios
                                     radioPanelKey.IsOn, 
                                     keyBinding.OSKeyPress.KeyPressSequence);
                             }
-
                             break;
                         }
                     }
@@ -266,7 +262,7 @@ namespace NonVisuals.Radios
                             null);
                     }
 
-                    foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
+                    foreach (OSCommandBindingPZ69Emulator operatingSystemCommand in _operatingSystemCommandBindings)
                     {
                         if (operatingSystemCommand.OSCommandObject != null && operatingSystemCommand.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && operatingSystemCommand.WhenTurnedOn == radioPanelKey.IsOn)
                         {
@@ -275,7 +271,7 @@ namespace NonVisuals.Radios
                         }
                     }
 
-                    foreach (var bipLinkPZ69 in _bipLinks)
+                    foreach (BIPLinkPZ69 bipLinkPZ69 in _bipLinks)
                     {
                         if (bipLinkPZ69.BIPLights.Count > 0 && bipLinkPZ69.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob && bipLinkPZ69.WhenTurnedOn == radioPanelKey.IsOn)
                         {
@@ -283,11 +279,10 @@ namespace NonVisuals.Radios
                             break;
                         }
                     }
-
                 }
             }
 
-            foreach (var radioPanelKeyObject in hashSet)
+            foreach (object radioPanelKeyObject in hashSet)
             {
                 // Looks which switches has been switched and sees whether any key emulation has been tied to them.
                 var radioPanelKey = (RadioPanelPZ69KnobEmulator)radioPanelKeyObject;
@@ -305,7 +300,7 @@ namespace NonVisuals.Radios
                         _lowerStandby = -1;
                     }
 
-                    foreach (var displayValue in _displayValues)
+                    foreach (RadioPanelPZ69DisplayValue displayValue in _displayValues)
                     {
                         if (displayValue.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob)
                         {
@@ -329,7 +324,6 @@ namespace NonVisuals.Radios
                             }
                         }
                     }
-
                     ShowFrequenciesOnPanel();
                 }
             }
@@ -378,18 +372,16 @@ namespace NonVisuals.Radios
             SendLCDData(bytes);
         }
 
-
         public string GetKeyPressForLoggingPurposes(RadioPanelPZ69KnobEmulator radioPanelKey)
         {
-            var result = string.Empty;
-            foreach (var keyBinding in _keyBindings)
+            string result = string.Empty;
+            foreach (KeyBindingPZ69 keyBinding in _keyBindings)
             {
                 if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
                 {
                     result = keyBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
                 }
             }
-
             return result;
         }
 
@@ -401,15 +393,15 @@ namespace NonVisuals.Radios
                 return;
             }
 
-            var value = double.Parse(valueAsString, NumberFormatInfoFullDisplay);
+            double value = double.Parse(valueAsString, NumberFormatInfoFullDisplay);
             if (value < 0)
             {
                 ClearDisplayValue(radioPanelPZ69Knob, radioPanelDisplay);
                 return;
             }
 
-            var found = false;
-            foreach (var displayValue in _displayValues)
+            bool found = false;
+            foreach (RadioPanelPZ69DisplayValue displayValue in _displayValues)
             {
                 if (displayValue.RadioPanelPZ69Knob == radioPanelPZ69Knob && displayValue.RadioPanelDisplay == radioPanelDisplay)
                 {
@@ -420,7 +412,7 @@ namespace NonVisuals.Radios
 
             if (!found)
             {
-                var displayValue = new RadioPanelPZ69DisplayValue
+                RadioPanelPZ69DisplayValue displayValue = new() 
                 {
                     RadioPanelPZ69Knob = radioPanelPZ69Knob,
                     RadioPanelDisplay = radioPanelDisplay,
@@ -442,8 +434,8 @@ namespace NonVisuals.Radios
                 return;
             }
 
-            var found = false;
-            foreach (var keyBinding in _keyBindings)
+            bool found = false;
+            foreach (KeyBindingPZ69 keyBinding in _keyBindings)
             {
                 if (keyBinding.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
                 {
@@ -455,14 +447,13 @@ namespace NonVisuals.Radios
                     {
                         keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
                     }
-
                     found = true;
                 }
             }
 
             if (!found && !string.IsNullOrEmpty(keyPress))
             {
-                var keyBinding = new KeyBindingPZ69
+                KeyBindingPZ69 keyBinding = new() 
                 {
                     RadioPanelPZ69Key = pz69SwitchOnOff.Switch,
                     OSKeyPress = new KeyPress(keyPress, keyPressLength),
@@ -485,8 +476,8 @@ namespace NonVisuals.Radios
                 return;
             }
 
-            var found = false;
-            foreach (var keyBinding in _keyBindings)
+            bool found = false;
+            foreach (KeyBindingPZ69 keyBinding in _keyBindings)
             {
                 if (keyBinding.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
                 {
@@ -506,7 +497,7 @@ namespace NonVisuals.Radios
 
             if (!found && keySequence.Count > 0)
             {
-                var keyBinding = new KeyBindingPZ69
+                KeyBindingPZ69 keyBinding = new() 
                 {
                     RadioPanelPZ69Key = pz69SwitchOnOff.Switch,
                     OSKeyPress = new KeyPress(description, keySequence),
@@ -536,9 +527,8 @@ namespace NonVisuals.Radios
                 return;
             }
 
-            var found = false;
-
-            foreach (var tmpBipLink in _bipLinks)
+            bool found = false;
+            foreach (BIPLinkPZ69 tmpBipLink in _bipLinks)
             {
                 if (tmpBipLink.RadioPanelPZ69Knob == pz69SwitchOnOff.Switch && tmpBipLink.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
                 {
@@ -564,8 +554,7 @@ namespace NonVisuals.Radios
         {
             var pz69SwitchOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
 
-            var found = false;
-
+            bool found = false;
             foreach (var operatingSystemCommandBinding in _operatingSystemCommandBindings)
             {
                 if (operatingSystemCommandBinding.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && operatingSystemCommandBinding.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
@@ -578,7 +567,7 @@ namespace NonVisuals.Radios
 
             if (!found)
             {
-                var operatingSystemCommandBindingPZ69 = new OSCommandBindingPZ69Emulator
+                OSCommandBindingPZ69Emulator operatingSystemCommandBindingPZ69 = new() 
                 {
                     RadioPanelPZ69Key = pz69SwitchOnOff.Switch,
                     OSCommandObject = operatingSystemCommand,
@@ -592,7 +581,7 @@ namespace NonVisuals.Radios
 
         public void ClearAllBindings(PZ69SwitchOnOff radioPanelPZ69KnobOnOff)
         {
-            foreach (var keyBinding in _keyBindings)
+            foreach (KeyBindingPZ69 keyBinding in _keyBindings)
             {
                 if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69KnobOnOff.Switch && keyBinding.WhenTurnedOn == radioPanelPZ69KnobOnOff.ButtonState)
                 {
@@ -613,16 +602,15 @@ namespace NonVisuals.Radios
         {
             var controlListPZ69 = (ControlList) controlList;
             var pz69SwitchOnOff = (PZ69SwitchOnOff) panelSwitchOnOff;
-            var found = false;
+            bool found = false;
             if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.KEYS)
             {
-                foreach (var keyBindingPZ55 in _keyBindings)
+                foreach (KeyBindingPZ69 keyBindingPZ55 in _keyBindings)
                 {
                     if (keyBindingPZ55.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && keyBindingPZ55.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
                     {
                         keyBindingPZ55.OSKeyPress = null;
                     }
-
                     found = true;
                     break;
                 }
@@ -630,13 +618,12 @@ namespace NonVisuals.Radios
 
             if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.BIPS)
             {
-                foreach (var bipLink in _bipLinks)
+                foreach (BIPLinkPZ69 bipLink in _bipLinks)
                 {
                     if (bipLink.RadioPanelPZ69Knob == pz69SwitchOnOff.Switch && bipLink.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
                     {
                         bipLink.BIPLights.Clear();
                     }
-
                     found = true;
                     break;
                 }
@@ -670,14 +657,13 @@ namespace NonVisuals.Radios
 
         public void Clear(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob)
         {
-            foreach (var keyBinding in _keyBindings)
+            foreach (KeyBindingPZ69 keyBinding in _keyBindings)
             {
                 if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69Knob)
                 {
                     keyBinding.OSKeyPress = null;
                 }
             }
-
             SetIsDirty();
         }
 
@@ -688,7 +674,7 @@ namespace NonVisuals.Radios
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new() 
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
@@ -701,8 +687,5 @@ namespace NonVisuals.Radios
         {
             SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
         }
-
     }
-    
-
 }
