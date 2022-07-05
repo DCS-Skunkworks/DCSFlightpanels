@@ -225,7 +225,6 @@
             {
                 return null;
             }
-
             return new List<string>();
         }
 
@@ -247,7 +246,6 @@
                         {
                             return true;
                         }
-
                         _frequencySensitivitySkipper = 0;
                         break;
                     }
@@ -260,12 +258,10 @@
                         {
                             return true;
                         }
-
                         _frequencySensitivitySkipper = 0;
                         break;
                     }
             }
-
             return false;
         }
         
@@ -273,7 +269,6 @@
         {
             e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
-        
 
         protected void Reset(ref long syncVariable)
         {
@@ -301,7 +296,6 @@
             {
                 return false; // good!
             }
-
             return true; // wait more
         }
 
