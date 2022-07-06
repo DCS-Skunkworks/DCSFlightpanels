@@ -249,12 +249,10 @@
             }
         }
 
-
         private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF86F knob)
         {
             try
             {
-
                 if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH))
                 {
                     // Don't do anything on the very first button press as the panel sends ALL
@@ -344,7 +342,6 @@
             }
         }
 
-
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (isFirstReport)
@@ -369,7 +366,6 @@
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.ARC27_PRESET);
                                     }
-
                                     break;
                                 }
 
@@ -379,7 +375,6 @@
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.ARC27_VOL);
                                     }
-
                                     break;
                                 }
 
@@ -389,7 +384,6 @@
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.ARN6);
                                     }
-
                                     break;
                                 }
 
@@ -399,7 +393,6 @@
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.ARN6_MODES);
                                     }
-
                                     break;
                                 }
 
@@ -409,7 +402,6 @@
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.ADF_APX6);
                                     }
-
                                     break;
                                 }
 
@@ -420,7 +412,6 @@
                                     {
                                         SetUpperRadioMode(CurrentF86FRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -430,7 +421,6 @@
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.ARC27_PRESET);
                                     }
-
                                     break;
                                 }
 
@@ -440,7 +430,6 @@
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.ARC27_VOL);
                                     }
-
                                     break;
                                 }
 
@@ -450,7 +439,6 @@
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.ARN6);
                                     }
-
                                     break;
                                 }
 
@@ -460,7 +448,6 @@
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.ARN6_MODES);
                                     }
-
                                     break;
                                 }
 
@@ -470,7 +457,6 @@
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.ADF_APX6);
                                     }
-
                                     break;
                                 }
 
@@ -481,7 +467,6 @@
                                     {
                                         SetLowerRadioMode(CurrentF86FRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -507,7 +492,6 @@
                                             SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH);
                                         }
                                     }
-
                                     break;
                                 }
 
@@ -520,7 +504,6 @@
                                             SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH);
                                         }
                                     }
-
                                     break;
                                 }
                         }
@@ -566,7 +549,6 @@
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -583,7 +565,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -593,7 +574,6 @@
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -615,7 +595,6 @@
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -632,7 +611,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -642,7 +620,6 @@
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -664,7 +641,6 @@
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -680,7 +656,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -690,7 +665,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -713,7 +687,6 @@
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -729,7 +702,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -739,7 +711,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -762,7 +733,6 @@
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -779,7 +749,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -789,7 +758,6 @@
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -811,7 +779,6 @@
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -828,7 +795,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -838,7 +804,6 @@
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -860,7 +825,6 @@
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -876,7 +840,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -886,7 +849,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -909,7 +871,6 @@
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -925,7 +886,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -935,7 +895,6 @@
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -967,13 +926,11 @@
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-
                         return;
                     }
 
                     if (!FirstReportHasBeenRead)
                     {
-
                         return;
                     }
 
@@ -1038,32 +995,13 @@
                                 uint mode = 0;
                                 lock (_lockARN6ModeObject)
                                 {
-                                    switch (_arn6ModeCockpitDialPos)
+                                    mode = _arn6ModeCockpitDialPos switch
                                     {
-                                        case 2:
-                                            {
-                                                mode = 1;
-                                                break;
-                                            }
-
-                                        case 3:
-                                            {
-                                                mode = 2;
-                                                break;
-                                            }
-
-                                        case 0:
-                                            {
-                                                mode = 3;
-                                                break;
-                                            }
-
-                                        case 1:
-                                            {
-                                                mode = 4;
-                                                break;
-                                            }
-                                    }
+                                        2 => 1,
+                                        3 => 2,
+                                        0 => 3,
+                                        1 => 4
+                                    };
                                 }
 
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -1152,32 +1090,13 @@
                                 uint mode = 0;
                                 lock (_lockARN6ModeObject)
                                 {
-                                    switch (_arn6ModeCockpitDialPos)
+                                    mode = _arn6ModeCockpitDialPos switch
                                     {
-                                        case 2:
-                                            {
-                                                mode = 1;
-                                                break;
-                                            }
-
-                                        case 3:
-                                            {
-                                                mode = 2;
-                                                break;
-                                            }
-
-                                        case 0:
-                                            {
-                                                mode = 3;
-                                                break;
-                                            }
-
-                                        case 1:
-                                            {
-                                                mode = 4;
-                                                break;
-                                            }
-                                    }
+                                        2 => 1,
+                                        3 => 2,
+                                        0 => 3,
+                                        1 => 4
+                                    };
                                 }
 
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -1218,7 +1137,6 @@
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
@@ -1290,9 +1208,6 @@
             try
             {
                 _currentLowerRadioMode = currentF86FRadioMode;
-
-                // If NOUSE then send next round of data to the panel in order to clear the LCD.
-                // _sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
             {
@@ -1300,28 +1215,22 @@
             }
         }
 
-
         private bool SkipARC27PresetDialChange()
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentF86FRadioMode.ARC27_PRESET || _currentLowerRadioMode == CurrentF86FRadioMode.ARC27_PRESET)
+                if (_arc27PresetDialSkipper > 2)
                 {
-                    if (_arc27PresetDialSkipper > 2)
-                    {
-                        _arc27PresetDialSkipper = 0;
-                        return false;
-                    }
-
-                    _arc27PresetDialSkipper++;
-                    return true;
+                    _arc27PresetDialSkipper = 0;
+                    return false;
                 }
+                _arc27PresetDialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1329,23 +1238,18 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentF86FRadioMode.ARC27_PRESET || _currentLowerRadioMode == CurrentF86FRadioMode.ARC27_PRESET)
+                if (_arc27ModeDialSkipper > 2)
                 {
-                    if (_arc27ModeDialSkipper > 2)
-                    {
-                        _arc27ModeDialSkipper = 0;
-                        return false;
-                    }
-
-                    _arc27ModeDialSkipper++;
-                    return true;
+                    _arc27ModeDialSkipper = 0;
+                    return false;
                 }
+                _arc27ModeDialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1353,23 +1257,18 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentF86FRadioMode.ARN6 || _currentLowerRadioMode == CurrentF86FRadioMode.ARN6)
+                if (_arn6BandDialSkipper > 2)
                 {
-                    if (_arn6BandDialSkipper > 2)
-                    {
-                        _arn6BandDialSkipper = 0;
-                        return false;
-                    }
-
-                    _arn6BandDialSkipper++;
-                    return true;
+                    _arn6BandDialSkipper = 0;
+                    return false;
                 }
+                _arn6BandDialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1377,23 +1276,18 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentF86FRadioMode.ARN6_MODES || _currentLowerRadioMode == CurrentF86FRadioMode.ARN6_MODES)
+                if (_arn6ModeDialSkipper > 2)
                 {
-                    if (_arn6ModeDialSkipper > 2)
-                    {
-                        _arn6ModeDialSkipper = 0;
-                        return false;
-                    }
-
-                    _arn6ModeDialSkipper++;
-                    return true;
+                    _arn6ModeDialSkipper = 0;
+                    return false;
                 }
+                _arn6ModeDialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1401,23 +1295,18 @@
         {
             try
             {
-                if (_currentUpperRadioMode == CurrentF86FRadioMode.ADF_APX6 || _currentLowerRadioMode == CurrentF86FRadioMode.ADF_APX6)
+                if (_apx6ModeDialSkipper > 2)
                 {
-                    if (_apx6ModeDialSkipper > 2)
-                    {
-                        _apx6ModeDialSkipper = 0;
-                        return false;
-                    }
-
-                    _apx6ModeDialSkipper++;
-                    return true;
+                    _apx6ModeDialSkipper = 0;
+                    return false;
                 }
+                _apx6ModeDialSkipper++;
+                return true;
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1444,6 +1333,5 @@
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
-
     }
 }
