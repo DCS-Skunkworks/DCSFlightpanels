@@ -85,7 +85,7 @@ namespace NonVisuals.Radios
         public RadioPanelPZ69FA18C(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
         {
-             CreateRadioKnobs();
+            CreateRadioKnobs();
             Startup();
             BIOSEventHandler.AttachDataListener(this);
         }
@@ -262,7 +262,6 @@ namespace NonVisuals.Radios
                                     break;
                                 }
                         }
-
                         break;
                     }
 
@@ -296,7 +295,6 @@ namespace NonVisuals.Radios
                                     break;
                                 }
                         }
-
                         break;
                     }
             }
@@ -329,8 +327,7 @@ namespace NonVisuals.Radios
 
                     long dialTimeout = DateTime.Now.Ticks;
                     long dialOkTime = 0;
-
-                    var dialSendCount = 0;
+                    int dialSendCount = 0;
 
                     do
                     {
@@ -399,6 +396,20 @@ namespace NonVisuals.Radios
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
+        private string GetCOM1FrequencyAsString()
+        {
+            uint integerCOMM1 = _comm1CockpitFreq / 100;
+            uint decimalCOMM1 = _comm1CockpitFreq - (integerCOMM1 * 100);
+            return $"{integerCOMM1}.{decimalCOMM1}";
+        }
+
+        private string GetCOM2FrequencyAsString()
+        {
+            uint integerCOMM2 = _comm2CockpitFreq / 100;
+            uint decimalCOMM2 = _comm2CockpitFreq - (integerCOMM2 * 100);
+            return $"{integerCOMM2}.{decimalCOMM2}";
+        }
+
         private void ShowFrequenciesOnPanel()
         {
             lock (_lockShowFrequenciesOnPanelObject)
@@ -425,12 +436,7 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.COMM1:
                         {
                             // show comm1 frequencies in upper panel
-
-                            uint integerCOMM1 = _comm1CockpitFreq / 100;
-                            uint decimalCOMM1 = _comm1CockpitFreq - (integerCOMM1 * 100);
-                            var frequencyAsString = string.Empty + integerCOMM1;
-                            frequencyAsString += ".";
-                            frequencyAsString += decimalCOMM1;
+                            string frequencyAsString = GetCOM1FrequencyAsString();
 
                             if (_upperButtonPressed)
                             {
@@ -449,11 +455,7 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.COMM2:
                         {
                             // show comm2 frequencies in upper panel
-                            uint integerCOMM2 = _comm2CockpitFreq / 100;
-                            uint decimalCOMM2 = _comm2CockpitFreq - (integerCOMM2 * 100);
-                            var frequencyAsString = string.Empty + integerCOMM2;
-                            frequencyAsString += ".";
-                            frequencyAsString += decimalCOMM2;
+                            string frequencyAsString = GetCOM2FrequencyAsString();
 
                             if (_upperButtonPressed)
                             {
@@ -525,12 +527,7 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.COMM1:
                         {
                             // show comm1 frequencies in lower panel
-
-                            uint integerCOMM1 = _comm1CockpitFreq / 100;
-                            uint decimalCOMM1 = _comm1CockpitFreq - (integerCOMM1 * 100);
-                            var frequencyAsString = string.Empty + integerCOMM1;
-                            frequencyAsString += ".";
-                            frequencyAsString += decimalCOMM1;
+                            string frequencyAsString = GetCOM1FrequencyAsString();
 
                             if (_lowerButtonPressed)
                             {
@@ -549,11 +546,7 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.COMM2:
                         {
                             // show comm2 frequencies in lower panel
-                            uint integerCOMM2 = _comm2CockpitFreq / 100;
-                            uint decimalCOMM2 = _comm2CockpitFreq - (integerCOMM2 * 100);
-                            var frequencyAsString = string.Empty + integerCOMM2;
-                            frequencyAsString += ".";
-                            frequencyAsString += decimalCOMM2;
+                            string frequencyAsString = GetCOM2FrequencyAsString();
 
                             if (_lowerButtonPressed)
                             {
@@ -660,7 +653,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -703,7 +695,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -738,7 +729,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -773,7 +763,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -816,7 +805,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -859,7 +847,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -894,7 +881,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -929,7 +915,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
                     }
@@ -996,7 +981,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentFA18CRadioMode.COMM1;
                                 }
-
                                 break;
                             }
 
@@ -1006,7 +990,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentFA18CRadioMode.COMM2;
                                 }
-
                                 break;
                             }
 
@@ -1016,7 +999,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentFA18CRadioMode.VHFFM;
                                 }
-
                                 break;
                             }
 
@@ -1026,7 +1008,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentFA18CRadioMode.ILS;
                                 }
-
                                 break;
                             }
 
@@ -1036,7 +1017,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentFA18CRadioMode.TACAN;
                                 }
-
                                 break;
                             }
 
@@ -1056,7 +1036,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentFA18CRadioMode.COMM1;
                                 }
-
                                 break;
                             }
 
@@ -1066,7 +1045,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentFA18CRadioMode.COMM2;
                                 }
-
                                 break;
                             }
 
@@ -1076,7 +1054,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentFA18CRadioMode.VHFFM;
                                 }
-
                                 break;
                             }
 
@@ -1086,7 +1063,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentFA18CRadioMode.ILS;
                                 }
-
                                 break;
                             }
 
@@ -1096,7 +1072,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentFA18CRadioMode.TACAN;
                                 }
-
                                 break;
                             }
 
@@ -1175,7 +1150,6 @@ namespace NonVisuals.Radios
 
                                     _upperButtonPressedAndDialRotated = false;
                                 }
-
                                 break;
                             }
 
@@ -1204,7 +1178,6 @@ namespace NonVisuals.Radios
 
                                     _lowerButtonPressedAndDialRotated = false;
                                 }
-
                                 break;
                             }
                     }
@@ -1220,7 +1193,6 @@ namespace NonVisuals.Radios
                             null);
                     }
                 }
-
                 AdjustFrequency(hashSet);
             }
         }
@@ -1265,7 +1237,7 @@ namespace NonVisuals.Radios
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new()
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
