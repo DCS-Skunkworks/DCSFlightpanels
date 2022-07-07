@@ -45,7 +45,6 @@
         private const string VHFVolumeCommandInc = "VUHF_RADIO_VOL_KNOB +3200\n";
         private const string VHFVolumeCommandDec = "VUHF_RADIO_VOL_KNOB -3200\n";
 
-
         /*M2000C UHF PRESETS COM2*/
         // Large dial PRESETS [step of 1]
         // Small dial Volume
@@ -182,12 +181,12 @@
                 UpdateCounter(e.Address, e.Data);
 
                 /*
-                                 * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
-                                 * Once a dial has been deemed to be "off" position and needs to be changed
-                                 * a change command is sent to DCS-BIOS.
-                                 * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
-                                 * reset. Reading the dial's position with no change in value will not reset.
-                                 */
+                * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
+                * Once a dial has been deemed to be "off" position and needs to be changed
+                * a change command is sent to DCS-BIOS.
+                * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
+                * reset. Reading the dial's position with no change in value will not reset.
+                */
 
                 // V/UHF Preset Channel Dial
                 if (e.Address == _vhfDcsbiosOutputPresetDial.Address)
@@ -446,7 +445,6 @@
                                     {
                                         SetUpperRadioMode(CurrentM2000CRadioMode.VUHF);
                                     }
-
                                     break;
                                 }
 
@@ -456,7 +454,6 @@
                                     {
                                         SetUpperRadioMode(CurrentM2000CRadioMode.UHF);
                                     }
-
                                     break;
                                 }
 
@@ -466,7 +463,6 @@
                                     {
                                         SetUpperRadioMode(CurrentM2000CRadioMode.TACAN);
                                     }
-
                                     break;
                                 }
 
@@ -476,7 +472,6 @@
                                     {
                                         SetUpperRadioMode(CurrentM2000CRadioMode.VOR);
                                     }
-
                                     break;
                                 }
 
@@ -488,7 +483,6 @@
                                     {
                                         SetUpperRadioMode(CurrentM2000CRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -498,7 +492,6 @@
                                     {
                                         SetLowerRadioMode(CurrentM2000CRadioMode.VUHF);
                                     }
-
                                     break;
                                 }
 
@@ -508,7 +501,6 @@
                                     {
                                         SetLowerRadioMode(CurrentM2000CRadioMode.UHF);
                                     }
-
                                     break;
                                 }
 
@@ -518,7 +510,6 @@
                                     {
                                         SetLowerRadioMode(CurrentM2000CRadioMode.TACAN);
                                     }
-
                                     break;
                                 }
 
@@ -528,7 +519,6 @@
                                     {
                                         SetLowerRadioMode(CurrentM2000CRadioMode.VOR);
                                     }
-
                                     break;
                                 }
 
@@ -540,7 +530,6 @@
                                     {
                                         SetLowerRadioMode(CurrentM2000CRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -611,11 +600,8 @@
                                             {
                                                 if (!SkipVUHFPresetDialChange())
                                                 {
-
                                                     DCSBIOS.Send(VHFPresetCommandInc);
-
                                                 }
-
                                                 break;
                                             }
 
@@ -625,7 +611,6 @@
                                                 {
                                                     DCSBIOS.Send(UHF_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -635,7 +620,6 @@
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_INC : TACAN_TENS_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -645,7 +629,6 @@
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? VOR_POWER_COMMAND_INC : VOR_DECIMALS_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -665,11 +648,8 @@
                                             {
                                                 if (!SkipVUHFPresetDialChange())
                                                 {
-
                                                     DCSBIOS.Send(VHFPresetCommandDec);
-
                                                 }
-
                                                 break;
                                             }
 
@@ -679,7 +659,6 @@
                                                 {
                                                     DCSBIOS.Send(UHF_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -689,7 +668,6 @@
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_DEC : TACAN_TENS_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -699,7 +677,6 @@
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? VOR_POWER_COMMAND_DEC : VOR_DECIMALS_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
                                     }
@@ -712,9 +689,7 @@
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-
                                                 DCSBIOS.Send(VHFVolumeCommandInc);
-
                                                 break;
                                             }
 
@@ -730,7 +705,6 @@
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_INC : TACAN_ONES_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -740,7 +714,6 @@
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? VOR_TEST_COMMAND_INC : VOR_ONES_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -764,9 +737,7 @@
 
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-
                                                 DCSBIOS.Send(VHFVolumeCommandDec);
-
                                                 break;
                                             }
 
@@ -776,7 +747,6 @@
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_DEC : TACAN_ONES_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -786,7 +756,6 @@
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? VOR_TEST_COMMAND_DEC : VOR_ONES_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -806,11 +775,8 @@
                                             {
                                                 if (!SkipVUHFPresetDialChange())
                                                 {
-
                                                     DCSBIOS.Send(VHFPresetCommandInc);
-
                                                 }
-
                                                 break;
                                             }
 
@@ -820,7 +786,6 @@
                                                 {
                                                     DCSBIOS.Send(UHF_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -830,7 +795,6 @@
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_INC : TACAN_TENS_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -840,7 +804,6 @@
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? VOR_POWER_COMMAND_INC : VOR_DECIMALS_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -860,11 +823,8 @@
                                             {
                                                 if (!SkipVUHFPresetDialChange())
                                                 {
-
                                                     DCSBIOS.Send(VHFPresetCommandDec);
-
                                                 }
-
                                                 break;
                                             }
 
@@ -874,7 +834,6 @@
                                                 {
                                                     DCSBIOS.Send(UHF_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -884,7 +843,6 @@
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_DEC : TACAN_TENS_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -894,7 +852,6 @@
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? VOR_POWER_COMMAND_DEC : VOR_DECIMALS_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -919,7 +876,6 @@
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
                                                 DCSBIOS.Send(VHFVolumeCommandInc);
-
                                                 break;
                                             }
 
@@ -929,7 +885,6 @@
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_INC : TACAN_ONES_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -939,7 +894,6 @@
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? VOR_TEST_COMMAND_INC : VOR_ONES_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -963,9 +917,7 @@
 
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-
                                                 DCSBIOS.Send(VHFVolumeCommandDec);
-
                                                 break;
                                             }
 
@@ -975,7 +927,6 @@
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_DEC : TACAN_ONES_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -985,7 +936,6 @@
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? VOR_TEST_COMMAND_DEC : VOR_ONES_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1021,7 +971,6 @@
 
                     if (!FirstReportHasBeenRead)
                     {
-
                         return;
                     }
 
@@ -1051,7 +1000,6 @@
                                         SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                     }
                                 }
-
                                 break;
                             }
 
@@ -1076,7 +1024,6 @@
                                         SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                     }
                                 }
-
                                 break;
                             }
 
@@ -1099,7 +1046,7 @@
                             {
                                 var channelAsString = string.Empty;
                                 var settingsAsString = string.Empty;
-                                lock (_lockTACANDialObject)
+                                lock (_lockVoRialObject)
                                 {
                                     var ones = _vorOnesCockpitDialPos + 8;
                                     var decimals = _vorDecimalsCockpitDialPos * 5;
@@ -1142,7 +1089,6 @@
                                         SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                     }
                                 }
-
                                 break;
                             }
 
@@ -1167,7 +1113,6 @@
                                         SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                     }
                                 }
-
                                 break;
                             }
 
@@ -1190,7 +1135,7 @@
                             {
                                 var channelAsString = string.Empty;
                                 var settingsAsString = string.Empty;
-                                lock (_lockTACANDialObject)
+                                lock (_lockVoRialObject)
                                 {
                                     var ones = _vorOnesCockpitDialPos + 8;
                                     var decimals = _vorDecimalsCockpitDialPos * 5;
@@ -1220,7 +1165,6 @@
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
@@ -1308,7 +1252,6 @@
             }
         }
 
-
         private bool SkipVUHFPresetDialChange()
         {
             try
@@ -1320,7 +1263,6 @@
                         _vhfPresetDialSkipper = 0;
                         return false;
                     }
-
                     _vhfPresetDialSkipper++;
                     return true;
                 }
@@ -1329,7 +1271,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1344,7 +1285,6 @@
                         _uhfPresetDialSkipper = 0;
                         return false;
                     }
-
                     _uhfPresetDialSkipper++;
                     return true;
                 }
@@ -1353,7 +1293,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1368,7 +1307,6 @@
                         _tacanDialSkipper = 0;
                         return false;
                     }
-
                     _tacanDialSkipper++;
                     return true;
                 }
@@ -1377,7 +1315,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1392,7 +1329,6 @@
                         _vorDialSkipper = 0;
                         return false;
                     }
-
                     _vorDialSkipper++;
                     return true;
                 }
@@ -1401,7 +1337,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1428,6 +1363,5 @@
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
-
     }
 }
