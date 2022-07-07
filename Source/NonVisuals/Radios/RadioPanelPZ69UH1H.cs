@@ -145,6 +145,7 @@ namespace NonVisuals.Radios
         private long _vhfFmDial2WaitingForFeedback;
         private long _vhfFmDial3WaitingForFeedback;
         private long _vhfFmDial4WaitingForFeedback;
+        private volatile bool _shutdownVHFFMThread;
 
         /*UH-1H ADF*/
         /*
@@ -306,7 +307,6 @@ namespace NonVisuals.Radios
                         if (tmp != _uhfCockpitDial1Frequency)
                         {
                             Interlocked.Increment(ref _doUpdatePanelLCD);
-
                             Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
                         }
                     }
@@ -318,7 +318,6 @@ namespace NonVisuals.Radios
                         if (tmp != _uhfCockpitDial2Frequency)
                         {
                             Interlocked.Increment(ref _doUpdatePanelLCD);
-
                             Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
                         }
                     }
@@ -330,7 +329,6 @@ namespace NonVisuals.Radios
                         if (tmp != _uhfCockpitDial3Frequency)
                         {
                             Interlocked.Increment(ref _doUpdatePanelLCD);
-
                             Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
                         }
                     }
@@ -363,7 +361,6 @@ namespace NonVisuals.Radios
                         if (tmp != _vhfNavCockpitDial1Frequency)
                         {
                             Interlocked.Increment(ref _doUpdatePanelLCD);
-
                             Interlocked.Exchange(ref _vhfNavDial1WaitingForFeedback, 0);
                         }
                     }
@@ -375,7 +372,6 @@ namespace NonVisuals.Radios
                         if (tmp != _vhfNavCockpitDial2Frequency)
                         {
                             Interlocked.Increment(ref _doUpdatePanelLCD);
-
                             Interlocked.Exchange(ref _vhfNavDial2WaitingForFeedback, 0);
                         }
                     }
@@ -385,7 +381,6 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
-
             ShowFrequenciesOnPanel();
         }
 
@@ -401,7 +396,6 @@ namespace NonVisuals.Radios
                     if (tmp != _interCommCockpitDial1Pos)
                     {
                         Interlocked.Increment(ref _doUpdatePanelLCD);
-
                         Interlocked.Exchange(ref _interCommDialWaitingForFeedback, 0);
                     }
                 }
@@ -417,7 +411,6 @@ namespace NonVisuals.Radios
                     if (tmp != _vhfFmCockpitFreq1DialPos)
                     {
                         Interlocked.Increment(ref _doUpdatePanelLCD);
-
                         Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 0);
                     }
                 }
@@ -432,7 +425,6 @@ namespace NonVisuals.Radios
                     if (tmp != _vhfFmCockpitFreq2DialPos)
                     {
                         Interlocked.Increment(ref _doUpdatePanelLCD);
-
                         Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 0);
                     }
                 }
@@ -447,7 +439,6 @@ namespace NonVisuals.Radios
                     if (tmp != _vhfFmCockpitFreq3DialPos)
                     {
                         Interlocked.Increment(ref _doUpdatePanelLCD);
-
                         Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 0);
                     }
                 }
@@ -462,7 +453,6 @@ namespace NonVisuals.Radios
                     if (tmp != _vhfFmCockpitFreq4DialPos)
                     {
                         Interlocked.Increment(ref _doUpdatePanelLCD);
-
                         Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 0);
                     }
                 }
@@ -478,7 +468,6 @@ namespace NonVisuals.Radios
                     if (tmp != _adfCockpitFrequencyBand)
                     {
                         Interlocked.Increment(ref _doUpdatePanelLCD);
-
                         Interlocked.Exchange(ref _adfFrequencyBandWaitingForFeedback, 0);
                     }
                 }
@@ -558,7 +547,6 @@ namespace NonVisuals.Radios
                                     // A = B + ((B * 0.11291) - 100.61)
                                     _adfCockpitFrequency = b + ((b * 0.11291) - 96.11);
                                 }
-
                                 break;
                             }
 
@@ -660,7 +648,6 @@ namespace NonVisuals.Radios
                                     break;
                                 }
                         }
-
                         break;
                     }
 
@@ -704,7 +691,6 @@ namespace NonVisuals.Radios
                                     break;
                                 }
                         }
-
                         break;
                     }
             }
@@ -868,7 +854,6 @@ namespace NonVisuals.Radios
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _vhfCommDial1FreqWaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -889,7 +874,6 @@ namespace NonVisuals.Radios
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _vhfCommDial2FreqWaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial2Timeout);
                             }
                         }
@@ -925,7 +909,6 @@ namespace NonVisuals.Radios
             {
                 Interlocked.Exchange(ref _vhfCommThreadNowSynching, 0);
             }
-
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
@@ -1019,7 +1002,6 @@ namespace NonVisuals.Radios
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -1040,7 +1022,6 @@ namespace NonVisuals.Radios
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial2Timeout);
                             }
                         }
@@ -1061,7 +1042,6 @@ namespace NonVisuals.Radios
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial3Timeout);
                             }
                         }
@@ -1098,7 +1078,6 @@ namespace NonVisuals.Radios
             {
                 Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
             }
-
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
@@ -1171,7 +1150,6 @@ namespace NonVisuals.Radios
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _vhfNavDial1WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -1194,7 +1172,6 @@ namespace NonVisuals.Radios
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _vhfNavDial2WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial2Timeout);
                             }
                         }
@@ -1230,7 +1207,6 @@ namespace NonVisuals.Radios
             {
                 Interlocked.Exchange(ref _vhfNavThreadNowSynching, 0);
             }
-
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
@@ -1246,11 +1222,9 @@ namespace NonVisuals.Radios
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownVHFFMThread = false;
             _vhfFmSyncThread = new Thread(VhfFmSynchThreadMethod);
-
             _vhfFmSyncThread.Start();
         }
 
-        private volatile bool _shutdownVHFFMThread;
         private void VhfFmSynchThreadMethod()
         {
             try
@@ -1352,7 +1326,6 @@ namespace NonVisuals.Radios
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -1384,7 +1357,6 @@ namespace NonVisuals.Radios
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial2Timeout);
                             }
                         }
@@ -1416,7 +1388,6 @@ namespace NonVisuals.Radios
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial3Timeout);
                             }
                         }
@@ -1448,7 +1419,6 @@ namespace NonVisuals.Radios
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial4Timeout);
                             }
                         }
@@ -1466,7 +1436,6 @@ namespace NonVisuals.Radios
                             dial4SendCount = 0;
                             Thread.Sleep(5000);
                         }
-
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownVHFFMThread);
@@ -1486,7 +1455,6 @@ namespace NonVisuals.Radios
             {
                 Interlocked.Exchange(ref _vhfFmThreadNowSynching, 0);
             }
-
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
@@ -1496,7 +1464,6 @@ namespace NonVisuals.Radios
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownADFThread = false;
             _adfSyncThread = new Thread(AdfBandChangeSynchThreadMethod);
-
             _adfSyncThread.Start();
         }
 
@@ -1669,7 +1636,6 @@ namespace NonVisuals.Radios
             {
                 return "0" + _vhfCommSmallFrequencyStandby;
             }
-
             return _vhfCommSmallFrequencyStandby.ToString();
         }
 
@@ -1712,7 +1678,6 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfCockpitPresetChannel), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _interCommCockpitDial1Pos, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
-
                             break;
                         }
 
@@ -1729,7 +1694,6 @@ namespace NonVisuals.Radios
                                         PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
-
                             break;
                         }
 
@@ -1763,7 +1727,6 @@ namespace NonVisuals.Radios
                                     }
                                 }
                             }
-
                             break;
                         }
 
@@ -1792,7 +1755,6 @@ namespace NonVisuals.Radios
                                     SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
-
                             break;
                         }
 
@@ -1826,7 +1788,6 @@ namespace NonVisuals.Radios
                                     }
                                 }
                             }
-
                             break;
                         }
 
@@ -1841,7 +1802,6 @@ namespace NonVisuals.Radios
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
-
                             break;
                         }
                 }
@@ -1855,7 +1815,6 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfCockpitPresetChannel), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _interCommCockpitDial1Pos, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
-
                             break;
                         }
 
@@ -1872,7 +1831,6 @@ namespace NonVisuals.Radios
                                         PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
-
                             break;
                         }
 
@@ -1906,7 +1864,6 @@ namespace NonVisuals.Radios
                                     }
                                 }
                             }
-
                             break;
                         }
 
@@ -1935,7 +1892,6 @@ namespace NonVisuals.Radios
                                     SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
-
                             break;
                         }
 
@@ -1969,7 +1925,6 @@ namespace NonVisuals.Radios
                                     }
                                 }
                             }
-
                             break;
                         }
 
@@ -1984,14 +1939,11 @@ namespace NonVisuals.Radios
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
-
                             break;
                         }
                 }
-
                 SendLCDData(bytes);
             }
-
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
@@ -2019,7 +1971,6 @@ namespace NonVisuals.Radios
                                             {
                                                 DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
                                             }
-
                                             break;
                                         }
 
@@ -2031,7 +1982,6 @@ namespace NonVisuals.Radios
                                                 // @ max value
                                                 break;
                                             }
-
                                             _vhfCommBigFrequencyStandby++;
                                             break;
                                         }
@@ -2044,7 +1994,6 @@ namespace NonVisuals.Radios
                                                 // @ max value
                                                 break;
                                             }
-
                                             _uhfBigFrequencyStandby++;
                                             break;
                                         }
@@ -2057,7 +2006,6 @@ namespace NonVisuals.Radios
                                                 // @ max value
                                                 break;
                                             }
-
                                             _vhfFmBigFrequencyStandby++;
                                             break;
                                         }
@@ -2069,7 +2017,6 @@ namespace NonVisuals.Radios
                                                 // @ max value
                                                 break;
                                             }
-
                                             _vhfNavBigFrequencyStandby++;
                                             break;
                                         }
@@ -2080,7 +2027,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -2094,7 +2040,6 @@ namespace NonVisuals.Radios
                                             {
                                                 DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
                                             }
-
                                             break;
                                         }
 
@@ -2106,7 +2051,6 @@ namespace NonVisuals.Radios
                                                 // @ min value
                                                 break;
                                             }
-
                                             _vhfCommBigFrequencyStandby--;
                                             break;
                                         }
@@ -2118,7 +2062,6 @@ namespace NonVisuals.Radios
                                                 // @ min value
                                                 break;
                                             }
-
                                             _uhfBigFrequencyStandby--;
                                             break;
                                         }
@@ -2131,7 +2074,6 @@ namespace NonVisuals.Radios
                                                 // @ min value
                                                 break;
                                             }
-
                                             _vhfFmBigFrequencyStandby--;
                                             break;
                                         }
@@ -2143,7 +2085,6 @@ namespace NonVisuals.Radios
                                                 // @ min value
                                                 break;
                                             }
-
                                             _vhfNavBigFrequencyStandby--;
                                             break;
                                         }
@@ -2154,7 +2095,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -2168,7 +2108,6 @@ namespace NonVisuals.Radios
                                             {
                                                 DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_INC);
                                             }
-
                                             break;
                                         }
 
@@ -2187,7 +2126,6 @@ namespace NonVisuals.Radios
                                                 _uhfSmallFrequencyStandby = 0;
                                                 break;
                                             }
-
                                             _uhfSmallFrequencyStandby += 5;
                                             break;
                                         }
@@ -2200,7 +2138,6 @@ namespace NonVisuals.Radios
                                                 _vhfFmSmallFrequencyStandby = 0;
                                                 break;
                                             }
-
                                             _vhfFmSmallFrequencyStandby += 5;
                                             break;
                                         }
@@ -2213,7 +2150,6 @@ namespace NonVisuals.Radios
                                                 _vhfNavSmallFrequencyStandby = 0;
                                                 break;
                                             }
-
                                             _vhfNavSmallFrequencyStandby += 5;
                                             break;
                                         }
@@ -2224,7 +2160,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -2238,7 +2173,6 @@ namespace NonVisuals.Radios
                                             {
                                                 DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_DEC);
                                             }
-
                                             break;
                                         }
 
@@ -2256,7 +2190,6 @@ namespace NonVisuals.Radios
                                                 _uhfSmallFrequencyStandby = 95;
                                                 break;
                                             }
-
                                             _uhfSmallFrequencyStandby -= 5;
                                             break;
                                         }
@@ -2269,7 +2202,6 @@ namespace NonVisuals.Radios
                                                 _vhfFmSmallFrequencyStandby = 95;
                                                 break;
                                             }
-
                                             _vhfFmSmallFrequencyStandby -= 5;
                                             break;
                                         }
@@ -2282,7 +2214,6 @@ namespace NonVisuals.Radios
                                                 _vhfNavSmallFrequencyStandby = 95;
                                                 break;
                                             }
-
                                             _vhfNavSmallFrequencyStandby -= 5;
                                             break;
                                         }
@@ -2293,7 +2224,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -2307,7 +2237,6 @@ namespace NonVisuals.Radios
                                             {
                                                 DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
                                             }
-
                                             break;
                                         }
 
@@ -2319,7 +2248,6 @@ namespace NonVisuals.Radios
                                                 // @ max value
                                                 break;
                                             }
-
                                             _vhfCommBigFrequencyStandby++;
                                             break;
                                         }
@@ -2332,7 +2260,6 @@ namespace NonVisuals.Radios
                                                 // @ max value
                                                 break;
                                             }
-
                                             _uhfBigFrequencyStandby++;
                                             break;
                                         }
@@ -2345,7 +2272,6 @@ namespace NonVisuals.Radios
                                                 // @ max value
                                                 break;
                                             }
-
                                             _vhfFmBigFrequencyStandby++;
                                             break;
                                         }
@@ -2357,7 +2283,6 @@ namespace NonVisuals.Radios
                                                 // @ max value
                                                 break;
                                             }
-
                                             _vhfNavBigFrequencyStandby++;
                                             break;
                                         }
@@ -2368,7 +2293,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -2382,7 +2306,6 @@ namespace NonVisuals.Radios
                                             {
                                                 DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
                                             }
-
                                             break;
                                         }
 
@@ -2394,7 +2317,6 @@ namespace NonVisuals.Radios
                                                 // @ min value
                                                 break;
                                             }
-
                                             _vhfCommBigFrequencyStandby--;
                                             break;
                                         }
@@ -2406,7 +2328,6 @@ namespace NonVisuals.Radios
                                                 // @ min value
                                                 break;
                                             }
-
                                             _uhfBigFrequencyStandby--;
                                             break;
                                         }
@@ -2419,7 +2340,6 @@ namespace NonVisuals.Radios
                                                 // @ min value
                                                 break;
                                             }
-
                                             _vhfFmBigFrequencyStandby--;
                                             break;
                                         }
@@ -2431,7 +2351,6 @@ namespace NonVisuals.Radios
                                                 // @ min value
                                                 break;
                                             }
-
                                             _vhfNavBigFrequencyStandby--;
                                             break;
                                         }
@@ -2442,7 +2361,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -2456,7 +2374,6 @@ namespace NonVisuals.Radios
                                             {
                                                 DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_INC);
                                             }
-
                                             break;
                                         }
 
@@ -2475,7 +2392,6 @@ namespace NonVisuals.Radios
                                                 _uhfSmallFrequencyStandby = 0;
                                                 break;
                                             }
-
                                             _uhfSmallFrequencyStandby += 5;
                                             break;
                                         }
@@ -2488,7 +2404,6 @@ namespace NonVisuals.Radios
                                                 _vhfFmSmallFrequencyStandby = 0;
                                                 break;
                                             }
-
                                             _vhfFmSmallFrequencyStandby += 5;
                                             break;
                                         }
@@ -2501,7 +2416,6 @@ namespace NonVisuals.Radios
                                                 _vhfNavSmallFrequencyStandby = 0;
                                                 break;
                                             }
-
                                             _vhfNavSmallFrequencyStandby += 5;
                                             break;
                                         }
@@ -2512,7 +2426,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -2526,7 +2439,6 @@ namespace NonVisuals.Radios
                                             {
                                                 DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_DEC);
                                             }
-
                                             break;
                                         }
 
@@ -2544,7 +2456,6 @@ namespace NonVisuals.Radios
                                                 _uhfSmallFrequencyStandby = 95;
                                                 break;
                                             }
-
                                             _uhfSmallFrequencyStandby -= 5;
                                             break;
                                         }
@@ -2557,7 +2468,6 @@ namespace NonVisuals.Radios
                                                 _vhfFmSmallFrequencyStandby = 95;
                                                 break;
                                             }
-
                                             _vhfFmSmallFrequencyStandby -= 5;
                                             break;
                                         }
@@ -2570,7 +2480,6 @@ namespace NonVisuals.Radios
                                                 _vhfNavSmallFrequencyStandby = 95;
                                                 break;
                                             }
-
                                             _vhfNavSmallFrequencyStandby -= 5;
                                             break;
                                         }
@@ -2581,7 +2490,6 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-
                                 break;
                             }
                     }
@@ -2606,39 +2514,14 @@ namespace NonVisuals.Radios
                  */
                 if (tmp.Length == 1)
                 {
-                    switch (frequency)
+                    result = frequency switch
                     {
-                        case 0:
-                            {
-                                result = frequency + 2;
-                                break;
-                            }
-
-                        case 2:
-                            {
-                                result = frequency + 3;
-                                break;
-                            }
-
-                        case 5:
-                            {
-                                result = frequency + 2;
-                                break;
-                            }
-
-                        case 7:
-                            {
-                                result = frequency + 3;
-                                break;
-                            }
-
-                        default:
-                            {
-                                // In case it is an invalid position invalid
-                                result = 0;
-                                break;
-                            }
-                    }
+                        0 => frequency + 2,
+                        2 => frequency + 3,
+                        5 => frequency + 2,
+                        7 => frequency + 3,
+                        _ => 0 // In case it is an invalid position invalid
+                    };
                 }
                 else if (tmp.Length == 2)
                 {
@@ -2669,39 +2552,14 @@ namespace NonVisuals.Radios
             {
                 if (tmp.Length == 1)
                 {
-                    switch (frequency)
+                    result = frequency switch
                     {
-                        case 0:
-                            {
-                                result = 97;
-                                break;
-                            }
-
-                        case 2:
-                            {
-                                result = frequency - 2;
-                                break;
-                            }
-
-                        case 5:
-                            {
-                                result = frequency - 3;
-                                break;
-                            }
-
-                        case 7:
-                            {
-                                result = frequency - 2;
-                                break;
-                            }
-
-                        default:
-                            {
-                                // In case it is in an invalid position
-                                result = 0;
-                                break;
-                            }
-                    }
+                        0 => 97,
+                        2 => frequency - 2,
+                        5 => frequency - 3,
+                        7 => frequency - 2,
+                        _ => 0 // In case it is an invalid position invalid
+                    };
                 }
                 else if (tmp.Length == 2)
                 {
@@ -2774,11 +2632,9 @@ namespace NonVisuals.Radios
                     _interCommSkipper = 0;
                     return false;
                 }
-
                 Interlocked.Increment(ref _interCommSkipper);
                 return true;
             }
-
             return false;
         }
 
@@ -2804,7 +2660,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentUH1HRadioMode.INTERCOMM;
                                 }
-
                                 break;
                             }
 
@@ -2814,7 +2669,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentUH1HRadioMode.VHFCOMM;
                                 }
-
                                 break;
                             }
 
@@ -2824,7 +2678,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentUH1HRadioMode.UHF;
                                 }
-
                                 break;
                             }
 
@@ -2834,7 +2687,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentUH1HRadioMode.VHFFM;
                                 }
-
                                 break;
                             }
 
@@ -2844,7 +2696,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentUH1HRadioMode.VHFNAV;
                                 }
-
                                 break;
                             }
 
@@ -2854,7 +2705,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentUH1HRadioMode.ADF;
                                 }
-
                                 break;
                             }
 
@@ -2869,7 +2719,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentUH1HRadioMode.INTERCOMM;
                                 }
-
                                 break;
                             }
 
@@ -2879,7 +2728,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentUH1HRadioMode.VHFCOMM;
                                 }
-
                                 break;
                             }
 
@@ -2889,7 +2737,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentUH1HRadioMode.UHF;
                                 }
-
                                 break;
                             }
 
@@ -2899,7 +2746,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentUH1HRadioMode.VHFFM;
                                 }
-
                                 break;
                             }
 
@@ -2909,7 +2755,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentUH1HRadioMode.VHFNAV;
                                 }
-
                                 break;
                             }
 
@@ -2919,7 +2764,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentUH1HRadioMode.ADF;
                                 }
-
                                 break;
                             }
 
@@ -2984,7 +2828,6 @@ namespace NonVisuals.Radios
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsUH1H.UPPER_FREQ_SWITCH);
                                     }
                                 }
-
                                 break;
                             }
 
@@ -3004,7 +2847,6 @@ namespace NonVisuals.Radios
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsUH1H.LOWER_FREQ_SWITCH);
                                     }
                                 }
-
                                 break;
                             }
                     }
@@ -3020,7 +2862,6 @@ namespace NonVisuals.Radios
                             null);
                     }
                 }
-
                 AdjustFrequency(hashSet);
             }
         }
