@@ -284,7 +284,6 @@
                                     {
                                         SetUpperRadioMode(CurrentP47DRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -294,7 +293,6 @@
                                     {
                                         SetLowerRadioMode(CurrentP47DRadioMode.HFRADIO);
                                     }
-
                                     break;
                                 }
 
@@ -317,7 +315,6 @@
                                     {
                                         SetLowerRadioMode(CurrentP47DRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -343,7 +340,6 @@
                                             DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
-
                                     break;
                                 }
 
@@ -356,7 +352,6 @@
                                             DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
-
                                     break;
                                 }
                         }
@@ -372,7 +367,6 @@
                                 null);
                         }
                     }
-
                     AdjustFrequency(hashSet);
                 }
             }
@@ -413,7 +407,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -430,7 +423,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -449,7 +441,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -462,7 +453,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -481,7 +471,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -494,7 +483,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -513,7 +501,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -526,7 +513,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -545,7 +531,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -558,7 +543,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -577,7 +561,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -590,7 +573,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -609,7 +591,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -622,7 +603,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -641,7 +621,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -654,13 +633,11 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
                         }
                     }
                 }
-
                 ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
@@ -851,7 +828,7 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new()
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
@@ -902,7 +879,6 @@
                         _hfRadioChannelPresetDialSkipper = 0;
                         return false;
                     }
-
                     _hfRadioChannelPresetDialSkipper++;
                     return true;
                 }
@@ -911,7 +887,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -971,7 +946,6 @@
                         _hfRadioModePresetDialSkipper = 0;
                         return false;
                     }
-
                     _hfRadioModePresetDialSkipper++;
                     return true;
                 }
@@ -980,7 +954,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1034,7 +1007,6 @@
                     }
                 }
             }
-
             return null;
         }
 
@@ -1046,7 +1018,6 @@
                 {
                     return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition + 1) + "\n";
                 }
-
                 return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition - 1) + "\n";
             }
         }
