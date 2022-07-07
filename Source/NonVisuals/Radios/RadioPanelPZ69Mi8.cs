@@ -122,6 +122,7 @@
         private long _yadro1ADial2WaitingForFeedback;
         private long _yadro1ADial3WaitingForFeedback;
         private long _yadro1ADial4WaitingForFeedback;
+        private volatile bool _shutdownYaDRO1AThread;
 
         /*
          * Mi-8 R-828 FM Radio PRESETS NAV2
@@ -683,11 +684,9 @@
                                         {
                                             DCSBIOS.Send(SPU7_ICS_SWITCH_TOGGLE_COMMAND);
                                         }
-
                                         break;
                                     }
                             }
-
                             break;
                         }
 
@@ -729,11 +728,9 @@
                                         {
                                             DCSBIOS.Send(SPU7_ICS_SWITCH_TOGGLE_COMMAND);
                                         }
-
                                         break;
                                     }
                             }
-
                             break;
                         }
                 }
@@ -777,8 +774,8 @@
                     try
                     {
                         /*
-                                          * Mi-8 R-863 COM1
-                                          */
+                        * Mi-8 R-863 COM1
+                        */
                         Interlocked.Exchange(ref _r863ManualThreadNowSynching, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
@@ -867,15 +864,15 @@
                                               + GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);// + "DEC\n"; // TODO is this still a problem? 30.7.2018 Went into loop GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
 
                                         /*
-                                                                                    25.7.2018
-                                                                                    10	0.22999967634678
-                                                                                    39	0.21999971568584
+                                        25.7.2018
+                                        10	0.22999967634678
+                                        39	0.21999971568584
                                         
-                                                                                    10Mhz  Rotary Knob (Mi-8MT/R863_FREQ1)
-                                                                                    Changing the dial (in cockpit) 39 => 10 does not show in DCS-BIOS in the CTRL-Ref page. But going down from 10 => 39 is OK.
-                                                                                    I have gotten the values above from DCS using the Lua console so I can see that they do actually change but there is something not working in DCS-BIOS
-                                                                                    So only go down with it
-                                                                                 */
+                                        10Mhz  Rotary Knob (Mi-8MT/R863_FREQ1)
+                                        Changing the dial (in cockpit) 39 => 10 does not show in DCS-BIOS in the CTRL-Ref page. But going down from 10 => 39 is OK.
+                                        I have gotten the values above from DCS using the Lua console so I can see that they do actually change but there is something not working in DCS-BIOS
+                                        So only go down with it
+                                        */
                                         DCSBIOS.Send(str);
                                         dial1SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial1WaitingForFeedback, 1);
@@ -901,7 +898,6 @@
                                         dial2SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial2WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial2Timeout);
                                 }
                             }
@@ -922,7 +918,6 @@
                                         dial3SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial3WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial3Timeout);
                                 }
                             }
@@ -951,7 +946,6 @@
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial4Timeout);
                                 }
                             }
@@ -1041,7 +1035,6 @@
             }
         }
 
-        private volatile bool _shutdownYaDRO1AThread;
         private void YaDRO1ASynchThreadMethod()
         {
             try
@@ -1140,7 +1133,6 @@
                                         DCSBIOS.Send(str);
                                         Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial1Timeout);
                                 }
                             }
@@ -1160,7 +1152,6 @@
                                         DCSBIOS.Send(str);
                                         Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial2Timeout);
                                 }
                             }
@@ -1180,7 +1171,6 @@
                                         DCSBIOS.Send(str);
                                         Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial3Timeout);
                                 }
                             }
@@ -1200,7 +1190,6 @@
                                         DCSBIOS.Send(str);
                                         Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial4Timeout);
                                 }
                             }
@@ -1275,7 +1264,6 @@
                                     {
                                         SetUpperRadioMode(CurrentMi8RadioMode.R863_MANUAL);
                                     }
-
                                     break;
                                 }
 
@@ -1285,7 +1273,6 @@
                                     {
                                         SetUpperRadioMode(CurrentMi8RadioMode.R863_PRESET);
                                     }
-
                                     break;
                                 }
 
@@ -1295,7 +1282,6 @@
                                     {
                                         SetUpperRadioMode(CurrentMi8RadioMode.YADRO1A);
                                     }
-
                                     break;
                                 }
 
@@ -1305,7 +1291,6 @@
                                     {
                                         SetUpperRadioMode(CurrentMi8RadioMode.R828_PRESETS);
                                     }
-
                                     break;
                                 }
 
@@ -1315,7 +1300,6 @@
                                     {
                                         SetUpperRadioMode(CurrentMi8RadioMode.ADF_ARK9);
                                     }
-
                                     break;
                                 }
 
@@ -1325,7 +1309,6 @@
                                     {
                                         SetUpperRadioMode(CurrentMi8RadioMode.SPU7);
                                     }
-
                                     break;
                                 }
 
@@ -1335,7 +1318,6 @@
                                     {
                                         SetLowerRadioMode(CurrentMi8RadioMode.R863_MANUAL);
                                     }
-
                                     break;
                                 }
 
@@ -1345,7 +1327,6 @@
                                     {
                                         SetLowerRadioMode(CurrentMi8RadioMode.R863_PRESET);
                                     }
-
                                     break;
                                 }
 
@@ -1355,7 +1336,6 @@
                                     {
                                         SetLowerRadioMode(CurrentMi8RadioMode.YADRO1A);
                                     }
-
                                     break;
                                 }
 
@@ -1365,7 +1345,6 @@
                                     {
                                         SetLowerRadioMode(CurrentMi8RadioMode.R828_PRESETS);
                                     }
-
                                     break;
                                 }
 
@@ -1375,7 +1354,6 @@
                                     {
                                         SetLowerRadioMode(CurrentMi8RadioMode.ADF_ARK9);
                                     }
-
                                     break;
                                 }
 
@@ -1385,7 +1363,6 @@
                                     {
                                         SetLowerRadioMode(CurrentMi8RadioMode.SPU7);
                                     }
-
                                     break;
                                 }
 
@@ -1395,7 +1372,6 @@
                                     {
                                         SetUpperRadioMode(CurrentMi8RadioMode.ARK_UD);
                                     }
-
                                     break;
                                 }
 
@@ -1405,7 +1381,6 @@
                                     {
                                         SetLowerRadioMode(CurrentMi8RadioMode.ARK_UD);
                                     }
-
                                     break;
                                 }
 
@@ -1443,7 +1418,6 @@
                                     {
                                         SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH);
                                     }
-
                                     break;
                                 }
 
@@ -1468,7 +1442,6 @@
                                     {
                                         SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH);
                                     }
-
                                     break;
                                 }
                         }
@@ -1484,7 +1457,6 @@
                                 null);
                         }
                     }
-
                     AdjustFrequency(hashSet);
                 }
             }
@@ -1543,7 +1515,6 @@
                                                 {
                                                     _r863ManualBigFrequencyStandby = 100;
                                                 }
-
                                                 break;
                                             }
 
@@ -1553,7 +1524,6 @@
                                                 {
                                                     DCSBIOS.Send(R863_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1581,7 +1551,6 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = 20;
                                                 }
-                                                
                                                 break;
                                             }
 
@@ -1591,7 +1560,6 @@
                                                 {
                                                     DCSBIOS.Send(R828_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1601,7 +1569,6 @@
                                                 {
                                                     DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1611,7 +1578,6 @@
                                                 {
                                                     DCSBIOS.Send(ARKUD_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1621,7 +1587,6 @@
                                                 {
                                                     DCSBIOS.Send(SPU7_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1630,7 +1595,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1667,7 +1631,6 @@
                                                 {
                                                     _r863ManualBigFrequencyStandby = 399;
                                                 }
-                                                
                                                 break;
                                             }
 
@@ -1677,7 +1640,6 @@
                                                 {
                                                     DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1705,7 +1667,6 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = 179;
                                                 }
-
                                                 break;
                                             }
 
@@ -1715,7 +1676,6 @@
                                                 {
                                                     DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1725,7 +1685,6 @@
                                                 {
                                                     DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1735,7 +1694,6 @@
                                                 {
                                                     DCSBIOS.Send(ARKUD_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1745,7 +1703,6 @@
                                                 {
                                                     DCSBIOS.Send(SPU7_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1754,7 +1711,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1806,7 +1762,6 @@
                                                 {
                                                     DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1816,7 +1771,6 @@
                                                 {
                                                     DCSBIOS.Send(ARKUD_MODE_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1831,7 +1785,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1847,7 +1800,6 @@
                                                     _r863ManualSmallFrequencyStandby = 975;
                                                     break;
                                                 }
-
                                                 _r863ManualSmallFrequencyStandby -= 25;
                                                 break;
                                             }
@@ -1866,7 +1818,6 @@
                                                     _yadro1ASmallFrequencyStandby = 99;
                                                     break;
                                                 }
-
                                                 _yadro1ASmallFrequencyStandby--;
                                                 break;
                                             }
@@ -1883,7 +1834,6 @@
                                                 {
                                                     DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1893,7 +1843,6 @@
                                                 {
                                                     DCSBIOS.Send(ARKUD_MODE_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1908,7 +1857,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1945,7 +1893,6 @@
                                                 {
                                                     _r863ManualBigFrequencyStandby = 100;
                                                 }
-
                                                 break;
                                             }
 
@@ -1955,7 +1902,6 @@
                                                 {
                                                     DCSBIOS.Send(R863_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1983,7 +1929,6 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = 20;
                                                 }
-
                                                 break;
                                             }
 
@@ -1993,7 +1938,6 @@
                                                 {
                                                     DCSBIOS.Send(R828_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2003,7 +1947,6 @@
                                                 {
                                                     DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2013,7 +1956,6 @@
                                                 {
                                                     DCSBIOS.Send(ARKUD_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2023,7 +1965,6 @@
                                                 {
                                                     DCSBIOS.Send(SPU7_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2032,7 +1973,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -2069,7 +2009,6 @@
                                                 {
                                                     _r863ManualBigFrequencyStandby = 399;
                                                 }
-
                                                 break;
                                             }
 
@@ -2079,7 +2018,6 @@
                                                 {
                                                     DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2107,7 +2045,6 @@
                                                 {
                                                     _yadro1ABigFrequencyStandby = 179;
                                                 }
-
                                                 break;
                                             }
 
@@ -2117,7 +2054,6 @@
                                                 {
                                                     DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2127,7 +2063,6 @@
                                                 {
                                                     DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2137,7 +2072,6 @@
                                                 {
                                                     DCSBIOS.Send(ARKUD_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2147,7 +2081,6 @@
                                                 {
                                                     DCSBIOS.Send(SPU7_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2156,7 +2089,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -2208,7 +2140,6 @@
                                                 {
                                                     DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2218,7 +2149,6 @@
                                                 {
                                                     DCSBIOS.Send(ARKUD_MODE_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2233,7 +2163,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -2249,7 +2178,6 @@
                                                     _r863ManualSmallFrequencyStandby = 975;
                                                     break;
                                                 }
-                                                
                                                 _r863ManualSmallFrequencyStandby -= 25;
                                                 break;
                                             }
@@ -2268,7 +2196,6 @@
                                                     _yadro1ASmallFrequencyStandby = 99;
                                                     break;
                                                 }
-
                                                 _yadro1ASmallFrequencyStandby -= 1;
                                                 break;
                                             }
@@ -2285,7 +2212,6 @@
                                                 {
                                                     DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2295,7 +2221,6 @@
                                                 {
                                                     DCSBIOS.Send(ARKUD_MODE_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -2310,13 +2235,11 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
                         }
                     }
                 }
-
                 ShowFrequenciesOnPanel(true);
             }
             catch (Exception ex)
@@ -2459,7 +2382,6 @@
                                         }
                                     }
                                 }
-
                                 break;
                             }
 
@@ -2658,7 +2580,6 @@
                                         }
                                     }
                                 }
-
                                 break;
                             }
 
@@ -2847,7 +2768,7 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new() 
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
@@ -3045,14 +2966,12 @@
                 {
                     return inc;
                 }
-
                 return dec;
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
             }
-
             return inc;
         }
 
@@ -3075,7 +2994,6 @@
                     {
                         tmpActualDialPositionUp++;
                     }
-
                     upCount++;
                 }
                 while (tmpActualDialPositionUp != desiredDialPosition);
@@ -3092,7 +3010,6 @@
                     {
                         tmpActualDialPositionUp--;
                     }
-
                     downCount++;
                 }
                 while (tmpActualDialPositionUp != desiredDialPosition);
@@ -3101,7 +3018,6 @@
                 {
                     return inc;
                 }
-
                 return dec;
             }
             catch (Exception ex)
@@ -3110,7 +3026,7 @@
             }
 
             throw new Exception(
-                "Should not reach this code. private String GetCommandDirectionFor0To9Dials(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
+                $"Should not reach this code. private String GetCommandDirectionFor0To9Dials(uint desiredDialPosition, uint actualDialPosition) -> {desiredDialPosition}   {actualDialPosition}");
         }
 
         /*
@@ -3173,7 +3089,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -3197,7 +3112,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -3221,7 +3135,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -3245,7 +3158,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -3269,7 +3181,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -3293,7 +3204,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -3317,7 +3227,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
