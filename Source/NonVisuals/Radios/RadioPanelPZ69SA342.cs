@@ -82,6 +82,7 @@
         private long _vhfAmValue4WaitingForFeedback; // Decimal 100s
         private int _vhfAmLeftDialSkipper;
         private int _vhfAmRightDialSkipper;
+        private volatile bool _shutdownVHFAMThread;
 
         /*COM2 SA342 FM PR4G Radio*/
         // Large dial 0-7 Presets 1, 2, 3, 4, 5, 6, 0, RG
@@ -427,7 +428,6 @@
                                     break;
                                 }
                         }
-
                         break;
                     }
             }
@@ -460,7 +460,6 @@
             _vhfAmSyncThread.Start();
         }
 
-        private volatile bool _shutdownVHFAMThread;
         private void VhfAmSynchThreadMethod(int desiredPositionDialWholeNumbers, int desiredPositionDialDecimals)
         {
             try
@@ -468,9 +467,9 @@
                 try
                 {
                     /*
-                                      * COM1 VHF AM
-                                      * 
-                                      */
+                    * COM1 VHF AM
+                    * 
+                    */
                     Interlocked.Exchange(ref _vhfAmThreadNowSynching, 1);
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
@@ -585,7 +584,6 @@
             {
                 Interlocked.Exchange(ref _vhfAmThreadNowSynching, 0);
             }
-
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
@@ -981,7 +979,6 @@
                                                     _vhfAmBigFrequencyStandby = 118;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -1017,7 +1014,6 @@
                                             {
                                                 _uhfBigFrequencyStandby = 225;
                                             }
-
                                             break;
                                         }
 
@@ -1028,7 +1024,6 @@
                                                 var command = GetAdfCommand(AdfDigit.Digit10S, true);
                                                 DCSBIOS.Send(command);
                                             }
-
                                             break;
                                         }
 
@@ -1038,7 +1033,6 @@
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -1056,7 +1050,6 @@
                                                     _vhfAmBigFrequencyStandby = 143;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -1092,7 +1085,6 @@
                                             {
                                                 _uhfBigFrequencyStandby = 399;
                                             }
-
                                             break;
                                         }
 
@@ -1103,7 +1095,6 @@
                                                 var command = GetAdfCommand(AdfDigit.Digit100S, true);
                                                 DCSBIOS.Send(command);
                                             }
-
                                             break;
                                         }
 
@@ -1113,7 +1104,6 @@
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -1132,7 +1122,6 @@
                                                     _vhfAmSmallFrequencyStandby = 0;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -1165,7 +1154,6 @@
                                                 // At max value
                                                 _uhfSmallFrequencyStandby = 0;
                                             }
-
                                             break;
                                         }
 
@@ -1176,7 +1164,6 @@
                                                 var command = GetAdfCommand(AdfDigit.Digits1S, true);
                                                 DCSBIOS.Send(command);
                                             }
-
                                             break;
                                         }
 
@@ -1186,7 +1173,6 @@
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -1205,7 +1191,6 @@
                                                     _vhfAmSmallFrequencyStandby = 0.975;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -1238,7 +1223,6 @@
                                                 // At max value
                                                 _uhfSmallFrequencyStandby = 99;
                                             }
-
                                             break;
                                         }
 
@@ -1249,7 +1233,6 @@
                                                 var command = GetAdfCommand(AdfDigit.Digits1S, false);
                                                 DCSBIOS.Send(command);
                                             }
-
                                             break;
                                         }
 
@@ -1259,7 +1242,6 @@
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -1277,7 +1259,6 @@
                                                     _vhfAmBigFrequencyStandby = 118;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -1318,7 +1299,6 @@
                                             {
                                                 _uhfBigFrequencyStandby = 225;
                                             }
-
                                             break;
                                         }
 
@@ -1329,7 +1309,6 @@
                                                 var command = GetAdfCommand(AdfDigit.Digit10S, true);
                                                 DCSBIOS.Send(command);
                                             }
-
                                             break;
                                         }
 
@@ -1339,7 +1318,6 @@
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -1357,7 +1335,6 @@
                                                     _vhfAmBigFrequencyStandby = 143;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -1393,7 +1370,6 @@
                                             {
                                                 _uhfBigFrequencyStandby = 399;
                                             }
-
                                             break;
                                         }
 
@@ -1404,7 +1380,6 @@
                                                 var command = GetAdfCommand(AdfDigit.Digit100S, true);
                                                 DCSBIOS.Send(command);
                                             }
-
                                             break;
                                         }
 
@@ -1414,7 +1389,6 @@
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -1433,7 +1407,6 @@
                                                     _vhfAmSmallFrequencyStandby = 0;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -1466,7 +1439,6 @@
                                                 // At max value
                                                 _uhfSmallFrequencyStandby = 0;
                                             }
-
                                             break;
                                         }
 
@@ -1477,7 +1449,6 @@
                                                 var command = GetAdfCommand(AdfDigit.Digits1S, true);
                                                 DCSBIOS.Send(command);
                                             }
-
                                             break;
                                         }
 
@@ -1487,7 +1458,6 @@
                                             break;
                                         }
                                 }
-
                                 break;
                             }
 
@@ -1506,7 +1476,6 @@
                                                     _vhfAmSmallFrequencyStandby = 0.975;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -1539,7 +1508,6 @@
                                                 // At max value
                                                 _uhfSmallFrequencyStandby = 99;
                                             }
-
                                             break;
                                         }
 
@@ -1550,7 +1518,6 @@
                                                 var command = GetAdfCommand(AdfDigit.Digits1S, false);
                                                 DCSBIOS.Send(command);
                                             }
-
                                             break;
                                         }
 
@@ -1560,13 +1527,11 @@
                                             break;
                                         }
                                 }
-
                                 break;
                             }
                     }
                 }
             }
-
             ShowFrequenciesOnPanel();
         }
 
@@ -1607,7 +1572,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentSA342RadioMode.VHFAM;
                                 }
-
                                 break;
                             }
 
@@ -1617,7 +1581,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentSA342RadioMode.VHFFM;
                                 }
-
                                 break;
                             }
 
@@ -1627,7 +1590,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentSA342RadioMode.UHF;
                                 }
-
                                 break;
                             }
 
@@ -1637,7 +1599,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentSA342RadioMode.ADF;
                                 }
-
                                 break;
                             }
 
@@ -1647,7 +1608,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentSA342RadioMode.NADIR;
                                 }
-
                                 break;
                             }
 
@@ -1658,7 +1618,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentSA342RadioMode.NOUSE;
                                 }
-
                                 break;
                             }
 
@@ -1668,7 +1627,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentSA342RadioMode.VHFAM;
                                 }
-
                                 break;
                             }
 
@@ -1678,7 +1636,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentSA342RadioMode.VHFFM;
                                 }
-
                                 break;
                             }
 
@@ -1688,7 +1645,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentSA342RadioMode.UHF;
                                 }
-
                                 break;
                             }
 
@@ -1698,7 +1654,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentSA342RadioMode.ADF;
                                 }
-
                                 break;
                             }
 
@@ -1708,7 +1663,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentSA342RadioMode.NADIR;
                                 }
-
                                 break;
                             }
 
@@ -1719,7 +1673,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentSA342RadioMode.NOUSE;
                                 }
-
                                 break;
                             }
 
@@ -1769,7 +1722,6 @@
                                 {
                                     SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsSA342.UPPER_FREQ_SWITCH);
                                 }
-
                                 break;
                             }
 
@@ -1779,7 +1731,6 @@
                                 {
                                     SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsSA342.LOWER_FREQ_SWITCH);
                                 }
-
                                 break;
                             }
                     }
@@ -1795,7 +1746,6 @@
                             null);
                     }
                 }
-
                 AdjustFrequency(hashSet);
             }
         }
@@ -1836,7 +1786,7 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new()
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
@@ -1868,39 +1818,20 @@
                                 return i.ToString();
                             }
                         }
-
                         break;
                     }
 
                 case 1:
                     {
-                        switch (position)
+                        return position switch
                         {
-                            case 0:
-                                {
-                                    return "00";
-                                }
-
-                            case 16383:
-                                {
-                                    return "25";
-                                }
-
-                            case 32767:
-                                {
-                                    return "50";
-                                }
-
-                            case 49151:
-                                {
-                                    return "75";
-                                }
-                        }
+                            0 => "00",
+                            16383 => "25",
+                            32767 => "50",
+                            49151 => "75",
+                        };
                     }
-
-                    break;
             }
-
             return "00";
         }
 
@@ -1926,33 +1857,15 @@
 
                 case VhfAmDigit.LastTwoSpecial:
                     {
-                        switch (position)
+                        return position switch
                         {
-                            case 0:
-                                {
-                                    return "00";
-                                }
-
-                            case 16383:
-                                {
-                                    return "25";
-                                }
-
-                            case 32767:
-                                {
-                                    return "50";
-                                }
-
-                            case 49151:
-                                {
-                                    return "75";
-                                }
-                        }
+                            0 => "00",
+                            16383 => "25",
+                            32767 => "50",
+                            49151 => "75",
+                        };                        
                     }
-
-                    break;
             }
-
             return "00";
         }
 
@@ -2015,7 +1928,6 @@
                     return true;
                 }
             }
-
             return false;
         }
 
@@ -2028,7 +1940,6 @@
                     return true;
                 }
             }
-
             return false;
         }
 
@@ -2071,7 +1982,6 @@
             {
                 return true;
             }
-
             return false;
         }
 
@@ -2086,7 +1996,6 @@
                         _vhfAmLeftDialSkipper = 0;
                         return false;
                     }
-
                     _vhfAmLeftDialSkipper++;
                     return true;
                 }
@@ -2095,7 +2004,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -2110,7 +2018,6 @@
                         _vhfAmRightDialSkipper = 0;
                         return false;
                     }
-
                     _vhfAmRightDialSkipper++;
                     return true;
                 }
@@ -2119,7 +2026,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -2134,7 +2040,6 @@
                         _uhfBigFrequencySkipper = 0;
                         return false;
                     }
-
                     _uhfBigFrequencySkipper++;
                     return true;
                 }
@@ -2143,7 +2048,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -2158,7 +2062,6 @@
                         _uhfSmallFrequencySkipper = 0;
                         return false;
                     }
-
                     _uhfSmallFrequencySkipper++;
                     return true;
                 }
@@ -2167,7 +2070,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -2183,7 +2085,6 @@
                             {
                                 return ADF1_UNIT100_S_INCREASE;
                             }
-
                             return ADF2_UNIT100_S_INCREASE;
                         }
 
@@ -2193,7 +2094,6 @@
                             {
                                 return ADF1_UNIT10_S_INCREASE;
                             }
-
                             return ADF2_UNIT10_S_INCREASE;
                         }
 
@@ -2205,20 +2105,16 @@
                                 {
                                     return ADF1_UNIT1_S_DECIMALS_INCREASE;
                                 }
-
                                 return ADF1_UNIT1_S_DECIMALS_DECREASE;
                             }
-
                             if (increase)
                             {
                                 return ADF2_UNIT1_S_DECIMALS_INCREASE;
                             }
-
                             return ADF2_UNIT1_S_DECIMALS_DECREASE;
                         }
                 }
             }
-
             return string.Empty;
         }
 
@@ -2233,7 +2129,6 @@
                         _adf100SDialSkipper = 0;
                         return false;
                     }
-
                     _adf100SDialSkipper++;
                     return true;
                 }
@@ -2242,7 +2137,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -2257,7 +2151,6 @@
                         _adf10SDialSkipper = 0;
                         return false;
                     }
-
                     _adf10SDialSkipper++;
                     return true;
                 }
@@ -2266,7 +2159,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -2281,7 +2173,6 @@
                         _adf1SDialSkipper = 0;
                         return false;
                     }
-
                     _adf1SDialSkipper++;
                     return true;
                 }
@@ -2290,7 +2181,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
