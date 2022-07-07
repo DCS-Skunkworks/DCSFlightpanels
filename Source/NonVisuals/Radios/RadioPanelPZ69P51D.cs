@@ -74,12 +74,12 @@ namespace NonVisuals.Radios
                 UpdateCounter(e.Address, e.Data);
 
                 /*
-                                 * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
-                                 * Once a dial has been deemed to be "off" position and needs to be changed
-                                 * a change command is sent to DCS-BIOS.
-                                 * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
-                                 * reset. Reading the dial's position with no change in value will not reset.
-                                 */
+                * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
+                * Once a dial has been deemed to be "off" position and needs to be changed
+                * a change command is sent to DCS-BIOS.
+                * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
+                * reset. Reading the dial's position with no change in value will not reset.
+                */
 
                 // VHF On Off
                 if (e.Address == _vhf1DcsbiosOutputPresetButton0.Address)
@@ -210,7 +210,6 @@ namespace NonVisuals.Radios
                                     {
                                         SetUpperRadioMode(CurrentP51DRadioMode.VHF);
                                     }
-
                                     break;
                                 }
 
@@ -225,7 +224,6 @@ namespace NonVisuals.Radios
                                     {
                                         SetUpperRadioMode(CurrentP51DRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -235,7 +233,6 @@ namespace NonVisuals.Radios
                                     {
                                         SetLowerRadioMode(CurrentP51DRadioMode.VHF);
                                     }
-
                                     break;
                                 }
 
@@ -250,7 +247,6 @@ namespace NonVisuals.Radios
                                     {
                                         SetLowerRadioMode(CurrentP51DRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -276,7 +272,6 @@ namespace NonVisuals.Radios
 
                                         }
                                     }
-
                                     break;
                                 }
 
@@ -288,7 +283,6 @@ namespace NonVisuals.Radios
                                         {
                                         }
                                     }
-
                                     break;
                                 }
                         }
@@ -298,7 +292,6 @@ namespace NonVisuals.Radios
                             PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_P51D, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                         }
                     }
-
                     AdjustFrequency(hashSet);
                 }
             }
@@ -335,7 +328,6 @@ namespace NonVisuals.Radios
                                                 {
                                                     SendIncVHFPresetCommand();
                                                 }
-
                                                 break;
                                             }
                                     }
@@ -352,7 +344,6 @@ namespace NonVisuals.Radios
                                                 {
                                                     SendDecVHFPresetCommand();
                                                 }
-
                                                 break;
                                             }
                                     }
@@ -395,7 +386,6 @@ namespace NonVisuals.Radios
                                                 {
                                                     SendIncVHFPresetCommand();
                                                 }
-
                                                 break;
                                             }
                                     }
@@ -412,7 +402,6 @@ namespace NonVisuals.Radios
                                                 {
                                                     SendDecVHFPresetCommand();
                                                 }
-
                                                 break;
                                             }
                                     }
@@ -456,7 +445,6 @@ namespace NonVisuals.Radios
             }
         }
 
-
         private bool SkipVhf1PresetDialChange()
         {
             try
@@ -468,7 +456,6 @@ namespace NonVisuals.Radios
                         _vhf1PresetDialSkipper = 0;
                         return false;
                     }
-
                     _vhf1PresetDialSkipper++;
                     return true;
                 }
@@ -731,7 +718,5 @@ namespace NonVisuals.Radios
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
-
-
     }
 }
