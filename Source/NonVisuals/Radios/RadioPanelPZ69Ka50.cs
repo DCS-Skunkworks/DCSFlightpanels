@@ -181,7 +181,6 @@
             base.Dispose(disposing);
         }
 
-
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
@@ -386,7 +385,6 @@
                                         {
                                             SendR800L1ToDCSBIOS();
                                         }
-
                                         break;
                                     }
 
@@ -401,7 +399,6 @@
                                         break;
                                     }
                             }
-
                             break;
                         }
 
@@ -420,7 +417,6 @@
                                         {
                                             SendR800L1ToDCSBIOS();
                                         }
-
                                         break;
                                     }
 
@@ -435,7 +431,6 @@
                                         break;
                                     }
                             }
-
                             break;
                         }
                 }
@@ -479,8 +474,8 @@
                     try
                     {
                         /*
-                                          * Ka-50 R-800L1 VHF 2
-                                          */
+                        * Ka-50 R-800L1 VHF 2
+                        */
                         Interlocked.Exchange(ref _r800L1ThreadNowSynching, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
@@ -565,7 +560,6 @@
                                         dial1SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial1Timeout);
                                 }
                             }
@@ -586,7 +580,6 @@
                                         dial2SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial2Timeout);
                                 }
                             }
@@ -607,7 +600,6 @@
                                         dial3SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial3Timeout);
                                 }
                             }
@@ -619,22 +611,13 @@
                             var desiredPositionDial4 = 0;
                             if (Interlocked.Read(ref _r800L1Dial4WaitingForFeedback) == 0)
                             {
-                                if (desiredPositionDial4X == 0)
+                                desiredPositionDial4 = desiredPositionDial4X switch
                                 {
-                                    desiredPositionDial4 = 0;
-                                }
-                                else if (desiredPositionDial4X == 2)
-                                {
-                                    desiredPositionDial4 = 0;
-                                }
-                                else if (desiredPositionDial4X == 5)
-                                {
-                                    desiredPositionDial4 = 2;
-                                }
-                                else if (desiredPositionDial4X == 7)
-                                {
-                                    desiredPositionDial4 = 2;
-                                }
+                                    0 => 0,
+                                    2 => 0,
+                                    5 => 2,
+                                    7 => 2 
+                                };
 
                                 // "00" "25" "50" "75", only "00" and "50" used.
                                 // Pos     0    1    2    3
@@ -656,7 +639,6 @@
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
                                     }
-
                                     Reset(ref dial4Timeout);
                                 }
                             }
@@ -741,7 +723,6 @@
                                     {
                                         SetUpperRadioMode(CurrentKa50RadioMode.VHF1_R828);
                                     }
-
                                     break;
                                 }
 
@@ -751,7 +732,6 @@
                                     {
                                         SetUpperRadioMode(CurrentKa50RadioMode.VHF2_R800L1);
                                     }
-
                                     break;
                                 }
 
@@ -761,7 +741,6 @@
                                     {
                                         SetUpperRadioMode(CurrentKa50RadioMode.ADF_ARK22);
                                     }
-
                                     break;
                                 }
 
@@ -771,7 +750,6 @@
                                     {
                                         SetLowerRadioMode(CurrentKa50RadioMode.VHF1_R828);
                                     }
-
                                     break;
                                 }
 
@@ -781,7 +759,6 @@
                                     {
                                         SetLowerRadioMode(CurrentKa50RadioMode.VHF2_R800L1);
                                     }
-
                                     break;
                                 }
 
@@ -791,7 +768,6 @@
                                     {
                                         SetLowerRadioMode(CurrentKa50RadioMode.ADF_ARK22);
                                     }
-
                                     break;
                                 }
 
@@ -801,7 +777,6 @@
                                     {
                                         SetUpperRadioMode(CurrentKa50RadioMode.ABRIS);
                                     }
-
                                     break;
                                 }
 
@@ -811,7 +786,6 @@
                                     {
                                         SetUpperRadioMode(CurrentKa50RadioMode.DATALINK);
                                     }
-
                                     break;
                                 }
 
@@ -822,7 +796,6 @@
                                     {
                                         SetUpperRadioMode(CurrentKa50RadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -832,7 +805,6 @@
                                     {
                                         SetLowerRadioMode(CurrentKa50RadioMode.ABRIS);
                                     }
-
                                     break;
                                 }
 
@@ -842,7 +814,6 @@
                                     {
                                         SetLowerRadioMode(CurrentKa50RadioMode.DATALINK);
                                     }
-
                                     break;
                                 }
 
@@ -853,7 +824,6 @@
                                     {
                                         SetLowerRadioMode(CurrentKa50RadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -899,17 +869,6 @@
                                                 DCSBIOS.Send(ADF_MODE_DEC);
                                             }
                                         }
-
-                                        /*if (_adfModeSwitchLastSent.Equals(ADFModeSwitchAntenna))
-                                                                                {
-                                                                                    DCSBIOS.Send(ADFModeSwitchCompass);
-                                                                                    _adfModeSwitchLastSent = ADFModeSwitchCompass;
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    DCSBIOS.Send(ADFModeSwitchAntenna);
-                                                                                    _adfModeSwitchLastSent = ADFModeSwitchAntenna;
-                                                                                }*/
                                     }
                                     else if (_currentUpperRadioMode == CurrentKa50RadioMode.DATALINK && radioPanelKnob.IsOn)
                                     {
@@ -919,7 +878,6 @@
                                     {
                                         SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsKa50.UPPER_FREQ_SWITCH);
                                     }
-
                                     break;
                                 }
 
@@ -961,7 +919,6 @@
                                     {
                                         SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsKa50.LOWER_FREQ_SWITCH);
                                     }
-
                                     break;
                                 }
                         }
@@ -977,7 +934,6 @@
                                 null);
                         }
                     }
-
                     AdjustFrequency(hashSet);
                 }
             }
@@ -1013,7 +969,6 @@
                                                 {
                                                     DCSBIOS.Send(VHF1_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1034,7 +989,6 @@
                                                 {
                                                     _r800L1BigFrequencyStandby++;
                                                 }
-
                                                 break;
                                             }
 
@@ -1051,7 +1005,6 @@
                                                 {
                                                     DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1061,7 +1014,6 @@
                                                 {
                                                     DCSBIOS.Send(ADF_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1070,7 +1022,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1084,7 +1035,6 @@
                                                 {
                                                     DCSBIOS.Send(VHF1_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1105,7 +1055,6 @@
                                                 {
                                                     _r800L1BigFrequencyStandby--;
                                                 }
-
                                                 break;
                                             }
 
@@ -1122,7 +1071,6 @@
                                                 {
                                                     DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1132,7 +1080,6 @@
                                                 {
                                                     DCSBIOS.Send(ADF_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1141,7 +1088,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1163,7 +1109,6 @@
                                                     _r800L1SmallFrequencyStandby = 0;
                                                     break;
                                                 }
-
                                                 _r800L1SmallFrequencyStandby += 5;
                                                 break;
                                             }
@@ -1181,7 +1126,6 @@
                                                 {
                                                     DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1196,7 +1140,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1218,7 +1161,6 @@
                                                     _r800L1SmallFrequencyStandby = 95;
                                                     break;
                                                 }
-
                                                 _r800L1SmallFrequencyStandby -= 5;
                                                 break;
                                             }
@@ -1236,7 +1178,6 @@
                                                 {
                                                     DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1251,7 +1192,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1265,7 +1205,6 @@
                                                 {
                                                     DCSBIOS.Send(VHF1_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1300,7 +1239,6 @@
                                                 {
                                                     _r800L1BigFrequencyStandby = _r800L1BigFrequencyStandby - 149 + 220;
                                                 }
-
                                                 break;
                                             }
 
@@ -1317,7 +1255,6 @@
                                                 {
                                                     DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1327,7 +1264,6 @@
                                                 {
                                                     DCSBIOS.Send(ADF_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1336,7 +1272,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1350,7 +1285,6 @@
                                                 {
                                                     DCSBIOS.Send(VHF1_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1385,7 +1319,6 @@
                                                 {
                                                     _r800L1BigFrequencyStandby = 149 - (220 - _r800L1BigFrequencyStandby);
                                                 }
-
                                                 break;
                                             }
 
@@ -1402,7 +1335,6 @@
                                                 {
                                                     DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1412,7 +1344,6 @@
                                                 {
                                                     DCSBIOS.Send(ADF_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1421,7 +1352,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1461,7 +1391,6 @@
                                                 {
                                                     DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1476,7 +1405,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -1498,7 +1426,6 @@
                                                     _r800L1SmallFrequencyStandby = 95;
                                                     break;
                                                 }
-
                                                 _r800L1SmallFrequencyStandby -= 5;
                                                 break;
                                             }
@@ -1516,7 +1443,6 @@
                                                 {
                                                     DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -1531,7 +1457,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
                         }
@@ -1592,7 +1517,6 @@
                         _vhf1PresetDialSkipper = 0;
                         return false;
                     }
-
                     _vhf1PresetDialSkipper++;
                     return true;
                 }
@@ -1601,7 +1525,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1616,7 +1539,6 @@
                         _adfPresetDialSkipper = 0;
                         return false;
                     }
-
                     _adfPresetDialSkipper++;
                     return true;
                 }
@@ -1625,7 +1547,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1640,7 +1561,6 @@
                         _datalinkMasterModeDialSkipper = 0;
                         return false;
                     }
-
                     _datalinkMasterModeDialSkipper++;
                     return true;
                 }
@@ -1649,7 +1569,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1664,7 +1583,6 @@
                         _datalinkSelfIdDialSkipper = 0;
                         return false;
                     }
-
                     _datalinkSelfIdDialSkipper++;
                     return true;
                 }
@@ -1673,7 +1591,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1797,26 +1714,12 @@
                                 string channelAsString;
                                 lock (_lockADFDialObject1)
                                 {
-                                    switch (_adfCockpitPresetDialPos)
+                                    channelAsString = _adfCockpitPresetDialPos switch
                                     {
-                                        case 0:
-                                            {
-                                                channelAsString = "9".PadLeft(2, ' ');
-                                                break;
-                                            }
-
-                                        case 1:
-                                            {
-                                                channelAsString = "10".PadLeft(2, ' ');
-                                                break;
-                                            }
-
-                                        default:
-                                            {
-                                                channelAsString = (_adfCockpitPresetDialPos - 1).ToString().PadLeft(2, ' ');
-                                                break;
-                                            }
-                                    }
+                                        0 => "9".PadLeft(2, ' '),
+                                        1 => "10".PadLeft(2, ' '),
+                                        _ => (_adfCockpitPresetDialPos - 1).ToString().PadLeft(2, ' ')
+                                    };
                                 }
 
                                 uint adfMode = 0;
@@ -1927,26 +1830,12 @@
                                 string channelAsString;
                                 lock (_lockADFDialObject1)
                                 {
-                                    switch (_adfCockpitPresetDialPos)
+                                    channelAsString = _adfCockpitPresetDialPos switch
                                     {
-                                        case 0:
-                                            {
-                                                channelAsString = "9".PadLeft(2, ' ');
-                                                break;
-                                            }
-
-                                        case 1:
-                                            {
-                                                channelAsString = "10".PadLeft(2, ' ');
-                                                break;
-                                            }
-
-                                        default:
-                                            {
-                                                channelAsString = (_adfCockpitPresetDialPos - 1).ToString().PadLeft(2, ' ');
-                                                break;
-                                            }
-                                    }
+                                        0 => "9".PadLeft(2, ' '),
+                                        1 => "10".PadLeft(2, ' '),
+                                        _ => (_adfCockpitPresetDialPos - 1).ToString().PadLeft(2, ' ')
+                                    };
                                 }
 
                                 uint adfMode = 0;
@@ -2022,7 +1911,7 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new()
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
@@ -2231,7 +2120,6 @@
                                         return inc;
                                     }
                             }
-
                             break;
                         }
 
@@ -2266,7 +2154,6 @@
                                         return inc;
                                     }
                             }
-
                             break;
                         }
 
@@ -2301,7 +2188,6 @@
                                         return inc;
                                     }
                             }
-
                             break;
                         }
 
@@ -2336,7 +2222,6 @@
                                         return inc;
                                     }
                             }
-
                             break;
                         }
 
@@ -2371,7 +2256,6 @@
                                         return inc;
                                     }
                             }
-
                             break;
                         }
 
@@ -2402,7 +2286,6 @@
                                         return dec;
                                     }
                             }
-
                             break;
                         }
 
@@ -2437,7 +2320,6 @@
                                         return dec;
                                     }
                             }
-
                             break;
                         }
 
@@ -2472,7 +2354,6 @@
                                         return dec;
                                     }
                             }
-
                             break;
                         }
 
@@ -2507,7 +2388,6 @@
                                         return dec;
                                     }
                             }
-
                             break;
                         }
 
@@ -2538,7 +2418,6 @@
                                         return null;
                                     }
                             }
-
                             break;
                         }
                 }
@@ -2549,7 +2428,7 @@
             }
 
             throw new Exception(
-                "Should reach this code. private String GetCommandDirectionFor0To9Dials(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
+                $"Should not reach this code. private String GetCommandDirectionFor0To9Dials(uint desiredDialPosition, uint actualDialPosition) -> {desiredDialPosition}   {actualDialPosition}");
         }
 
         private string GetR800L1DialFrequencyForPosition(uint position)
@@ -2558,28 +2437,13 @@
             {
                 // "00"  "25" "50" "75"
                 // 0    1    2    3  
-                switch (position)
+                return position switch
                 {
-                    case 0:
-                        {
-                            return "0";
-                        }
-
-                    case 1:
-                        {
-                            return "5";
-                        }
-
-                    case 2:
-                        {
-                            return "5";
-                        }
-
-                    case 3:
-                        {
-                            return "0";
-                        }
-                }
+                    0 => "0",
+                    1 => "5",
+                    2 => "5",
+                    3 => "0",
+                };             
             }
             catch (Exception ex)
             {
