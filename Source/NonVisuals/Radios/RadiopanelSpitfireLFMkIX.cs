@@ -45,38 +45,22 @@
         *  COM1 Small Fine Channel/OFF 0 => 4
         *  Freq. Selector Light Switch        
         */
-        private readonly object _lockHFRadioPresetDialObject1 = new object();
-
+        private readonly object _lockHFRadioPresetDialObject1 = new();
         private DCSBIOSOutput _hfRadioOffDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelAPresetDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelBPresetDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelCPresetDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelDPresetDcsbiosOutput;
-
         private volatile uint _hfRadioOffCockpitButton = 1;
-
         private volatile uint _hfRadioChannelACockpitButton;
-
         private volatile uint _hfRadioChannelBCockpitButton;
-
         private volatile uint _hfRadioChannelCCockpitButton;
-
         private volatile uint _hfRadioChannelDCockpitButton;
-
         private int _hfRadioChannelPresetDialSkipper;
-
         private const string HF_RADIO_LIGHT_SWITCH_COMMAND = "RCTRL_DIM TOGGLE\n";
-
-        private readonly object _lockHFRadioModeDialObject1 = new object();
-
+        private readonly object _lockHFRadioModeDialObject1 = new();
         private volatile uint _hfRadioModeCockpitDialPosition = 1;
-
         private DCSBIOSOutput _hfRadioModeDialPresetDcsbiosOutput;
-
         private int _hfRadioModePresetDialSkipper;
 
         /* 
@@ -84,30 +68,18 @@
                 *  COM2 Small IFF Circuit B
                 *  COM2 ACT/STBY IFF Destruction
                 */
-        private readonly object _lockIFFDialObject1 = new object();
-
+        private readonly object _lockIFFDialObject1 = new();
         private DCSBIOSOutput _iffBiffDcsbiosOutputDial;
-
         private DCSBIOSOutput _iffDiffDcsbiosOutputDial;
-
         private volatile uint _iffBiffCockpitDialPos = 1;
-
         private volatile uint _iffDiffCockpitDialPos;
-
         private int _iffBiffDialSkipper;
-
         private int _iffDiffDialSkipper;
-
         private const string IFFB_COMMAND_INC = "IFF_B INC\n";
-
         private const string IFFB_COMMAND_DEC = "IFF_B DEC\n";
-
         private const string IFFD_COMMAND_INC = "IFF_D INC\n";
-
         private const string IFFD_COMMAND_DEC = "IFF_D DEC\n";
-
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
-
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69SpitfireLFMkIX(HIDSkeleton hidSkeleton)
@@ -306,7 +278,6 @@
                                     {
                                         SetUpperRadioMode(CurrentSpitfireLFMkIXRadioMode.HFRADIO);
                                     }
-
                                     break;
                                 }
 
@@ -316,7 +287,6 @@
                                     {
                                         SetUpperRadioMode(CurrentSpitfireLFMkIXRadioMode.IFF);
                                     }
-
                                     break;
                                 }
 
@@ -330,7 +300,6 @@
                                     {
                                         SetUpperRadioMode(CurrentSpitfireLFMkIXRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -340,7 +309,6 @@
                                     {
                                         SetLowerRadioMode(CurrentSpitfireLFMkIXRadioMode.HFRADIO);
                                     }
-
                                     break;
                                 }
 
@@ -350,7 +318,6 @@
                                     {
                                         SetLowerRadioMode(CurrentSpitfireLFMkIXRadioMode.IFF);
                                     }
-
                                     break;
                                 }
 
@@ -364,7 +331,6 @@
                                     {
                                         SetLowerRadioMode(CurrentSpitfireLFMkIXRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -390,7 +356,6 @@
                                             DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
-
                                     break;
                                 }
 
@@ -403,7 +368,6 @@
                                             DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
-
                                     break;
                                 }
                         }
@@ -460,7 +424,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -470,7 +433,6 @@
                                                 {
                                                     DCSBIOS.Send(IFFD_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -479,7 +441,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -498,7 +459,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -508,11 +468,9 @@
                                                 {
                                                     DCSBIOS.Send(IFFD_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -531,7 +489,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -541,11 +498,9 @@
                                                 {
                                                     DCSBIOS.Send(IFFB_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -564,7 +519,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -574,11 +528,9 @@
                                                 {
                                                     DCSBIOS.Send(IFFB_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -597,7 +549,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -607,11 +558,9 @@
                                                 {
                                                     DCSBIOS.Send(IFFD_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -630,7 +579,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -640,11 +588,9 @@
                                                 {
                                                     DCSBIOS.Send(IFFD_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -663,7 +609,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -673,11 +618,9 @@
                                                 {
                                                     DCSBIOS.Send(IFFB_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -696,7 +639,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -706,11 +648,9 @@
                                                 {
                                                     DCSBIOS.Send(IFFB_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
                         }
@@ -863,7 +803,6 @@
                                 break;
                             }
                     }
-
                     SendLCDData(bytes);
                 }
             }
@@ -961,7 +900,6 @@
                         _hfRadioChannelPresetDialSkipper = 0;
                         return false;
                     }
-
                     _hfRadioChannelPresetDialSkipper++;
                     return true;
                 }
@@ -970,7 +908,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -985,7 +922,6 @@
                         _iffDiffDialSkipper = 0;
                         return false;
                     }
-
                     _iffDiffDialSkipper++;
                     return true;
                 }
@@ -994,7 +930,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1009,7 +944,6 @@
                         _iffBiffDialSkipper = 0;
                         return false;
                     }
-
                     _iffBiffDialSkipper++;
                     return true;
                 }
@@ -1018,7 +952,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1033,7 +966,6 @@
                         _hfRadioModePresetDialSkipper = 0;
                         return false;
                     }
-
                     _hfRadioModePresetDialSkipper++;
                     return true;
                 }
@@ -1042,7 +974,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1096,7 +1027,6 @@
                     }
                 }
             }
-
             return null;
         }
 
@@ -1108,7 +1038,6 @@
                 {
                     return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition + 1) + "\n";
                 }
-
                 return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition - 1) + "\n";
             }
         }

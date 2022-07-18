@@ -45,42 +45,24 @@
         *  COM1 Small Fine Channel/OFF 0 => 4
         *  Freq. Selector Light Switch        
         */
-        private readonly object _lockHFRadioPresetDialObject1 = new object();
-
+        private readonly object _lockHFRadioPresetDialObject1 = new();
         private DCSBIOSOutput _hfRadioOffDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelAPresetDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelBPresetDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelCPresetDcsbiosOutput;
-
         private DCSBIOSOutput _hfRadioChannelDPresetDcsbiosOutput;
-
         private volatile uint _hfRadioOffCockpitButton = 1;
-
         private volatile uint _hfRadioChannelACockpitButton;
-
         private volatile uint _hfRadioChannelBCockpitButton;
-
         private volatile uint _hfRadioChannelCCockpitButton;
-
         private volatile uint _hfRadioChannelDCockpitButton;
-
         private int _hfRadioChannelPresetDialSkipper;
-
         private const string HF_RADIO_LIGHT_SWITCH_COMMAND = "RCTRL_DIM TOGGLE\n";
-
-        private readonly object _lockHFRadioModeDialObject1 = new object();
-
+        private readonly object _lockHFRadioModeDialObject1 = new();
         private volatile uint _hfRadioModeCockpitDialPosition = 1;
-
         private DCSBIOSOutput _hfRadioModeDialPresetDcsbiosOutput;
-
         private int _hfRadioModePresetDialSkipper;
-
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
-
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69P47D(HIDSkeleton hidSkeleton)
@@ -302,7 +284,6 @@
                                     {
                                         SetUpperRadioMode(CurrentP47DRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -312,7 +293,6 @@
                                     {
                                         SetLowerRadioMode(CurrentP47DRadioMode.HFRADIO);
                                     }
-
                                     break;
                                 }
 
@@ -335,7 +315,6 @@
                                     {
                                         SetLowerRadioMode(CurrentP47DRadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -361,7 +340,6 @@
                                             DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
-
                                     break;
                                 }
 
@@ -374,7 +352,6 @@
                                             DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
-
                                     break;
                                 }
                         }
@@ -390,7 +367,6 @@
                                 null);
                         }
                     }
-
                     AdjustFrequency(hashSet);
                 }
             }
@@ -431,7 +407,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -448,7 +423,6 @@
                                                 break;
                                             }
                                     }
-
                                     break;
                                 }
 
@@ -467,7 +441,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -480,7 +453,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -499,7 +471,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -512,7 +483,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -531,7 +501,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -544,7 +513,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -563,7 +531,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -576,7 +543,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -595,7 +561,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -608,7 +573,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -627,7 +591,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -640,7 +603,6 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
 
@@ -659,7 +621,6 @@
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
-
                                                 break;
                                             }
 
@@ -672,13 +633,11 @@
                                                 break;
                                             }*/
                                     }
-
                                     break;
                                 }
                         }
                     }
                 }
-
                 ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
@@ -869,7 +828,7 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new()
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
@@ -920,7 +879,6 @@
                         _hfRadioChannelPresetDialSkipper = 0;
                         return false;
                     }
-
                     _hfRadioChannelPresetDialSkipper++;
                     return true;
                 }
@@ -929,7 +887,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -989,7 +946,6 @@
                         _hfRadioModePresetDialSkipper = 0;
                         return false;
                     }
-
                     _hfRadioModePresetDialSkipper++;
                     return true;
                 }
@@ -998,7 +954,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1052,7 +1007,6 @@
                     }
                 }
             }
-
             return null;
         }
 
@@ -1064,7 +1018,6 @@
                 {
                     return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition + 1) + "\n";
                 }
-
                 return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition - 1) + "\n";
             }
         }

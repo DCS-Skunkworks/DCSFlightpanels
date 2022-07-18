@@ -24,7 +24,7 @@
         private readonly NumberFormatInfo _numberFormatInfoFullDisplay;
         private int _frequencyKnobSensitivity;
         private volatile int _frequencySensitivitySkipper;
-        protected readonly object LockLCDUpdateObject = new object();
+        protected readonly object LockLCDUpdateObject = new();
         protected bool DataHasBeenReceivedFromDCSBIOS;
 
         /// <summary>
@@ -35,7 +35,7 @@
         public long ResetSyncTimeout { get; set; } = 35000000;
 
         private long _syncOKDelayTimeout = 50000000; // 5s
-        private readonly PZ69DisplayBytes _pZ69DisplayBytes = new PZ69DisplayBytes();
+        private readonly PZ69DisplayBytes _pZ69DisplayBytes = new();
 
         protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
         {
@@ -225,7 +225,6 @@
             {
                 return null;
             }
-
             return new List<string>();
         }
 
@@ -247,7 +246,6 @@
                         {
                             return true;
                         }
-
                         _frequencySensitivitySkipper = 0;
                         break;
                     }
@@ -260,12 +258,10 @@
                         {
                             return true;
                         }
-
                         _frequencySensitivitySkipper = 0;
                         break;
                     }
             }
-
             return false;
         }
         
@@ -273,7 +269,6 @@
         {
             e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
-        
 
         protected void Reset(ref long syncVariable)
         {
@@ -301,7 +296,6 @@
             {
                 return false; // good!
             }
-
             return true; // wait more
         }
 

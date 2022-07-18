@@ -45,11 +45,11 @@
         private double _uhfSmallFrequencyStandby;
         private double _uhfSavedCockpitBigFrequency;
         private double _uhfSavedCockpitSmallFrequency;
-        private readonly object _lockUhfDialsObject1 = new object();
-        private readonly object _lockUhfDialsObject2 = new object();
-        private readonly object _lockUhfDialsObject3 = new object();
-        private readonly object _lockUhfDialsObject4 = new object();
-        private readonly object _lockUhfDialsObject5 = new object();
+        private readonly object _lockUhfDialsObject1 = new();
+        private readonly object _lockUhfDialsObject2 = new();
+        private readonly object _lockUhfDialsObject3 = new();
+        private readonly object _lockUhfDialsObject4 = new();
+        private readonly object _lockUhfDialsObject5 = new();
         private DCSBIOSOutput _uhfDcsbiosOutputFreqDial1;
         private DCSBIOSOutput _uhfDcsbiosOutputFreqDial2;
         private DCSBIOSOutput _uhfDcsbiosOutputFreqDial3;
@@ -101,9 +101,9 @@
         private int _tacanSavedCockpitBigFrequency = 6;
         private int _tacanSavedCockpitSmallFrequency = 5;
         private int _tacanSavedCockpitXY;
-        private readonly object _lockTacanDialsObject1 = new object();
-        private readonly object _lockTacanDialsObject2 = new object();
-        private readonly object _lockTacanDialsObject3 = new object();
+        private readonly object _lockTacanDialsObject1 = new();
+        private readonly object _lockTacanDialsObject2 = new();
+        private readonly object _lockTacanDialsObject3 = new();
         private DCSBIOSOutput _tacanDcsbiosOutputFreqChannel;
         private volatile uint _tacanCockpitFreq1DialPos = 1;
         private volatile uint _tacanCockpitFreq2DialPos = 1;
@@ -117,7 +117,7 @@
         private long _tacanDial2WaitingForFeedback;
         private long _tacanDial3WaitingForFeedback;
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
 
         private long _doUpdatePanelLCD;
 
@@ -265,7 +265,6 @@
                 }
             }
 
-
             // TACAN is set via String listener
 
             // Set once
@@ -390,7 +389,6 @@
                                     {
                                         SendUhfToDCSBIOS();
                                     }
-
                                     break;
                                 }
 
@@ -400,7 +398,6 @@
                                     break;
                                 }
                         }
-
                         break;
                     }
 
@@ -414,7 +411,6 @@
                                     {
                                         SendUhfToDCSBIOS();
                                     }
-
                                     break;
                                 }
 
@@ -424,7 +420,6 @@
                                     break;
                                 }
                         }
-
                         break;
                     }
             }
@@ -472,39 +467,14 @@
             freqDial4 = int.Parse(frequencyAsString.Substring(4, 1));
 
             var tmp = int.Parse(frequencyAsString.Substring(5, 1));
-            switch (tmp)
+            freqDial5 = tmp switch
             {
-                case 0:
-                    {
-                        freqDial5 = 0;
-                        break;
-                    }
-
-                case 2:
-                    {
-                        freqDial5 = 1;
-                        break;
-                    }
-
-                case 5:
-                    {
-                        freqDial5 = 2;
-                        break;
-                    }
-
-                case 7:
-                    {
-                        freqDial5 = 3;
-                        break;
-                    }
-
-                default:
-                    {
-                        // Safeguard in case it is in a invalid position
-                        freqDial5 = 0;
-                        break;
-                    }
-            }
+                0 => 0,
+                2 => 1,
+                5 => 2,
+                7 => 3,
+                _ => 0  // Safeguard in case it is in a invalid position
+            };
 
             _shutdownUHFThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
@@ -807,7 +777,6 @@
                     var dial1SendCount = 0;
                     var dial2SendCount = 0;
                     var dial3SendCount = 0;
-
 
                     do
                     {
@@ -1122,7 +1091,6 @@
                                     SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
-
                             break;
                         }
 
@@ -1719,7 +1687,6 @@
         {
             // Crude fix if any freqs are outside the valid boundaries
 
-
             // UHF
             // 225.000 - 399.975 MHz
             if (_uhfBigFrequencyStandby < 100)
@@ -1787,7 +1754,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentF5ERadioMode.UHF;
                                 }
-
                                 break;
                             }
 
@@ -1797,7 +1763,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentF5ERadioMode.TACAN;
                                 }
-
                                 break;
                             }
 
@@ -1811,7 +1776,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentF5ERadioMode.NO_USE;
                                 }
-
                                 break;
                             }
 
@@ -1821,7 +1785,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentF5ERadioMode.UHF;
                                 }
-
                                 break;
                             }
 
@@ -1831,7 +1794,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentF5ERadioMode.TACAN;
                                 }
-
                                 break;
                             }
 
@@ -1845,7 +1807,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentF5ERadioMode.NO_USE;
                                 }
-
                                 break;
                             }
 
@@ -1903,7 +1864,6 @@
 
                                     _upperButtonPressedAndDialRotated = false;
                                 }
-
                                 break;
                             }
 
@@ -1921,7 +1881,6 @@
 
                                     _lowerButtonPressedAndDialRotated = false;
                                 }
-
                                 break;
                             }
                     }
@@ -1964,12 +1923,11 @@
             }
         }
 
-
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new()
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
@@ -2011,32 +1969,13 @@
             {
                 case 1:
                     {
-                        switch (position)
+                        return position switch
                         {
-                            case 1:
-                                {
-                                    return "1";
-                                }
-
-                            case 2:
-                                {
-                                    return "2";
-                                }
-
-                            case 3:
-                                {
-                                    return "3";
-                                }
-
-                            case 4:
-                                {
-                                    return "4";
-
-                                    // throw new NotImplementedException("check how A should be treated.");
-                                    // return "0";//should be "A"
-                                }
-                        }
-                        break;
+                            1 => "1",
+                            2 => "2",
+                            3 => "3",
+                            4 => "4"
+                        };                        
                     }
 
                 case 2:
@@ -2048,33 +1987,16 @@
 
                 case 5:
                     {
-                        switch (position)
+                        // "00" "25" "50" "75", only "00" and "50" used.
+                        // Pos     0    1    2    3
+                        return position switch
                         {
-                            // "00" "25" "50" "75", only "00" and "50" used.
-                            // Pos     0    1    2    3
-                            case 0:
-                                {
-                                    return "0";
-                                }
-
-                            case 1:
-                                {
-                                    return "2";
-                                }
-
-                            case 2:
-                                {
-                                    return "5";
-                                }
-
-                            case 3:
-                                {
-                                    return "7";
-                                }
-                        }
+                            0 => "0",
+                            1 => "2",
+                            2 => "5",
+                            3 => "7"
+                        };
                     }
-
-                    break;
             }
             return string.Empty;
         }
@@ -2220,5 +2142,4 @@
         {
         }
     }
-
 }

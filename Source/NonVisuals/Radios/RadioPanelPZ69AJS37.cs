@@ -51,7 +51,6 @@
         private const string FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND = "FR22_OUTER_RIGHT_KNOB -8000\n";
         private const string FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND = "FR22_INNER_RIGHT_KNOB -8000\n";
 
-
         /*AJS-37 FR24 COM2*/
         // Large dial Presets
         // Small dial Radio Volume
@@ -65,9 +64,9 @@
         private volatile uint _tilsChannelCockpitValue;
         private volatile uint _tilsChannelLayerSelectorCockpitValue;
         private volatile uint _masterModeSelectorCockpitValue;
-        private readonly object _lockTilsChannelSelectorDialObject1 = new object();
-        private readonly object _lockTilsChannelLayerSelectorObject2 = new object();
-        private readonly object _lockMasterModeSelectorObject = new object();
+        private readonly object _lockTilsChannelSelectorDialObject1 = new();
+        private readonly object _lockTilsChannelLayerSelectorObject2 = new();
+        private readonly object _lockMasterModeSelectorObject = new();
         private DCSBIOSOutput _tilsChannelSelectorDcsbiosOutput;
         private DCSBIOSOutput _tilsChannelLayerSelectorDcsbiosOutput;
         private DCSBIOSOutput _masterModeSelectorDcsbiosOutput;
@@ -79,7 +78,7 @@
         private int _tilsChannelDialSkipper;
         private int _masterModeSelectorDialSkipper;
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69AJS37(HIDSkeleton hidSkeleton) : base(hidSkeleton)
@@ -117,7 +116,6 @@
                     Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
-
                 */
             }
             catch (Exception ex)
@@ -135,12 +133,12 @@
                 UpdateCounter(e.Address, e.Data);
 
                 /*
-                                 * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
-                                 * Once a dial has been deemed to be "off" position and needs to be changed
-                                 * a change command is sent to DCS-BIOS.
-                                 * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
-                                 * reset. Reading the dial's position with no change in value will not reset.
-                                 */
+                * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
+                * Once a dial has been deemed to be "off" position and needs to be changed
+                * a change command is sent to DCS-BIOS.
+                * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
+                * reset. Reading the dial's position with no change in value will not reset.
+                */
 
                 // TILS Channel Selector
                 if (e.Address == _tilsChannelSelectorDcsbiosOutput.Address)
@@ -199,7 +197,6 @@
         {
             try
             {
-
                 if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsAJS37.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsAJS37.LOWER_FREQ_SWITCH))
                 {
                     // Don't do anything on the very first button press as the panel sends ALL
@@ -304,7 +301,6 @@
                                     {
                                         SetUpperRadioMode(CurrentAJS37RadioMode.FR22);
                                     }
-
                                     break;
                                 }
 
@@ -314,7 +310,6 @@
                                     {
                                         SetUpperRadioMode(CurrentAJS37RadioMode.FR24);
                                     }
-
                                     break;
                                 }
 
@@ -324,7 +319,6 @@
                                     {
                                         SetUpperRadioMode(CurrentAJS37RadioMode.TILS);
                                     }
-
                                     break;
                                 }
 
@@ -334,7 +328,6 @@
                                     {
                                         SetLowerRadioMode(CurrentAJS37RadioMode.FR22);
                                     }
-
                                     break;
                                 }
 
@@ -344,7 +337,6 @@
                                     {
                                         SetLowerRadioMode(CurrentAJS37RadioMode.FR24);
                                     }
-
                                     break;
                                 }
 
@@ -354,7 +346,6 @@
                                     {
                                         SetLowerRadioMode(CurrentAJS37RadioMode.TILS);
                                     }
-
                                     break;
                                 }
 
@@ -404,7 +395,6 @@
                                     {
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsAJS37.UPPER_FREQ_SWITCH);
                                     }
-
                                     break;
                                 }
 
@@ -429,7 +419,6 @@
                                     {
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsAJS37.LOWER_FREQ_SWITCH);
                                     }
-
                                     break;
                                 }
                         }
@@ -439,7 +428,6 @@
                             PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AJS37, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                         }
                     }
-
                     AdjustFrequency(hashSet);
                 }
             }
@@ -453,7 +441,6 @@
         {
             try
             {
-
                 if (SkipCurrentFrequencyChange())
                 {
                     return;
@@ -487,7 +474,6 @@
                                                 {
                                                     DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -520,7 +506,6 @@
                                                 {
                                                     DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -553,7 +538,6 @@
                                                 {
                                                     DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -586,7 +570,6 @@
                                                 {
                                                     DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -610,7 +593,6 @@
 
                                         case CurrentAJS37RadioMode.FR24:
                                             {
-
                                                 break;
                                             }
 
@@ -620,7 +602,6 @@
                                                 {
                                                     DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -644,7 +625,6 @@
 
                                         case CurrentAJS37RadioMode.FR24:
                                             {
-
                                                 break;
                                             }
 
@@ -654,7 +634,6 @@
                                                 {
                                                     DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -687,7 +666,6 @@
                                                 {
                                                     DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -720,7 +698,6 @@
                                                 {
                                                     DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -743,8 +720,6 @@
             }
         }
 
-
-
         private void ShowFrequenciesOnPanel()
         {
             try
@@ -753,13 +728,11 @@
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-
                         return;
                     }
 
                     if (!FirstReportHasBeenRead)
                     {
-
                         return;
                     }
 
@@ -895,7 +868,6 @@
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
-
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             PZ69KnobChanged(isFirstReport, hashSet);
@@ -905,7 +877,6 @@
         {
             try
             {
-
                 // COM1
 
                 // COM2
@@ -1019,7 +990,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -1046,7 +1016,5 @@
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
-
-
     }
 }

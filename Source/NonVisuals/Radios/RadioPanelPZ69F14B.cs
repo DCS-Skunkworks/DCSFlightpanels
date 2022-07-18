@@ -52,10 +52,10 @@
         private uint _uhfSavedCockpitDial2Frequency;
         private uint _uhfSavedCockpitDial3Frequency;
         private uint _uhfSavedCockpitDial4Frequency;
-        private readonly object _lockUhfDialBigFreqObject = new object();
-        private readonly object _lockUhfDial3FreqObject = new object();
-        private readonly object _lockUhfDial4FreqObject = new object();
-        private readonly object _lockUhfPresetObject = new object();
+        private readonly object _lockUhfDialBigFreqObject = new();
+        private readonly object _lockUhfDial3FreqObject = new();
+        private readonly object _lockUhfDial4FreqObject = new();
+        private readonly object _lockUhfPresetObject = new();
         private DCSBIOSOutput _uhfDcsbiosOutputBigFrequencyNumber;
         private DCSBIOSOutput _uhfDcsbiosOutputDial3FrequencyNumber;
         private DCSBIOSOutput _uhfDcsbiosOutputDial4FrequencyNumber;
@@ -120,10 +120,10 @@
         private uint _vuhfSavedCockpitDial2Frequency;
         private uint _vuhfSavedCockpitDial3Frequency;
         private uint _vuhfSavedCockpitDial4Frequency;
-        private readonly object _lockVuhfBigFreqObject = new object();
-        private readonly object _lockVuhfDial3FreqObject = new object();
-        private readonly object _lockVuhfDial4FreqObject = new object();
-        private readonly object _lockVuhfPresetObject = new object();
+        private readonly object _lockVuhfBigFreqObject = new();
+        private readonly object _lockVuhfDial3FreqObject = new();
+        private readonly object _lockVuhfDial4FreqObject = new();
+        private readonly object _lockVuhfPresetObject = new();
         private DCSBIOSOutput _vuhfDcsbiosOutputBigFrequencyNumber;
         private DCSBIOSOutput _vuhfDcsbiosOutputDial3FrequencyNumber;
         private DCSBIOSOutput _vuhfDcsbiosOutputDial4FrequencyNumber;
@@ -176,9 +176,9 @@
         private int _pilotTacanSavedCockpitTensFrequency = 6;
         private int _pilotTacanSavedCockpitOnesFrequency = 5;
         private int _pilotTacanSavedCockpitXY;
-        private readonly object _lockPilotTacanTensDialObject = new object();
-        private readonly object _lockPilotTacanOnesObject = new object();
-        private readonly object _lockPilotTacanXYDialObject = new object();
+        private readonly object _lockPilotTacanTensDialObject = new();
+        private readonly object _lockPilotTacanOnesObject = new();
+        private readonly object _lockPilotTacanXYDialObject = new();
         private DCSBIOSOutput _pilotTacanDcsbiosOutputTensDial;
         private DCSBIOSOutput _pilotTacanDcsbiosOutputOnesDial;
         private DCSBIOSOutput _pilotTacanDcsbiosOutputXYDial;
@@ -204,9 +204,9 @@
         private int _rioTacanSavedCockpitTensFrequency = 6;
         private int _rioTacanSavedCockpitOnesFrequency = 5;
         private int _rioTacanSavedCockpitXY;
-        private readonly object _lockRioTacanTensDialObject = new object();
-        private readonly object _lockRioTacanOnesObject = new object();
-        private readonly object _lockRioTacanXYDialObject = new object();
+        private readonly object _lockRioTacanTensDialObject = new();
+        private readonly object _lockRioTacanOnesObject = new();
+        private readonly object _lockRioTacanXYDialObject = new();
         private DCSBIOSOutput _rioTacanDcsbiosOutputTensDial;
         private DCSBIOSOutput _rioTacanDcsbiosOutputOnesDial;
         private DCSBIOSOutput _rioTacanDcsbiosOutputXYDial;
@@ -230,9 +230,9 @@
         private int _rioLink4TensAndOnesFrequencyStandby;
         private int _rioLink4SavedCockpitHundredsFrequency;
         private int _rioLink4SavedCockpitTensAndOnesFrequency;
-        private readonly object _lockRioLink4HundredsDial = new object();
-        private readonly object _lockRioLink4TensDial = new object();
-        private readonly object _lockRioLink4OnesDial = new object();
+        private readonly object _lockRioLink4HundredsDial = new();
+        private readonly object _lockRioLink4TensDial = new();
+        private readonly object _lockRioLink4OnesDial = new();
         private DCSBIOSOutput _rioLink4DcsbiosOutputHundredsDial;
         private DCSBIOSOutput _rioLink4DcsbiosOutputTensDial;
         private DCSBIOSOutput _rioLink4DcsbiosOutputOnesDial;
@@ -254,7 +254,7 @@
         private readonly ClickSpeedDetector _rioLink4TensAndOnesClickSpeedDetector = new ClickSpeedDetector(20);
         private byte _skipRioLink4TensAndOnesFreqChange;
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
 
         private long _doUpdatePanelLCD;
 
@@ -293,7 +293,6 @@
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             UpdateCounter(e.Address, e.Data);
-
 
             /*
              * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
@@ -665,7 +664,6 @@
                                         SendUHFToDCSBIOS();
                                         ShowFrequenciesOnPanel();
                                     }
-
                                     break;
                                 }
 
@@ -676,7 +674,6 @@
                                         SendVUHFToDCSBIOS();
                                         ShowFrequenciesOnPanel();
                                     }
-
                                     break;
                                 }
 
@@ -721,7 +718,6 @@
                                         SendUHFToDCSBIOS();
                                         ShowFrequenciesOnPanel();
                                     }
-
                                     break;
                                 }
 
@@ -732,7 +728,6 @@
                                         SendVUHFToDCSBIOS();
                                         ShowFrequenciesOnPanel();
                                     }
-
                                     break;
                                 }
 
@@ -758,7 +753,6 @@
                     }
             }
         }
-
 
         private void SendUHFToDCSBIOS()
         {
@@ -822,7 +816,6 @@
                     var dial3SendCount = 0;
                     var dial4SendCount = 0;
 
-
                     do
                     {
                         if (IsTimedOut(ref dial1Timeout))
@@ -857,7 +850,6 @@
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -878,7 +870,6 @@
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial2Timeout);
                             }
                         }
@@ -900,7 +891,6 @@
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
                                 }
                             }
-
                             Reset(ref dial3Timeout);
                         }
                         else
@@ -920,7 +910,6 @@
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial4Timeout);
                             }
                         }
@@ -957,7 +946,6 @@
             {
                 Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
             }
-
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
         
@@ -1023,7 +1011,6 @@
                     var dial3SendCount = 0;
                     var dial4SendCount = 0;
 
-
                     do
                     {
                         if (IsTimedOut(ref dial1Timeout))
@@ -1058,7 +1045,6 @@
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _vuhfDial1WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -1079,7 +1065,6 @@
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _vuhfDial2WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial2Timeout);
                             }
                         }
@@ -1101,7 +1086,6 @@
                                     Interlocked.Exchange(ref _vuhfDial3WaitingForFeedback, 1);
                                 }
                             }
-
                             Reset(ref dial3Timeout);
                         }
                         else
@@ -1121,7 +1105,6 @@
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vuhfDial4WaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial4Timeout);
                             }
                         }
@@ -1139,9 +1122,7 @@
                             dial4SendCount = 0;
                             Thread.Sleep(5000);
                         }
-
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
-
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownVUHFThread);
                     SwapCockpitStandbyFrequencyVuhf();
@@ -1158,10 +1139,8 @@
             {
                 Interlocked.Exchange(ref _vuhfThreadNowSynching, 0);
             }
-
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
-
 
         private void SendLink4ToDCSBIOS()
         {
@@ -1201,10 +1180,8 @@
                     var dial2SendCount = 0;
                     var dial3SendCount = 0;
 
-
                     do
                     {
-
                         if (IsTimedOut(ref dial1Timeout))
                         {
                            ResetWaitingForFeedBack(ref _rioLinkHundredsWaitingForFeedback); // Lets do an ugly reset
@@ -1232,7 +1209,6 @@
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioLinkHundredsWaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -1253,7 +1229,6 @@
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -1274,7 +1249,6 @@
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -1291,10 +1265,7 @@
                             dial3SendCount = 0;
                             Thread.Sleep(5000);
                         }
-
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
-
-
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime)) && !_shutdownRIOLink4Thread);
                     SwapCockpitStandbyFrequencyDataLink4();
@@ -1311,11 +1282,8 @@
             {
                 Interlocked.Exchange(ref _rioLink4ThreadNowSynching, 0);
             }
-
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
-
-
 
         private void SendPilotTacanToDCSBIOS()
         {
@@ -1368,10 +1336,8 @@
                     var dial2SendCount = 0;
                     var dial3SendCount = 0;
 
-
                     do
                     {
-
                         if (IsTimedOut(ref dial1Timeout))
                         {
                             ResetWaitingForFeedBack(ref _pilotTacanTensWaitingForFeedback); // Lets do an ugly reset
@@ -1389,7 +1355,6 @@
 
                         if (Interlocked.Read(ref _pilotTacanTensWaitingForFeedback) == 0)
                         {
-
                             lock (_lockPilotTacanTensDialObject)
                             {
                                 if (_pilotTacanCockpitTensDialPos != desiredPositionDial1)
@@ -1400,7 +1365,6 @@
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanTensWaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -1423,7 +1387,6 @@
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanOnesWaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial2Timeout);
                             }
                         }
@@ -1434,7 +1397,6 @@
 
                         if (Interlocked.Read(ref _pilotTacanXYWaitingForFeedback) == 0)
                         {
-
                             lock (_lockPilotTacanXYDialObject)
                             {
                                 if (_pilotTacanCockpitXYDialPos != desiredPositionDial3)
@@ -1447,7 +1409,6 @@
                                     Interlocked.Exchange(ref _pilotTacanXYWaitingForFeedback, 1);
                                 }
                             }
-
                             Reset(ref dial3Timeout);
                         }
                         else
@@ -1463,10 +1424,7 @@
                             dial3SendCount = 0;
                             Thread.Sleep(5000);
                         }
-
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
-
-
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime)) && !_shutdownPilotTACANThread);
                     SwapPilotCockpitStandbyFrequencyTacan();
@@ -1486,7 +1444,6 @@
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
-
 
         private void SendRioTacanToDCSBIOS()
         {
@@ -1524,10 +1481,8 @@
                     var dial2SendCount = 0;
                     var dial3SendCount = 0;
 
-
                     do
                     {
-
                         if (IsTimedOut(ref dial1Timeout))
                         {
                             ResetWaitingForFeedBack(ref _rioTacanTensWaitingForFeedback); // Lets do an ugly reset
@@ -1556,7 +1511,6 @@
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioTacanTensWaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial1Timeout);
                             }
                         }
@@ -1579,7 +1533,6 @@
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _rioTacanOnesWaitingForFeedback, 1);
                                 }
-
                                 Reset(ref dial2Timeout);
                             }
                         }
@@ -1590,7 +1543,6 @@
 
                         if (Interlocked.Read(ref _rioTacanXYWaitingForFeedback) == 0)
                         {
-
                             lock (_lockRioTacanXYDialObject)
                             {
                                 if (_rioTacanCockpitXYDialPos != desiredPositionDial3)
@@ -1603,7 +1555,6 @@
                                     Interlocked.Exchange(ref _rioTacanXYWaitingForFeedback, 1);
                                 }
                             }
-
                             Reset(ref dial3Timeout);
                         }
                         else
@@ -1619,10 +1570,7 @@
                             dial3SendCount = 0;
                             Thread.Sleep(5000);
                         }
-
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
-
-
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime)) && !_shutdownRIOTACANThread);
                     SwapRioCockpitStandbyFrequencyTacan();
@@ -1639,7 +1587,6 @@
             {
                 Interlocked.Exchange(ref _rioTacanThreadNowSynching, 0);
             }
-
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
 
@@ -1689,7 +1636,6 @@
                                     SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + (((double)_uhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
-
                             break;
                         }
 
@@ -1719,7 +1665,6 @@
                                     SetPZ69DisplayBytesDefault(ref bytes, _vuhfBigFrequencyStandby + (((double)_vuhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
-
                             break;
                         }
 
@@ -1748,7 +1693,6 @@
                             {
                                 frequencyAsString += _pilotTacanCockpitXYDialPos;
                             }
-
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             SetPZ69DisplayBytes(ref bytes, double.Parse(_pilotTacanTensFrequencyStandby + _pilotTacanOnesFrequencyStandby.ToString() + "." + _pilotTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
@@ -1770,7 +1714,6 @@
                             {
                                 frequencyAsString += _rioTacanCockpitXYDialPos;
                             }
-
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             SetPZ69DisplayBytes(ref bytes, double.Parse(_rioTacanTensFrequencyStandby + _rioTacanOnesFrequencyStandby.ToString() + "." + _rioTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
@@ -1805,11 +1748,9 @@
                                         }
                                     }
                                 }
-
                                 SetPZ69DisplayBytesDefault(ref bytes, frequencyAsString.PadLeft(5,' '), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesDefault(ref bytes, _rioLink4HundredsFrequencyStandby + _rioLink4TensAndOnesFrequencyStandby.ToString().PadLeft(2, '0'), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
-
                             break;
                         }
 
@@ -1848,7 +1789,6 @@
                                     SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + (((double)_uhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
-
                             break;
                         }
 
@@ -1878,7 +1818,6 @@
                                     SetPZ69DisplayBytesDefault(ref bytes, _vuhfBigFrequencyStandby + (((double)_vuhfSmallFrequencyStandby) / 1000), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
-
                             break;
                         }
 
@@ -1898,7 +1837,6 @@
                             {
                                 frequencyAsString += _pilotTacanCockpitXYDialPos;
                             }
-
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBytes(ref bytes, double.Parse(_pilotTacanTensFrequencyStandby + _pilotTacanOnesFrequencyStandby.ToString() + "." + _pilotTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
@@ -1920,7 +1858,6 @@
                             {
                                 frequencyAsString += _rioTacanCockpitXYDialPos;
                             }
-
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBytes(ref bytes, double.Parse(_rioTacanTensFrequencyStandby + _rioTacanOnesFrequencyStandby.ToString() + "." + _rioTacanXYStandby, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
@@ -1955,11 +1892,9 @@
                                         }
                                     }
                                 }
-
                                 SetPZ69DisplayBytesDefault(ref bytes, frequencyAsString.PadLeft(5, ' '), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesDefault(ref bytes, _rioLink4HundredsFrequencyStandby + _rioLink4TensAndOnesFrequencyStandby.ToString().PadLeft(2, '0'), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
-
                             break;
                         }
 
@@ -1972,7 +1907,6 @@
                 }
                 SendLCDData(bytes);
             }
-
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
@@ -1994,7 +1928,6 @@
                     }
                 }
             }
-
             return frequencyAsString;
         }
 
@@ -2016,7 +1949,6 @@
                     }
                 }
             }
-
             return frequencyAsString;
         }
 
@@ -2066,7 +1998,6 @@
                                                     _uhfBigFrequencyStandby++;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -2094,7 +2025,6 @@
                                                     AdjustVUHFBigFrequency(true);
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -2148,7 +2078,6 @@
 
                                                 _rioLink4HundredsFrequencyStandby++;
                                             }
-
                                             break;
                                         }
                                 }
@@ -2184,7 +2113,6 @@
                                                     _uhfBigFrequencyStandby--;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -2209,7 +2137,6 @@
                                                     AdjustVUHFBigFrequency(false);
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -2263,7 +2190,6 @@
 
                                                 _rioLink4HundredsFrequencyStandby--;
                                             }
-
                                             break;
                                         }
                                 }
@@ -2288,7 +2214,6 @@
                                             {
                                                 UHFSmallFrequencyStandbyAdjust(true);
                                             }
-
                                             break;
                                         }
 
@@ -2306,7 +2231,6 @@
                                             {
                                                 VUHFSmallFrequencyStandbyAdjust(true);
                                             }
-
                                             break;
                                         }
 
@@ -2372,7 +2296,6 @@
                                             {
                                                 UHFSmallFrequencyStandbyAdjust(false);
                                             }
-
                                             break;
                                         }
 
@@ -2390,7 +2313,6 @@
                                             {
                                                 VUHFSmallFrequencyStandbyAdjust(false);
                                             }
-
                                             break;
                                         }
 
@@ -2470,7 +2392,6 @@
                                                     _uhfBigFrequencyStandby += 1;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -2498,7 +2419,6 @@
                                                     AdjustVUHFBigFrequency(true);
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -2552,7 +2472,6 @@
 
                                                 _rioLink4HundredsFrequencyStandby++;
                                             }
-
                                             break;
                                         }
                                 }
@@ -2588,7 +2507,6 @@
                                                     _uhfBigFrequencyStandby -= 1;
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -2614,7 +2532,6 @@
                                                     AdjustVUHFBigFrequency(false);
                                                 }
                                             }
-
                                             break;
                                         }
 
@@ -2668,7 +2585,6 @@
 
                                                 _rioLink4HundredsFrequencyStandby--;
                                             }
-
                                             break;
                                         }
                                 }
@@ -2693,7 +2609,6 @@
                                             {
                                                 UHFSmallFrequencyStandbyAdjust(true);
                                             }
-
                                             break;
                                         }
 
@@ -2711,7 +2626,6 @@
                                             {
                                                 VUHFSmallFrequencyStandbyAdjust(true);
                                             }
-
                                             break;
                                         }
 
@@ -2777,7 +2691,6 @@
                                             {
                                                 UHFSmallFrequencyStandbyAdjust(false);
                                             }
-
                                             break;
                                         }
 
@@ -2795,7 +2708,6 @@
                                             {
                                                 VUHFSmallFrequencyStandbyAdjust(false);
                                             }
-
                                             break;
                                         }
 
@@ -2845,11 +2757,9 @@
                     }
                 }
             }
-
             Interlocked.Increment(ref _doUpdatePanelLCD);
             ShowFrequenciesOnPanel();
         }
-
 
         private void Link4TensAndOnesFrequencyStandbyAdjust(bool increase)
         {
@@ -3008,7 +2918,6 @@
                 _uhfBigFrequencyStandby = 225;
             }
 
-
             // TACAN
             // 00X/Y - 129X/Y
             if (_pilotTacanTensFrequencyStandby < 0)
@@ -3064,7 +2973,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentF14RadioMode.UHF;
                                 }
-
                                 break;
                             }
 
@@ -3074,7 +2982,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentF14RadioMode.VUHF;
                                 }
-
                                 break;
                             }
 
@@ -3084,7 +2991,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentF14RadioMode.PLT_TACAN;
                                 }
-
                                 break;
                             }
 
@@ -3094,7 +3000,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentF14RadioMode.RIO_TACAN;
                                 }
-
                                 break;
                             }
 
@@ -3104,7 +3009,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentF14RadioMode.LINK4;
                                 }
-
                                 break;
                             }
 
@@ -3115,7 +3019,6 @@
                                 {
                                     _currentUpperRadioMode = CurrentF14RadioMode.NOUSE;
                                 }
-
                                 break;
                             }
 
@@ -3125,7 +3028,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentF14RadioMode.UHF;
                                 }
-
                                 break;
                             }
 
@@ -3135,7 +3037,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentF14RadioMode.VUHF;
                                 }
-
                                 break;
                             }
 
@@ -3145,7 +3046,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentF14RadioMode.PLT_TACAN;
                                 }
-
                                 break;
                             }
 
@@ -3155,7 +3055,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentF14RadioMode.RIO_TACAN;
                                 }
-
                                 break;
                             }
 
@@ -3165,7 +3064,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentF14RadioMode.LINK4;
                                 }
-
                                 break;
                             }
 
@@ -3176,7 +3074,6 @@
                                 {
                                     _currentLowerRadioMode = CurrentF14RadioMode.NOUSE;
                                 }
-
                                 break;
                             }
 
@@ -3234,7 +3131,6 @@
 
                                     _upperButtonPressedAndDialRotated = false;
                                 }
-
                                 break;
                             }
 
@@ -3252,18 +3148,15 @@
 
                                     _lowerButtonPressedAndDialRotated = false;
                                 }
-
                                 break;
                             }
                     }
-
                     
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
                         PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_F14B, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
-
                 AdjustFrequency(hashSet);
             }
         }
@@ -3322,7 +3215,7 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new() 
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
@@ -3372,7 +3265,6 @@
                 }
             }
         }
-
 
         private void SaveCockpitFrequencyVuhf()
         {
@@ -3588,10 +3480,8 @@
                     break;
                 }
             }
-
             return counterUp > counterDown ? dec : inc;
         }
     }
-
 }
 

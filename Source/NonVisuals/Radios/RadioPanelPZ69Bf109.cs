@@ -66,13 +66,13 @@
         // Small dial Fine tuning
         private readonly ClickSpeedDetector _fineTuneIncreaseChangeMonitor = new ClickSpeedDetector(20);
         private readonly ClickSpeedDetector _fineTuneDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly object _lockFug16ZyPresetDialObject1 = new object();
+        private readonly object _lockFug16ZyPresetDialObject1 = new();
         private DCSBIOSOutput _fug16ZyPresetDcsbiosOutputPresetDial;
         private volatile uint _fug16ZyPresetCockpitDialPos = 1;
         private const string FUG16_ZY_PRESET_COMMAND_INC = "RADIO_MODE INC\n";
         private const string FUG16_ZY_PRESET_COMMAND_DEC = "RADIO_MODE DEC\n";
         private int _fug16ZyPresetDialSkipper;
-        private readonly object _lockFug16ZyFineTuneDialObject1 = new object();
+        private readonly object _lockFug16ZyFineTuneDialObject1 = new();
         private DCSBIOSOutput _fug16ZyFineTuneDcsbiosOutputDial;
         private volatile uint _fug16ZyFineTuneCockpitDialPos = 1;
         private const string FUG16_ZY_FINE_TUNE_COMMAND_INC = "FUG16_TUNING +300\n";
@@ -84,7 +84,7 @@
         // Large dial 0-1 [step of 1]
         // Small dial Volume control
         // ACT/STBY IFF Test Button
-        private readonly object _lockFUG25AIFFDialObject1 = new object();
+        private readonly object _lockFUG25AIFFDialObject1 = new();
         private DCSBIOSOutput _fug25aIFFDcsbiosOutputDial;
         private volatile uint _fug25aIFFCockpitDialPos = 1;
         private const string FUG25AIFFCommandInc = "FUG25_MODE INC\n";
@@ -99,13 +99,13 @@
         // Large dial N/A
         // Small dial N/A
         // ACT/STBY Homing Switch
-        private readonly object _lockHomingDialObject1 = new object();
+        private readonly object _lockHomingDialObject1 = new();
         private DCSBIOSOutput _homingDcsbiosOutputPresetDial;
         private volatile uint _homingCockpitDialPos = 1;
         private const string HOMING_COMMAND_INC = "FT_ZF_SWITCH INC\n";
         private const string HOMING_COMMAND_DEC = "FT_ZF_SWITCH DEC\n";
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Bf109(HIDSkeleton hidSkeleton) : base(hidSkeleton)
@@ -151,12 +151,12 @@
                 UpdateCounter(e.Address, e.Data);
 
                 /*
-                                 * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
-                                 * Once a dial has been deemed to be "off" position and needs to be changed
-                                 * a change command is sent to DCS-BIOS.
-                                 * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
-                                 * reset. Reading the dial's position with no change in value will not reset.
-                                 */
+                * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
+                * Once a dial has been deemed to be "off" position and needs to be changed
+                * a change command is sent to DCS-BIOS.
+                * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
+                * reset. Reading the dial's position with no change in value will not reset.
+                */
 
                 // FuG 16ZY Preset Channel Dial
                 if (e.Address == _fug16ZyPresetDcsbiosOutputPresetDial.Address)
@@ -224,7 +224,6 @@
             }
         }
 
-
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (isFirstReport)
@@ -249,7 +248,6 @@
                                     {
                                         SetUpperRadioMode(CurrentBf109RadioMode.FUG16ZY);
                                     }
-
                                     break;
                                 }
 
@@ -259,7 +257,6 @@
                                     {
                                         SetUpperRadioMode(CurrentBf109RadioMode.IFF);
                                     }
-
                                     break;
                                 }
 
@@ -269,7 +266,6 @@
                                     {
                                         SetUpperRadioMode(CurrentBf109RadioMode.HOMING);
                                     }
-
                                     break;
                                 }
 
@@ -282,7 +278,6 @@
                                     {
                                         SetUpperRadioMode(CurrentBf109RadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -292,7 +287,6 @@
                                     {
                                         SetLowerRadioMode(CurrentBf109RadioMode.FUG16ZY);
                                     }
-
                                     break;
                                 }
 
@@ -302,7 +296,6 @@
                                     {
                                         SetLowerRadioMode(CurrentBf109RadioMode.IFF);
                                     }
-
                                     break;
                                 }
 
@@ -312,7 +305,6 @@
                                     {
                                         SetLowerRadioMode(CurrentBf109RadioMode.HOMING);
                                     }
-
                                     break;
                                 }
 
@@ -325,7 +317,6 @@
                                     {
                                         SetLowerRadioMode(CurrentBf109RadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -359,7 +350,6 @@
                                             }
                                         }
                                     }
-
                                     break;
                                 }
 
@@ -380,7 +370,6 @@
                                             }
                                         }
                                     }
-
                                     break;
                                 }
                         }
@@ -404,7 +393,6 @@
         {
             try
             {
-
                 if (SkipCurrentFrequencyChange())
                 {
                     return;
@@ -428,7 +416,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -438,7 +425,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG25AIFFCommandInc);
                                                 }
-
                                                 break;
                                             }
 
@@ -466,7 +452,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -476,7 +461,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG25AIFFCommandDec);
                                                 }
-
                                                 break;
                                             }
 
@@ -507,7 +491,6 @@
                                                     // Change faster
                                                     changeFaster = true;
                                                 }
-
                                                 DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_INC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_INC);
                                                 break;
                                             }
@@ -545,7 +528,6 @@
                                                     // Change faster
                                                     changeFaster = true;
                                                 }
-
                                                 DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_DEC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_DEC);
                                                 break;
                                             }
@@ -580,7 +562,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -590,7 +571,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG25AIFFCommandInc);
                                                 }
-
                                                 break;
                                             }
 
@@ -618,7 +598,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -628,7 +607,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG25AIFFCommandDec);
                                                 }
-
                                                 break;
                                             }
 
@@ -659,7 +637,6 @@
                                                     // Change faster
                                                     changeFaster = true;
                                                 }
-
                                                 DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_INC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_INC);
                                                 break;
                                             }
@@ -697,7 +674,6 @@
                                                     // Change faster
                                                     changeFaster = true;
                                                 }
-
                                                 DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_DEC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_DEC);
                                                 break;
                                             }
@@ -740,13 +716,11 @@
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-
                         return;
                     }
 
                     if (!FirstReportHasBeenRead)
                     {
-
                         return;
                     }
 
@@ -770,7 +744,6 @@
 
                                     fineTunePositionAsString = (_fug16ZyFineTuneCockpitDialPos / 10).ToString();
                                 }
-
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPostionAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
@@ -785,7 +758,6 @@
                                 {
                                     positionAsString = (_fug25aIFFCockpitDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
-
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
@@ -800,7 +772,6 @@
                                 {
                                     positionAsString = (_homingCockpitDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
-
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
@@ -830,7 +801,6 @@
 
                                     fineTunePositionAsString = (_fug16ZyFineTuneCockpitDialPos / 10).ToString();
                                 }
-
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPostionAsString), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
@@ -845,7 +815,6 @@
                                 {
                                     positionAsString = (_fug25aIFFCockpitDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
-
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
@@ -860,7 +829,6 @@
                                 {
                                     positionAsString = (_homingCockpitDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
-
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
@@ -969,7 +937,6 @@
                         _fug16ZyPresetDialSkipper = 0;
                         return false;
                     }
-
                     _fug16ZyPresetDialSkipper++;
                     return true;
                 }
@@ -993,7 +960,6 @@
                         _fug25aIFFDialSkipper = 0;
                         return false;
                     }
-
                     _fug25aIFFDialSkipper++;
                     return true;
                 }
@@ -1029,7 +995,5 @@
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
-
-
     }
 }

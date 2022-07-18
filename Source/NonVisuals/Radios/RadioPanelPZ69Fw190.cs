@@ -64,13 +64,13 @@
         /*FuG 16ZY COM1*/
         // Large dial 0-3 [step of 1]
         // Small dial Fine tuning
-        private readonly object _lockFug16ZyPresetDialObject1 = new object();
+        private readonly object _lockFug16ZyPresetDialObject1 = new();
         private DCSBIOSOutput _fug16ZyPresetDcsbiosOutputPresetDial;
         private volatile uint _fug16ZyPresetCockpitDialPos = 1;
         private const string FUG16_ZY_PRESET_COMMAND_INC = "RADIO_MODE INC\n";
         private const string FUG16_ZY_PRESET_COMMAND_DEC = "RADIO_MODE DEC\n";
         private int _fug16ZyPresetDialSkipper;
-        private readonly object _lockFug16ZyFineTuneDialObject1 = new object();
+        private readonly object _lockFug16ZyFineTuneDialObject1 = new();
         private DCSBIOSOutput _fug16ZyFineTuneDcsbiosOutputDial;
         private volatile uint _fug16ZyFineTuneCockpitDialPos = 1;
         private const string FUG16_ZY_FINE_TUNE_COMMAND_INC = "FUG16_TUNING INC\n";
@@ -80,7 +80,7 @@
         // Large dial 0-1 [step of 1]
         // Small dial Volume control
         // ACT/STBY IFF Test Button
-        private readonly object _lockFUG25AIFFDialObject1 = new object();
+        private readonly object _lockFUG25AIFFDialObject1 = new();
         private DCSBIOSOutput _fug25AIFFDcsbiosOutputDial;
         private volatile uint _fug25AIFFCockpitDialPos = 1;
         private const string FUG25_AIFF_COMMAND_INC = "FUG25_MODE INC\n";
@@ -95,13 +95,13 @@
         // Large dial N/A
         // Small dial N/A
         // ACT/STBY Homing Switch
-        private readonly object _lockHomingDialObject1 = new object();
+        private readonly object _lockHomingDialObject1 = new();
         private DCSBIOSOutput _homingDcsbiosOutputPresetDial;
         private volatile uint _homingCockpitDialPos = 1;
         private const string HOMING_COMMAND_INC = "FT_ZF_SWITCH INC\n";
         private const string HOMING_COMMAND_DEC = "FT_ZF_SWITCH DEC\n";
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Fw190(HIDSkeleton hidSkeleton) : base(hidSkeleton)
@@ -147,12 +147,12 @@
                 UpdateCounter(e.Address, e.Data);
 
                 /*
-                                 * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
-                                 * Once a dial has been deemed to be "off" position and needs to be changed
-                                 * a change command is sent to DCS-BIOS.
-                                 * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
-                                 * reset. Reading the dial's position with no change in value will not reset.
-                                 */
+                * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
+                * Once a dial has been deemed to be "off" position and needs to be changed
+                * a change command is sent to DCS-BIOS.
+                * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
+                * reset. Reading the dial's position with no change in value will not reset.
+                */
 
                 // FuG 16ZY Preset Channel Dial
                 if (e.Address == _fug16ZyPresetDcsbiosOutputPresetDial.Address)
@@ -220,7 +220,6 @@
             }
         }
 
-
         public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (isFirstReport)
@@ -245,7 +244,6 @@
                                     {
                                         SetUpperRadioMode(CurrentFw190RadioMode.FUG16ZY);
                                     }
-
                                     break;
                                 }
 
@@ -255,7 +253,6 @@
                                     {
                                         SetUpperRadioMode(CurrentFw190RadioMode.IFF);
                                     }
-
                                     break;
                                 }
 
@@ -265,7 +262,6 @@
                                     {
                                         SetUpperRadioMode(CurrentFw190RadioMode.HOMING);
                                     }
-
                                     break;
                                 }
 
@@ -278,7 +274,6 @@
                                     {
                                         SetUpperRadioMode(CurrentFw190RadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -288,7 +283,6 @@
                                     {
                                         SetLowerRadioMode(CurrentFw190RadioMode.FUG16ZY);
                                     }
-
                                     break;
                                 }
 
@@ -298,7 +292,6 @@
                                     {
                                         SetLowerRadioMode(CurrentFw190RadioMode.IFF);
                                     }
-
                                     break;
                                 }
 
@@ -308,7 +301,6 @@
                                     {
                                         SetLowerRadioMode(CurrentFw190RadioMode.HOMING);
                                     }
-
                                     break;
                                 }
 
@@ -321,7 +313,6 @@
                                     {
                                         SetLowerRadioMode(CurrentFw190RadioMode.NOUSE);
                                     }
-
                                     break;
                                 }
 
@@ -355,7 +346,6 @@
                                             }
                                         }
                                     }
-
                                     break;
                                 }
 
@@ -376,7 +366,6 @@
                                             }
                                         }
                                     }
-
                                     break;
                                 }
                         }
@@ -400,7 +389,6 @@
         {
             try
             {
-
                 if (SkipCurrentFrequencyChange())
                 {
                     return;
@@ -424,7 +412,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -434,7 +421,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG25_AIFF_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -462,7 +448,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -472,7 +457,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG25_AIFF_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -560,7 +544,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -570,7 +553,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG25_AIFF_COMMAND_INC);
                                                 }
-
                                                 break;
                                             }
 
@@ -598,7 +580,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -608,7 +589,6 @@
                                                 {
                                                     DCSBIOS.Send(FUG25_AIFF_COMMAND_DEC);
                                                 }
-
                                                 break;
                                             }
 
@@ -687,7 +667,6 @@
                         }
                     }
                 }
-
                 ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
@@ -704,13 +683,11 @@
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-
                         return;
                     }
 
                     if (!FirstReportHasBeenRead)
                     {
-
                         return;
                     }
 
@@ -844,14 +821,12 @@
             {
                 logger.Error(ex);
             }
-
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-
             PZ69KnobChanged(isFirstReport, hashSet);
         }
 
@@ -883,7 +858,7 @@
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new()
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
@@ -935,7 +910,6 @@
                         _fug16ZyPresetDialSkipper = 0;
                         return false;
                     }
-
                     _fug16ZyPresetDialSkipper++;
                     return true;
                 }
@@ -944,7 +918,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
 
@@ -959,7 +932,6 @@
                         _fug25AIFFDialSkipper = 0;
                         return false;
                     }
-
                     _fug25AIFFDialSkipper++;
                     return true;
                 }
@@ -968,7 +940,6 @@
             {
                 logger.Error(ex);
             }
-
             return false;
         }
         
@@ -983,6 +954,5 @@
         public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink) { }
 
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
-
     }
 }

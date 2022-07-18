@@ -32,7 +32,7 @@ namespace NonVisuals.Radios
         // Small dial Radio volume RAD_VOL +/- 
         // STBY/ACT, radio on/off RAD_PWR TOGGLE
         private volatile uint _radioFreqSelectorPositionCockpit;
-        private readonly object _lockRadioFreqSelectorPositionObject = new object();
+        private readonly object _lockRadioFreqSelectorPositionObject = new();
         private DCSBIOSOutput _radioDcsbiosOutputFreqSelectorPosition;
         private const string RADIO_FREQ_SELECTOR_POSITION_COMMAND_INC = "RAD_CHAN INC\n";
         private const string RADIO_FREQ_SELECTOR_POSITION_COMMAND_DEC = "RAD_CHAN DEC\n";
@@ -45,10 +45,10 @@ namespace NonVisuals.Radios
         // Small dial RSBN ILS PRMG_CHAN
         // STBY/ACT, RSBN/ARC switch  RSBN_ARC_SEL
         private volatile uint _rsbnNavChannelCockpit = 1;
-        private readonly object _lockRsbnNavChannelObject = new object();
+        private readonly object _lockRsbnNavChannelObject = new();
         private DCSBIOSOutput _rsbnNavChannelCockpitOutput;
         private volatile uint _rsbnILSChannelCockpit = 1;
-        private readonly object _lockRsbnilsChannelObject = new object();
+        private readonly object _lockRsbnilsChannelObject = new();
         private DCSBIOSOutput _rsbnILSChannelCockpitOutput;
         private const string RSBN_NAV_CHANNEL_COMMAND_INC = "RSBN_CHAN INC\n";
         private const string RSBN_NAV_CHANNEL_COMMAND_DEC = "RSBN_CHAN DEC\n";
@@ -61,10 +61,10 @@ namespace NonVisuals.Radios
         // Small dial ARC Preset ARC_CHAN
         // STBY/ACT, RSBN/ARC switch  RSBN_ARC_SEL 1
         private volatile uint _arcSectorCockpit = 1;
-        private readonly object _lockARCSectorObject = new object();
+        private readonly object _lockARCSectorObject = new();
         private DCSBIOSOutput _arcSectorCockpitOutput;
         private volatile uint _arcPresetChannelCockpit = 1;
-        private readonly object _lockARCPresetChannelObject = new object();
+        private readonly object _lockARCPresetChannelObject = new();
         private DCSBIOSOutput _arcPresetChannelCockpitOutput;
         private const string ARC_SECTOR_COMMAND_INC = "ARC_ZONE INC\n";
         private const string ARC_SECTOR_COMMAND_DEC = "ARC_ZONE DEC\n";
@@ -72,7 +72,7 @@ namespace NonVisuals.Radios
         private const string ARC_PRESET_CHANNEL_COMMAND_DEC = "ARC_CHAN DEC\n";
         private const string SELECT_ARC_COMMAND = "RSBN_ARC_SEL DEC\n";
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69MiG21Bis(HIDSkeleton hidSkeleton) : base(hidSkeleton)
@@ -116,7 +116,6 @@ namespace NonVisuals.Radios
             // Radio
             if (e.Address == _radioDcsbiosOutputFreqSelectorPosition.Address)
             {
-
                 lock (_lockRadioFreqSelectorPositionObject)
                 {
                     var tmp = _radioFreqSelectorPositionCockpit;
@@ -132,7 +131,6 @@ namespace NonVisuals.Radios
             // RSBN Nav
             if (e.Address == _rsbnNavChannelCockpitOutput.Address)
             {
-
                 lock (_lockRsbnNavChannelObject)
                 {
                     var tmp = _rsbnNavChannelCockpit;
@@ -148,7 +146,6 @@ namespace NonVisuals.Radios
             // RSBN ILS
             if (e.Address == _rsbnILSChannelCockpitOutput.Address)
             {
-
                 lock (_lockRsbnilsChannelObject)
                 {
                     var tmp = _rsbnILSChannelCockpit;
@@ -164,7 +161,6 @@ namespace NonVisuals.Radios
             // ARC Sector
             if (e.Address == _arcSectorCockpitOutput.Address)
             {
-
                 lock (_lockARCSectorObject)
                 {
                     var tmp = _arcSectorCockpit;
@@ -180,7 +176,6 @@ namespace NonVisuals.Radios
             // ARC Preset
             if (e.Address == _arcPresetChannelCockpitOutput.Address)
             {
-
                 lock (_lockARCPresetChannelObject)
                 {
                     var tmp = _arcPresetChannelCockpit;
@@ -203,7 +198,6 @@ namespace NonVisuals.Radios
 
         private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMiG21Bis knob)
         {
-
             if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch || knob == RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch))
             {
                 // Don't do anything on the very first button press as the panel sends ALL
@@ -298,7 +292,6 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionCockpit, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
-
                             break;
                         }
 
@@ -313,7 +306,6 @@ namespace NonVisuals.Radios
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelCockpit, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
-
                             break;
                         }
 
@@ -328,7 +320,6 @@ namespace NonVisuals.Radios
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelCockpit, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
-
                             break;
                         }
                 }
@@ -341,7 +332,6 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionCockpit, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
-
                             break;
                         }
 
@@ -356,7 +346,6 @@ namespace NonVisuals.Radios
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelCockpit, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
-
                             break;
                         }
 
@@ -371,13 +360,11 @@ namespace NonVisuals.Radios
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelCockpit, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
-
                             break;
                         }
                 }
                 SendLCDData(bytes);
             }
-
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
@@ -624,7 +611,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentMiG21BisRadioMode.Radio;
                                 }
-
                                 break;
                             }
 
@@ -634,7 +620,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentMiG21BisRadioMode.RSBN;
                                 }
-
                                 break;
                             }
 
@@ -644,7 +629,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentUpperRadioMode = CurrentMiG21BisRadioMode.ARC;
                                 }
-
                                 break;
                             }
 
@@ -674,7 +658,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentMiG21BisRadioMode.Radio;
                                 }
-
                                 break;
                             }
 
@@ -684,7 +667,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentMiG21BisRadioMode.RSBN;
                                 }
-
                                 break;
                             }
 
@@ -694,7 +676,6 @@ namespace NonVisuals.Radios
                                 {
                                     _currentLowerRadioMode = CurrentMiG21BisRadioMode.ARC;
                                 }
-
                                 break;
                             }
 
@@ -764,7 +745,6 @@ namespace NonVisuals.Radios
                                 {
                                     SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch);
                                 }
-
                                 break;
                             }
 
@@ -774,7 +754,6 @@ namespace NonVisuals.Radios
                                 {
                                     SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch);
                                 }
-
                                 break;
                             }
                     }
@@ -784,7 +763,6 @@ namespace NonVisuals.Radios
                         PluginManager.DoEvent(DCSFPProfile.SelectedProfile.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_MIG21BIS, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
-
                 AdjustFrequency(hashSet);
             }
         }
@@ -818,7 +796,7 @@ namespace NonVisuals.Radios
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
+            DcsOutputAndColorBindingPZ55 dcsOutputAndColorBinding = new()
             {
                 DCSBiosOutputLED = dcsBiosOutput,
                 LEDColor = panelLEDColor,
@@ -898,5 +876,4 @@ namespace NonVisuals.Radios
         {
         }
     }
-
 }
