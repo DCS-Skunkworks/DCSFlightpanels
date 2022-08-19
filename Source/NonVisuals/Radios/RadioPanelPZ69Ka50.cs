@@ -611,6 +611,7 @@
                             var desiredPositionDial4 = 0;
                             if (Interlocked.Read(ref _r800L1Dial4WaitingForFeedback) == 0)
                             {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                 desiredPositionDial4 = desiredPositionDial4X switch
                                 {
                                     0 => 0,
@@ -618,6 +619,7 @@
                                     5 => 2,
                                     7 => 2 
                                 };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 
                                 // "00" "25" "50" "75", only "00" and "50" used.
                                 // Pos     0    1    2    3
@@ -2437,13 +2439,15 @@
             {
                 // "00"  "25" "50" "75"
                 // 0    1    2    3  
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                 return position switch
                 {
                     0 => "0",
                     1 => "5",
                     2 => "5",
                     3 => "0",
-                };             
+                };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             }
             catch (Exception ex)
             {
