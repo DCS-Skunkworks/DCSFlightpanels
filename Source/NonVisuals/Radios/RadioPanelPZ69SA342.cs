@@ -1823,6 +1823,7 @@
 
                 case 1:
                     {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "00",
@@ -1830,6 +1831,7 @@
                             32767 => "50",
                             49151 => "75",
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
             return "00";
@@ -1857,6 +1859,7 @@
 
                 case VhfAmDigit.LastTwoSpecial:
                     {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "00",
@@ -1864,6 +1867,7 @@
                             32767 => "50",
                             49151 => "75",
                         };                        
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
             return "00";

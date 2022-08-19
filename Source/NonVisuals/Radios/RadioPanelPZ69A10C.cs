@@ -1464,6 +1464,7 @@
                 desiredPositionDial3 = int.Parse(frequencyAsString.Substring(3, 1));
                 var tmpPosition = int.Parse(frequencyAsString.Substring(4, 2));
 
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                 desiredPositionDial4 = tmpPosition switch
                 {
                     0 => 0,
@@ -1471,6 +1472,7 @@
                     50 => 2,
                     75 => 3
                 };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 
             }
             else
@@ -2775,6 +2777,7 @@
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch 
                                             { 
                                                 10 => 15,
@@ -2788,6 +2791,7 @@
                                                 90 => 95,
                                                 95 or 100 or 105 => 10 // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -2884,6 +2888,7 @@
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 0 or 5 or 10 => 95,
@@ -2897,6 +2902,7 @@
                                                 90 => 75,
                                                 95 => 90
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -3250,6 +3256,7 @@
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 10 => 15,
@@ -3263,6 +3270,7 @@
                                                 90 => 95,
                                                 95 or 100 or 105 => 10 // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -3359,6 +3367,7 @@
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 0 or 5 or 10 => 95,
@@ -3372,6 +3381,7 @@
                                                 90 => 75,
                                                 95 => 90
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -3899,6 +3909,7 @@
             {
                 case 1:
                     {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "3",
@@ -3915,6 +3926,7 @@
                             11 => "14",
                             12 => "15"
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
                 case 2:
@@ -3931,6 +3943,7 @@
                     {
                         // "00" "25" "50" "75", 0 2 5 7 used.
                         // Pos     0    1    2    3
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "0",
@@ -3938,6 +3951,7 @@
                             2 => "5",
                             3 => "7"                        
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
             return string.Empty;
@@ -3966,12 +3980,14 @@
             {
                 case 1:
                     {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "2",
                             1 => "3",
                             2 => "0" // should be "A" // throw new NotImplementedException("check how A should be treated.");
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
                 case 2:
@@ -3985,6 +4001,7 @@
                     {
                         // "00" "25" "50" "75", only "00" and "50" used.
                         // Pos     0    1    2    3
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "00",
@@ -3992,6 +4009,7 @@
                             2 => "50",
                             3 => "75"
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
 
@@ -4018,6 +4036,7 @@
             {
                 case 1:
                     {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "3",
@@ -4034,6 +4053,7 @@
                             11 => "14",
                             12 => "15"
                         };                   
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
                 case 2:
@@ -4050,6 +4070,7 @@
                     {
                         // "00" "25" "50" "75"
                         // Pos     0    1    2    3
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "00",
@@ -4057,6 +4078,7 @@
                             2 => "50",
                             3 => "75"
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
 
@@ -4073,6 +4095,7 @@
             {
                 case 1:
                     {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "108",
@@ -4080,12 +4103,14 @@
                             2 => "110",
                             3 => "111"
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
                 case 2:
                     {
                         // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
                         // 0    1    2    3    4    5    6    7    8    9
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "10",
@@ -4099,6 +4124,7 @@
                             8 => "90",
                             9 => "95"
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
             return string.Empty;
@@ -4114,6 +4140,7 @@
             {
                 case 1:
                     {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return freq switch
                         {
                             108 => 0,
@@ -4121,12 +4148,14 @@
                             110 => 2,
                             111 => 3
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
                 case 2:
                     {
                         // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
                         // 0    1    2    3    4    5    6    7    8    9
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return freq switch
                         {
                             10 => 0,
@@ -4140,6 +4169,7 @@
                             90 => 8,
                             95 => 9
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
             return 0;
@@ -4992,6 +5022,7 @@
                         {
                             uint dial4 = 0;
 
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             dial4 = _vhfAmCockpitFreq4DialPos switch
                             {
                                 0 => 0,
@@ -4999,6 +5030,7 @@
                                 2 => 50,
                                 3 => 75
                             };                            
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             _vhfAmSavedCockpitBigFrequency = double.Parse((_vhfAmCockpitFreq1DialPos + 3) + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfAmSavedCockpitSmallFrequency = double.Parse(_vhfAmCockpitFreq3DialPos + dial4.ToString(NumberFormatInfoFullDisplay).PadLeft(2, '0'), NumberFormatInfoFullDisplay);
                         }
@@ -5113,6 +5145,7 @@
                         lock (_lockVhfFmDialsObject4)
                         {
                             uint dial4 = 0;
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             dial4 = _vhfFmCockpitFreq4DialPos switch
                             {
                                 0 => 0,
@@ -5120,6 +5153,7 @@
                                 2 => 50,
                                 3 => 75
                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                            
                             _vhfFmSavedCockpitBigFrequency = uint.Parse((_vhfFmCockpitFreq1DialPos + 3) + _vhfFmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfFmSavedCockpitSmallFrequency = uint.Parse((_vhfFmCockpitFreq3DialPos.ToString() + dial4).PadLeft(3, '0'), NumberFormatInfoFullDisplay);

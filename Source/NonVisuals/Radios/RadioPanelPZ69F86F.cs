@@ -995,6 +995,7 @@
                                 uint mode = 0;
                                 lock (_lockARN6ModeObject)
                                 {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                     mode = _arn6ModeCockpitDialPos switch
                                     {
                                         2 => 1,
@@ -1002,6 +1003,7 @@
                                         0 => 3,
                                         1 => 4
                                     };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                 }
 
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -1090,6 +1092,7 @@
                                 uint mode = 0;
                                 lock (_lockARN6ModeObject)
                                 {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                     mode = _arn6ModeCockpitDialPos switch
                                     {
                                         2 => 1,
@@ -1097,6 +1100,7 @@
                                         0 => 3,
                                         1 => 4
                                     };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                 }
 
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.LOWER_STBY_RIGHT);

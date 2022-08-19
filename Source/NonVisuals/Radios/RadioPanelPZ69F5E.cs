@@ -1969,6 +1969,7 @@
             {
                 case 1:
                     {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             1 => "1",
@@ -1976,6 +1977,7 @@
                             3 => "3",
                             4 => "4"
                         };                        
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
                 case 2:
@@ -1989,6 +1991,7 @@
                     {
                         // "00" "25" "50" "75", only "00" and "50" used.
                         // Pos     0    1    2    3
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "0",
@@ -1996,6 +1999,7 @@
                             2 => "5",
                             3 => "7"
                         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
             return string.Empty;
