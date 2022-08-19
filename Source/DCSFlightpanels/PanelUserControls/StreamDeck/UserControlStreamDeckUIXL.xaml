@@ -30,8 +30,10 @@
         </Style>
 
         <Style TargetType="Image" x:Key="DotImageStyle">
-            <Setter Property="Canvas.Left" Value="13"/>
-            <Setter Property="Canvas.Bottom" Value="23"/>
+            <Setter Property="Canvas.Left" Value="0"/>
+            <Setter Property="Canvas.Top" Value="0"/>
+            <Setter Property="Canvas.Width" Value="32"/>
+            <Setter Property="Canvas.Height" Value="32"/>
         </Style>
 
     </UserControl.Resources>
@@ -77,13 +79,13 @@
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="0">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage4" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image  Name="DotImage4" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image  Name="DotImage4" Source="/dcsfp;component/Images/dot3.png" Stretch="Fill" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="0">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage5" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image  Name="DotImage5" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image  Name="DotImage5" Source="/dcsfp;component/Images/dot3.png" Stretch="Fill" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
 

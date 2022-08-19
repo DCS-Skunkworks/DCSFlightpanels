@@ -137,6 +137,30 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
+        protected void SetDotImagePicture(int number, StreamDeckButton streamdeckButton)
+        {
+            foreach (var dotImage in DotImages)
+            {
+                if (dotImage.Name == "DotImage" + number)
+                {
+                    if (streamdeckButton.FaceType == EnumStreamDeckFaceType.Image)
+                    {
+                        var faceTypeImage = (FaceTypeImage)streamdeckButton.Face;
+
+                        var bitmap = new Bitmap(faceTypeImage.ImageFile);
+                        dotImage.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
+                    }
+//                  //  @"C:\Users\steph\Google Drive\Gaming\Stream Deck\CenterIR.png"
+                   
+////                    var bitmap = new Bitmap(@"C:\Users\steph\Google Drive\Gaming\Stream Deck\CenterIR.png");
+//                    //var bitmap2 = new Bitmap(streamdeckButton);
+//                    //   ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
+//                    //dotImage.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+//                    dotImage.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
+                }
+            }
+        }
+
         private void UpdateButtonInfoFromSource()
         {
             HideAllDotImages();
@@ -152,6 +176,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 if (streamDeckButton.HasConfig)
                 {
                     SetDotImageStatus(true, StreamDeckCommon.ButtonNumber(streamDeckButton.StreamDeckButtonName));
+                    SetDotImagePicture(StreamDeckCommon.ButtonNumber(streamDeckButton.StreamDeckButtonName), streamDeckButton);
                 }
             }
         }
