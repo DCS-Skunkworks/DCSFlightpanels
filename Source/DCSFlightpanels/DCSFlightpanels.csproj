@@ -50,9 +50,6 @@
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <ItemGroup>
-    <FrameworkReference Update="Microsoft.WindowsDesktop.App;Microsoft.WindowsDesktop.App.WPF;Microsoft.WindowsDesktop.App.WindowsForms" TargetingPackVersion="6.0.4" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="StreamDeckGallery\**" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
