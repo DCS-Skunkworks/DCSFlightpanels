@@ -264,10 +264,10 @@ namespace NonVisuals
                 }
                 else
                 {
-                    MessageBox.Show("Reference found in bindings file to a " + genericBinding.PanelType.GetEnumDescriptionField() + ", no such hardware found.", "Hardware missing", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    MessageBox.Show($"Reference found in bindings file to a {genericBinding.PanelType.GetEnumDescriptionField()}, no such hardware found.", "Hardware missing", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     if (MessageBox.Show(
-                            "Do you want to remove the configuration(s) for the " +
-                            genericBinding.PanelType.GetEnumDescriptionField() + ".", "Delete configuration",
+                            $"Do you want to remove the configuration(s) for the {genericBinding.PanelType.GetEnumDescriptionField()} ?", 
+                            "Delete configuration",
                             MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
                         settingsWereModified = true;
@@ -278,7 +278,7 @@ namespace NonVisuals
                             "Panel Removed", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
-                
+
                 return true;
             }
 
