@@ -28,7 +28,7 @@
     </Authors>
     <PackageId>DCSFlightpanels (DCSFP)</PackageId>
     <Version>1.0.0</Version>
-    <AssemblyVersion>4.6.8266.1</AssemblyVersion>
+    <AssemblyVersion>4.6.8268.1</AssemblyVersion>
     <FileVersion>
     </FileVersion>
     <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
@@ -49,9 +49,6 @@
 		</AllowedReferenceRelatedFileExtensions>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
-  <ItemGroup>
-    <FrameworkReference Update="Microsoft.WindowsDesktop.App;Microsoft.WindowsDesktop.App.WPF;Microsoft.WindowsDesktop.App.WindowsForms" TargetingPackVersion="6.0.4" />
-  </ItemGroup>
   <ItemGroup>
     <Content Include="StreamDeckGallery\**" CopyToOutputDirectory="Always" />
   </ItemGroup>

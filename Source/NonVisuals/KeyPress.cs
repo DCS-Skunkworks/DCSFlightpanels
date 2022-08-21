@@ -68,7 +68,7 @@ namespace NonVisuals
             }
             catch (Exception e)
             {
-                throw new Exception("Error creating KeyPress object. " + e.Message);
+                throw new Exception($"Error creating KeyPress object. {e.Message}");
             }
         }
 
@@ -108,7 +108,7 @@ namespace NonVisuals
         {
             try
             {
-                Debug.WriteLine("Looking for negators. Count is " + _negatorOSKeyPresses.Count);
+                Debug.WriteLine($"Looking for negators. Count is {_negatorOSKeyPresses.Count}");
                 foreach (var negatorOSKeyPress in _negatorOSKeyPresses)
                 {
                     /*if (negatorOSKeyPress.KeyPressSequence.Count == 0)

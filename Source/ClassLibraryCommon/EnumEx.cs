@@ -33,7 +33,7 @@
                 }
             }
 
-            throw new ArgumentException("Not found.", "description");
+            throw new ArgumentException($"Could not find enum value {description} in enum {typeof(T)}", "description");
         }
         
         public static IEnumerable<T> GetValues<T>()

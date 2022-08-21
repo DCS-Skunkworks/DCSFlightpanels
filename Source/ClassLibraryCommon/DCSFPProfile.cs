@@ -124,7 +124,7 @@
             var module = Modules.FirstOrDefault(x => x.ID == id);
             if (module == null)
             {
-                LogErrorAndThrowException("Failed to determine profile ID (" + id + ") in your bindings file.");
+                LogErrorAndThrowException($"Failed to determine profile ID ({id}) in your bindings file.");
             }
             return module;
         }
