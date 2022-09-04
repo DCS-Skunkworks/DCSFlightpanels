@@ -42,7 +42,8 @@
     using NonVisuals.Plugin;
 
     using Octokit;
-    
+    using DCSFlightpanels.PanelUserControls.PreProgrammed;
+
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
@@ -366,6 +367,39 @@
 
                 switch (hidSkeleton.GamingPanelType)
                 {
+                    case GamingPanelEnum.CDU737:
+                        {
+                            var tabItem = new TabItem { Header = "CDU 737" };
+
+                            IGamingPanelUserControl panel = UserControlBaseFactoryHelpers.GetUSerControl(GamingPanelEnum.CDU737, 
+                                                _profileHandler.Profile, 
+                                                hidSkeleton, tabItem);
+                            if (panel != null)
+                            {
+                                _panelUserControls.Add((UserControl )panel);
+                                tabItem.Content = panel;
+                                TabControlPanels.Items.Add(tabItem);
+
+                                _profileFileHIDInstances
+                                    .Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            }
+
+
+                            //if (DCSFPProfile.IsAH6(_profileHandler.Profile))
+                            //{
+                            //    var cockpitMasterCDU737 = new Cdu737UserControlAH64D(hidSkeleton, tabItem);
+                            //    _panelUserControls.Add(cockpitMasterCDU737);
+                            //    tabItem.Content = cockpitMasterCDU737;
+                            //    TabControlPanels.Items.Add(tabItem);
+                            //    _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
+                            //    AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+
+                            //}
+                            break;
+
+
+                        }
                     case GamingPanelEnum.PZ55SwitchPanel:
                         {
                             var tabItem = new TabItem { Header = "PZ55" };
@@ -683,6 +717,7 @@
         {
             var panelOrderList = new List<GamingPanelEnum>
                                      {
+                                        GamingPanelEnum.CDU737,
                                          GamingPanelEnum.StreamDeckXL,
                                          GamingPanelEnum.StreamDeck,
                                          GamingPanelEnum.StreamDeckV2,
@@ -1977,5 +2012,6 @@
                 UseShellExecute = true
             });
         }
+
     }
 }
