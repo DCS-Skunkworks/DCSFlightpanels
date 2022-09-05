@@ -370,6 +370,11 @@
         {
             return dcsfpModule.ID == 42;
         }
+        public static bool IsAH64D(DCSFPProfile dcsfpModule)
+        {
+            return dcsfpModule.ID == 46;
+        }
+
 
         public static DCSFPProfile GetBackwardCompatible(string oldEnumValue)
         {

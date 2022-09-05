@@ -86,7 +86,10 @@ namespace NonVisuals
                                 hidDevice.Removed += hidSkeleton.HIDDeviceOnRemoved;
 
                                 //Only Saitek needs this hid library, Stream Deck uses an other. But Stream Deck is added in order to have references.
-                                if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.Saitek || hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.MadCatz)
+                                if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.Saitek 
+                                    || hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.MadCatz
+                                    || (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.CockpitMaster && hidSkeleton.PanelInfo.GamingPanelType == GamingPanelEnum.CDU737)
+                                    )
                                 {
                                     hidSkeleton.HIDReadDevice = hidDevice;
                                     hidSkeleton.HIDReadDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);

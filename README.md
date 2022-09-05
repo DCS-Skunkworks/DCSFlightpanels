@@ -45,6 +45,16 @@ Stream Deck Panels Supported:
 * Stream Deck MK2
 * XL
 
+Cockpit Master
+---------------------------------------------
+CDU 737 ( in progress ) 
+
+[Demo of the CDU with A10C](https://www.youtube.com/watch?v=lVF50B9EQZw)
+
+[Demo of the CDU with Apache AH-64D](https://www.youtube.com/watch?v=fd0thX4ZApE)
+
+Links
+--------------------------------------------
 
 [How to install](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki)
 
