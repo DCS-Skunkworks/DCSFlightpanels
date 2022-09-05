@@ -148,8 +148,8 @@
             SetLine(7, "       by Cerppo        ");
             SetLine(9, "* waiting dcsBios data *");
 
-            SetLine(11, "        Rocker          ");
-            SetLine(12, "       Bindings         ");
+            //SetLine(11, "        Rocker          ");
+            //SetLine(12, "       Bindings         ");
 
             //_TextLines[11].applyColorToLine(CDUColors.WHITE);
             //_TextLines[12].applyColorToLine(CDUColors.WHITE);
