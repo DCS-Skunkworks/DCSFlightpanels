@@ -10,15 +10,14 @@
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
 
-    using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;
     using NonVisuals.CockpitMaster.Switches;
-    using Timer = System.Timers.Timer;
-    using System.Timers;
     using HidLibrary;
     using NonVisuals.Interfaces;
+    using System.Timers;
+    using Timer = System.Timers.Timer;
 
-    public enum CDU737Leds
+    public enum CDU737Led
     {
         EXEC = 0b0000001,      // EXEC on 
         MSG = 0b0000010,     // MSG
@@ -31,7 +30,12 @@
     {
         public const int MAX_BRIGHT = 0xff;
         private const int BRIGHTNESS_STEP = 10;
+
+        // refresh the CDU 2 times / sec. 
+        // ok for most case , except when the master caution is blinking very fast in the A10
+
         private const int TICK_DISPLAY = 500;
+
         private int _screenBrightness = MAX_BRIGHT / 2;
         private int _keyboardBrightness = MAX_BRIGHT / 2;
 
@@ -71,7 +75,6 @@
 
         public string[] CDULines
         {
-
             get
             {
                 string[] result = new  string[LINES_ON_CDU];
@@ -83,10 +86,9 @@
                 }
                 return result;
             }
-            
         }
 
-        private HashSet<DCSBIOSActionBindingCDU737> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingCDU737>();
+        //private HashSet<DCSBIOSActionBindingCDU737> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingCDU737>();
 
         protected HashSet<CDUMappedKey> CDUPanelKeys = new();
 
@@ -146,19 +148,18 @@
             SetLine(7, "       by Cerppo        ");
             SetLine(9, "* waiting dcsBios data *");
 
-            //SetLine(11, "        Rocker          ");
-            //SetLine(12, "       Bindings         ");
+            SetLine(11, "        Rocker          ");
+            SetLine(12, "       Bindings         ");
 
             //_TextLines[11].applyColorToLine(CDUColors.WHITE);
             //_TextLines[12].applyColorToLine(CDUColors.WHITE);
             //_TextLines[13].applyColorToLine(CDUColors.WHITE);
 
             //_TextLines[11].setDisplayedCharAt(new DisplayedChar(CDUCharset.p, CDUColors.CYAN, true, true), 0);
-            //_TextLines[12].setDisplayedCharAt(new DisplayedChar(CDUCharset.g, CDUColors.CYAN, true, true),0);
+            //_TextLines[12].setDisplayedCharAt(new DisplayedChar(CDUCharset.g, CDUColors.CYAN, true, true), 0);
 
             //_TextLines[11].setDisplayedCharAt(new DisplayedChar(CDUCharset.uparrow, CDUColors.CYAN, true, true), 23);
             //_TextLines[12].setDisplayedCharAt(new DisplayedChar(CDUCharset.downarrow, CDUColors.CYAN, true, true), 23);
-
 
             StartTimers();
 
@@ -198,9 +199,6 @@
             }
         }
 
-
-
-
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
             ClearSettings();
@@ -229,14 +227,7 @@
 
             var result = new List<string>();
 
-            foreach (var dcsBiosBinding in _dcsBiosBindings)
-            {
-                if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                {
-                    result.Add(dcsBiosBinding.ExportSettings());
-                }
-            }
-
+      
             return result;
         }
 
@@ -249,7 +240,6 @@
 
         public override void ClearSettings(bool setIsDirty = false)
         {
-            _dcsBiosBindings.Clear();
 
             if (setIsDirty)
             {
@@ -259,27 +249,13 @@
 
         public override void Identify()
         {
-            try
-            {
-                var thread = new Thread(ShowIdentifyingValue);
-                thread.Start();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
+
         }
 
-        private void ShowIdentifyingValue()
-        {
-          
-        }
+
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            // Set _selectedMode and LCD button statuses
-            // and performs the actual actions for key presses
-
             if (isFirstReport)
             {
                 return;
@@ -287,11 +263,9 @@
 
             try
             {
-                foreach( var keyObject in hashSet)
+                foreach(CDUMappedKey key in hashSet)
                 {
-                    var key = (CDUMappedKey) keyObject;
-
-                    DCSBIOS.Send(key.MappedCommand());
+                    _ = DCSBIOS.Send(key.MappedCommand());
                 }
                   
             }
@@ -302,11 +276,11 @@
             
         }
 
-        public HashSet<DCSBIOSActionBindingCDU737> DCSBiosBindings
-        {
-            get => _dcsBiosBindings;
-            set => _dcsBiosBindings = value;
-        }
+        //public HashSet<DCSBIOSActionBindingCDU737> DCSBiosBindings
+        //{
+        //    get => _dcsBiosBindings;
+        //    set => _dcsBiosBindings = value;
+        //}
 
         public int ScreenBrightness
         {
@@ -352,14 +326,14 @@
             KeyboardBrightness -= BRIGHTNESS_STEP;
         }
 
-        public void Led_ON(CDU737Leds led)
+        public void Led_ON(CDU737Led led)
         {
            LedStatus |= (byte)led;
 
 
         }
 
-        public void Led_OFF(CDU737Leds led)
+        public void Led_OFF(CDU737Led led)
         {
             LedStatus &= unchecked((byte)~led);
         }
@@ -371,21 +345,24 @@
 
         }
 
-        public void SetColorForLine( int line, CDUColors color)
+        public void SetColorForLine( int line, CDUColor color)
         {
             _TextLines[line].applyColorToLine(color);
         }
 
-        public void SetMaskColorForLine( int line, CDUColors[] mask)
+        public void SetMaskColorForLine( int line, CDUColor[] mask)
         {
             _TextLines[line].applyMaskColor(mask);
         }
 
         private void TimedDisplayBufferOnCDU(object sender, ElapsedEventArgs e)
         {
+            // splitted in two methods because i was experimenting with another way to refresh, more event bases thant "tick" based
+            // A10C quick caution pulse is not displayed correctly when the refresh is time based. 
+            // if you send too much refresh to the CDU, it starts to "lag" ... 
+
             displayBufferOnCDU();
         }
-
 
         private void displayBufferOnCDU()
         {

@@ -2,7 +2,7 @@
 
 namespace NonVisuals.CockpitMaster.Panels
 {
-    public enum CDUColors {
+    public enum CDUColor {
 
         WHITE= 0b000,
         CYAN= 0b001,
@@ -18,10 +18,10 @@ namespace NonVisuals.CockpitMaster.Panels
     // This is the available charset
     // combined with Inverted or Big it makes the 255 values
 
-    public enum Modifiers
+    public enum Modifier
     {
-        Big = (1<<6),
-        Inverted = (1 << 7),
+        Big = 1<<6,
+        Inverted = 1 << 7,
     }
     public enum CDUCharset
     {
@@ -38,7 +38,6 @@ namespace NonVisuals.CockpitMaster.Panels
         colon = 0x0a,
         semicolon = 0x0b,
         emptysquare = 0x0c,
-        comas = 0x0c,
         uparrow = 0x0d,
         downarrow = 0xe,
         leftarrow = 0x0f, 
@@ -93,7 +92,6 @@ namespace NonVisuals.CockpitMaster.Panels
 
     }
 
-
     public class DisplayedChar
     {
 
@@ -102,10 +100,10 @@ namespace NonVisuals.CockpitMaster.Panels
         public bool Inverted { get; set; }
         public bool Big { get; set; }
         
-        public CDUColors Color { get; set; }
+        public CDUColor Color { get; set; }
 
         public DisplayedChar(CDUCharset cduChar, 
-            CDUColors color = CDUColors.GREEN,
+            CDUColor color = CDUColor.GREEN,
             bool big =false, 
             bool inverted = false)
         {
@@ -115,28 +113,26 @@ namespace NonVisuals.CockpitMaster.Panels
             Color = color;
 
         }
-    
+   
         public byte getCode()
         {
             byte _code = (byte) _value;
-            if (Inverted) _code |= (byte) Modifiers.Inverted;
-            if (Big) _code |= (byte) Modifiers.Big;
+            if (Inverted) _code |= (byte) Modifier.Inverted;
+            if (Big) _code |= (byte) Modifier.Big;
             return _code;
 
         }
-
-        
+                
         static public byte[] encode2chars(DisplayedChar char1, DisplayedChar char2)
         {
-            // encode 2 consécutive chars 
+            // encode 2 consecutive chars 
             // respecting the HIDreport structure
             // Simply put two consecutive chars are encoded that way.
-            // Assume they both are 0x47 0x47 - which is a dash '-'
-            // red is 0x3 green is 0x2
-            //  =>  0x47 0x7(seven of the 47 second char)(col1=3) 0x(col2=2)4(four of the 47 2nd char)
-            // method returns => 0x47 0x73 0x24 
+            // Assume they both are 0x47 0x47  (which is a dash '-')
+            // red is 0x03 green is 0x02
+            //  => 0x47 0x7(seven of the 0x47 second char)(col1=3) 0x(col2=2)4(four of the 47 2nd char)
 
-            // 0x0c 0x0c  => 0x0c 0 0x0c
+            // method returns => 0x47 0x73 0x24 
 
             byte[] encoded = new byte[3];
             encoded[0]= char1.getCode();

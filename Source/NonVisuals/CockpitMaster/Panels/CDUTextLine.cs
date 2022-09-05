@@ -13,30 +13,32 @@ namespace NonVisuals.CockpitMaster.Panels
         private DisplayedChar[] displayedChars = new DisplayedChar[MAX_CHAR];
 
         private readonly byte[] encodedLine = new byte[36];
-        private string _line; 
+        private string _line;
+        private CDUColor _lineColor;
 
         private Dictionary<char, CDUCharset> _convertTable = CDUTextLineHelpers.defaultConvertTable;
-        public CDUTextLine(string line = "")
+        public CDUTextLine(string line = "", CDUColor color = CDUColor.GREEN)
         {
             Line = line;
+            Color = color;
         }
 
         public CDUTextLine(string line, Dictionary<char, CDUCharset> convertTable)
         {
-            Line=line;
+            Line = line;
             _convertTable = convertTable;
         }
 
-        public Dictionary<char, CDUCharset> ConvertTable { 
+        public Dictionary<char, CDUCharset> ConvertTable {
             get
             {
-                return _convertTable; 
-            } 
+                return _convertTable;
+            }
             set
             {
                 _convertTable = value;
 
-            } 
+            }
         }
 
         public string Line
@@ -52,14 +54,17 @@ namespace NonVisuals.CockpitMaster.Panels
                 // Transcode all Known Chars.
                 for (int i = 0; i < _line.Length; i++)
                 {
-                    CDUCharset converted;
+                    CDUCharset converted = convert(_line[i]);
 
-                    if (!_convertTable.TryGetValue(_line[i], out converted))
+                    // Defaults to line color, 
+                    CDUColor _oldColor = _lineColor;
+
+                    if (displayedChars[i] != null)
                     {
-                        Console.WriteLine((byte)_line[i]); // to Debug Breakpoint un mapped chars
+                        // Keep any masks Applied 
+                        _oldColor = displayedChars[i].Color;
                     }
-    ;
-                    displayedChars[i] = new DisplayedChar(converted);
+                    displayedChars[i] = new DisplayedChar(converted, _oldColor);
 
                 }
 
@@ -71,6 +76,17 @@ namespace NonVisuals.CockpitMaster.Panels
                 encode();
 
             }
+        }
+
+        private CDUCharset convert(char ch)
+        {
+            CDUCharset converted;
+            if (!_convertTable.TryGetValue(ch, out converted))
+            {
+                Console.WriteLine(ch); // to Debug Breakpoint un mapped chars
+            }
+
+            return converted;
         }
 
         public void setLineWithDisplayedChar(DisplayedChar[] line)
@@ -87,12 +103,24 @@ namespace NonVisuals.CockpitMaster.Panels
             displayedChars[index] = ch;
             encode();
         }
+
         public byte[] getEncodedBytes()
         {
             return encodedLine;
         }
 
-        public void applyColorToLine(CDUColors color)
+        // This sets the default for the Line 
+      
+        public CDUColor Color
+        {
+            get { return _lineColor; }
+            set { 
+                _lineColor = value;
+                applyColorToLine(value);
+            }
+        }
+
+        public void applyColorToLine(CDUColor color)
         {
             for (int i = 0; i < MAX_CHAR; i++)
             {
@@ -101,7 +129,7 @@ namespace NonVisuals.CockpitMaster.Panels
             encode();
         }
 
-        public void applyMaskColor(CDUColors[] colorArray)
+        public void applyMaskColor(CDUColor[] colorArray)
         {
             for (int i = 0; i < MAX_CHAR; i++)
             {
@@ -109,7 +137,6 @@ namespace NonVisuals.CockpitMaster.Panels
             }
             encode();
         }
-
 
         private void encode()
         {
@@ -125,8 +152,6 @@ namespace NonVisuals.CockpitMaster.Panels
                 encodedLine[tempIndex++] = tempo[2];
 
             }
-
-
         }
     }
 }

@@ -4,11 +4,20 @@ using NonVisuals.CockpitMaster.Panels;
 using System;
 using DCS_BIOS.Interfaces;
 using NonVisuals.CockpitMaster.Switches;
+using System.Collections.Generic;
 
 namespace NonVisuals.CockpitMaster.Preprogrammed
 {
+    
     public class CDU737PanelAH64D : CDU737PanelBase , IDCSBIOSStringListener
     {
+
+        enum CDUModes
+        {
+            initial =0 , 
+            swapfreq = 1,
+            engine = 2,
+        }
 
         // List the DCSBios Mappings Here
 
@@ -17,6 +26,8 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         private DCSBIOSOutput _PLT_EUFD_LINE1;
         private DCSBIOSOutput _PLT_EUFD_LINE2;
         private DCSBIOSOutput _PLT_EUFD_LINE3;
+        private DCSBIOSOutput _PLT_EUFD_LINE4;
+        private DCSBIOSOutput _PLT_EUFD_LINE5;
 
         private DCSBIOSOutput _PLT_EUFD_LINE8;
         private DCSBIOSOutput _PLT_EUFD_LINE9;
@@ -32,12 +43,13 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
 
         private DCSBIOSOutput _PLT_MASTER_WARNING_L;
 
+        private int _mode = (int) CDUModes.initial;
+
 
         public CDU737PanelAH64D(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             ConvertTable = CDUTextLineHelpers.AH64ConvertTable;
             CDUPanelKeys = CDUMappedKeyAH64D.GetMappedPanelKeys();
-
         }
 
         public sealed override void Startup()
@@ -61,6 +73,10 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE2);
                 _PLT_EUFD_LINE3 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE3");
                 DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE3);
+                _PLT_EUFD_LINE4 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE4");
+                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE4);
+                _PLT_EUFD_LINE5 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE5");
+                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE5);
 
                 // UFD Frequency
                 _PLT_EUFD_LINE8 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE8");
@@ -93,6 +109,48 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 SetLastException(ex);
             }
         }
+
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        {
+            if (isFirstReport)
+            {
+                return;
+            }
+
+            // intercept special keys to do some internal stuff
+            // ( emulation off a CDU with internal pages  => this does not exists in the Apache ! )
+            try
+            {
+                foreach (CDUMappedKey key in hashSet)
+                {
+                    if (key.CDUKey == CDU737Keys.INITREF && key.IsOn)
+                    {
+                        _mode = 0;
+                       
+                    }
+                    if (key.CDUKey == CDU737Keys.RTE && key.IsOn)
+                    {
+                        _mode = 1;
+
+                    }
+                    if (key.CDUKey == CDU737Keys.CLB && key.IsOn)
+                    {
+                        _mode = 2;
+
+                    }
+
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+
+            base.GamingPanelKnobChanged(isFirstReport, hashSet);
+
+        }
+
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -129,22 +187,15 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 {
                     if (_PLT_MASTER_WARNING_L.GetUIntValue(e.Data) ==1 )
                     {
-                        Led_ON(CDU737Leds.FAIL);
+                        Led_ON(CDU737Led.FAIL);
 
                     } else
                     {
-                        Led_OFF(CDU737Leds.FAIL);
+                        Led_OFF(CDU737Led.FAIL);
 
                     }
-                         
                    
                 }
-                    
-
-
-
-
-
 
             }
             catch (Exception)
@@ -157,9 +208,29 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         {
             try
             {
-                if(e.Address.Equals(_PLT_EUFD_LINE14.Address))
+
+                // Example to handle several "pages" , with a "Mode 
+                // and depending on the mode, provide a totally different Display
+                // for the 14 lines 
+
+                //if (_mode == 0)
+                //{
+                //    SetColorForLine(0, CDUColors.RED);
+                //}
+                //else if (_mode == 1)
+                //{
+                //    SetColorForLine(0, CDUColors.YELLOW);
+                //}
+                //else
+                //{
+                //    SetColorForLine(0, CDUColors.GREEN);
+                //}
+
+
+
+                if (e.Address.Equals(_PLT_EUFD_LINE14.Address))
                 {
-                    SetLine(0, string.Format("{0,24}", e.StringData.Substring(46, 10)));
+                    SetLine(0, string.Format("{0,24}",e.StringData.Substring(46, 10)));
                 }
 
                 if (e.Address.Equals(_PLT_EUFD_LINE1.Address))
@@ -177,10 +248,21 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                     SetLine(3, string.Format("{0,24}", e.StringData.Substring(38, 17)));
 
                 }
+                if (e.Address.Equals(_PLT_EUFD_LINE4.Address))
+                {
+                    SetLine(4, string.Format("{0,24}", e.StringData.Substring(38, 17)));
 
-                SetLine(4, "");
-                SetLine(5, "");
+                }
+                if (e.Address.Equals(_PLT_EUFD_LINE5.Address))
+                {
+                    SetLine(5, string.Format("{0,24}", e.StringData.Substring(38, 17)));
+
+                }
+
+                // UNused
                 SetLine(6, "");
+
+                // Radios Frequencies
 
                 if (e.Address.Equals(_PLT_EUFD_LINE8.Address))
                 {
@@ -209,7 +291,6 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 {
                     SetLine(13, e.StringData);
                 }
-
 
             }
 

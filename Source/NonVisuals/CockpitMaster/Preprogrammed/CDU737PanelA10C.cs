@@ -102,12 +102,12 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                     int masterCaution = (int) _MASTER_CAUTION.GetUIntValue(e.Data);
                     if ( masterCaution == 1)
                     {
-                        Led_ON(CDU737Leds.FAIL);
+                        Led_ON(CDU737Led.FAIL);
                         
                     }
                     else
                     {
-                        Led_OFF(CDU737Leds.FAIL);
+                        Led_OFF(CDU737Led.FAIL);
                     }
 
                 }
