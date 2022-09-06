@@ -99,7 +99,7 @@ namespace NonVisuals.CockpitMaster.Panels
 
         public void setDisplayedCharAt(DisplayedChar ch, int index)
         {
-            if (index < 0 || index > MAX_CHAR - 1) throw new ArgumentException("index out of Range 0 - 23");
+            if (index < 0 || index > MAX_CHAR - 1) throw new ArgumentException("CDUTextLine - Index out of Range 0 - 23");
             displayedChars[index] = ch;
             encode();
         }
