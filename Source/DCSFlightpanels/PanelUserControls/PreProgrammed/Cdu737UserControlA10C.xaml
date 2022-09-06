@@ -32,7 +32,7 @@
             <Image x:Name="mappingA10C" Height="181" Width="372" Source="/PanelUserControls/PreProgrammed/mappingmenukey.jpg"/>
             <Label Content="LSK means Left Shift Key, key on the left, numbered from top to bottom" FontSize="12" FontWeight="Bold" />
             <Label Content="LSK 5 and LSK 6 are mapped to P/G" FontSize="12" FontWeight="Bold" />
-            <Label Content="Prev PAGE, Next Pageare mapped to P/G" FontSize="12" FontWeight="Bold" />
+            <Label Content="Prev Page, Next Page are mapped to P/G" FontSize="12" FontWeight="Bold" />
             <Label Content="RSK 5 and RSK 6 are mapped to +/- RockerSwitch" FontSize="12" FontWeight="Bold" />
             <Label Content="FIX is mapped to MK" FontSize="12" FontWeight="Bold" />
 
