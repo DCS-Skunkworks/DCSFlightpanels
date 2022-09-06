@@ -29,7 +29,7 @@
 
             <Label Content="Frequency displayed are the Active frequencies ( left part of Pilot UFD)" FontSize="12" FontWeight="Bold" />
             <Label Content="Keyboard Mappings" FontSize="24" FontWeight="Bold" />
-            <Label Content="Mapping is pretty intuitive, though some key do not exists like the * and ÷ " FontSize="12" FontWeight="Bold" />
+            <Label Content="Mapping is pretty intuitive, though some keys do not exists like the * and ÷" FontSize="12" FontWeight="Bold" />
             <Label Content="Left and Right arrow are mapped to PrevPage NextPage" FontSize="12" FontWeight="Bold" />
             <Label Content="Enter is mapped to EXEC" FontSize="12" FontWeight="Bold" />
 
