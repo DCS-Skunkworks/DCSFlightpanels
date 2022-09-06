@@ -1,11 +1,7 @@
-﻿
-namespace DCSFlightpanels.PanelUserControls.PreProgrammed
+﻿namespace DCSFlightpanels.PanelUserControls.PreProgrammed
 {
-
     using System.Windows;
     using System.Windows.Controls;
-
-
     using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
@@ -13,8 +9,6 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
     using NonVisuals.CockpitMaster.Preprogrammed;
     using DCSFlightpanels.Interfaces;
     using System;
-    using NonVisuals.Saitek.Panels;
-    using NonVisuals.Saitek.Switches;
 
     /// <summary>
     /// Logique d'interaction pour Cdu737UserControlA10C.xaml
@@ -50,7 +44,6 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
                     AppEventHandler.DetachGamingPanelListener(this);
 
                 }
-
                 _disposed = true;
             }
 
@@ -60,11 +53,9 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
 
         private bool _once = true;
 
-
         private void CDU737UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             UserControlLoaded = true;
-
 
             if (_once)
             {
@@ -100,7 +91,6 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
             (Action)
             (() =>
             {
-
                 CDULines.Text = lines[0] + '\n';
                 CDULines.Text += lines[1] + '\n';
                 CDULines.Text += lines[2] + '\n';
@@ -111,11 +101,8 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
                 CDULines.Text += lines[7] + '\n';
                 CDULines.Text += lines[8] + '\n';
                 CDULines.Text += lines[9];
-
             }
             ));
-
-
         }
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
