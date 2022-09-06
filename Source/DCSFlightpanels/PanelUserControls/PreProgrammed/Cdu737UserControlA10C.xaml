@@ -26,7 +26,7 @@
         <StackPanel x:Name="LBL_Mappings" Orientation="Vertical">
 
             <Label Content="Mappings" FontSize="24" FontWeight="Bold" />
-            <Label Content="Menu buttons are mapped in the same order, like show on the picture below" FontSize="12" FontWeight="Bold" />
+            <Label Content="Menu buttons are mapped in the same order, as shown on the picture below" FontSize="12" FontWeight="Bold" />
             <Label Content="BRT -/+ are operative - but a bug in DCSBios ATM prevent a correct usage" FontSize="12" FontWeight="Bold" />
 
             <Image x:Name="mappingA10C" Height="181" Width="372" Source="/PanelUserControls/PreProgrammed/mappingmenukey.jpg"/>
