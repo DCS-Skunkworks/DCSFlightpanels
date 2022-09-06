@@ -12,7 +12,7 @@
     using DCSFlightpanels.CustomControls;
 
     /// <summary>
-    /// Logique d'interaction pour Cdu737UserControlA10C.xaml
+    /// Interaction logic for Cdu737UserControlA10C.xaml
     /// </summary>
     /// 
     public partial class Cdu737UserControlA10C : UserControlBase,
