@@ -49,7 +49,7 @@ Cockpit Master
 ---------------------------------------------
 CDU 737 ( in progress ) 
 
-[Demo of the CDU with A10C](https://www.youtube.com/watch?v=lVF50B9EQZw)
+[Demo of the CDU with A10C](https://www.youtube.com/watch?v=kSMwf8sg_Ro)
 
 [Demo of the CDU with Apache AH-64D](https://www.youtube.com/watch?v=fd0thX4ZApE)
 
