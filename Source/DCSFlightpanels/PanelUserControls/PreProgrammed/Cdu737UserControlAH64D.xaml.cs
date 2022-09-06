@@ -98,22 +98,7 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
             Dispatcher?.BeginInvoke(
             (Action)
             (() => {
-
-                CDULines.Text = lines[0] + '\n';
-                CDULines.Text += lines[1] + '\n';
-                CDULines.Text += lines[2] + '\n';
-                CDULines.Text += lines[3] + '\n';
-                CDULines.Text += lines[4] + '\n';
-                CDULines.Text += lines[5] + '\n';
-                CDULines.Text += lines[6] + '\n';
-                CDULines.Text += lines[7] + '\n';
-                CDULines.Text += lines[8] + '\n';
-                CDULines.Text += lines[9] + '\n';
-                CDULines.Text += lines[10] + '\n';
-                CDULines.Text += lines[11] + '\n';
-                CDULines.Text += lines[12] + '\n';
-                CDULines.Text += lines[13];
-
+                CDU737UserControl.displayLines(lines, 14);
             }
             ));
 
@@ -125,26 +110,9 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
             Dispatcher?.BeginInvoke(
             (Action)
             (() => {
-
-                CDULines.Text = lines[0] + '\n';
-                CDULines.Text += lines[1] + '\n';
-                CDULines.Text += lines[2] + '\n';
-                CDULines.Text += lines[3] + '\n';
-                CDULines.Text += lines[4] + '\n';
-                CDULines.Text += lines[5] + '\n';
-                CDULines.Text += lines[6] + '\n';
-                CDULines.Text += lines[7] + '\n';
-                CDULines.Text += lines[8] + '\n';
-                CDULines.Text += lines[9] + '\n';
-                CDULines.Text += lines[10] + '\n';
-                CDULines.Text += lines[11] + '\n';
-                CDULines.Text += lines[12] + '\n';
-                CDULines.Text += lines[13];
-
+                CDU737UserControl.displayLines(lines,14);
             }
             ));
-
-
 
         }
         private void HideAllImages()

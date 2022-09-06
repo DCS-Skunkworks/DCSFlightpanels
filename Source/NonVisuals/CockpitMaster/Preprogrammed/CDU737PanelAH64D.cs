@@ -43,9 +43,6 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
 
         private DCSBIOSOutput _PLT_MASTER_WARNING_L;
 
-        private int _mode = (int) CDUModes.initial;
-
-
         public CDU737PanelAH64D(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             ConvertTable = CDUTextLineHelpers.AH64ConvertTable;
@@ -117,36 +114,6 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 return;
             }
 
-            // intercept special keys to do some internal stuff
-            // ( emulation off a CDU with internal pages  => this does not exists in the Apache ! )
-            try
-            {
-                foreach (CDUMappedKey key in hashSet)
-                {
-                    if (key.CDUKey == CDU737Keys.INITREF && key.IsOn)
-                    {
-                        _mode = 0;
-                       
-                    }
-                    if (key.CDUKey == CDU737Keys.RTE && key.IsOn)
-                    {
-                        _mode = 1;
-
-                    }
-                    if (key.CDUKey == CDU737Keys.CLB && key.IsOn)
-                    {
-                        _mode = 2;
-
-                    }
-
-                }
-
-            }
-            catch (Exception)
-            {
-
-            }
-
             base.GamingPanelKnobChanged(isFirstReport, hashSet);
 
         }
@@ -208,25 +175,6 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         {
             try
             {
-
-                // Example to handle several "pages" , with a "Mode 
-                // and depending on the mode, provide a totally different Display
-                // for the 14 lines 
-
-                //if (_mode == 0)
-                //{
-                //    SetColorForLine(0, CDUColors.RED);
-                //}
-                //else if (_mode == 1)
-                //{
-                //    SetColorForLine(0, CDUColors.YELLOW);
-                //}
-                //else
-                //{
-                //    SetColorForLine(0, CDUColors.GREEN);
-                //}
-
-
 
                 if (e.Address.Equals(_PLT_EUFD_LINE14.Address))
                 {

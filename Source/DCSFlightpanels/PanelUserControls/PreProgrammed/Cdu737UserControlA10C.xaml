@@ -12,17 +12,9 @@
         d:DesignHeight="650" d:DesignWidth="1000">
 
     <StackPanel Orientation="Horizontal">
-        <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
-            <Label Content="CockpitMaster CDU 737" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
-            <Grid Height="500">
-                <Image HorizontalAlignment="Left" Height="512"  Margin="5,0,0,0" VerticalAlignment="Top" Width="311" Source="/PanelUserControls/PreProgrammed/cdu737.png"/>
-
-                <TextBlock x:Name="CDULines" Foreground="#FF47D800" Background="Black" Margin="59,35,55,285" Height="180" Width="202" FontFamily="Consolas" FontSize="14" />
-            </Grid>
-            <GroupBox Header="Log"  FontSize="10" />
-
-
-        </StackPanel>
+        
+        <customControls:CDU737UserControl x:Name="CDU737UserControl" />
+      
         <StackPanel x:Name="LBL_Mappings" Orientation="Vertical">
 
             <Label Content="Mappings" FontSize="24" FontWeight="Bold" />

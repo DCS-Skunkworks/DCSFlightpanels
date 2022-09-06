@@ -9,6 +9,7 @@
     using NonVisuals.CockpitMaster.Preprogrammed;
     using DCSFlightpanels.Interfaces;
     using System;
+    using DCSFlightpanels.CustomControls;
 
     /// <summary>
     /// Logique d'interaction pour Cdu737UserControlA10C.xaml
@@ -91,16 +92,7 @@
             (Action)
             (() =>
             {
-                CDULines.Text = lines[0] + '\n';
-                CDULines.Text += lines[1] + '\n';
-                CDULines.Text += lines[2] + '\n';
-                CDULines.Text += lines[3] + '\n';
-                CDULines.Text += lines[4] + '\n';
-                CDULines.Text += lines[5] + '\n';
-                CDULines.Text += lines[6] + '\n';
-                CDULines.Text += lines[7] + '\n';
-                CDULines.Text += lines[8] + '\n';
-                CDULines.Text += lines[9];
+                CDU737UserControl.displayLines(lines, 10);
             }
             ));
         }
