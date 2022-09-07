@@ -30,11 +30,14 @@ namespace ClassLibraryCommon
     {
         Saitek = 0x6A3,
         MadCatz = 0x0738,
-        Elgato = 0xFD9
+        Elgato = 0xFD9,
+        CockpitMaster = 0x0483,
     }
 
     public enum GamingPanelEnum
     {
+        [Description("Cockpit Master 737 CDU")]
+        CDU737 = 0x5b36,
         [Description("Unknown Panel")]
         Unknown = 0,
         [Description("Saitek PZ55 Switch Panel")]

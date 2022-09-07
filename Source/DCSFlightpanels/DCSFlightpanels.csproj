@@ -274,6 +274,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\F-14 RIO Datalink.png" />
+    <Resource Include="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
+    <Resource Include="PanelUserControls\PreProgrammed\cdu737.png" />
+    <Resource Include="PanelUserControls\PreProgrammed\mappingmenukey.jpg" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -319,6 +322,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
+    <None Remove="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
+    <None Remove="PanelUserControls\PreProgrammed\cdu737.png" />
+    <None Remove="PanelUserControls\PreProgrammed\mappingmenukey.jpg" />
     <Page Remove="AboutWindow.xaml" />
     <Page Remove="PreferencesWindow.xaml" />
     <Page Remove="Windows\LinkMappingWindow.xaml" />
