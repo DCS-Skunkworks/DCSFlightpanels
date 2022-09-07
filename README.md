@@ -45,11 +45,11 @@ Stream Deck Panels Supported:
 * Stream Deck MK2
 * XL
 
-CockpitMaster device supported:
+Cockpit Master devices supported:
 ---------------------------------------------
-* Cockpitmaster CDU 737 (DCS-BIOS ,A10C & AH64D preprogrammed)
+* CDU 737 (DCS-BIOS, A-10C & AH-64D preprogrammed)
 
-[Demo of the CDU with A10C](https://www.youtube.com/watch?v=kSMwf8sg_Ro)
+[Demo of the CDU with A-10C](https://www.youtube.com/watch?v=kSMwf8sg_Ro)
 
 [Demo of the CDU with Apache AH-64D](https://www.youtube.com/watch?v=fd0thX4ZApE)
 
