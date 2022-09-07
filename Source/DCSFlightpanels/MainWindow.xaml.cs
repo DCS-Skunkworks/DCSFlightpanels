@@ -384,18 +384,7 @@
                                     .Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-
-
-                            //if (DCSFPProfile.IsAH6(_profileHandler.Profile))
-                            //{
-                            //    var cockpitMasterCDU737 = new Cdu737UserControlAH64D(hidSkeleton, tabItem);
-                            //    _panelUserControls.Add(cockpitMasterCDU737);
-                            //    tabItem.Content = cockpitMasterCDU737;
-                            //    TabControlPanels.Items.Add(tabItem);
-                            //    _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
-                            //    AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
-
-                            //}
+                           
                             break;
 
 
