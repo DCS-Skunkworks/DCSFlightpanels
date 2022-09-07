@@ -196,7 +196,6 @@ namespace NonVisuals.CockpitMaster.Panels
                 { ']' , CDUCharset.closeparent | (CDUCharset) Modifier.Big },
                 { '|' , CDUCharset.openparent | (CDUCharset) Modifier.Big },
 
-                //
                 { '?' , CDUCharset.plus| (CDUCharset) Modifier.Inverted },
 
                 // Special chars 

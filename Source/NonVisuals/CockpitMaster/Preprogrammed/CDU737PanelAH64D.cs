@@ -46,7 +46,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         public CDU737PanelAH64D(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             ConvertTable = CDUTextLineHelpers.AH64ConvertTable;
-            CDUPanelKeys = CDUMappedKeyAH64D.GetMappedPanelKeys();
+            CDUPanelKeys = CDUMappedCommandKeyAH64D.GetMappedPanelKeys();
         }
 
         public sealed override void Startup()

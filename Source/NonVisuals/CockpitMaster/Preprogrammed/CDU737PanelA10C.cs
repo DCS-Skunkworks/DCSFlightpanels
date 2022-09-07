@@ -25,7 +25,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
 
         public CDU737PanelA10C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
-            CDUPanelKeys = CDUMappedKeyA10C.GetMappedPanelKeys();
+            CDUPanelKeys = CDUMappedCommandKeyA10C.GetMappedPanelKeys();
         }
 
         public sealed override void Startup()
@@ -125,8 +125,6 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 string data = e.StringData
                     .Replace("***", "xxx")
                     .Replace("**", "xx");
-
-
 
                 if (e.Address.Equals(_CDU_LINE_0.Address))
                 {
