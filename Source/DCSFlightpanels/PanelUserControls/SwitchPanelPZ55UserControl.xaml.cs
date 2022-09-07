@@ -43,9 +43,6 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
         private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
 
-
-
-
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             InitializeComponent();
@@ -56,7 +53,6 @@ namespace DCSFlightpanels.PanelUserControls
             AppEventHandler.AttachGamingPanelListener(this);
             AppEventHandler.AttachLEDLightListener(this);
         }
-
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
