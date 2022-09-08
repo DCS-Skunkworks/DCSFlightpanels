@@ -216,10 +216,10 @@
 
             BindingHash = genericPanelBinding.BindingHash;
 
-            var settings = genericPanelBinding.Settings;
+            List<string> settings = genericPanelBinding.Settings;
             SettingsLoading = true;
             
-            foreach (var setting in settings)
+            foreach (string setting in settings)
             {
                 if (!setting.StartsWith("#") && setting.Length > 2)
                 {
@@ -446,7 +446,7 @@
             {
                 Array.Copy(NewCDUPanelValues, OldCDUPanelValues, 64);
                 Array.Copy(report.Data, NewCDUPanelValues, 64);
-                var hashSet = GetHashSetOfChangedKnobs(OldCDUPanelValues, NewCDUPanelValues);
+                HashSet<object> hashSet = GetHashSetOfChangedKnobs(OldCDUPanelValues, NewCDUPanelValues);
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
@@ -461,14 +461,14 @@
 
         private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
         {
-            var result = new HashSet<object>();
+            HashSet<object> result = new HashSet<object>();
 
-            for (var i = 0; i < 64; i++)
+            for (int i = 0; i < 64; i++)
             {
-                var oldByte = oldValue[i];
-                var newByte = newValue[i];
+                byte oldByte = oldValue[i];
+                byte newByte = newValue[i];
 
-                foreach (var key in CDUPanelKeys)
+                foreach (CDUMappedCommandKey key in CDUPanelKeys)
                 {
                     if (key.Group == i && (FlagHasChanged(oldByte, newByte, key.Mask) || !FirstReportHasBeenRead))
                     {
