@@ -236,7 +236,7 @@
                 return null;
             }
 
-            var result = new List<string>();
+            List<string> result = new();
       
             return result;
         }
