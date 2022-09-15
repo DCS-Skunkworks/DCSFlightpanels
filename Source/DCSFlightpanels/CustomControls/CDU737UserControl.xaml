@@ -14,8 +14,6 @@
 
                 <TextBlock x:Name="CDULines" Foreground="#FF47D800" Background="Black" Margin="59,35,55,285" Height="180" Width="202" FontFamily="Consolas" FontSize="14" />
             </Grid>
-            <GroupBox Header="Log"  FontSize="10" />
-
 
         </StackPanel>
     

@@ -42,7 +42,7 @@
         public const int LINES_ON_CDU = 14;
 
         private byte[][] ScreenBuffer;
-        private byte[] LedBuffer;
+        private byte[] BrightAndLedBuffer;
 
         protected byte[] OldCDUPanelValues = {
             0,0,0,0,0,0,0,0,
@@ -66,31 +66,35 @@
             0,0,0,0,0,0,0,0
         };
 
+        private HidReport[] hidReport;
 
+        // This byte stores the physical panel Led Status 
+        // it's a combination of bits coming from CDU737Led enum
         private byte LedStatus = 0;
 
+        // Default convertTable to transform chars from DCSBios to 
+        // existing chars in the CDU charset
         private Dictionary<char, CDUCharset> _convertTable = CDUTextLineHelpers.defaultConvertTable;
 
+        // storage of lines status in a human comprehensible way
+        // is used later to encode the hidreport buffers 
         private CDUTextLine[] _TextLines = new CDUTextLine[LINES_ON_CDU];
 
         public string[] CDULines
         {
             get
             {
-                string[] result = new  string[LINES_ON_CDU];
+                string[] result = new string[LINES_ON_CDU];
 
                 for (int i=0;i< LINES_ON_CDU;i++ )
                 {
                     result[i] = _TextLines[i].Line;
-
                 }
                 return result;
             }
         }
 
-        //private HashSet<DCSBIOSActionBindingCDU737> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingCDU737>();
-
-        protected HashSet<CDUMappedKey> CDUPanelKeys = new();
+        protected HashSet<CDUMappedCommandKey> CDUPanelKeys = new();
 
         private readonly Timer _displayCDUTimer = new Timer(TICK_DISPLAY);
 
@@ -102,7 +106,6 @@
             {
                 throw new ArgumentException();
             }
-
 
             initCDU();
 
@@ -119,21 +122,31 @@
         {
             _displayCDUTimer.Elapsed += TimedDisplayBufferOnCDU;
             _displayCDUTimer.Start();
-
         }
 
         private void initCDU()
         {
             // Init ScreenBuffer ( HidReport Representation of the CDU ) 
+            // The screen on the physical device is refreshed by sending 
+            // 9 HidReport of 64 bytes. 
+            // the 1st byte of each report is the "packet" number, from 1 to 9
+
             ScreenBuffer = new byte[9][];
 
             for (byte i = 0; i < 9; i++)
             {
+                // i keep the 1st byte off this buffer on purpose
+                // helps copying text from cdu lines to buffers. 
                 ScreenBuffer[i] = new byte[63];
             }
 
-            LedBuffer = new byte[64];
-            LedBuffer[0] = 9;
+            // this is the 9th hidreport
+            // it contains 3 significant bytes 
+            // Screen brightness 
+            // Keyboard brightness
+            // led Buffer
+            BrightAndLedBuffer = new byte[64];
+            BrightAndLedBuffer[0] = 9;
 
             ScreenBrightness = MAX_BRIGHT;
             KeyboardBrightness = MAX_BRIGHT;
@@ -148,21 +161,20 @@
             SetLine(7, "       by Cerppo        ");
             SetLine(9, "* waiting dcsBios data *");
 
-            //SetLine(11, "        Rocker          ");
-            //SetLine(12, "       Bindings         ");
+            hidReport = new HidReport[] {
+            _hidWriteDevice.CreateReport(),
+            _hidWriteDevice.CreateReport(),
+            _hidWriteDevice.CreateReport(),
+            _hidWriteDevice.CreateReport(),
+            _hidWriteDevice.CreateReport(),
+            _hidWriteDevice.CreateReport(),
+            _hidWriteDevice.CreateReport(),
+            _hidWriteDevice.CreateReport(),
+            _hidWriteDevice.CreateReport(),
+        };
 
-            //_TextLines[11].applyColorToLine(CDUColors.WHITE);
-            //_TextLines[12].applyColorToLine(CDUColors.WHITE);
-            //_TextLines[13].applyColorToLine(CDUColors.WHITE);
-
-            //_TextLines[11].setDisplayedCharAt(new DisplayedChar(CDUCharset.p, CDUColors.CYAN, true, true), 0);
-            //_TextLines[12].setDisplayedCharAt(new DisplayedChar(CDUCharset.g, CDUColors.CYAN, true, true), 0);
-
-            //_TextLines[11].setDisplayedCharAt(new DisplayedChar(CDUCharset.uparrow, CDUColors.CYAN, true, true), 23);
-            //_TextLines[12].setDisplayedCharAt(new DisplayedChar(CDUCharset.downarrow, CDUColors.CYAN, true, true), 23);
 
             StartTimers();
-
         }
 
         private bool _disposed;
@@ -195,7 +207,6 @@
             {
                 _convertTable = value;
                 foreach (CDUTextLine line in _TextLines) line.ConvertTable = value;
-
             }
         }
 
@@ -205,10 +216,10 @@
 
             BindingHash = genericPanelBinding.BindingHash;
 
-            var settings = genericPanelBinding.Settings;
+            List<string> settings = genericPanelBinding.Settings;
             SettingsLoading = true;
             
-            foreach (var setting in settings)
+            foreach (string setting in settings)
             {
                 if (!setting.StartsWith("#") && setting.Length > 2)
                 {
@@ -225,8 +236,7 @@
                 return null;
             }
 
-            var result = new List<string>();
-
+            List<string> result = new();
       
             return result;
         }
@@ -249,7 +259,6 @@
 
         public override void Identify()
         {
-
         }
 
 
@@ -263,7 +272,7 @@
 
             try
             {
-                foreach(CDUMappedKey key in hashSet)
+                foreach(CDUMappedCommandKey key in hashSet)
                 {
                     _ = DCSBIOS.Send(key.MappedCommand());
                 }
@@ -271,16 +280,8 @@
             }
             catch(Exception)
             {
-
             }
-            
         }
-
-        //public HashSet<DCSBIOSActionBindingCDU737> DCSBiosBindings
-        //{
-        //    get => _dcsBiosBindings;
-        //    set => _dcsBiosBindings = value;
-        //}
 
         public int ScreenBrightness
         {
@@ -294,7 +295,7 @@
                 _screenBrightness = value;
                 if (_screenBrightness < 0) _screenBrightness = 0;
                 if (_screenBrightness > MAX_BRIGHT) _screenBrightness = MAX_BRIGHT;
-                LedBuffer[1] = (byte) _screenBrightness;
+                BrightAndLedBuffer[1] = (byte) _screenBrightness;
             }
         }
 
@@ -306,11 +307,10 @@
             }
             set
             {
-
                 _keyboardBrightness = value;
                 if (_keyboardBrightness < 0) _keyboardBrightness = 0;
                 if (_keyboardBrightness > MAX_BRIGHT) _keyboardBrightness = MAX_BRIGHT;
-                LedBuffer[2] = (byte)_keyboardBrightness;
+                BrightAndLedBuffer[2] = (byte)_keyboardBrightness;
             }
         }
 
@@ -329,8 +329,6 @@
         public void Led_ON(CDU737Led led)
         {
            LedStatus |= (byte)led;
-
-
         }
 
         public void Led_OFF(CDU737Led led)
@@ -340,7 +338,7 @@
 
         public void SetLine(int line, string text)
         {
-            if (line < 0 || line > LINES_ON_CDU-1) throw new ArgumentOutOfRangeException("Line must be 0 to 13");
+            if (line < 0 || line > LINES_ON_CDU-1) throw new ArgumentOutOfRangeException("CDU Line must be 0 to 13");
             _TextLines[line].Line = text;
 
         }
@@ -367,33 +365,15 @@
         private void displayBufferOnCDU()
         {
 
-            // Data structure is 
+            // Data structure in the hidReport is 
             // 3 bytes for 2 char
-            // first byte is char 1 0x47  =>  -
-            // second byte : 4 most it  , low part of the 2nd char ( if we want a - too, it's the 7 of the 0x47 )
-            //             : 4 lowest = color of the 1st char
-            // Third Byte  : most significant 4 bits , color of the 2nd char 
-            //             / lsb : Hight part of the 2nd char ( it's the 4 of the 0x47)
-
-            // Simply put  tow chars 0x47 0x47 
-            //  =>                   0x47 0x7(col1) 0x(col2)4 
+            // Simply put two chars 0x47 0x47 
+            // =>                   0x47 0x7(col1) 0x(col2)4 
+            // => if the color is 0x3 and 0x5
+            // => 0x47 0x73 0x54
 
             lock (_lockUpdateDisplay)
             {
-
-
-                HidLibrary.HidReport[] hidReport = {
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-            };
-
                 // Copy lines to ScreenBuffer
                 int currentBuffer = 0;
                 int copied = 0;
@@ -417,14 +397,14 @@
                     }
                 }
 
-                // buffer is a 9 lines byte[]
-                // 8 first byte[] maps the chars
-                // 9th maps the LED status, brightness of screen / keyboard
+                // buffer is a 9 byte[]
+                // 8 first byte[] maps the chars on the screen (14 lines!)
+                // then 9th byte[] maps the LED status, brightness of screen / keyboard
                 // as far as i understand, most of the 9th is filled with blank
-
 
                 for (int i = 0; i < 8; i++)
                 {
+                    // Screenbuffers are declared 63 bytes
                     // Doing this here, ensure the Numbering of HidReport is not "broken" 
                     // by mistake, and simplifies "recopy of lines in buffers
                     byte[] buffer = new byte[64];
@@ -432,14 +412,13 @@
                     Array.Copy(ScreenBuffer[i], 0, buffer, 1, 63);
                     hidReport[i].Data = buffer;
                     _ = _hidWriteDevice.WriteReportAsync(hidReport[i]);
-
-
                 }
 
                 // Handles LED 
-
-                LedBuffer[3] = LedStatus;
-                hidReport[8].Data = LedBuffer;
+                // BrightAndLefbuffer[0] = 9 and should not be modified 
+                
+                BrightAndLedBuffer[3] = LedStatus;
+                hidReport[8].Data = BrightAndLedBuffer;
 
                 _ = _hidWriteDevice.WriteReport(hidReport[8]);
             }
@@ -467,7 +446,7 @@
             {
                 Array.Copy(NewCDUPanelValues, OldCDUPanelValues, 64);
                 Array.Copy(report.Data, NewCDUPanelValues, 64);
-                var hashSet = GetHashSetOfChangedKnobs(OldCDUPanelValues, NewCDUPanelValues);
+                HashSet<object> hashSet = GetHashSetOfChangedKnobs(OldCDUPanelValues, NewCDUPanelValues);
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
@@ -482,20 +461,19 @@
 
         private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
         {
-            var result = new HashSet<object>();
+            HashSet<object> result = new HashSet<object>();
 
-            for (var i = 0; i < 64; i++)
+            for (int i = 0; i < 64; i++)
             {
-                var oldByte = oldValue[i];
-                var newByte = newValue[i];
+                byte oldByte = oldValue[i];
+                byte newByte = newValue[i];
 
-                foreach (var key in CDUPanelKeys)
+                foreach (CDUMappedCommandKey key in CDUPanelKeys)
                 {
                     if (key.Group == i && (FlagHasChanged(oldByte, newByte, key.Mask) || !FirstReportHasBeenRead))
                     {
                         key.IsOn = FlagValue(newValue, key);
                         result.Add(key);
-
                     }
                 }
 
@@ -523,7 +501,5 @@
         {
             return (currentValue[panelKnob.Group] & panelKnob.Mask) > 0;
         }
-
     }
-
 }

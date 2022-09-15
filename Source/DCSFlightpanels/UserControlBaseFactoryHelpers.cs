@@ -24,7 +24,6 @@ namespace DCSFlightpanels
                 {
                     return new Cdu737UserControlAH64D(hidSkeleton, parentTabItem);
                 }
-
             }
 
             return null;
