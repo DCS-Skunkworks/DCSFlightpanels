@@ -11,14 +11,6 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
     
     public class CDU737PanelAH64D : CDU737PanelBase , IDCSBIOSStringListener
     {
-
-        enum CDUModes
-        {
-            initial =0 , 
-            swapfreq = 1,
-            engine = 2,
-        }
-
         // List the DCSBios Mappings Here
 
         private DCSBIOSOutput _PLT_KU_DISPLAY;
@@ -47,6 +39,9 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         {
             ConvertTable = CDUTextLineHelpers.AH64ConvertTable;
             CDUPanelKeys = CDUMappedCommandKeyAH64D.GetMappedPanelKeys();
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+
         }
 
         public sealed override void Startup()
@@ -107,17 +102,46 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             }
         }
 
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    BIOSEventHandler.DetachStringListener(this);
+                    BIOSEventHandler.DetachDataListener(this);
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
+
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (isFirstReport)
             {
                 return;
             }
+            try
+            {
 
-            base.GamingPanelKnobChanged(isFirstReport, hashSet);
+                foreach (CDUMappedCommandKey key in hashSet)
+                {
+                    _ = DCSBIOS.Send(key.MappedCommand());
+                }
+            }
+            catch (Exception)
+            {
+            }
+
 
         }
-
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -145,7 +169,6 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                     // MAX_BRIGHT is 256 , so 655356 / 256 is 256 , we need to divide by 2^8
                     ScreenBrightness = (int) eufdBright >> 8;
                     KeyboardBrightness= (int)  eufdBright >>8;
-
                 }
 
                 // AH - 64D / PLT_MASTER_WARNING_L
@@ -155,19 +178,14 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                     if (_PLT_MASTER_WARNING_L.GetUIntValue(e.Data) ==1 )
                     {
                         Led_ON(CDU737Led.FAIL);
-
                     } else
                     {
                         Led_OFF(CDU737Led.FAIL);
-
                     }
-                   
                 }
-
             }
             catch (Exception)
             {
-
             }
 
         }
@@ -175,7 +193,6 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         {
             try
             {
-
                 if (e.Address.Equals(_PLT_EUFD_LINE14.Address))
                 {
                     SetLine(0, string.Format("{0,24}",e.StringData.Substring(46, 10)));
@@ -184,27 +201,22 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 if (e.Address.Equals(_PLT_EUFD_LINE1.Address))
                 {
                     SetLine(1, string.Format("{0,24}", e.StringData.Substring(38, 17)));
-
                 }
                 if (e.Address.Equals(_PLT_EUFD_LINE2.Address))
                 {
                     SetLine(2, string.Format("{0,24}", e.StringData.Substring(38, 17)));
-
                 }
                 if (e.Address.Equals(_PLT_EUFD_LINE3.Address))
                 {
                     SetLine(3, string.Format("{0,24}", e.StringData.Substring(38, 17)));
-
                 }
                 if (e.Address.Equals(_PLT_EUFD_LINE4.Address))
                 {
                     SetLine(4, string.Format("{0,24}", e.StringData.Substring(38, 17)));
-
                 }
                 if (e.Address.Equals(_PLT_EUFD_LINE5.Address))
                 {
                     SetLine(5, string.Format("{0,24}", e.StringData.Substring(38, 17)));
-
                 }
 
                 // UNused
