@@ -66,6 +66,13 @@
             0,0,0,0,0,0,0,0
         };
 
+        // 14 lines to track for DCSBios Change
+        protected string[] oldCDULines =
+        {
+            "","","","","","","",
+            "","","","","","","",
+        };
+
         private HidReport[] hidReport;
 
         // This byte stores the physical panel Led Status 
@@ -340,7 +347,7 @@
             displayBufferOnCDU();
         }
 
-        private void displayBufferOnCDU()
+        protected void displayBufferOnCDU()
         {
 
             // Data structure in the hidReport is 
@@ -410,12 +417,7 @@
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            
-        }
 
-        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
-        {
-            
         }
 
         private void OnReport(HidReport report)
@@ -478,6 +480,33 @@
         private static bool FlagValue(byte[] currentValue, ICockpitMasterCDUKey panelKnob)
         {
             return (currentValue[panelKnob.Group] & panelKnob.Mask) > 0;
+        }
+
+
+        protected bool HandleStringData( int line, DCSBIOSStringDataEventArgs e,
+            string data, 
+            ref int changed)
+        {
+
+            if (data == oldCDULines[line])
+            {
+                return false;
+            }
+            
+            changed++;
+            oldCDULines[line] = data;
+            return true;
+
+        }
+
+        protected (bool, uint) ShouldHandleDCSBiosData(DCSBIOSDataEventArgs e, DCSBIOSOutput output)
+        {
+            if (e.Address != output.Address) return (false, 0);
+            var oldValue = output.LastIntValue;
+            var newValue = output.GetUIntValue(e.Data);
+            if (oldValue == newValue) return (false, 0);
+
+            return (true, output.GetUIntValue(e.Data));
         }
     }
 }

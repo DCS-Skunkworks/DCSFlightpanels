@@ -163,7 +163,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             }
 
         }
-        public new void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
+        public  void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
