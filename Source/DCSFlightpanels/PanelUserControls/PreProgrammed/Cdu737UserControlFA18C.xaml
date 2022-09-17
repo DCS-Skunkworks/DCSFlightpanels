@@ -1,0 +1,36 @@
+﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.PanelUserControls.PreProgrammed.Cdu737UserControlFA18C"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
+        xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+        
+        xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
+        mc:Ignorable="d" 
+        
+        d:DesignHeight="650" d:DesignWidth="1000">
+
+    <StackPanel Orientation="Horizontal">
+        
+        <customControls:CDU737UserControl x:Name="CDU737UserControl" />
+      
+        <StackPanel x:Name="LBL_Mappings" Orientation="Vertical">
+
+            <Label Content="Mappings" FontSize="24" FontWeight="Bold" />
+            <Label Content="Menu buttons are mapped in the same order, as shown on the picture below" FontSize="12" FontWeight="Bold" />
+            <Image x:Name="UFC" Height="350" Width="500" Source="/PanelUserControls/PreProgrammed/FA18CUFC.jpg" />
+            <Label Content="Keyboard is mapped in position (means . is CLR and +- is ENT" FontSize="12" FontWeight="Bold" />
+            <Label Content="LSK means Left Shift Key, key on the left, numbered from top to bottom" FontSize="12" FontWeight="Bold" />
+            <Label Content="LSK 1 is Mapped to I/P" FontSize="12" FontWeight="Bold" />
+            <Label Content="RSK1 to 5 are mapped to 5 round buttons near Each display " FontSize="12" FontWeight="Bold" />
+            <Image x:Name="CDU" Source="/PanelUserControls/PreProgrammed/mapping02.jpg" Width="500" />
+            <Label Content="INIT REF is mapped to A/P , then RTE to IFF etc..  BCN is mapped to PROG" FontSize="12" FontWeight="Bold" />
+            <Label Content="ON OFF is mapped to EXEC" FontSize="12" FontWeight="Bold" />
+
+        </StackPanel>
+    </StackPanel>
+
+
+</panelUserControls:UserControlBase>
+    
