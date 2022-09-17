@@ -141,7 +141,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             foreach (var dotImage in DotImages)
             {
-                if (dotImage.Name == "DotImage" + number)
+                if (dotImage.Name == $"DotImage{number}")
                 {
                     if (streamdeckButton.FaceType == EnumStreamDeckFaceType.Image)
                     {
@@ -175,7 +175,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
                 if (streamDeckButton.HasConfig)
                 {
-                    SetDotImageStatus(true, StreamDeckCommon.ButtonNumber(streamDeckButton.StreamDeckButtonName));
+                    SetDotImageVisibleStatus(Visibility.Visible, StreamDeckCommon.ButtonNumber(streamDeckButton.StreamDeckButtonName));
                     SetDotImagePicture(StreamDeckCommon.ButtonNumber(streamDeckButton.StreamDeckButtonName), streamDeckButton);
                 }
             }
@@ -342,23 +342,17 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
-        protected void SetDotImageStatus(bool show, int number)
+        protected void SetDotImageVisibleStatus(Visibility visibility, int number)
         {
-            foreach (var dotImage in DotImages)
-            {
-                if (dotImage.Name == "DotImage" + number)
-                {
-                    dotImage.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
-                }
-            }
+            var dotImage = DotImages.FirstOrDefault(x => x.Name == $"DotImage{number}");
+            if (dotImage == null)
+                return;
+            dotImage.Visibility = visibility;
         }
 
         public void HideAllDotImages()
         {
-            foreach (var dotImage in DotImages)
-            {
-                dotImage.Visibility = Visibility.Collapsed;
-            }
+            DotImages.ForEach(x => x.Visibility = Visibility.Collapsed);
         }
 
         public StreamDeckPanel StreamDeckPanelInstance
@@ -381,19 +375,20 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         protected void SetSelectedButtonUIOnly(EnumStreamDeckButtonNames selectedButtonName)
         {
-            //Deselect everything
-            ButtonImages.ForEach(x => { 
-                x.Source = StreamDeck.Resources.GetDeselectedImageNamed(x.Bill.StreamDeckButtonName);
-                x.IsSelected = false; }
-            );
-            
+            //Deselect everything selected (normaly should only be 1 currently selected but we never know...
+            ButtonImages.Where(x => x.IsSelected).ToList().ForEach(x => 
+                {
+                    x.Source = StreamDeck.Resources.GetDeselectedImageNamed(x.Bill.StreamDeckButtonName);
+                    x.IsSelected = false; 
+                });
+
             //Select the one
             var selectedButton = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == selectedButtonName);
-            if (selectedButton == null)
-                return;
-
-            selectedButton.Source = StreamDeck.Resources.GetSelectedImageNamed(selectedButton.Bill.StreamDeckButtonName);
-            selectedButton.IsSelected = true;
+            if (selectedButton != null)
+            {
+                selectedButton.Source = StreamDeck.Resources.GetSelectedImageNamed(selectedButton.Bill.StreamDeckButtonName);
+                selectedButton.IsSelected = true;
+            }
         }
 
         public void SetIsDirty()
@@ -418,8 +413,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", string.Empty)),
                 };
-              //  buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Green);
-              //  buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
+
                 buttonImage.Bill.StreamDeckPanelInstance = _streamDeckPanel;
                 buttonImage.Source = StreamDeck.Resources.GetDeselectedImageNamed(buttonImage.Bill.StreamDeckButtonName);
             }
