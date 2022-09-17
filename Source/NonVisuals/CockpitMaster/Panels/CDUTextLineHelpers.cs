@@ -108,7 +108,9 @@ namespace NonVisuals.CockpitMaster.Panels
                 // +/- in a char
                 { (char)177 , CDUCharset.plus},
 
-                {'~' , CDUCharset.needInvertedBig01 | (CDUCharset) Modifier.Big | (CDUCharset) Modifier.Inverted }
+                {'~' , CDUCharset.needInvertedBig01 | (CDUCharset) Modifier.Big | (CDUCharset) Modifier.Inverted },
+
+                {(char) 182 , CDUCharset.needInvertedBig01 | (CDUCharset) Modifier.Inverted },
 
             };
 
@@ -160,7 +162,6 @@ namespace NonVisuals.CockpitMaster.Panels
                 { '>' , CDUCharset.greater },
                 { '-' , CDUCharset.dash },
                 { '/' , CDUCharset.slash },
-                //{ ',' , CDUCharset.comas },
                 { ':' , CDUCharset.colon },
                 { '%' , CDUCharset.percent },
                 { '+' , CDUCharset.plus },

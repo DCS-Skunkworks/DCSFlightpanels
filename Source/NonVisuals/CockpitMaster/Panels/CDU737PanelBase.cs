@@ -26,7 +26,7 @@
         CALL = 0b0010000,     // CALL
     }
 
-    public class CDU737PanelBase : CockpitMasterPanel, IDCSBIOSStringListener
+    public class CDU737PanelBase : CockpitMasterPanel
     {
         public const int MAX_BRIGHT = 0xff;
         private const int BRIGHTNESS_STEP = 10;
@@ -64,6 +64,13 @@
             0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0
+        };
+
+        // 14 lines to track for DCSBios Change
+        protected string[] oldCDULines =
+        {
+            "","","","","","","",
+            "","","","","","","",
         };
 
         private HidReport[] hidReport;
@@ -112,9 +119,7 @@
             VendorId = (int)GamingPanelVendorEnum.CockpitMaster;
             ProductId = (int)GamingPanelEnum.CDU737;
 
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
+            // Startup();
 
         }
 
@@ -162,17 +167,16 @@
             SetLine(9, "* waiting dcsBios data *");
 
             hidReport = new HidReport[] {
-            _hidWriteDevice.CreateReport(),
-            _hidWriteDevice.CreateReport(),
-            _hidWriteDevice.CreateReport(),
-            _hidWriteDevice.CreateReport(),
-            _hidWriteDevice.CreateReport(),
-            _hidWriteDevice.CreateReport(),
-            _hidWriteDevice.CreateReport(),
-            _hidWriteDevice.CreateReport(),
-            _hidWriteDevice.CreateReport(),
-        };
-
+                _hidWriteDevice.CreateReport(),
+                _hidWriteDevice.CreateReport(),
+                _hidWriteDevice.CreateReport(),
+                _hidWriteDevice.CreateReport(),
+                _hidWriteDevice.CreateReport(),
+                _hidWriteDevice.CreateReport(),
+                _hidWriteDevice.CreateReport(),
+                _hidWriteDevice.CreateReport(),
+                _hidWriteDevice.CreateReport(),
+            };
 
             StartTimers();
         }
@@ -187,8 +191,6 @@
                 {
                     _displayCDUTimer.Stop();
                     _displayCDUTimer.Dispose();
-                    BIOSEventHandler.DetachStringListener(this);
-                    BIOSEventHandler.DetachDataListener(this);
                 }
 
                 _disposed = true;
@@ -196,6 +198,11 @@
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        {
+
         }
 
         public Dictionary<char, CDUCharset> ConvertTable { 
@@ -262,27 +269,6 @@
         }
 
 
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            if (isFirstReport)
-            {
-                return;
-            }
-
-            try
-            {
-                foreach(CDUMappedCommandKey key in hashSet)
-                {
-                    _ = DCSBIOS.Send(key.MappedCommand());
-                }
-                  
-            }
-            catch(Exception)
-            {
-            }
-        }
-
         public int ScreenBrightness
         {
             get
@@ -340,7 +326,6 @@
         {
             if (line < 0 || line > LINES_ON_CDU-1) throw new ArgumentOutOfRangeException("CDU Line must be 0 to 13");
             _TextLines[line].Line = text;
-
         }
 
         public void SetColorForLine( int line, CDUColor color)
@@ -362,7 +347,7 @@
             displayBufferOnCDU();
         }
 
-        private void displayBufferOnCDU()
+        protected void displayBufferOnCDU()
         {
 
             // Data structure in the hidReport is 
@@ -432,12 +417,7 @@
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            
-        }
 
-        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
-        {
-            
         }
 
         private void OnReport(HidReport report)
@@ -500,6 +480,33 @@
         private static bool FlagValue(byte[] currentValue, ICockpitMasterCDUKey panelKnob)
         {
             return (currentValue[panelKnob.Group] & panelKnob.Mask) > 0;
+        }
+
+
+        protected bool HandleStringData( int line, DCSBIOSStringDataEventArgs e,
+            string data, 
+            ref int changed)
+        {
+
+            if (data == oldCDULines[line])
+            {
+                return false;
+            }
+            
+            changed++;
+            oldCDULines[line] = data;
+            return true;
+
+        }
+
+        protected (bool, uint) ShouldHandleDCSBiosData(DCSBIOSDataEventArgs e, DCSBIOSOutput output)
+        {
+            if (e.Address != output.Address) return (false, 0);
+            var oldValue = output.LastIntValue;
+            var newValue = output.GetUIntValue(e.Data);
+            if (oldValue == newValue) return (false, 0);
+
+            return (true, output.GetUIntValue(e.Data));
         }
     }
 }
