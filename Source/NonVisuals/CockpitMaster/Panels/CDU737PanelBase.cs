@@ -119,7 +119,7 @@
             VendorId = (int)GamingPanelVendorEnum.CockpitMaster;
             ProductId = (int)GamingPanelEnum.CDU737;
 
-            Startup();
+            // Startup();
 
         }
 

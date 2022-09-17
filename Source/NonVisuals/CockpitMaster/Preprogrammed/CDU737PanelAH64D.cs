@@ -43,6 +43,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             CDUPanelKeys = CDUMappedCommandKeyAH64D.GetMappedPanelKeys();
             BIOSEventHandler.AttachStringListener(this);
             BIOSEventHandler.AttachDataListener(this);
+            Startup();
         }
 
         public sealed override void Startup()

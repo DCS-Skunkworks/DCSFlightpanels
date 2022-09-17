@@ -54,7 +54,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 new CDUMappedCommandKey(4, 1 << 0, false, CDU737Keys.EXEC, "PLT_KU_ENT 1" , "PLT_KU_ENT 0"),
 
                 // Group 5
-                new CDUMappedCommandKey(5, 1 << 6, false, CDU737Keys.N1LIMIT),
+                new CDUMappedCommandKey(5, 1 << 6, false, CDU737Keys.N1LIMIT,"PLT_MPD_L_AC INC","PLT_MPD_L_AC DEC"),
                 new CDUMappedCommandKey(5, 1 << 5, false, CDU737Keys.FIX),
                 new CDUMappedCommandKey(5, 1 << 4, false, CDU737Keys.A , "PLT_KU_A 1" , "PLT_KU_A 0"),
                 new CDUMappedCommandKey(5, 1 << 3, false, CDU737Keys.B, "PLT_KU_B 1" , "PLT_KU_B 0"),
