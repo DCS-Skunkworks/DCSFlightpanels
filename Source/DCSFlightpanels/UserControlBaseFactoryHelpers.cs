@@ -28,6 +28,11 @@ namespace DCSFlightpanels
                 {
                     return new Cdu737UserControlFA18C(hidSkeleton, parentTabItem);
                 }
+                if (DCSFPProfile.IsSA342(profile))
+                {
+                    return new Cdu737UserControlSA342(hidSkeleton, parentTabItem);
+                }
+
 
             }
 
