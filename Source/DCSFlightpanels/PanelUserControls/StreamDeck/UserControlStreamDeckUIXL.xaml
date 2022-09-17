@@ -18,6 +18,10 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="Border" x:Key="BorderSelected">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+        </Style>
 
         <Style TargetType="Image" x:Key="ButtonImageStyle">
             <Setter Property="Margin" Value="1,1,1,1"/>
