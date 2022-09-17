@@ -329,8 +329,6 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
 
                 }
 
-                if (linesChanged > 0) displayBufferOnCDU();
-
             }
 
             catch (Exception)

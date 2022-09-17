@@ -119,8 +119,6 @@
             VendorId = (int)GamingPanelVendorEnum.CockpitMaster;
             ProductId = (int)GamingPanelEnum.CDU737;
 
-            // Startup();
-
         }
 
         private void StartTimers()
@@ -328,6 +326,13 @@
             _TextLines[line].Line = text;
         }
 
+        public void SetDisplayCharAt( int line, DisplayedChar ch, int index)
+        {
+            if (line < 0 || line > LINES_ON_CDU - 1) throw new ArgumentOutOfRangeException("CDU Line must be 0 to 13");
+            _TextLines[line].setDisplayedCharAt(ch, index);
+
+        }
+
         public void SetColorForLine( int line, CDUColor color)
         {
             _TextLines[line].applyColorToLine(color);
@@ -488,7 +493,7 @@
             ref int changed)
         {
 
-            if (data == oldCDULines[line])
+            if (string.Compare(data,oldCDULines[line])==0)
             {
                 return false;
             }
