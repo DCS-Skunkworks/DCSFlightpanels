@@ -382,14 +382,17 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         protected void SetSelectedButtonUIOnly(EnumStreamDeckButtonNames selectedButtonName)
         {
             //Deselect everything
-            ButtonImages.ForEach(x => { x.Source = x.Bill.DeselectedImage; x.IsSelected = false; });
+            ButtonImages.ForEach(x => { 
+                x.Source = StreamDeck.Resources.GetDeselectedImageNamed(x.Bill.StreamDeckButtonName);
+                x.IsSelected = false; }
+            );
             
             //Select the one
             var selectedButton = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == selectedButtonName);
             if (selectedButton == null)
                 return;
 
-            selectedButton.Source = selectedButton.Bill.SelectedImage;
+            selectedButton.Source = StreamDeck.Resources.GetSelectedImageNamed(selectedButton.Bill.StreamDeckButtonName);
             selectedButton.IsSelected = true;
         }
 
@@ -415,10 +418,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", string.Empty)),
                 };
-                buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Green);
-                buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
+              //  buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Green);
+              //  buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
                 buttonImage.Bill.StreamDeckPanelInstance = _streamDeckPanel;
-                buttonImage.Source = buttonImage.Bill.DeselectedImage;
+                buttonImage.Source = StreamDeck.Resources.GetDeselectedImageNamed(buttonImage.Bill.StreamDeckButtonName);
             }
         }
 

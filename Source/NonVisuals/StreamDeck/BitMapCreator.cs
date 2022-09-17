@@ -198,11 +198,6 @@
             return streamdeckSizedBitmap;
         }
 
-        public static BitmapImage GetButtonImageFromResources(EnumStreamDeckButtonNames streamDeckButtonName, Color color)
-        {
-            return new BitmapImage(new Uri(StreamDeckConstants.NUMBER_BUTTON_LOCATION + StreamDeckCommon.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
-        }
-
         public static Bitmap CreateStreamDeckBitmap(string text, Font font, Color fontColor, int offsetX, int offsetY, Bitmap backgroundBitmap)
         {
             return CreateBitmapImage(text, font, offsetX, offsetY, fontColor, Color.Transparent, backgroundBitmap);
