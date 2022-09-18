@@ -567,27 +567,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 logger.Error(ex);
             }
         }
-
-        protected static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
-        {
-            if (depObj == null)
-                yield return null;
-
-            for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(depObj); i++)
-            {
-                var child = System.Windows.Media.VisualTreeHelper.GetChild(depObj, i);
-
-                if (child != null && child is T)
-                    yield return (T)child;
-
-                foreach (T childOfChild in FindVisualChildren<T>(child))
-                    yield return childOfChild;
-            }
-        }
+      
 
         protected void CheckButtonControlListValidity()
         {
-            if (ButtonImages.Count() != ButtonAmount())
+            if (ButtonImages.Count != ButtonAmount())
             {
                 //Error messages only flashes briefly to the user :-( but is logged in error log :-).
                 //This error should not happen in theory if the screen is correctly designed, Debug.assert to warn the dev.
