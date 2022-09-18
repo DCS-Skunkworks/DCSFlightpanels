@@ -141,6 +141,20 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             var button = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == streamdeckButton.StreamDeckButtonName);
             if (button != null)
             {
+                switch (streamdeckButton.Face.FaceType)
+                {
+                    case EnumStreamDeckFaceType.Image:
+                        var faceTypeImage = (FaceTypeImage)streamdeckButton.Face;
+                        var bitmap = new Bitmap(faceTypeImage.ImageFile);
+                        button.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
+                        break;
+
+                    case EnumStreamDeckFaceType.Text:
+                        var faceTypeText = (FaceTypeText)streamdeckButton.Face;
+                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(faceTypeText.ButtonTextTemplate, faceTypeText.TextFont, faceTypeText.FontColor, faceTypeText.BackgroundColor, faceTypeText.OffsetX, faceTypeText.OffsetY);
+                        button.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
+                        break;
+                }
                 if (streamdeckButton.Face.FaceType == EnumStreamDeckFaceType.Image)
                 {
                     var faceTypeImage = (FaceTypeImage)streamdeckButton.Face;
