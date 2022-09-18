@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
+using StreamDeckSharp;
 
 namespace DCSFlightpanels.CustomControls
 {
@@ -20,7 +20,11 @@ namespace DCSFlightpanels.CustomControls
                 Border borderParent = Common.FindVisualParent<Border>(this);
                 borderParent.Style = _isSelected ? (Style)FindResource("BorderSelected") : (Style)FindResource("BorderMouseHoover");
             }
-        
+        }
+
+        public void SetDefaultButtonImage()
+        {
+            Source = PanelUserControls.StreamDeck.Resources.GetDefaultButtonImageNamed(Bill.StreamDeckButtonName);
         }
     } 
 }

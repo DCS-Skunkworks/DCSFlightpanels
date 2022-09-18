@@ -154,7 +154,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             HideAllDotImages();
 
-            foreach (var buttonImage in ButtonImages)
+            foreach (StreamDeckImage buttonImage in ButtonImages)
             {
                 buttonImage.Bill.Clear();
 
@@ -165,6 +165,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 if (streamDeckButton.HasConfig)
                 {
                     SetButtonPicture(streamDeckButton);
+                } 
+                else
+                {
+                    buttonImage.SetDefaultButtonImage();
                 }
             }
         }
@@ -393,7 +397,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 };
 
                 buttonImage.Bill.StreamDeckPanelInstance = _streamDeckPanel;
-                buttonImage.Source = StreamDeck.Resources.GetDefaultButtonImageNamed(buttonImage.Bill.StreamDeckButtonName);
+                buttonImage.SetDefaultButtonImage();                
             }
         }
 
@@ -583,5 +587,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 ButtonImages.Clear();
             }
         }
+
+
     }
 }
