@@ -47,7 +47,11 @@ Stream Deck Panels Supported:
 
 Cockpit Master devices supported:
 ---------------------------------------------
-* CDU 737 (DCS-BIOS, A-10C & AH-64D preprogrammed)
+* CDU 737 (DCS-BIOS) 
+* A-10C  preprogrammed
+* AH-64D preprogrammed
+* F/A-18C UFC preprogrammed
+* SA342 Nadir Keyboard preprogrammed
 
 [Demo of the CDU with A-10C](https://www.youtube.com/watch?v=kSMwf8sg_Ro)
 

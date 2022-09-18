@@ -3,11 +3,15 @@ using DCS_BIOS;
 using NonVisuals.CockpitMaster.Panels;
 using System;
 using DCS_BIOS.Interfaces;
+using NonVisuals.CockpitMaster.Switches;
+using System.Collections.Generic;
 
 namespace NonVisuals.CockpitMaster.Preprogrammed
 {
     public class CDU737PanelA10C : CDU737PanelBase , IDCSBIOSStringListener
     {
+        // List the DCSBios Mappings Here
+
         private DCSBIOSOutput _CDU_LINE_0;
         private DCSBIOSOutput _CDU_LINE_1;
         private DCSBIOSOutput _CDU_LINE_2;
@@ -26,6 +30,9 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         public CDU737PanelA10C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             CDUPanelKeys = CDUMappedCommandKeyA10C.GetMappedPanelKeys();
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            Startup();
         }
 
         public sealed override void Startup()
@@ -55,7 +62,6 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 _CDU_LINE_9 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE9");
                 DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_9);
 
-
                 _CDU_BRT = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_BRT");
                 _MASTER_CAUTION = DCSBIOSControlLocator.GetDCSBIOSOutput("MASTER_CAUTION");
 
@@ -69,6 +75,46 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 SetLastException(ex);
             }
         }
+
+        private bool _disposed;
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    BIOSEventHandler.DetachStringListener(this);
+                    BIOSEventHandler.DetachDataListener(this);
+                }
+
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        {
+            if (isFirstReport)
+            {
+                return;
+            }
+
+            try
+            {
+                foreach (CDUMappedCommandKey key in hashSet)
+                {
+                    _ = DCSBIOS.Send(key.MappedCommand());
+                }
+
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -118,7 +164,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             }
 
         }
-        public new void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
+        public  void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {

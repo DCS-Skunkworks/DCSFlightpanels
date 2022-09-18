@@ -276,7 +276,10 @@
     <Resource Include="Images\F-14 RIO Datalink.png" />
     <Resource Include="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
     <Resource Include="PanelUserControls\PreProgrammed\cdu737.png" />
+    <Resource Include="PanelUserControls\PreProgrammed\FA18CUFC.jpg" />
+    <Resource Include="PanelUserControls\PreProgrammed\mapping02.jpg" />
     <Resource Include="PanelUserControls\PreProgrammed\mappingmenukey.jpg" />
+    <Resource Include="PanelUserControls\PreProgrammed\SA342_NADIR.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -324,10 +327,21 @@
     <Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
     <None Remove="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
     <None Remove="PanelUserControls\PreProgrammed\cdu737.png" />
+    <None Remove="PanelUserControls\PreProgrammed\FA18CUFC.jpg" />
+    <None Remove="PanelUserControls\PreProgrammed\mapping02.jpg" />
     <None Remove="PanelUserControls\PreProgrammed\mappingmenukey.jpg" />
+    <None Remove="PanelUserControls\PreProgrammed\SA342_NADIR.png" />
     <Page Remove="AboutWindow.xaml" />
     <Page Remove="PreferencesWindow.xaml" />
     <Page Remove="Windows\LinkMappingWindow.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PanelUserControls\PreProgrammed\Cdu737UserControlSA342.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="PanelUserControls\PreProgrammed\Cdu737UserControlFA18C.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
   <PropertyGroup />
   <PropertyGroup>

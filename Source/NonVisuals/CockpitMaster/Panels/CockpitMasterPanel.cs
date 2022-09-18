@@ -15,9 +15,7 @@
     {
 
         protected readonly object LockLCDUpdateObject = new();
-
         protected HidDevice _hidWriteDevice;
-
 
         protected CockpitMasterPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton) : base(typeOfGamingPanel, hidSkeleton)
         {
@@ -41,9 +39,6 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-
-
-      
 
         protected static bool FlagHasChanged(byte oldValue, byte newValue, int bitMask)
         {
@@ -84,16 +79,5 @@
              */
             return ((oldValue ^ newValue) & bitMask) > 0;
         }
-
-    }
-
-
-    public enum ControlList : byte
-    {
-        ALL,
-        DCSBIOS,
-        KEYS,
-        BIPS,
-        OSCOMMANDS
     }
 }
