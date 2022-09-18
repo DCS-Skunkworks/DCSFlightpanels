@@ -378,15 +378,13 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             //Deselect everything selected (normaly should only be 1 currently selected but we never know...
             ButtonImages.Where(x => x.IsSelected).ToList().ForEach(x => 
                 {
-                    x.Source = StreamDeck.Resources.GetDeselectedImageNamed(x.Bill.StreamDeckButtonName);
-                    x.IsSelected = false; 
+                    x.IsSelected = false;
                 });
 
             //Select the one
             var selectedButton = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == selectedButtonName);
             if (selectedButton != null)
             {
-                selectedButton.Source = StreamDeck.Resources.GetSelectedImageNamed(selectedButton.Bill.StreamDeckButtonName);
                 selectedButton.IsSelected = true;
             }
         }
@@ -415,7 +413,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 };
 
                 buttonImage.Bill.StreamDeckPanelInstance = _streamDeckPanel;
-                buttonImage.Source = StreamDeck.Resources.GetDeselectedImageNamed(buttonImage.Bill.StreamDeckButtonName);
+                buttonImage.Source = StreamDeck.Resources.GetDefaultButtonImageNamed(buttonImage.Bill.StreamDeckButtonName);
             }
         }
 
