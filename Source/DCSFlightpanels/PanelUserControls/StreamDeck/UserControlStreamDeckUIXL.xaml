@@ -20,7 +20,7 @@
         </Style>
         <Style TargetType="Border" x:Key="BorderSelected">
             <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderBrush" Value="LimeGreen"/>
         </Style>
 
         <Style TargetType="Image" x:Key="ButtonImageStyle">

@@ -137,26 +137,16 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
-        protected void SetDotImagePicture(int number, StreamDeckButton streamdeckButton)
+        protected void SetButtonPicture(StreamDeckButton streamdeckButton)
         {
-            foreach (var dotImage in DotImages)
+            var button = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == streamdeckButton.StreamDeckButtonName);
+            if (button != null)
             {
-                if (dotImage.Name == $"DotImage{number}")
+                if (streamdeckButton.Face.FaceType == EnumStreamDeckFaceType.Image)
                 {
-                    if (streamdeckButton.FaceType == EnumStreamDeckFaceType.Image)
-                    {
-                        var faceTypeImage = (FaceTypeImage)streamdeckButton.Face;
-
-                        var bitmap = new Bitmap(faceTypeImage.ImageFile);
-                        dotImage.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
-                    }
-//                  //  @"C:\Users\steph\Google Drive\Gaming\Stream Deck\CenterIR.png"
-                   
-////                    var bitmap = new Bitmap(@"C:\Users\steph\Google Drive\Gaming\Stream Deck\CenterIR.png");
-//                    //var bitmap2 = new Bitmap(streamdeckButton);
-//                    //   ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
-//                    //dotImage.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
-//                    dotImage.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
+                    var faceTypeImage = (FaceTypeImage)streamdeckButton.Face;
+                    var bitmap = new Bitmap(faceTypeImage.ImageFile);
+                    button.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
                 }
             }
         }
@@ -176,7 +166,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 if (streamDeckButton.HasConfig)
                 {
                     SetDotImageVisibleStatus(Visibility.Visible, StreamDeckCommon.ButtonNumber(streamDeckButton.StreamDeckButtonName));
-                    SetDotImagePicture(StreamDeckCommon.ButtonNumber(streamDeckButton.StreamDeckButtonName), streamDeckButton);
+                    SetButtonPicture(streamDeckButton);
                 }
             }
         }
