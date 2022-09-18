@@ -28,7 +28,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         protected readonly List<StreamDeckImage> ButtonImages = new List<StreamDeckImage>();
-        protected readonly List<System.Windows.Controls.Image> DotImages = new List<System.Windows.Controls.Image>();
         protected bool UserControlLoaded;
         protected StreamDeckPanel _streamDeckPanel;
         private string _lastShownLayer = string.Empty;
@@ -165,7 +164,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
                 if (streamDeckButton.HasConfig)
                 {
-                    SetDotImageVisibleStatus(Visibility.Visible, StreamDeckCommon.ButtonNumber(streamDeckButton.StreamDeckButtonName));
                     SetButtonPicture(streamDeckButton);
                 }
             }
@@ -332,17 +330,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
-        protected void SetDotImageVisibleStatus(Visibility visibility, int number)
-        {
-            var dotImage = DotImages.FirstOrDefault(x => x.Name == $"DotImage{number}");
-            if (dotImage == null)
-                return;
-            dotImage.Visibility = visibility;
-        }
-
         public void HideAllDotImages()
         {
-            DotImages.ForEach(x => x.Visibility = Visibility.Collapsed);
+
         }
 
         public StreamDeckPanel StreamDeckPanelInstance
@@ -597,18 +587,16 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         protected void CheckButtonControlListValidity()
         {
-            if (ButtonImages.Count() != ButtonAmount()
-                || DotImages.Count() != ButtonAmount())
+            if (ButtonImages.Count() != ButtonAmount())
             {
                 //Error messages only flashes briefly to the user :-( but is logged in error log :-).
                 //This error should not happen in theory if the screen is correctly designed, Debug.assert to warn the dev.
                 //Clear lists to show to the user that something wrong happened.
                 Common.ShowErrorMessageBox(
-                    new Exception($"Error initializing streamdeck buttons list. Expecting [{ButtonAmount()}] got [{ButtonImages.Count()}]/[{DotImages.Count()}]"
+                    new Exception($"Error initializing streamdeck buttons list. Expecting [{ButtonAmount()}] got [{ButtonImages.Count()}]"
                     ));
                 Debug.Assert(false);
                 ButtonImages.Clear();
-                DotImages.Clear();
             }
         }
     }

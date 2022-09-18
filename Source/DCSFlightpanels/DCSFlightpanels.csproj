@@ -294,9 +294,6 @@
     <Resource Include="Images\up_arrow.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\dot3.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\filenotfound.png" />
     <Resource Include="Images\cue_banner_search_dcsbios.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
