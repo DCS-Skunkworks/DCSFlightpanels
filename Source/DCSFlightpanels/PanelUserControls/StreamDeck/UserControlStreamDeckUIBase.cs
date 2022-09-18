@@ -144,15 +144,20 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 switch (streamdeckButton.Face.FaceType)
                 {
                     case EnumStreamDeckFaceType.Image:
-                        var faceTypeImage = (FaceTypeImage)streamdeckButton.Face;
-                        var bitmap = new Bitmap(faceTypeImage.ImageFile);
+                        var ftImage = (FaceTypeImage)streamdeckButton.Face;
+                        var bitmap = new Bitmap(ftImage.ImageFile);
                         button.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
                         break;
 
                     case EnumStreamDeckFaceType.Text:
-                        var faceTypeText = (FaceTypeText)streamdeckButton.Face;
-                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(faceTypeText.ButtonTextTemplate, faceTypeText.TextFont, faceTypeText.FontColor, faceTypeText.BackgroundColor, faceTypeText.OffsetX, faceTypeText.OffsetY);
+                        var ftText = (FaceTypeText)streamdeckButton.Face;
+                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(ftText.ButtonTextTemplate, ftText.TextFont, ftText.FontColor, ftText.BackgroundColor, ftText.OffsetX, ftText.OffsetY);
                         button.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
+                        break;
+                    case EnumStreamDeckFaceType.DCSBIOS:
+                        var ftDcsBios = (FaceTypeDCSBIOS)streamdeckButton.Face;
+                        var bitmapDcsBios = BitMapCreator.CreateStreamDeckBitmap(ftDcsBios.ButtonTextTemplate, ftDcsBios.TextFont, ftDcsBios.FontColor, ftDcsBios.BackgroundColor, ftDcsBios.OffsetX, ftDcsBios.OffsetY);
+                        button.Source = BitMapCreator.Bitmap2BitmapImage(bitmapDcsBios);
                         break;
                 }
                 if (streamdeckButton.Face.FaceType == EnumStreamDeckFaceType.Image)
