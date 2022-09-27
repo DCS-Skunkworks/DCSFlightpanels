@@ -703,6 +703,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             try
             {
                 TextBoxDCSBIOSActionButtonOn.Bill.Clear();
+                SetIsDirty();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -715,6 +717,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             try
             {
                 AddEditDCSBIOS(TextBoxDCSBIOSActionButtonOff);
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -727,6 +730,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             try
             {
                 TextBoxDCSBIOSActionButtonOff.Bill.Clear();
+                SetIsDirty();
                 SetFormState();
             }
             catch (Exception ex)
