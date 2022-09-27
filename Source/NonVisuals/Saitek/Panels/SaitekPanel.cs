@@ -58,6 +58,7 @@
             {
                 if (disposing)
                 {
+                    SaitekPanelKnobs.Clear();
                 }
 
                 _disposed = true;
