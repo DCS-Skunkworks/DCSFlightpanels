@@ -11,5 +11,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             return new BitmapImage(new Uri(StreamDeckConstants.NUMBER_BUTTON_LOCATION + StreamDeckCommon.ButtonNumber(streamDeckButtonName) + "_blue.png", UriKind.Absolute));
         }
+        public static BitmapImage GetButtonDcsBiosDecoderRule()
+        {
+            return new BitmapImage(new Uri(StreamDeckConstants.StreamDeckGalleryPathMisc + "DcsBiosDecoderRule.png", UriKind.Absolute));
+        }
     }
 }

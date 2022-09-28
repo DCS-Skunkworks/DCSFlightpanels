@@ -10,6 +10,8 @@
         public static readonly string StreamDeckGalleryPath = AppDomain.CurrentDomain.BaseDirectory + "\\StreamDeckGallery\\";
 
         public static readonly string StreamDeckGalleryPathSymbols = AppDomain.CurrentDomain.BaseDirectory + "\\StreamDeckGallery\\Symbols\\";
+        
+        public static readonly string StreamDeckGalleryPathMisc = AppDomain.CurrentDomain.BaseDirectory + "\\StreamDeckGallery\\Misc\\";
 
         public static readonly string StreamDeckGalleryHomeWhite = "home_white.png";
 

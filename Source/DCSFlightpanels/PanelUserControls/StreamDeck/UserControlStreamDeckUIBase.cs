@@ -11,7 +11,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
-
+    using System.Windows.Media.Imaging;
     using ClassLibraryCommon;
 
     using DCSFlightpanels.Bills;
@@ -156,8 +156,14 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         break;
                     case EnumStreamDeckFaceType.DCSBIOS:
                         var ftDcsBios = (FaceTypeDCSBIOS)streamdeckButton.Face;
-                        var bitmapDcsBios = BitMapCreator.CreateStreamDeckBitmap(ftDcsBios.ButtonTextTemplate, ftDcsBios.TextFont, ftDcsBios.FontColor, ftDcsBios.BackgroundColor, ftDcsBios.OffsetX, ftDcsBios.OffsetY);
-                        button.Source = BitMapCreator.Bitmap2BitmapImage(bitmapDcsBios);
+                        var dcsBiosDecoder = (DCSBIOSDecoder)streamdeckButton.Face;
+                        BitmapImage bitmapDcsBios = dcsBiosDecoder.DecoderOutputType switch
+                        {
+                            EnumDCSBIOSDecoderOutputType.Raw => BitMapCreator.Bitmap2BitmapImage(BitMapCreator.CreateStreamDeckBitmap(ftDcsBios.ButtonTextTemplate, ftDcsBios.TextFont, ftDcsBios.FontColor, ftDcsBios.BackgroundColor, ftDcsBios.OffsetX, ftDcsBios.OffsetY)),
+                            EnumDCSBIOSDecoderOutputType.Converter => StreamDeck.Resources.GetButtonDcsBiosDecoderRule(),
+                            _ => throw new Exception("Unexepected DecoderOutputType")
+                        };
+                        button.Source = bitmapDcsBios;
                         break;
                 }
                 if (streamdeckButton.Face.FaceType == EnumStreamDeckFaceType.Image)
