@@ -11,6 +11,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Drawing;
     using System.Linq;
     using System.Media;
     using System.Windows;
@@ -163,6 +164,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && (!string.IsNullOrEmpty(TextBoxDCSBIOSId.Text) || !string.IsNullOrEmpty(TextBoxFormula.Text));
 
             ComboBoxDecimals.IsEnabled = CheckBoxLimitDecimals.IsChecked == true;
+            DisplayImagePreview();
         }
 
         private void DispatcherTimerTick(object sender, EventArgs e)
@@ -713,6 +715,15 @@ namespace DCSFlightpanels.Windows.StreamDeck
             _dcsbiosDecoder.TextFont = SettingsManager.DefaultFont;
             _dcsbiosDecoder.FontColor = SettingsManager.DefaultFontColor;
             _dcsbiosDecoder.BackgroundColor = SettingsManager.DefaultBackgroundColor;
+        }
+
+        private void DisplayImagePreview()
+        {
+            if (_dcsbiosDecoder.DecoderOutputType == EnumDCSBIOSDecoderOutputType.Raw)
+            {
+                var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosDecoder.ButtonTextTemplate, _dcsbiosDecoder.TextFont, _dcsbiosDecoder.FontColor, _dcsbiosDecoder.BackgroundColor, _dcsbiosDecoder.OffsetX, _dcsbiosDecoder.OffsetY);
+                ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
+            }
         }
 
         /*
