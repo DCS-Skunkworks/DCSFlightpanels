@@ -87,6 +87,8 @@
         // is used later to encode the hidreport buffers 
         private CDUTextLine[] _TextLines = new CDUTextLine[LINES_ON_CDU];
 
+        private CDUColor _baseColor;
+
         public string[] CDULines
         {
             get
@@ -126,6 +128,23 @@
             _displayCDUTimer.Elapsed += TimedDisplayBufferOnCDU;
             _displayCDUTimer.Start();
         }
+
+        public CDUColor BaseColor
+        {
+            get
+            {
+                return _baseColor;
+            }
+            set
+            {
+                _baseColor = value;
+                for (int i = 0; i < LINES_ON_CDU; i++)
+                {
+                    SetColorForLine(i, _baseColor);
+                }
+            }
+        }
+
 
         private void initCDU()
         {
