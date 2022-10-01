@@ -62,6 +62,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\cdu737.png" />
     <Resource Include="Images\fip.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\NewDocument_32x32.png" />
+    <Resource Include="Images\rio-cap-f14.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\SaveHL.bmp" />
@@ -325,6 +327,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
+    <None Remove="Images\cdu737.png" />
+    <None Remove="Images\rio-cap-f14.png" />
     <None Remove="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
     <None Remove="PanelUserControls\PreProgrammed\cdu737.png" />
     <None Remove="PanelUserControls\PreProgrammed\FA18CUFC.jpg" />
@@ -336,6 +340,9 @@
     <Page Remove="Windows\LinkMappingWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="PanelUserControls\PreProgrammed\Cdu737UserControlF14.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
     <Page Update="PanelUserControls\PreProgrammed\Cdu737UserControlSA342.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
