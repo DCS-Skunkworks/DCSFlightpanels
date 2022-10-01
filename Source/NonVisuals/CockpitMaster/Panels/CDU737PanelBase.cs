@@ -397,10 +397,10 @@
                     // Screenbuffers are declared 63 bytes
                     // Doing this here, ensure the Numbering of HidReport is not "broken" 
                     // by mistake, and simplifies "recopy of lines in buffers
-                    byte[] buffer = new byte[64];
-                    buffer[0] = (byte)(i + 1);
-                    Array.Copy(ScreenBuffer[i], 0, buffer, 1, 63);
-                    hidReport[i].Data = buffer;
+                    
+                    hidReport[i].Data[0] = (byte)(i + 1);
+                    Array.Copy(ScreenBuffer[i], 0, hidReport[i].Data, 1, 63);
+                    
                     _ = _hidWriteDevice.WriteReportAsync(hidReport[i]);
                 }
 
