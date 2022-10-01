@@ -52,6 +52,7 @@ Cockpit Master devices supported:
 * AH-64D preprogrammed
 * F/A-18C UFC preprogrammed
 * SA342 Nadir Keyboard preprogrammed
+* F14 RIO Cap Panel preprogrammed
 
 [Demo of the CDU with A-10C](https://www.youtube.com/watch?v=kSMwf8sg_Ro)
 
