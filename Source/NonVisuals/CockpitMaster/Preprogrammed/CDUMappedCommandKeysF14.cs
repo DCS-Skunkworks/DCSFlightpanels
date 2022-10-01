@@ -71,7 +71,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 new CDUMappedCommandKey(6, 1 << 0, false, CDU737Keys.J),
 
                 // Group 7
-                new CDUMappedCommandKey(7, 1 << 7, false, CDU737Keys.K1, "RIO_CAP_LAT_1 INC","RIO_CAP_LAT_2 DEC"),
+                new CDUMappedCommandKey(7, 1 << 7, false, CDU737Keys.K1, "RIO_CAP_LAT_1 INC","RIO_CAP_LAT_1 DEC"),
                 new CDUMappedCommandKey(7, 1 << 6, false, CDU737Keys.K2, "RIO_CAP_NBR_2 INC","RIO_CAP_NBR_2 DEC"),
                 new CDUMappedCommandKey(7, 1 << 5, false, CDU737Keys.K3, "RIO_CAP_SPD_3 INC","RIO_CAP_SPD_3 DEC"),
                 new CDUMappedCommandKey(7, 1 << 4, false, CDU737Keys.K),
