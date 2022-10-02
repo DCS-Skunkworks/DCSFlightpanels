@@ -36,10 +36,10 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 new CDUMappedCommandKey(2, 1 << 2, false, CDU737Keys.LSK6),
 
                 // Group 3
-                new CDUMappedCommandKey(3, 1 << 6, false, CDU737Keys.INITREF),
-                new CDUMappedCommandKey(3, 1 << 5, false, CDU737Keys.RTE),
-                new CDUMappedCommandKey(3, 1 << 4, false, CDU737Keys.CLB),
-                new CDUMappedCommandKey(3, 1 << 3, false, CDU737Keys.CRZ),
+                new CDUMappedCommandKey(3, 1 << 6, false, CDU737Keys.INITREF, "RIO_HCU_TCS TOGGLE",""),
+                new CDUMappedCommandKey(3, 1 << 5, false, CDU737Keys.RTE,"RIO_HCU_RADAR TOGGLE", ""),
+                new CDUMappedCommandKey(3, 1 << 4, false, CDU737Keys.CLB,"RIO_HCU_DDD TOGGLE", ""),
+                new CDUMappedCommandKey(3, 1 << 3, false, CDU737Keys.CRZ,"RIO_HCU_TID TOGGLE", ""),
                 new CDUMappedCommandKey(3, 1 << 2, false, CDU737Keys.DES),
                 new CDUMappedCommandKey(3, 1 << 1, false, CDU737Keys.BRT_MINUS),
                 new CDUMappedCommandKey(3, 1 << 0, false, CDU737Keys.BRT_PLUS),
