@@ -279,6 +279,7 @@
     <Resource Include="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
     <Resource Include="PanelUserControls\PreProgrammed\cdu737.png" />
     <Resource Include="PanelUserControls\PreProgrammed\FA18CUFC.jpg" />
+    <Resource Include="PanelUserControls\PreProgrammed\hcu-modes-mapping.png" />
     <Resource Include="PanelUserControls\PreProgrammed\mapping02.jpg" />
     <Resource Include="PanelUserControls\PreProgrammed\mappingmenukey.jpg" />
     <Resource Include="PanelUserControls\PreProgrammed\SA342_NADIR.png" />
@@ -332,6 +333,7 @@
     <None Remove="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
     <None Remove="PanelUserControls\PreProgrammed\cdu737.png" />
     <None Remove="PanelUserControls\PreProgrammed\FA18CUFC.jpg" />
+    <None Remove="PanelUserControls\PreProgrammed\hcu-modes-mapping.png" />
     <None Remove="PanelUserControls\PreProgrammed\mapping02.jpg" />
     <None Remove="PanelUserControls\PreProgrammed\mappingmenukey.jpg" />
     <None Remove="PanelUserControls\PreProgrammed\SA342_NADIR.png" />

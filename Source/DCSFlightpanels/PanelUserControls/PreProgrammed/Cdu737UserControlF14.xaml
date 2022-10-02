@@ -19,12 +19,16 @@
         
             <Label Content="RIO CAP Mappings" FontSize="24" FontWeight="Bold" />
             
-            <Image x:Name="maping_rio" Height="500" Width="273" Source="/Images/rio-cap-f14.png"/>
+            <Image x:Name="maping_rio" Height="380" Width="273" Source="/Images/rio-cap-f14.png"/>
             
-            <Label Content="PREV PAGE and NEXT PAGE move the Rotrary" FontSize="12" FontWeight="Bold" />
-            <Label Content="LSK means Left Shift Key, key on the left, numbered from top to bottom" FontSize="12" FontWeight="Bold" />
-            <Label Content="CDU EXEC is mapped to Enter, CDU CLR to Clear" FontSize="12" FontWeight="Bold" />
-            <Label Content="E and N are both mapped to NE Key , same for S and W mapped to SW Key" FontSize="12" FontWeight="Bold" />
+            <Label Content="PREV PAGE and NEXT PAGE move the Rotrary" FontSize="10" FontWeight="Bold" />
+            <Label Content="LSK means Left Shift Key, key on the left, numbered from top to bottom" FontSize="10" FontWeight="Bold" />
+            <Label Content="CDU EXEC is mapped to Enter, CDU CLR to Clear" FontSize="10" FontWeight="Bold" />
+            <Label Content="E and N are both mapped to NE Key , same for S and W mapped to SW Key" FontSize="10" FontWeight="Bold" />
+            
+            <Label Content="HCU Mode Switching" FontSize="12" FontWeight="Bold" />
+
+            <Image x:Name="maping_HCU" Height="80" Width="300" Source="/PanelUserControls/PreProgrammed/hcu-modes-mapping.png"/>
 
         </StackPanel>
     </StackPanel>
