@@ -1,0 +1,106 @@
+﻿using DCS_BIOS.EventArgs;
+using DCS_BIOS;
+using NonVisuals.CockpitMaster.Panels;
+using System;
+using DCS_BIOS.Interfaces;
+using NonVisuals.CockpitMaster.Switches;
+using System.Collections.Generic;
+
+namespace NonVisuals.CockpitMaster.Preprogrammed
+{
+    public class CDU737PanelM2000C : CDU737PanelBase, IDCSBIOSStringListener
+    {
+        // List the DCSBios Mappings Here
+        private bool _disposed;
+
+        public CDU737PanelM2000C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        {
+            CDUPanelKeys = CDUMappedCommandKeyM2000C.GetMappedPanelKeys();
+
+            Startup();
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+
+        }
+
+        public sealed override void Startup()
+        {
+            try
+            {
+                SetColorForLine(0, CDUColor.WHITE);
+                SetLine(0, string.Format("{0,24}", "M2000C profile"));
+                SetColorForLine(5, CDUColor.BLUE);
+                SetColorForLine(7, CDUColor.WHITE);
+                SetColorForLine(9, CDUColor.RED);
+                SetLine(9,"  PCN Keyboard Mapping  ");
+
+                StartListeningForHidPanelChanges();
+                
+            }
+            catch (Exception ex)
+            {
+                SetLastException(ex);
+            }
+        }
+
+        // Protected implementation of Dispose pattern.
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    BIOSEventHandler.DetachStringListener(this);
+                    BIOSEventHandler.DetachDataListener(this);
+                }
+                _disposed = true;
+            }
+
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        {
+            if (isFirstReport)
+            {
+                return;
+            }
+
+            try
+            {
+                foreach (CDUMappedCommandKey key in hashSet)
+                {
+                    _ = DCSBIOS.Send(key.MappedCommand());
+                }
+
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
+        {
+
+            if (SettingsLoading)
+            {
+                return;
+            }
+
+            try
+            {
+                UpdateCounter(e.Address, e.Data);
+
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
+        {
+        }
+
+    }
+}

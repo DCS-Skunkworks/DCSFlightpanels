@@ -18,7 +18,6 @@ namespace DCSFlightpanels
                 if (DCSFPProfile.IsA10C(profile))
                 {
                     return new Cdu737UserControlA10C(hidSkeleton, parentTabItem);
-
                 }
                 if (DCSFPProfile.IsAH64D(profile))
                 {
@@ -36,8 +35,10 @@ namespace DCSFlightpanels
                 {
                     return new Cdu737UserControlF14(hidSkeleton, parentTabItem);
                 }
-
-
+                if (DCSFPProfile.IsM2000C(profile))
+                {
+                    return new Cdu737UserControlM2000C(hidSkeleton, parentTabItem);
+                }
             }
 
             return null;
