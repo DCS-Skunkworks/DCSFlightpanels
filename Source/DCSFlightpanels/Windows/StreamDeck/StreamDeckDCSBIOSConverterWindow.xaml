@@ -126,6 +126,11 @@
                                     <Button Name="ButtonTestTextFaceRaw" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
                                 </StackPanel>
                             </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <Border BorderThickness="1" BorderBrush="#FF000000" HorizontalAlignment="Left" Height="73" Width="73" Margin="10,0,0,0">
+                                    <Image Name="ButtonImagePreviewRaw"  Height="72" Width="72" Margin="0,0,0,0"/>
+                                </Border>
+                            </StackPanel>
                         </StackPanel>
                         <Label Name="LabelInsertRaw" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
                     </StackPanel>
@@ -155,7 +160,7 @@
                                 <RepeatButton Name="RepeatButtonActionPressDownOverlay" Content="{StaticResource DownArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressDown_OnClick"/>
                                 <RepeatButton Name="RepeatButtonActionPressLeftOverlay" Content="{StaticResource LeftArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressLeft_OnClick"/>
                                 <RepeatButton Name="RepeatButtonActionPressRightOverlay" Content="{StaticResource RightArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressRight_OnClick"/>
-                            </StackPanel>
+                            </StackPanel>                            
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Button Name="ButtonTextFaceFontOverlay" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonTextFaceFont_OnClick"/>
@@ -164,6 +169,11 @@
                                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
                                     <Button Name="ButtonTestTextFaceOverlay" Margin="10,2,2,0" Width="40" Height="20" Content="Test" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
                                 </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <Border BorderThickness="1" BorderBrush="#FF000000" HorizontalAlignment="Left" Height="73" Width="73" Margin="30,0,0,0">
+                                    <Image Name="ButtonImagePreviewOverlay"  Height="72" Width="72" Margin="0,0,0,0"/>
+                                </Border>
                             </StackPanel>
                         </StackPanel>
                         <Label Name="LabelInsertOverlayImage" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>

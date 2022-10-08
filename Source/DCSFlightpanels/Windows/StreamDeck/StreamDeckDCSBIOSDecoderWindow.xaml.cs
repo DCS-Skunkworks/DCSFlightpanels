@@ -375,19 +375,21 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-
         private void RepeatButtonPressUp_OnClick(object sender, RoutedEventArgs e)
         {
             SetOffset(Axis.Y, -StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
         }
+
         private void RepeatButtonPressDown_OnClick(object sender, RoutedEventArgs e)
         {
             SetOffset(Axis.Y, +StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
         }
+
         private void RepeatButtonPressLeft_OnClick(object sender, RoutedEventArgs e)
         {
             SetOffset(Axis.X, -StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
         }
+
         private void RepeatButtonPressRight_OnClick(object sender, RoutedEventArgs e)
         {
             SetOffset(Axis.X, +StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
