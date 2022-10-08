@@ -87,8 +87,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                 var referenceValuesOK = Use2Criteria ? double.TryParse(TextBoxReferenceValue1.Text, out var result1) && double.TryParse(TextBoxReferenceValue2.Text, out var result2) : double.TryParse(TextBoxReferenceValue1.Text, out var result3);
 
-
-
                 var criteriaOK = (!Use2Criteria || criteria2DataOK) && criteria1DataOK && referenceValuesOK;
 
                 ButtonOk.IsEnabled = criteriaOK && _dcsbiosConverter.FaceConfigurationIsOK && IsDirty;

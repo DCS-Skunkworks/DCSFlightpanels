@@ -349,14 +349,25 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        private void RepeatButtonPressUp_OnClick(object sender, RoutedEventArgs e)
+     
+        private void SetOffset(Axis offsetAxis, int offsetChangeValue)
         {
             try
             {
-                _dcsbiosDecoder.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                switch (offsetAxis) {
+                    case Axis.X:
+                        _dcsbiosDecoder.OffsetX += offsetChangeValue;
+                        break;
+                    case Axis.Y:
+                        _dcsbiosDecoder.OffsetY += offsetChangeValue;
+                    break;
+                }
+                TextBoxOffsetInfo.OffSetX = _dcsbiosDecoder.OffsetX;
                 TextBoxOffsetInfo.OffSetY = _dcsbiosDecoder.OffsetY;
+                SettingsManager.OffsetX = _dcsbiosDecoder.OffsetX;
                 SettingsManager.OffsetY = _dcsbiosDecoder.OffsetY;
                 SetIsDirty();
+                DisplayImagePreview();
             }
             catch (Exception ex)
             {
@@ -364,19 +375,22 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
+
+        private void RepeatButtonPressUp_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetOffset(Axis.Y, -StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
+        }
         private void RepeatButtonPressDown_OnClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                _dcsbiosDecoder.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TextBoxOffsetInfo.OffSetY = _dcsbiosDecoder.OffsetY;
-                SettingsManager.OffsetY = _dcsbiosDecoder.OffsetY;
-                SetIsDirty();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            SetOffset(Axis.Y, +StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
+        }
+        private void RepeatButtonPressLeft_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetOffset(Axis.X, -StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
+        }
+        private void RepeatButtonPressRight_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetOffset(Axis.X, +StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
         }
 
         public bool IsDirty => _isDirty;
@@ -395,35 +409,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             _isDirty = false;
         }
 
-        private void RepeatButtonPressLeft_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                _dcsbiosDecoder.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TextBoxOffsetInfo.OffSetX = _dcsbiosDecoder.OffsetX;
-                SettingsManager.OffsetX = _dcsbiosDecoder.OffsetX;
-                SetIsDirty();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void RepeatButtonPressRight_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                _dcsbiosDecoder.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TextBoxOffsetInfo.OffSetX = _dcsbiosDecoder.OffsetX;
-                SettingsManager.OffsetX = _dcsbiosDecoder.OffsetX;
-                SetIsDirty();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
+     
 
         private void TextBoxFormula_OnTextChanged(object sender, TextChangedEventArgs e)
         {
