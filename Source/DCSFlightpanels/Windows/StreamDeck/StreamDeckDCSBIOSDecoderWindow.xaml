@@ -213,7 +213,9 @@
                                     <Button Name="ButtonTextFaceBackgroundColor" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
                                 </StackPanel>
                             </StackPanel>
-                            <Image Name="ButtonImage"  Height="72" Width="72" Margin="30,0,0,0"/>
+                            <Border BorderThickness="1" BorderBrush="#FF000000" HorizontalAlignment="Left" Height="73" Width="73" Margin="30,0,0,0">
+                                <Image Name="ButtonImagePreview"  Height="72" Width="72" Margin="0,0,0,0"/>
+                            </Border>
                         </StackPanel>
                         <Label Name="LabelInsertRaw" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsertRaw_OnMouseDown"/>
                         <StackPanel Margin="0,5,0,0" Orientation="Horizontal">

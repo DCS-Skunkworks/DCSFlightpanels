@@ -6,8 +6,7 @@ namespace DCSFlightpanels.Bills
     using System.Drawing;
     using System.Windows;
     using System.Windows.Media;
-    using System.Windows.Media.Imaging;
-
+  
     using MEF;
 
     using NonVisuals;
@@ -33,8 +32,6 @@ namespace DCSFlightpanels.Bills
             get { return $"#{_backgroundColor.R:X2}{_backgroundColor.G:X2}{_backgroundColor.B:X2}"; } 
         }
 
-        public BitmapImage SelectedImage { get; set; }
-        public BitmapImage DeselectedImage { get; set; }
         public StreamDeckPanel StreamDeckPanelInstance { get; set; }
 
         public Color FontColor

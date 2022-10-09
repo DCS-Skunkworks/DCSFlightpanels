@@ -87,11 +87,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                 var referenceValuesOK = Use2Criteria ? double.TryParse(TextBoxReferenceValue1.Text, out var result1) && double.TryParse(TextBoxReferenceValue2.Text, out var result2) : double.TryParse(TextBoxReferenceValue1.Text, out var result3);
 
-
-
                 var criteriaOK = (!Use2Criteria || criteria2DataOK) && criteria1DataOK && referenceValuesOK;
 
                 ButtonOk.IsEnabled = criteriaOK && _dcsbiosConverter.FaceConfigurationIsOK && IsDirty;
+                
+                DisplayImagePreview();
             }
             catch (Exception ex)
             {
@@ -540,12 +540,20 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void RepeatButtonPressUp_OnClick(object sender, RoutedEventArgs e)
+        private void SetOffset(Axis offsetAxis, int offsetChangeValue)
         {
             try
             {
-                _dcsbiosConverter.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                switch (offsetAxis)
+                {
+                    case Axis.X:
+                        _dcsbiosConverter.OffsetX += offsetChangeValue;
+                        break;
+                    case Axis.Y:
+                        _dcsbiosConverter.OffsetY += offsetChangeValue;
+                        break;
+                }
+                SettingsManager.OffsetX = _dcsbiosConverter.OffsetX;
                 SettingsManager.OffsetY = _dcsbiosConverter.OffsetY;
                 TestImage();
                 SetIsDirty();
@@ -555,54 +563,26 @@ namespace DCSFlightpanels.Windows.StreamDeck
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void RepeatButtonPressUp_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetOffset(Axis.Y, -StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
         }
 
         private void RepeatButtonPressDown_OnClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                _dcsbiosConverter.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                SettingsManager.OffsetY = _dcsbiosConverter.OffsetY;
-                TestImage();
-                SetIsDirty();
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            SetOffset(Axis.Y, +StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
         }
 
         private void RepeatButtonPressLeft_OnClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                _dcsbiosConverter.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                SettingsManager.OffsetX = _dcsbiosConverter.OffsetX;
-                TestImage();
-                SetIsDirty();
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            SetOffset(Axis.X, -StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
         }
 
         private void RepeatButtonPressRight_OnClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                _dcsbiosConverter.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                SettingsManager.OffsetX = _dcsbiosConverter.OffsetX;
-                TestImage();
-                SetIsDirty();
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            SetOffset(Axis.X, +StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
         }
 
         private void TestImage()
@@ -692,5 +672,29 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
+        private void DisplayImagePreview()
+        {
+            switch (_dcsbiosConverter.ConverterOutputType)
+            {
+               case EnumConverterOutputType.Raw:
+                    {
+                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosConverter.ButtonTextTemplate, _dcsbiosConverter.TextFont, _dcsbiosConverter.FontColor, _dcsbiosConverter.BackgroundColor, _dcsbiosConverter.OffsetX, _dcsbiosConverter.OffsetY);
+                        ButtonImagePreviewRaw.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
+                        break;
+                    }
+                case EnumConverterOutputType.Image:
+                    {
+                        var bitmap = new Bitmap(_dcsbiosConverter.ImageFileRelativePath);
+                        ButtonImagePreviewImage.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
+                        break;
+                    }
+                case EnumConverterOutputType.ImageOverlay:
+                    {
+                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosConverter.ButtonTextTemplate, _dcsbiosConverter.TextFont, _dcsbiosConverter.FontColor, _dcsbiosConverter.BackgroundColor, _dcsbiosConverter.OffsetX, _dcsbiosConverter.OffsetY);
+                        ButtonImagePreviewOverlay.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
+                        break;
+                    }
+            }
+        }
     }
 }

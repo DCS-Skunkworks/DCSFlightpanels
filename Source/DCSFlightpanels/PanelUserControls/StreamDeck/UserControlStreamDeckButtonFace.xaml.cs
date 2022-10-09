@@ -341,28 +341,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
             ClearRadioButtons();
 
-            switch (streamDeckButton.FaceType)
-            {
-                case EnumStreamDeckFaceType.Text:
-                    {
-                        RadioButtonTextFace.IsChecked = true;
-                        break;
-                    }
-                case EnumStreamDeckFaceType.DCSBIOS:
-                    {
-                        RadioButtonDCSBIOSFace.IsChecked = true;
-                        break;
-                    }
-                case EnumStreamDeckFaceType.Image:
-                    {
-                        RadioButtonImageFace.IsChecked = true;
-                        break;
-                    }
-                default:
-                    {
-                        return;
-                    }
-            }
+            RadioButtonTextFace.IsChecked = streamDeckButton.FaceType == EnumStreamDeckFaceType.Text;
+            RadioButtonDCSBIOSFace.IsChecked = streamDeckButton.FaceType == EnumStreamDeckFaceType.DCSBIOS;
+            RadioButtonImageFace.IsChecked = streamDeckButton.FaceType == EnumStreamDeckFaceType.Image;
+
             ShowFaceConfiguration(streamDeckButton.Face);
         }
 
@@ -433,7 +415,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     {
                         if (TextBoxButtonTextFace.Bill.ContainsTextFace())
                         {
-                            var result = new FaceTypeText
+                            return new FaceTypeText()
                             {
                                 StreamDeckButtonName = streamDeckButtonName,
                                 StreamDeckPanelInstance = _streamDeckPanel,
@@ -444,7 +426,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                                 OffsetX = TextBoxButtonTextFace.Bill.OffsetX,
                                 OffsetY = TextBoxButtonTextFace.Bill.OffsetY
                             };
-                            return result;
                         }
                         return null;
                     }
@@ -465,13 +446,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     {
                         if (TextBoxImageFace.Bill.ContainsImageFace())
                         {
-                            var result = new FaceTypeImage
+                            return new FaceTypeImage()
                             {
                                 StreamDeckButtonName = streamDeckButtonName,
                                 StreamDeckPanelInstance = _streamDeckPanel,
                                 ImageFile = TextBoxImageFace.Bill.ImageFileRelativePath
                             };
-                            return result;
                         }
                         return null;
                     }

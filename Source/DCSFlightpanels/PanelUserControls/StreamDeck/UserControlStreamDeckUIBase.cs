@@ -11,7 +11,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
-
+    using System.Windows.Media.Imaging;
     using ClassLibraryCommon;
 
     using DCSFlightpanels.Bills;
@@ -28,7 +28,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
         protected readonly List<StreamDeckImage> ButtonImages = new List<StreamDeckImage>();
-        protected readonly List<System.Windows.Controls.Image> DotImages = new List<System.Windows.Controls.Image>();
         protected bool UserControlLoaded;
         protected StreamDeckPanel _streamDeckPanel;
         private string _lastShownLayer = string.Empty;
@@ -137,11 +136,50 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
+        protected void SetButtonPicture(StreamDeckButton streamdeckButton)
+        {
+            var button = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == streamdeckButton.StreamDeckButtonName);
+            if (button != null)
+            {
+                switch (streamdeckButton.Face.FaceType)
+                {
+                    case EnumStreamDeckFaceType.Image:
+                        var ftImage = (FaceTypeImage)streamdeckButton.Face;
+                        var bitmap = new Bitmap(ftImage.ImageFile);
+                        button.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
+                        break;
+
+                    case EnumStreamDeckFaceType.Text:
+                        var ftText = (FaceTypeText)streamdeckButton.Face;
+                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(ftText.ButtonTextTemplate, ftText.TextFont, ftText.FontColor, ftText.BackgroundColor, ftText.OffsetX, ftText.OffsetY);
+                        button.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
+                        break;
+                    case EnumStreamDeckFaceType.DCSBIOS:
+                        var ftDcsBios = (FaceTypeDCSBIOS)streamdeckButton.Face;
+                        var dcsBiosDecoder = (DCSBIOSDecoder)streamdeckButton.Face;
+                        BitmapImage bitmapDcsBios = dcsBiosDecoder.DecoderOutputType switch
+                        {
+                            EnumDCSBIOSDecoderOutputType.Raw => BitMapCreator.Bitmap2BitmapImage(BitMapCreator.CreateStreamDeckBitmap(ftDcsBios.ButtonTextTemplate, ftDcsBios.TextFont, ftDcsBios.FontColor, ftDcsBios.BackgroundColor, ftDcsBios.OffsetX, ftDcsBios.OffsetY)),
+                            EnumDCSBIOSDecoderOutputType.Converter => StreamDeck.Resources.GetButtonDcsBiosDecoderRule(),
+                            _ => throw new Exception("Unexepected DecoderOutputType")
+                        };
+                        button.Source = bitmapDcsBios;
+                        break;
+                }
+                if (streamdeckButton.Face.FaceType == EnumStreamDeckFaceType.Image)
+                {
+                    var faceTypeImage = (FaceTypeImage)streamdeckButton.Face;
+                    var bitmap = new Bitmap(faceTypeImage.ImageFile);
+                    button.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
+                }
+            }
+        }
+
         private void UpdateButtonInfoFromSource()
         {
             HideAllDotImages();
 
-            foreach (var buttonImage in ButtonImages)
+            foreach (StreamDeckImage buttonImage in ButtonImages)
             {
                 buttonImage.Bill.Clear();
 
@@ -151,7 +189,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
                 if (streamDeckButton.HasConfig)
                 {
-                    SetDotImageStatus(true, StreamDeckCommon.ButtonNumber(streamDeckButton.StreamDeckButtonName));
+                    SetButtonPicture(streamDeckButton);
+                } 
+                else
+                {
+                    buttonImage.SetDefaultButtonImage();
                 }
             }
         }
@@ -317,28 +359,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
-        protected void SetDotImageStatus(bool show, int number, bool allOthersNegated = false)
-        {
-            foreach (var dotImage in DotImages)
-            {
-                if (allOthersNegated)
-                {
-                    dotImage.Visibility = show ? Visibility.Collapsed : Visibility.Visible;
-                }
-
-                if (dotImage.Name == "DotImage" + number)
-                {
-                    dotImage.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
-                }
-            }
-        }
-
         public void HideAllDotImages()
         {
-            foreach (var dotImage in DotImages)
-            {
-                dotImage.Visibility = Visibility.Collapsed;
-            }
+
         }
 
         public StreamDeckPanel StreamDeckPanelInstance
@@ -361,25 +384,17 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         protected void SetSelectedButtonUIOnly(EnumStreamDeckButtonNames selectedButtonName)
         {
-            foreach (var buttonImage in ButtonImages)
+            //Deselect everything selected (normaly should only be 1 currently selected but we never know...
+            ButtonImages.Where(x => x.IsSelected).ToList().ForEach(x => 
+                {
+                    x.IsSelected = false;
+                });
+
+            //Select the one
+            var selectedButton = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == selectedButtonName);
+            if (selectedButton != null)
             {
-                try
-                {
-                    if (selectedButtonName == buttonImage.Bill.StreamDeckButtonName)
-                    {
-                        buttonImage.Source = buttonImage.Bill.SelectedImage;
-                        buttonImage.IsSelected = true;
-                    }
-                    else
-                    {
-                        buttonImage.Source = buttonImage.Bill.DeselectedImage;
-                        buttonImage.IsSelected = false;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.ShowErrorMessageBox(ex);
-                }
+                selectedButton.IsSelected = true;
             }
         }
 
@@ -405,10 +420,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", string.Empty)),
                 };
-                buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, System.Drawing.Color.Green);
-                buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
+
                 buttonImage.Bill.StreamDeckPanelInstance = _streamDeckPanel;
-                buttonImage.Source = buttonImage.Bill.DeselectedImage;
+                buttonImage.SetDefaultButtonImage();                
             }
         }
 
@@ -582,39 +596,23 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 logger.Error(ex);
             }
         }
-
-        protected static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
-        {
-            if (depObj == null)
-                yield return null;
-
-            for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(depObj); i++)
-            {
-                var child = System.Windows.Media.VisualTreeHelper.GetChild(depObj, i);
-
-                if (child != null && child is T)
-                    yield return (T)child;
-
-                foreach (T childOfChild in FindVisualChildren<T>(child))
-                    yield return childOfChild;
-            }
-        }
+      
 
         protected void CheckButtonControlListValidity()
         {
-            if (ButtonImages.Count() != ButtonAmount()
-                || DotImages.Count() != ButtonAmount())
+            if (ButtonImages.Count != ButtonAmount())
             {
                 //Error messages only flashes briefly to the user :-( but is logged in error log :-).
                 //This error should not happen in theory if the screen is correctly designed, Debug.assert to warn the dev.
                 //Clear lists to show to the user that something wrong happened.
                 Common.ShowErrorMessageBox(
-                    new Exception($"Error initializing streamdeck buttons list. Expecting [{ButtonAmount()}] got [{ButtonImages.Count()}]/[{DotImages.Count()}]"
+                    new Exception($"Error initializing streamdeck buttons list. Expecting [{ButtonAmount()}] got [{ButtonImages.Count()}]"
                     ));
                 Debug.Assert(false);
                 ButtonImages.Clear();
-                DotImages.Clear();
             }
         }
+
+
     }
 }
