@@ -714,18 +714,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        /*
-        private void DisplayButtonImage()
-        {
-            Dispatcher?.BeginInvoke(
-                (Action)delegate
-                {
-                    ButtonImage.Source = CommonStreamDeck.ConvertBitMap(_dcsbiosDecoder.Bitmap);
-                });
-        }
-        */
-
-
         private void TextBoxFormula_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
