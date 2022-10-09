@@ -83,22 +83,16 @@
 
         public static int ButtonNumber(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            if (streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
-            {
-                return -1;
-            }
-
-            return int.Parse(streamDeckButtonName.ToString().Replace("BUTTON", string.Empty));
+            return streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON ? 
+            -1 : 
+            int.Parse(streamDeckButtonName.ToString().Replace("BUTTON", string.Empty));
         }
 
         public static EnumStreamDeckButtonNames ButtonName(int streamDeckButtonNumber)
         {
-            if (streamDeckButtonNumber == 0)
-            {
-                return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
-            }
-
-            return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
+            return streamDeckButtonNumber == 0 ?
+            EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON : 
+            (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), $"BUTTON{streamDeckButtonNumber}");
         }
 
         public static EnumStreamDeckButtonNames ButtonName(string streamDeckButtonNumber)

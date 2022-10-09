@@ -11,6 +11,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Drawing;
     using System.Linq;
     using System.Media;
     using System.Windows;
@@ -163,6 +164,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && (!string.IsNullOrEmpty(TextBoxDCSBIOSId.Text) || !string.IsNullOrEmpty(TextBoxFormula.Text));
 
             ComboBoxDecimals.IsEnabled = CheckBoxLimitDecimals.IsChecked == true;
+            DisplayImagePreview();
         }
 
         private void DispatcherTimerTick(object sender, EventArgs e)
@@ -347,14 +349,25 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        private void RepeatButtonPressUp_OnClick(object sender, RoutedEventArgs e)
+     
+        private void SetOffset(Axis offsetAxis, int offsetChangeValue)
         {
             try
             {
-                _dcsbiosDecoder.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                switch (offsetAxis) {
+                    case Axis.X:
+                        _dcsbiosDecoder.OffsetX += offsetChangeValue;
+                        break;
+                    case Axis.Y:
+                        _dcsbiosDecoder.OffsetY += offsetChangeValue;
+                    break;
+                }
+                TextBoxOffsetInfo.OffSetX = _dcsbiosDecoder.OffsetX;
                 TextBoxOffsetInfo.OffSetY = _dcsbiosDecoder.OffsetY;
+                SettingsManager.OffsetX = _dcsbiosDecoder.OffsetX;
                 SettingsManager.OffsetY = _dcsbiosDecoder.OffsetY;
                 SetIsDirty();
+                DisplayImagePreview();
             }
             catch (Exception ex)
             {
@@ -362,19 +375,24 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
+        private void RepeatButtonPressUp_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetOffset(Axis.Y, -StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
+        }
+
         private void RepeatButtonPressDown_OnClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                _dcsbiosDecoder.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TextBoxOffsetInfo.OffSetY = _dcsbiosDecoder.OffsetY;
-                SettingsManager.OffsetY = _dcsbiosDecoder.OffsetY;
-                SetIsDirty();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            SetOffset(Axis.Y, +StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
+        }
+
+        private void RepeatButtonPressLeft_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetOffset(Axis.X, -StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
+        }
+
+        private void RepeatButtonPressRight_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetOffset(Axis.X, +StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE);
         }
 
         public bool IsDirty => _isDirty;
@@ -393,35 +411,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             _isDirty = false;
         }
 
-        private void RepeatButtonPressLeft_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                _dcsbiosDecoder.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TextBoxOffsetInfo.OffSetX = _dcsbiosDecoder.OffsetX;
-                SettingsManager.OffsetX = _dcsbiosDecoder.OffsetX;
-                SetIsDirty();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void RepeatButtonPressRight_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                _dcsbiosDecoder.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TextBoxOffsetInfo.OffSetX = _dcsbiosDecoder.OffsetX;
-                SettingsManager.OffsetX = _dcsbiosDecoder.OffsetX;
-                SetIsDirty();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
+     
 
         private void TextBoxFormula_OnTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -715,17 +705,14 @@ namespace DCSFlightpanels.Windows.StreamDeck
             _dcsbiosDecoder.BackgroundColor = SettingsManager.DefaultBackgroundColor;
         }
 
-        /*
-        private void DisplayButtonImage()
+        private void DisplayImagePreview()
         {
-            Dispatcher?.BeginInvoke(
-                (Action)delegate
-                {
-                    ButtonImage.Source = CommonStreamDeck.ConvertBitMap(_dcsbiosDecoder.Bitmap);
-                });
+            if (_dcsbiosDecoder.DecoderOutputType == EnumDCSBIOSDecoderOutputType.Raw)
+            {
+                var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosDecoder.ButtonTextTemplate, _dcsbiosDecoder.TextFont, _dcsbiosDecoder.FontColor, _dcsbiosDecoder.BackgroundColor, _dcsbiosDecoder.OffsetX, _dcsbiosDecoder.OffsetY);
+                ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
+            }
         }
-        */
-
 
         private void TextBoxFormula_OnKeyUp(object sender, KeyEventArgs e)
         {

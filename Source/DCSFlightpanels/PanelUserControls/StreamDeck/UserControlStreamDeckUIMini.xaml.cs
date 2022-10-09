@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
+using ClassLibraryCommon;
 using DCSFlightpanels.CustomControls;
 using NonVisuals.StreamDeck.Panels;
 
@@ -36,11 +36,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         private void FillControlLists()
         {
-            FindVisualChildren<StreamDeckImage>(GridButtons).ToList()
+            Common.FindVisualChildren<StreamDeckImage>(GridButtons).ToList()
                 .ForEach(x => ButtonImages.Add(x));
-
-            FindVisualChildren<Image>(GridButtons).ToList().Where(x => x.Name.StartsWith("DotImage")).ToList()
-                .ForEach(x => DotImages.Add(x));
 
             CheckButtonControlListValidity();
         }

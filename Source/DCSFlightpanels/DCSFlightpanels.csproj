@@ -279,9 +279,9 @@
     <Resource Include="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
     <Resource Include="PanelUserControls\PreProgrammed\cdu737.png" />
     <Resource Include="PanelUserControls\PreProgrammed\FA18CUFC.jpg" />
-    <Resource Include="PanelUserControls\PreProgrammed\hcu-modes-mapping.png" />
     <Resource Include="PanelUserControls\PreProgrammed\mapping02.jpg" />
     <Resource Include="PanelUserControls\PreProgrammed\mappingmenukey.jpg" />
+    <Resource Include="PanelUserControls\PreProgrammed\pcn-mapping.png" />
     <Resource Include="PanelUserControls\PreProgrammed\SA342_NADIR.png" />
   </ItemGroup>
   <ItemGroup>
@@ -298,9 +298,6 @@
     <Resource Include="Images\left_arrow.png" />
     <Resource Include="Images\right_arrow.png" />
     <Resource Include="Images\up_arrow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\dot3.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\filenotfound.png" />
@@ -333,15 +330,19 @@
     <None Remove="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
     <None Remove="PanelUserControls\PreProgrammed\cdu737.png" />
     <None Remove="PanelUserControls\PreProgrammed\FA18CUFC.jpg" />
-    <None Remove="PanelUserControls\PreProgrammed\hcu-modes-mapping.png" />
     <None Remove="PanelUserControls\PreProgrammed\mapping02.jpg" />
     <None Remove="PanelUserControls\PreProgrammed\mappingmenukey.jpg" />
+    <None Remove="PanelUserControls\PreProgrammed\pcn-mapping.png" />
     <None Remove="PanelUserControls\PreProgrammed\SA342_NADIR.png" />
     <Page Remove="AboutWindow.xaml" />
     <Page Remove="PreferencesWindow.xaml" />
     <Page Remove="Windows\LinkMappingWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="PanelUserControls\PreProgrammed\Cdu737UserControlM2000C.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="PanelUserControls\PreProgrammed\Cdu737UserControlF14.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>

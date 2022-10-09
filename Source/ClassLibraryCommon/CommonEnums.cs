@@ -63,4 +63,10 @@ namespace ClassLibraryCommon
         [Description("Logitech Farming Side Panel")]
         FarmingPanel = 0x2218
     }
+
+    public enum Axis
+    {
+        X,
+        Y
+    }
 }
