@@ -86,13 +86,14 @@
             return (_dcsbiosBinding?.DCSBIOSInputs == null || _dcsbiosBinding.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             if (_dcsbiosBinding == null)
             {
                 _dcsbiosBinding = new DCSBIOSActionBindingFarmingPanel();
             }
             _dcsbiosBinding.DCSBIOSInputs = dcsBiosInputs;
+            _dcsbiosBinding.IsSequenced = isSequenced;
         }
         
         public override void ClearAll()

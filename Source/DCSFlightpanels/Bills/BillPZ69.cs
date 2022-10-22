@@ -52,7 +52,7 @@
             return false;
         }
 
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             throw new Exception("BillPZ69 cannot contain DCS-BIOS");
         }

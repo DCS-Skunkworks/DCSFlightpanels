@@ -81,7 +81,7 @@
             return (_dcsbiosBindingTPM?.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             if (_dcsbiosBindingTPM == null)
             {
@@ -89,6 +89,7 @@
             }
 
             _dcsbiosBindingTPM.DCSBIOSInputs = dcsBiosInputs;
+            _dcsbiosBindingTPM.IsSequenced = isSequenced;
         }
 
         protected override void ClearDCSBIOSFromBill()

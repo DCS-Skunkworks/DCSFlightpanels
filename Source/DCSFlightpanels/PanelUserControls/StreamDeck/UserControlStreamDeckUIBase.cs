@@ -139,6 +139,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         protected void SetButtonPicture(StreamDeckButton streamdeckButton)
         {
             var button = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == streamdeckButton.StreamDeckButtonName);
+            if (streamdeckButton.Face == null)
+            {
+                return; // bug
+            }
+
             if (button != null)
             {
                 switch (streamdeckButton.Face.FaceType)

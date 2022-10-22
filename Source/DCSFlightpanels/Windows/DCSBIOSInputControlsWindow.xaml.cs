@@ -22,7 +22,7 @@
         private readonly bool _showSequenced = false;
         private bool _isSequenced = false;
 
-        public DCSBIOSInputControlsWindow(string header, string description, bool showSequenced = false)
+        public DCSBIOSInputControlsWindow(string header, string description, bool isSequenced, bool showSequenced)
         {
             InitializeComponent();
             _header = header;
@@ -32,7 +32,7 @@
             ShowItems();
         }
 
-        public DCSBIOSInputControlsWindow(string header, List<DCSBIOSInput> dcsbiosInputs, string description, bool showSequenced = false)
+        public DCSBIOSInputControlsWindow(string header, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced, bool showSequenced)
         {
             InitializeComponent();
             if (dcsbiosInputs != null)

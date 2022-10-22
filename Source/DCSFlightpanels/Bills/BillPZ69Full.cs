@@ -76,7 +76,7 @@
             return _bipLinkPZ69 != null && _bipLinkPZ69.BIPLights.Count > 0;
         }
         
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             if (_dcsbiosBindingPZ69 == null)
             {
@@ -84,6 +84,7 @@
             }
 
             _dcsbiosBindingPZ69.DCSBIOSInputs = dcsBiosInputs;
+            _dcsbiosBindingPZ69.IsSequenced = isSequenced;
         }
 
         public override bool IsEmpty()

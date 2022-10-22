@@ -32,7 +32,7 @@ namespace DCSFlightpanels.Bills
         public abstract bool ContainsBIPLink();
         public abstract bool IsEmpty();
         public abstract bool IsEmptyNoCareBipLink();
-        public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs);
+        public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced);
         public abstract void ClearAll();
         protected abstract void ClearDCSBIOSFromBill();
         public abstract BIPLink BipLink { get; set; }
@@ -142,7 +142,7 @@ namespace DCSFlightpanels.Bills
                 case CopyContentType.DCSBIOS:
                     {
                         description = DCSBIOSBinding.Description;
-                        content = DCSBIOSBinding.DCSBIOSInputs;
+                        content = DCSBIOSBinding;
                         break;
                     }
                 case CopyContentType.BIPLink:
@@ -205,7 +205,8 @@ namespace DCSFlightpanels.Bills
                     {
                         if (IsEmptyNoCareBipLink())
                         {
-                            AddDCSBIOS(copyPackage.Description, (List<DCSBIOSInput>)copyPackage.Content);
+                            var dcsbiosActionBindingBase = (DCSBIOSActionBindingBase)copyPackage.Content;
+                            AddDCSBIOS(copyPackage.Description, dcsbiosActionBindingBase.DCSBIOSInputs, dcsbiosActionBindingBase.IsSequenced);
                         }
                         break;
                     }
@@ -578,12 +579,12 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        private void AddDCSBIOS(string description, List<DCSBIOSInput> dcsBiosInputs)
+        private void AddDCSBIOS(string description, List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             // 1 appropriate text to textbox
             // 2 update bindings
             SetTextBoxText(description, dcsBiosInputs.CloneJson());
-            Consume(dcsBiosInputs.CloneJson());
+            Consume(dcsBiosInputs.CloneJson(), isSequenced);
             UpdateDCSBIOSBinding();
         }
 
@@ -592,11 +593,11 @@ namespace DCSFlightpanels.Bills
             DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
             if (ContainsDCSBIOS())
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(TextBox.Name.Replace("TextBox", string.Empty), DCSBIOSInputs, TextBox.Text);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(TextBox.Name.Replace("TextBox", string.Empty), DCSBIOSInputs, TextBox.Text,   DCSBIOSBinding.IsSequenced,  true);
             }
             else
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow( TextBox.Name.Replace("TextBox", string.Empty), null);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow( TextBox.Name.Replace("TextBox", string.Empty), null, false, true);
             }
 
             dcsBIOSInputControlsWindow.ShowDialog();
@@ -609,7 +610,7 @@ namespace DCSFlightpanels.Bills
                 }
                 else
                 {
-                    AddDCSBIOS(dcsBIOSInputControlsWindow.Description, dcsBiosInputs);
+                    AddDCSBIOS(dcsBIOSInputControlsWindow.Description, dcsBiosInputs, dcsBIOSInputControlsWindow.IsSequenced);
                 }
             }
         }
