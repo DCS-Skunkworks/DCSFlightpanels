@@ -5,8 +5,12 @@
     using System.Threading;
 
     using DCS_BIOS;
+    using MEF;
     using Newtonsoft.Json;
     using NLog;
+    using NonVisuals.Properties;
+    using NonVisuals.Saitek;
+    using static System.Net.Mime.MediaTypeNames;
 
     [Serializable]
     public abstract class DCSBIOSActionBindingBase : IDisposable
@@ -16,7 +20,7 @@
         private string _description;
         [NonSerialized] private Thread _sendDCSBIOSCommandsThread;
         private volatile List<DCSBIOSInput> _dcsbiosInputs;
-        
+
         internal abstract void ImportSettings(string settings);
         public abstract string ExportSettings();
 
@@ -63,7 +67,7 @@
 
         protected bool CancelSendDCSBIOSCommands
         {
-            get => _shutdownCommandsThread; 
+            get => _shutdownCommandsThread;
             set => _shutdownCommandsThread = value;
         }
 
@@ -134,6 +138,160 @@
             }
         }
 
+        public DCSBIOSActionBindingSkeleton ParseSettingV2(string config)
+        {
+            var result = new DCSBIOSActionBindingSkeleton();
+
+            //MultiPanelDCSBIOSControlV2{32}\o/{ALT}\o/{FLAPS_LEVER_DOWN|BESKRIVNING}\o/\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|0|0}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|1000}
+            //SwitchPanelDCSBIOSControlV2{32}\o/{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
+            var parameters = config.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL },
+                StringSplitOptions.RemoveEmptyEntries);
+
+            //SwitchPanelDCSBIOSControlV2{32}
+            var configInt = parameters[0]
+                .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
+            ParseSettingsInt(int.Parse(configInt));
+            result.IsSequenced = IsSequenced;
+            result.WhenTurnedOn = WhenTurnedOn;
+
+            if (config.Contains("MultiPanelDCSBIOSControl")) // Has additional setting which tells which position leftmost dial is in
+            {
+                //{ALT}
+                result.MultiPanelMode = parameters[1].Replace("{", "").Replace("}", "");
+
+                //{FLAPS_LEVER_DOWN|BESKRIVNING}
+                var key = parameters[2].Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                result.KeyName = key[0];
+                if (key.Length > 1)
+                {
+                    Description = key[1];
+                }
+            }
+            else
+            {
+                //{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}
+                var key = parameters[1].Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                result.KeyName = key[0];
+                if (key.Length > 1)
+                {
+                    Description = key[1];
+                }
+            }
+
+            // The rest of the array besides last entry are DCSBIOSInput
+            // DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC}
+            DCSBIOSInputs = new List<DCSBIOSInput>();
+            for (var i = 0; i < parameters.Length; i++)
+            {
+                if (parameters[i].StartsWith("DCSBIOSInput{"))
+                {
+                    var dcsbiosInput = new DCSBIOSInput();
+                    dcsbiosInput.ImportString(parameters[i]);
+                    DCSBIOSInputs.Add(dcsbiosInput);
+                }
+            }
+
+
+            return result;
+        }
+
+        public DCSBIOSActionBindingSkeleton ParseSettingV1(string config)
+        {
+            var result = new DCSBIOSActionBindingSkeleton();
+
+            //MultiPanelDCSBIOSControl{ALT}\o/{FLAPS_LEVER_DOWN|BESKRIVNING}\o/\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|0|0}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|1000}
+            //SwitchPanelDCSBIOSControl{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
+
+            var parameters = config.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
+
+            // SwitchPanelDCSBIOSControl{1KNOB_ENGINE_LEFT}
+            var param0 = parameters[0].Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1);
+
+            if (config.Contains("MultiPanelDCSBIOSControl"))
+            {
+                //MultiPanelDCSBIOSControl{ALT}
+                result.MultiPanelMode = parameters[0]
+                    .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
+
+                //{FLAPS_LEVER_DOWN|BESKRIVNING}
+                var key = parameters[1].Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                result.KeyName = key[0];
+                if (key.Length > 1)
+                {
+                    Description = key[1];
+                }
+            }
+            else
+            {
+                //SwitchPanelDCSBIOSControl{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}
+                var keyInfo = parameters[0]
+                    .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
+                var key = keyInfo.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                result.KeyName = key[0];
+                if (key.Length > 1)
+                {
+                    Description = key[1];
+                }
+            }
+
+            // The rest of the array besides last entry are DCSBIOSInput
+            // DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC}
+            DCSBIOSInputs = new List<DCSBIOSInput>();
+            for (var i = 0; i < parameters.Length; i++)
+            {
+                if (parameters[i].StartsWith("DCSBIOSInput{"))
+                {
+                    var dcsbiosInput = new DCSBIOSInput();
+                    dcsbiosInput.ImportString(parameters[i]);
+                    DCSBIOSInputs.Add(dcsbiosInput);
+                }
+            }
+            return result;
+        }
+
+        public DCSBIOSActionBindingSkeleton ParseSetting(string config)
+        {
+            if (config.Contains("DCSBIOSControlV2{")) //Check that the setting is V2    
+            {
+                return ParseSettingV2(config);
+            } 
+            
+            if (config.Contains("DCSBIOSControl{")) //First version
+            {
+                return ParseSettingV1(config);
+            }
+
+            return null;
+        }
+
+        public void ParseSettingsInt(int configs)
+        {
+            /*
+             * Bit #1 IsSequenced
+             * Bit #2 WhenTurnedOn
+             */
+            IsSequenced = (configs & 1) == 1;
+            WhenOnTurnedOn = (configs & 2) == 1;
+        }
+
+        public int GetSettingsInt()
+        {
+            int result = 0;
+            /*
+             * Bit #1 IsSequenced
+             * Bit #2 WhenTurnedOn
+             */
+            if (IsSequenced)
+            {
+                result &= 1;
+            }
+            if (WhenOnTurnedOn)
+            {
+                result &= 2;
+            }
+
+            return result;
+        }
 
         [JsonProperty("WhenTurnedOn", Required = Required.Default)]
         public bool WhenTurnedOn
@@ -174,7 +332,7 @@
             get => _isSequenced;
             set => _isSequenced = value;
         }
-     
+
 
     }
 }
