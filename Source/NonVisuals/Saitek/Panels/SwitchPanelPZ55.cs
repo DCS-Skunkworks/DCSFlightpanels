@@ -107,7 +107,7 @@
                 if (!setting.StartsWith("#") && setting.Length > 2)
                 {
 
-                    if (setting.StartsWith("SwitchPanelKey{"))
+                    if (setting.StartsWith("SwitchPanelKey"))
                     {
                         var keyBinding = new KeyBindingPZ55();
                         keyBinding.ImportSettings(setting);
@@ -125,13 +125,13 @@
                         colorOutput.ImportSettings(setting);
                         _listColorOutputBinding.Add(colorOutput);
                     }
-                    else if (setting.StartsWith("SwitchPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("SwitchPanelDCSBIOSControl"))
                     {
                         var dcsBIOSBindingPZ55 = new DCSBIOSActionBindingPZ55();
                         dcsBIOSBindingPZ55.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
                     }
-                    else if (setting.StartsWith("SwitchPanelBIPLink{"))
+                    else if (setting.StartsWith("SwitchPanelBIPLink"))
                     {
                         var bipLinkPZ55 = new BIPLinkPZ55();
                         bipLinkPZ55.ImportSettings(setting);

@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Bills
+﻿using System.Net.Mime;
+
+namespace DCSFlightpanels.Bills
 {
     using System;
     using System.Collections.Generic;
@@ -49,7 +51,7 @@
             {
                 if (ContainsKeyPress())
                 {
-                    throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
+                    throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress " + TextBox.Name);
                 }
                 _dcsbiosBindingPZ55 = (DCSBIOSActionBindingPZ55)value;
                 SetTextBoxText(value);

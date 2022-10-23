@@ -55,6 +55,16 @@
                 || panelType == GamingPanelEnum.StreamDeckMK2;
         }
 
+        public static string RemoveCurlyBrackets(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return null;
+            }
+
+            return s.Replace("{", "").Replace("}", "");
+        }
+
         public static string RemoveLControl(string keySequence)
         {
             return true switch

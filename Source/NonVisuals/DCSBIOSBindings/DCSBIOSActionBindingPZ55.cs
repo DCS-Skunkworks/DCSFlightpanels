@@ -72,21 +72,7 @@
                 return null;
             }
 
-            var onStr = WhenOnTurnedOn ? "1" : "0";
-
-            // \o/DCSBIOSInput{AAP_STEER|SET_STATE|2}\o/DCSBIOSInput{BAT_PWR|INC|2}
-            var stringBuilder = new StringBuilder();
-            foreach (var dcsbiosInput in DCSBIOSInputs)
-            {
-                stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + dcsbiosInput);
-            }
-
-            if (!string.IsNullOrWhiteSpace(Description))
-            {
-                return "SwitchPanelDCSBIOSControlV2{" + GetSettingsInt() + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{"  + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "|" + Description + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder;
-            }
-
-            return "SwitchPanelDCSBIOSControlV2{" + GetSettingsInt() + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder;
+            return GetExportString("SwitchPanelDCSBIOSControlV2", null, Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key));
         }
 
         public SwitchPanelPZ55Keys SwitchPanelPZ55Key

@@ -1,4 +1,7 @@
-﻿namespace NonVisuals.DCSBIOSBindings
+﻿using System.Text;
+using ClassLibraryCommon;
+
+namespace NonVisuals.DCSBIOSBindings
 {
     using System;
     using System.Collections.Generic;
@@ -157,10 +160,10 @@
             if (config.Contains("MultiPanelDCSBIOSControl")) // Has additional setting which tells which position leftmost dial is in
             {
                 //{ALT}
-                result.MultiPanelMode = parameters[1].Replace("{", "").Replace("}", "");
-
+                result.MultiPanelMode = Common.RemoveCurlyBrackets(parameters[1]);
+                
                 //{FLAPS_LEVER_DOWN|BESKRIVNING}
-                var key = parameters[2].Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                var key = Common.RemoveCurlyBrackets(parameters[2]).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 result.KeyName = key[0];
                 if (key.Length > 1)
                 {
@@ -170,7 +173,7 @@
             else
             {
                 //{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}
-                var key = parameters[1].Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                var key = Common.RemoveCurlyBrackets(parameters[1]).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 result.KeyName = key[0];
                 if (key.Length > 1)
                 {
@@ -191,7 +194,6 @@
                 }
             }
 
-
             return result;
         }
 
@@ -199,8 +201,8 @@
         {
             var result = new DCSBIOSActionBindingSkeleton();
 
-            //MultiPanelDCSBIOSControl{ALT}\o/{FLAPS_LEVER_DOWN|BESKRIVNING}\o/\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|0|0}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|1000}
-            //SwitchPanelDCSBIOSControl{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
+            //MultiPanelDCSBIOSControl{ALT}\o/{1FLAPS_LEVER_DOWN|BESKRIVNING}\o/\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|0|0}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|1000}
+            //SwitchPanelDCSBIOSControl{1SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
 
             var parameters = config.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -213,8 +215,10 @@
                 result.MultiPanelMode = parameters[0]
                     .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
 
-                //{FLAPS_LEVER_DOWN|BESKRIVNING}
-                var key = parameters[1].Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                //{1FLAPS_LEVER_DOWN|BESKRIVNING}
+                WhenTurnedOn = (parameters[1].Substring(0, 1) == "1");
+                
+                var key = parameters[1].Substring(1).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 result.KeyName = key[0];
                 if (key.Length > 1)
                 {
@@ -223,10 +227,11 @@
             }
             else
             {
-                //SwitchPanelDCSBIOSControl{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}
+                //SwitchPanelDCSBIOSControl{1SWITCHKEY_LIGHTS_PANEL|AAP_STEER}
                 var keyInfo = parameters[0]
                     .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
-                var key = keyInfo.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                WhenTurnedOn = (keyInfo.Substring(0, 1) == "1");
+                var key = keyInfo.Substring(1).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 result.KeyName = key[0];
                 if (key.Length > 1)
                 {
@@ -246,6 +251,7 @@
                     DCSBIOSInputs.Add(dcsbiosInput);
                 }
             }
+
             return result;
         }
 
@@ -254,8 +260,8 @@
             if (config.Contains("DCSBIOSControlV2{")) //Check that the setting is V2    
             {
                 return ParseSettingV2(config);
-            } 
-            
+            }
+
             if (config.Contains("DCSBIOSControl{")) //First version
             {
                 return ParseSettingV1(config);
@@ -271,7 +277,7 @@
              * Bit #2 WhenTurnedOn
              */
             IsSequenced = (configs & 1) == 1;
-            WhenOnTurnedOn = (configs & 2) == 1;
+            WhenOnTurnedOn = (configs & 2) == 2;
         }
 
         public int GetSettingsInt()
@@ -283,14 +289,49 @@
              */
             if (IsSequenced)
             {
-                result &= 1;
+                result |= 1;
             }
             if (WhenOnTurnedOn)
             {
-                result &= 2;
+                result |= 2;
             }
 
             return result;
+        }
+
+        public string GetExportString(string header, string mode, string keyName)
+        {
+            //MultiPanelDCSBIOSControlV2{32}\o/{ALT}\o/{FLAPS_LEVER_DOWN|BESKRIVNING}\o/\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|0|0}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|1000}
+            //SwitchPanelDCSBIOSControlV2{32}\o/{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
+
+            if (DCSBIOSInputs.Count == 0)
+            {
+                return null;
+            }
+
+            var stringBuilder = new StringBuilder();
+            foreach (var dcsbiosInput in DCSBIOSInputs)
+            {
+                stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + dcsbiosInput);
+            }
+
+            if (!string.IsNullOrEmpty(mode))
+            {
+                //Multipanel has one additional setting
+                if (!string.IsNullOrWhiteSpace(Description))
+                {
+                    return header + "{" + GetSettingsInt() + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + mode + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + keyName + "|" + Description + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder;
+                }
+
+                return header + "{" + GetSettingsInt() + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + mode + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + keyName + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder;
+            }
+
+            if (!string.IsNullOrWhiteSpace(Description))
+            {
+                return header + "{" + GetSettingsInt() + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + keyName + "|" + Description + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder;
+            }
+
+            return header + "{" + GetSettingsInt() + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + keyName + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder;
         }
 
         [JsonProperty("WhenTurnedOn", Required = Required.Default)]
