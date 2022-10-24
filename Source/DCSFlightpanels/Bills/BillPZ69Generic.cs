@@ -12,7 +12,7 @@
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
 
-    public class BillPZ69Full : BillBaseInput
+    public class BillPZ69Generic : BillBaseInput
     {
         private BIPLinkPZ69 _bipLinkPZ69;
         private DCSBIOSActionBindingPZ69 _dcsbiosBindingPZ69;
@@ -29,10 +29,7 @@
 
         public override List<DCSBIOSInput> DCSBIOSInputs
         {
-            get
-            {
-                return ContainsDCSBIOS() ? _dcsbiosBindingPZ69.DCSBIOSInputs : null;
-            }
+            get => ContainsDCSBIOS() ? _dcsbiosBindingPZ69.DCSBIOSInputs : null;
             set
             {
                 if (ContainsDCSBIOS())
@@ -56,7 +53,7 @@
             }
         }
 
-        public BillPZ69Full(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
+        public BillPZ69Generic(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
             SetContextMenu();
         }

@@ -47,15 +47,7 @@
                 throw new ArgumentException("Import string empty. (DCSBIOSBindingPZ55)");
             }
             
-            if (settings.StartsWith("SwitchPanelDCSBIOSControlV2{"))
-            {
-                var skeleton = ParseSetting(settings);
-                _switchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), skeleton.KeyName);
-                /*
-                 * Other settings already added.
-                 */
-            }
-            else if (settings.StartsWith("SwitchPanelDCSBIOSControl{")) // Older settings style without config int
+            if (settings.StartsWith("SwitchPanelDCSBIOSControl"))
             {
                 var skeleton = ParseSetting(settings);
                 _switchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), skeleton.KeyName);

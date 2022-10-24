@@ -9,7 +9,7 @@ namespace NonVisuals.DCSBIOSBindings
 {
     public class DCSBIOSActionBindingSkeleton
     {
-        public string MultiPanelMode;
+        public string Mode; // Used by Multi & Radiopanel as they have one more setting
         public string KeyName;
         public string Description;
         public bool WhenTurnedOn;

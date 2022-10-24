@@ -92,7 +92,7 @@
                         operatingSystemCommand.ImportSettings(setting);
                         _operatingSystemCommandBindings.Add(operatingSystemCommand);
                     }
-                    else if (setting.StartsWith("TPMPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("TPMPanelDCSBIOSControl"))
                     {
                         var dcsBIOSBindingTPM = new DCSBIOSActionBindingTPM();
                         dcsBIOSBindingTPM.ImportSettings(setting);

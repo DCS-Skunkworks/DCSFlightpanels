@@ -28,6 +28,7 @@
             _header = header;
             _description = description;
             TextBoxDescription.Text = _description;
+            IsSequenced = isSequenced;
             _showSequenced = showSequenced;
             ShowItems();
         }
@@ -42,6 +43,7 @@
             _header = header;
             _description = description;
             TextBoxDescription.Text = _description;
+            IsSequenced = isSequenced;
             _showSequenced = showSequenced;
 
             ShowItems();
@@ -260,10 +262,7 @@
             get => _isSequenced;
             set
             {
-                if (value)
-                {
-                    CheckBoxIsSequenced.IsChecked = true;
-                }
+                CheckBoxIsSequenced.IsChecked = value;
                 _isSequenced = value;
             }
         }

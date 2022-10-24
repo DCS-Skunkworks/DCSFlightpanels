@@ -12,7 +12,7 @@
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
 
-    public class BillPZ69 : BillBaseInput
+    public class BillPZ69Emulator : BillBaseInput
     {
         private BIPLinkPZ69 _bipLinkPZ69;
 
@@ -38,7 +38,7 @@
             set {}
         }
 
-        public BillPZ69(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
+        public BillPZ69Emulator(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
             SetContextMenu();
         }

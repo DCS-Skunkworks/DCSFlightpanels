@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using ClassLibraryCommon;
 
 namespace NonVisuals.DCSBIOSBindings
@@ -74,7 +75,7 @@ namespace NonVisuals.DCSBIOSBindings
             set => _shutdownCommandsThread = value;
         }
 
-
+        
         public void SendDCSBIOSCommands(CancellationToken cancellationToken)
         {
             CancelSendDCSBIOSCommands = true;
@@ -108,6 +109,7 @@ namespace NonVisuals.DCSBIOSBindings
                             return;
                         }
 
+                        Debug.WriteLine("Sending DCS-BIOS command " + command);
                         DCSBIOS.Send(command);
                         _sequenceIndex++;
 
@@ -157,10 +159,10 @@ namespace NonVisuals.DCSBIOSBindings
             result.IsSequenced = IsSequenced;
             result.WhenTurnedOn = WhenTurnedOn;
 
-            if (config.Contains("MultiPanelDCSBIOSControl")) // Has additional setting which tells which position leftmost dial is in
+            if (config.Contains("MultiPanelDCSBIOSControl") || config.Contains("RadioPanelDCSBIOSControl")) // Has additional setting which tells which position leftmost dial is in
             {
                 //{ALT}
-                result.MultiPanelMode = Common.RemoveCurlyBrackets(parameters[1]);
+                result.Mode = Common.RemoveCurlyBrackets(parameters[1]);
                 
                 //{FLAPS_LEVER_DOWN|BESKRIVNING}
                 var key = Common.RemoveCurlyBrackets(parameters[2]).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
@@ -209,16 +211,16 @@ namespace NonVisuals.DCSBIOSBindings
             // SwitchPanelDCSBIOSControl{1KNOB_ENGINE_LEFT}
             var param0 = parameters[0].Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1);
 
-            if (config.Contains("MultiPanelDCSBIOSControl"))
+            if (config.Contains("MultiPanelDCSBIOSControl") || config.Contains("RadioPanelDCSBIOSControl"))
             {
                 //MultiPanelDCSBIOSControl{ALT}
-                result.MultiPanelMode = parameters[0]
+                result.Mode = parameters[0]
                     .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
 
                 //{1FLAPS_LEVER_DOWN|BESKRIVNING}
                 WhenTurnedOn = (parameters[1].Substring(0, 1) == "1");
                 
-                var key = parameters[1].Substring(1).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                var key = Common.RemoveCurlyBrackets(parameters[1]).Substring(1).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 result.KeyName = key[0];
                 if (key.Length > 1)
                 {
@@ -317,7 +319,7 @@ namespace NonVisuals.DCSBIOSBindings
 
             if (!string.IsNullOrEmpty(mode))
             {
-                //Multipanel has one additional setting
+                //Multipanel/Radio has one additional setting
                 if (!string.IsNullOrWhiteSpace(Description))
                 {
                     return header + "{" + GetSettingsInt() + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + mode + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + keyName + "|" + Description + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder;

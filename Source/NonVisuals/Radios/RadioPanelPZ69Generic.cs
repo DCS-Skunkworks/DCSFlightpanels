@@ -132,7 +132,7 @@ namespace NonVisuals.Radios
                         dcsbiosBindingLCDPZ69.ImportSettings(setting);
                         _dcsBiosLcdBindings.Add(dcsbiosBindingLCDPZ69);
                     }
-                    else if (setting.StartsWith("RadioPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("RadioPanelDCSBIOSControl"))
                     {
                         var dcsbiosBindingPZ69 = new DCSBIOSActionBindingPZ69();
                         dcsbiosBindingPZ69.ImportSettings(setting);
@@ -467,7 +467,7 @@ namespace NonVisuals.Radios
                     }
                 }
             }
-
+            
             foreach (object radioPanelKeyObject in hashSet)
             {
                 // Looks which switches has been switched and sees whether any key emulation has been tied to them.

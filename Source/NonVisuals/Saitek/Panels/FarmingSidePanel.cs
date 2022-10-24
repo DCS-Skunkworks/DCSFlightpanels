@@ -94,7 +94,7 @@
                         operatingSystemCommand.ImportSettings(setting);
                         _operatingSystemCommandBindings.Add(operatingSystemCommand);
                     }
-                    else if (setting.StartsWith("FarmingPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("FarmingPanelDCSBIOSControl"))
                     {
                         var dcsBIOSBinding = new DCSBIOSActionBindingFarmingPanel();
                         dcsBIOSBinding.ImportSettings(setting);

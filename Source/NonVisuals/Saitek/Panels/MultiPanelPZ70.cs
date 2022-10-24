@@ -177,7 +177,13 @@
                         operatingSystemCommand.ImportSettings(setting);
                         _operatingSystemCommandBindings.Add(operatingSystemCommand);
                     }
-                    else if (setting.StartsWith("MultiPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("MultiPanelDCSBIOSControlLCD{"))
+                    {
+                        var dcsBIOSBindingLCDPZ70 = new DCSBIOSOutputBindingPZ70();
+                        dcsBIOSBindingLCDPZ70.ImportSettings(setting);
+                        _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDPZ70);
+                    }
+                    else if (setting.StartsWith("MultiPanelDCSBIOSControl"))
                     {
                         var dcsBIOSBindingPZ70 = new DCSBIOSActionBindingPZ70();
                         dcsBIOSBindingPZ70.ImportSettings(setting);
@@ -188,12 +194,6 @@
                         var bipLinkPZ70 = new BIPLinkPZ70();
                         bipLinkPZ70.ImportSettings(setting);
                         _bipLinks.Add(bipLinkPZ70);
-                    }
-                    else if (setting.StartsWith("MultiPanelDCSBIOSControlLCD{"))
-                    {
-                        var dcsBIOSBindingLCDPZ70 = new DCSBIOSOutputBindingPZ70();
-                        dcsBIOSBindingLCDPZ70.ImportSettings(setting);
-                        _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDPZ70);
                     }
                 }
             }

@@ -5,6 +5,6 @@ namespace DCSFlightpanels.CustomControls
 {
     public class PZ69Button : Button
     {
-        public BillPZ69Button Bill { get; set; }
+        public BillPZ69LCDButton Bill { get; set; }
     }
 }
