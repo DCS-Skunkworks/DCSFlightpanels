@@ -6,47 +6,40 @@
     using System.Drawing.Imaging;
     using System.Drawing.Text;
     using System.IO;
-    using System.Windows.Media;
+    using System.Reflection;
     using System.Windows.Media.Imaging;
 
-    using MEF;
     using NLog;
-    using Color = System.Drawing.Color;
-    using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
     public static class BitMapCreator
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-       
+
         public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
         {
-            using (var outStream = new MemoryStream())
-            {
-                BitmapEncoder bmpBitmapEncoder = new BmpBitmapEncoder();
-                bmpBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));
-                bmpBitmapEncoder.Save(outStream);
-                var bitmap = new Bitmap(outStream);
+            using MemoryStream outStream = new();
+            BmpBitmapEncoder bmpBitmapEncoder = new();
+            bmpBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+            bmpBitmapEncoder.Save(outStream);
+            Bitmap bitmap = new(outStream);
 
-                return new Bitmap(bitmap);
-            }
+            return new Bitmap(bitmap);
         }
 
         public static BitmapImage Bitmap2BitmapImage(Bitmap bitmap)
         {
             try
             {
-                using (MemoryStream memory = new MemoryStream())
-                {
-                    bitmap.Save(memory, ImageFormat.Bmp);
-                    memory.Position = 0;
-                    BitmapImage bitmapImage = new BitmapImage();
-                    bitmapImage.BeginInit();
-                    bitmapImage.StreamSource = memory;
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.EndInit();
+                using MemoryStream memory = new();
+                bitmap.Save(memory, ImageFormat.Bmp);
+                memory.Position = 0;
+                BitmapImage bitmapImage = new();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
 
-                    return bitmapImage;
-                }
+                return bitmapImage;
             }
             catch (Exception ex)
             {
@@ -60,83 +53,8 @@
             return bitmap.Width < Constants.StreamDeckImageSideSize || bitmap.Height < Constants.StreamDeckImageSideSize;
         }
 
-        /*
-                public static Bitmap AdjustImage(Bitmap bitmap, float contrast, float brightness, float gamma)
-                {
-                    /*
-                     * 1.0f is no change
-                     *
-                     * https://stackoverflow.com/questions/15408607/adjust-brightness-contrast-and-gamma-of-an-image
-                     *
-                    float adjustedBrightness = brightness - 1.0f;
-                    // create matrix that will brighten and contrast the image
-                    float[][] ptsArray ={
-                        new float[] {contrast, 0, 0, 0, 0}, // scale red
-                        new float[] {0, contrast, 0, 0, 0}, // scale green
-                        new float[] {0, 0, contrast, 0, 0}, // scale blue
-                        new float[] {0, 0, 0, 1.0f, 0}, // don't scale alpha
-                        new float[] {adjustedBrightness, adjustedBrightness, adjustedBrightness, 0, 1}};
-        
-                    var imageAttributes = new ImageAttributes();
-                    imageAttributes.ClearColorMatrix();
-                    imageAttributes.SetColorMatrix(new ColorMatrix(ptsArray), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-                    imageAttributes.SetGamma(gamma, ColorAdjustType.Bitmap);
-        
-                    var graphics = Graphics.FromImage(bitmap);
-                    graphics.DrawImage(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height)
-                        , 0, 0, bitmap.Width, bitmap.Height,
-                        GraphicsUnit.Pixel, imageAttributes);
-        
-                    return bitmap;
-                }
-            */
-        public static void SetContrast(Bitmap bmp, int threshold)
-        {
-            // https://efundies.com/adjust-the-contrast-of-an-image-in-c/
-            var lockedBitmap = new LockBitmap(bmp);
-            lockedBitmap.LockBits();
-
-            var contrast = Math.Pow((100.0 + threshold) / 100.0, 2);
-
-            for (int y = 0; y < lockedBitmap.Height; y++)
-            {
-                for (int x = 0; x < lockedBitmap.Width; x++)
-                {
-                    var oldColor = lockedBitmap.GetPixel(x, y);
-                    var red = ((((oldColor.R / 255.0) - 0.5) * contrast) + 0.5) * 255.0;
-                    var green = ((((oldColor.G / 255.0) - 0.5) * contrast) + 0.5) * 255.0;
-                    var blue = ((((oldColor.B / 255.0) - 0.5) * contrast) + 0.5) * 255.0;
-                    if (red > 255) red = 255;
-                    if (red < 0) red = 0;
-                    if (green > 255) green = 255;
-                    if (green < 0) green = 0;
-                    if (blue > 255) blue = 255;
-                    if (blue < 0) blue = 0;
-
-                    var newColor = Color.FromArgb(oldColor.A, (int)red, (int)green, (int)blue);
-                    lockedBitmap.SetPixel(x, y, newColor);
-                }
-            }
-
-            lockedBitmap.UnlockBits();
-        }
-
-        public static Bitmap CreateBitmap(int width, int height, Color color)
-        {
-            var bitmap = new Bitmap(width, height);
-            var graphics = Graphics.FromImage(bitmap);
-            using (var solidBrush = new SolidBrush(Color.FromArgb(color.R, color.G, color.B)))
-            {
-                graphics.FillRectangle(solidBrush, 0, 0, width, height);
-            }
-
-            return bitmap;
-        }
-
         public static Bitmap AdjustBitmap(Bitmap originalImage, float brightness, float contrast, float gamma)
         {
-            var result = new Bitmap(originalImage.Width, originalImage.Height);
-
             /*float brightness = 1.0f; // no change in brightness
             float contrast = 2.0f; // twice the contrast
             float gamma = 1.0f; // no change in gamma*/
@@ -151,38 +69,24 @@
                     new[] { adjustedBrightness, adjustedBrightness, adjustedBrightness, 0, 1 }
                 };
 
-            ImageAttributes imageAttributes = new ImageAttributes();
+            ImageAttributes imageAttributes = new();
             imageAttributes.ClearColorMatrix();
             imageAttributes.SetColorMatrix(new ColorMatrix(ptsArray), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
             imageAttributes.SetGamma(gamma, ColorAdjustType.Bitmap);
-            var graphics = Graphics.FromImage(result);
-            graphics.DrawImage(originalImage, new Rectangle(0, 0, result.Width, result.Height), 0, 0, originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, imageAttributes);
 
-            return result;
-        }
+            Bitmap resultBitmap = new(originalImage.Width, originalImage.Height);
+            Graphics graphics = Graphics.FromImage(resultBitmap);
+            graphics.DrawImage(originalImage, new Rectangle(0, 0, resultBitmap.Width, resultBitmap.Height), 0, 0, originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, imageAttributes);
 
-        public static Color GetBackgroundColor(Bitmap bitmap)
-        {
-            var colorCounter = new ColorCounter();
-
-            for (var y = 0; y < bitmap.Height; y++)
-            {
-                for (var x = 0; x < bitmap.Width; x++)
-                {
-                    colorCounter.RegisterColor(bitmap.GetPixel(x, y));
-                }
-            }
-
-            return colorCounter.GetMajority();
+            return resultBitmap;
         }
 
         public static Bitmap EnlargeBitmapCanvas(Bitmap bitmap)
         {
             // Create blank canvas
-            var streamdeckSizedBitmap = new Bitmap(Constants.StreamDeckImageSideSize, Constants.StreamDeckImageSideSize);
+            Bitmap streamdeckSizedBitmap = new(Constants.StreamDeckImageSideSize, Constants.StreamDeckImageSideSize);
 
-            var graphics = Graphics.FromImage(streamdeckSizedBitmap);
-
+            Graphics graphics = Graphics.FromImage(streamdeckSizedBitmap);
             graphics.SmoothingMode = SmoothingMode.None;
             graphics.CompositingMode = CompositingMode.SourceCopy;
             graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -203,7 +107,7 @@
             return CreateBitmapImage(text, font, offsetX, offsetY, fontColor, Color.Transparent, backgroundBitmap);
         }
 
-        public static Bitmap CreateStreamDeckBitmap(string text, Font font, Color fontColor, Color backgroundColor, int offsetX, int offsetY)
+        public static Bitmap CreateStreamDeckBitmap(string text, Font font, Color fontColor, int offsetX, int offsetY, Color backgroundColor)
         {
             return CreateBitmapImage(text, font, offsetX, offsetY, fontColor, backgroundColor);
         }
@@ -222,7 +126,7 @@
             }
 
             // Create a graphics object to measure the text's width and height.
-            var graphicsObject = Graphics.FromImage(createdBitmap);
+            Graphics graphicsObject = Graphics.FromImage(createdBitmap);
 
             // Set Background color
             if (backgroundBitmap == null)
@@ -245,30 +149,28 @@
 
         public static Bitmap CreateEmptyStreamDeckBitmap(Color color)
         {
-            return CreateStreamDeckBitmap(null, null, color, color, 0, 0);
+            return CreateStreamDeckBitmap(null, null, color, 0, 0, color);
         }
 
-        public static BitmapSource CreateBitmapSourceFromGdiBitmap(Bitmap bitmap)
+        public static Bitmap BitmapOrFileNotFound(string imagePath)
         {
-            if (bitmap == null)
+            return File.Exists(imagePath) ? new Bitmap(imagePath) : FileNotFoundBitmap();
+        }
+
+        public static Bitmap FileNotFoundBitmap()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+            BitmapImage tmpBitMapImage = new();
+            using (var stream = assembly.GetManifestResourceStream(@"NonVisuals.Images.filenotfound.png"))
             {
-                throw new Exception("Bitmap argument was null.");
+                tmpBitMapImage.BeginInit();
+                tmpBitMapImage.StreamSource = stream;
+                tmpBitMapImage.CacheOption = BitmapCacheOption.OnLoad;
+                tmpBitMapImage.EndInit();
             }
 
-            var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-
-            var bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-
-            try
-            {
-                var size = (rect.Width * rect.Height) * 4;
-
-                return BitmapSource.Create(bitmap.Width, bitmap.Height, bitmap.HorizontalResolution, bitmap.VerticalResolution, PixelFormats.Bgra32, null, bitmapData.Scan0, size, bitmapData.Stride);
-            }
-            finally
-            {
-                bitmap.UnlockBits(bitmapData);
-            }
+            return BitmapImage2Bitmap(tmpBitMapImage);
         }
     }
 }

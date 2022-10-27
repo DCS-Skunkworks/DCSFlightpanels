@@ -63,7 +63,7 @@ namespace Tests.NonVisuals
         [InlineData("AbC", "Calibri", 20, -10, -10, "Created_With_BackgroundColor_72x72_7.bmp")]
         public void CreateStreamDeckBitmapWithBackGroundColor_ShouldProduceExpectedBitmap(string text, string fontFamily,int fontSize, int x, int y, string expectedImage)
         {
-            var createdBitmap = BitMapCreator.CreateStreamDeckBitmap(text, new Font(new FontFamily(fontFamily), fontSize, FontStyle.Bold), Color.Yellow, Color.Blue, x, y);
+            var createdBitmap = BitMapCreator.CreateStreamDeckBitmap(text, new Font(new FontFamily(fontFamily), fontSize, FontStyle.Bold), Color.Yellow, x, y, Color.Blue);
             
             Bitmap expectedBitmap = new(Path.Combine(_TestsResourcesFolder, expectedImage));
             Assert.True(CompareBitmaps(expectedBitmap, createdBitmap));

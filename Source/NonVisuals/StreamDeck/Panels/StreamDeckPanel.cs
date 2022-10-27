@@ -41,7 +41,7 @@
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new();
 
         private readonly IStreamDeckBoard _streamDeckBoard;
-        private static Bitmap _fileNotFoundBitMap;
+
         public IStreamDeckBoard StreamDeckBoard => _streamDeckBoard;
         public int ButtonCount => _buttonCount;
 
@@ -456,29 +456,7 @@
 
         public static Bitmap Validate(string imagePath)
         {
-            return File.Exists(imagePath) ? new Bitmap(imagePath) : FileNotFoundBitmap();
-        }
-
-        public static Bitmap FileNotFoundBitmap()
-        {
-            if (_fileNotFoundBitMap != null)
-            {
-                return _fileNotFoundBitMap;
-            }
-
-            var assembly = Assembly.GetExecutingAssembly();
-
-            BitmapImage tmpBitMapImage = new();
-            using (var stream = assembly.GetManifestResourceStream(@"NonVisuals.Images.filenotfound.png"))
-            {
-                tmpBitMapImage.BeginInit();
-                tmpBitMapImage.StreamSource = stream;
-                tmpBitMapImage.CacheOption = BitmapCacheOption.OnLoad;
-                tmpBitMapImage.EndInit();
-            }
-
-            _fileNotFoundBitMap = BitMapCreator.BitmapImage2Bitmap(tmpBitMapImage);
-            return _fileNotFoundBitMap;
+            return BitMapCreator.BitmapOrFileNotFound(imagePath);
         }
 
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)

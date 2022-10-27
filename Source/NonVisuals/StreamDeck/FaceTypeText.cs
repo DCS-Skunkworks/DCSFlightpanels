@@ -70,11 +70,11 @@
             {
                 if (string.IsNullOrEmpty(ButtonFinalText) || !_buttonTextTemplate.Contains(StreamDeckConstants.DCSBIOSValuePlaceHolder))
                 {
-                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonTextTemplate, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
+                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonTextTemplate, _textFont, _fontColor, OffsetX, OffsetY, _backgroundColor);
                 }
                 else
                 {
-                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonFinalText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
+                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonFinalText, _textFont, _fontColor, OffsetX, OffsetY, _backgroundColor);
                 }
 
                 RefreshBitmap = false;

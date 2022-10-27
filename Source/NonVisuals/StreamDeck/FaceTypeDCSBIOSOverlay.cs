@@ -42,7 +42,7 @@ namespace NonVisuals.StreamDeck
             {
                 if (string.IsNullOrEmpty(_backgroundBitmapPath)) //User maybe only wants text displayed.
                 {
-                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(ButtonFinalText, TextFont, FontColor, Color.LightGray, OffsetX, OffsetY);
+                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(ButtonFinalText, TextFont, FontColor, OffsetX, OffsetY, Color.LightGray);
                 }
                 else
                 {
