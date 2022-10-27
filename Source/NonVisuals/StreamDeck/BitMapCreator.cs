@@ -160,17 +160,19 @@
         public static Bitmap FileNotFoundBitmap()
         {
             var assembly = Assembly.GetExecutingAssembly();
+            return new Bitmap(Path.Combine(Path.GetDirectoryName(assembly.Location),@"Images\filenotfound.png"));
+            
+            //Old code does not preserve transparency :
 
-            BitmapImage tmpBitMapImage = new();
-            using (var stream = assembly.GetManifestResourceStream(@"NonVisuals.Images.filenotfound.png"))
-            {
-                tmpBitMapImage.BeginInit();
-                tmpBitMapImage.StreamSource = stream;
-                tmpBitMapImage.CacheOption = BitmapCacheOption.OnLoad;
-                tmpBitMapImage.EndInit();
-            }
-
-            return BitmapImage2Bitmap(tmpBitMapImage);
+            //BitmapImage tmpBitMapImage = new();
+            //using (var stream = assembly.GetManifestResourceStream(@"NonVisuals.Images.filenotfound.png"))
+            //{
+            //    tmpBitMapImage.BeginInit();
+            //    tmpBitMapImage.StreamSource = stream;
+            //    tmpBitMapImage.CacheOption = BitmapCacheOption.OnLoad;
+            //    tmpBitMapImage.EndInit();
+            //}
+            //return BitmapImage2Bitmap(tmpBitMapImage);
         }
     }
 }
