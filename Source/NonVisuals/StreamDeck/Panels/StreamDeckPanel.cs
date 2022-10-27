@@ -291,8 +291,7 @@
             {
                 return;
             }
-
-            var keyBitmap = KeyBitmap.Create.FromBitmap(bitmap);
+            var keyBitmap = KeyBitmap.Create.FromBitmap(new(bitmap)); //Why new Bitmap(...) ? to eventually convert Format8bppIndexed to Format32bppArgb
 
             lock (_updateStreamDeckOledLockObject)
             {
@@ -307,7 +306,7 @@
                 return;
             }
 
-            var keyBitmap = KeyBitmap.Create.FromBitmap(BitMapCreator.BitmapImage2Bitmap(bitmapImage));
+            var keyBitmap = KeyBitmap.Create.FromBitmap(new Bitmap(BitMapCreator.BitmapImage2Bitmap(bitmapImage))); //Why new Bitmap(...) ? to eventually convert Format8bppIndexed to Format32bppArgb
             lock (_updateStreamDeckOledLockObject)
             {
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
