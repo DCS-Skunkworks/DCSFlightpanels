@@ -4,7 +4,7 @@
                                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                                        xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
-                                       Loaded="UserControlStreamDeckNormal_OnLoaded"
+                                       Loaded="UserControlStreamDeckXL_OnLoaded"
                                        xmlns:streamDeck="clr-namespace:DCSFlightpanels.PanelUserControls.StreamDeck"
                                        mc:Ignorable="d" 
                                        d:DesignHeight="235" d:DesignWidth="400">

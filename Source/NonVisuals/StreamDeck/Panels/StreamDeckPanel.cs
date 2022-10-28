@@ -299,20 +299,6 @@
             }
         }
 
-        public void SetImage(EnumStreamDeckButtonNames streamDeckButtonName, BitmapImage bitmapImage)
-        {
-            if (streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
-            {
-                return;
-            }
-
-            var keyBitmap = KeyBitmap.Create.FromBitmap(new Bitmap(BitMapCreator.BitmapImage2Bitmap(bitmapImage))); //Why new Bitmap(...) ? to eventually convert Format8bppIndexed to Format32bppArgb
-            lock (_updateStreamDeckOledLockObject)
-            {
-                _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
-            }
-        }
-
         public void ClearAllFaces()
         {
             _streamDeckLayerHandler.ClearAllFaces();
