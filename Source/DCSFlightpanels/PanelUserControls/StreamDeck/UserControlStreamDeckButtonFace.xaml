@@ -88,7 +88,6 @@
                 <customControl:StreamDeckFaceTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxImageFace"  IsEnabled="False" Background="LightSteelBlue"/>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Button Name="ButtonBrowse" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowse_OnClick"/>
-                    <Button Name="ButtonTestSelectImageGalleryButton" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestSelectImageGalleryButton_OnClick"/>
                 </StackPanel>
                 <Border BorderThickness="1" BorderBrush="#FF000000" HorizontalAlignment="Left" Height="73" Width="73" Margin="10,20,0,0">
                     <Image x:Name="ButtonImagePreview" Height="72" Width="72">

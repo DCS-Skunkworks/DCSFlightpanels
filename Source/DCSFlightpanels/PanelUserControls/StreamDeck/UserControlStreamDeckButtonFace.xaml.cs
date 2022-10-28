@@ -113,7 +113,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 ButtonTextFaceBackgroundColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTestTextFace.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
 
-                ButtonTestSelectImageGalleryButton.IsEnabled = TextBoxImageFace.Bill.ContainsImageFace();
                 DisplayImagePreview();
             }
             catch (Exception ex)
@@ -650,23 +649,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
                     SetFormState();
                 }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ButtonTestSelectImageGalleryButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (!TextBoxImageFace.Bill.ContainsImageFace())
-                {
-                    return;
-                }
-                var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
-                _streamDeckPanel.SetImage(_streamDeckButton, bitmap);
             }
             catch (Exception ex)
             {
