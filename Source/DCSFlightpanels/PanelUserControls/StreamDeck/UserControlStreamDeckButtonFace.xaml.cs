@@ -630,7 +630,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
-        private void ButtonBrowse_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonBrowseForImage_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -643,8 +643,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     TextBoxImageFace.Bill.ImageFileRelativePath = imageRelativePath;
                     SettingsManager.LastImageFileDirectory = directory;
-                    var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
-                    _streamDeckPanel.SetImage(_streamDeckButton, bitmap);
+                    _streamDeckPanel.SetImage(_streamDeckButton, new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath));
                     SetIsDirty();
 
                     SetFormState();
