@@ -764,7 +764,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                _saitekPanel.AddOrUpdateDCSBIOSBinding(PanelUIParent.GetSwitch(TextBox), DCSBIOSInputs, TextBox.Text);
+                _saitekPanel.AddOrUpdateDCSBIOSBinding(PanelUIParent.GetSwitch(TextBox), DCSBIOSInputs, TextBox.Text, DCSBIOSBinding.IsSequenced);
             }
             catch (Exception ex)
             {

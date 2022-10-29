@@ -709,7 +709,7 @@
             SetIsDirty();
         }
 
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
         {
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
@@ -730,6 +730,7 @@
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
+                    dcsBiosBinding.IsSequenced = isSequenced;
                     found = true;
                     break;
                 }
@@ -742,7 +743,8 @@
                     SwitchPanelPZ55Key = pz55SwitchOnOff.Switch,
                     DCSBIOSInputs = dcsbiosInputs,
                     WhenTurnedOn = pz55SwitchOnOff.ButtonState,
-                    Description = description
+                    Description = description,
+                    IsSequenced = isSequenced
                 };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }

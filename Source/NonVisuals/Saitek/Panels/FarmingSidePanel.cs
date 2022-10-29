@@ -452,7 +452,7 @@
             return null;
         }
 
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
         {
             var farmingPanelOnOff = (FarmingPanelOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
@@ -473,6 +473,7 @@
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
+                    dcsBiosBinding.IsSequenced = isSequenced;
                     found = true;
                     break;
                 }
@@ -485,7 +486,8 @@
                     FarmingPanelKey = farmingPanelOnOff.Switch,
                     DCSBIOSInputs = dcsbiosInputs,
                     WhenTurnedOn = farmingPanelOnOff.ButtonState,
-                    Description = description
+                    Description = description,
+                    IsSequenced = isSequenced
                 };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
