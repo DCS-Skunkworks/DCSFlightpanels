@@ -202,15 +202,12 @@ namespace NonVisuals.DCSBIOSBindings
         public DCSBIOSActionBindingSkeleton ParseSettingV1(string config)
         {
             var result = new DCSBIOSActionBindingSkeleton();
-
+            //RadioPanelDCSBIOSControl{UpperCOM1}\o/{1UpperLargeFreqWheelInc|PLT_INTL_PRIMARY_L_KNB}\o/\o/DCSBIOSInput{PLT_INTL_PRIMARY_L_KNB|VARIABLE_STEP|2000|0}	
             //MultiPanelDCSBIOSControl{ALT}\o/{1FLAPS_LEVER_DOWN|BESKRIVNING}\o/\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|0|0}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|1000}
             //SwitchPanelDCSBIOSControl{1SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
 
             var parameters = config.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
-
-            // SwitchPanelDCSBIOSControl{1KNOB_ENGINE_LEFT}
-            var param0 = parameters[0].Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1);
-
+            
             if (config.Contains("MultiPanelDCSBIOSControl") || config.Contains("RadioPanelDCSBIOSControl"))
             {
                 //MultiPanelDCSBIOSControl{ALT}
@@ -218,7 +215,7 @@ namespace NonVisuals.DCSBIOSBindings
                     .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
 
                 //{1FLAPS_LEVER_DOWN|BESKRIVNING}
-                WhenTurnedOn = (parameters[1].Substring(0, 1) == "1");
+                WhenTurnedOn = Common.RemoveCurlyBrackets(parameters[1]).Substring(0, 1) == "1";
                 
                 var key = Common.RemoveCurlyBrackets(parameters[1]).Substring(1).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 result.KeyName = key[0];

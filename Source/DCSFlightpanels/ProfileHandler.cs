@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Linq;
+using System.Windows.Input;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
 
@@ -416,13 +417,7 @@ namespace NonVisuals
                             {
                                 if (insidePanel)
                                 {
-                                    var line = fileLine;
-                                    if (line.StartsWith("\t"))
-                                    {
-                                        line = line.Replace("\t", string.Empty);
-                                    }
-
-                                    genericPanelBinding.Settings.Add(line);
+                                    genericPanelBinding.Settings.Add(fileLine.Trim());
                                 }
 
                                 if (insideJSONPanel)
@@ -625,14 +620,17 @@ namespace NonVisuals
                 stringBuilder.AppendLine("EmulationModesFlag=" + Common.GetEmulationModesFlag());
                 stringBuilder.AppendLine("UseGenericRadio=" + Profile.UseGenericRadio + Environment.NewLine);
 
-                foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
-                {
-                    if (!genericPanelBinding.HasBeenDeleted)
-                    {
-                        stringBuilder.AppendLine(genericPanelBinding.ExportBinding());
-                    }
-                }
+                var panelBindings = BindingMappingManager.PanelBindings;
 
+                // Place the Saitek panels first in the profile, the JSON of the Streamdecks takes forever so it will be difficult
+                // to find any Saiteks if they would be after a Streamdeck.
+                panelBindings.RemoveAll(o => o.HasBeenDeleted);
+                panelBindings = panelBindings.OrderBy(o => o.IsJSON()).ToList();
+                foreach (var genericPanelBinding in panelBindings)
+                {
+                    stringBuilder.AppendLine(genericPanelBinding.ExportBinding());
+                }
+                
                 stringBuilder.AppendLine(GetFooter());
 
                 File.WriteAllText(_filename, stringBuilder.ToString(), Encoding.ASCII);
