@@ -87,7 +87,7 @@ namespace NonVisuals.StreamDeck
 
             if (_keyBitmap == null)
             {
-                _keyBitmap = KeyBitmap.Create.FromBitmap(_bitmap);
+                _keyBitmap = KeyBitmap.Create.FromBitmap(new Bitmap(_bitmap)); //Why new Bitmap(...) ? to eventually convert Format8bppIndexed to Format32bppArgb
             }
         }
 

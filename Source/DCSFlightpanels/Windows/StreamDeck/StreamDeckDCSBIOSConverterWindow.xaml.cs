@@ -678,19 +678,19 @@ namespace DCSFlightpanels.Windows.StreamDeck
             {
                case EnumConverterOutputType.Raw:
                     {
-                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosConverter.ButtonTextTemplate, _dcsbiosConverter.TextFont, _dcsbiosConverter.FontColor, _dcsbiosConverter.BackgroundColor, _dcsbiosConverter.OffsetX, _dcsbiosConverter.OffsetY);
+                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosConverter.ButtonTextTemplate, _dcsbiosConverter.TextFont, _dcsbiosConverter.FontColor, _dcsbiosConverter.OffsetX, _dcsbiosConverter.OffsetY, _dcsbiosConverter.BackgroundColor);
                         ButtonImagePreviewRaw.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
                         break;
                     }
                 case EnumConverterOutputType.Image:
                     {
-                        var bitmap = new Bitmap(_dcsbiosConverter.ImageFileRelativePath);
+                        var bitmap = BitMapCreator.BitmapOrFileNotFound(_dcsbiosConverter.ImageFileRelativePath);
                         ButtonImagePreviewImage.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
                         break;
                     }
                 case EnumConverterOutputType.ImageOverlay:
                     {
-                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosConverter.ButtonTextTemplate, _dcsbiosConverter.TextFont, _dcsbiosConverter.FontColor, _dcsbiosConverter.BackgroundColor, _dcsbiosConverter.OffsetX, _dcsbiosConverter.OffsetY);
+                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosConverter.ButtonTextTemplate, _dcsbiosConverter.TextFont, _dcsbiosConverter.FontColor, _dcsbiosConverter.OffsetX, _dcsbiosConverter.OffsetY, _dcsbiosConverter.BackgroundColor);
                         ButtonImagePreviewOverlay.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
                         break;
                     }

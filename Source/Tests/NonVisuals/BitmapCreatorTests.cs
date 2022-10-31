@@ -1,8 +1,7 @@
 ﻿using NonVisuals.StreamDeck;
-using System;
+using OpenMacroBoard.SDK;
 using System.Drawing;
 using System.IO;
-using System.Windows.Media.Imaging;
 using Xunit;
 
 namespace Tests.NonVisuals
@@ -63,7 +62,7 @@ namespace Tests.NonVisuals
         [InlineData("AbC", "Calibri", 20, -10, -10, "Created_With_BackgroundColor_72x72_7.bmp")]
         public void CreateStreamDeckBitmapWithBackGroundColor_ShouldProduceExpectedBitmap(string text, string fontFamily,int fontSize, int x, int y, string expectedImage)
         {
-            var createdBitmap = BitMapCreator.CreateStreamDeckBitmap(text, new Font(new FontFamily(fontFamily), fontSize, FontStyle.Bold), Color.Yellow, Color.Blue, x, y);
+            var createdBitmap = BitMapCreator.CreateStreamDeckBitmap(text, new Font(new FontFamily(fontFamily), fontSize, FontStyle.Bold), Color.Yellow, x, y, Color.Blue);
             
             Bitmap expectedBitmap = new(Path.Combine(_TestsResourcesFolder, expectedImage));
             Assert.True(CompareBitmaps(expectedBitmap, createdBitmap));
@@ -101,11 +100,68 @@ namespace Tests.NonVisuals
             Assert.True(CompareBitmaps(expectedBitmap, createdBitmap));
         }
 
+        [Fact]
+        public void BitmapOrFileNotFound_WithValidPath_ShouldReturnExpectedBitmap()
+        {
+            Bitmap expectedImage = new(Path.Combine(_TestsResourcesFolder, "BackGroundImage_CduU_72x72.bmp"));
+            string imageWithValidPath = @"NonVisuals\BitmapCreatorTestsResources\BackGroundImage_CduU_72x72.bmp";
+            var loadedImage = BitMapCreator.BitmapOrFileNotFound(imageWithValidPath);
+            Assert.True(CompareBitmaps(expectedImage, loadedImage));
+        }
+
+        [Fact]
+        public void BitmapOrFileNotFound_WithInvalidPath_ShouldReturnFileNotFoundBitmap()
+        {
+            Bitmap expectedImage = new (@"Images\filenotfound.png");
+            string imageWithInvalidPath = @"..\..\xxx\yyyy\BackGroundImage_CduU_72x72.bmp";
+            var loadedImage = BitMapCreator.BitmapOrFileNotFound(imageWithInvalidPath);        
+            Assert.True(CompareBitmaps(expectedImage, loadedImage));
+        }
+
+        [Theory]
+        [InlineData("BackGroundImage_CduU_72x72.bmp")]
+        [InlineData("Created_With_BackgroundImage72_72x72_3.bmp")]
+        [InlineData("EnlargedBitmapCanvas_FromSmallerThan_72x72.bmp")]
+        public void CompareBitmap_ShouldReturnTrue_OnSameImages(string image)
+        {
+            Bitmap image1 = new(Path.Combine(_TestsResourcesFolder, image));
+            Bitmap image2 = new(Path.Combine(_TestsResourcesFolder, image));
+            Assert.True(CompareBitmaps(image1, image2));
+        }
+
+        [Theory]
+        [InlineData("BackGroundImage_CduU_72x72.bmp", "Created_With_BackgroundImage72_72x72_3.bmp")]
+        [InlineData("Created_With_BackgroundImage72_72x72_3.bmp", "Created_With_BackgroundImage150_72x72_6.bmp")]
+        [InlineData("BackGroundImage_CduU_30x30.bmp", "BackGroundImage_CduU_72x72.bmp")]
+        [InlineData("EmptyRed_StreamdeckBitmap_72x72.bmp", "OriginalAdjusted_1.2_2.0_0.8.bmp")]
+        public void CompareBitmap_ShouldReturnFalse_OnDifferentImages(string img1, string img2)
+        {
+            Bitmap image1 = new(Path.Combine(_TestsResourcesFolder, img1));
+            Bitmap image2 = new(Path.Combine(_TestsResourcesFolder, img2));
+            Assert.False(CompareBitmaps(image1, image2));
+        }
+        
+        [Fact]
+        //This 'test' is only present to emphasize on the fix just below
+        public void KeyBitmapCreateFromBitmap_IsThrowingException_OnDirectLoad_OfUnsuportedFormat()
+        {
+            Bitmap unsuported = (Bitmap)Image.FromFile(Path.Combine(_TestsResourcesFolder, "IncompatibleForKeyBitmap.png"));
+            Assert.Throws<System.NotSupportedException>(() => KeyBitmap.Create.FromBitmap(unsuported));
+        }
+
+        [Fact]
+        public void KeyBitmapCreateFromBitmap_IsWorking_OnUnsuportedFormat_IfConvertedToBitmapFirst()
+        {
+            Bitmap unsuported = (Bitmap)Image.FromFile(Path.Combine(_TestsResourcesFolder, "IncompatibleForKeyBitmap.png"));
+            KeyBitmap.Create.FromBitmap(new Bitmap(unsuported));
+        }
+
+
         /// <summary>
         /// This is quite a dumb comparison function. 
         /// We only care about the size & pixel values, no encoding check or other fancy stuff.
         /// </summary>
-        public bool CompareBitmaps(Bitmap bmp1, Bitmap bmp2)
+        private bool CompareBitmaps(Bitmap bmp1, Bitmap bmp2)
         {
             if (bmp1 == null || bmp2 == null)
                 return false;
@@ -122,9 +178,14 @@ namespace Tests.NonVisuals
             for (int x = 0; x < bmp1.Width; x++)
                 for (int y = 0; y < bmp1.Height; y++)
                     if (bmp1.GetPixel(x, y) != bmp2.GetPixel(x, y))
+                    {
+                        Color c1 = bmp1.GetPixel(x, y); //for debug purpose only
+                        Color c2 = bmp2.GetPixel(x, y); //for debug purpose only
                         return false;
+                    }
 
             return true;
         }
+
     }
 }

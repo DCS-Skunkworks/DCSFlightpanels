@@ -3,9 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Drawing;
-    using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Threading;
     using System.Windows.Media.Imaging;
 
@@ -41,7 +39,7 @@
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new();
 
         private readonly IStreamDeckBoard _streamDeckBoard;
-        private static Bitmap _fileNotFoundBitMap;
+
         public IStreamDeckBoard StreamDeckBoard => _streamDeckBoard;
         public int ButtonCount => _buttonCount;
 
@@ -293,23 +291,8 @@
             {
                 return;
             }
+            var keyBitmap = KeyBitmap.Create.FromBitmap(new(bitmap)); //Why new Bitmap(...) ? to eventually convert Format8bppIndexed to Format32bppArgb
 
-            var keyBitmap = KeyBitmap.Create.FromBitmap(bitmap);
-
-            lock (_updateStreamDeckOledLockObject)
-            {
-                _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
-            }
-        }
-
-        public void SetImage(EnumStreamDeckButtonNames streamDeckButtonName, BitmapImage bitmapImage)
-        {
-            if (streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
-            {
-                return;
-            }
-
-            var keyBitmap = KeyBitmap.Create.FromBitmap(BitMapCreator.BitmapImage2Bitmap(bitmapImage));
             lock (_updateStreamDeckOledLockObject)
             {
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
@@ -456,29 +439,7 @@
 
         public static Bitmap Validate(string imagePath)
         {
-            return File.Exists(imagePath) ? new Bitmap(imagePath) : FileNotFoundBitmap();
-        }
-
-        public static Bitmap FileNotFoundBitmap()
-        {
-            if (_fileNotFoundBitMap != null)
-            {
-                return _fileNotFoundBitMap;
-            }
-
-            var assembly = Assembly.GetExecutingAssembly();
-
-            BitmapImage tmpBitMapImage = new();
-            using (var stream = assembly.GetManifestResourceStream(@"NonVisuals.Images.filenotfound.png"))
-            {
-                tmpBitMapImage.BeginInit();
-                tmpBitMapImage.StreamSource = stream;
-                tmpBitMapImage.CacheOption = BitmapCacheOption.OnLoad;
-                tmpBitMapImage.EndInit();
-            }
-
-            _fileNotFoundBitMap = BitMapCreator.BitmapImage2Bitmap(tmpBitMapImage);
-            return _fileNotFoundBitMap;
+            return BitMapCreator.BitmapOrFileNotFound(imagePath);
         }
 
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
