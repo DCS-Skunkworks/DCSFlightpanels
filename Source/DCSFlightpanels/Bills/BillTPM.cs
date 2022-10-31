@@ -9,7 +9,7 @@
     using DCSFlightpanels.Interfaces;
 
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
     public class BillTPM : BillBaseInput
@@ -17,7 +17,7 @@
         private DCSBIOSActionBindingTPM _dcsbiosBindingTPM;
         private BIPLinkTPM _bipLinkTPM;
 
-        public override BIPLink BipLink
+        public override BIPLinkBase BipLink
         {
             get => _bipLinkTPM;
             set

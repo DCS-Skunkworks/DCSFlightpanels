@@ -11,7 +11,7 @@ namespace DCSFlightpanels.Bills
     using DCSFlightpanels.Interfaces;
 
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
     public class BillPZ55 : BillBaseInput
@@ -19,7 +19,7 @@ namespace DCSFlightpanels.Bills
         private DCSBIOSActionBindingPZ55 _dcsbiosBindingPZ55;
         private BIPLinkPZ55 _bipLinkPZ55;
 
-        public override BIPLink BipLink
+        public override BIPLinkBase BipLink
         {
             get => _bipLinkPZ55;
             set

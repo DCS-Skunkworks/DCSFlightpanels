@@ -9,14 +9,14 @@
     using DCSFlightpanels.Interfaces;
 
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
     public class BillPZ69Emulator : BillBaseInput
     {
         private BIPLinkPZ69 _bipLinkPZ69;
 
-        public override BIPLink BipLink
+        public override BIPLinkBase BipLink
         {
             get => _bipLinkPZ69;
             set

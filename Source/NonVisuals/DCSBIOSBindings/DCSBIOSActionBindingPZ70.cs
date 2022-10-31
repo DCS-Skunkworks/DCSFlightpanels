@@ -52,15 +52,25 @@
 
             if (settings.StartsWith("MultiPanelDCSBIOSControl"))
             {
-                var skeleton = ParseSetting(settings);
-                _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), skeleton.Mode);
-                _multiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), skeleton.KeyName);
+                var result = ParseSetting(settings);
+                _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), result.Item1);
+                _multiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), result.Item2);
                 /*
                  * Other settings already added.
                  */
             }
         }
-        
+
+        public override string ExportSettings()
+        {
+            if (DCSBIOSInputs.Count == 0)
+            {
+                return null;
+            }
+
+            return GetExportString("MultiPanelDCSBIOSControlV2", Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition), Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob));
+        }
+
         public PZ70DialPosition DialPosition
         {
             get => _pz70DialPosition;
@@ -71,16 +81,6 @@
         {
             get => _multiPanelPZ70Knob;
             set => _multiPanelPZ70Knob = value;
-        }
-        
-        public override string ExportSettings()
-        {
-            if (DCSBIOSInputs.Count == 0)
-            {
-                return null;
-            }
-            
-            return GetExportString("MultiPanelDCSBIOSControlV2", Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition), Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob));
         }
 
     }

@@ -1,4 +1,4 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
     using System.Linq;
@@ -6,41 +6,36 @@
 
     using MEF;
 
-    using NonVisuals.Saitek.Panels;
-
     [Serializable]
-    public class BIPLinkPZ70 : BIPLink
+    public class BIPLinkPZ55 : BIPLinkBase
     {
         /*
          This class binds a physical switch on the PZ55 with a BIP LED
          */
-        public PZ70DialPosition DialPosition { get; set; }
-
-        public MultiPanelPZ70Knobs MultiPanelPZ70Knob { get; set; }
+        private SwitchPanelPZ55Keys _switchPanelPZ55Key;
 
         public override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))
             {
-                throw new ArgumentException("Import string empty. (BIPLinkPZ70)");
+                throw new ArgumentException("Import string empty. (BIPLinkPZ55)");
             }
 
-            if (settings.StartsWith("MultipanelBIPLink{"))
+            if (settings.StartsWith("SwitchPanelBIPLink{"))
             {
-                // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                // SwitchPanelBIPLink{1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
                 // 0 1 2 3
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}
-                var param0 = parameters[0].Replace("MultipanelBIPLink{", string.Empty).Replace("}", string.Empty).Trim();
+                // SwitchPanelBIPLink{1KNOB_ENGINE_LEFT}
+                var param0 = parameters[0].Replace("SwitchPanelBIPLink{", string.Empty).Replace("}", string.Empty).Trim();
 
-                // ALT|1KNOB_ENGINE_LEFT
-                var tmpArray = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                WhenOnTurnedOn = tmpArray[1].Substring(0, 1) == "1";
-                MultiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), tmpArray[1].Substring(1));
-                DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), tmpArray[0]);
+                // 1KNOB_ENGINE_LEFT
+                WhenOnTurnedOn = param0.Substring(0, 1) == "1";
+                param0 = param0.Substring(1);
+                _switchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), param0);
 
-                for (var i = 0; i < parameters.Length; i++)
+                for (int i = 0; i < parameters.Length; i++)
                 {
                     if (parameters[i].StartsWith("BIPLight"))
                     {
@@ -60,7 +55,7 @@
 
         public override string ExportSettings()
         {
-            // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+            // SwitchPanelBIPLink{1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
             if (_bipLights == null || _bipLights.Count == 0)
             {
                 return null;
@@ -68,7 +63,7 @@
 
             var onStr = WhenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("MultipanelBIPLink{" + DialPosition + "|" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}");
+            stringBuilder.Append("SwitchPanelBIPLink{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}");
             foreach (var bipLight in _bipLights)
             {
                 stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + bipLight.Value.ExportSettings());
@@ -91,7 +86,11 @@
 
             return _bipLights.Keys.Max() + 1;
         }
-        
-    }
 
+        public SwitchPanelPZ55Keys SwitchPanelPZ55Key
+        {
+            get => _switchPanelPZ55Key;
+            set => _switchPanelPZ55Key = value;
+        }
+    }
 }

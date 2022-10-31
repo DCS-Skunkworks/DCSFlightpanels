@@ -1,11 +1,11 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 
     using MEF;
 
     [Serializable]
-    public class OSCommandBindingTPM : OSCommandBinding
+    public class OSCommandBindingTPM : OSCommandBindingBase
     {
         /*
          This class binds a physical switch on the TPM with a Windows OS command.
@@ -29,7 +29,7 @@
                 var param0 = parameters[0].Replace("TPMPanelOSCommand{", string.Empty).Replace("}", string.Empty);
 
                 // 1KNOB_ENGINE_LEFT
-                WhenTurnedOn = (param0.Substring(0, 1) == "1");
+                WhenTurnedOn = param0.Substring(0, 1) == "1";
                 param0 = param0.Substring(1);
                 _tpmPanelSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), param0);
 

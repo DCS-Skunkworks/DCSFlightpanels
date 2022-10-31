@@ -1,17 +1,17 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 
     using MEF;
 
     [Serializable]
-    public class OSCommandBindingFarmingPanel : OSCommandBinding
+    public class OSCommandBindingFarmingPanel : OSCommandBindingBase
     {
         /*
          This class binds a physical switch on the Farming Simulator Side Panel with a Windows OS command.
          */
         private FarmingPanelMKKeys _farmingPanelKey;
-        
+
         internal override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))

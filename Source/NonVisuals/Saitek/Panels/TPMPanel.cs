@@ -13,6 +13,7 @@
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Switches;
 
     public class TPMPanel : SaitekPanel
@@ -450,7 +451,7 @@
             SetIsDirty();
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
             var bipLinkTPM = (BIPLinkTPM)bipLink;

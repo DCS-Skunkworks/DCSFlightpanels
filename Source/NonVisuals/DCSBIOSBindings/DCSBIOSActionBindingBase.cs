@@ -143,9 +143,10 @@ namespace NonVisuals.DCSBIOSBindings
             }
         }
 
-        public DCSBIOSActionBindingSkeleton ParseSettingV2(string config)
+        public Tuple<string, string> ParseSettingV2(string config)
         {
-            var result = new DCSBIOSActionBindingSkeleton();
+            var mode = "";
+            var key = "";
 
             //MultiPanelDCSBIOSControlV2{32}\o/{ALT}\o/{FLAPS_LEVER_DOWN|BESKRIVNING}\o/\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|0|0}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|1000}
             //SwitchPanelDCSBIOSControlV2{32}\o/{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
@@ -156,30 +157,28 @@ namespace NonVisuals.DCSBIOSBindings
             var configInt = parameters[0]
                 .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
             ParseSettingsInt(int.Parse(configInt));
-            result.IsSequenced = IsSequenced;
-            result.WhenTurnedOn = WhenTurnedOn;
-
+            
             if (config.Contains("MultiPanelDCSBIOSControl") || config.Contains("RadioPanelDCSBIOSControl")) // Has additional setting which tells which position leftmost dial is in
             {
                 //{ALT}
-                result.Mode = Common.RemoveCurlyBrackets(parameters[1]);
+                mode = Common.RemoveCurlyBrackets(parameters[1]);
                 
                 //{FLAPS_LEVER_DOWN|BESKRIVNING}
-                var key = Common.RemoveCurlyBrackets(parameters[2]).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                result.KeyName = key[0];
-                if (key.Length > 1)
+                var tmpKey = Common.RemoveCurlyBrackets(parameters[2]).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                key = tmpKey[0];
+                if (tmpKey.Length > 1)
                 {
-                    Description = key[1];
+                    Description = tmpKey[1];
                 }
             }
             else
             {
                 //{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}
-                var key = Common.RemoveCurlyBrackets(parameters[1]).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                result.KeyName = key[0];
-                if (key.Length > 1)
+                var tmpKey = Common.RemoveCurlyBrackets(parameters[1]).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                key = tmpKey[0];
+                if (tmpKey.Length > 1)
                 {
-                    Description = key[1];
+                    Description = tmpKey[1];
                 }
             }
 
@@ -196,12 +195,13 @@ namespace NonVisuals.DCSBIOSBindings
                 }
             }
 
-            return result;
+            return Tuple.Create(mode, key);
         }
 
-        public DCSBIOSActionBindingSkeleton ParseSettingV1(string config)
+        public Tuple<string, string> ParseSettingV1(string config)
         {
-            var result = new DCSBIOSActionBindingSkeleton();
+            var mode = "";
+            var key = "";
             //RadioPanelDCSBIOSControl{UpperCOM1}\o/{1UpperLargeFreqWheelInc|PLT_INTL_PRIMARY_L_KNB}\o/\o/DCSBIOSInput{PLT_INTL_PRIMARY_L_KNB|VARIABLE_STEP|2000|0}	
             //MultiPanelDCSBIOSControl{ALT}\o/{1FLAPS_LEVER_DOWN|BESKRIVNING}\o/\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|0|0}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|1000}
             //SwitchPanelDCSBIOSControl{1SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
@@ -211,17 +211,17 @@ namespace NonVisuals.DCSBIOSBindings
             if (config.Contains("MultiPanelDCSBIOSControl") || config.Contains("RadioPanelDCSBIOSControl"))
             {
                 //MultiPanelDCSBIOSControl{ALT}
-                result.Mode = parameters[0]
+                mode = parameters[0]
                     .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
 
                 //{1FLAPS_LEVER_DOWN|BESKRIVNING}
                 WhenTurnedOn = Common.RemoveCurlyBrackets(parameters[1]).Substring(0, 1) == "1";
                 
-                var key = Common.RemoveCurlyBrackets(parameters[1]).Substring(1).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                result.KeyName = key[0];
-                if (key.Length > 1)
+                var tmpKey = Common.RemoveCurlyBrackets(parameters[1]).Substring(1).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                key = tmpKey[0];
+                if (tmpKey.Length > 1)
                 {
-                    Description = key[1];
+                    Description = tmpKey[1];
                 }
             }
             else
@@ -230,11 +230,11 @@ namespace NonVisuals.DCSBIOSBindings
                 var keyInfo = parameters[0]
                     .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
                 WhenTurnedOn = (keyInfo.Substring(0, 1) == "1");
-                var key = keyInfo.Substring(1).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                result.KeyName = key[0];
-                if (key.Length > 1)
+                var tmpKey = keyInfo.Substring(1).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                key = tmpKey[0];
+                if (tmpKey.Length > 1)
                 {
-                    Description = key[1];
+                    Description = tmpKey[1];
                 }
             }
 
@@ -251,10 +251,10 @@ namespace NonVisuals.DCSBIOSBindings
                 }
             }
 
-            return result;
+            return Tuple.Create(mode, key);
         }
 
-        public DCSBIOSActionBindingSkeleton ParseSetting(string config)
+        public Tuple<string, string> ParseSetting(string config)
         {
             if (config.Contains("DCSBIOSControlV2{")) //Check that the setting is V2    
             {
@@ -267,35 +267,6 @@ namespace NonVisuals.DCSBIOSBindings
             }
 
             return null;
-        }
-
-        public void ParseSettingsInt(int configs)
-        {
-            /*
-             * Bit #1 IsSequenced
-             * Bit #2 WhenTurnedOn
-             */
-            IsSequenced = (configs & 1) == 1;
-            WhenOnTurnedOn = (configs & 2) == 2;
-        }
-
-        public int GetSettingsInt()
-        {
-            int result = 0;
-            /*
-             * Bit #1 IsSequenced
-             * Bit #2 WhenTurnedOn
-             */
-            if (IsSequenced)
-            {
-                result |= 1;
-            }
-            if (WhenOnTurnedOn)
-            {
-                result |= 2;
-            }
-
-            return result;
         }
 
         public string GetExportString(string header, string mode, string keyName)
@@ -331,6 +302,35 @@ namespace NonVisuals.DCSBIOSBindings
             }
 
             return header + "{" + GetSettingsInt() + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + keyName + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder;
+        }
+
+        public void ParseSettingsInt(int configs)
+        {
+            /*
+             * Bit #1 IsSequenced
+             * Bit #2 WhenTurnedOn
+             */
+            IsSequenced = (configs & 1) == 1;
+            WhenOnTurnedOn = (configs & 2) == 2;
+        }
+
+        public int GetSettingsInt()
+        {
+            int result = 0;
+            /*
+             * Bit #1 IsSequenced
+             * Bit #2 WhenTurnedOn
+             */
+            if (IsSequenced)
+            {
+                result |= 1;
+            }
+            if (WhenOnTurnedOn)
+            {
+                result |= 2;
+            }
+
+            return result;
         }
 
         [JsonProperty("WhenTurnedOn", Required = Required.Default)]

@@ -21,6 +21,7 @@ namespace NonVisuals.Radios
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Radios.Misc;
     using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
 
     public class RadioPanelPZ69Generic : RadioPanelPZ69Base
     {
@@ -831,7 +832,7 @@ namespace NonVisuals.Radios
             SetIsDirty();
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
             PZ69SwitchOnOff radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
             BIPLinkPZ69 bipLinkPZ69 = (BIPLinkPZ69)bipLink;

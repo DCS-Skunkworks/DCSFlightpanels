@@ -2,14 +2,15 @@
 using DCS_BIOS;
 using MEF;
 using NonVisuals;
-using NonVisuals.Saitek;
+using NonVisuals.Saitek.BindingClasses;
 using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Panels;
 using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
 
-namespace Tests.NonVisuals {
+namespace Tests.NonVisuals
+{
     public class CloneTests {
         
         private const string _sringValue1 ="Some string value 1";

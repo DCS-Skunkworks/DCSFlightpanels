@@ -13,6 +13,7 @@
 
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Switches;
 
     public abstract class SaitekPanel : GamingPanel, IDisposable
@@ -25,7 +26,7 @@
 
         public abstract void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced);
 
-        public abstract void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink);
+        public abstract void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink);
 
         public abstract void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand);
 

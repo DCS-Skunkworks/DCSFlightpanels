@@ -1,12 +1,14 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
     using System.Collections.Generic;
 
     using MEF;
+    using NonVisuals;
+    using NonVisuals.Saitek;
 
     [Serializable]
-    public class KeyBindingPZ69DialPosition : KeyBinding
+    public class KeyBindingPZ69DialPosition : KeyBindingBase
     {
         /*
          This class binds a physical switch on the PZ69 with a user made virtual keypress in Windows.
@@ -15,6 +17,7 @@
          */
         private PZ69DialPosition _pz69DialPosition;
         private RadioPanelPZ69KnobsEmulator _panelPZ69Knob;
+        
 
         internal override void ImportSettings(string settings)
         {
@@ -25,28 +28,16 @@
 
             if (settings.StartsWith("RadioPanelKeyDialPos{"))
             {
-                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
-                var param0 = parameters[0].Replace("RadioPanelKeyDialPos{", string.Empty).Replace("}", string.Empty);
-                _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
-                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty);
-                WhenTurnedOn = param1.Substring(0, 1) == "1";
-                param1 = param1.Substring(1);
-                _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param1);
-                OSKeyPress = new KeyPress();
-                OSKeyPress.ImportString(parameters[2]);
+                // RadioPanelKeyDialPos{LowerCOM1}\o/{0LowerFreqSwitch}\o/OSKeyPress{ThirtyTwoMilliSec,VK_A}
+
+                var result = ParseSettingV1(settings);
+
+                _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), result.Item1);
+                _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), result.Item2);
+                /*
+                 * All others settings set already
+                 */
             }
-        }
-
-        public PZ69DialPosition DialPosition
-        {
-            get => _pz69DialPosition;
-            set => _pz69DialPosition = value;
-        }
-
-        public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Key
-        {
-            get => _panelPZ69Knob;
-            set => _panelPZ69Knob = value;
         }
 
         public override string ExportSettings()
@@ -60,11 +51,22 @@
             {
                 return null;
             }
-
-            var onStr = WhenTurnedOn ? "1" : "0";
-            return "RadioPanelKeyDialPos{" + _pz69DialPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
+            
+            return GetExportString("RadioPanelKeyDialPos", Enum.GetName(typeof(KeyBindingPZ69DialPosition), DialPosition), Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key));
         }
 
+        public PZ69DialPosition DialPosition
+        {
+            get => _pz69DialPosition;
+            set => _pz69DialPosition = value;
+        }
+
+        public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Key
+        {
+            get => _panelPZ69Knob;
+            set => _panelPZ69Knob = value;
+        }
+        
         public static HashSet<KeyBindingPZ69DialPosition> SetNegators(HashSet<KeyBindingPZ69DialPosition> knobBindings)
         {
             if (knobBindings == null)

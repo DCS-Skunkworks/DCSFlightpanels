@@ -48,8 +48,8 @@
             
             if (settings.StartsWith("FarmingPanelDCSBIOSControl"))
             {
-                var skeleton = ParseSetting(settings);
-                _farmingPanelKey = (FarmingPanelMKKeys)Enum.Parse(typeof(FarmingPanelMKKeys), skeleton.KeyName);
+                var result = ParseSetting(settings);
+                _farmingPanelKey = (FarmingPanelMKKeys)Enum.Parse(typeof(FarmingPanelMKKeys), result.Item2);
                 /*
                  * Other settings already added.
                  */

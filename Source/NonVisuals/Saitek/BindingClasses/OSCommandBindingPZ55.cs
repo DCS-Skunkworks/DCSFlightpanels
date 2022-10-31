@@ -1,17 +1,17 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 
     using MEF;
 
     [Serializable]
-    public class OSCommandBindingPZ55 : OSCommandBinding
+    public class OSCommandBindingPZ55 : OSCommandBindingBase
     {
         /*
          This class binds a physical switch on the PZ55 with a Windows OS command.
          */
         private SwitchPanelPZ55Keys _switchPanelPZ55Key;
-        
+
         internal override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))

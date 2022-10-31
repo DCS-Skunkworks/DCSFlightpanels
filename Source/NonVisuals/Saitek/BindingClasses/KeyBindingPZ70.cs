@@ -3,23 +3,26 @@ using System.Reflection.PortableExecutable;
 using System.Threading;
 using Microsoft.VisualBasic.Logging;
 
-namespace NonVisuals.Saitek
+namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
     using System.Collections.Generic;
 
     using MEF;
+    using NonVisuals;
+    using NonVisuals.Saitek;
 
     using NonVisuals.Saitek.Panels;
 
     [Serializable]
-    public class KeyBindingPZ70 : KeyBinding
+    public class KeyBindingPZ70 : KeyBindingBase
     {
         /*
          This class binds a physical switch on the PZ70 with a user made virtual keypress in Windows.
          */
         private PZ70DialPosition _pz70DialPosition;
         private MultiPanelPZ70Knobs _multiPanelPZ70Knob;
+
 
         internal override void ImportSettings(string settings)
         {
@@ -30,27 +33,28 @@ namespace NonVisuals.Saitek
 
             if (settings.StartsWith("MultiPanelKnob{"))
             {
-                // MultiPanelKey{ALT}\o/{1KNOB_ENGINE_LEFT}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
+                // MultiPanelKnob{ALT}\o/{1LCD_WHEEL_DEC}\o/OSKeyPress{ThirtyTwoMilliSec,VK_A}
 
-                // MultiPanelKey{ALT}
-                var param0 = parameters[0].Replace("MultiPanelKnob{", string.Empty).Replace("}", string.Empty);
-                _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), param0);
+                var result = ParseSettingV1(settings);
 
-                // {1KNOB_ENGINE_LEFT}
-                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty);
-
-                // 1KNOB_ENGINE_LEFT
-                WhenTurnedOn = param1.Substring(0, 1) == "1";
-                param1 = param1.Substring(1);
-                _multiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), param1);
-
-                // OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
-                OSKeyPress = new KeyPress();
-                OSKeyPress.ImportString(parameters[2]);
+                _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), result.Item1);
+                _multiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), result.Item2);
+                /*
+                 * All others settings set already
+                 */
             }
         }
 
+        public override string ExportSettings()
+        {
+            if (OSKeyPress == null || OSKeyPress.IsEmpty())
+            {
+                return null;
+            }
+
+            return GetExportString("MultiPanelKnob", Enum.GetName(typeof(PZ70DialPosition), DialPosition), Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob));
+        }
+        
         public PZ70DialPosition DialPosition
         {
             get => _pz70DialPosition;
@@ -62,18 +66,7 @@ namespace NonVisuals.Saitek
             get => _multiPanelPZ70Knob;
             set => _multiPanelPZ70Knob = value;
         }
-
-        public override string ExportSettings()
-        {
-            if (OSKeyPress == null || OSKeyPress.IsEmpty())
-            {
-                return null;
-            }
-
-            var onStr = WhenTurnedOn ? "1" : "0";
-            return "MultiPanelKnob{" + _pz70DialPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
-        }
-
+        
         private static long _checker = 0;
         public static void SetNegators(ref HashSet<KeyBindingPZ70> knobBindings)
         {
@@ -222,7 +215,7 @@ namespace NonVisuals.Saitek
                     }
                 }
             }
-            
+
             Interlocked.Decrement(ref _checker);
         }
     }

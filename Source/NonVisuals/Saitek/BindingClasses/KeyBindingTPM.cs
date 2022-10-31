@@ -1,17 +1,20 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
     using System.Collections.Generic;
 
     using MEF;
+    using NonVisuals;
+    using NonVisuals.Saitek;
 
     [Serializable]
-    public class KeyBindingTPM : KeyBinding
+    public class KeyBindingTPM : KeyBindingBase
     {
         /*
          This class binds a physical switch on the TPM with a user made virtual keypress in Windows.
          */
         private TPMPanelSwitches _tpmPanelSwitch;
+
 
         internal override void ImportSettings(string settings)
         {
@@ -20,32 +23,15 @@
                 throw new ArgumentException("Import string empty. (KeyBinding)");
             }
 
-            if (settings.StartsWith("TPMPanelSwitch{"))
+            if (settings.StartsWith("SwitchPanelKey{"))
             {
-                // TPMPanelSwitch{1KNOB_ENGINE_LEFT}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
+                var result = ParseSettingV1(settings);
 
-                // TPMPanelSwitch{1KNOB_ENGINE_LEFT}
-                var param0 = parameters[0].Trim().Substring(15);
-
-                // 1KNOB_ENGINE_LEFT}
-                param0 = param0.Remove(param0.Length - 1, 1);
-
-                // 1KNOB_ENGINE_LEFT
-                WhenTurnedOn = (param0.Substring(0, 1) == "1");
-                param0 = param0.Substring(1);
-                _tpmPanelSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), param0);
-
-                // OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
-                OSKeyPress = new KeyPress();
-                OSKeyPress.ImportString(parameters[1]);
+                TPMSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), result.Item2);
+                /*
+                 * All others settings set already
+                 */
             }
-        }
-
-        public TPMPanelSwitches TPMSwitch
-        {
-            get => _tpmPanelSwitch;
-            set => _tpmPanelSwitch = value;
         }
 
         public override string ExportSettings()
@@ -55,10 +41,16 @@
                 return null;
             }
 
-            var onStr = WhenTurnedOn ? "1" : "0";
-            return "TPMPanelSwitch{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
+            return GetExportString("TPMPanelSwitch", null, Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch));
         }
+        
 
+        public TPMPanelSwitches TPMSwitch
+        {
+            get => _tpmPanelSwitch;
+            set => _tpmPanelSwitch = value;
+        }
+        
         public static HashSet<KeyBindingTPM> SetNegators(HashSet<KeyBindingTPM> knobBindings)
         {
             if (knobBindings == null)

@@ -7,9 +7,9 @@
 
     using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
-    
+
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
     public class BillPFarmingPanel : BillBaseInput
@@ -17,7 +17,7 @@
         private DCSBIOSActionBindingFarmingPanel _dcsbiosBinding;
         private BIPLinkFarmingPanel _bipLink;
 
-        public override BIPLink BipLink
+        public override BIPLinkBase BipLink
         {
             get => _bipLink;
             set

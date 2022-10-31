@@ -16,10 +16,10 @@ namespace NonVisuals.StreamDeck
 
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
-    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
 
     [Serializable]
-    public class ActionTypeKey : KeyBinding, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
+    public class ActionTypeKey : KeyBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.KeyPress;
         public bool IsRepeatable() => true;

@@ -1,4 +1,4 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@
     using Newtonsoft.Json;
 
     [Serializable]
-    public abstract class BIPLink
+    public abstract class BIPLinkBase
     {
         /*
          This class binds a physical switch with a BIP LED
@@ -51,7 +51,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -91,7 +91,7 @@
                         bipEventHandlerManager.ShowLight(bipLight);
                     }
                 }
-                catch (Exception )
+                catch (Exception)
                 { }
             }
             finally

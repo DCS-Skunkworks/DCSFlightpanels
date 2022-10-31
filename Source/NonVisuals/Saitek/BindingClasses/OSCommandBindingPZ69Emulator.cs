@@ -1,11 +1,11 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 
     using MEF;
 
     [Serializable]
-    public class OSCommandBindingPZ69Emulator : OSCommandBinding
+    public class OSCommandBindingPZ69Emulator : OSCommandBindingBase
     {
         /*
          This class binds a physical switch on the PZ69 key emulator with a Windows OS command.
@@ -29,7 +29,7 @@
                 var param0 = parameters[0].Replace("RadioPanelOSPZ69{", string.Empty).Replace("}", string.Empty);
 
                 // 1UpperCOM1
-                WhenTurnedOn = (param0.Substring(0, 1) == "1");
+                WhenTurnedOn = param0.Substring(0, 1) == "1";
                 param0 = param0.Substring(1);
                 _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param0);
 

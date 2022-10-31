@@ -1,11 +1,11 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 
     using MEF;
 
     [Serializable]
-    public class OSCommandBindingPZ69FullEmulator : OSCommandBinding
+    public class OSCommandBindingPZ69FullEmulator : OSCommandBindingBase
     {
         /*
          This class binds a physical switch on the PZ69 full emulator (includes DCS-BIOS) with a Windows OS command.

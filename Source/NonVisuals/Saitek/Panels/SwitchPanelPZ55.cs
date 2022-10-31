@@ -15,6 +15,7 @@
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Switches;
 
     public enum SwitchPanelPZ55LEDPosition : byte
@@ -752,7 +753,7 @@
             SetIsDirty();
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             var bipLinkPZ55 = (BIPLinkPZ55)bipLink;

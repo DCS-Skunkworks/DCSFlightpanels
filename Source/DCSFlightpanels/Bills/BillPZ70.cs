@@ -8,15 +8,15 @@
     using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
 
-    using NonVisuals.DCSBIOSBindings;    
-    using NonVisuals.Saitek;
+    using NonVisuals.DCSBIOSBindings;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
     public class BillPZ70 : BillBaseInput
     {
         private DCSBIOSActionBindingPZ70 _dcsbiosBindingPZ70;
         private BIPLinkPZ70 _bipLinkPZ70;
-        public override BIPLink BipLink
+        public override BIPLinkBase BipLink
         {
             get => _bipLinkPZ70;
             set

@@ -49,18 +49,12 @@
             
             if (settings.StartsWith("TPMPanelDCSBIOSControl"))
             {
-                var skeleton = ParseSetting(settings);
-                _tpmPanelSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), skeleton.KeyName);
+                var result = ParseSetting(settings);
+                _tpmPanelSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), result.Item2);
                 /*
                  * Other settings already added.
                  */
             }
-        }
-        
-        public TPMPanelSwitches TPMSwitch
-        {
-            get => _tpmPanelSwitch;
-            set => _tpmPanelSwitch = value;
         }
 
         public override string ExportSettings()
@@ -69,8 +63,14 @@
             {
                 return null;
             }
-            
+
             return GetExportString("TPMPanelDCSBIOSControlV2", null, Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch));
+        }
+
+        public TPMPanelSwitches TPMSwitch
+        {
+            get => _tpmPanelSwitch;
+            set => _tpmPanelSwitch = value;
         }
 
     }

@@ -1,20 +1,20 @@
-﻿namespace NonVisuals
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 
     [Serializable]
-    public abstract class OSCommandBinding
+    public abstract class OSCommandBindingBase
     {
         /*
          This is the base class for all the OSCommand binding classes
          that binds a physical switch to a Windows OS command.
          */
         private bool _whenOnTurnedOn = true;
-        
+
         private OSCommand _operatingSystemCommand;
 
         internal abstract void ImportSettings(string settings);
-        
+
         public abstract string ExportSettings();
 
         public int GetHash()
@@ -22,7 +22,7 @@
             unchecked
             {
                 var result = _whenOnTurnedOn.GetHashCode();
-                result = (result * 397) ^ (_operatingSystemCommand?.GetHash() ?? 0);
+                result = result * 397 ^ (_operatingSystemCommand?.GetHash() ?? 0);
                 return result;
             }
         }

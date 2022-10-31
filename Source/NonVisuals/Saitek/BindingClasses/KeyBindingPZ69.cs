@@ -1,17 +1,20 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
     using System.Collections.Generic;
 
     using MEF;
+    using NonVisuals;
+    using NonVisuals.Saitek;
 
     [Serializable]
-    public class KeyBindingPZ69 : KeyBinding
+    public class KeyBindingPZ69 : KeyBindingBase
     {
         /*
          This class binds a physical switch on the PZ69 with a user made virtual keypress in Windows.
          */
         private RadioPanelPZ69KnobsEmulator _panelPZ69Knob;
+        
 
         internal override void ImportSettings(string settings)
         {
@@ -22,30 +25,16 @@
 
             if (settings.StartsWith("RadioPanelKey{"))
             {
-                // RadioPanelKey{1UpperCOM1}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
+                // RadioPanelKey{1KNOB_ENGINE_OFF}\o/OSKeyPress{HalfSecond,VK_I}
+                // RadioPanelKey{0SWITCHKEY_CLOSE_COWL}\o/OSKeyPress{INFORMATION=^key press sequence^[ThirtyTwoMilliSec,VK_A,ThirtyTwoMilliSec][ThirtyTwoMilliSec,VK_B,ThirtyTwoMilliSec]}
 
-                // RadioPanelKey{1UpperCOM1}
-                var param0 = parameters[0].Trim().Substring(14);
-
-                // 1UpperCOM1}
-                param0 = param0.Remove(param0.Length - 1, 1);
-
-                // 1UpperCOM1
-                WhenTurnedOn = param0.Substring(0, 1) == "1";
-                param0 = param0.Substring(1);
-                _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param0);
-
-                // OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
-                OSKeyPress = new KeyPress();
-                OSKeyPress.ImportString(parameters[1]);
+                var result = ParseSettingV1(settings);
+                
+                _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), result.Item2);
+                /*
+                 * All others settings set already
+                 */
             }
-        }
-
-        public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Key
-        {
-            get => _panelPZ69Knob;
-            set => _panelPZ69Knob = value;
         }
 
         public override string ExportSettings()
@@ -55,8 +44,13 @@
                 return null;
             }
 
-            var onStr = WhenTurnedOn ? "1" : "0";
-            return "RadioPanelKey{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
+            return GetExportString("RadioPanelKey", null, Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key));
+        }
+
+        public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Key
+        {
+            get => _panelPZ69Knob;
+            set => _panelPZ69Knob = value;
         }
 
         public static HashSet<KeyBindingPZ69> SetNegators(HashSet<KeyBindingPZ69> knobBindings)

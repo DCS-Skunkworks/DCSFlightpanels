@@ -14,6 +14,7 @@
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
 
     public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base
     {
@@ -2473,7 +2474,7 @@
         {
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
         }
 

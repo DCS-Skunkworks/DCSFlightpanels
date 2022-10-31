@@ -19,7 +19,7 @@ namespace DCSFlightpanels.Bills
 
     using NonVisuals;
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
     public abstract class BillBaseInput
@@ -35,7 +35,7 @@ namespace DCSFlightpanels.Bills
         public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced);
         public abstract void ClearAll();
         protected abstract void ClearDCSBIOSFromBill();
-        public abstract BIPLink BipLink { get; set; }
+        public abstract BIPLinkBase BipLink { get; set; }
         public abstract List<DCSBIOSInput> DCSBIOSInputs { get; set; }
         public abstract DCSBIOSActionBindingBase DCSBIOSBinding { get; set; }
 
@@ -215,7 +215,7 @@ namespace DCSFlightpanels.Bills
                     {
                         if (!ContainsBIPLink())
                         {
-                            AddBipLink((BIPLink)copyPackage.Content);
+                            AddBipLink((BIPLinkBase)copyPackage.Content);
                         }
                         break;
                     }
@@ -615,7 +615,7 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        private void AddBipLink(BIPLink bipLink)
+        private void AddBipLink(BIPLinkBase bipLink)
         {
             //Don't know how to get around this. Json can't clone an abstract class.
             if (bipLink.GetType() == typeof(BIPLinkPZ55))
@@ -686,7 +686,7 @@ namespace DCSFlightpanels.Bills
 
             if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
             {
-                var tmpBIPLink = (BIPLink)bipLinkWindow.BIPLink;
+                var tmpBIPLink = (BIPLinkBase)bipLinkWindow.BIPLink;
 
                 if (tmpBIPLink.BIPLights.Count == 0)
                 {

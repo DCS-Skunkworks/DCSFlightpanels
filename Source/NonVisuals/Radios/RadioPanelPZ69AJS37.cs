@@ -14,6 +14,7 @@
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
 
     public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
@@ -1009,7 +1010,7 @@
         {
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
         }
 

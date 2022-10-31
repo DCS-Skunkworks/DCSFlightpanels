@@ -14,9 +14,10 @@ namespace NonVisuals.StreamDeck
     using Newtonsoft.Json;
 
     using NonVisuals.Interfaces;
+    using NonVisuals.Saitek.BindingClasses;
 
     [Serializable]
-    public class ActionTypeOS : OSCommandBinding, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
+    public class ActionTypeOS : OSCommandBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.OSCommand;
         public bool IsRepeatable() => true;

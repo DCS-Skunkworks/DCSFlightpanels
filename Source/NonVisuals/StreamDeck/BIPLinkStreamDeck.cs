@@ -5,10 +5,9 @@
     using MEF;
 
     using Newtonsoft.Json;
+    using NonVisuals.Saitek.BindingClasses;
 
-    using NonVisuals.Saitek;
-
-    public class BIPLinkStreamDeck : BIPLink
+    public class BIPLinkStreamDeck : BIPLinkBase
     {
         /*
          This class binds a physical key on a Stream Deck with a BIP LED

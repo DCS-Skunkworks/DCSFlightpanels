@@ -48,27 +48,15 @@
 
             if (settings.StartsWith("RadioPanelDCSBIOSControl"))
             {
-                var skeleton = ParseSetting(settings);
-                _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), skeleton.Mode);
-                _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), skeleton.KeyName);
+                var result = ParseSetting(settings);
+                _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), result.Item1);
+                _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), result.Item2);
                 /*
                  * Other settings already added.
                  */
             }
         }
-        
-        public PZ69DialPosition DialPosition
-        {
-            get => _pz69DialPosition;
-            set => _pz69DialPosition = value;
-        }
 
-        public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Knob
-        {
-            get => _panelPZ69Knob;
-            set => _panelPZ69Knob = value;
-        }
-        
         public override string ExportSettings()
         {
             if (DCSBIOSInputs.Count == 0)
@@ -82,6 +70,18 @@
             }
 
             return GetExportString("RadioPanelDCSBIOSControlV2", Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition), Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob));
+        }
+
+        public PZ69DialPosition DialPosition
+        {
+            get => _pz69DialPosition;
+            set => _pz69DialPosition = value;
+        }
+
+        public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Knob
+        {
+            get => _panelPZ69Knob;
+            set => _panelPZ69Knob = value;
         }
     }
 }

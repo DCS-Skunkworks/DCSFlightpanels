@@ -49,8 +49,8 @@
             
             if (settings.StartsWith("SwitchPanelDCSBIOSControl"))
             {
-                var skeleton = ParseSetting(settings);
-                _switchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), skeleton.KeyName);
+                var result = ParseSetting(settings);
+                _switchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), result.Item2);
                 /*
                  * Other settings already added.
                  */

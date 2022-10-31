@@ -1,4 +1,4 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
     using System.Linq;
@@ -7,7 +7,7 @@
     using MEF;
 
     [Serializable]
-    public class BIPLinkTPM : BIPLink
+    public class BIPLinkTPM : BIPLinkBase
     {
         private TPMPanelSwitches _tpmSwitch;
 

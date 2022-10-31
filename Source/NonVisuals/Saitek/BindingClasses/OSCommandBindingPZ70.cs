@@ -1,4 +1,4 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 
@@ -7,7 +7,7 @@
     using NonVisuals.Saitek.Panels;
 
     [Serializable]
-    public class OSCommandBindingPZ70 : OSCommandBinding
+    public class OSCommandBindingPZ70 : OSCommandBindingBase
     {
         /*
          This class binds a physical switch on the PZ70 with a Windows OS command.
