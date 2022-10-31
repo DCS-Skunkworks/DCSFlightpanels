@@ -1,9 +1,7 @@
 ﻿using NonVisuals.StreamDeck;
-using System;
+using OpenMacroBoard.SDK;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
-using System.Windows.Media.Imaging;
 using Xunit;
 
 namespace Tests.NonVisuals
@@ -142,6 +140,22 @@ namespace Tests.NonVisuals
             Bitmap image2 = new(Path.Combine(_TestsResourcesFolder, img2));
             Assert.False(CompareBitmaps(image1, image2));
         }
+        
+        [Fact]
+        //This 'test' is only present to emphasize on the fix just below
+        public void KeyBitmapCreateFromBitmap_IsThrowingException_OnDirectLoad_OfUnsuportedFormat()
+        {
+            Bitmap unsuported = (Bitmap)Image.FromFile(Path.Combine(_TestsResourcesFolder, "IncompatibleForKeyBitmap.png"));
+            Assert.Throws<System.NotSupportedException>(() => KeyBitmap.Create.FromBitmap(unsuported));
+        }
+
+        [Fact]
+        public void KeyBitmapCreateFromBitmap_IsWorking_OnUnsuportedFormat_IfConvertedToBitmapFirst()
+        {
+            Bitmap unsuported = (Bitmap)Image.FromFile(Path.Combine(_TestsResourcesFolder, "IncompatibleForKeyBitmap.png"));
+            KeyBitmap.Create.FromBitmap(new Bitmap(unsuported));
+        }
+
 
         /// <summary>
         /// This is quite a dumb comparison function. 
@@ -172,5 +186,6 @@ namespace Tests.NonVisuals
 
             return true;
         }
+
     }
 }

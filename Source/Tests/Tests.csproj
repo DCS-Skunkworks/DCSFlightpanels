@@ -143,6 +143,9 @@
     <None Update="NonVisuals\BitmapCreatorTestsResources\EnlargedBitmapCanvas_FromSmallerThan_72x72.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="NonVisuals\BitmapCreatorTestsResources\IncompatibleForKeyBitmap.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="NonVisuals\BitmapCreatorTestsResources\OriginalAdjusted_0.7_0.8_.0.9.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
