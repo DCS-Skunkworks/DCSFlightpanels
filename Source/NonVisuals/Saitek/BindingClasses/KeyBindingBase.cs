@@ -90,7 +90,7 @@ namespace NonVisuals.Saitek.BindingClasses
 
                 // OSKeyPress{HalfSecond,VK_I}    
                 OSKeyPress = new KeyPress();
-                OSKeyPress.ImportString(parameters[2]);
+                OSKeyPress.ImportString(parameters[1]);
             }
 
             return Tuple.Create(mode, key);

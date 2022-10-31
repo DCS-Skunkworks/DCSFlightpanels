@@ -52,7 +52,7 @@
                 return null;
             }
             
-            return GetExportString("RadioPanelKeyDialPos", Enum.GetName(typeof(KeyBindingPZ69DialPosition), DialPosition), Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key));
+            return GetExportString("RadioPanelKeyDialPos", Enum.GetName(typeof(PZ69DialPosition), DialPosition), Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key));
         }
 
         public PZ69DialPosition DialPosition
