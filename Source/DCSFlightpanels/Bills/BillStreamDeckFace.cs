@@ -145,11 +145,6 @@ namespace DCSFlightpanels.Bills
             return !string.IsNullOrEmpty(ImageFileRelativePath);
         }
 
-        public bool ContainsImageFaceAndImageExists()
-        {
-            return !string.IsNullOrEmpty(ImageFileRelativePath) && File.Exists(ImageFileRelativePath);
-        }
-
         public override bool ContainsDCSBIOS()
         {
             return _dcsbiosDecoder != null;

@@ -123,9 +123,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         private void DisplayImagePreview()
         {
-            if (TextBoxImageFace.Bill.ContainsImageFaceAndImageExists())
+            if (TextBoxImageFace.Bill.ContainsImageFace())
             {
-                var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
+                var bitmap = BitMapCreator.BitmapOrFileNotFound(TextBoxImageFace.Bill.ImageFileRelativePath);
                 ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
             }
         }

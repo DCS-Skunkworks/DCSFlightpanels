@@ -684,7 +684,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     }
                 case EnumConverterOutputType.Image:
                     {
-                        var bitmap = new Bitmap(_dcsbiosConverter.ImageFileRelativePath);
+                        var bitmap = BitMapCreator.BitmapOrFileNotFound(_dcsbiosConverter.ImageFileRelativePath);
                         ButtonImagePreviewImage.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
                         break;
                     }
