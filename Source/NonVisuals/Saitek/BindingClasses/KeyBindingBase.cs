@@ -104,7 +104,6 @@ namespace NonVisuals.Saitek.BindingClasses
             }
 
             var onStr = WhenTurnedOn ? "1" : "0";
-            //return "FarmingPanelKey{" + onStr + Enum.GetName(typeof(FarmingPanelMKKeys), FarmingPanelKey) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
 
             if (!string.IsNullOrEmpty(mode))
             {

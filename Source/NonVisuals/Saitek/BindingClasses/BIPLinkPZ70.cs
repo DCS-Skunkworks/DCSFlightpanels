@@ -24,37 +24,15 @@
             {
                 throw new ArgumentException("Import string empty. (BIPLinkPZ70)");
             }
-
-            if (settings.StartsWith("MultipanelBIPLink{"))
+            
+            if (settings.StartsWith("TPMPanelBipLink{"))
             {
-                // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                // 0 1 2 3
-                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
-
-                // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}
-                var param0 = parameters[0].Replace("MultipanelBIPLink{", string.Empty).Replace("}", string.Empty).Trim();
-
-                // ALT|1KNOB_ENGINE_LEFT
-                var tmpArray = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                WhenOnTurnedOn = tmpArray[1].Substring(0, 1) == "1";
-                MultiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), tmpArray[1].Substring(1));
-                DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), tmpArray[0]);
-
-                for (var i = 0; i < parameters.Length; i++)
-                {
-                    if (parameters[i].StartsWith("BIPLight"))
-                    {
-                        var tmpBipLight = new BIPLight();
-                        _bipLights.Add(GetNewKeyValue(), tmpBipLight);
-                        tmpBipLight.ImportSettings(parameters[i]);
-                    }
-
-                    if (parameters[i].StartsWith("Description["))
-                    {
-                        var tmp = parameters[i].Replace("Description[", string.Empty).Replace("]", string.Empty);
-                        _description = tmp;
-                    }
-                }
+                var result = ParseSettingV1(settings);
+                DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), result.Item1);
+                MultiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), result.Item2);
+                /*
+                 * All others settings set already
+                 */
             }
         }
 
@@ -65,33 +43,10 @@
             {
                 return null;
             }
-
-            var onStr = WhenOnTurnedOn ? "1" : "0";
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append("MultipanelBIPLink{" + DialPosition + "|" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}");
-            foreach (var bipLight in _bipLights)
-            {
-                stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + bipLight.Value.ExportSettings());
-            }
-
-            if (!string.IsNullOrWhiteSpace(_description))
-            {
-                stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + "Description[" + _description + "]");
-            }
-
-            return stringBuilder.ToString();
+            
+            return GetExportString("MultipanelBIPLink", Enum.GetName(typeof(PZ70DialPosition), DialPosition), Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob));
         }
-
-        private int GetNewKeyValue()
-        {
-            if (_bipLights.Count == 0)
-            {
-                return 0;
-            }
-
-            return _bipLights.Keys.Max() + 1;
-        }
-
+        
     }
 
 }
