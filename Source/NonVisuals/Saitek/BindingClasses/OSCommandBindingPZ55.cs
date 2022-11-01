@@ -3,6 +3,7 @@
     using System;
 
     using MEF;
+    using NonVisuals.Saitek.Switches;
 
     [Serializable]
     public class OSCommandBindingPZ55 : OSCommandBindingBase
@@ -38,21 +39,20 @@
             }
         }
 
-        public SwitchPanelPZ55Keys SwitchPanelPZ55Key
-        {
-            get => _switchPanelPZ55Key;
-            set => _switchPanelPZ55Key = value;
-        }
-
         public override string ExportSettings()
         {
             if (OSCommandObject == null || OSCommandObject.IsEmpty)
             {
                 return null;
             }
+            
+            return GetExportString("SwitchPanelOSPZ55", null, Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key));
+        }
 
-            var onStr = WhenTurnedOn ? "1" : "0";
-            return "SwitchPanelOSPZ55{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSCommandObject.ExportString();
+        public SwitchPanelPZ55Keys SwitchPanelPZ55Key
+        {
+            get => _switchPanelPZ55Key;
+            set => _switchPanelPZ55Key = value;
         }
     }
 }
