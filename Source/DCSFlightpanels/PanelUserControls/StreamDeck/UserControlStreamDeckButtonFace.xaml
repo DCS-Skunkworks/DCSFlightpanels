@@ -49,7 +49,7 @@
             <StackPanel Name="StackPanelButtonTextImage"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Margin="10,5,10,0" Visibility="Collapsed">
                 <Label Content="Choose Button Text and Color" Background="#e6e6e6" HorizontalContentAlignment="Center" Margin="0,5,0,0"  />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                    <customControl:StreamDeckFaceTextBox x:Name="TextBoxButtonTextFace" FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Margin="4,0,0,0" TextChanged="TextBoxButtonTextFace_OnTextChanged"  KeyUp="TextBoxButtonTextFace_OnKeyUp" />
+                    <customControl:StreamDeckFaceTextBox x:Name="TextBoxButtonTextFace" FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Margin="0,0,0,10" TextChanged="TextBoxButtonTextFace_OnTextChanged"  KeyUp="TextBoxButtonTextFace_OnKeyUp" />
                     <StackPanel>
                         <RepeatButton Name="RepeatButtonActionPressUp" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
                         <RepeatButton Name="RepeatButtonActionPressDown" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
@@ -63,8 +63,13 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
                             <Button Name="ButtonTextFaceBackgroundColor" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
-                            <Button Name="ButtonTestTextFace" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestTextFace_OnClick"/>
                         </StackPanel>
+                    </StackPanel>
+                    <StackPanel>
+                        <Border BorderThickness="1" BorderBrush="#FF000000" HorizontalAlignment="Left" Height="73" Width="73" Margin="10,3,0,0">
+                            <Image x:Name="TextBoxImagePreview" Height="72" Width="72">
+                            </Image>
+                        </Border>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -89,7 +94,7 @@
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Button Name="ButtonBrowseForImage" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowseForImage_OnClick"/>
                 </StackPanel>
-                <Border BorderThickness="1" BorderBrush="#FF000000" HorizontalAlignment="Left" Height="73" Width="73" Margin="10,20,0,0">
+                <Border BorderThickness="1" BorderBrush="#FF000000" HorizontalAlignment="Left" Height="73" Width="73" Margin="00,20,0,0">
                     <Image x:Name="ButtonImagePreview" Height="72" Width="72">
                     </Image>
                 </Border>

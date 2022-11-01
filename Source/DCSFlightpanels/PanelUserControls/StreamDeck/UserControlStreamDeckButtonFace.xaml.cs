@@ -111,7 +111,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 ButtonTextFaceFont.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTextFaceFontColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTextFaceBackgroundColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
-                ButtonTestTextFace.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
 
                 DisplayImagePreview();
             }
@@ -127,6 +126,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             {
                 var bitmap = BitMapCreator.BitmapOrFileNotFound(TextBoxImageFace.Bill.ImageFileRelativePath);
                 ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
+            }
+            if (TextBoxButtonTextFace.Bill.ContainsTextFace())
+            {
+                var bitmap = BitMapCreator.CreateStreamDeckBitmap(TextBoxButtonTextFace.Text, TextBoxButtonTextFace.Bill.TextFont, TextBoxButtonTextFace.Bill.FontColor, TextBoxButtonTextFace.Bill.OffsetX, TextBoxButtonTextFace.Bill.OffsetY, TextBoxButtonTextFace.Bill.BackgroundColor);
+                TextBoxImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
             }
         }
 
@@ -274,19 +278,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     SetIsDirty();
 
                 }
-                TextBoxButtonTextFace.TestImage(_streamDeckPanel);
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ButtonTestTextFace_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
                 TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetFormState();
             }
@@ -499,7 +490,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 TextBoxButtonTextFace.Bill.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 TextBoxOffsetInfo.OffSetY = TextBoxButtonTextFace.Bill.OffsetY;
                 SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
-                TextBoxButtonTextFace.TestImage(_streamDeckPanel);
+                TextBoxButtonTextFace.TestImage(_streamDeckPanel);                
                 SetIsDirty();
             }
             catch (Exception ex)
@@ -507,7 +498,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
         private void RepeatButtonActionPressDown_OnClick(object sender, RoutedEventArgs e)
         {
             try

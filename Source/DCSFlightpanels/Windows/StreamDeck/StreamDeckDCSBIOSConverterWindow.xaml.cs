@@ -505,14 +505,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void ButtonTestDCSBIOSDecoder_OnClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                _streamDeckPanel.SetImage(_streamDeckButtonName, _dcsbiosConverter.Bitmap);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            TestImage();
         }
 
         private void TextBoxOutputText_OnKeyUp(object sender, KeyEventArgs e)
@@ -540,6 +533,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
         private void SetOffset(Axis offsetAxis, int offsetChangeValue)
         {
             try
@@ -587,7 +581,14 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void TestImage()
         {
-            _streamDeckPanel.SetImage(_streamDeckButtonName, _dcsbiosConverter.Bitmap);
+            try
+            {
+                _streamDeckPanel.SetImage(_streamDeckButtonName, GetBitmapFromOutputType());
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
 
         private void ButtonTextFaceFont_OnClick(object sender, RoutedEventArgs e)
@@ -662,7 +663,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private EnumComparator SelectedComparator2 => StreamDeckCommon.GetComparatorValue(ComboBoxComparisonType2.Text);
 
-
         private void StreamDeckDCSBIOSConverterWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
@@ -674,27 +674,41 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void DisplayImagePreview()
         {
-            switch (_dcsbiosConverter.ConverterOutputType)
+            System.Windows.Controls.Image imgControl = _dcsbiosConverter.ConverterOutputType switch
             {
-               case EnumConverterOutputType.Raw:
-                    {
-                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosConverter.ButtonTextTemplate, _dcsbiosConverter.TextFont, _dcsbiosConverter.FontColor, _dcsbiosConverter.OffsetX, _dcsbiosConverter.OffsetY, _dcsbiosConverter.BackgroundColor);
-                        ButtonImagePreviewRaw.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
-                        break;
-                    }
-                case EnumConverterOutputType.Image:
-                    {
-                        var bitmap = BitMapCreator.BitmapOrFileNotFound(_dcsbiosConverter.ImageFileRelativePath);
-                        ButtonImagePreviewImage.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
-                        break;
-                    }
-                case EnumConverterOutputType.ImageOverlay:
-                    {
-                        var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosConverter.ButtonTextTemplate, _dcsbiosConverter.TextFont, _dcsbiosConverter.FontColor, _dcsbiosConverter.OffsetX, _dcsbiosConverter.OffsetY, _dcsbiosConverter.BackgroundColor);
-                        ButtonImagePreviewOverlay.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
-                        break;
-                    }
+                EnumConverterOutputType.Raw => ButtonImagePreviewRaw,
+                EnumConverterOutputType.Image => ButtonImagePreviewImage,
+                EnumConverterOutputType.ImageOverlay => ButtonImagePreviewOverlay,
+                _ => throw new Exception("Unexpected ConverterOutputType"),
+            };
+            imgControl.Source = BitMapCreator.Bitmap2BitmapImage(GetBitmapFromOutputType());
+        }
+
+        private Bitmap GetBitmapFromOutputType()
+        {
+            try
+            {
+                var bitmap = _dcsbiosConverter.ConverterOutputType switch
+                {
+                    EnumConverterOutputType.Raw => BitMapCreator.CreateStreamDeckBitmap(_dcsbiosConverter.ButtonTextTemplate, _dcsbiosConverter.TextFont, _dcsbiosConverter.FontColor, _dcsbiosConverter.OffsetX, _dcsbiosConverter.OffsetY, _dcsbiosConverter.BackgroundColor),
+                    EnumConverterOutputType.Image => BitMapCreator.BitmapOrFileNotFound(_dcsbiosConverter.ImageFileRelativePath),
+                    EnumConverterOutputType.ImageOverlay => CreateOverLayBitmap(),
+                    _ => throw new Exception("Unexpected ConverterOutputType"),
+                };
+                return bitmap;
             }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+                return null;
+            }
+        }
+
+        private Bitmap CreateOverLayBitmap()
+        {
+            var backgroundBitmap = BitMapCreator.BitmapOrFileNotFound(_dcsbiosConverter.ImageFileRelativePath);
+            var bitmapOverlay = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosConverter.ButtonTextTemplate, _dcsbiosConverter.TextFont, _dcsbiosConverter.FontColor, _dcsbiosConverter.OffsetX, _dcsbiosConverter.OffsetY, backgroundBitmap);
+            return bitmapOverlay;
         }
     }
 }
