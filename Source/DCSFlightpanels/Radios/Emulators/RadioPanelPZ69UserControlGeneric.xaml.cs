@@ -182,7 +182,7 @@
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ69Full(this, _radioPanelPZ69, textBox);
+                textBox.Bill = new BillPZ69Generic(this, _radioPanelPZ69, textBox);
             }
             _textBoxBillsSet = true;
         }
@@ -193,10 +193,10 @@
             {
                 return;
             }
-            ButtonUpperLeftLcd.Bill = new BillPZ69Button(ButtonUpperLeftLcd);
-            ButtonLowerLeftLcd.Bill = new BillPZ69Button(ButtonLowerLeftLcd);
-            ButtonUpperRightLcd.Bill = new BillPZ69Button(ButtonUpperRightLcd);
-            ButtonLowerRightLcd.Bill = new BillPZ69Button(ButtonLowerRightLcd);
+            ButtonUpperLeftLcd.Bill = new BillPZ69LCDButton(ButtonUpperLeftLcd);
+            ButtonLowerLeftLcd.Bill = new BillPZ69LCDButton(ButtonLowerLeftLcd);
+            ButtonUpperRightLcd.Bill = new BillPZ69LCDButton(ButtonUpperRightLcd);
+            ButtonLowerRightLcd.Bill = new BillPZ69LCDButton(ButtonLowerRightLcd);
             _buttonBillsSet = true;
         }
         

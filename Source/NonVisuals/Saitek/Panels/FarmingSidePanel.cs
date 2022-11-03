@@ -13,6 +13,7 @@
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Switches;
 
     public class FarmingSidePanel : SaitekPanel
@@ -94,7 +95,7 @@
                         operatingSystemCommand.ImportSettings(setting);
                         _operatingSystemCommandBindings.Add(operatingSystemCommand);
                     }
-                    else if (setting.StartsWith("FarmingPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("FarmingPanelDCSBIOSControl"))
                     {
                         var dcsBIOSBinding = new DCSBIOSActionBindingFarmingPanel();
                         dcsBIOSBinding.ImportSettings(setting);
@@ -452,7 +453,7 @@
             return null;
         }
 
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
         {
             var farmingPanelOnOff = (FarmingPanelOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
@@ -473,6 +474,7 @@
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
+                    dcsBiosBinding.IsSequenced = isSequenced;
                     found = true;
                     break;
                 }
@@ -485,7 +487,8 @@
                     FarmingPanelKey = farmingPanelOnOff.Switch,
                     DCSBIOSInputs = dcsbiosInputs,
                     WhenTurnedOn = farmingPanelOnOff.ButtonState,
-                    Description = description
+                    Description = description,
+                    IsSequenced = isSequenced
                 };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
@@ -493,7 +496,7 @@
             SetIsDirty();
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
             var farmingPanelOnOff = (FarmingPanelOnOff)panelSwitchOnOff;
             var bipLinkFarmingPanel = (BIPLinkFarmingPanel)bipLink;

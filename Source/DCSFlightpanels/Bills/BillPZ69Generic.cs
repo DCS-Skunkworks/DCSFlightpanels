@@ -9,15 +9,15 @@
     using DCSFlightpanels.Interfaces;
 
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
-    public class BillPZ69Full : BillBaseInput
+    public class BillPZ69Generic : BillBaseInput
     {
         private BIPLinkPZ69 _bipLinkPZ69;
         private DCSBIOSActionBindingPZ69 _dcsbiosBindingPZ69;
 
-        public override BIPLink BipLink
+        public override BIPLinkBase BipLink
         {
             get => _bipLinkPZ69;
             set
@@ -29,10 +29,7 @@
 
         public override List<DCSBIOSInput> DCSBIOSInputs
         {
-            get
-            {
-                return ContainsDCSBIOS() ? _dcsbiosBindingPZ69.DCSBIOSInputs : null;
-            }
+            get => ContainsDCSBIOS() ? _dcsbiosBindingPZ69.DCSBIOSInputs : null;
             set
             {
                 if (ContainsDCSBIOS())
@@ -56,7 +53,7 @@
             }
         }
 
-        public BillPZ69Full(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
+        public BillPZ69Generic(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
             SetContextMenu();
         }
@@ -76,7 +73,7 @@
             return _bipLinkPZ69 != null && _bipLinkPZ69.BIPLights.Count > 0;
         }
         
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             if (_dcsbiosBindingPZ69 == null)
             {
@@ -84,6 +81,7 @@
             }
 
             _dcsbiosBindingPZ69.DCSBIOSInputs = dcsBiosInputs;
+            _dcsbiosBindingPZ69.IsSequenced = isSequenced;
         }
 
         public override bool IsEmpty()

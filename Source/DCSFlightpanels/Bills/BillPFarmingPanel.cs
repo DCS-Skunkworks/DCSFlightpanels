@@ -7,9 +7,9 @@
 
     using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
-    
+
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
     public class BillPFarmingPanel : BillBaseInput
@@ -17,7 +17,7 @@
         private DCSBIOSActionBindingFarmingPanel _dcsbiosBinding;
         private BIPLinkFarmingPanel _bipLink;
 
-        public override BIPLink BipLink
+        public override BIPLinkBase BipLink
         {
             get => _bipLink;
             set
@@ -86,13 +86,14 @@
             return (_dcsbiosBinding?.DCSBIOSInputs == null || _dcsbiosBinding.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             if (_dcsbiosBinding == null)
             {
                 _dcsbiosBinding = new DCSBIOSActionBindingFarmingPanel();
             }
             _dcsbiosBinding.DCSBIOSInputs = dcsBiosInputs;
+            _dcsbiosBinding.IsSequenced = isSequenced;
         }
         
         public override void ClearAll()

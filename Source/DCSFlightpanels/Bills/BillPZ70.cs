@@ -8,15 +8,15 @@
     using DCS_BIOS;
     using DCSFlightpanels.Interfaces;
 
-    using NonVisuals.DCSBIOSBindings;    
-    using NonVisuals.Saitek;
+    using NonVisuals.DCSBIOSBindings;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
     public class BillPZ70 : BillBaseInput
     {
         private DCSBIOSActionBindingPZ70 _dcsbiosBindingPZ70;
         private BIPLinkPZ70 _bipLinkPZ70;
-        public override BIPLink BipLink
+        public override BIPLinkBase BipLink
         {
             get => _bipLinkPZ70;
             set
@@ -85,7 +85,7 @@
             return (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             if (_dcsbiosBindingPZ70 == null)
             {
@@ -93,6 +93,7 @@
             }
 
             _dcsbiosBindingPZ70.DCSBIOSInputs = dcsBiosInputs;
+            _dcsbiosBindingPZ70.IsSequenced = isSequenced;
         }
 
         public override void ClearAll()

@@ -9,14 +9,14 @@
     using DCSFlightpanels.Interfaces;
 
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
-    public class BillPZ69 : BillBaseInput
+    public class BillPZ69Emulator : BillBaseInput
     {
         private BIPLinkPZ69 _bipLinkPZ69;
 
-        public override BIPLink BipLink
+        public override BIPLinkBase BipLink
         {
             get => _bipLinkPZ69;
             set
@@ -38,7 +38,7 @@
             set {}
         }
 
-        public BillPZ69(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
+        public BillPZ69Emulator(IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(textBox, panelUI, saitekPanel)
         {
             SetContextMenu();
         }
@@ -52,7 +52,7 @@
             return false;
         }
 
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             throw new Exception("BillPZ69 cannot contain DCS-BIOS");
         }

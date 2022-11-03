@@ -651,6 +651,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         textBox.Name.Replace("TextBox", string.Empty),
                         textBox.Bill.DCSBIOSBinding.DCSBIOSInputs,
                         textBox.Text,
+                        textBox.Bill.DCSBIOSBinding.IsSequenced,
                         true)
                     {
                         IsSequenced = textBox.Bill.DCSBIOSBinding.IsSequenced //Add on, not optimal structure
@@ -658,7 +659,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 }
                 else
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(textBox.Name.Replace("TextBox", string.Empty), null, true);
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(textBox.Name.Replace("TextBox", string.Empty), null, false, true);
                 }
 
                 dcsbiosControlsConfigsWindow.ShowDialog();

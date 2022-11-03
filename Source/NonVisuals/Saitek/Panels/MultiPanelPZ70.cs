@@ -14,6 +14,7 @@
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Switches;
 
     public class MultiPanelPZ70 : SaitekPanel
@@ -177,7 +178,13 @@
                         operatingSystemCommand.ImportSettings(setting);
                         _operatingSystemCommandBindings.Add(operatingSystemCommand);
                     }
-                    else if (setting.StartsWith("MultiPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("MultiPanelDCSBIOSControlLCD{"))
+                    {
+                        var dcsBIOSBindingLCDPZ70 = new DCSBIOSOutputBindingPZ70();
+                        dcsBIOSBindingLCDPZ70.ImportSettings(setting);
+                        _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDPZ70);
+                    }
+                    else if (setting.StartsWith("MultiPanelDCSBIOSControl"))
                     {
                         var dcsBIOSBindingPZ70 = new DCSBIOSActionBindingPZ70();
                         dcsBIOSBindingPZ70.ImportSettings(setting);
@@ -188,12 +195,6 @@
                         var bipLinkPZ70 = new BIPLinkPZ70();
                         bipLinkPZ70.ImportSettings(setting);
                         _bipLinks.Add(bipLinkPZ70);
-                    }
-                    else if (setting.StartsWith("MultiPanelDCSBIOSControlLCD{"))
-                    {
-                        var dcsBIOSBindingLCDPZ70 = new DCSBIOSOutputBindingPZ70();
-                        dcsBIOSBindingLCDPZ70.ImportSettings(setting);
-                        _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDPZ70);
                     }
                 }
             }
@@ -464,7 +465,7 @@
             SetIsDirty();
         }
 
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
         {
             var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
 
@@ -482,6 +483,7 @@
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
+                    dcsBiosBinding.IsSequenced = isSequenced;
                     found = true;
                     break;
                 }
@@ -495,7 +497,8 @@
                     DialPosition = _pz70DialPosition,
                     DCSBIOSInputs = dcsbiosInputs,
                     WhenTurnedOn = pz70SwitchOnOff.ButtonState,
-                    Description = description
+                    Description = description,
+                    IsSequenced = isSequenced
                 };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
@@ -569,7 +572,7 @@
             SetIsDirty();
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
             var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
             var bipLinkPZ70 = (BIPLinkPZ70) bipLink;

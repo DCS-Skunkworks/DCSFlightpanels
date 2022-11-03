@@ -15,6 +15,7 @@
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Switches;
 
     public enum SwitchPanelPZ55LEDPosition : byte
@@ -107,7 +108,7 @@
                 if (!setting.StartsWith("#") && setting.Length > 2)
                 {
 
-                    if (setting.StartsWith("SwitchPanelKey{"))
+                    if (setting.StartsWith("SwitchPanelKey"))
                     {
                         var keyBinding = new KeyBindingPZ55();
                         keyBinding.ImportSettings(setting);
@@ -125,13 +126,13 @@
                         colorOutput.ImportSettings(setting);
                         _listColorOutputBinding.Add(colorOutput);
                     }
-                    else if (setting.StartsWith("SwitchPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("SwitchPanelDCSBIOSControl"))
                     {
                         var dcsBIOSBindingPZ55 = new DCSBIOSActionBindingPZ55();
                         dcsBIOSBindingPZ55.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
                     }
-                    else if (setting.StartsWith("SwitchPanelBIPLink{"))
+                    else if (setting.StartsWith("SwitchPanelBIPLink"))
                     {
                         var bipLinkPZ55 = new BIPLinkPZ55();
                         bipLinkPZ55.ImportSettings(setting);
@@ -709,7 +710,7 @@
             SetIsDirty();
         }
 
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
         {
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
@@ -730,6 +731,7 @@
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
+                    dcsBiosBinding.IsSequenced = isSequenced;
                     found = true;
                     break;
                 }
@@ -742,7 +744,8 @@
                     SwitchPanelPZ55Key = pz55SwitchOnOff.Switch,
                     DCSBIOSInputs = dcsbiosInputs,
                     WhenTurnedOn = pz55SwitchOnOff.ButtonState,
-                    Description = description
+                    Description = description,
+                    IsSequenced = isSequenced
                 };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
@@ -750,7 +753,7 @@
             SetIsDirty();
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             var bipLinkPZ55 = (BIPLinkPZ55)bipLink;

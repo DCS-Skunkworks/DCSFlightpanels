@@ -19,7 +19,7 @@ namespace DCSFlightpanels.Bills
 
     using NonVisuals;
     using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
     public abstract class BillBaseInput
@@ -32,10 +32,10 @@ namespace DCSFlightpanels.Bills
         public abstract bool ContainsBIPLink();
         public abstract bool IsEmpty();
         public abstract bool IsEmptyNoCareBipLink();
-        public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs);
+        public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced);
         public abstract void ClearAll();
         protected abstract void ClearDCSBIOSFromBill();
-        public abstract BIPLink BipLink { get; set; }
+        public abstract BIPLinkBase BipLink { get; set; }
         public abstract List<DCSBIOSInput> DCSBIOSInputs { get; set; }
         public abstract DCSBIOSActionBindingBase DCSBIOSBinding { get; set; }
 
@@ -142,7 +142,7 @@ namespace DCSFlightpanels.Bills
                 case CopyContentType.DCSBIOS:
                     {
                         description = DCSBIOSBinding.Description;
-                        content = DCSBIOSBinding.DCSBIOSInputs;
+                        content = DCSBIOSBinding;
                         break;
                     }
                 case CopyContentType.BIPLink:
@@ -205,7 +205,8 @@ namespace DCSFlightpanels.Bills
                     {
                         if (IsEmptyNoCareBipLink())
                         {
-                            AddDCSBIOS(copyPackage.Description, (List<DCSBIOSInput>)copyPackage.Content);
+                            var dcsbiosActionBindingBase = (DCSBIOSActionBindingBase)copyPackage.Content;
+                            AddDCSBIOS(copyPackage.Description, dcsbiosActionBindingBase.DCSBIOSInputs, dcsbiosActionBindingBase.IsSequenced);
                         }
                         break;
                     }
@@ -214,7 +215,7 @@ namespace DCSFlightpanels.Bills
                     {
                         if (!ContainsBIPLink())
                         {
-                            AddBipLink((BIPLink)copyPackage.Content);
+                            AddBipLink((BIPLinkBase)copyPackage.Content);
                         }
                         break;
                     }
@@ -578,12 +579,12 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        private void AddDCSBIOS(string description, List<DCSBIOSInput> dcsBiosInputs)
+        private void AddDCSBIOS(string description, List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             // 1 appropriate text to textbox
             // 2 update bindings
             SetTextBoxText(description, dcsBiosInputs.CloneJson());
-            Consume(dcsBiosInputs.CloneJson());
+            Consume(dcsBiosInputs.CloneJson(), isSequenced);
             UpdateDCSBIOSBinding();
         }
 
@@ -592,11 +593,11 @@ namespace DCSFlightpanels.Bills
             DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
             if (ContainsDCSBIOS())
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(TextBox.Name.Replace("TextBox", string.Empty), DCSBIOSInputs, TextBox.Text);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(TextBox.Name.Replace("TextBox", string.Empty), DCSBIOSInputs, TextBox.Text,   DCSBIOSBinding.IsSequenced,  true);
             }
             else
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow( TextBox.Name.Replace("TextBox", string.Empty), null);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow( TextBox.Name.Replace("TextBox", string.Empty), null, false, true);
             }
 
             dcsBIOSInputControlsWindow.ShowDialog();
@@ -609,12 +610,12 @@ namespace DCSFlightpanels.Bills
                 }
                 else
                 {
-                    AddDCSBIOS(dcsBIOSInputControlsWindow.Description, dcsBiosInputs);
+                    AddDCSBIOS(dcsBIOSInputControlsWindow.Description, dcsBiosInputs, dcsBIOSInputControlsWindow.IsSequenced);
                 }
             }
         }
 
-        private void AddBipLink(BIPLink bipLink)
+        private void AddBipLink(BIPLinkBase bipLink)
         {
             //Don't know how to get around this. Json can't clone an abstract class.
             if (bipLink.GetType() == typeof(BIPLinkPZ55))
@@ -685,7 +686,7 @@ namespace DCSFlightpanels.Bills
 
             if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
             {
-                var tmpBIPLink = (BIPLink)bipLinkWindow.BIPLink;
+                var tmpBIPLink = (BIPLinkBase)bipLinkWindow.BIPLink;
 
                 if (tmpBIPLink.BIPLights.Count == 0)
                 {
@@ -763,7 +764,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                _saitekPanel.AddOrUpdateDCSBIOSBinding(PanelUIParent.GetSwitch(TextBox), DCSBIOSInputs, TextBox.Text);
+                _saitekPanel.AddOrUpdateDCSBIOSBinding(PanelUIParent.GetSwitch(TextBox), DCSBIOSInputs, TextBox.Text, DCSBIOSBinding.IsSequenced);
             }
             catch (Exception ex)
             {

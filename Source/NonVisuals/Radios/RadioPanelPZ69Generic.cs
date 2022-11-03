@@ -21,6 +21,7 @@ namespace NonVisuals.Radios
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Radios.Misc;
     using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
 
     public class RadioPanelPZ69Generic : RadioPanelPZ69Base
     {
@@ -132,7 +133,7 @@ namespace NonVisuals.Radios
                         dcsbiosBindingLCDPZ69.ImportSettings(setting);
                         _dcsBiosLcdBindings.Add(dcsbiosBindingLCDPZ69);
                     }
-                    else if (setting.StartsWith("RadioPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("RadioPanelDCSBIOSControl"))
                     {
                         var dcsbiosBindingPZ69 = new DCSBIOSActionBindingPZ69();
                         dcsbiosBindingPZ69.ImportSettings(setting);
@@ -467,7 +468,7 @@ namespace NonVisuals.Radios
                     }
                 }
             }
-
+            
             foreach (object radioPanelKeyObject in hashSet)
             {
                 // Looks which switches has been switched and sees whether any key emulation has been tied to them.
@@ -831,7 +832,7 @@ namespace NonVisuals.Radios
             SetIsDirty();
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
             PZ69SwitchOnOff radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
             BIPLinkPZ69 bipLinkPZ69 = (BIPLinkPZ69)bipLink;
@@ -969,7 +970,7 @@ namespace NonVisuals.Radios
             SetIsDirty();
         }
 
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
         {
             PZ69SwitchOnOff radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
@@ -987,6 +988,7 @@ namespace NonVisuals.Radios
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
+                    dcsBiosBinding.IsSequenced = isSequenced;
                     found = true;
                     break;
                 }
@@ -1000,7 +1002,8 @@ namespace NonVisuals.Radios
                     DialPosition = pz69DialPosition,
                     DCSBIOSInputs = dcsbiosInputs,
                     WhenTurnedOn = radioPanelPZ69KeyOnOff.ButtonState,
-                    Description = description
+                    Description = description,
+                    IsSequenced = isSequenced
                 };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
@@ -1037,9 +1040,9 @@ namespace NonVisuals.Radios
                     if (keyBinding.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz69SwitchOnOff.ButtonState && keyBinding.DialPosition == pz69DialPosition)
                     {
                         keyBinding.OSKeyPress = null;
+                        found = true;
+                        break;
                     }
-                    found = true;
-                    break;
                 }
             }
 
@@ -1050,9 +1053,9 @@ namespace NonVisuals.Radios
                     if (dcsBiosBinding.RadioPanelPZ69Knob == pz69SwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == pz69SwitchOnOff.ButtonState && dcsBiosBinding.DialPosition == pz69DialPosition)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
+                        found = true;
+                        break;
                     }
-                    found = true;
-                    break;
                 }
             }
 
@@ -1063,9 +1066,9 @@ namespace NonVisuals.Radios
                     if (bipLink.RadioPanelPZ69Knob == pz69SwitchOnOff.Switch && bipLink.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
                     {
                         bipLink.BIPLights.Clear();
+                        found = true;
+                        break;
                     }
-                    found = true;
-                    break;
                 }
             }
 

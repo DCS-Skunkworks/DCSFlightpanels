@@ -22,17 +22,18 @@
         private readonly bool _showSequenced = false;
         private bool _isSequenced = false;
 
-        public DCSBIOSInputControlsWindow(string header, string description, bool showSequenced = false)
+        public DCSBIOSInputControlsWindow(string header, string description, bool isSequenced, bool showSequenced)
         {
             InitializeComponent();
             _header = header;
             _description = description;
             TextBoxDescription.Text = _description;
+            IsSequenced = isSequenced;
             _showSequenced = showSequenced;
             ShowItems();
         }
 
-        public DCSBIOSInputControlsWindow(string header, List<DCSBIOSInput> dcsbiosInputs, string description, bool showSequenced = false)
+        public DCSBIOSInputControlsWindow(string header, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced, bool showSequenced)
         {
             InitializeComponent();
             if (dcsbiosInputs != null)
@@ -42,6 +43,7 @@
             _header = header;
             _description = description;
             TextBoxDescription.Text = _description;
+            IsSequenced = isSequenced;
             _showSequenced = showSequenced;
 
             ShowItems();
@@ -260,10 +262,7 @@
             get => _isSequenced;
             set
             {
-                if (value)
-                {
-                    CheckBoxIsSequenced.IsChecked = true;
-                }
+                CheckBoxIsSequenced.IsChecked = value;
                 _isSequenced = value;
             }
         }

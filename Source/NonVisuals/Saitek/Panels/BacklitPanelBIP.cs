@@ -12,6 +12,7 @@
 
     using MEF;
     using NonVisuals.EventArgs;
+    using NonVisuals.Saitek.BindingClasses;
 
     public class BacklitPanelBIP : SaitekPanel
     {
@@ -684,11 +685,11 @@
         {
         }
 
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
         {
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
         }
 

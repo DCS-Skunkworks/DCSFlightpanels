@@ -18,6 +18,7 @@ namespace NonVisuals.Radios
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Radios.Misc;
     using NonVisuals.Saitek;
+    using NonVisuals.Saitek.BindingClasses;
 
     public class RadioPanelPZ69Emulator : RadioPanelPZ69Base
     {
@@ -510,12 +511,12 @@ namespace NonVisuals.Radios
             SetIsDirty();
         }
 
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
         {
             throw new NotImplementedException();
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
             var pz69SwitchOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
             var bipLinkPZ69 = (BIPLinkPZ69) bipLink;

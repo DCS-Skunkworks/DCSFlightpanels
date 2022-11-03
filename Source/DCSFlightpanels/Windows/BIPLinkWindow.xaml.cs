@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.BindingClasses;
 
 namespace DCSFlightpanels.Windows
 {
@@ -14,10 +15,10 @@ namespace DCSFlightpanels.Windows
     /// </summary>
     public partial class BIPLinkWindow
     {
-        private readonly BIPLink _bipLink;
+        private readonly BIPLinkBase _bipLink;
         private bool _isDirty;
         
-        public BIPLinkWindow(BIPLink bipLink)
+        public BIPLinkWindow(BIPLinkBase bipLink)
         {
             InitializeComponent();
             _bipLink = bipLink;
@@ -253,7 +254,7 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        public BIPLink BIPLink => _bipLink;
+        public BIPLinkBase BIPLink => _bipLink;
 
         private void BIPLinkWindow_OnKeyDown(object sender, KeyEventArgs e)
         {

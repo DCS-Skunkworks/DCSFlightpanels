@@ -176,7 +176,7 @@
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ69(this, _radioPanelPZ69, textBox);
+                textBox.Bill = new BillPZ69Emulator(this, _radioPanelPZ69, textBox);
             }
             _textBoxBillsSet = true;
         }

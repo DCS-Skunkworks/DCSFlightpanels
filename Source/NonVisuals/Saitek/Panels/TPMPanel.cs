@@ -13,6 +13,7 @@
     using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Switches;
 
     public class TPMPanel : SaitekPanel
@@ -92,7 +93,7 @@
                         operatingSystemCommand.ImportSettings(setting);
                         _operatingSystemCommandBindings.Add(operatingSystemCommand);
                     }
-                    else if (setting.StartsWith("TPMPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("TPMPanelDCSBIOSControl"))
                     {
                         var dcsBIOSBindingTPM = new DCSBIOSActionBindingTPM();
                         dcsBIOSBindingTPM.ImportSettings(setting);
@@ -450,7 +451,7 @@
             SetIsDirty();
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
         {
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
             var bipLinkTPM = (BIPLinkTPM)bipLink;
@@ -486,7 +487,7 @@
             SetIsDirty();
         }
 
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
         {
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
@@ -507,6 +508,7 @@
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
+                    dcsBiosBinding.IsSequenced = isSequenced;
                     found = true;
                     break;
                 }
@@ -519,7 +521,8 @@
                     TPMSwitch = tpmPanelSwitchOnOff.Switch,
                     DCSBIOSInputs = dcsbiosInputs,
                     WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState,
-                    Description = description
+                    Description = description,
+                    IsSequenced = isSequenced
                 };
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }

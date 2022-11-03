@@ -1,17 +1,18 @@
-﻿namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 
     using MEF;
+    using NonVisuals.Saitek.Switches;
 
     [Serializable]
-    public class OSCommandBindingPZ55 : OSCommandBinding
+    public class OSCommandBindingPZ55 : OSCommandBindingBase
     {
         /*
          This class binds a physical switch on the PZ55 with a Windows OS command.
          */
         private SwitchPanelPZ55Keys _switchPanelPZ55Key;
-        
+
         internal override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))
@@ -38,21 +39,20 @@
             }
         }
 
-        public SwitchPanelPZ55Keys SwitchPanelPZ55Key
-        {
-            get => _switchPanelPZ55Key;
-            set => _switchPanelPZ55Key = value;
-        }
-
         public override string ExportSettings()
         {
             if (OSCommandObject == null || OSCommandObject.IsEmpty)
             {
                 return null;
             }
+            
+            return GetExportString("SwitchPanelOSPZ55", null, Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key));
+        }
 
-            var onStr = WhenTurnedOn ? "1" : "0";
-            return "SwitchPanelOSPZ55{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSCommandObject.ExportString();
+        public SwitchPanelPZ55Keys SwitchPanelPZ55Key
+        {
+            get => _switchPanelPZ55Key;
+            set => _switchPanelPZ55Key = value;
         }
     }
 }
