@@ -8,9 +8,6 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>	  
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>bin\x64\Debug\</OutputPath>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -24,7 +21,6 @@
 	</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="flightpanels02_8Rc_icon.ico" />
     <EmbeddedResource Include="Images\filenotfound.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>

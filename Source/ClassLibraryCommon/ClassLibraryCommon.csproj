@@ -19,14 +19,8 @@
       .allowedextension
     </AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
-  </PropertyGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="flightpanels02_8Rc_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
