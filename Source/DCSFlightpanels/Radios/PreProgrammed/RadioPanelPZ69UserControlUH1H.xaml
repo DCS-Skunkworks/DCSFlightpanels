@@ -108,6 +108,8 @@
             <Image Height="110" Source="/dcsfp;component/Images/UH-1H_AN_ARN-82_VHF_NAV.png" />
             <Label Content="AN/ARN-83 ADF" FontWeight="Bold"/>
             <Image Height="110" Source="/dcsfp;component/Images/UH-1H_AN_ARN-83_ADF.png" />
+            <Label Content="INTERCOMM" FontWeight="Bold"/>
+            <Image Height="110" Source="/dcsfp;component/Images/UH-1H_INTERCOMM.png" />            
         </StackPanel>
 
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="5">
