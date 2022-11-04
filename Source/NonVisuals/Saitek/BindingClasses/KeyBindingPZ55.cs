@@ -4,9 +4,6 @@
     using System.Collections.Generic;
 
     using MEF;
-    using NonVisuals;
-    using NonVisuals.Saitek;
-    using NonVisuals.Saitek.Switches;
 
     [Serializable]
     public class KeyBindingPZ55 : KeyBindingBase
