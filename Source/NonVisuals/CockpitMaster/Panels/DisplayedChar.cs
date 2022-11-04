@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NonVisuals.CockpitMaster.Panels
+﻿namespace NonVisuals.CockpitMaster.Panels
 {
     public enum CDUColor {
 

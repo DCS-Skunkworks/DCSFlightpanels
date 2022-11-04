@@ -1,15 +1,7 @@
 ﻿namespace NonVisuals.DCSBIOSBindings
 {
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Text;
-
-    using DCS_BIOS;
-
     using MEF;
-
-    using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
 
     [Serializable]

@@ -6,7 +6,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Drawing;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -23,7 +22,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck;
     using NonVisuals.StreamDeck.Events;
-    using static System.Net.Mime.MediaTypeNames;
 
     public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, INvStreamDeckListener, IStreamDeckConfigListener, IOledImageListener
     {

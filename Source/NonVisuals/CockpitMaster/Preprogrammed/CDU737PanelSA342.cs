@@ -5,8 +5,6 @@ using System;
 using DCS_BIOS.Interfaces;
 using NonVisuals.CockpitMaster.Switches;
 using System.Collections.Generic;
-using System.Xml;
-using Theraot;
 
 namespace NonVisuals.CockpitMaster.Preprogrammed
 {

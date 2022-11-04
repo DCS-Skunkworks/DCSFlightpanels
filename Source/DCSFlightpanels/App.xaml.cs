@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Threading;
 using System.Windows;
 using DCSFlightpanels.Properties;
