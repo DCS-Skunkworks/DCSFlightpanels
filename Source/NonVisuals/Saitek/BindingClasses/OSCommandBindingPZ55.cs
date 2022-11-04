@@ -3,6 +3,7 @@
     using System;
 
     using MEF;
+    using NonVisuals.Saitek.Switches;
 
     [Serializable]
     public class OSCommandBindingPZ55 : OSCommandBindingBase

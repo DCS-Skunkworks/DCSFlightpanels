@@ -9,9 +9,12 @@ namespace NonVisuals.DCSBIOSBindings
     using System.Threading;
 
     using DCS_BIOS;
+    using MEF;
     using Newtonsoft.Json;
     using NLog;
+    using NonVisuals.Properties;
     using NonVisuals.Saitek;
+    using static System.Net.Mime.MediaTypeNames;
 
     [Serializable]
     public abstract class DCSBIOSActionBindingBase : IDisposable

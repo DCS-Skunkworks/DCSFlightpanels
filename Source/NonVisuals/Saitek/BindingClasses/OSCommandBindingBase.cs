@@ -2,6 +2,7 @@
 
 namespace NonVisuals.Saitek.BindingClasses
 {
+    using MEF;
     using System;
 
     [Serializable]

@@ -1,4 +1,3 @@
-﻿using System.Threading;
 
 namespace NonVisuals.Saitek.BindingClasses
 {
@@ -6,6 +5,11 @@ namespace NonVisuals.Saitek.BindingClasses
     using System.Collections.Generic;
 
     using MEF;
+﻿using System.Diagnostics;
+using System.Reflection.PortableExecutable;
+using System.Threading;
+using Microsoft.VisualBasic.Logging;
+
     using NonVisuals.Saitek.Panels;
 
     [Serializable]

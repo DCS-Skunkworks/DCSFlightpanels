@@ -147,7 +147,7 @@
                             <Button Name="ButtonTestSelectImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
                         </StackPanel>
                         <StackPanel  Margin="0,0,0,0" Orientation="Horizontal">
-                            <Border BorderThickness="1" BorderBrush="#FF000000" HorizontalAlignment="Left" Height="73" Width="73" Margin="10,10,5,5">
+                            <Border BorderThickness="1" BorderBrush="#FF000000" HorizontalAlignment="Left" Height="73" Width="73" Margin="0,10,0,5">
                                 <Image Name="ButtonImagePreviewImage"  Height="72" Width="72" Margin="0,0,0,0"/>
                             </Border>
                         </StackPanel>
@@ -187,7 +187,6 @@
                         <customControls:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" Width="300" IsReadOnly="True" x:Name="TextBoxOverlayImagePath"  IsEnabled="False" Background="LightSteelBlue"/>
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <Button Name="ButtonBrowseOverlayImage" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowseImage_OnClick"/>
-                            <Button Name="ButtonTestSelectOverlayImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

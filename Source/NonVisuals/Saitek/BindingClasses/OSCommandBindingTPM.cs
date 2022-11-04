@@ -3,6 +3,7 @@
     using System;
 
     using MEF;
+    using NonVisuals.Saitek.Panels;
 
     [Serializable]
     public class OSCommandBindingTPM : OSCommandBindingBase

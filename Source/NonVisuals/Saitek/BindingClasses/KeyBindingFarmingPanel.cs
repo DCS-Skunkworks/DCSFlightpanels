@@ -4,6 +4,8 @@
     using System.Collections.Generic;
 
     using MEF;
+    using NonVisuals;
+    using NonVisuals.Saitek;
 
     [Serializable]
     public class KeyBindingFarmingPanel : KeyBindingBase

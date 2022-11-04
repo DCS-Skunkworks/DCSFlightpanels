@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Bills
+﻿using System.Net.Mime;
+
+namespace DCSFlightpanels.Bills
 {
     using System;
     using System.Collections.Generic;
