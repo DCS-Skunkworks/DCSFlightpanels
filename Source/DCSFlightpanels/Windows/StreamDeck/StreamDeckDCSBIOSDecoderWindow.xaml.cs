@@ -709,7 +709,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             if (_dcsbiosDecoder.DecoderOutputType == EnumDCSBIOSDecoderOutputType.Raw)
             {
-                var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosDecoder.ButtonTextTemplate, _dcsbiosDecoder.TextFont, _dcsbiosDecoder.FontColor, _dcsbiosDecoder.BackgroundColor, _dcsbiosDecoder.OffsetX, _dcsbiosDecoder.OffsetY);
+                var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosDecoder.ButtonTextTemplate, _dcsbiosDecoder.TextFont, _dcsbiosDecoder.FontColor, _dcsbiosDecoder.OffsetX, _dcsbiosDecoder.OffsetY, _dcsbiosDecoder.BackgroundColor);
                 ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
             }
         }

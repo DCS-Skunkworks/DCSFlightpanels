@@ -16,7 +16,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             InitializeComponent();
         }
 
-        private void UserControlStreamDeckNormal_OnLoaded(object sender, RoutedEventArgs e)
+        private void UserControlStreamDeckXL_OnLoaded(object sender, RoutedEventArgs e)
         {
             if (!UserControlLoaded)
             {

@@ -72,7 +72,7 @@
 
             if (_bitmap == null || RefreshBitmap)
             {
-                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonFinalText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
+                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonFinalText, _textFont, _fontColor, OffsetX, OffsetY, _backgroundColor);
                 RefreshBitmap = false;
             }
         }

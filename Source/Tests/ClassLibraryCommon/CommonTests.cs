@@ -1,8 +1,6 @@
 ﻿using ClassLibraryCommon;
 using System;
 using System.Linq;
-using System.Windows.Input;
-using System.Windows.Interop;
 using Xunit;
 
 namespace Tests.ClassLibraryCommon
@@ -44,36 +42,6 @@ namespace Tests.ClassLibraryCommon
         public void GetRelativePath_ShouldReturn_ExpectedValue(string relativeTo, string path, string expected)
         {
             Assert.Equal(expected, Common.GetRelativePath(relativeTo, path));
-        }
-
-
-        [StaTheory]
-        [InlineData(Key.Tab, Key.Tab)]
-        [InlineData(Key.Up, Key.Up)]
-        [InlineData(Key.X, Key.X)]
-        [InlineData(Key.NumPad1, Key.NumPad1)]
-        public void RealKey_UnspecificKey_ShouldReturn_UnspecificKey(Key inputKey, Key expectedKey)
-        {
-            var keyEvent = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0,
-                           inputKey);
-            Assert.Equal(expectedKey, keyEvent.RealKey());
-        }
-
-        [StaFact]
-        public void RealKey_System_ShouldReturn_SystemKey()
-        {
-            var keyEvent = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0,
-                Key.System);
-            Assert.Equal(keyEvent.SystemKey, keyEvent.RealKey());
-        }
-
-        [StaFact]
-        public void RealKey_ImeProcessed_ShouldReturn_ImeProcessedKey()
-        {
-            var keyEvent = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0,
-                Key.ImeProcessed);
-
-            Assert.Equal(keyEvent.ImeProcessedKey, keyEvent.RealKey());
         }
 
         [Fact]

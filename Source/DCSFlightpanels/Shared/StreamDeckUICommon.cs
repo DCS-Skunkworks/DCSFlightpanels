@@ -158,17 +158,5 @@
 
             return result;
         }
-        
-
-        public static Bitmap FileNotFoundBitmap
-        {
-            get
-            {
-                var uri = new Uri("pack://application:,,,/dcsfp;component/Images/filenotfound.png");
-                return new Bitmap(uri.AbsolutePath);
-            }
-        }
-
-
     }
 }
