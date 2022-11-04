@@ -25,7 +25,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="flightpanels02_8Rc_icon.ico" />
-    <Content Include="huey_icon.ico" />
     <EmbeddedResource Include="Images\filenotfound.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
