@@ -5,11 +5,7 @@ namespace NonVisuals.Saitek.BindingClasses
     using System.Collections.Generic;
 
     using MEF;
-﻿using System.Diagnostics;
-using System.Reflection.PortableExecutable;
-using System.Threading;
-using Microsoft.VisualBasic.Logging;
-
+    using System.Threading;
     using NonVisuals.Saitek.Panels;
 
     [Serializable]

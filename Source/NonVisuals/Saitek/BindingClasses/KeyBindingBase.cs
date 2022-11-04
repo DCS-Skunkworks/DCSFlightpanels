@@ -4,10 +4,6 @@ namespace NonVisuals.Saitek.BindingClasses
 
     using Newtonsoft.Json;
 
-    using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Properties;
-    using NonVisuals.Saitek.Switches;
-
 
     [Serializable]
     public abstract class KeyBindingBase
