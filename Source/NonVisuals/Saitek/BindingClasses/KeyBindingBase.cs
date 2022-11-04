@@ -1,9 +1,12 @@
+
+
 namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 
     using Newtonsoft.Json;
 
+    using ClassLibraryCommon;
 
     [Serializable]
     public abstract class KeyBindingBase
