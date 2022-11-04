@@ -3,7 +3,6 @@
     using System;
 
     using MEF;
-    using NonVisuals.Saitek.Switches;
 
     [Serializable]
     public class OSCommandBindingPZ69Emulator : OSCommandBindingBase

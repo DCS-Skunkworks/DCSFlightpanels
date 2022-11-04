@@ -9,7 +9,6 @@
     using NonVisuals.CockpitMaster.Preprogrammed;
     using DCSFlightpanels.Interfaces;
     using System;
-    using DCSFlightpanels.CustomControls;
 
     /// <summary>
     /// Interaction logic for Cdu737UserControlF14.xaml

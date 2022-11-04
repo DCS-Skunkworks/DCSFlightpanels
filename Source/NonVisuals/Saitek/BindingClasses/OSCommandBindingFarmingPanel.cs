@@ -1,6 +1,4 @@
-﻿using NonVisuals.Saitek.Switches;
-
-namespace NonVisuals.Saitek.BindingClasses
+﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 

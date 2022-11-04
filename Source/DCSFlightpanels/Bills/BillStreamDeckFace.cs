@@ -1,5 +1,4 @@
-﻿using System.IO;
-using NonVisuals.StreamDeck.Panels;
+﻿using NonVisuals.StreamDeck.Panels;
 
 namespace DCSFlightpanels.Bills
 {

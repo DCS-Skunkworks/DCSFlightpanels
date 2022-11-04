@@ -1,6 +1,5 @@
 ﻿namespace NonVisuals.Saitek.Switches
 {
-    using System;
     using System.Collections.Generic;
 
     using MEF;

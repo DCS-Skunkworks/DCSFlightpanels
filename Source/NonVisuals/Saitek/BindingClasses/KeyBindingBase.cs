@@ -1,14 +1,10 @@
-﻿using System.Globalization;
-using ClassLibraryCommon;
+﻿using ClassLibraryCommon;
 
 namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
 
     using Newtonsoft.Json;
-    using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Properties;
-    using NonVisuals.Saitek.Switches;
 
     [Serializable]
     public abstract class KeyBindingBase

@@ -42,7 +42,6 @@
     using NonVisuals.Plugin;
 
     using Octokit;
-    using DCSFlightpanels.PanelUserControls.PreProgrammed;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {

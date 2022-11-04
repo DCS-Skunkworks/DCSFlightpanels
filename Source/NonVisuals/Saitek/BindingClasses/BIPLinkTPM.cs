@@ -1,9 +1,6 @@
 ﻿namespace NonVisuals.Saitek.BindingClasses
 {
     using System;
-    using System.Linq;
-    using System.Text;
-
     using MEF;
 
     [Serializable]

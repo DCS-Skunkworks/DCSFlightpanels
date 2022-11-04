@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace DCSFlightpanels
+﻿namespace DCSFlightpanels
 {
     using System;
     using System.Windows;

@@ -5,8 +5,6 @@
     using System.Drawing;
     using System.Linq;
     using System.Threading;
-    using System.Windows.Media.Imaging;
-
     using ClassLibraryCommon;
 
     using DCS_BIOS;

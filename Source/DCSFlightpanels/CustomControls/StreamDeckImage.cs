@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
-using StreamDeckSharp;
 
 namespace DCSFlightpanels.CustomControls
 {

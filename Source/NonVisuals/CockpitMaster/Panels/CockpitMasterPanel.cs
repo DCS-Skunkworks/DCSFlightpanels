@@ -1,15 +1,9 @@
 ﻿namespace NonVisuals.CockpitMaster.Panels
 {
     using System;
-    using System.Collections.Generic;
-
     using ClassLibraryCommon;
 
     using HidLibrary;
-
-    using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
-    using NonVisuals.CockpitMaster.Switches;
 
     public abstract class CockpitMasterPanel : GamingPanel, IDisposable
     {
