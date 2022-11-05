@@ -16,7 +16,7 @@
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.PanelUserControls;
     using DCSFlightpanels.Properties;
-    
+
     using MEF;
 
     using NonVisuals;
