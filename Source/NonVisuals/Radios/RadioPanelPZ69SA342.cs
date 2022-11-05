@@ -97,10 +97,10 @@
         /*NAV1 SA342 UHF Radio*/
         // Large dial 225-399
         // Small dial 000-975 where only 2 digits can be used
-        private readonly ClickSpeedDetector _uhfBigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _uhfBigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _uhfSmallFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _uhfSmallFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _uhfBigFreqIncreaseChangeMonitor = new(20);
+        private readonly ClickSpeedDetector _uhfBigFreqDecreaseChangeMonitor = new(20);
+        private readonly ClickSpeedDetector _uhfSmallFreqIncreaseChangeMonitor = new(20);
+        private readonly ClickSpeedDetector _uhfSmallFreqDecreaseChangeMonitor = new(20);
         private double _uhfBigFrequencyStandby = 225;
         private double _uhfSmallFrequencyStandby;
         private const string UHF_BUTTON0_COMMAND_ON = "UHF_RADIO_BUTTON_0 1\n";

@@ -14,7 +14,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     public partial class StreamDeckLayerWindow : Window
     {
 
-        private readonly List<StreamDeckLayer> _existingLayers = new List<StreamDeckLayer>();
+        private readonly List<StreamDeckLayer> _existingLayers = new();
         private bool _loaded = false;
         private const int MINIMUM_LENGTH = 3;
         private StreamDeckLayer _newLayer = null;

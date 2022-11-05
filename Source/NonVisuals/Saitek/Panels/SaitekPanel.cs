@@ -32,7 +32,7 @@
 
         public abstract DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput);
 
-        protected HashSet<ISaitekPanelKnob> SaitekPanelKnobs = new HashSet<ISaitekPanelKnob>();
+        protected HashSet<ISaitekPanelKnob> SaitekPanelKnobs = new();
 
         protected byte[] OldSaitekPanelValue = { 0, 0, 0 };
 

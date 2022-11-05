@@ -13,7 +13,7 @@
     {
         private KeyPressLength _lengthOfBreak = KeyPressLength.FiftyMilliSec;
         private KeyPressLength _lengthOfKeyPress = KeyPressLength.FiftyMilliSec;
-        private HashSet<VirtualKeyCode> _virtualKeyCodes = new HashSet<VirtualKeyCode>();
+        private HashSet<VirtualKeyCode> _virtualKeyCodes = new();
 
 
         public int GetHash()

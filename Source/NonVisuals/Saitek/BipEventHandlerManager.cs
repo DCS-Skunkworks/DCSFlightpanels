@@ -12,7 +12,7 @@
 
         public event BipPanelRegisteredEventHandler OnBipPanelRegistered;
 
-        private readonly List<BacklitPanelBIP> _backlitPanels = new List<BacklitPanelBIP>();
+        private readonly List<BacklitPanelBIP> _backlitPanels = new();
 
         // private object _panelLockObject = new object();
         public List<BacklitPanelBIP> GetBips()

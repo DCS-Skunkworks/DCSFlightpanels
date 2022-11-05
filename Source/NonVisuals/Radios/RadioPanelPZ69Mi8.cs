@@ -40,8 +40,8 @@
          * Large dial 100-149  -> 220 - 399 [step of 1]
          * Small dial 0 - 95
          */
-        private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new(20);
+        private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new(20);
         private const int CHANGE_VALUE = 10;
 
         // private int[] _r863ManualFreq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
@@ -97,8 +97,8 @@
          * Large dial 100-149  -> 20 - 179 [step of 1]
          * Small dial 0 - 99
          */
-        private readonly ClickSpeedDetector _yadro1ABigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _yadro1ABigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _yadro1ABigFreqIncreaseChangeMonitor = new(20);
+        private readonly ClickSpeedDetector _yadro1ABigFreqDecreaseChangeMonitor = new(20);
         private uint _yadro1ABigFrequencyStandby = 100;
         private uint _yadro1ASmallFrequencyStandby;
         private volatile uint _yadro1ASavedCockpitBigFrequency;

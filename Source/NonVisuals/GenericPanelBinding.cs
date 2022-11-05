@@ -11,7 +11,7 @@
         private GamingPanelEnum _panelType = GamingPanelEnum.Unknown;
         private string _hidInstance;
         private string _bindingHash;
-        private List<string> _settings = new List<string>(50);
+        private List<string> _settings = new(50);
         private string _jsonString = string.Empty;
         private bool _hasBeenDeleted;
 

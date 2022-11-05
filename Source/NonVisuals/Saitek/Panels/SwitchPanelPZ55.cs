@@ -27,12 +27,12 @@
 
     public class SwitchPanelPZ55 : SaitekPanel
     {
-        private readonly List<DcsOutputAndColorBindingPZ55> _listColorOutputBinding = new List<DcsOutputAndColorBindingPZ55>();
-        private readonly object _dcsBiosDataReceivedLock = new object();
-        private HashSet<DCSBIOSActionBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ55>();
-        private HashSet<KeyBindingPZ55> _keyBindings = new HashSet<KeyBindingPZ55>();
-        private List<OSCommandBindingPZ55> _operatingSystemCommandBindings = new List<OSCommandBindingPZ55>();
-        private HashSet<BIPLinkPZ55> _bipLinks = new HashSet<BIPLinkPZ55>();
+        private readonly List<DcsOutputAndColorBindingPZ55> _listColorOutputBinding = new();
+        private readonly object _dcsBiosDataReceivedLock = new();
+        private HashSet<DCSBIOSActionBindingPZ55> _dcsBiosBindings = new();
+        private HashSet<KeyBindingPZ55> _keyBindings = new();
+        private List<OSCommandBindingPZ55> _operatingSystemCommandBindings = new();
+        private HashSet<BIPLinkPZ55> _bipLinks = new();
         private SwitchPanelPZ55LEDs _ledUpperColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledLeftColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledRightColor = SwitchPanelPZ55LEDs.ALL_DARK;

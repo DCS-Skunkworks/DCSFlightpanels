@@ -101,7 +101,7 @@
 
         protected HashSet<CDUMappedCommandKey> CDUPanelKeys = new();
 
-        private readonly Timer _displayCDUTimer = new Timer(TICK_DISPLAY);
+        private readonly Timer _displayCDUTimer = new(TICK_DISPLAY);
 
         private readonly object _lockUpdateDisplay = new();
 

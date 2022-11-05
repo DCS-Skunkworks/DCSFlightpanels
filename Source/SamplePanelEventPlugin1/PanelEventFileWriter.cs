@@ -11,7 +11,7 @@
     {
         private static PanelEventFileWriter _panelEventFileWriter;
         private readonly string _filePath;
-        private readonly object _lockObject = new object();
+        private readonly object _lockObject = new();
         private readonly string _filename = "DCSFP_Plugin_Output.txt";
 
         public PanelEventFileWriter()

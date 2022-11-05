@@ -55,8 +55,8 @@
         /*F-86F ARN-6 MANUAL NAV1*/
         // Large dial -> tuning
         // Small dial -> bands
-        private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new(20);
+        private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new(20);
         private readonly object _lockARN6FrequencyObject = new();
         private readonly object _lockARN6BandObject = new();
         private volatile uint _arn6CockpitFrequency = 108;

@@ -64,8 +64,8 @@
         private DCSBIOSOutput _uhfDcsbiosOutputSelectedChannel;
         private volatile uint _uhfCockpitFreqMode;
         private volatile uint _uhfCockpitPresetChannel;
-        private readonly ClickSpeedDetector _uhfChannelClickSpeedDetector = new ClickSpeedDetector(8);
-        private readonly ClickSpeedDetector _uhfFreqModeClickSpeedDetector = new ClickSpeedDetector(6);
+        private readonly ClickSpeedDetector _uhfChannelClickSpeedDetector = new(8);
+        private readonly ClickSpeedDetector _uhfFreqModeClickSpeedDetector = new(6);
 
         private const string UHF_1ST_DIAL_INCREASE = "PLT_UHF1_110_DIAL INC\n";
         private const string UHF_1ST_DIAL_DECREASE = "PLT_UHF1_110_DIAL DEC\n";
@@ -90,7 +90,7 @@
         private const string UHF_MODE_DECREASE = "PLT_UHF1_FUNCTION DEC\n";
         private DCSBIOSOutput _uhfDcsbiosOutputMode;
         private volatile uint _uhfCockpitMode; // OFF = 0
-        private readonly ClickSpeedDetector _uhfModeClickSpeedDetector = new ClickSpeedDetector(8);
+        private readonly ClickSpeedDetector _uhfModeClickSpeedDetector = new(8);
         private byte _skipUhfSmallFreqChange;
         private long _uhfThreadNowSynching;
         private Thread _uhfSyncThread;
@@ -132,8 +132,8 @@
         private DCSBIOSOutput _vuhfDcsbiosOutputSelectedChannel;
         private volatile uint _vuhfCockpitFreqMode;
         private volatile uint _vuhfCockpitPresetChannel;
-        private readonly ClickSpeedDetector _vuhfChannelClickSpeedDetector = new ClickSpeedDetector(8);
-        private readonly ClickSpeedDetector _vuhfFreqModeClickSpeedDetector = new ClickSpeedDetector(6);
+        private readonly ClickSpeedDetector _vuhfChannelClickSpeedDetector = new(8);
+        private readonly ClickSpeedDetector _vuhfFreqModeClickSpeedDetector = new(6);
 
         private const string VUHF_1ST_DIAL_INCREASE = "RIO_VUHF_110_DIAL INC\n";
         private const string VUHF_1ST_DIAL_DECREASE = "RIO_VUHF_110_DIAL DEC\n";
@@ -252,7 +252,7 @@
         private long _rioLinkHundredsWaitingForFeedback;
         private long _rioLinkTensWaitingForFeedback;
         private long _rioLinkOnesWaitingForFeedback;
-        private readonly ClickSpeedDetector _rioLink4TensAndOnesClickSpeedDetector = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _rioLink4TensAndOnesClickSpeedDetector = new(20);
         private byte _skipRioLink4TensAndOnesFreqChange;
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();

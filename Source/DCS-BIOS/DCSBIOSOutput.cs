@@ -46,7 +46,7 @@ namespace DCS_BIOS
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
 
-        [NonSerialized] private object _lockObject = new object();
+        [NonSerialized] private object _lockObject = new();
         
         public static DCSBIOSOutput CreateCopy(DCSBIOSOutput dcsbiosOutput)
         {

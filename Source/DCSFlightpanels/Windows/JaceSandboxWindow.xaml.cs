@@ -24,10 +24,10 @@ namespace DCSFlightpanels.Windows
     /// </summary>
     public partial class JaceSandboxWindow : Window, IDcsBiosDataListener, IDisposable
     {
-        private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+        private readonly AutoResetEvent _autoResetEvent = new(false);
         private readonly string _typeToSearch = "Type to search control";
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
-        private readonly JaceExtended _jaceExtended = new JaceExtended();
+        private readonly JaceExtended _jaceExtended = new();
         private DCSBIOSOutput _dcsbiosOutput1 = null;
         private DCSBIOSOutput _dcsbiosOutput2 = null;
         private DCSBIOSOutput _dcsbiosOutput3 = null;

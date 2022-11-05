@@ -29,7 +29,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     public partial class UserControlStreamDeckButtonAction : UserControlBase, IIsDirty, INvStreamDeckListener
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly List<StreamDeckActionTextBox> _textBoxes = new List<StreamDeckActionTextBox>();
+        private readonly List<StreamDeckActionTextBox> _textBoxes = new();
 
         private StreamDeckButton _streamDeckButton;
         private bool _isLoaded = false;

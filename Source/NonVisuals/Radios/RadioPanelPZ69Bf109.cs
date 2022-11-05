@@ -65,8 +65,8 @@
         /*FuG 16ZY COM1*/
         // Large dial 0-3 [step of 1]
         // Small dial Fine tuning
-        private readonly ClickSpeedDetector _fineTuneIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _fineTuneDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _fineTuneIncreaseChangeMonitor = new(20);
+        private readonly ClickSpeedDetector _fineTuneDecreaseChangeMonitor = new(20);
         private readonly object _lockFug16ZyPresetDialObject1 = new();
         private DCSBIOSOutput _fug16ZyPresetDcsbiosOutputPresetDial;
         private volatile uint _fug16ZyPresetCockpitDialPos = 1;

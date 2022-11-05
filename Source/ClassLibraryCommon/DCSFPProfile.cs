@@ -10,7 +10,7 @@
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private static object _lock = new object();
+        private static object _lock = new();
         private static readonly List<DCSFPProfile> ModulesList = new();
 
         public static DCSFPProfile SelectedProfile { get; set; }

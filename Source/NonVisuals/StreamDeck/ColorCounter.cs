@@ -6,7 +6,7 @@
 
     internal class ColorCounter
     {
-        private readonly List<ColorCount> _colorList = new List<ColorCount>(50);
+        private readonly List<ColorCount> _colorList = new(50);
 
         public void RegisterColor(Color color)
         {

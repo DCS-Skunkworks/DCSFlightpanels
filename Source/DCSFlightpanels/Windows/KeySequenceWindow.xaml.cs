@@ -16,7 +16,7 @@
     /// </summary>
     public partial class KeySequenceWindow : Window, IIsDirty
     {
-        private readonly SortedList<int, IKeyPressInfo> _sortedList = new SortedList<int, IKeyPressInfo>();
+        private readonly SortedList<int, IKeyPressInfo> _sortedList = new();
         private bool _isDirty;
         private bool _formLoaded = false;
         private readonly bool _supportIndefinite;

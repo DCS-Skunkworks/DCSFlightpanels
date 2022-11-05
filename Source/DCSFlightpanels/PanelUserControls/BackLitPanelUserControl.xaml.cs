@@ -26,12 +26,12 @@
     {
         private readonly BacklitPanelBIP _backlitPanelBIP;
 
-        private readonly List<Image> _colorImages = new List<Image>();
-        private readonly List<Image> _configurationIndicatorImages = new List<Image>();
-        private readonly BitmapImage _blackImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/black.png"));
-        private readonly BitmapImage _redImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/red.png"));
-        private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
-        private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
+        private readonly List<Image> _colorImages = new();
+        private readonly List<Image> _configurationIndicatorImages = new();
+        private readonly BitmapImage _blackImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/black.png"));
+        private readonly BitmapImage _redImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/red.png"));
+        private readonly BitmapImage _greenImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
+        private readonly BitmapImage _yellowImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
 
 
