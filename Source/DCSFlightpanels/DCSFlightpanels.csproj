@@ -28,7 +28,7 @@
     </Authors>
     <PackageId>DCSFlightpanels (DCSFP)</PackageId>
     <Version>1.0.0</Version>
-    <AssemblyVersion>4.6.8338.2</AssemblyVersion>
+    <AssemblyVersion>4.6.8344.1</AssemblyVersion>
     <FileVersion>
     </FileVersion>
     <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
@@ -61,9 +61,8 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-	
   <ItemGroup>
-		<Resource Include="Images\*.*" />
+    <Resource Include="Images\*.*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />

@@ -491,7 +491,7 @@ namespace NonVisuals
             }
             else if (DCSFPProfile.IsFlamingCliff(Profile))
             {
-                Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
+                Common.SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled);
             }
             else
             {

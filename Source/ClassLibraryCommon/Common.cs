@@ -45,16 +45,7 @@
                 }
             }
         }
-
-        public static bool IsStreamDeck(GamingPanelEnum panelType)
-        {
-            return panelType == GamingPanelEnum.StreamDeckMini
-                || panelType == GamingPanelEnum.StreamDeck
-                || panelType == GamingPanelEnum.StreamDeckXL
-                || panelType == GamingPanelEnum.StreamDeckV2
-                || panelType == GamingPanelEnum.StreamDeckMK2;
-        }
-
+        
         public static string RemoveCurlyBrackets(string s)
         {
             if (string.IsNullOrEmpty(s))
@@ -102,35 +93,7 @@
                 }
             }
         }
-
-        public static void SetEmulationModes(DCSFPProfile dcsfpProfile)
-        {
-            ResetEmulationModesFlag();
-            switch (dcsfpProfile.ID)
-            {
-                case 1: //No profile loaded
-                    {
-                        break;
-                    }
-                case 2:
-                    {
-                        SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
-                        break;
-                    }
-                case 4:
-                    {
-                        SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled);
-                        break;
-                    }
-                default:
-                    {
-                        SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled | EmulationMode.DCSBIOSOutputEnabled);
-                        break;
-                    }
-            }
-            ValidateEmulationModeFlag();
-        }
-
+        
         public static void SetEmulationModesFlag(int flag)
         {
             _emulationModesFlag = flag;
@@ -153,7 +116,7 @@
         {
             return (_emulationModesFlag & (int)flagValue) > 0;
         }
-
+        
         public static void ClearEmulationModesFlag(EmulationMode flagValue)
         {
             _emulationModesFlag &= ~((int)flagValue);

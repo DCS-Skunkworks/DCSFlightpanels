@@ -122,7 +122,7 @@
                     In PZ70 you can paste into the same textbox under different knob positions like ALT VS IAS etc. 
                     if (copyPackage?.SourceName == TextBox.Name)
                     {
-                        copyPackage = null;
+                        copyPackage = null; < not valid
                     }*/
                 }
 
@@ -137,7 +137,7 @@
                 {
                     result.AddNullKeyVisible = true;
                     result.EditSequenceVisible = true; 
-                    if (Common.FullDCSBIOSEnabled() || Common.PartialDCSBIOSEnabled())
+                    if (Common.FullDCSBIOSEnabled())
                     {
                         result.EditDCSBIOSVisible = true;
                     }
