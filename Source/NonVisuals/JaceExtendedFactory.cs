@@ -26,7 +26,7 @@ namespace NonVisuals
                         {
                             if (id == 0 || collision == true)
                             {
-                                id = RandomFactory.Get();
+                                id = new Random(DateTime.Now.Millisecond).Next(int.MaxValue);
                             }
                             if (!JaceEngines.ContainsKey(id))
                             {
