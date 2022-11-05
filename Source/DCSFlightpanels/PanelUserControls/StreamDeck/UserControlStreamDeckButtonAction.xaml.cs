@@ -71,7 +71,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 return;
             }
 
-            if (Common.KeyEmulationOnly())
+            if (Common.KeyEmulationOnly() || !Common.FullDCSBIOSEnabled())
             {
                 RadioButtonDCSBIOS.Visibility = Visibility.Collapsed;
             }
