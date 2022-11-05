@@ -47,15 +47,15 @@
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new List<KeyValuePair<string, GamingPanelEnum>>();
+        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new();
         private readonly string _windowName = "DCSFlightpanels ";
-        private readonly Timer _exceptionTimer = new Timer(1000);
-        private readonly Timer _statusMessagesTimer = new Timer(1000);
-        private readonly Timer _dcsStopGearTimer = new Timer(5000);
-        private readonly Timer _dcsCheckDcsBiosStatusTimer = new Timer(5000);
-        private readonly List<string> _statusMessages = new List<string>();
-        private readonly object _lockObjectStatusMessages = new object();
-        private readonly List<UserControl> _panelUserControls = new List<UserControl>();
+        private readonly Timer _exceptionTimer = new(1000);
+        private readonly Timer _statusMessagesTimer = new(1000);
+        private readonly Timer _dcsStopGearTimer = new(5000);
+        private readonly Timer _dcsCheckDcsBiosStatusTimer = new(5000);
+        private readonly List<string> _statusMessages = new();
+        private readonly object _lockObjectStatusMessages = new();
+        private readonly List<UserControl> _panelUserControls = new();
 
         private ProfileHandler _profileHandler;
         private DCSBIOS _dcsBios;

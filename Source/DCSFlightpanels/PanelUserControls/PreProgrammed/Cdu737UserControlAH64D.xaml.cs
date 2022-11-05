@@ -9,7 +9,7 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
     using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
-    
+
     using NonVisuals.CockpitMaster.Preprogrammed;
     using DCSFlightpanels.Interfaces;
     using System;

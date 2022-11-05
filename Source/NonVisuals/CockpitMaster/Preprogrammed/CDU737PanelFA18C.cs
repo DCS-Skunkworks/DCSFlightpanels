@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace NonVisuals.CockpitMaster.Preprogrammed
 {
-    
+
     public class CDU737PanelFA18C : CDU737PanelBase , IDCSBIOSStringListener
     {
         // List the DCSBios Mappings Here

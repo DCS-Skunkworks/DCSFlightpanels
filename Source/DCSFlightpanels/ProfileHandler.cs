@@ -31,8 +31,8 @@ namespace NonVisuals
 
         private static DCSFPProfile _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
 
-        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new List<KeyValuePair<string, GamingPanelEnum>>();
-        private readonly object _lockObject = new object();
+        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new();
+        private readonly object _lockObject = new();
 
         // Both directory and filename
         private string _filename = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)) + "\\" + "dcsfp_profile.bindings";

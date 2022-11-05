@@ -54,8 +54,8 @@
             108, 109, 110, 111, 113, 114, 115, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130,131, 132, 133, 134, 135, 136, 138, 139, 140, 141, 250, 251, 252, 253, 254, 255, 256,257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 344, 365, 385
             //
         };*/
-        private readonly ClickSpeedDetector _r800L1BigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _r800L1BigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _r800L1BigFreqIncreaseChangeMonitor = new(20);
+        private readonly ClickSpeedDetector _r800L1BigFreqDecreaseChangeMonitor = new(20);
         const int CHANGE_VALUE = 10;
 
         // private long _changesWithinLastticksSinceLastChangeLargeDial;
@@ -114,16 +114,16 @@
         // Large ABRIS Left Dial
         // Small ABRIS Right Dial
         // ACT/STBY Push Right ABRIS Dial IN/OUT
-        private readonly ClickSpeedDetector _abrisLeftDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
-        private readonly ClickSpeedDetector _abrisLeftDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
+        private readonly ClickSpeedDetector _abrisLeftDialIncreaseChangeMonitor = new(10);
+        private readonly ClickSpeedDetector _abrisLeftDialDecreaseChangeMonitor = new(10);
 
         private const string ABRIS_LEFT_DIAL_COMMAND_INC_MORE = "ABRIS_BRIGHTNESS +2500\n";
         private const string ABRIS_LEFT_DIAL_COMMAND_DEC_MORE = "ABRIS_BRIGHTNESS -2500\n";
         private const string ABRIS_LEFT_DIAL_COMMAND_INC = "ABRIS_BRIGHTNESS +1000\n";
         private const string ABRIS_LEFT_DIAL_COMMAND_DEC = "ABRIS_BRIGHTNESS -1000\n";
 
-        private readonly ClickSpeedDetector _abrisRightDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
-        private readonly ClickSpeedDetector _abrisRightDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
+        private readonly ClickSpeedDetector _abrisRightDialIncreaseChangeMonitor = new(10);
+        private readonly ClickSpeedDetector _abrisRightDialDecreaseChangeMonitor = new(10);
 
         private const string ABRIS_RIGHT_DIAL_COMMAND_INC_MORE = "ABRIS_CURSOR_ROT +2500\n";
         private const string ABRIS_RIGHT_DIAL_COMMAND_DEC_MORE = "ABRIS_CURSOR_ROT -2500\n";

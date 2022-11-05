@@ -1,4 +1,4 @@
-﻿namespace DCSFlightpanels.Radios.PreProgrammed 
+﻿namespace DCSFlightpanels.Radios.PreProgrammed
 {
     using System;
     using System.Collections.Generic;

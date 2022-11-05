@@ -17,7 +17,7 @@
         private bool _formLoaded;
         private bool _isDirty;
         private readonly List<GenericPanelBinding> _genericBindings;
-        private readonly List<ModifiedGenericBinding> _modifiedGenericBindings = new List<ModifiedGenericBinding>();
+        private readonly List<ModifiedGenericBinding> _modifiedGenericBindings = new();
         private readonly List<GamingPanel> _gamingPanels;
 
         public BindingsMappingWindow(List<GenericPanelBinding> genericBindings, List<GamingPanel> gamingPanels)

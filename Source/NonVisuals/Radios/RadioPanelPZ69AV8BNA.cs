@@ -40,7 +40,7 @@
         private readonly object _lockCOMM1DialsObject = new();
         private DCSBIOSOutput _comm1DcsbiosOutputFreq;
         private string _comm1Frequency = "225.000";
-        private readonly ClickSpeedDetector _comm1ChannelClickSpeedDetector = new ClickSpeedDetector(8);
+        private readonly ClickSpeedDetector _comm1ChannelClickSpeedDetector = new(8);
 
         /* COMM2 V/UHF AN/ARC-210 */
         // Large dial xxx-xxx [step of 1]
@@ -54,7 +54,7 @@
         private readonly object _lockCOMM2DialsObject = new();
         private DCSBIOSOutput _comm2DcsbiosOutputFreq;
         private string _comm2Frequency = "225.000";
-        private readonly ClickSpeedDetector _comm2ChannelClickSpeedDetector = new ClickSpeedDetector(8);
+        private readonly ClickSpeedDetector _comm2ChannelClickSpeedDetector = new(8);
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
 

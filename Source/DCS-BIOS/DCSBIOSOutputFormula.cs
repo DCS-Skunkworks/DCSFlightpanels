@@ -19,7 +19,7 @@ namespace DCS_BIOS
         private string _formula;
         
         [NonSerialized]
-        private readonly object _jaceLockObject = new object();
+        private readonly object _jaceLockObject = new();
 
         [NonSerialized]
         private int _staticUpdateInterval = 0;

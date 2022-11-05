@@ -73,14 +73,14 @@
         private DCSBIOSOutput _vhfAmDcsbiosOutputSelectedChannel;
         private volatile uint _vhfAmCockpitFreqMode;
         private volatile uint _vhfAmCockpitPresetChannel;
-        private readonly ClickSpeedDetector _vhfAmChannelClickSpeedDetector = new ClickSpeedDetector(8);
-        private readonly ClickSpeedDetector _vhfAmFreqModeClickSpeedDetector = new ClickSpeedDetector(6);
+        private readonly ClickSpeedDetector _vhfAmChannelClickSpeedDetector = new(8);
+        private readonly ClickSpeedDetector _vhfAmFreqModeClickSpeedDetector = new(6);
 
         private const string VHF_AM_MODE_INCREASE = "VHFAM_MODE INC\n";
         private const string VHF_AM_MODE_DECREASE = "VHFAM_MODE DEC\n";
         private DCSBIOSOutput _vhfAmDcsbiosOutputMode;  // VHFAM_MODE
         private volatile uint _vhfAmCockpitMode; // OFF = 0
-        private readonly ClickSpeedDetector _vhfAmModeClickSpeedDetector = new ClickSpeedDetector(8);
+        private readonly ClickSpeedDetector _vhfAmModeClickSpeedDetector = new(8);
 
         /*A-10C AN/ARC-164 UHF Radio 2*/
         // Large dial 225-399 [step of 1]
@@ -124,14 +124,14 @@
         private DCSBIOSOutput _uhfDcsbiosOutputSelectedChannel;
         private volatile uint _uhfCockpitFreqMode;
         private volatile uint _uhfCockpitPresetChannel;
-        private readonly ClickSpeedDetector _uhfChannelClickSpeedDetector = new ClickSpeedDetector(8);
-        private readonly ClickSpeedDetector _uhfFreqModeClickSpeedDetector = new ClickSpeedDetector(6);
+        private readonly ClickSpeedDetector _uhfChannelClickSpeedDetector = new(8);
+        private readonly ClickSpeedDetector _uhfFreqModeClickSpeedDetector = new(6);
 
         private const string UHF_FUNCTION_INCREASE = "UHF_FUNCTION INC\n";
         private const string UHF_FUNCTION_DECREASE = "UHF_FUNCTION DEC\n";
         private DCSBIOSOutput _uhfDcsbiosOutputFunction;  // UHF_FUNCTION
         private volatile uint _uhfCockpitMode;
-        private readonly ClickSpeedDetector _uhfFunctionClickSpeedDetector = new ClickSpeedDetector(8);
+        private readonly ClickSpeedDetector _uhfFunctionClickSpeedDetector = new(8);
 
         /*A-10C AN/ARC-186(V) VHF FM Radio 3*/
         // Large dial 30-76 [step of 1]
@@ -170,14 +170,14 @@
         private DCSBIOSOutput _vhfFmDcsbiosOutputSelectedChannel;
         private volatile uint _vhfFmCockpitFreqMode;
         private volatile uint _vhfFmCockpitPresetChannel;
-        private readonly ClickSpeedDetector _vhfFmChannelClickSpeedDetector = new ClickSpeedDetector(8);
-        private readonly ClickSpeedDetector _vhfFmFreqModeClickSpeedDetector = new ClickSpeedDetector(6);
+        private readonly ClickSpeedDetector _vhfFmChannelClickSpeedDetector = new(8);
+        private readonly ClickSpeedDetector _vhfFmFreqModeClickSpeedDetector = new(6);
 
         private const string VHF_FM_MODE_INCREASE = "VHFFM_MODE INC\n";
         private const string VHF_FM_MODE_DECREASE = "VHFFM_MODE DEC\n";
         private DCSBIOSOutput _vhfFmDcsbiosOutputMode;// VHFFM_MODE
         private volatile uint _vhfFmCockpitMode;
-        private readonly ClickSpeedDetector _vhfFmModeClickSpeedDetector = new ClickSpeedDetector(6);
+        private readonly ClickSpeedDetector _vhfFmModeClickSpeedDetector = new(6);
 
         /*A-10C ILS*/
         // Large dial 108-111 [step of 1]

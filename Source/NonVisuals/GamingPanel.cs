@@ -27,8 +27,8 @@
         protected abstract void StartListeningForHidPanelChanges();
 
         private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
-        private static readonly object UpdateCounterLockObject = new object();
-        private readonly object _exceptionLockObject = new object();
+        private static readonly object UpdateCounterLockObject = new();
+        private readonly object _exceptionLockObject = new();
         private Exception _lastException;
         private string _randomBindingHash = string.Empty;
         private uint _count;

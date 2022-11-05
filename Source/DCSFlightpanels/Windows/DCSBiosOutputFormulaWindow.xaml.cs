@@ -30,7 +30,7 @@ namespace DCSFlightpanels.Windows
 
         private DCSBIOSOutput _dcsBiosOutput;
 
-        private readonly object _formulaLockObject = new object();
+        private readonly object _formulaLockObject = new();
         private DCSBIOSOutputFormula _dcsbiosOutputFormula;
 
         private bool _formLoaded;

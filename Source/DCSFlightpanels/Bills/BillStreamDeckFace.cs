@@ -5,7 +5,7 @@ namespace DCSFlightpanels.Bills
     using System.Drawing;
     using System.Windows;
     using System.Windows.Media;
-  
+
     using MEF;
 
     using NonVisuals;

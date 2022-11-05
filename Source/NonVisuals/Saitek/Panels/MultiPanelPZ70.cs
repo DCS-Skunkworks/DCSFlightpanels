@@ -19,22 +19,22 @@
 
     public class MultiPanelPZ70 : SaitekPanel
     {
-        private readonly object _lcdLockObject = new object();
-        private readonly object _lcdDataVariablesLockObject = new object();
-        private readonly PZ70LCDButtonByteList _lcdButtonByteListHandler = new PZ70LCDButtonByteList();
-        private readonly ClickSpeedDetector _altLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
-        private readonly ClickSpeedDetector _vsLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
-        private readonly ClickSpeedDetector _iasLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
-        private readonly ClickSpeedDetector _hdgLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
-        private readonly ClickSpeedDetector _crsLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
+        private readonly object _lcdLockObject = new();
+        private readonly object _lcdDataVariablesLockObject = new();
+        private readonly PZ70LCDButtonByteList _lcdButtonByteListHandler = new();
+        private readonly ClickSpeedDetector _altLCDKeyEmulatorValueChangeMonitor = new(15);
+        private readonly ClickSpeedDetector _vsLCDKeyEmulatorValueChangeMonitor = new(15);
+        private readonly ClickSpeedDetector _iasLCDKeyEmulatorValueChangeMonitor = new(15);
+        private readonly ClickSpeedDetector _hdgLCDKeyEmulatorValueChangeMonitor = new(15);
+        private readonly ClickSpeedDetector _crsLCDKeyEmulatorValueChangeMonitor = new(15);
 
         private int _lcdKnobSensitivity;
         private volatile byte _knobSensitivitySkipper;
-        private HashSet<DCSBIOSActionBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ70>();
-        private HashSet<DCSBIOSOutputBindingPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSOutputBindingPZ70>();
-        private HashSet<KeyBindingPZ70> _knobBindings = new HashSet<KeyBindingPZ70>();
-        private List<OSCommandBindingPZ70> _operatingSystemCommandBindings = new List<OSCommandBindingPZ70>();
-        private HashSet<BIPLinkPZ70> _bipLinks = new HashSet<BIPLinkPZ70>();
+        private HashSet<DCSBIOSActionBindingPZ70> _dcsBiosBindings = new();
+        private HashSet<DCSBIOSOutputBindingPZ70> _dcsBiosLcdBindings = new();
+        private HashSet<KeyBindingPZ70> _knobBindings = new();
+        private List<OSCommandBindingPZ70> _operatingSystemCommandBindings = new();
+        private HashSet<BIPLinkPZ70> _bipLinks = new();
         private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
         
         // 0 - 40000

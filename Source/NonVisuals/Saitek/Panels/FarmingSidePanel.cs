@@ -18,11 +18,11 @@
 
     public class FarmingSidePanel : SaitekPanel
     {
-        private HashSet<DCSBIOSActionBindingFarmingPanel> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingFarmingPanel>();
-        private HashSet<KeyBindingFarmingPanel> _keyBindings = new HashSet<KeyBindingFarmingPanel>();
-        private List<OSCommandBindingFarmingPanel> _operatingSystemCommandBindings = new List<OSCommandBindingFarmingPanel>();
-        private HashSet<BIPLinkFarmingPanel> _bipLinks = new HashSet<BIPLinkFarmingPanel>();
-        private readonly object _dcsBiosDataReceivedLock = new object();
+        private HashSet<DCSBIOSActionBindingFarmingPanel> _dcsBiosBindings = new();
+        private HashSet<KeyBindingFarmingPanel> _keyBindings = new();
+        private List<OSCommandBindingFarmingPanel> _operatingSystemCommandBindings = new();
+        private HashSet<BIPLinkFarmingPanel> _bipLinks = new();
+        private readonly object _dcsBiosDataReceivedLock = new();
 
         public FarmingSidePanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.FarmingPanel, hidSkeleton)
         {

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     using NonVisuals.Interfaces;
-   
+
     public enum RadioPanelPZ69KnobsSA342
     {
         UPPER_VHFAM,

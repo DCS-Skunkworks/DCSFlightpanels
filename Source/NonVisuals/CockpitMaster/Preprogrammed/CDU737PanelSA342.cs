@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace NonVisuals.CockpitMaster.Preprogrammed
 {
-    
+
     public class CDU737PanelSA342 : CDU737PanelBase , IDCSBIOSStringListener
     {
         public CDU737PanelSA342(HIDSkeleton hidSkeleton) : base(hidSkeleton)

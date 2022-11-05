@@ -81,16 +81,16 @@
         private DCSBIOSOutput _uhfDcsbiosOutputSelectedChannel;
         private volatile uint _uhfCockpitFreqMode;
         private volatile uint _uhfCockpitPresetChannel;
-        private readonly ClickSpeedDetector _uhfBigFreqIncreaseClickSpeedDetector = new ClickSpeedDetector(15);
-        private readonly ClickSpeedDetector _uhfBigFreqDecreaseClickSpeedDetector = new ClickSpeedDetector(15);
-        private readonly ClickSpeedDetector _uhfChannelClickSpeedDetector = new ClickSpeedDetector(8);
-        private readonly ClickSpeedDetector _uhfFreqModeClickSpeedDetector = new ClickSpeedDetector(6);
+        private readonly ClickSpeedDetector _uhfBigFreqIncreaseClickSpeedDetector = new(15);
+        private readonly ClickSpeedDetector _uhfBigFreqDecreaseClickSpeedDetector = new(15);
+        private readonly ClickSpeedDetector _uhfChannelClickSpeedDetector = new(8);
+        private readonly ClickSpeedDetector _uhfFreqModeClickSpeedDetector = new(6);
 
         private const string UHF_FUNCTION_INCREASE = "UHF_FUNC INC\n";
         private const string UHF_FUNCTION_DECREASE = "UHF_FUNC DEC\n";
         private DCSBIOSOutput _uhfDcsbiosOutputFunction;  // UHF_FUNC
         private volatile uint _uhfCockpitFunction;
-        private readonly ClickSpeedDetector _uhfFunctionClickSpeedDetector = new ClickSpeedDetector(8);
+        private readonly ClickSpeedDetector _uhfFunctionClickSpeedDetector = new(8);
 
         /*TACAN*/
         // Large dial 0-12 [step of 1]

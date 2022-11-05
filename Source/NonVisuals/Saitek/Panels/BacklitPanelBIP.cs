@@ -32,7 +32,7 @@
 
         private const byte _8BIPMask = 0x80;
 
-        private readonly List<DcsOutputAndColorBindingBIP> _listColorOutputBinding = new List<DcsOutputAndColorBindingBIP>();
+        private readonly List<DcsOutputAndColorBindingBIP> _listColorOutputBinding = new();
 
         private readonly byte[] _upperRowBytes = { 0x0, 0x0 }; // byte 1 & 4
 

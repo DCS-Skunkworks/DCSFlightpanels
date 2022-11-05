@@ -15,7 +15,6 @@ namespace DCS_BIOS
     using System.Threading;
 
     using DCS_BIOS.EventArgs;
-    using DCS_BIOS.Interfaces;
     using NLog;
 
     public enum DCSBiosStateEnum

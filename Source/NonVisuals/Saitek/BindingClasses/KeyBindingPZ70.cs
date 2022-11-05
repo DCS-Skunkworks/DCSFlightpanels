@@ -5,7 +5,6 @@ namespace NonVisuals.Saitek.BindingClasses
     using System.Collections.Generic;
 
     using MEF;
-    using System.Threading;
     using NonVisuals.Saitek.Panels;
 
     [Serializable]
@@ -16,7 +15,6 @@ namespace NonVisuals.Saitek.BindingClasses
          */
         private PZ70DialPosition _pz70DialPosition;
         private MultiPanelPZ70Knobs _multiPanelPZ70Knob;
-
 
         internal override void ImportSettings(string settings)
         {
@@ -60,12 +58,9 @@ namespace NonVisuals.Saitek.BindingClasses
             get => _multiPanelPZ70Knob;
             set => _multiPanelPZ70Knob = value;
         }
-        
-        private static long _checker = 0;
+
         public static void SetNegators(ref HashSet<KeyBindingPZ70> knobBindings)
         {
-            Interlocked.Increment(ref _checker);
-
             if (knobBindings == null)
             {
                 return;
@@ -85,14 +80,15 @@ namespace NonVisuals.Saitek.BindingClasses
                 // Clear all negators
                 keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Clear();
 
-                if (keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_ALT || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_VS
-                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_IAS
-                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_HDG
-                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_CRS
-                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC
-                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC
-                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP
-                                                                                      || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN)
+                if (keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_ALT
+                 || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_VS
+                 || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_IAS
+                 || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_HDG
+                 || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_CRS
+                 || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC
+                 || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC
+                 || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP
+                 || keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN) 
                 {
                     // We have to deal with them separately
                     continue;
@@ -141,60 +137,22 @@ namespace NonVisuals.Saitek.BindingClasses
                 {
                     MultiPanelPZ70Knobs negatorKnob = MultiPanelPZ70Knobs.KNOB_ALT;
 
-                    switch (keyBindingPZ70.MultiPanelPZ70Knob)
+                    /*
+                     * This is actually broken, the dial on PZ70, you should be able to dial in two directions from IAS and get negation.
+                     */
+                    negatorKnob = keyBindingPZ70.MultiPanelPZ70Knob switch
                     {
-                        /*
-                         * This is actually broken, the dial on PZ70, you should be able to dial in two directions from IAS and get negation.
-                         */
-                        case MultiPanelPZ70Knobs.KNOB_ALT:
-                            {
-                                negatorKnob = MultiPanelPZ70Knobs.KNOB_VS;
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.KNOB_CRS:
-                            {
-                                negatorKnob = MultiPanelPZ70Knobs.KNOB_HDG;
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.KNOB_VS:
-                            {
-                                negatorKnob = MultiPanelPZ70Knobs.KNOB_ALT;
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.KNOB_IAS:
-                            {
-                                negatorKnob = MultiPanelPZ70Knobs.KNOB_HDG;
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.KNOB_HDG:
-                            {
-                                negatorKnob = MultiPanelPZ70Knobs.KNOB_CRS;
-                                break;
-                            }
-
-                        case MultiPanelPZ70Knobs.LCD_WHEEL_INC:
-                            {
-                                negatorKnob = MultiPanelPZ70Knobs.LCD_WHEEL_DEC;
-                                break;
-                            }
-
-                        case MultiPanelPZ70Knobs.LCD_WHEEL_DEC:
-                            {
-                                negatorKnob = MultiPanelPZ70Knobs.LCD_WHEEL_INC;
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP:
-                            {
-                                negatorKnob = MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN;
-                                break;
-                            }
-
-                        case MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN:
-                            {
-                                negatorKnob = MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP;
-                                break;
-                            }
-                    }
+                        MultiPanelPZ70Knobs.KNOB_ALT => MultiPanelPZ70Knobs.KNOB_VS,
+                        MultiPanelPZ70Knobs.KNOB_VS => MultiPanelPZ70Knobs.KNOB_ALT,
+                        MultiPanelPZ70Knobs.KNOB_IAS => MultiPanelPZ70Knobs.KNOB_HDG,
+                        MultiPanelPZ70Knobs.KNOB_HDG => MultiPanelPZ70Knobs.KNOB_CRS,
+                        MultiPanelPZ70Knobs.KNOB_CRS => MultiPanelPZ70Knobs.KNOB_HDG,
+                        MultiPanelPZ70Knobs.LCD_WHEEL_INC => MultiPanelPZ70Knobs.LCD_WHEEL_DEC,
+                        MultiPanelPZ70Knobs.LCD_WHEEL_DEC => MultiPanelPZ70Knobs.LCD_WHEEL_INC,
+                        MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP => MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN,
+                        MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN => MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP,
+                        _ => throw new Exception($"Unexpected MultiPanelPZ70Knob value for negator [{keyBindingPZ70.MultiPanelPZ70Knob}]")
+                    };
 
                     foreach (var keyBinding in knobBindings)
                     {
@@ -209,8 +167,6 @@ namespace NonVisuals.Saitek.BindingClasses
                     }
                 }
             }
-
-            Interlocked.Decrement(ref _checker);
         }
     }
 }

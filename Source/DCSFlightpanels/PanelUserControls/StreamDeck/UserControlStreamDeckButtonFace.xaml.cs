@@ -32,8 +32,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     public partial class UserControlStreamDeckButtonFace : IStreamDeckButtonActionListener, IIsDirty, INvStreamDeckListener
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
-        private readonly List<RadioButton> _radioButtonList = new List<RadioButton>();
+        private readonly List<StreamDeckFaceTextBox> _textBoxList = new();
+        private readonly List<RadioButton> _radioButtonList = new();
         private bool _isLoaded = false;
         private EnumStreamDeckButtonNames _streamDeckButton;
         private StreamDeckPanel _streamDeckPanel;
