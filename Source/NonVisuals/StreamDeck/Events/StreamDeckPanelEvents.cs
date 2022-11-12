@@ -8,7 +8,7 @@ namespace NonVisuals.StreamDeck.Events
     using MEF;
 
 
-    public class ActionTypeChangedEventArgs : System.EventArgs
+    public class ActionTypeChangedEventArgs : EventArgs
     {
         public string BindingHash { get; set; }
         public EnumStreamDeckActionType ActionType { get; set; }

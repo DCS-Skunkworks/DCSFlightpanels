@@ -11,11 +11,11 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
-    using NonVisuals.Saitek;
+    using EventArgs;
+    using Interfaces;
+    using Saitek;
     using NonVisuals.Saitek.Panels;
-    using NonVisuals.StreamDeck.Events;
+    using Events;
 
     using OpenMacroBoard.SDK;
 

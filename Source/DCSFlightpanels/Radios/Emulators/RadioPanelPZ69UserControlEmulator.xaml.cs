@@ -11,11 +11,11 @@
 
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.Bills;
-    using DCSFlightpanels.CustomControls;
-    using DCSFlightpanels.Interfaces;
-    using DCSFlightpanels.PanelUserControls;
-    using DCSFlightpanels.Properties;
+    using Bills;
+    using CustomControls;
+    using Interfaces;
+    using PanelUserControls;
+    using Properties;
 
     using MEF;
 

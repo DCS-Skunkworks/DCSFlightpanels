@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
     public enum RadioPanelPZ69KnobsKa50
     {
@@ -32,6 +32,12 @@
         LOWER_FREQ_SWITCH
     }
 
+
+    /*
+     * Represents a knob or button on the PZ69 Radio Panel.
+     * Used by the PZ69 instance to determine what knob & button
+     * the user is manipulating.
+     */
     public class RadioPanelKnobKa50 : ISaitekPanelKnob
     {
         public RadioPanelKnobKa50(int group, int mask, bool isOn, RadioPanelPZ69KnobsKa50 radioPanelPZ69Knob)

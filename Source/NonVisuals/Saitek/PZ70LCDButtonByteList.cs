@@ -4,7 +4,7 @@
 
     using MEF;
     using NLog;
-    using NonVisuals.Saitek.Panels;
+    using Panels;
 
     public class PZ70LCDButtonByteList
     {

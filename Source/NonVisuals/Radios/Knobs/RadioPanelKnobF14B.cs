@@ -2,8 +2,10 @@
 {
     using System.Collections.Generic;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
+
+    
     public enum RadioPanelPZ69KnobsF14B
     {
         UPPER_UHF,
@@ -31,6 +33,13 @@
         LOWER_LARGE_FREQ_WHEEL_DEC,
         LOWER_FREQ_SWITCH
     }
+
+
+    /*
+     * Represents a knob or button on the PZ69 Radio Panel.
+     * Used by the PZ69 instance to determine what knob & button
+     * the user is manipulating.
+     */
 
     public class RadioPanelKnobF14B : ISaitekPanelKnob
     {

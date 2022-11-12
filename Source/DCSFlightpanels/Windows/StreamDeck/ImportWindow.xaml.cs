@@ -12,7 +12,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System.Windows.Forms;
     using System.Windows.Input;
     using ClassLibraryCommon;
-    using DCSFlightpanels.Properties;
+    using Properties;
     using MEF;
     using Newtonsoft.Json;
     using NonVisuals.StreamDeck;

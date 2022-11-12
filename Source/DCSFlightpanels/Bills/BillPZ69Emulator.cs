@@ -1,4 +1,7 @@
-﻿namespace DCSFlightpanels.Bills
+﻿using NonVisuals.BindingClasses.BIP;
+using NonVisuals.BindingClasses.DCSBIOSBindings;
+
+namespace DCSFlightpanels.Bills
 {
     using System;
     using System.Collections.Generic;
@@ -6,10 +9,7 @@
     using System.Windows.Media;
 
     using DCS_BIOS;
-    using DCSFlightpanels.Interfaces;
-
-    using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek.BindingClasses;
+    using Interfaces;
     using NonVisuals.Saitek.Panels;
 
     public class BillPZ69Emulator : BillBaseInput

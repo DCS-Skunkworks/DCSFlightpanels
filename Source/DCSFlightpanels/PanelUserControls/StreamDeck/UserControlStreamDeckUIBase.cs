@@ -13,9 +13,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using System.Windows.Media.Imaging;
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.Bills;
-    using DCSFlightpanels.CustomControls;
-    using DCSFlightpanels.Shared;
+    using Bills;
+    using CustomControls;
+    using Shared;
 
     using MEF;
     using NLog;

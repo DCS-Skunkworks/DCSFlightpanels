@@ -10,8 +10,8 @@ namespace DCSFlightpanels.PanelUserControls
 
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.Interfaces;
-    using DCSFlightpanels.PanelUserControls.StreamDeck;
+    using Interfaces;
+    using StreamDeck;
     using DCSFlightpanels.Windows.StreamDeck;
     using NLog;
     using NonVisuals;

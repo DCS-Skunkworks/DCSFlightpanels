@@ -1,28 +1,23 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Windows;
 using System.Windows.Input;
+using ClassLibraryCommon;
+using DCS_BIOS;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
+using MEF;
+using Microsoft.Win32;
+using NonVisuals;
+using NonVisuals.EventArgs;
+using NonVisuals.Interfaces;
 
-namespace NonVisuals
+namespace DCSFlightpanels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Text;
-    using System.Windows;
-
-    using ClassLibraryCommon;
-
-    using DCS_BIOS;
-
-    using MEF;
-
-    using Microsoft.Win32;
-
-    using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
-
     public class ProfileHandler : ISettingsModifiedListener, IIsDirty, IDisposable, IProfileHandler, IPanelEventListener
     {
         private const string OPEN_FILE_DIALOG_FILE_NAME = "*.bindings";
@@ -196,7 +191,7 @@ namespace NonVisuals
                 return;
             }
 
-            var tempDirectory = string.IsNullOrEmpty(Settings.Default.LastProfileDialogLocation) ? Constants.PathRootDriveC : Settings.Default.LastProfileDialogLocation;
+            var tempDirectory = string.IsNullOrEmpty(Settings.Default.LastProfileDialogLocation) ? NonVisuals.Constants.PathRootDriveC : Settings.Default.LastProfileDialogLocation;
             ClearAll();
             var openFileDialog = new OpenFileDialog
             {
@@ -504,7 +499,7 @@ namespace NonVisuals
             var saveFileDialog = new SaveFileDialog
             {
                 RestoreDirectory = true,
-                InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastProfileDialogLocation) ? Constants.PathRootDriveC : Settings.Default.LastProfileDialogLocation,
+                InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastProfileDialogLocation) ? NonVisuals.Constants.PathRootDriveC : Settings.Default.LastProfileDialogLocation,
                 FileName = "dcsfp_profile.bindings",
                 DefaultExt = OPEN_FILE_DIALOG_DEFAULT_EXT,
                 Filter = OPEN_FILE_DIALOG_FILTER,

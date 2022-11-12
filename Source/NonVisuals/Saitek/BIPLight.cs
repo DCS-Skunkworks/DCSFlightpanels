@@ -3,7 +3,7 @@
     using System;
     using System.Text;
 
-    using NonVisuals.Saitek.Panels;
+    using Panels;
 
     public enum BIPLightDelays 
     {

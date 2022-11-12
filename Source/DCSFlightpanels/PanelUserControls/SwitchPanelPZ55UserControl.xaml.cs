@@ -11,10 +11,10 @@ namespace DCSFlightpanels.PanelUserControls
 
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.Bills;
-    using DCSFlightpanels.CustomControls;
-    using DCSFlightpanels.Interfaces;
-    using DCSFlightpanels.Windows;
+    using Bills;
+    using CustomControls;
+    using Interfaces;
+    using Windows;
 
     using NonVisuals;
     using NonVisuals.EventArgs;

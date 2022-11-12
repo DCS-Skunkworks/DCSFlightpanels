@@ -166,7 +166,7 @@ namespace Tests.NonVisuals
             if (bmp1 == null || bmp2 == null)
                 return false;
             
-            if (object.Equals(bmp1, bmp2))
+            if (Equals(bmp1, bmp2))
                 return true;
 
             if (!bmp1.Size.Equals(bmp2.Size))

@@ -9,9 +9,9 @@
 
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.Interfaces;
-    using DCSFlightpanels.Properties;
-    using DCSFlightpanels.Windows;
+    using Interfaces;
+    using Properties;
+    using Windows;
 
     using NonVisuals;
     using NonVisuals.EventArgs;

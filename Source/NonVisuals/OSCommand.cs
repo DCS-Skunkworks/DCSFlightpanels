@@ -5,7 +5,7 @@
     using System.Media;
     using System.Threading;
     using NLog;
-    using NonVisuals.Saitek;
+    using Saitek;
 
     [Serializable]
     public class OSCommand

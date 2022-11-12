@@ -6,9 +6,9 @@
     using System.Threading;
 
     using ClassLibraryCommon;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Radios.Misc;
-    using NonVisuals.Saitek.Panels;
+    using EventArgs;
+    using Misc;
+    using Saitek.Panels;
 
     public enum PZ69LCDPosition
     {
@@ -18,6 +18,9 @@
         LOWER_STBY_RIGHT = 16
     }
 
+    /*
+     * Base class for all radios.
+     */
     public abstract class RadioPanelPZ69Base : SaitekPanel
     {
         private byte _ignoreSwitchButtonCounter = 1;

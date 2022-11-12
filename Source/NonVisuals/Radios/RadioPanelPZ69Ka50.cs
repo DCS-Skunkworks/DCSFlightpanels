@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Radios
+﻿using NonVisuals.BindingClasses.BIP;
+
+namespace NonVisuals.Radios
 {
     using System;
     using System.Collections.Generic;
@@ -11,11 +13,14 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-    using NonVisuals.Plugin;
-    using NonVisuals.Radios.Knobs;
-    using NonVisuals.Saitek;
-    using NonVisuals.Saitek.BindingClasses;
+    using Plugin;
+    using Knobs;
+    using Saitek;
 
+
+    /*
+     * Pre-programmed radio panel for the Ka50.
+     */
     public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base
     {
         private enum CurrentKa50RadioMode

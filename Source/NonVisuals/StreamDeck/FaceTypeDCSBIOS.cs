@@ -6,7 +6,7 @@
 
     using Newtonsoft.Json;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
     [Serializable]
     public class FaceTypeDCSBIOS : FaceTypeBase, IStreamDeckButtonFace, IFontFace

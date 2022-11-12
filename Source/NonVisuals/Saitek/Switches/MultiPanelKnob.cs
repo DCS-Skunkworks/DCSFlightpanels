@@ -5,8 +5,14 @@
 
     using MEF;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
+
+    /*
+     * Logitech Multi Panel Knob, contains only the key, no information about
+     * what action(s) the knob should perform.
+     * Used by the panel to get information on what knob(s) has been switched
+     */
     public class MultiPanelKnob : ISaitekPanelKnob
     {
 

@@ -30,7 +30,7 @@ namespace DCSFlightpanels.Windows
                 var memoryStream = new MemoryStream(_bytes, 0, _bytes.Length);
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 var textRange = new TextRange(RichTextBoxInformation.Document.ContentStart, RichTextBoxInformation.Document.ContentEnd);
-                textRange.Load(memoryStream, System.Windows.DataFormats.Rtf);
+                textRange.Load(memoryStream, DataFormats.Rtf);
                 memoryStream.Close();
             }
             catch (Exception ex)

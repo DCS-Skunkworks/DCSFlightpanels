@@ -13,8 +13,8 @@ namespace NonVisuals.StreamDeck
 
     using Newtonsoft.Json;
 
-    using NonVisuals.Interfaces;
-    using NonVisuals.StreamDeck.Events;
+    using Interfaces;
+    using Events;
 
     public enum LayerNavType
     {

@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
 
-    using NonVisuals.EventArgs;
-    using NonVisuals.Saitek.Panels;
+    using EventArgs;
+    using Panels;
 
     public class BipEventHandlerManager
     {

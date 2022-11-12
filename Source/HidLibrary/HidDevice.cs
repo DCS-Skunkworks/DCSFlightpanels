@@ -155,7 +155,7 @@ namespace HidLibrary
         {
             var readDelegate = new ReadDelegate(Read);
 #if NET20 || NET35 || NET5_0_OR_GREATER
-            return await Task<HidDeviceData>.Factory.StartNew(() => readDelegate.Invoke(timeout));
+            return await Task.Factory.StartNew(() => readDelegate.Invoke(timeout));
 #else
             return await Task<HidDeviceData>.Factory.FromAsync(readDelegate.BeginInvoke, readDelegate.EndInvoke, timeout, null);
 #endif
@@ -187,7 +187,7 @@ namespace HidLibrary
         {
             var readReportDelegate = new ReadReportDelegate(ReadReport);
 #if NET20 || NET35 || NET5_0_OR_GREATER
-            return await Task<HidReport>.Factory.StartNew(() => readReportDelegate.Invoke(timeout));
+            return await Task.Factory.StartNew(() => readReportDelegate.Invoke(timeout));
 #else
             return await Task<HidReport>.Factory.FromAsync(readReportDelegate.BeginInvoke, readReportDelegate.EndInvoke, timeout, null);
 #endif
@@ -370,7 +370,7 @@ namespace HidLibrary
         {
             var writeDelegate = new WriteDelegate(Write);
 #if NET20 || NET35 || NET5_0_OR_GREATER
-            return await Task<bool>.Factory.StartNew(() => writeDelegate.Invoke(data, timeout));
+            return await Task.Factory.StartNew(() => writeDelegate.Invoke(data, timeout));
 #else
             return await Task<bool>.Factory.FromAsync(writeDelegate.BeginInvoke, writeDelegate.EndInvoke, data, timeout, null);
 #endif
@@ -421,7 +421,7 @@ namespace HidLibrary
         {
             var writeReportDelegate = new WriteReportDelegate(WriteReport);
 #if NET20 || NET35 || NET5_0_OR_GREATER
-            return await Task<bool>.Factory.StartNew(() => writeReportDelegate.Invoke(report, timeout));
+            return await Task.Factory.StartNew(() => writeReportDelegate.Invoke(report, timeout));
 #else
             return await Task<bool>.Factory.FromAsync(writeReportDelegate.BeginInvoke, writeReportDelegate.EndInvoke, report, timeout, null);
 #endif

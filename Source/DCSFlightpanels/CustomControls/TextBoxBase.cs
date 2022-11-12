@@ -8,7 +8,7 @@
 
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.Bills;
+    using Bills;
 
 
     public abstract class TextBoxBaseInput : TextBox

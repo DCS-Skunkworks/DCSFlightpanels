@@ -8,7 +8,7 @@ namespace NonVisuals.StreamDeck
 
     using Newtonsoft.Json;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
     using OpenMacroBoard.SDK;
 

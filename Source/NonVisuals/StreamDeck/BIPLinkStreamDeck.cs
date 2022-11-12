@@ -1,11 +1,12 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using NonVisuals.BindingClasses.BIP;
+
+namespace NonVisuals.StreamDeck
 {
     using System.Linq;
 
     using MEF;
 
     using Newtonsoft.Json;
-    using NonVisuals.Saitek.BindingClasses;
 
     public class BIPLinkStreamDeck : BIPLinkBase
     {

@@ -10,12 +10,12 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
-    using DCSFlightpanels.Bills;
-    using DCSFlightpanels.CustomControls;
-    using DCSFlightpanels.Interfaces;
-    using DCSFlightpanels.PanelUserControls;
-    using DCSFlightpanels.Properties;
-    using DCSFlightpanels.Windows;
+    using Bills;
+    using CustomControls;
+    using Interfaces;
+    using PanelUserControls;
+    using Properties;
+    using Windows;
 
 
     using MEF;

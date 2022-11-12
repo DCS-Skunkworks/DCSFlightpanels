@@ -94,7 +94,7 @@ namespace HidLibrary
         internal struct SP_DEVICE_INTERFACE_DATA
         {
             internal int cbSize;
-            internal System.Guid InterfaceClassGuid;
+            internal Guid InterfaceClassGuid;
             internal int Flags;
             internal IntPtr Reserved;
         }
@@ -142,7 +142,7 @@ namespace HidLibrary
         static internal extern bool SetupDiEnumDeviceInterfaces(IntPtr deviceInfoSet, ref SP_DEVINFO_DATA deviceInfoData, ref Guid interfaceClassGuid, int memberIndex, ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData);
 
         [DllImport("setupapi.dll")]
-        static internal extern IntPtr SetupDiGetClassDevs(ref System.Guid classGuid, string enumerator, IntPtr hwndParent, int flags);
+        static internal extern IntPtr SetupDiGetClassDevs(ref Guid classGuid, string enumerator, IntPtr hwndParent, int flags);
 
         [DllImport("setupapi.dll")]
         static internal extern bool SetupDiGetDeviceInterfaceDetail(IntPtr deviceInfoSet, ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData, IntPtr deviceInterfaceDetailData, int deviceInterfaceDetailDataSize, ref int requiredSize, IntPtr deviceInfoData);

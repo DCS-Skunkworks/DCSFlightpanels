@@ -5,8 +5,14 @@
 
     using MEF;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
+
+    /*
+     * Logitech TPM Panel Switch, contains only the switch, no information about
+     * what action(s) the switch should perform.
+     * Used by the panel to get information on what switch(es) has been switched
+     */
     public class TPMPanelSwitch : ISaitekPanelKnob
     {
         public TPMPanelSwitch()

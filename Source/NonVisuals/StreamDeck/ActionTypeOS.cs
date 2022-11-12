@@ -1,4 +1,5 @@
-﻿using NonVisuals.StreamDeck.Panels;
+﻿using NonVisuals.BindingClasses.OSCommand;
+using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
 {
@@ -13,8 +14,7 @@ namespace NonVisuals.StreamDeck
 
     using Newtonsoft.Json;
 
-    using NonVisuals.Interfaces;
-    using NonVisuals.Saitek.BindingClasses;
+    using Interfaces;
 
     [Serializable]
     public class ActionTypeOS : OSCommandBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction

@@ -1,4 +1,9 @@
-﻿namespace NonVisuals.Saitek.Panels
+﻿using NonVisuals.BindingClasses.BIP;
+using NonVisuals.BindingClasses.DCSBIOSBindings;
+using NonVisuals.BindingClasses.Key;
+using NonVisuals.BindingClasses.OSCommand;
+
+namespace NonVisuals.Saitek.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -10,12 +15,13 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-    using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Plugin;
-    using NonVisuals.Saitek.BindingClasses;
-    using NonVisuals.Saitek.Switches;
+    using EventArgs;
+    using Plugin;
+    using Switches;
 
+    /*
+     * The implementation class for the Logitech Farming Side Panel
+     */
     public class FarmingSidePanel : SaitekPanel
     {
         private HashSet<DCSBIOSActionBindingFarmingPanel> _dcsBiosBindings = new();

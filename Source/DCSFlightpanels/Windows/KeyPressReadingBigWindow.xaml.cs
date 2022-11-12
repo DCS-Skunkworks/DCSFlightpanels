@@ -222,12 +222,12 @@ namespace DCSFlightpanels.Windows
 
                 if (keyCode > 0)
                 {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), keyCode));
+                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
                 }
                 var modifiers = CommonVirtualKey.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));
+                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
                 var result = string.Empty;
                 foreach (var str in hashSetOfKeysPressed)
@@ -265,14 +265,14 @@ namespace DCSFlightpanels.Windows
                 var modifiers = CommonVirtualKey.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));
+                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
 
                 if (hashSetOfKeysPressed.Any())
                 {
                     foreach (var virtualKeyCode in modifiers)
                     {
-                        AddKey(textBox, Enum.GetName(typeof(MEF.VirtualKeyCode), virtualKeyCode));
+                        AddKey(textBox, Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                     }
                 }
                 else
@@ -281,7 +281,7 @@ namespace DCSFlightpanels.Windows
 
                     if (keyCode > 0)
                     {
-                        AddKey(textBox, Enum.GetName(typeof(MEF.VirtualKeyCode), keyCode));
+                        AddKey(textBox, Enum.GetName(typeof(VirtualKeyCode), keyCode));
                     }
                 }
 

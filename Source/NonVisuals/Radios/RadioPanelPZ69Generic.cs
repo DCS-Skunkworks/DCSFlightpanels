@@ -1,4 +1,8 @@
 ﻿using System.Globalization;
+using NonVisuals.BindingClasses.BIP;
+using NonVisuals.BindingClasses.DCSBIOSBindings;
+using NonVisuals.BindingClasses.Key;
+using NonVisuals.BindingClasses.OSCommand;
 using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Radios
@@ -14,15 +18,17 @@ namespace NonVisuals.Radios
     using DCS_BIOS.EventArgs;
 
     using MEF;
+    using EventArgs;
+    using Plugin;
+    using Knobs;
+    using Misc;
+    using Saitek;
 
-    using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Plugin;
-    using NonVisuals.Radios.Knobs;
-    using NonVisuals.Radios.Misc;
-    using NonVisuals.Saitek;
-    using NonVisuals.Saitek.BindingClasses;
-
+    /*
+     * This is the class for the PZ69 Radio Panel that is used when :
+     * 1) The DCS module doesn't have a pre-programmed radio
+     * 2) The user chooses to program the radio themselves using e.g. DCS-BIOS
+     */
     public class RadioPanelPZ69Generic : RadioPanelPZ69Base
     {
 

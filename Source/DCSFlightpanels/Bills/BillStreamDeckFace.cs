@@ -14,6 +14,14 @@ namespace DCSFlightpanels.Bills
     using Brushes = System.Windows.Media.Brushes;
     using Color = System.Drawing.Color;
 
+    /*
+     * BillStreamDeckFace is mapped to a TextBox. When the user selects a Streamdeck button
+     * the Face sub panel will have a number of TextBoxes that the user can use for adding settings.     
+     * The Bill class will then hold whatever Face configuration the user specifies.
+     * The Button's Face (image) can be selected to be static or based on data from dcs-bios.
+     *
+     * (buttons also have actions which is what will happens when the button is pressed or released)
+     */
     public class BillStreamDeckFace : BillBaseOutput
     {
         public EnumStreamDeckButtonNames StreamDeckButtonName;

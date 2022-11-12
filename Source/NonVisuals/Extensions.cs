@@ -2,7 +2,7 @@
 {
     using System;
     using System.Globalization;
-    using NonVisuals.StreamDeck;
+    using StreamDeck;
     using TextBox = System.Windows.Controls.TextBox;
     using Newtonsoft.Json;
 

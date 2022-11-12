@@ -4,6 +4,21 @@
     using System;
     using System.Globalization;
 
+    /*
+     * Used for displaying data on the PZ Radio Panel LCD display.
+     *
+     * LCD data sent to the PZ69 Radio Panel :
+     * 1 byte (header byte 0x0)
+     * 5 bytes upper left LCD
+     * 5 bytes upper right LCD
+     * 5 bytes lower left LCD
+     * 5 bytes lower right LCD
+
+     * 0x01 - 0x09 displays the figure 1-9
+     * 0xD1 - 0xD9 displays the figure 1.-9. (figure followed by dot)
+     * 0xFF -> blank, nothing is shown in that spot.
+     *
+     */
     public class PZ69DisplayBytes
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();

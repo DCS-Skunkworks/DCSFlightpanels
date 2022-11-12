@@ -4,7 +4,7 @@
 
     using Newtonsoft.Json;
 
-    using NonVisuals.Saitek.Panels;
+    using Panels;
 
     [Serializable]
     public abstract class PanelSwitchBIPLightBinding

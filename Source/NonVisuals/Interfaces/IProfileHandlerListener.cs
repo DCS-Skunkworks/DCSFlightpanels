@@ -1,6 +1,6 @@
 ﻿namespace NonVisuals.Interfaces
 {
-    using NonVisuals.EventArgs;
+    using EventArgs;
 
     public interface IProfileHandlerListener
     {

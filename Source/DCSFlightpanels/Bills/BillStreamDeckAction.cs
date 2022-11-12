@@ -12,6 +12,15 @@ namespace DCSFlightpanels.Bills
     using NonVisuals.Saitek;
     using NonVisuals.StreamDeck;
 
+    /*
+     * BillStreamDeckAction is mapped to a TextBox. When the user selects a Streamdeck button
+     * the Action sub panel will have a number of TextBoxes that the user can use for adding settings.     
+     * The Bill class will then hold whatever Action the user specifies.
+     * The action can be e.g. key emulation, dcs-bios control and more.
+     *
+     * Action means => Whatever Action the Streamdeck will perform when button is pressed or released.
+     * (buttons also have faces which is the image the user sees on the physical Streamdeck button)
+     */
     public class BillStreamDeckAction : BillBaseInputStreamDeck
     {
         private ActionTypeDCSBIOS _dcsbiosBindingStreamDeck;

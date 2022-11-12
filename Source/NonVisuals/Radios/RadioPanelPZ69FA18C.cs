@@ -2,6 +2,8 @@
 //  added by Capt Zeen
 //
 
+using NonVisuals.BindingClasses.BIP;
+
 namespace NonVisuals.Radios
 {
     using System;
@@ -15,11 +17,14 @@ namespace NonVisuals.Radios
     using DCS_BIOS.Interfaces;
 
     using MEF;
-    using NonVisuals.Plugin;
-    using NonVisuals.Radios.Knobs;
-    using NonVisuals.Saitek;
-    using NonVisuals.Saitek.BindingClasses;
+    using Plugin;
+    using Knobs;
+    using Saitek;
 
+
+    /*
+     * Pre-programmed radio panel for the F/A-18C.
+     */
     public class RadioPanelPZ69FA18C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentFA18CRadioMode

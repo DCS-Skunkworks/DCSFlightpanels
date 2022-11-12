@@ -22,7 +22,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System.Windows.Navigation;
     using ClassLibraryCommon;
     using DCS_BIOS;
-    using DCSFlightpanels.Shared;
+    using Shared;
     using NonVisuals;
     using NonVisuals.Interfaces;
     using NonVisuals.StreamDeck;
@@ -44,7 +44,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private bool _populatingData = false;
         private DCSBIOSDecoder _dcsbiosDecoder = null;
         private bool _closing = false;
-        private System.Windows.Threading.DispatcherTimer _dispatcherTimer;
+        private DispatcherTimer _dispatcherTimer;
 
         public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeckPanel)
         {
@@ -106,7 +106,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 SetFormState();
                 TextBoxSearchWord.Focus();
 
-                _dispatcherTimer = new System.Windows.Threading.DispatcherTimer(DispatcherPriority.Send);
+                _dispatcherTimer = new DispatcherTimer(DispatcherPriority.Send);
                 _dispatcherTimer.Tick += new EventHandler(DispatcherTimerTick);
                 _dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
                 _dispatcherTimer.Start();

@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Saitek.Panels
+﻿using NonVisuals.BindingClasses.BIP;
+
+namespace NonVisuals.Saitek.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -11,9 +13,13 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Saitek.BindingClasses;
+    using EventArgs;
 
+    /*
+     * The implementation class for the Logitech Backlit Panel (BIP)
+     * See bottom of file for communication information in
+     * regards of setting the lights.
+     */
     public class BacklitPanelBIP : SaitekPanel
     {
         private const byte _1BIPMask = 0x01;

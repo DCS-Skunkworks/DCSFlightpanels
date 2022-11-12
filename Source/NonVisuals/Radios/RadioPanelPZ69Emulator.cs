@@ -1,4 +1,7 @@
-﻿using NonVisuals.Saitek.Panels;
+﻿using NonVisuals.BindingClasses.BIP;
+using NonVisuals.BindingClasses.Key;
+using NonVisuals.BindingClasses.OSCommand;
+using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Radios
 {
@@ -13,13 +16,16 @@ namespace NonVisuals.Radios
 
     using MEF;
 
-    using NonVisuals.EventArgs;
-    using NonVisuals.Plugin;
-    using NonVisuals.Radios.Knobs;
-    using NonVisuals.Radios.Misc;
-    using NonVisuals.Saitek;
-    using NonVisuals.Saitek.BindingClasses;
+    using EventArgs;
+    using Plugin;
+    using Knobs;
+    using Misc;
+    using Saitek;
 
+    /*
+     * This is the class for the PZ69 Radio Panel that is used when the user
+     * has a key emulation only profile open.
+     */
     public class RadioPanelPZ69Emulator : RadioPanelPZ69Base
     {
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new();

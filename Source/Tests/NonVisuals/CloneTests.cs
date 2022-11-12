@@ -2,20 +2,20 @@
 using DCS_BIOS;
 using MEF;
 using NonVisuals;
-using NonVisuals.Saitek.BindingClasses;
 using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Panels;
 using System.Collections.Generic;
 using System.Drawing;
+using NonVisuals.BindingClasses.BIP;
 using Xunit;
 
 namespace Tests.NonVisuals
 {
     public class CloneTests {
         
-        private const string _sringValue1 ="Some string value 1";
-        private const string _sringValue2 = "Some string value 2";
-        private const string _sringValue3 = "Some string value 3";
+        private const string _stringValue1 ="Some string value 1";
+        private const string _stringValue2 = "Some string value 2";
+        private const string _stringValue3 = "Some string value 3";
         private const int _intValue1 = 456;
         private Color _colorValue1 = Color.Aquamarine;
 
@@ -58,13 +58,13 @@ namespace Tests.NonVisuals
         public void BIPLink_MustBe_Clonable_UseOf_BIPLinkPZ69() {
             //Note: BIPLink is Absract
             BIPLinkPZ69 source = new();
-            source.Description = _sringValue1;
+            source.Description = _stringValue1;
             source.WhenTurnedOn = false;
             
             BIPLinkPZ69 cloned = source.CloneJson();
 
             Assert.NotNull(cloned);
-            Assert.Equal(_sringValue1, cloned.Description);
+            Assert.Equal(_stringValue1, cloned.Description);
             Assert.False(cloned.WhenTurnedOn);
         }
 
@@ -72,43 +72,43 @@ namespace Tests.NonVisuals
         public void BIPLink_MustBe_Clonable_UseOf_BIPLinkPZ55() {
             //Note: BIPLink is Absract
             BIPLinkPZ55 source = new();
-            source.Description = _sringValue1;
+            source.Description = _stringValue1;
             source.WhenTurnedOn = false;
             
             BIPLinkPZ55 cloned = source.CloneJson();
 
             Assert.NotNull(cloned);
-            Assert.Equal(_sringValue1, cloned.Description);
+            Assert.Equal(_stringValue1, cloned.Description);
             Assert.False(cloned.WhenTurnedOn);
         }
 
         [Fact]
         public void OSCommand_MustBe_Clonable() {
             OSCommand source = new();
-            source.Name = _sringValue1;
-            source.Arguments = _sringValue2;
-            source.Command = _sringValue3;
+            source.Name = _stringValue1;
+            source.Arguments = _stringValue2;
+            source.Command = _stringValue3;
             
             OSCommand cloned = source.CloneJson();
 
             Assert.NotNull(cloned);
-            Assert.Equal(_sringValue1, cloned.Name);
-            Assert.Equal(_sringValue2, cloned.Arguments);
-            Assert.Equal(_sringValue3, cloned.Command);
+            Assert.Equal(_stringValue1, cloned.Name);
+            Assert.Equal(_stringValue2, cloned.Arguments);
+            Assert.Equal(_stringValue3, cloned.Command);
         }
 
         [Fact]
         public void DCSBIOSDecoder_MustBe_Clonable() {
             DCSBIOSDecoder source = new();
-            source.ButtonFinalText = _sringValue1;
-            source.ButtonTextTemplate = _sringValue2;
+            source.ButtonFinalText = _stringValue1;
+            source.ButtonTextTemplate = _stringValue2;
             source.FontColor = _colorValue1;
            
             DCSBIOSDecoder cloned = source.CloneJson();
 
             Assert.NotNull(cloned);
             Assert.Equal(string.Empty, cloned.ButtonFinalText); // has [JsonIgnore] attribute, no value expected in clone
-            Assert.Equal(_sringValue2, cloned.ButtonTextTemplate);
+            Assert.Equal(_stringValue2, cloned.ButtonTextTemplate);
             Assert.Equal(_colorValue1, cloned.FontColor);
         }
 
@@ -128,16 +128,16 @@ namespace Tests.NonVisuals
         [Fact]
         public void DCSBIOSInput_MustBe_Clonable() {
             DCSBIOSInput source = new();
-            source.ControlId = _sringValue1;
+            source.ControlId = _stringValue1;
             source.Delay = _intValue1;
-            source.ControlDescription = _sringValue2;
+            source.ControlDescription = _stringValue2;
 
             DCSBIOSInput cloned = source.CloneJson();
 
             Assert.NotNull(cloned);
-            Assert.Equal(_sringValue1, cloned.ControlId);
+            Assert.Equal(_stringValue1, cloned.ControlId);
             Assert.Equal(_intValue1, cloned.Delay);
-            Assert.Equal(_sringValue2, cloned.ControlDescription);
+            Assert.Equal(_stringValue2, cloned.ControlDescription);
         }
 
         [Fact]

@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    using NonVisuals.Properties;
+    using Properties;
 
     public static class SettingsManager
     {

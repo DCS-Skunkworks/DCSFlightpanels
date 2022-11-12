@@ -13,8 +13,8 @@ namespace NonVisuals.StreamDeck
 
     using Newtonsoft.Json;
 
-    using NonVisuals.Interfaces;
-    using NonVisuals.Plugin;
+    using Interfaces;
+    using Plugin;
 
     [Serializable]
     public class StreamDeckButton : IDisposable

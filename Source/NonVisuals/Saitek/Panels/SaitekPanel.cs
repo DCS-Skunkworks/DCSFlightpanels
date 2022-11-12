@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Saitek.Panels
+﻿using NonVisuals.BindingClasses.BIP;
+
+namespace NonVisuals.Saitek.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -11,11 +13,13 @@
 
     using MEF;
 
-    using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
-    using NonVisuals.Saitek.BindingClasses;
-    using NonVisuals.Saitek.Switches;
+    using EventArgs;
+    using Interfaces;
+    using Switches;
 
+    /*
+     * Base class for Saitek Panels. Contains common functions and properties shared between the panels.
+     */
     public abstract class SaitekPanel : GamingPanel, IDisposable
     {
         public abstract void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff);

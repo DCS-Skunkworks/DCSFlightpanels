@@ -1,4 +1,9 @@
-﻿namespace NonVisuals.Saitek.Panels
+﻿using NonVisuals.BindingClasses.BIP;
+using NonVisuals.BindingClasses.DCSBIOSBindings;
+using NonVisuals.BindingClasses.Key;
+using NonVisuals.BindingClasses.OSCommand;
+
+namespace NonVisuals.Saitek.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -12,11 +17,9 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-    using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Plugin;
-    using NonVisuals.Saitek.BindingClasses;
-    using NonVisuals.Saitek.Switches;
+    using EventArgs;
+    using Plugin;
+    using Switches;
 
     public enum SwitchPanelPZ55LEDPosition : byte
     {
@@ -25,6 +28,10 @@
         RIGHT = 0x2
     }
 
+    /*
+     * The implementation class for the Logitech Switch Panel (PZ55)
+     * See bottom of file for communication information.
+     */
     public class SwitchPanelPZ55 : SaitekPanel
     {
         private readonly List<DcsOutputAndColorBindingPZ55> _listColorOutputBinding = new();
@@ -1139,4 +1146,67 @@
     }
     
 }
+/*
+Setting the LED lights on Switch Panel PZ55. One byte with one byte report header (0x0)
 
+
+LED Byte:
+* 00000000 0x0 ALL DARK
+* 
+* 00000001 0x1 UP GREEN
+* 00001000 0x8 UP RED
+* 00001001 0x9 UP YELLOW
+* 
+* 00000010 0x2 LEFT GREEN
+* 00010000 0x10 LEFT RED
+* 00010010 0x12 LEFT YELLOW
+* 
+* 00100000 0x20 RIGHT RED
+* 00000100 0x4 RIGHT GREEN
+* 00100100 0x24 RIGHT YELLOW
+
+
+
+
+Switch Panel PZ55 sends 3 bytes representing all the switches and knobs, levers.
+
+0 = Off
+
+1 = On
+
+
+Byte #1
+00000000
+||||||||_ SWITCHKEY_MASTER_BAT
+|||||||_ SWITCHKEY_MASTER_ALT
+||||||_ SWITCHKEY_AVIONICS_MASTER
+|||||_ SWITCHKEY_FUEL_PUMP
+||||_ SWITCHKEY_DE_ICE
+|||_ SWITCHKEY_PITOT_HEAT
+||_ SWITCHKEY_CLOSE_COWL ** ~
+|_ SWITCHKEY_LIGHTS_PANEL
+
+Byte #2 
+00000000
+||||||||_ SWITCHKEY_LIGHTS_BEACON
+|||||||_ SWITCHKEY_LIGHTS_NAV
+||||||_ SWITCHKEY_LIGHTS_STROBE
+|||||_ SWITCHKEY_LIGHTS_TAXI
+||||_ SWITCHKEY_LIGHTS_LANDING
+|||_ KNOB_ENGINE_OFF
+||_ KNOB_ENGINE_RIGHT
+|_ KNOB_ENGINE_LEFT
+
+Byte #3
+00000000
+||||||||_ KNOB_ENGINE_BOTH
+|||||||_ KNOB_ENGINE_START
+||||||_ LEVER_GEAR_UP
+|||||_ LEVER_GEAR_DOWN
+||||_ 
+|||_ 
+||_ 
+|_
+
+
+ */

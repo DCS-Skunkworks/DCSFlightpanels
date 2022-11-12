@@ -1,7 +1,7 @@
 ﻿namespace NonVisuals.CockpitMaster.Switches
 {
     using System.Collections.Generic;
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
     public enum CDU737Keys
     {

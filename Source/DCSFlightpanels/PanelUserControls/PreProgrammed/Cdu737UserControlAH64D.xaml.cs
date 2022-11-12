@@ -11,7 +11,7 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
     using NonVisuals.Interfaces;
 
     using NonVisuals.CockpitMaster.Preprogrammed;
-    using DCSFlightpanels.Interfaces;
+    using Interfaces;
     using System;
 
     /// <summary>

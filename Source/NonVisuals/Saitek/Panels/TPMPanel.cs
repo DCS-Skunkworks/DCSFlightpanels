@@ -1,4 +1,9 @@
-﻿namespace NonVisuals.Saitek.Panels
+﻿using NonVisuals.BindingClasses.BIP;
+using NonVisuals.BindingClasses.DCSBIOSBindings;
+using NonVisuals.BindingClasses.Key;
+using NonVisuals.BindingClasses.OSCommand;
+
+namespace NonVisuals.Saitek.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -10,12 +15,14 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-    using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Plugin;
-    using NonVisuals.Saitek.BindingClasses;
-    using NonVisuals.Saitek.Switches;
+    using EventArgs;
+    using Plugin;
+    using Switches;
 
+    /*
+     * The implementation class for the Logitech TPM Panel (TPM)
+     * See bottom of file for communication information.
+     */
     public class TPMPanel : SaitekPanel
     {
         private readonly object _dcsBiosDataReceivedLock = new();
@@ -631,3 +638,31 @@
 
 
 }
+
+/*
+ TPM (only toggle switches) first 3 bytes for TPM rods.
+
+
+Byte 4:
+00000000
+||||||||_ 
+|||||||_ 
+||||||_
+|||||_ G1
+||||_ G2
+|||_ G3
+||_ G4
+|_ G5
+
+
+Byte 5:
+00000000 
+||||||||_ G6
+|||||||_ G7
+||||||_ G8
+|||||_ G9
+||||_
+|||_
+||_
+|_
+*/
