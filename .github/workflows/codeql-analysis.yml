@@ -55,7 +55,7 @@ jobs:
     #    uses a compiled language
 
     - run: |
-        dotnet publish \Source\DCSFlightpanels\DCSFlightpanels.csproj --self-contained false -f net6.0-windows -r win-x64 -c Release /p:DebugType=None /p:DebugSymbols=false
+        dotnet build /Source/DCSFlightpanels/DCSFlightpanels.csproj --self-contained false -f net6.0-windows -r win-x64 -c Release /p:DebugType=None /p:DebugSymbols=false
     #   make bootstrap
     #   make release
 
