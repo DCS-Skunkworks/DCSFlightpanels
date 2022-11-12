@@ -18,6 +18,10 @@ namespace NonVisuals.Radios
     using Knobs;
     using Saitek;
 
+
+    /*
+     * Pre-programmed radio panel for the F-14B.
+     */
     public class RadioPanelPZ69F14B : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentF14RadioMode

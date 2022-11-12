@@ -19,6 +19,10 @@ namespace NonVisuals.Saitek.Panels
     using Plugin;
     using Switches;
 
+    /*
+     * The implementation class for the Logitech Multi Panel (PZ70)
+     * See bottom of file for communication information.
+     */
     public class MultiPanelPZ70 : SaitekPanel
     {
         private readonly object _lcdLockObject = new();
@@ -1472,3 +1476,84 @@ namespace NonVisuals.Saitek.Panels
     }
     
 }
+
+/*
+Sends 3 bytes when switching occurs :
+Byte #1
+00000000
+||||||||_ KNOB_ALT
+|||||||_ KNOB_VS
+||||||_ KNOB_IAS
+|||||_ KNOB_HDG
+||||_ KNOB_CRS
+|||_ LCD WHEEL INC 
+||_ LCD WHEEL DEC
+|_ AP_BUTTON
+
+Byte #2
+00000000
+||||||||_ HDG_BUTTON
+|||||||_ NAV_BUTTON
+||||||_ IAS_BUTTON
+|||||_ ALT_BUTTON
+||||_ VS_BUTTON
+|||_ APR_BUTTON
+||_ REV_BUTTON
+|_ AUTO THROTTLE
+
+Byte #3
+00000000
+||||||||_ FLAPS UP 
+|||||||_ FLAPS DOWN
+||||||_ PITCH TRIM DOWN
+|||||_ PITCH TRIM UP
+||||_ 
+|||_ 
+||_ 
+|_ 
+
+
+
+
+Bytes sent to the PZ70:
+
+1 Report ID byte(0x0) + 11 payload bytes
+
+h p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11
+|  |  |  |  |  |  |  |  |  |  |  |_ Lights LCD buttons on/off (LCD Button Byte)
+|  |  |  |  |  |  |  |  |  |  |_ Rightmost number on lower LCD row (0x0-0x9, 0xA above will darken the digit position, except 0xEE which will show a dash)
+|  |  |  |  |  |  |  |  |  |_ 
+|  |  |  |  |  |  |  |  |_ 
+|  |  |  |  |  |  |  |_ 
+|  |  |  |  |  |  |_ Leftmost number on lower LCD row (0x0-0x9, 0xA above will darken the digit position, except 0xEE which will show a dash)
+|  |  |  |  |  |_ Rightmost number on upper LCD row (0x0-0x9, 0xA above will darken the digit position)
+|  |  |  |  |_ 
+|  |  |  |_ 
+|  |  |_ 
+|  |_ Leftmost number on upper LCD row (0x0-0x9, 0xA above will darken the digit position)
+|_ Report ID byte, always 0x0
+
+The leftmost text in the display is set by the panel itself when it receives feature data.
+"ALT / VS"
+"IAS"
+"HDG"
+"CRS"
+
+The panel limits which digit can be displayed depending on which mode is selected.
+
+ALT / VS : p1 - p10
+IAS : p4 - p6
+HDG : p4 - p6
+CRS : p4 - p6
+
+LCD Button Byte
+00000000
+||||||||_ AP_BUTTON
+|||||||_ HDG_BUTTON
+||||||_ NAV_BUTTON
+|||||_ IAS_BUTTON
+||||_ ALT_BUTTON
+|||_ VS_BUTTON
+||_ APR_BUTTON
+|_ REV_BUTTON
+ */

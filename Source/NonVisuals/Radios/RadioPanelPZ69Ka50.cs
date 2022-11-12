@@ -17,6 +17,10 @@ namespace NonVisuals.Radios
     using Knobs;
     using Saitek;
 
+
+    /*
+     * Pre-programmed radio panel for the Ka50.
+     */
     public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base
     {
         private enum CurrentKa50RadioMode

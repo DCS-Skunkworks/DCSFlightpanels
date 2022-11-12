@@ -19,6 +19,10 @@ namespace NonVisuals.Saitek.Panels
     using Plugin;
     using Switches;
 
+    /*
+     * The implementation class for the Logitech TPM Panel (TPM)
+     * See bottom of file for communication information.
+     */
     public class TPMPanel : SaitekPanel
     {
         private readonly object _dcsBiosDataReceivedLock = new();
@@ -634,3 +638,31 @@ namespace NonVisuals.Saitek.Panels
 
 
 }
+
+/*
+ TPM (only toggle switches) first 3 bytes for TPM rods.
+
+
+Byte 4:
+00000000
+||||||||_ 
+|||||||_ 
+||||||_
+|||||_ G1
+||||_ G2
+|||_ G3
+||_ G4
+|_ G5
+
+
+Byte 5:
+00000000 
+||||||||_ G6
+|||||||_ G7
+||||||_ G8
+|||||_ G9
+||||_
+|||_
+||_
+|_
+

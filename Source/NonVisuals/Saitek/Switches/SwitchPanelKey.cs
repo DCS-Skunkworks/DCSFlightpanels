@@ -51,6 +51,11 @@
     }
 
 
+    /*
+     * Logitech Switch Panel Key, contains only the key, no information about
+     * what action(s) the key should perform.
+     * Used by the panel to get information on what key(s) has been switched
+     */
     public class SwitchPanelKey : ISaitekPanelKnob
     {
 

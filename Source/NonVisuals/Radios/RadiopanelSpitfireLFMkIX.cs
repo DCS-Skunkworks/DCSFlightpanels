@@ -17,6 +17,10 @@ namespace NonVisuals.Radios
     using Knobs;
     using Saitek;
 
+
+    /*
+     * Pre-programmed radio panel for the Spitfire LF MK IX.
+     */
     public class RadioPanelPZ69SpitfireLFMkIX : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentSpitfireLFMkIXRadioMode

@@ -17,6 +17,10 @@ namespace NonVisuals.Radios
     using Knobs;
     using Saitek;
 
+
+    /*
+     * Pre-programmed radio panel for the FW190.
+     */
     public class RadioPanelPZ69Fw190 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentFw190RadioMode

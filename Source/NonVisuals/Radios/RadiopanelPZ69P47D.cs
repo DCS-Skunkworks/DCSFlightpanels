@@ -17,6 +17,10 @@ namespace NonVisuals.Radios
     using Knobs;
     using Saitek;
 
+
+    /*
+     * Pre-programmed radio panel for the P-47D.
+     */
     public class RadioPanelPZ69P47D : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentP47DRadioMode

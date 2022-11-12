@@ -15,6 +15,11 @@ namespace NonVisuals.Saitek.Panels
     using MEF;
     using EventArgs;
 
+    /*
+     * The implementation class for the Logitech Backlit Panel (BIP)
+     * See bottom of file for communication information in
+     * regards of setting the lights.
+     */
     public class BacklitPanelBIP : SaitekPanel
     {
         private const byte _1BIPMask = 0x01;

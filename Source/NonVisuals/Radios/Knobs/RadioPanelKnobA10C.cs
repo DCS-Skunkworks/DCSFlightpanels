@@ -5,11 +5,6 @@
 
     using Interfaces;
 
-    /*
-     * All knobs & switches available on the PZ69 Radio Panel.
-     * Used by the PZ69 instance to determine what knob & switch
-     * the user is manipulating.
-     */
     public enum RadioPanelPZ69KnobsA10C
     {
         UPPER_VHFAM,
@@ -37,6 +32,13 @@
         LOWER_LARGE_FREQ_WHEEL_DEC,
         LOWER_FREQ_SWITCH
     }
+
+
+    /*
+     * Represents a knob or button on the PZ69 Radio Panel.
+     * Used by the PZ69 instance to determine what knob & button
+     * the user is manipulating.
+     */
 
     public class RadioPanelKnobA10C : ISaitekPanelKnob
     {

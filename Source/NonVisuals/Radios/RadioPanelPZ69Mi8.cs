@@ -19,6 +19,10 @@ namespace NonVisuals.Radios
     using Knobs;
     using Saitek;
 
+
+    /*
+     * Pre-programmed radio panel for the Mi8.
+     */
     public class RadioPanelPZ69Mi8 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentMi8RadioMode

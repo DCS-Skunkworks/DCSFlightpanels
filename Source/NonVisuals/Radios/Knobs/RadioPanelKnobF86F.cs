@@ -32,6 +32,12 @@
         LOWER_FREQ_SWITCH
     }
 
+
+    /*
+     * Represents a knob or button on the PZ69 Radio Panel.
+     * Used by the PZ69 instance to determine what knob & button
+     * the user is manipulating.
+     */
     public class RadioPanelKnobF86F : ISaitekPanelKnob
     {
         public RadioPanelKnobF86F(int group, int mask, bool isOn, RadioPanelPZ69KnobsF86F radioPanelPZ69Knob)

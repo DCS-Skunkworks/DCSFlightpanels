@@ -15,6 +15,10 @@ namespace NonVisuals.Radios
     using Knobs;
     using Saitek;
 
+
+    /*
+     * Pre-programmed radio panel for the P-51D.
+     */
     public class RadioPanelPZ69P51D : RadioPanelPZ69Base
     {
         private enum CurrentP51DRadioMode

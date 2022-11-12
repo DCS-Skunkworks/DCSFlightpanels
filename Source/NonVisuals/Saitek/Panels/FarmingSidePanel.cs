@@ -19,6 +19,9 @@ namespace NonVisuals.Saitek.Panels
     using Plugin;
     using Switches;
 
+    /*
+     * The implementation class for the Logitech Farming Side Panel
+     */
     public class FarmingSidePanel : SaitekPanel
     {
         private HashSet<DCSBIOSActionBindingFarmingPanel> _dcsBiosBindings = new();

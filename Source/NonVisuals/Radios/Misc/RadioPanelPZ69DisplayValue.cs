@@ -8,6 +8,10 @@
 
     using Saitek;
 
+    /*
+     * Used by the generic and emulator version of the PZ69 Radio Panel
+     * when a specific setting is mapped with one of the 4 LCDs.
+     */
     public class RadioPanelPZ69DisplayValue
     {
         public RadioPanelPZ69Display RadioPanelDisplay { get; set; }

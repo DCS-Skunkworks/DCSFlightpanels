@@ -17,6 +17,9 @@ namespace NonVisuals.Saitek.Panels
     using Interfaces;
     using Switches;
 
+    /*
+     * Base class for Saitek Panels. Contains common functions and properties shared between the panels.
+     */
     public abstract class SaitekPanel : GamingPanel, IDisposable
     {
         public abstract void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff);

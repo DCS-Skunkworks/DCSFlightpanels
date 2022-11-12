@@ -21,6 +21,10 @@ namespace NonVisuals.Radios
     using Knobs;
     using Saitek;
 
+
+    /*
+     * Pre-programmed radio panel for the F/A-18C.
+     */
     public class RadioPanelPZ69FA18C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentFA18CRadioMode

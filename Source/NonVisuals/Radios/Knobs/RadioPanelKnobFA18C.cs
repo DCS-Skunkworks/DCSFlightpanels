@@ -36,6 +36,12 @@ namespace NonVisuals.Radios.Knobs
         LOWER_FREQ_SWITCH
     }
 
+
+    /*
+     * Represents a knob or button on the PZ69 Radio Panel.
+     * Used by the PZ69 instance to determine what knob & button
+     * the user is manipulating.
+     */
     public class RadioPanelKnobFA18C : ISaitekPanelKnob
     {
         public RadioPanelKnobFA18C(int group, int mask, bool isOn, RadioPanelPZ69KnobsFA18C radioPanelPZ69Knob)

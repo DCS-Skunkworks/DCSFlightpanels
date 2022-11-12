@@ -31,6 +31,13 @@
         LOWER_LARGE_FREQ_WHEEL_DEC,
         LOWER_FREQ_SWITCH
     }
+
+
+    /*
+     * Represents a knob or button on the PZ69 Radio Panel.
+     * Used by the PZ69 instance to determine what knob & button
+     * the user is manipulating.
+     */
     public class RadioPanelKnobP51D : ISaitekPanelKnob
     {
         public RadioPanelKnobP51D(int group, int mask, bool isOn, RadioPanelPZ69KnobsP51D radioPanelPZ69Knob)

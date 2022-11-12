@@ -18,6 +18,9 @@ namespace NonVisuals.Radios
     using Knobs;
     using Saitek;
 
+    /*
+     * Pre-programmed radio panel for the A-10C.
+     */
     public class RadioPanelPZ69A10C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentA10RadioMode

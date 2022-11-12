@@ -4,6 +4,8 @@
 
     using Interfaces;
 
+
+
     public enum RadioPanelPZ69KnobsAJS37
     {
         UPPER_FR22,      //COM1
@@ -31,6 +33,14 @@
         LOWER_LARGE_FREQ_WHEEL_DEC,
         LOWER_FREQ_SWITCH
     }
+
+
+
+    /*
+     * Represents a knob or button on the PZ69 Radio Panel.
+     * Used by the PZ69 instance to determine what knob & button
+     * the user is manipulating.
+     */
 
     public class RadioPanelKnobAJS37 : ISaitekPanelKnob
     {
