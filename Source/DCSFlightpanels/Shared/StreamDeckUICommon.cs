@@ -7,8 +7,8 @@
 
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.CustomControls;
-    using DCSFlightpanels.Properties;
+    using CustomControls;
+    using Properties;
 
     using NonVisuals;
     using NonVisuals.StreamDeck;

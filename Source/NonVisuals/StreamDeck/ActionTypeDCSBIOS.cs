@@ -1,4 +1,5 @@
-﻿using NonVisuals.StreamDeck.Panels;
+﻿using NonVisuals.BindingClasses.DCSBIOSBindings;
+using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
 {
@@ -11,9 +12,7 @@ namespace NonVisuals.StreamDeck
     using MEF;
 
     using Newtonsoft.Json;
-
-    using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
     [Serializable]
     public class ActionTypeDCSBIOS : DCSBIOSActionBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction

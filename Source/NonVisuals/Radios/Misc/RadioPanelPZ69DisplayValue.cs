@@ -6,7 +6,7 @@
 
     using MEF;
 
-    using NonVisuals.Saitek;
+    using Saitek;
 
     public class RadioPanelPZ69DisplayValue
     {

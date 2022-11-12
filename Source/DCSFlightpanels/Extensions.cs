@@ -2,7 +2,7 @@
 
 namespace DCSFlightpanels
 {
-    using DCSFlightpanels.CustomControls;
+    using CustomControls;
 
     using NonVisuals.StreamDeck;
 

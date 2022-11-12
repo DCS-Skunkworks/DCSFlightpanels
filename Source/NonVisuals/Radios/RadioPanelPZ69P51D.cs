@@ -1,4 +1,5 @@
 ﻿using ClassLibraryCommon;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -10,10 +11,9 @@ namespace NonVisuals.Radios
     using DCS_BIOS.EventArgs;
 
     using MEF;
-    using NonVisuals.Plugin;
-    using NonVisuals.Radios.Knobs;
-    using NonVisuals.Saitek;
-    using NonVisuals.Saitek.BindingClasses;
+    using Plugin;
+    using Knobs;
+    using Saitek;
 
     public class RadioPanelPZ69P51D : RadioPanelPZ69Base
     {

@@ -1,6 +1,6 @@
 ﻿namespace DCS_BIOS.Interfaces
 {
-    using DCS_BIOS.EventArgs;
+    using EventArgs;
 
     public interface IDcsBiosConnectionListener
     {

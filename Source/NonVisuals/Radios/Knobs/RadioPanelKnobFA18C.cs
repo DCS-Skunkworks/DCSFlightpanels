@@ -6,7 +6,7 @@ namespace NonVisuals.Radios.Knobs
 {
     using System.Collections.Generic;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
     public enum RadioPanelPZ69KnobsFA18C
     {

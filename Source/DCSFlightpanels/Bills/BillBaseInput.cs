@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using NonVisuals.BindingClasses.BIP;
+using NonVisuals.BindingClasses.DCSBIOSBindings;
 
 namespace DCSFlightpanels.Bills
 {
@@ -11,15 +13,13 @@ namespace DCSFlightpanels.Bills
     using ClassLibraryCommon;
 
     using DCS_BIOS;
-    using DCSFlightpanels.Interfaces;
-    using DCSFlightpanels.Windows;
+    using Interfaces;
+    using Windows;
 
 
     using MEF;
 
     using NonVisuals;
-    using NonVisuals.DCSBIOSBindings;
-    using NonVisuals.Saitek.BindingClasses;
     using NonVisuals.Saitek.Panels;
 
     public abstract class BillBaseInput
@@ -463,7 +463,7 @@ namespace DCSFlightpanels.Bills
         private void AddVKNULL()
         {
             ClearAll();
-            var virtualKeyNull = Enum.GetName(typeof(MEF.VirtualKeyCode), MEF.VirtualKeyCode.VK_NULL);
+            var virtualKeyNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
             if (string.IsNullOrEmpty(virtualKeyNull))
             {
                 return;

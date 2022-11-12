@@ -5,7 +5,7 @@
 
     using MEF;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
     public class TPMPanelSwitch : ISaitekPanelKnob
     {

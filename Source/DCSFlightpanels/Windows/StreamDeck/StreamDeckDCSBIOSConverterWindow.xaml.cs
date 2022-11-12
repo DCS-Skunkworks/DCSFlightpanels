@@ -10,7 +10,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System.Windows.Documents;
     using System.Windows.Input;
     using ClassLibraryCommon;
-    using DCSFlightpanels.Shared;
+    using Shared;
     using MEF;
     using NonVisuals;
     using NonVisuals.Interfaces;

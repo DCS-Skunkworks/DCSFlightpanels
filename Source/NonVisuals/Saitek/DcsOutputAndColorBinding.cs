@@ -5,7 +5,7 @@
 
     using DCS_BIOS;
 
-    using NonVisuals.Saitek.Panels;
+    using Panels;
 
     public enum PanelLEDColor : byte
     {

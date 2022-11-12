@@ -8,8 +8,8 @@
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
     using NLog;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
+    using EventArgs;
+    using Interfaces;
 
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty, IDisposable
     {

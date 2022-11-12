@@ -1,5 +1,5 @@
 ﻿using DCSFlightpanels.CustomControls;
-using NonVisuals.DCSBIOSBindings;
+using NonVisuals.BindingClasses.DCSBIOSBindings;
 
 namespace DCSFlightpanels.Bills
 {

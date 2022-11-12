@@ -6,7 +6,7 @@ namespace NonVisuals.StreamDeck.Events
 
     using MEF;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
     public static class SDEventHandler
     {

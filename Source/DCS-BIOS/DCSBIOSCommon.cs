@@ -16,7 +16,7 @@ namespace DCS_BIOS
         /// </returns>
         public static Tuple<bool, bool> CheckJSONDirectory(string jsonDirectory)
         {
-            jsonDirectory = DCSBIOSCommon.GetDCSBIOSJSONDirectory(jsonDirectory);
+            jsonDirectory = GetDCSBIOSJSONDirectory(jsonDirectory);
 
             //Debug.WriteLine($"\nFolder exists? {Directory.Exists(jsonDirectory)}    {jsonDirectory}\n");
             if (string.IsNullOrEmpty(jsonDirectory) || !Directory.Exists(jsonDirectory))

@@ -1,3 +1,5 @@
+using NonVisuals.BindingClasses.BIP;
+
 namespace NonVisuals.Radios
 {
     using System;
@@ -13,10 +15,9 @@ namespace NonVisuals.Radios
     using DCS_BIOS.Interfaces;
 
     using MEF;
-    using NonVisuals.Plugin;
-    using NonVisuals.Radios.Knobs;
-    using NonVisuals.Saitek;
-    using NonVisuals.Saitek.BindingClasses;
+    using Plugin;
+    using Knobs;
+    using Saitek;
 
     public class RadioPanelPZ69UH1H : RadioPanelPZ69Base, IDCSBIOSStringListener
     {

@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.PanelUserControls
+﻿using NonVisuals.BindingClasses.DCSBIOSBindings;
+
+namespace DCSFlightpanels.PanelUserControls
 {
     using System;
     using System.Collections.Generic;
@@ -9,16 +11,15 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
-    using DCSFlightpanels.Bills;
-    using DCSFlightpanels.CustomControls;
-    using DCSFlightpanels.Interfaces;
-    using DCSFlightpanels.Properties;
-    using DCSFlightpanels.Windows;
+    using Bills;
+    using CustomControls;
+    using Interfaces;
+    using Properties;
+    using Windows;
 
 
     using MEF;
     using NonVisuals;
-    using NonVisuals.DCSBIOSBindings;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Saitek;

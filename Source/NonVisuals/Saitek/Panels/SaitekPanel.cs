@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Saitek.Panels
+﻿using NonVisuals.BindingClasses.BIP;
+
+namespace NonVisuals.Saitek.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -11,10 +13,9 @@
 
     using MEF;
 
-    using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
-    using NonVisuals.Saitek.BindingClasses;
-    using NonVisuals.Saitek.Switches;
+    using EventArgs;
+    using Interfaces;
+    using Switches;
 
     public abstract class SaitekPanel : GamingPanel, IDisposable
     {

@@ -6,9 +6,9 @@
     using System.Threading;
 
     using ClassLibraryCommon;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Radios.Misc;
-    using NonVisuals.Saitek.Panels;
+    using EventArgs;
+    using Misc;
+    using Saitek.Panels;
 
     public enum PZ69LCDPosition
     {

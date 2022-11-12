@@ -3,8 +3,13 @@
     using System;
     using System.Collections.Generic;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
+    /*
+     * All knobs & switches available on the PZ69 Radio Panel.
+     * Used by the PZ69 instance to determine what knob & switch
+     * the user is manipulating.
+     */
     public enum RadioPanelPZ69KnobsA10C
     {
         UPPER_VHFAM,

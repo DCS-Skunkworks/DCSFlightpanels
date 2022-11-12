@@ -10,10 +10,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.Bills;
-    using DCSFlightpanels.CustomControls;
-    using DCSFlightpanels.Shared;
-    using DCSFlightpanels.Windows;
+    using Bills;
+    using CustomControls;
+    using Shared;
+    using Windows;
 
     using MEF;
     using NLog;

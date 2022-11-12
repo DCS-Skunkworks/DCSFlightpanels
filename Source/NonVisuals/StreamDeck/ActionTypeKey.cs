@@ -1,4 +1,5 @@
-﻿using NonVisuals.StreamDeck.Panels;
+﻿using NonVisuals.BindingClasses.Key;
+using NonVisuals.StreamDeck.Panels;
 
 namespace NonVisuals.StreamDeck
 {
@@ -14,9 +15,8 @@ namespace NonVisuals.StreamDeck
 
     using Newtonsoft.Json;
 
-    using NonVisuals.Interfaces;
-    using NonVisuals.Plugin;
-    using NonVisuals.Saitek.BindingClasses;
+    using Interfaces;
+    using Plugin;
 
     [Serializable]
     public class ActionTypeKey : KeyBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction

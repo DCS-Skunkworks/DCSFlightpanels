@@ -5,7 +5,7 @@
 
     using MEF;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
     [Flags]
     public enum SwitchPanelPZ55LEDs : byte

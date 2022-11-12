@@ -1,6 +1,6 @@
 ﻿namespace NonVisuals.EventArgs
 {
-    using NonVisuals.Saitek.Panels;
+    using Saitek.Panels;
 
     using EventArgs = System.EventArgs;
 

@@ -10,10 +10,10 @@
 
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.Bills;
-    using DCSFlightpanels.CustomControls;
-    using DCSFlightpanels.Interfaces;
-    using DCSFlightpanels.Windows;
+    using Bills;
+    using CustomControls;
+    using Interfaces;
+    using Windows;
 
     using MEF;
 
@@ -600,7 +600,7 @@
                 }
 
                 textBox.Bill.ClearAll();
-                var vkNull = Enum.GetName(typeof(MEF.VirtualKeyCode), MEF.VirtualKeyCode.VK_NULL);
+                var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
                 if (string.IsNullOrEmpty(vkNull))
                 {
                     return;

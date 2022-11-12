@@ -5,8 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.Saitek;
-using NonVisuals.Saitek.BindingClasses;
 
 namespace DCSFlightpanels.Windows
 {

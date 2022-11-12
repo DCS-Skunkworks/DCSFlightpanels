@@ -43,7 +43,7 @@ namespace HidLibrary
         {
             var readDelegate = new ReadDelegate(FastRead);
 #if NET20 || NET35 || NET5_0_OR_GREATER
-            return await Task<HidDeviceData>.Factory.StartNew(() => readDelegate.Invoke(timeout));
+            return await Task.Factory.StartNew(() => readDelegate.Invoke(timeout));
 #else
             return await Task<HidDeviceData>.Factory.FromAsync(readDelegate.BeginInvoke, readDelegate.EndInvoke, timeout, null);
 #endif
@@ -75,7 +75,7 @@ namespace HidLibrary
         {
             var readReportDelegate = new ReadReportDelegate(FastReadReport);
 #if NET20 || NET35 || NET5_0_OR_GREATER
-            return await Task<HidReport>.Factory.StartNew(() => readReportDelegate.Invoke(timeout));
+            return await Task.Factory.StartNew(() => readReportDelegate.Invoke(timeout));
 #else
             return await Task<HidReport>.Factory.FromAsync(readReportDelegate.BeginInvoke, readReportDelegate.EndInvoke, timeout, null);
 #endif

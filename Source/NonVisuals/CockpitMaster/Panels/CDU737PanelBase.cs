@@ -6,10 +6,10 @@
 
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
-    using NonVisuals.EventArgs;
-    using NonVisuals.CockpitMaster.Switches;
+    using EventArgs;
+    using Switches;
     using HidLibrary;
-    using NonVisuals.Interfaces;
+    using Interfaces;
     using System.Timers;
     using Timer = System.Timers.Timer;
 

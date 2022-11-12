@@ -260,7 +260,7 @@ namespace DCSFlightpanels.Windows
                     ShowNewFolderButton = false
                 };
 
-                if (!string.IsNullOrEmpty(DCS_BIOS.DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation)))
+                if (!string.IsNullOrEmpty(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation)))
                 {
                     folderBrowserDialog.SelectedPath = DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);
                 }

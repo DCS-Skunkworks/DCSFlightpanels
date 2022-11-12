@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Saitek.Panels
+﻿using NonVisuals.BindingClasses.BIP;
+
+namespace NonVisuals.Saitek.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -11,8 +13,7 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Saitek.BindingClasses;
+    using EventArgs;
 
     public class BacklitPanelBIP : SaitekPanel
     {

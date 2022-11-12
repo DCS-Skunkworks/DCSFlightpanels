@@ -16,7 +16,7 @@ namespace NonVisuals.StreamDeck
 
     using Newtonsoft.Json;
     using NLog;
-    using NonVisuals.StreamDeck.Events;
+    using Events;
 
     [Serializable]
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener, IDisposable

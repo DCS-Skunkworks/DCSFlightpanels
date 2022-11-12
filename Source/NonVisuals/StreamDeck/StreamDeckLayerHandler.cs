@@ -15,7 +15,7 @@ namespace NonVisuals.StreamDeck
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using NLog;
-    using NonVisuals.StreamDeck.Events;
+    using Events;
 
     using OpenMacroBoard.SDK;
 

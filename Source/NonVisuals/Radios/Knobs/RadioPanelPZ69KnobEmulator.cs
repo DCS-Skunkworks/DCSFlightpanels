@@ -4,7 +4,7 @@
 
     using MEF;
 
-    using NonVisuals.Interfaces;
+    using Interfaces;
 
     public enum CurrentEmulatorRadioMode
     {

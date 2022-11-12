@@ -2,7 +2,7 @@
 {
     using System;
 
-    using NonVisuals.Saitek;
+    using Saitek;
 
     public class LedLightChangeEventArgs : EventArgs
     {

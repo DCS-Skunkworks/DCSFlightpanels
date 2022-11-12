@@ -2,7 +2,7 @@
 {
     using System.Windows.Controls;
 
-    using DCSFlightpanels.Bills;
+    using Bills;
 
     public class TextBoxBaseOutput : TextBox
     {
