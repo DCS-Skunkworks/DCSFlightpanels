@@ -109,7 +109,7 @@
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.CDU737)
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.CDU737} expected");
             }
 
             initCDU();
@@ -337,13 +337,13 @@
 
         public void SetLine(int line, string text)
         {
-            if (line < 0 || line > LINES_ON_CDU-1) throw new ArgumentOutOfRangeException("CDU Line must be 0 to 13");
+            if (line < 0 || line > LINES_ON_CDU-1) throw new ArgumentOutOfRangeException(nameof(line), "CDU Line must be 0 to 13");
             _TextLines[line].Line = text;
         }
 
         public void SetDisplayCharAt( int line, DisplayedChar ch, int index)
         {
-            if (line < 0 || line > LINES_ON_CDU - 1) throw new ArgumentOutOfRangeException("CDU Line must be 0 to 13");
+            if (line < 0 || line > LINES_ON_CDU - 1) throw new ArgumentOutOfRangeException(nameof(line), "CDU Line must be 0 to 13");
             _TextLines[line].setDisplayedCharAt(ch, index);
 
         }

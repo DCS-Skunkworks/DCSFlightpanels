@@ -61,7 +61,7 @@ namespace NonVisuals.Saitek.Panels
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.PZ55SwitchPanel} expected");
             }
 
             // Fixed values

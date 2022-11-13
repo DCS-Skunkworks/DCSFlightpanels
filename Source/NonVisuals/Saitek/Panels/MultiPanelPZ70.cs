@@ -64,7 +64,7 @@ namespace NonVisuals.Saitek.Panels
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ70MultiPanel)
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.PZ70MultiPanel} expected");
             }
 
             VendorId = 0x6A3;

@@ -44,7 +44,7 @@ namespace NonVisuals.CockpitMaster.Panels
             set
             {
 
-                if (value.Length > MAX_CHAR) throw new ArgumentException();
+                if (value.Length > MAX_CHAR) throw new ArgumentException($"Length must be less than or equal to {MAX_CHAR}");
 
                 _line = value;
 

@@ -34,7 +34,7 @@ namespace NonVisuals.Saitek.Panels
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.FarmingPanel)
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.FarmingPanel} expected");
             }
 
             // Fixed values
