@@ -399,7 +399,7 @@ namespace NonVisuals
                 throw new ArgumentException("Import string empty. (KeyBinding)");
             }
 
-            if (str.Contains("["))
+            if (str.Contains('['))
             {
                 ImportStringMultiKeySequence(str);
             }
