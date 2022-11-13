@@ -610,7 +610,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 //This error should not happen in theory if the screen is correctly designed, Debug.assert to warn the dev.
                 //Clear lists to show to the user that something wrong happened.
                 Common.ShowErrorMessageBox(
-                    new Exception($"Error initializing streamdeck buttons list. Expecting [{ButtonAmount()}] got [{ButtonImages.Count()}]"
+                    new Exception($"Error initializing streamdeck buttons list. Expecting [{ButtonAmount()}] got [{ButtonImages.Count}]"
                     ));
                 Debug.Assert(false);
                 ButtonImages.Clear();
