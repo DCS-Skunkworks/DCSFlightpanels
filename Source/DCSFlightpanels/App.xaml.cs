@@ -17,21 +17,21 @@ namespace DCSFlightpanels
 
         private void InitNotificationIcon()
         {
-            System.Windows.Forms.ToolStripMenuItem notifyIconContextMenuShow = new System.Windows.Forms.ToolStripMenuItem
+            System.Windows.Forms.ToolStripMenuItem notifyIconContextMenuShow = new()
             {
                // Index = 0,
                 Text = "Show"
             };
             notifyIconContextMenuShow.Click += new EventHandler(NotifyIcon_Show);
 
-            System.Windows.Forms.ToolStripMenuItem notifyIconContextMenuQuit = new System.Windows.Forms.ToolStripMenuItem
+            System.Windows.Forms.ToolStripMenuItem notifyIconContextMenuQuit = new()
             {
               //  Index = 1,
                 Text = "Quit"
             };
             notifyIconContextMenuQuit.Click += new EventHandler(NotifyIcon_Quit);
 
-            System.Windows.Forms.ContextMenuStrip notifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip();
+            System.Windows.Forms.ContextMenuStrip notifyIconContextMenu = new();
             notifyIconContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripMenuItem[] { notifyIconContextMenuShow, notifyIconContextMenuQuit });
 
             _notifyIcon = new System.Windows.Forms.NotifyIcon

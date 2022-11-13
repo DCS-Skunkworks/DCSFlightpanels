@@ -40,7 +40,7 @@ namespace NonVisuals.StreamDeck
 
         private readonly UnicodeEncoding _uniCodeEncoding = new();
         private const Formatting INDENTED_FORMATTING = Formatting.Indented;
-        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        private readonly JsonSerializerSettings _jsonSettings = new()
                                                                     {
                                                                         ContractResolver = new ExcludeObsoletePropertiesResolver(),
                                                                         TypeNameHandling = TypeNameHandling.All,

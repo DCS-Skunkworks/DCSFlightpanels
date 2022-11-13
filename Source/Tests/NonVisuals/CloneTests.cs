@@ -144,7 +144,7 @@ namespace Tests.NonVisuals
         public void DCSBIOSConverter_MustBe_Clonable() {
             var gamingPanelSkeleton =
                new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
-            StreamDeckPanel streamdeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), true);
+            StreamDeckPanel streamdeckPanel = new(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), true);
             DCSBIOSConverter source = new(streamdeckPanel);
             source.ConverterOutputType = EnumConverterOutputType.Image;
             source.BackgroundColor = _colorValue1;

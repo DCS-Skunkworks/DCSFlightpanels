@@ -28,7 +28,7 @@ namespace NonVisuals.StreamDeck
         private bool _useFormula;
         private double _formulaResult = double.MaxValue;
         private string _lastFormulaError = string.Empty;
-        private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
+        private List<DCSBIOSConverter> _dcsbiosConverters = new();
         private volatile bool _valueUpdated = true;
         private DCSBiosOutputType _decoderSourceType = DCSBiosOutputType.IntegerType;
         private bool _treatStringAsNumber;

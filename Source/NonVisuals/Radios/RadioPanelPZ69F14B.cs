@@ -163,7 +163,7 @@ namespace NonVisuals.Radios
         private const string VUHF_MODE_DECREASE = "RIO_VUHF_MODE DEC\n";
         private DCSBIOSOutput _vuhfDcsbiosOutputMode;
         private volatile uint _vuhfCockpitMode; // OFF = 0
-        private readonly ClickSpeedDetector _vuhfModeClickSpeedDetector = new ClickSpeedDetector(8);
+        private readonly ClickSpeedDetector _vuhfModeClickSpeedDetector = new(8);
         private byte _skipVuhfSmallFreqChange;
         private long _vuhfThreadNowSynching;
         private Thread _vuhfSyncThread;

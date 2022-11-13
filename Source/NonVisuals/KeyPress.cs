@@ -19,7 +19,7 @@ namespace NonVisuals
     public class KeyPress
     {
         private const int SLEEP_VALUE = 32;
-        private SortedList<int, IKeyPressInfo> _sortedKeyPressInfoList = new SortedList<int, IKeyPressInfo>();
+        private SortedList<int, IKeyPressInfo> _sortedKeyPressInfoList = new();
         private string _description = "Key press sequence";
         [NonSerialized] private Thread _executingThread;
 
@@ -29,7 +29,7 @@ namespace NonVisuals
          * depends on what the user has configured.
          * It is the binding class that must make sure to set these.
          */
-        private List<KeyPress> _negatorOSKeyPresses = new List<KeyPress>();
+        private List<KeyPress> _negatorOSKeyPresses = new();
         private volatile bool _abort;
 
 
@@ -558,7 +558,7 @@ namespace NonVisuals
             return _sortedKeyPressInfoList == null || _sortedKeyPressInfoList.Count == 0;
         }
 
-        private SortedList<int, KeyPressInfo> _oldSortedKeyPressInfoList = new SortedList<int, KeyPressInfo>();
+        private SortedList<int, KeyPressInfo> _oldSortedKeyPressInfoList = new();
         [Obsolete]
         [JsonProperty("KeySequence", Required = Required.Default)]
         public SortedList<int, KeyPressInfo> KeySequenceObsolete

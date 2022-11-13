@@ -17,7 +17,7 @@ namespace NonVisuals.BindingClasses.BIP
          The user can map a physical switch so that whenever it is flicked
          the BIP will light up in a position chosen by the user.
          */
-        internal SortedList<int, BIPLight> _bipLights = new SortedList<int, BIPLight>();
+        internal SortedList<int, BIPLight> _bipLights = new();
         internal bool WhenOnTurnedOn = true;
         internal string _description;
         [NonSerialized]

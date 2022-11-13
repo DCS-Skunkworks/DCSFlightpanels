@@ -461,7 +461,7 @@
 
         private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
         {
-            HashSet<object> result = new HashSet<object>();
+            HashSet<object> result = new();
 
             for (int i = 0; i < 64; i++)
             {

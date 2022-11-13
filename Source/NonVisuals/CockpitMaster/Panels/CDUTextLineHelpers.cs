@@ -6,7 +6,7 @@ namespace NonVisuals.CockpitMaster.Panels
     {
 
         public static readonly Dictionary<char, CDUCharset> defaultConvertTable =
-            new Dictionary<char, CDUCharset>()
+            new()
             {
                 { ' ' , CDUCharset.space },
                 { '.' , CDUCharset.dot },
@@ -115,7 +115,7 @@ namespace NonVisuals.CockpitMaster.Panels
             };
 
         public static readonly Dictionary<char, CDUCharset> AH64ConvertTable =
-            new Dictionary<char, CDUCharset>()
+            new()
             {
                 { ' ' , CDUCharset.space },
                 { '.' , CDUCharset.dot },

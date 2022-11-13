@@ -11,7 +11,7 @@ namespace NonVisuals
     public static class JaceExtendedFactory
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
-        private static readonly Dictionary<int, JaceExtended> JaceEngines = new Dictionary<int, JaceExtended>();
+        private static readonly Dictionary<int, JaceExtended> JaceEngines = new();
         private static readonly object LockObject = new();
         public static JaceExtended Instance(ref int id)
         {

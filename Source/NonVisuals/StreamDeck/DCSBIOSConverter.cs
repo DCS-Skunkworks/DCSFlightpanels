@@ -23,8 +23,8 @@ namespace NonVisuals.StreamDeck
         private bool _criteria1IsOk;
         private bool _criteria2IsOk;
 
-        private FaceTypeText _faceTypeText = new FaceTypeText();
-        private FaceTypeImage _faceTypeImage = new FaceTypeImage();
+        private FaceTypeText _faceTypeText = new();
+        private FaceTypeImage _faceTypeImage = new();
         private FaceTypeDCSBIOSOverlay _faceTypeDCSBIOSOverlay;
 
         [NonSerialized]
