@@ -179,8 +179,8 @@ namespace Tests.NonVisuals
                 for (int y = 0; y < bmp1.Height; y++)
                     if (bmp1.GetPixel(x, y) != bmp2.GetPixel(x, y))
                     {
-                        Color c1 = bmp1.GetPixel(x, y); //for debug purpose only
-                        Color c2 = bmp2.GetPixel(x, y); //for debug purpose only
+                        //Color c1 = bmp1.GetPixel(x, y); //for debug purpose only
+                        //Color c2 = bmp2.GetPixel(x, y); //for debug purpose only
                         return false;
                     }
 

@@ -146,8 +146,8 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
 
         public Tuple<string, string> ParseSettingV2(string config)
         {
-            var mode = "";
-            var key = "";
+            string mode = "";
+            string key;
 
             //MultiPanelDCSBIOSControlV2{32}\o/{ALT}\o/{FLAPS_LEVER_DOWN|BESKRIVNING}\o/\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|0|0}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|1000}
             //SwitchPanelDCSBIOSControlV2{32}\o/{SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
@@ -201,8 +201,8 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
 
         public Tuple<string, string> ParseSettingV1(string config)
         {
-            var mode = "";
-            var key = "";
+            string mode = "";
+            string key;
             //RadioPanelDCSBIOSControl{UpperCOM1}\o/{1UpperLargeFreqWheelInc|PLT_INTL_PRIMARY_L_KNB}\o/\o/DCSBIOSInput{PLT_INTL_PRIMARY_L_KNB|VARIABLE_STEP|2000|0}	
             //MultiPanelDCSBIOSControl{ALT}\o/{1FLAPS_LEVER_DOWN|BESKRIVNING}\o/\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|0|0}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|1000}
             //SwitchPanelDCSBIOSControl{1SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
