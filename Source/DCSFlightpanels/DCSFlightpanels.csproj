@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
@@ -137,7 +137,4 @@
     <RootNamespace>DCSFlightpanels</RootNamespace>
     <Description>Saitek Pro Flight &amp; Streamdeck with DCS-BIOS or as keyemulator</Description>
   </PropertyGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /Y &quot;$(TargetDir)SamplePanelEventPlugin1.dll&quot; &quot;$(TargetDir)\Extensions\SamplePanelEventPlugin1.dll&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)SamplePanelEventPlugin2.dll&quot; &quot;$(TargetDir)\Extensions\SamplePanelEventPlugin2.dll&quot;" />
-  </Target>
 </Project>
