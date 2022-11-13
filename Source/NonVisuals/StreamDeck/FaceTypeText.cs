@@ -57,7 +57,7 @@
                 stringBuilder.Append("Face Text");
                 if (!string.IsNullOrEmpty(_buttonTextTemplate))
                 {
-                    stringBuilder.Append(" ").Append(_buttonTextTemplate);
+                    stringBuilder.Append(' ').Append(_buttonTextTemplate);
                 }
 
                 return stringBuilder.ToString();

@@ -420,7 +420,7 @@ namespace NonVisuals.StreamDeck
         public string GetConfigurationInformation()
         {
             var stringBuilder = new StringBuilder(500);
-            stringBuilder.Append("\n");
+            stringBuilder.Append('\n');
 
             stringBuilder.Append($"Layer count : {_layerList.Count}, button count = {_streamDeckPanel.GetButtons().Count}\n");
             stringBuilder.Append("Existing layers:\n");
@@ -429,7 +429,7 @@ namespace NonVisuals.StreamDeck
                 stringBuilder.Append($"\t{streamDeckLayer.Name} ({streamDeckLayer.StreamDeckButtons.Count})\n");
             }
 
-            stringBuilder.Append("\n");
+            stringBuilder.Append('\n');
 
             return stringBuilder.ToString();
         }

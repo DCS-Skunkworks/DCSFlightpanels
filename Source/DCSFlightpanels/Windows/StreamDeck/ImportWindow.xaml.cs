@@ -571,7 +571,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 {
                     if (File.Exists(Path.Combine(TextBoxImageImportFolder.Text, file.Name)))
                     {
-                        stringBuilder.Append(file.Name).Append("\n");
+                        stringBuilder.Append(file.Name).Append('\n');
                         show = true;
                     }
                     else

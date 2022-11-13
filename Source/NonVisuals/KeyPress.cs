@@ -606,7 +606,7 @@ namespace NonVisuals
                 result.Append("[" + Enum.GetName(typeof(KeyPressLength), keyPressInfo.LengthOfBreak) + "," + GetVirtualKeyCodesAsString(keyPressInfo) + "," + Enum.GetName(typeof(KeyPressLength), keyPressInfo.LengthOfKeyPress) + "]");
             }
 
-            result.Append("}");
+            result.Append('}');
             return result.ToString();
         }
 

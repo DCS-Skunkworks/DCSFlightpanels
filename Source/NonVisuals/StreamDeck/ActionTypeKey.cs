@@ -56,7 +56,7 @@ namespace NonVisuals.StreamDeck
                 stringBuilder.Append("Key press");
                 if (OSKeyPress != null)
                 {
-                    stringBuilder.Append(" ").Append(OSKeyPress.GetKeyPressInformation());
+                    stringBuilder.Append(' ').Append(OSKeyPress.GetKeyPressInformation());
                 }
 
                 return stringBuilder.ToString();
