@@ -41,6 +41,12 @@
         }
     }
 
+    /*
+     * This is used for mapping a certain DCS-BIOS Control value with a
+     * panel LED. So for example DCS-BIOS GEAR_INDICATOR value of 1
+     * would show a GREEN light on the Switch Panel or the BIP whereas
+     * 0 would show RED.
+     */
     public abstract class DcsOutputAndColorBinding
     {
         public abstract void ImportSettings(string settings);
