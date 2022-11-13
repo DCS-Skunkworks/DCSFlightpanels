@@ -456,7 +456,7 @@ namespace NonVisuals.Saitek.Panels
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            return null;
+            throw new Exception("Farming Side Panel does not support color bindings with DCS-BIOS.");
         }
 
         public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)

@@ -1412,7 +1412,7 @@ namespace NonVisuals.Saitek.Panels
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            return null;
+            throw new Exception("Multi Panel does not support color bindings with DCS-BIOS.");
         }
 
         public HashSet<DCSBIOSActionBindingPZ70> DCSBiosBindings

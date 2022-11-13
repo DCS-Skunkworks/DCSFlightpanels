@@ -43,8 +43,6 @@
 
     public abstract class DcsOutputAndColorBinding
     {
-        private DCSBIOSOutput _dcsBiosOutputLED;
-
         public abstract void ImportSettings(string settings);
         public abstract string ExportSettings();
 
@@ -53,11 +51,7 @@
 
         protected string[] Separator { get; } = { SaitekConstants.SEPARATOR_SYMBOL };
 
-        public DCSBIOSOutput DCSBiosOutputLED
-        {
-            get => _dcsBiosOutputLED;
-            set => _dcsBiosOutputLED = value;
-        }
+        public DCSBIOSOutput DCSBiosOutputLED { get; set; }
     }
 
 
