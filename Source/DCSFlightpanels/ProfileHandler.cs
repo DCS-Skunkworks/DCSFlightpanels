@@ -641,7 +641,7 @@ namespace DCSFlightpanels
             }
         }
 
-        private string GetFooter()
+        private static string GetFooter()
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine + "#--------------------------------------------------------------------");

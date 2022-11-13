@@ -363,7 +363,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
-        public void HideAllDotImages()
+        public static void HideAllDotImages()
         {
 
         }

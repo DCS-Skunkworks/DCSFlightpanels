@@ -1952,7 +1952,7 @@ namespace NonVisuals.Radios
             return Interlocked.Read(ref _vhfAmThreadNowSynching) > 0;
         }
 
-        private bool SwitchVhfAmDecimalDirectionUp(int cockpitValue, int desiredValue)
+        private static bool SwitchVhfAmDecimalDirectionUp(int cockpitValue, int desiredValue)
         {
             var upCount = 0;
             var downCount = 0;

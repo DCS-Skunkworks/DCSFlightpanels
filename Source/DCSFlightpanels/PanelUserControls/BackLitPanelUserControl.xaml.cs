@@ -226,7 +226,7 @@
             }
         }
 
-        private BIPLedPositionEnum GetLedPosition(string imageName)
+        private static BIPLedPositionEnum GetLedPosition(string imageName)
         {
             var result = BIPLedPositionEnum.Position_1_1;
             //ImagePosition3_4

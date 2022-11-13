@@ -526,7 +526,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             return  CheckBoxPlaySoundFile.IsChecked == true && !string.IsNullOrEmpty(TextBoxSoundFile.Text) && File.Exists(TextBoxSoundFile.Text);
         }
 
-        private bool SoundConfigIsOk(IStreamDeckButtonAction streamDeckButtonAction)
+        private static bool SoundConfigIsOk(IStreamDeckButtonAction streamDeckButtonAction)
         {
             return !string.IsNullOrEmpty(streamDeckButtonAction.SoundFile) && File.Exists(streamDeckButtonAction.SoundFile);
         }

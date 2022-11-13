@@ -296,7 +296,7 @@ namespace NonVisuals
             }
         }
 
-        public string GetVirtualKeyCodesAsString(IKeyPressInfo keyPressInfo)
+        public static string GetVirtualKeyCodesAsString(IKeyPressInfo keyPressInfo)
         {
             var result = new StringBuilder();
 

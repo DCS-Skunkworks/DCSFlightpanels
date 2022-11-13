@@ -3888,7 +3888,7 @@ namespace NonVisuals.Radios
             SaitekPanelKnobs = RadioPanelKnobA10C.GetRadioPanelKnobs();
         }
 
-        private string GetVhfAmDialFrequencyForPosition(int dial, uint position)
+        private static string GetVhfAmDialFrequencyForPosition(int dial, uint position)
         {
 
             // Frequency selector 1      VHFAM_FREQ1
@@ -3956,7 +3956,7 @@ namespace NonVisuals.Radios
             return string.Empty;
         }
 
-        private string GetUhfDialFrequencyForPosition(int dial, uint position)
+        private static string GetUhfDialFrequencyForPosition(int dial, uint position)
         {
             // Frequency selector 1     
             // //"2"  "3"  "A"
@@ -4015,7 +4015,7 @@ namespace NonVisuals.Radios
             return string.Empty;
         }
 
-        private string GetVhfFmDialFrequencyForPosition(int dial, uint position)
+        private static string GetVhfFmDialFrequencyForPosition(int dial, uint position)
         {
 
             // Frequency selector 1      VHFFM_FREQ1
@@ -4084,7 +4084,7 @@ namespace NonVisuals.Radios
             return string.Empty;
         }
 
-        private string GetILSDialFrequencyForPosition(int dial, uint position)
+        private static string GetILSDialFrequencyForPosition(int dial, uint position)
         {
             // 1 Mhz   "108" "109" "110" "111"
             // 0     1     2     3
@@ -4129,7 +4129,7 @@ namespace NonVisuals.Radios
             return string.Empty;
         }
 
-        private int GetILSDialPosForFrequency(int dial, int freq)
+        private static int GetILSDialPosForFrequency(int dial, int freq)
         {
             // 1 Mhz   "108" "109" "110" "111"
             // 0     1     2     3
@@ -4174,7 +4174,7 @@ namespace NonVisuals.Radios
             return 0;
         }
 
-        private string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
+        private static string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
         {
             const string inc = "INC\n";
             const string dec = "DEC\n";
@@ -4654,7 +4654,7 @@ namespace NonVisuals.Radios
             throw new Exception("Should not reach this code. private String GetCommandDirectionForVhfDial1(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
         }
 
-        private string GetCommandDirectionForVhfDial23(int desiredDialPosition, uint actualDialPosition)
+        private static string GetCommandDirectionForVhfDial23(int desiredDialPosition, uint actualDialPosition)
         {
             const string inc = "INC\n";
             const string dec = "DEC\n";

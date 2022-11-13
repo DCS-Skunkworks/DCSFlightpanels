@@ -95,7 +95,7 @@
             }
         }
 
-        public int GetMaskForDialPosition(PZ70DialPosition pz70DialPosition)
+        public static int GetMaskForDialPosition(PZ70DialPosition pz70DialPosition)
         {
             try
             {
@@ -136,7 +136,7 @@
             }
         }
 
-        public byte GetMaskForButton(MultiPanelPZ70Knobs multiPanelPZ70Knob)
+        public static byte GetMaskForButton(MultiPanelPZ70Knobs multiPanelPZ70Knob)
         {
             try
             {

@@ -249,7 +249,7 @@ namespace NonVisuals.StreamDeck
             SystemSounds.Asterisk.Play();
         }
 
-        private List<string> AddFileForCompression(List<string> list, string file)
+        private static List<string> AddFileForCompression(List<string> list, string file)
         {
             if (string.IsNullOrEmpty(file) || !File.Exists(file) || list.Contains(file))
             {

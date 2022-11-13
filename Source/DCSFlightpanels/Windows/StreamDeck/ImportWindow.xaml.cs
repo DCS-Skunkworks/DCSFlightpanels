@@ -295,7 +295,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        private bool VerifyImportArchive(string filename)
+        private static bool VerifyImportArchive(string filename)
         {
             return ZipArchiver.ZipFileContainsFile(filename, StreamDeckConstants.BUTTON_EXPORT_FILENAME);
         }
@@ -417,7 +417,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        private bool PreCheckBeforeImport()
+        private static bool PreCheckBeforeImport()
         {
             return true;
         }

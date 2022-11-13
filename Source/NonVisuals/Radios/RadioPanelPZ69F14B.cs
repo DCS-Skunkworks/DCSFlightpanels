@@ -3441,7 +3441,7 @@ namespace NonVisuals.Radios
             return Interlocked.Read(ref _vuhfThreadNowSynching) > 0;
         }
 
-        private string GetCommandDirection10Dial(int desiredDialPosition, uint actualDialPosition)
+        private static string GetCommandDirection10Dial(int desiredDialPosition, uint actualDialPosition)
         {
             const string inc = "INC\n";
             const string dec = "DEC\n";

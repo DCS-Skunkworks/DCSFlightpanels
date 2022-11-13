@@ -161,7 +161,7 @@ namespace Tests.NonVisuals
         /// This is quite a dumb comparison function. 
         /// We only care about the size & pixel values, no encoding check or other fancy stuff.
         /// </summary>
-        private bool CompareBitmaps(Bitmap bmp1, Bitmap bmp2)
+        private static bool CompareBitmaps(Bitmap bmp1, Bitmap bmp2)
         {
             if (bmp1 == null || bmp2 == null)
                 return false;

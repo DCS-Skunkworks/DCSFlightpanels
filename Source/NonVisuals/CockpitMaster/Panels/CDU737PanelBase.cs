@@ -519,7 +519,7 @@
 
         }
 
-        protected (bool, uint) ShouldHandleDCSBiosData(DCSBIOSDataEventArgs e, DCSBIOSOutput output)
+        protected static (bool, uint) ShouldHandleDCSBiosData(DCSBIOSDataEventArgs e, DCSBIOSOutput output)
         {
             if (e.Address != output.Address) return (false, 0);
             var oldValue = output.LastIntValue;

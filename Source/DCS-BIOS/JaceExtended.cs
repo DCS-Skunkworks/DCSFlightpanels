@@ -32,7 +32,7 @@ namespace DCS_BIOS
             }
         }
 
-        private void AddFunctions()
+        private static void AddFunctions()
         {
             //_calculationEngine.AddFunction("floor", Math.Floor);
             //_calculationEngine.AddFunction("ceiling", Math.Ceiling);

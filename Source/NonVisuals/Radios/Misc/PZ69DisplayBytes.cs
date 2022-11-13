@@ -202,7 +202,7 @@
             while (i < 5);
         }
 
-        private int GetArrayPosition(PZ69LCDPosition pz69LCDPosition)
+        private static int GetArrayPosition(PZ69LCDPosition pz69LCDPosition)
         {
             switch (pz69LCDPosition)
             {

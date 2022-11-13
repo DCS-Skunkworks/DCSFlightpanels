@@ -2907,7 +2907,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private string GetCommandDirectionForR863ManualDial1(int desiredDialPosition, uint actualDialPosition)
+        private static string GetCommandDirectionForR863ManualDial1(int desiredDialPosition, uint actualDialPosition)
         {
             const string inc = "INC\n";
             const string dec = "DEC\n";
@@ -2975,7 +2975,7 @@ namespace NonVisuals.Radios
             return inc;
         }
 
-        private string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
+        private static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
         {
             try
             {

@@ -172,13 +172,13 @@ namespace NonVisuals.Saitek.Panels
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
         }
 
-        private string GetValueFromSetting(string setting)
+        private static string GetValueFromSetting(string setting)
         {
             int pos = setting.IndexOf('{');
             return setting.Substring(pos + 1, setting.LastIndexOf('}') - pos - 1);
         }
 
-        private PanelLEDColor GetSettingPanelLEDColor(string setting)
+        private static PanelLEDColor GetSettingPanelLEDColor(string setting)
         {
             return (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), GetValueFromSetting(setting));
         }
@@ -980,7 +980,7 @@ namespace NonVisuals.Saitek.Panels
             }
         }
 
-        private SwitchPanelPZ55LEDs GetSwitchPanelPZ55LEDColor(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition, PanelLEDColor panelLEDColor)
+        private static SwitchPanelPZ55LEDs GetSwitchPanelPZ55LEDColor(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition, PanelLEDColor panelLEDColor)
         {
             var result = SwitchPanelPZ55LEDs.ALL_DARK;
 
