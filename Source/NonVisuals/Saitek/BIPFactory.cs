@@ -3,6 +3,11 @@
     using System.Collections.Generic;
     using Panels;
 
+    /*
+     * This class is used to manage all the BIPs that are connected to the PC.
+     * When the user makes e.g. a BipLink it uses this class to see which BIPs are
+     * available and can identify which is which by having the BIP flash its LEDs.
+     */
     public static class BipFactory
     {
         private static readonly BipEventHandlerManager BIPEventHandlerManager = new BipEventHandlerManager();

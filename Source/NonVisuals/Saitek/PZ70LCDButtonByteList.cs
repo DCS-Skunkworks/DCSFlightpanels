@@ -6,6 +6,10 @@
     using NLog;
     using Panels;
 
+
+    /*
+     * Class for handling the buttons below the LCD of the Multi Panel (PZ70).
+     */
     public class PZ70LCDButtonByteList
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();

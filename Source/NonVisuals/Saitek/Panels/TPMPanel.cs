@@ -187,7 +187,7 @@ namespace NonVisuals.Saitek.Panels
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            return null;
+            throw new Exception("TPM Panel does not support color bindings with DCS-BIOS.");
         }
 
         public override void ClearSettings(bool setIsDirty = false)

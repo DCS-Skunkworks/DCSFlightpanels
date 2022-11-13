@@ -41,10 +41,14 @@
         }
     }
 
+    /*
+     * This is used for mapping a certain DCS-BIOS Control value with a
+     * panel LED. So for example DCS-BIOS GEAR_INDICATOR value of 1
+     * would show a GREEN light on the Switch Panel or the BIP whereas
+     * 0 would show RED.
+     */
     public abstract class DcsOutputAndColorBinding
     {
-        private DCSBIOSOutput _dcsBiosOutputLED;
-
         public abstract void ImportSettings(string settings);
         public abstract string ExportSettings();
 
@@ -53,11 +57,7 @@
 
         protected string[] Separator { get; } = { SaitekConstants.SEPARATOR_SYMBOL };
 
-        public DCSBIOSOutput DCSBiosOutputLED
-        {
-            get => _dcsBiosOutputLED;
-            set => _dcsBiosOutputLED = value;
-        }
+        public DCSBIOSOutput DCSBiosOutputLED { get; set; }
     }
 
 

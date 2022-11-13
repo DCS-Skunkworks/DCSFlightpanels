@@ -5,6 +5,9 @@
 
     using DCS_BIOS;
 
+    /*
+     * Used for setting the brightness of the BIP LEDs.
+     */
     public class DCSBIOSBrightnessBinding
     {
         public static readonly string Keyword = "PanelBrightness";

@@ -1187,13 +1187,7 @@ namespace NonVisuals.Radios
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55
-            {
-                DCSBiosOutputLED = dcsBiosOutput,
-                LEDColor = panelLEDColor,
-                SaitekLEDPosition = saitekPanelLEDPosition
-            };
-            return dcsOutputAndColorBinding;
+            throw new Exception("Radio Panel does not support color bindings with DCS-BIOS.");
         }
 
         private void CreateRadioKnobs()
