@@ -45,7 +45,7 @@ jobs:
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
     # - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
+    #  uses: github/codeql-action/autobuild@v2
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
@@ -55,7 +55,7 @@ jobs:
     #    uses a compiled language
 
     - run: |
-        dotnet build /Source/DCSFlightpanels.sln
+        dotnet build Source/DCSFlightpanels/DCSFlightpanels.csproj /p:EnableWindowsTargeting=true --self-contained false -f net6.0-windows -r win-x64 -c Release /p:DebugType=None /p:DebugSymbols=false
     #   make bootstrap
     #   make release
 
