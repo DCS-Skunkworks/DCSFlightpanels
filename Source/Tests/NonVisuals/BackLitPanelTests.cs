@@ -1,4 +1,4 @@
-﻿using NonVisuals.Panels.Saitek.Panels;
+using NonVisuals.Panels.Saitek.Panels;
 using System;
 using Xunit;
 
