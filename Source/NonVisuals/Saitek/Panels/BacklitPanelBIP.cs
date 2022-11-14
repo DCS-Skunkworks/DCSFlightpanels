@@ -731,6 +731,168 @@ namespace NonVisuals.Saitek.Panels
 
             _dcsbiosBrightnessControl = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsBiosBrightnessBinding.ControlId);
         }
+
+        public static BIPLedPositionEnum GetLedPosition(string imageName)
+        {
+            var result = BIPLedPositionEnum.Position_1_1;
+            //ImagePosition3_4
+            var str = imageName.Remove(0, 14);
+            //3_4
+            var row = int.Parse(str.Substring(0, 1));
+            var index = int.Parse(str.Substring(2, 1));
+            try
+            {
+                switch (row)
+                {
+                    case 1:
+                        {
+                            switch (index)
+                            {
+                                case 1:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_1;
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_2;
+                                        break;
+                                    }
+                                case 3:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_3;
+                                        break;
+                                    }
+                                case 4:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_4;
+                                        break;
+                                    }
+                                case 5:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_5;
+                                        break;
+                                    }
+                                case 6:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_6;
+                                        break;
+                                    }
+                                case 7:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_7;
+                                        break;
+                                    }
+                                case 8:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_8;
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
+                    case 2:
+                        {
+                            switch (index)
+                            {
+                                case 1:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_1;
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_2;
+                                        break;
+                                    }
+                                case 3:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_3;
+                                        break;
+                                    }
+                                case 4:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_4;
+                                        break;
+                                    }
+                                case 5:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_5;
+                                        break;
+                                    }
+                                case 6:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_6;
+                                        break;
+                                    }
+                                case 7:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_7;
+                                        break;
+                                    }
+                                case 8:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_8;
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
+                    case 3:
+                        {
+                            switch (index)
+                            {
+                                case 1:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_1;
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_2;
+                                        break;
+                                    }
+                                case 3:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_3;
+                                        break;
+                                    }
+                                case 4:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_4;
+                                        break;
+                                    }
+                                case 5:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_5;
+                                        break;
+                                    }
+                                case 6:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_6;
+                                        break;
+                                    }
+                                case 7:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_7;
+                                        break;
+                                    }
+                                case 8:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_8;
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+            return result;
+        }
     }
 
     [Serializable]
@@ -833,4 +995,5 @@ namespace NonVisuals.Saitek.Panels
         ||_ 
         |_  Rightmost RED when not same bit in Byte #3 set
  */
+
 }
