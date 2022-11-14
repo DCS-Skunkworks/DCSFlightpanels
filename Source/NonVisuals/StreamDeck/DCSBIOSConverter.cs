@@ -297,101 +297,32 @@ namespace NonVisuals.StreamDeck
             set => _referenceValue2 = value;
         }
 
-        private static string GetOutputAsString(EnumConverterOutputType converterOutputType)
+        public static string GetOutputAsString(EnumConverterOutputType converterOutputType)
         {
-            string result;
-            switch (converterOutputType)
+            return converterOutputType switch
             {
-                case EnumConverterOutputType.NotSet:
-                    {
-                        result = "not set";
-                        break;
-                    }
-
-                case EnumConverterOutputType.Raw:
-                    {
-                        result = "raw";
-                        break;
-                    }
-
-                case EnumConverterOutputType.Image:
-                    {
-                        result = "image";
-                        break;
-                    }
-
-                case EnumConverterOutputType.ImageOverlay:
-                    {
-                        result = "image overlay";
-                        break;
-                    }
-
-                default:
-                    {
-                        result = "unknown?";
-                        break;
-                    }
-            }
-
-            return result;
+                EnumConverterOutputType.NotSet => "not set",
+                EnumConverterOutputType.Raw => "raw",
+                EnumConverterOutputType.Image => "image",
+                EnumConverterOutputType.ImageOverlay => "image overlay",
+                _ => "unknown?"
+            };
         }
 
-        private static string GetComparatorAsString(EnumComparator comparator)
+        public static string GetComparatorAsString(EnumComparator comparator)
         {
-            var result = string.Empty;
-
-            switch (comparator)
+            return comparator switch
             {
-                case EnumComparator.NotSet:
-                    {
-                        result = "NotSet";
-                        break;
-                    }
-
-                case EnumComparator.Equals:
-                    {
-                        result = "==";
-                        break;
-                    }
-
-                case EnumComparator.NotEquals:
-                    {
-                        result = "!=";
-                        break;
-                    }
-
-                case EnumComparator.LessThan:
-                    {
-                        result = "<";
-                        break;
-                    }
-
-                case EnumComparator.LessThanEqual:
-                    {
-                        result = "<=";
-                        break;
-                    }
-
-                case EnumComparator.GreaterThan:
-                    {
-                        result = ">";
-                        break;
-                    }
-
-                case EnumComparator.GreaterThanEqual:
-                    {
-                        result = ">=";
-                        break;
-                    }
-
-                case EnumComparator.Always:
-                    {
-                        result = "Always";
-                        break;
-                    }
-            }
-
-            return result;
+                EnumComparator.NotSet => "NotSet",
+                EnumComparator.Equals => "==",
+                EnumComparator.NotEquals => "!=",
+                EnumComparator.LessThan => "<",
+                EnumComparator.LessThanEqual => "<=",
+                EnumComparator.GreaterThan => ">",
+                EnumComparator.GreaterThanEqual => ">=",
+                EnumComparator.Always => "Always",
+                _ => throw new ArgumentException($"Unexpected EnumComparator value {comparator}")
+            };       
         }
 
         [JsonIgnore]
