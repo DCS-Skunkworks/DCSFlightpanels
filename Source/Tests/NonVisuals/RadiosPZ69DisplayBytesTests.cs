@@ -9,7 +9,6 @@ namespace Tests.NonVisuals
 {
     public class RadiosPZ69DisplayBytesTests
     {
-        private readonly PZ69DisplayBytes _dp = new();
         private const string ZEROES = "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00";
         private const string DEIGHTS = "00-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8-D8";
         private const string VALUES = "00-01-02-03-04-05-06-07-08-09-01-02-03-04-05-06-07-08-09-01-02";
@@ -38,7 +37,7 @@ namespace Tests.NonVisuals
         public void SetPositionBlank_ShouldSet_5_Blank_Chars_At_Position(string expected, string inputArray, PZ69LCDPosition lcdPosition)
         {
             var bytes = StringToBytes(inputArray);
-            _dp.SetPositionBlank(ref bytes, lcdPosition);
+            PZ69DisplayBytes.SetPositionBlank(ref bytes, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
         }
 
@@ -89,7 +88,7 @@ namespace Tests.NonVisuals
         public void UnsignedInteger_ShouldReturn_ExpectedValue(string expected, uint inputUint, string inputArray, PZ69LCDPosition lcdPosition)
         {
             var bytes = StringToBytes(inputArray);
-            _dp.UnsignedInteger(ref bytes, inputUint, lcdPosition);
+            PZ69DisplayBytes.UnsignedInteger(ref bytes, inputUint, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
         }
 
@@ -145,7 +144,7 @@ namespace Tests.NonVisuals
         public void DefaultStringAsIt_ShouldReturn_ExpectedValue(string expected, string inputString, string inputArray, PZ69LCDPosition lcdPosition)
         {
             var bytes = StringToBytes(inputArray);
-            _dp.DefaultStringAsIs(ref bytes, inputString, lcdPosition);
+            PZ69DisplayBytes.DefaultStringAsIs(ref bytes, inputString, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
         }
 
@@ -160,7 +159,7 @@ namespace Tests.NonVisuals
         public void DefaultStringAsIt_InvalidChars_OrCombination_ShouldThrow_FormatException(string inputString)
         {
             var bytes = StringToBytes(DEIGHTS);
-            Assert.Throws<FormatException>(() => _dp.DefaultStringAsIs(ref bytes, inputString, PZ69LCDPosition.UPPER_ACTIVE_LEFT));            
+            Assert.Throws<FormatException>(() => PZ69DisplayBytes.DefaultStringAsIs(ref bytes, inputString, PZ69LCDPosition.UPPER_ACTIVE_LEFT));            
         }
 
         public static IEnumerable<object[]> DoubleWithSpecifiedDecimalsPlacesData()
@@ -219,7 +218,7 @@ namespace Tests.NonVisuals
         public void DoubleWithSpecifiedDecimalsPlaces_ShouldReturn_ExpectedValue(string expected, double digits, int decimals, string inputArray, PZ69LCDPosition lcdPosition)
         {
             var bytes = StringToBytes(inputArray);
-            _dp.DoubleWithSpecifiedDecimalsPlaces(ref bytes, digits, decimals, lcdPosition);
+            PZ69DisplayBytes.DoubleWithSpecifiedDecimalsPlaces(ref bytes, digits, decimals, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
         }
 
@@ -258,7 +257,7 @@ namespace Tests.NonVisuals
         public void Double_ShouldReturn_ExpectedValue(string expected, double digits, string inputArray, PZ69LCDPosition lcdPosition)
         {
             var bytes = StringToBytes(inputArray);
-            _dp.DoubleJustifyLeft(ref bytes, digits, lcdPosition);
+            PZ69DisplayBytes.DoubleJustifyLeft(ref bytes, digits, lcdPosition);
             Assert.Equal(expected, BitConverter.ToString(bytes));
         }
     }
