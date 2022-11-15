@@ -97,98 +97,31 @@
 
         public static int GetMaskForDialPosition(PZ70DialPosition pz70DialPosition)
         {
-            try
+            return pz70DialPosition switch
             {
-
-                switch (pz70DialPosition)
-                {
-                    case PZ70DialPosition.ALT:
-                        {
-                            return DIAL_ALT_MASK;
-                        }
-
-                    case PZ70DialPosition.VS:
-                        {
-                            return DIAL_VS_MASK;
-                        }
-
-                    case PZ70DialPosition.IAS:
-                        {
-                            return DIAL_IAS_MASK;
-                        }
-
-                    case PZ70DialPosition.HDG:
-                        {
-                            return DIAL_HDG_MASK;
-                        }
-
-                    case PZ70DialPosition.CRS:
-                        {
-                            return DIAL_CRS_MASK;
-                        }
-                }
-                throw new Exception("Multipanel : Failed to find Mask for dial position " + pz70DialPosition);
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-                throw;
-            }
+                PZ70DialPosition.ALT => DIAL_ALT_MASK,
+                PZ70DialPosition.VS  => DIAL_VS_MASK,
+                PZ70DialPosition.IAS => DIAL_IAS_MASK,
+                PZ70DialPosition.HDG => DIAL_HDG_MASK,
+                PZ70DialPosition.CRS => DIAL_CRS_MASK,
+                _ => throw new Exception($"Multipanel : Failed to find Mask for dial position {pz70DialPosition}")
+            };
         }
 
         public static byte GetMaskForButton(MultiPanelPZ70Knobs multiPanelPZ70Knob)
         {
-            try
+            return multiPanelPZ70Knob switch
             {
-                switch (multiPanelPZ70Knob)
-                {
-                    case MultiPanelPZ70Knobs.AP_BUTTON:
-                        {
-                            return AP_MASK;
-                        }
-
-                    case MultiPanelPZ70Knobs.HDG_BUTTON:
-                        {
-                            return HDG_MASK;
-                        }
-
-                    case MultiPanelPZ70Knobs.NAV_BUTTON:
-                        {
-                            return NAV_MASK;
-                        }
-
-                    case MultiPanelPZ70Knobs.IAS_BUTTON:
-                        {
-                            return IAS_MASK;
-                        }
-
-                    case MultiPanelPZ70Knobs.ALT_BUTTON:
-                        {
-                            return ALT_MASK;
-                        }
-
-                    case MultiPanelPZ70Knobs.VS_BUTTON:
-                        {
-                            return VS_MASK;
-                        }
-
-                    case MultiPanelPZ70Knobs.APR_BUTTON:
-                        {
-                            return APR_MASK;
-                        }
-
-                    case MultiPanelPZ70Knobs.REV_BUTTON:
-                        {
-                            return REV_MASK;
-                        }
-                }
-                throw new Exception("Multipanel : Failed to find Mask for button " + multiPanelPZ70Knob);
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-                throw;
-            }
+                MultiPanelPZ70Knobs.AP_BUTTON  => AP_MASK,
+                MultiPanelPZ70Knobs.HDG_BUTTON => HDG_MASK,
+                MultiPanelPZ70Knobs.NAV_BUTTON => NAV_MASK,
+                MultiPanelPZ70Knobs.IAS_BUTTON => IAS_MASK,
+                MultiPanelPZ70Knobs.ALT_BUTTON => ALT_MASK,
+                MultiPanelPZ70Knobs.VS_BUTTON  => VS_MASK,
+                MultiPanelPZ70Knobs.APR_BUTTON => APR_MASK,
+                MultiPanelPZ70Knobs.REV_BUTTON => REV_MASK,
+                _ => throw new Exception($"Multipanel : Failed to find Mask for button {multiPanelPZ70Knob}")
+            };
         }
 
         public bool FlipButton(int buttonDialMask, byte buttonMask)
