@@ -980,7 +980,7 @@ namespace NonVisuals.Saitek.Panels
             }
         }
 
-        private static SwitchPanelPZ55LEDs GetSwitchPanelPZ55LEDColor(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition, PanelLEDColor panelLEDColor)
+        public static SwitchPanelPZ55LEDs GetSwitchPanelPZ55LEDColor(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition, PanelLEDColor panelLEDColor)
         {
             var result = SwitchPanelPZ55LEDs.ALL_DARK;
 
