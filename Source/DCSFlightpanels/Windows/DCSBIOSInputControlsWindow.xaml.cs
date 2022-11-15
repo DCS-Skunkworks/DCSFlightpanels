@@ -16,7 +16,7 @@
     public partial class DCSBIOSInputControlsWindow : Window, IIsDirty
     {
         private readonly string _header;
-        private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();
+        private List<DCSBIOSInput> _dcsbiosInputs = new();
         private string _description;
         private bool _isDirty = false;
         private readonly bool _showSequenced = false;

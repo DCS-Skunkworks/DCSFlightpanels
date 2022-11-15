@@ -1741,7 +1741,7 @@ namespace NonVisuals.Radios
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
-        private string DivideBy2AndFormatForDisplay(uint position)
+        private static string DivideBy2AndFormatForDisplay(uint position)
         {
             double frequencyAsDouble = (double)position / 2;
             return frequencyAsDouble.ToString("0.0", CultureInfo.InvariantCulture);
@@ -1885,7 +1885,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
+        private static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
         {
             try
             {

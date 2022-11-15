@@ -48,7 +48,7 @@ namespace NonVisuals
             stringBuilder.AppendLine($"HIDHandler has the following skeletons ({_instance.HIDSkeletons.Count}) :");
             foreach (var skeleton in _instance.HIDSkeletons)
             {
-                stringBuilder.Append("\t").Append(skeleton.PanelInfo).Append("\n");
+                stringBuilder.Append('\t').Append(skeleton.PanelInfo).Append('\n');
             }
 
             return stringBuilder.ToString();

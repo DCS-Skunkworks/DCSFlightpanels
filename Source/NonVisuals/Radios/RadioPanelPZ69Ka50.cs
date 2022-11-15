@@ -2085,7 +2085,7 @@ namespace NonVisuals.Radios
             return inc;
         }
 
-        private string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
+        private static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
         {
             try
             {
@@ -2433,7 +2433,7 @@ namespace NonVisuals.Radios
                 $"Should not reach this code. private String GetCommandDirectionFor0To9Dials(uint desiredDialPosition, uint actualDialPosition) -> {desiredDialPosition}   {actualDialPosition}");
         }
 
-        private string GetR800L1DialFrequencyForPosition(uint position)
+        private static string GetR800L1DialFrequencyForPosition(uint position)
         {
             try
             {

@@ -23,7 +23,7 @@ namespace NonVisuals.StreamDeck
         private IStreamDeckButtonFace _buttonFace;
         private IStreamDeckButtonAction _buttonActionForPress;
         private IStreamDeckButtonAction _buttonActionForRelease;
-        [NonSerialized] private volatile CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        [NonSerialized] private volatile CancellationTokenSource _cancellationTokenSource = new();
         [NonSerialized] private Thread _keyPressedThread;
         [NonSerialized] private StreamDeckPanel _streamDeckPanel;
         private volatile bool _isVisible;
@@ -310,17 +310,17 @@ namespace NonVisuals.StreamDeck
                 var stringBuilder = new StringBuilder();
                 if (ActionForPress != null)
                 {
-                    stringBuilder.Append("ActionPress : ").Append(_buttonActionForPress.ActionDescription).Append(" ");
+                    stringBuilder.Append("ActionPress : ").Append(_buttonActionForPress.ActionDescription).Append(' ');
                 }
 
                 if (ActionForRelease != null)
                 {
-                    stringBuilder.Append("ActionRelease : ").Append(_buttonActionForRelease.ActionDescription).Append(" ");
+                    stringBuilder.Append("ActionRelease : ").Append(_buttonActionForRelease.ActionDescription).Append(' ');
                 }
 
                 if (Face != null)
                 {
-                    stringBuilder.Append(Face.FaceDescription).Append(" ");
+                    stringBuilder.Append(Face.FaceDescription).Append(' ');
                 }
 
                 return stringBuilder.ToString();

@@ -414,7 +414,7 @@ namespace HidLibrary
                 return (NativeMethods.HidD_SetOutputReport(WriteHandle, buffer, buffer.Length));
             }
             else
-                throw new ArgumentException("The output report is null, it must be allocated before you call this method", "report");
+                throw new ArgumentException("The output report is null, it must be allocated before you call this method", nameof(report));
         }
 
         public async Task<bool> WriteReportAsync(HidReport report, int timeout = 0)

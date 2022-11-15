@@ -2505,7 +2505,7 @@ namespace NonVisuals.Radios
             ShowFrequenciesOnPanel();
         }
 
-        private uint QuarterFrequencyStandbyAdjust(uint frequency, bool increase)
+        private static uint QuarterFrequencyStandbyAdjust(uint frequency, bool increase)
         {
             uint result = 0;
             var tmp = frequency.ToString(CultureInfo.InvariantCulture);
@@ -2930,7 +2930,7 @@ namespace NonVisuals.Radios
             SaitekPanelKnobs = RadioPanelKnobUH1H.GetRadioPanelKnobs();
         }
 
-        private string GetCommandDirectionForVhfCommDial1(uint desiredFreq, uint actualFreq)
+        private static string GetCommandDirectionForVhfCommDial1(uint desiredFreq, uint actualFreq)
         {
             /*UH-1H AN/ARC-134 VHF Comm Radio Set*/
             // Large dial 116 - 149 [step of 1]
@@ -2964,7 +2964,7 @@ namespace NonVisuals.Radios
             throw new Exception("Should reach this code. GetCommandDirectionForVhfCommDial1(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
         }
 
-        private string GetCommandDirectionForVhfCommDial2(uint desiredFreq, uint actualFreq)
+        private static string GetCommandDirectionForVhfCommDial2(uint desiredFreq, uint actualFreq)
         {
             /*UH-1H AN/ARC-134 VHF Comm Radio Set*/
 
@@ -3000,7 +3000,7 @@ namespace NonVisuals.Radios
             throw new Exception("Should reach this code. GetCommandDirectionForVhfCommDial2(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
         }
 
-        private string GetCommandDirectionForUhfDial1(uint desiredFreq, uint actualFreq)
+        private static string GetCommandDirectionForUhfDial1(uint desiredFreq, uint actualFreq)
         {
             // Large dial 20 - 39 [step of 1]
             // d19 +/-10
@@ -3029,7 +3029,7 @@ namespace NonVisuals.Radios
             throw new Exception("Should reach this code. GetCommandDirectionForUhfDial1(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
         }
 
-        private string GetCommandDirectionForUhfDial2(uint desiredFreq, uint actualFreq)
+        private static string GetCommandDirectionForUhfDial2(uint desiredFreq, uint actualFreq)
         {
             // 2nd dial 0 - 9 [step of 1]
             // +/-9
@@ -3058,7 +3058,7 @@ namespace NonVisuals.Radios
             throw new Exception("Should reach this code. GetCommandDirectionForUhfDial2(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
         }
 
-        private string GetCommandDirectionForUhfDial3(uint desiredFreq, uint actualFreq)
+        private static string GetCommandDirectionForUhfDial3(uint desiredFreq, uint actualFreq)
         {
             // 00 05 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95
             // 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20   
@@ -3088,7 +3088,7 @@ namespace NonVisuals.Radios
             throw new Exception("Should reach this code. GetCommandDirectionForUhfDial3(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
         }
 
-        private string GetCommandDirectionForVhfNavDial1(uint desiredFreq, uint actualFreq)
+        private static string GetCommandDirectionForVhfNavDial1(uint desiredFreq, uint actualFreq)
         {
             /*UH-1H AN/ARC-134 VHF Comm Radio Set*/
             // Large dial 107-126  [step of 1]

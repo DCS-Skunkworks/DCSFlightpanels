@@ -39,7 +39,7 @@ namespace NonVisuals.StreamDeck
             int pixelCount = Width * Height;
 
             // Create rectangle to lock
-            Rectangle rect = new Rectangle(0, 0, Width, Height);
+            Rectangle rect = new(0, 0, Width, Height);
 
             // get source bitmap pixel format size
             Depth = Image.GetPixelFormatSize(_source.PixelFormat);

@@ -10,7 +10,7 @@
      */
     public static class BipFactory
     {
-        private static readonly BipEventHandlerManager BIPEventHandlerManager = new BipEventHandlerManager();
+        private static readonly BipEventHandlerManager BIPEventHandlerManager = new();
 
         public static void BroadcastRegisteredBips()
         {

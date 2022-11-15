@@ -40,7 +40,7 @@ namespace NonVisuals.StreamDeck
 
         private readonly UnicodeEncoding _uniCodeEncoding = new();
         private const Formatting INDENTED_FORMATTING = Formatting.Indented;
-        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        private readonly JsonSerializerSettings _jsonSettings = new()
                                                                     {
                                                                         ContractResolver = new ExcludeObsoletePropertiesResolver(),
                                                                         TypeNameHandling = TypeNameHandling.All,
@@ -249,7 +249,7 @@ namespace NonVisuals.StreamDeck
             SystemSounds.Asterisk.Play();
         }
 
-        private List<string> AddFileForCompression(List<string> list, string file)
+        private static List<string> AddFileForCompression(List<string> list, string file)
         {
             if (string.IsNullOrEmpty(file) || !File.Exists(file) || list.Contains(file))
             {
@@ -420,7 +420,7 @@ namespace NonVisuals.StreamDeck
         public string GetConfigurationInformation()
         {
             var stringBuilder = new StringBuilder(500);
-            stringBuilder.Append("\n");
+            stringBuilder.Append('\n');
 
             stringBuilder.Append($"Layer count : {_layerList.Count}, button count = {_streamDeckPanel.GetButtons().Count}\n");
             stringBuilder.Append("Existing layers:\n");
@@ -429,7 +429,7 @@ namespace NonVisuals.StreamDeck
                 stringBuilder.Append($"\t{streamDeckLayer.Name} ({streamDeckLayer.StreamDeckButtons.Count})\n");
             }
 
-            stringBuilder.Append("\n");
+            stringBuilder.Append('\n');
 
             return stringBuilder.ToString();
         }

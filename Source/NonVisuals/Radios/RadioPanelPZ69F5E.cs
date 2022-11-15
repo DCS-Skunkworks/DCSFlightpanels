@@ -1946,7 +1946,7 @@ namespace NonVisuals.Radios
             SaitekPanelKnobs = RadioPanelKnobF5E.GetRadioPanelKnobs();
         }
 
-        private string GetUhfDialFrequencyForPosition(int dial, uint position)
+        private static string GetUhfDialFrequencyForPosition(int dial, uint position)
         {
             // Frequency selector 1     
             // // "T"  "2"  "3"  "A"

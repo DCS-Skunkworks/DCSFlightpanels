@@ -28,7 +28,7 @@ namespace NonVisuals.StreamDeck
         private bool _useFormula;
         private double _formulaResult = double.MaxValue;
         private string _lastFormulaError = string.Empty;
-        private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
+        private List<DCSBIOSConverter> _dcsbiosConverters = new();
         private volatile bool _valueUpdated = true;
         private DCSBiosOutputType _decoderSourceType = DCSBiosOutputType.IntegerType;
         private bool _treatStringAsNumber;
@@ -98,11 +98,11 @@ namespace NonVisuals.StreamDeck
                 stringBuilder.Append("Face DCS-BIOS Decoder");
                 if (FormulaSelectedAndOk())
                 {
-                    stringBuilder.Append(" ").Append(_dcsbiosOutputFormula.DCSBIOSOutputs()[0].ControlId);
+                    stringBuilder.Append(' ').Append(_dcsbiosOutputFormula.DCSBIOSOutputs()[0].ControlId);
                 }
                 else if (_dcsbiosOutput != null)
                 {
-                    stringBuilder.Append(" ").Append(_dcsbiosOutput.ControlId);
+                    stringBuilder.Append(' ').Append(_dcsbiosOutput.ControlId);
                 }
 
                 return stringBuilder.ToString();

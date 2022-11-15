@@ -19,7 +19,7 @@ namespace NonVisuals
     public class KeyPress
     {
         private const int SLEEP_VALUE = 32;
-        private SortedList<int, IKeyPressInfo> _sortedKeyPressInfoList = new SortedList<int, IKeyPressInfo>();
+        private SortedList<int, IKeyPressInfo> _sortedKeyPressInfoList = new();
         private string _description = "Key press sequence";
         [NonSerialized] private Thread _executingThread;
 
@@ -29,7 +29,7 @@ namespace NonVisuals
          * depends on what the user has configured.
          * It is the binding class that must make sure to set these.
          */
-        private List<KeyPress> _negatorOSKeyPresses = new List<KeyPress>();
+        private List<KeyPress> _negatorOSKeyPresses = new();
         private volatile bool _abort;
 
 
@@ -207,7 +207,7 @@ namespace NonVisuals
             {
                 // Debug.WriteLine("VK = " + virtualKeyCodes[1] + " length = " + keyPressLength);
                 // Press modifiers
-                for (var i = 0; i < virtualKeyCodes.Count(); i++)
+                for (var i = 0; i < virtualKeyCodes.Length; i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
                     if (CommonVirtualKey.IsModifierKey(virtualKeyCode))
@@ -229,7 +229,7 @@ namespace NonVisuals
                 Thread.Sleep(millisecondsTimeout: 32); 
 
                 // Press normal keys
-                for (var i = 0; i < virtualKeyCodes.Count(); i++)
+                for (var i = 0; i < virtualKeyCodes.Length; i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
                     if (!CommonVirtualKey.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
@@ -269,7 +269,7 @@ namespace NonVisuals
         private void ReleaseKeys(VirtualKeyCode[] virtualKeyCodes)
         {
             // Release normal keys
-            for (var i = 0; i < virtualKeyCodes.Count(); i++)
+            for (var i = 0; i < virtualKeyCodes.Length; i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
                 if (!CommonVirtualKey.IsModifierKey(virtualKeyCode))
@@ -279,7 +279,7 @@ namespace NonVisuals
             }
 
             // Release modifiers
-            for (var i = 0; i < virtualKeyCodes.Count(); i++)
+            for (var i = 0; i < virtualKeyCodes.Length; i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
                 if (CommonVirtualKey.IsModifierKey(virtualKeyCode))
@@ -296,7 +296,7 @@ namespace NonVisuals
             }
         }
 
-        public string GetVirtualKeyCodesAsString(IKeyPressInfo keyPressInfo)
+        public static string GetVirtualKeyCodesAsString(IKeyPressInfo keyPressInfo)
         {
             var result = new StringBuilder();
 
@@ -399,7 +399,7 @@ namespace NonVisuals
                 throw new ArgumentException("Import string empty. (KeyBinding)");
             }
 
-            if (str.Contains("["))
+            if (str.Contains('['))
             {
                 ImportStringMultiKeySequence(str);
             }
@@ -483,7 +483,7 @@ namespace NonVisuals
                 // [FiftyMilliSec,VK_C,FiftyMilliSec]
                 // [FiftyMilliSec,VK_D,FiftyMilliSec]}
                 // ...
-                for (int i = 0; i < array.Count(); i++)
+                for (int i = 0; i < array.Length; i++)
                 {
                     var keyPressInfo = new KeyPressInfo();
                     var entry = array[i];
@@ -558,7 +558,7 @@ namespace NonVisuals
             return _sortedKeyPressInfoList == null || _sortedKeyPressInfoList.Count == 0;
         }
 
-        private SortedList<int, KeyPressInfo> _oldSortedKeyPressInfoList = new SortedList<int, KeyPressInfo>();
+        private SortedList<int, KeyPressInfo> _oldSortedKeyPressInfoList = new();
         [Obsolete]
         [JsonProperty("KeySequence", Required = Required.Default)]
         public SortedList<int, KeyPressInfo> KeySequenceObsolete
@@ -606,7 +606,7 @@ namespace NonVisuals
                 result.Append("[" + Enum.GetName(typeof(KeyPressLength), keyPressInfo.LengthOfBreak) + "," + GetVirtualKeyCodesAsString(keyPressInfo) + "," + Enum.GetName(typeof(KeyPressLength), keyPressInfo.LengthOfKeyPress) + "]");
             }
 
-            result.Append("}");
+            result.Append('}');
             return result.ToString();
         }
 
@@ -646,7 +646,7 @@ namespace NonVisuals
                 }
             }
 
-            var inputs = new NativeMethods.INPUT[virtualKeyCodes.Count()];
+            var inputs = new NativeMethods.INPUT[virtualKeyCodes.Length];
 
             while (keyPressLengthTimeConsumed < (int)keyPressLength)
             {
@@ -660,7 +660,7 @@ namespace NonVisuals
                 }
 
                 // Add modifiers
-                for (var i = 0; i < virtualKeyCodes.Count(); i++)
+                for (var i = 0; i < virtualKeyCodes.Length; i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
                     if (CommonVirtualKey.IsModifierKey(virtualKeyCode))
@@ -683,7 +683,7 @@ namespace NonVisuals
                 // 0  1  2  3
                 // 1  2  3  4
                 // Add normal keys
-                for (var i = modifierCount; i < virtualKeyCodes.Count(); i++)
+                for (var i = modifierCount; i < virtualKeyCodes.Length; i++)
                 {
                     var virtualKeyCode = virtualKeyCodes[i];
                     if (!CommonVirtualKey.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
@@ -698,7 +698,7 @@ namespace NonVisuals
                     }
                 }
 
-                NativeMethods.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
+                NativeMethods.SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
 
                 if (keyPressLength != KeyPressLength.Indefinite)
                 {
@@ -717,7 +717,7 @@ namespace NonVisuals
                 }
             }
 
-            for (var i = 0; i < inputs.Count(); i++)
+            for (var i = 0; i < inputs.Length; i++)
             {
                 inputs[i].InputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_KEYUP;
             }
@@ -725,7 +725,7 @@ namespace NonVisuals
             Array.Reverse(inputs);
 
             // Release same keys
-            NativeMethods.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
+            NativeMethods.SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
         }
 
         [JsonProperty("Abort", Required = Required.Default)]

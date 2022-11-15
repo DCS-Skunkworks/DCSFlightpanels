@@ -44,7 +44,7 @@
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ69RadioPanel)
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.PZ69RadioPanel} expected");
             }
 
             _numberFormatInfoFullDisplay = new NumberFormatInfo

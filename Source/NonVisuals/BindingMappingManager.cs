@@ -11,7 +11,7 @@ namespace NonVisuals
     public static class BindingMappingManager
     {
         private static object _genericBindingsLock = new();
-        private static volatile List<GenericPanelBinding> _genericBindings = new List<GenericPanelBinding>();
+        private static volatile List<GenericPanelBinding> _genericBindings = new();
 
 
         public static void ClearBindings()

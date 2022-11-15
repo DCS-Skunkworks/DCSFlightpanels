@@ -71,7 +71,7 @@ namespace NonVisuals.Saitek.Panels
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.BackLitPanel)
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.BackLitPanel} expected");
             }
 
             VendorId = 0x6A3;

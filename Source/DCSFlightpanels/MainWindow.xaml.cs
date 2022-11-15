@@ -181,7 +181,7 @@
         /// Try to find the path of the log with a file target given as parameter
         /// See NLog.config in the main folder of the application for configured log targets
         /// </summary>
-        private string GetLogFilePathByTarget(string targetName)
+        private static string GetLogFilePathByTarget(string targetName)
         {
             string fileName;
             if (LogManager.Configuration != null && LogManager.Configuration.ConfiguredNamedTargets.Count != 0)
@@ -1411,12 +1411,12 @@
             }
         }
 
-        public void DeviceAttached(GamingPanelEnum gamingPanelsEnum)
+        public static void DeviceAttached(GamingPanelEnum gamingPanelsEnum)
         {
             // ignore
         }
 
-        public void DeviceDetached(GamingPanelEnum gamingPanelsEnum)
+        public static void DeviceDetached(GamingPanelEnum gamingPanelsEnum)
         {
             // ignore
         }
@@ -1462,7 +1462,7 @@
             }
         }
 
-        private void TryOpenLogFileWithTarget(string targetName)
+        private static void TryOpenLogFileWithTarget(string targetName)
         {
             try
             {
@@ -1672,7 +1672,7 @@
             informationWindow.ShowDialog();
         }
 
-        private string GetProductId(string saitekVID, string usbDeviceKeyName)
+        private static string GetProductId(string saitekVID, string usbDeviceKeyName)
         {
             var pos = usbDeviceKeyName.IndexOf("&", StringComparison.InvariantCulture);
             var vid = usbDeviceKeyName.Substring(0, pos);

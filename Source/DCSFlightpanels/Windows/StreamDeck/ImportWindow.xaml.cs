@@ -24,7 +24,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     {
         private readonly string _bindingHash;
         private bool _formLoaded = false;
-        private List<ButtonExport> _buttonExports = new List<ButtonExport>();
+        private List<ButtonExport> _buttonExports = new();
         private string _extractedFilesFolder = string.Empty;
 
         public ImportWindow(string bindingHash)
@@ -295,7 +295,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        private bool VerifyImportArchive(string filename)
+        private static bool VerifyImportArchive(string filename)
         {
             return ZipArchiver.ZipFileContainsFile(filename, StreamDeckConstants.BUTTON_EXPORT_FILENAME);
         }
@@ -417,7 +417,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        private bool PreCheckBeforeImport()
+        private static bool PreCheckBeforeImport()
         {
             return true;
         }
@@ -571,7 +571,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 {
                     if (File.Exists(Path.Combine(TextBoxImageImportFolder.Text, file.Name)))
                     {
-                        stringBuilder.Append(file.Name).Append("\n");
+                        stringBuilder.Append(file.Name).Append('\n');
                         show = true;
                     }
                     else

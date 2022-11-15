@@ -22,8 +22,8 @@ namespace NonVisuals.BindingClasses.OSCommand
 
         public Tuple<string, string> ParseSettingV1(string config)
         {
-            var mode = "";
-            var key = "";
+            string mode = "";
+            string key;
 
             if (string.IsNullOrEmpty(config))
             {

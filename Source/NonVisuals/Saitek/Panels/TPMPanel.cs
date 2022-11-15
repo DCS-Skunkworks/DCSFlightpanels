@@ -36,7 +36,7 @@ namespace NonVisuals.Saitek.Panels
         {
             if (hidSkeleton.GamingPanelType != GamingPanelEnum.TPM)
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.TPM} expected");
             }
 
             // Fixed values

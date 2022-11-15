@@ -53,7 +53,7 @@ namespace NonVisuals.StreamDeck
                 stringBuilder.Append("OS Command");
                 if (OSCommandObject != null)
                 {
-                    stringBuilder.Append(" ").Append(OSCommandObject.Name);
+                    stringBuilder.Append(' ').Append(OSCommandObject.Name);
                 }
 
                 return stringBuilder.ToString();

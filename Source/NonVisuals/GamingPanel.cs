@@ -42,7 +42,7 @@
         public bool ForwardPanelEvent { get; set; }
         public int VendorId { get; set; }
         public int ProductId { get; set; }
-        public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); 
+        public static readonly List<GamingPanel> GamingPanels = new(); 
 
         public string HIDInstance
         {

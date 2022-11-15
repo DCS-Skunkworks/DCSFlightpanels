@@ -66,7 +66,7 @@
             };
         }
 
-        public static readonly List<GamingPanelSkeleton> GamingPanelSkeletons = new List<GamingPanelSkeleton>
+        public static readonly List<GamingPanelSkeleton> GamingPanelSkeletons = new()
         {
             new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel),
             new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ69RadioPanel),

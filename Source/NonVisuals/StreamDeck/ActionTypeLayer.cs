@@ -92,7 +92,7 @@ namespace NonVisuals.StreamDeck
                 stringBuilder.Append("Layer Nav.");
                 if (!string.IsNullOrEmpty(TargetLayer))
                 {
-                    stringBuilder.Append(" ").Append(TargetLayer);
+                    stringBuilder.Append(' ').Append(TargetLayer);
                 }
 
                 return stringBuilder.ToString();

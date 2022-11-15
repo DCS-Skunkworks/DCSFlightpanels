@@ -63,7 +63,7 @@ namespace NonVisuals.StreamDeck
                 stringBuilder.Append("Face Image");
                 if (!string.IsNullOrEmpty(_imageFile))
                 {
-                    stringBuilder.Append(" ").Append(_imageFile);
+                    stringBuilder.Append(' ').Append(_imageFile);
                 }
 
                 return stringBuilder.ToString();

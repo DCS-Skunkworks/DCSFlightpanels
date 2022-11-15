@@ -23,8 +23,8 @@ namespace NonVisuals.StreamDeck
         private bool _criteria1IsOk;
         private bool _criteria2IsOk;
 
-        private FaceTypeText _faceTypeText = new FaceTypeText();
-        private FaceTypeImage _faceTypeImage = new FaceTypeImage();
+        private FaceTypeText _faceTypeText = new();
+        private FaceTypeImage _faceTypeImage = new();
         private FaceTypeDCSBIOSOverlay _faceTypeDCSBIOSOverlay;
 
         [NonSerialized]
@@ -297,7 +297,7 @@ namespace NonVisuals.StreamDeck
             set => _referenceValue2 = value;
         }
 
-        private string GetOutputAsString(EnumConverterOutputType converterOutputType)
+        private static string GetOutputAsString(EnumConverterOutputType converterOutputType)
         {
             string result;
             switch (converterOutputType)
@@ -336,7 +336,7 @@ namespace NonVisuals.StreamDeck
             return result;
         }
 
-        private string GetComparatorAsString(EnumComparator comparator)
+        private static string GetComparatorAsString(EnumComparator comparator)
         {
             var result = string.Empty;
 

@@ -161,7 +161,7 @@ namespace Tests.NonVisuals
         /// This is quite a dumb comparison function. 
         /// We only care about the size & pixel values, no encoding check or other fancy stuff.
         /// </summary>
-        private bool CompareBitmaps(Bitmap bmp1, Bitmap bmp2)
+        private static bool CompareBitmaps(Bitmap bmp1, Bitmap bmp2)
         {
             if (bmp1 == null || bmp2 == null)
                 return false;
@@ -179,8 +179,8 @@ namespace Tests.NonVisuals
                 for (int y = 0; y < bmp1.Height; y++)
                     if (bmp1.GetPixel(x, y) != bmp2.GetPixel(x, y))
                     {
-                        Color c1 = bmp1.GetPixel(x, y); //for debug purpose only
-                        Color c2 = bmp2.GetPixel(x, y); //for debug purpose only
+                        //Color c1 = bmp1.GetPixel(x, y); //for debug purpose only
+                        //Color c2 = bmp2.GetPixel(x, y); //for debug purpose only
                         return false;
                     }
 

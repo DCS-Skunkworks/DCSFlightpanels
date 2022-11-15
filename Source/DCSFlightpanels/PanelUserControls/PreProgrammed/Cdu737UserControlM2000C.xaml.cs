@@ -99,7 +99,7 @@
         {
 
         }
-        private void HideAllImages()
+        private static void HideAllImages()
         {
 
         }

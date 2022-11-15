@@ -368,7 +368,7 @@
             {
                 var textBox = ((TextBox)sender);
 
-                if (textBox.Text.Contains("."))
+                if (textBox.Text.Contains('.'))
                 {
                     textBox.MaxLength = 6;
                 }
@@ -382,7 +382,7 @@
                     e.Handled = true;
                     return;
                 }
-                if (textBox.Text.Contains(".") && e.Key == Key.OemPeriod)
+                if (textBox.Text.Contains('.') && e.Key == Key.OemPeriod)
                 {
                     e.Handled = true;
                 }

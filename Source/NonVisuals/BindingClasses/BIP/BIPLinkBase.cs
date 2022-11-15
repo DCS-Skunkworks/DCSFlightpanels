@@ -17,7 +17,7 @@ namespace NonVisuals.BindingClasses.BIP
          The user can map a physical switch so that whenever it is flicked
          the BIP will light up in a position chosen by the user.
          */
-        internal SortedList<int, BIPLight> _bipLights = new SortedList<int, BIPLight>();
+        internal SortedList<int, BIPLight> _bipLights = new();
         internal bool WhenOnTurnedOn = true;
         internal string _description;
         [NonSerialized]
@@ -29,8 +29,8 @@ namespace NonVisuals.BindingClasses.BIP
 
         public Tuple<string, string> ParseSettingV1(string config)
         {
-            var mode = "";
-            var key = "";
+            string mode = "";
+            string key;
 
             // SwitchPanelBIPLink{1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]
             // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]
