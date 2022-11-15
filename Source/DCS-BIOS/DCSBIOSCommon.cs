@@ -48,21 +48,6 @@ namespace DCS_BIOS
             return result;
         }
 
-        public static string ToPaddedHexString(int i, int padLength = 4)
-        {
-            return "0x" + i.ToString("x").PadLeft(padLength, '0');
-        }
-
-        public static string ToPaddedHexString(uint i, int padLength = 4)
-        {
-            return "0x" + i.ToString("x").PadLeft(padLength, '0');
-        }
-
-        private static int SetBitToZeroAtPosition(int value, int position)
-        {
-            return value & ~(1 << position);
-        }
-
         public static string GetDCSBIOSJSONDirectory(string jsonDirectory)
         {
             var replaceString = "$USERDIRECTORY$";

@@ -1,9 +1,7 @@
 ﻿namespace ClassLibraryCommon
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
 
     public static class EnumEx
     {
@@ -34,21 +32,6 @@
             }
 
             throw new ArgumentException($"Could not find enum value {description} in enum {typeof(T)}", nameof(description));
-        }
-        
-        public static String ToPaddedHexString(int i, int padLength = 4)
-        {
-            return "0x" + i.ToString("x").PadLeft(padLength, '0');
-        }
-
-        public static String ToPaddedHexString(uint i, int padLength = 4)
-        {
-            return "0x" + i.ToString("x").PadLeft(padLength, '0');
-        }
-
-        private static int SetBitToZeroAtPosition(int value, int position)
-        {
-            return value & ~(1 << position);
         }
     }
 }
