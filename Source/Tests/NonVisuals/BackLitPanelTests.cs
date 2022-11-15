@@ -70,7 +70,7 @@ namespace Tests.NonVisuals
         [InlineData("______x_______3_1", BIPLedPositionEnum.Position_3_1)]
         [InlineData("___________z__3_4", BIPLedPositionEnum.Position_3_4)]
         [InlineData("__uu__________3x8", BIPLedPositionEnum.Position_3_8)]
-
+        [InlineData("ImagePosition_3_4", BIPLedPositionEnum.Position_3_4)]
         public void GetLedPosition_ShouldReturn_ExpectedEnumValue(string inputString, BIPLedPositionEnum bIPLedPositionEnum)
         {
             Assert.Equal(bIPLedPositionEnum, BacklitPanelBIP.GetLedPosition(inputString));
