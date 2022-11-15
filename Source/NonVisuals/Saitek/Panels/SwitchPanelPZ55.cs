@@ -982,104 +982,34 @@ namespace NonVisuals.Saitek.Panels
 
         public static SwitchPanelPZ55LEDs GetSwitchPanelPZ55LEDColor(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition, PanelLEDColor panelLEDColor)
         {
-            var result = SwitchPanelPZ55LEDs.ALL_DARK;
-
-            switch (switchPanelPZ55LEDPosition)
+            return switchPanelPZ55LEDPosition switch
             {
-                case SwitchPanelPZ55LEDPosition.UP:
-                    {
-                        switch (panelLEDColor)
-                        {
-                            case PanelLEDColor.DARK:
-                                {
-                                    result = SwitchPanelPZ55LEDs.ALL_DARK;
-                                    break;
-                                }
-
-                            case PanelLEDColor.GREEN:
-                                {
-                                    result = SwitchPanelPZ55LEDs.UP_GREEN;
-                                    break;
-                                }
-
-                            case PanelLEDColor.RED:
-                                {
-                                    result = SwitchPanelPZ55LEDs.UP_RED;
-                                    break;
-                                }
-
-                            case PanelLEDColor.YELLOW:
-                                {
-                                    result = SwitchPanelPZ55LEDs.UP_YELLOW;
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case SwitchPanelPZ55LEDPosition.LEFT:
-                    {
-                        switch (panelLEDColor)
-                        {
-                            case PanelLEDColor.DARK:
-                                {
-                                    result = SwitchPanelPZ55LEDs.ALL_DARK;
-                                    break;
-                                }
-
-                            case PanelLEDColor.GREEN:
-                                {
-                                    result = SwitchPanelPZ55LEDs.LEFT_GREEN;
-                                    break;
-                                }
-
-                            case PanelLEDColor.RED:
-                                {
-                                    result = SwitchPanelPZ55LEDs.LEFT_RED;
-                                    break;
-                                }
-
-                            case PanelLEDColor.YELLOW:
-                                {
-                                    result = SwitchPanelPZ55LEDs.LEFT_YELLOW;
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case SwitchPanelPZ55LEDPosition.RIGHT:
-                    {
-                        switch (panelLEDColor)
-                        {
-                            case PanelLEDColor.DARK:
-                                {
-                                    result = SwitchPanelPZ55LEDs.ALL_DARK;
-                                    break;
-                                }
-
-                            case PanelLEDColor.GREEN:
-                                {
-                                    result = SwitchPanelPZ55LEDs.RIGHT_GREEN;
-                                    break;
-                                }
-
-                            case PanelLEDColor.RED:
-                                {
-                                    result = SwitchPanelPZ55LEDs.RIGHT_RED;
-                                    break;
-                                }
-
-                            case PanelLEDColor.YELLOW:
-                                {
-                                    result = SwitchPanelPZ55LEDs.RIGHT_YELLOW;
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-            }
-            return result;
+                SwitchPanelPZ55LEDPosition.UP => panelLEDColor switch
+                {
+                    PanelLEDColor.DARK => SwitchPanelPZ55LEDs.ALL_DARK,
+                    PanelLEDColor.GREEN => SwitchPanelPZ55LEDs.UP_GREEN,
+                    PanelLEDColor.RED => SwitchPanelPZ55LEDs.UP_RED,
+                    PanelLEDColor.YELLOW => SwitchPanelPZ55LEDs.UP_YELLOW,
+                    _ => SwitchPanelPZ55LEDs.ALL_DARK
+                },
+                SwitchPanelPZ55LEDPosition.LEFT => panelLEDColor switch
+                {
+                    PanelLEDColor.DARK => SwitchPanelPZ55LEDs.ALL_DARK,
+                    PanelLEDColor.GREEN => SwitchPanelPZ55LEDs.LEFT_GREEN,
+                    PanelLEDColor.RED => SwitchPanelPZ55LEDs.LEFT_RED,
+                    PanelLEDColor.YELLOW => SwitchPanelPZ55LEDs.LEFT_YELLOW,
+                    _ => SwitchPanelPZ55LEDs.ALL_DARK
+                },
+                SwitchPanelPZ55LEDPosition.RIGHT => panelLEDColor switch
+                {
+                    PanelLEDColor.DARK => SwitchPanelPZ55LEDs.ALL_DARK,
+                    PanelLEDColor.GREEN => SwitchPanelPZ55LEDs.RIGHT_GREEN,
+                    PanelLEDColor.RED => SwitchPanelPZ55LEDs.RIGHT_RED,
+                    PanelLEDColor.YELLOW => SwitchPanelPZ55LEDs.RIGHT_YELLOW,
+                    _ => SwitchPanelPZ55LEDs.ALL_DARK
+                },
+                _ => SwitchPanelPZ55LEDs.ALL_DARK
+            };
         }
 
         private void CreateSwitchKeys()
