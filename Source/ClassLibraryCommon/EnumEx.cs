@@ -36,11 +36,6 @@
             throw new ArgumentException($"Could not find enum value {description} in enum {typeof(T)}", nameof(description));
         }
         
-        public static IEnumerable<T> GetValues<T>()
-        {
-            return Enum.GetValues(typeof(T)).Cast<T>();
-        }
-
         public static String ToPaddedHexString(int i, int padLength = 4)
         {
             return "0x" + i.ToString("x").PadLeft(padLength, '0');

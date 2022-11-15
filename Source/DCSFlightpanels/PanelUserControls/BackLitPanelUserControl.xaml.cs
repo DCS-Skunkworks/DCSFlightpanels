@@ -179,8 +179,7 @@
                     return;
                 }
                 HideAllConfigurationExistsImages();
-                var bipPositions = ClassLibraryCommon.EnumEx.GetValues<BIPLedPositionEnum>();
-                foreach (var position in bipPositions)
+                foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
                 {
                     SetLEDImage(position, _backlitPanelBIP.GetColor(position));
                     SetConfigExistsImageVisibility(_backlitPanelBIP.HasConfiguration(position), position);
