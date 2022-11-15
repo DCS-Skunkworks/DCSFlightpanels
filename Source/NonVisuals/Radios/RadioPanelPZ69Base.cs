@@ -193,7 +193,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "SetPZ69DisplayBytesDefault()");
+                Logger.Error(ex, "SetPZ69DisplayBytesDefault()");
             }
         }
 

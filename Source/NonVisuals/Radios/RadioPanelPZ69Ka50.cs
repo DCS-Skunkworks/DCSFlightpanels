@@ -352,7 +352,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -443,7 +443,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -466,7 +466,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -687,7 +687,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
 
             // Refresh panel once this debacle is finished
@@ -703,7 +703,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -947,7 +947,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1475,7 +1475,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1510,7 +1510,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1531,7 +1531,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -1553,7 +1553,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -1575,7 +1575,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -1597,7 +1597,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -1870,7 +1870,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
@@ -1909,7 +1909,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
         
@@ -1935,7 +1935,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1950,7 +1950,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -2016,7 +2016,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -2079,7 +2079,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
 
             return inc;
@@ -2426,7 +2426,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
 
             throw new Exception(
@@ -2451,7 +2451,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
 
             return string.Empty;

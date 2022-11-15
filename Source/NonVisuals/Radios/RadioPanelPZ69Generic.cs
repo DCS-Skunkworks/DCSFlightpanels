@@ -282,7 +282,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "DcsBiosDataReceived()");
+                Logger.Error(ex, "DcsBiosDataReceived()");
             }
         }
 

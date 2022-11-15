@@ -8,9 +8,9 @@
 
     public class DCSFPProfile
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private static object _lock = new();
+        private static readonly object Lock = new();
         private static readonly List<DCSFPProfile> ModulesList = new();
 
         public static DCSFPProfile SelectedProfile { get; set; }
@@ -27,19 +27,19 @@
             AddInternalModules();
         }
 
-        public int ID { get; set; }
+        public int ID { get; }
 
-        public string JSONFilename { get; set; }
+        public string JSONFilename { get; }
 
-        public string Description { get; set; }
+        public string Description { get; }
 
-        public bool UseGenericRadio { get; set; } = false;
+        public bool UseGenericRadio { get; set; }
 
         public static List<DCSFPProfile> Modules
         {
             get
             {
-                lock (_lock)
+                lock (Lock)
                 {
                     return ModulesList;
                 }
@@ -50,7 +50,7 @@
         {
             get
             {
-                lock (_lock)
+                lock (Lock)
                 {
                     return ModulesList.Count - 2; // Two profiles are not DCS-BIOS
                 }
@@ -59,7 +59,7 @@
 
         private static void AddInternalModules()
         {
-            lock (_lock)
+            lock (Lock)
             {
                 if (!ModulesList.Exists(o => o.ID == 1))
                 {
@@ -105,7 +105,7 @@
                     // ProperName = A-10C Thunderbolt II
                     var properName = info[1].Split(new[] { "=" }, StringSplitOptions.None)[1].Trim();
 
-                    lock (_lock)
+                    lock (Lock)
                     {
                         ModulesList.Add(new DCSFPProfile(id, properName, json));
                     }
@@ -115,7 +115,7 @@
 
         private static void LogErrorAndThrowException(string message)
         {
-            logger.Error(message);
+            Logger.Error(message);
             throw new Exception(message);
         }
 

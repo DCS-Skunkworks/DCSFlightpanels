@@ -793,7 +793,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
         
@@ -845,7 +845,7 @@ namespace NonVisuals.Radios
                     case 7:
                         return " 4  2";
                     default:
-                        logger.Error("Unexpected value for _arcSectorCockpit");
+                        Logger.Error("Unexpected value for _arcSectorCockpit");
                         return " 0  0";
                 }
             }

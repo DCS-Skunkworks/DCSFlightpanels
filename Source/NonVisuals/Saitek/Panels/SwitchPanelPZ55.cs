@@ -98,7 +98,7 @@ namespace NonVisuals.Saitek.Panels
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -414,7 +414,7 @@ namespace NonVisuals.Saitek.Panels
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "SetLandingGearLedsManually");
+                Logger.Error(ex, "SetLandingGearLedsManually");
                 throw;
             }
         }
@@ -575,7 +575,7 @@ namespace NonVisuals.Saitek.Panels
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "CheckDcsDataForColorChangeHook(uint address, uint data)");
+                Logger.Error(ex, "CheckDcsDataForColorChangeHook(uint address, uint data)");
                 throw;
             }
         }

@@ -13,7 +13,7 @@
 
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty, IDisposable
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        internal static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public abstract void Startup();
         public abstract void Identify();
@@ -177,7 +177,7 @@
                     return;
                 }
 
-                logger.Error(ex, "Via GamingPanel.SetLastException()");
+                Logger.Error(ex, "Via GamingPanel.SetLastException()");
                 lock (_exceptionLockObject)
                 {
                     _lastException = new Exception(ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);

@@ -72,7 +72,7 @@ namespace NonVisuals.Saitek.Panels
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 

@@ -20,7 +20,7 @@
 
     public static class Common
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static int _emulationModesFlag = 0;
         public static APIModeEnum APIMode = 0;
 
@@ -186,7 +186,7 @@
 
         public static void ShowErrorMessageBox(Exception ex, string message = null)
         {
-            logger.Error(ex, message);
+            Logger.Error(ex, message);
             MessageBox.Show(ex.Message, $"Details logged to error log.{Environment.NewLine}{ex.Source}", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 

@@ -43,6 +43,6 @@ namespace DCS_BIOS.Json
             }
         }
 
-        public DCSBiosOutputType OutputDataType { get; set; }
+        public DCSBiosOutputType OutputDataType { get; private set; }
     }
 }

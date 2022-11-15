@@ -26,18 +26,11 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public override List<DCSBIOSInput> DCSBIOSInputs
+        protected override List<DCSBIOSInput> DCSBIOSInputs
         {
             get
             {
                 return ContainsDCSBIOS() ? _dcsbiosBindingPZ70.DCSBIOSInputs : null;
-            }
-            set
-            {
-                if (ContainsDCSBIOS())
-                {
-                    _dcsbiosBindingPZ70.DCSBIOSInputs = value;
-                }
             }
         }
 
@@ -80,12 +73,12 @@ namespace DCSFlightpanels.Bills
             return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override bool IsEmptyNoCareBipLink()
+        protected override bool IsEmptyNoCareBipLink()
         {
             return (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
+        protected override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             if (_dcsbiosBindingPZ70 == null)
             {
