@@ -179,8 +179,7 @@
                     return;
                 }
                 HideAllConfigurationExistsImages();
-                var bipPositions = ClassLibraryCommon.EnumEx.GetValues<BIPLedPositionEnum>();
-                foreach (var position in bipPositions)
+                foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
                 {
                     SetLEDImage(position, _backlitPanelBIP.GetColor(position));
                     SetConfigExistsImageVisibility(_backlitPanelBIP.HasConfiguration(position), position);
@@ -210,7 +209,7 @@
                 var menuItem = (MenuItem)sender;
                 var contextMenu = (ContextMenu)menuItem.Parent;
                 var imageName = contextMenu.Tag.ToString();
-                var position = GetLedPosition(imageName);
+                var position = BacklitPanelBIP.GetLedPosition(imageName);
 
                 var ledConfigsWindow = new LEDConfigsWindow("Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
                 if (ledConfigsWindow.ShowDialog() == true)
@@ -226,167 +225,6 @@
             }
         }
 
-        private static BIPLedPositionEnum GetLedPosition(string imageName)
-        {
-            var result = BIPLedPositionEnum.Position_1_1;
-            //ImagePosition3_4
-            var str = imageName.Remove(0, 14);
-            //3_4
-            var row = int.Parse(str.Substring(0, 1));
-            var index = int.Parse(str.Substring(2, 1));
-            try
-            {
-                switch (row)
-                {
-                    case 1:
-                        {
-                            switch (index)
-                            {
-                                case 1:
-                                    {
-                                        result = BIPLedPositionEnum.Position_1_1;
-                                        break;
-                                    }
-                                case 2:
-                                    {
-                                        result = BIPLedPositionEnum.Position_1_2;
-                                        break;
-                                    }
-                                case 3:
-                                    {
-                                        result = BIPLedPositionEnum.Position_1_3;
-                                        break;
-                                    }
-                                case 4:
-                                    {
-                                        result = BIPLedPositionEnum.Position_1_4;
-                                        break;
-                                    }
-                                case 5:
-                                    {
-                                        result = BIPLedPositionEnum.Position_1_5;
-                                        break;
-                                    }
-                                case 6:
-                                    {
-                                        result = BIPLedPositionEnum.Position_1_6;
-                                        break;
-                                    }
-                                case 7:
-                                    {
-                                        result = BIPLedPositionEnum.Position_1_7;
-                                        break;
-                                    }
-                                case 8:
-                                    {
-                                        result = BIPLedPositionEnum.Position_1_8;
-                                        break;
-                                    }
-                            }
-                            break;
-                        }
-                    case 2:
-                        {
-                            switch (index)
-                            {
-                                case 1:
-                                    {
-                                        result = BIPLedPositionEnum.Position_2_1;
-                                        break;
-                                    }
-                                case 2:
-                                    {
-                                        result = BIPLedPositionEnum.Position_2_2;
-                                        break;
-                                    }
-                                case 3:
-                                    {
-                                        result = BIPLedPositionEnum.Position_2_3;
-                                        break;
-                                    }
-                                case 4:
-                                    {
-                                        result = BIPLedPositionEnum.Position_2_4;
-                                        break;
-                                    }
-                                case 5:
-                                    {
-                                        result = BIPLedPositionEnum.Position_2_5;
-                                        break;
-                                    }
-                                case 6:
-                                    {
-                                        result = BIPLedPositionEnum.Position_2_6;
-                                        break;
-                                    }
-                                case 7:
-                                    {
-                                        result = BIPLedPositionEnum.Position_2_7;
-                                        break;
-                                    }
-                                case 8:
-                                    {
-                                        result = BIPLedPositionEnum.Position_2_8;
-                                        break;
-                                    }
-                            }
-                            break;
-                        }
-                    case 3:
-                        {
-                            switch (index)
-                            {
-                                case 1:
-                                    {
-                                        result = BIPLedPositionEnum.Position_3_1;
-                                        break;
-                                    }
-                                case 2:
-                                    {
-                                        result = BIPLedPositionEnum.Position_3_2;
-                                        break;
-                                    }
-                                case 3:
-                                    {
-                                        result = BIPLedPositionEnum.Position_3_3;
-                                        break;
-                                    }
-                                case 4:
-                                    {
-                                        result = BIPLedPositionEnum.Position_3_4;
-                                        break;
-                                    }
-                                case 5:
-                                    {
-                                        result = BIPLedPositionEnum.Position_3_5;
-                                        break;
-                                    }
-                                case 6:
-                                    {
-                                        result = BIPLedPositionEnum.Position_3_6;
-                                        break;
-                                    }
-                                case 7:
-                                    {
-                                        result = BIPLedPositionEnum.Position_3_7;
-                                        break;
-                                    }
-                                case 8:
-                                    {
-                                        result = BIPLedPositionEnum.Position_3_8;
-                                        break;
-                                    }
-                            }
-                            break;
-                        }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-            return result;
-        }
 
         private void SetContextMenuClickHandlers()
         {
@@ -514,7 +352,7 @@
 
         private void SetPhysicalLED(Image image, PanelLEDColor newColor)
         {
-            var position = GetLedPosition(image.Name);
+            var position = BacklitPanelBIP.GetLedPosition(image.Name);
             _backlitPanelBIP.SetLED(position, newColor);
         }
 
