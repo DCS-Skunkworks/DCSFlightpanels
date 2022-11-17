@@ -109,7 +109,7 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        protected void SetTextBoxText(string description, List<DCSBIOSInput> dcsBiosInputs)
+        private void SetTextBoxText(string description, List<DCSBIOSInput> dcsBiosInputs)
         {
             if (dcsBiosInputs != null)
             {
