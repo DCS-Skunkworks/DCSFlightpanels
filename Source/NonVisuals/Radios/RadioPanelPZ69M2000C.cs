@@ -16,7 +16,8 @@ namespace NonVisuals.Radios
     using MEF;
     using Plugin;
     using Knobs;
-    using Saitek;
+    using Panels.Saitek;
+    using HID;
 
 
     /*
@@ -1209,7 +1210,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
         
@@ -1233,7 +1234,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1248,7 +1249,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1269,7 +1270,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -1291,7 +1292,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -1313,7 +1314,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -1335,7 +1336,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }

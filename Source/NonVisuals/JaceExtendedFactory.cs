@@ -10,7 +10,7 @@ namespace NonVisuals
 
     public static class JaceExtendedFactory
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly Dictionary<int, JaceExtended> JaceEngines = new();
         private static readonly object LockObject = new();
         public static JaceExtended Instance(ref int id)
@@ -42,7 +42,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                logger.Error(ex.Message);
+                Logger.Error(ex.Message);
                 Common.ShowErrorMessageBox(ex);
             }
 

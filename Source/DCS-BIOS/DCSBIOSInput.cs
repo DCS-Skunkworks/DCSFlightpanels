@@ -29,7 +29,7 @@ namespace DCS_BIOS
     [Serializable]
     public class DCSBIOSInput
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        internal static Logger Logger = LogManager.GetCurrentClassLogger();
         // These are loaded and saved, all the rest are fetched from DCS-BIOS
         private string _controlId;
         
@@ -138,7 +138,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"Error in DCSBIOSInput.ToString(), ControlId = {_controlId}");
+                Logger.Error(ex, $"Error in DCSBIOSInput.ToString(), ControlId = {_controlId}");
                 throw;
             }
         }

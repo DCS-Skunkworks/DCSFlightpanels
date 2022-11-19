@@ -15,6 +15,12 @@ namespace NonVisuals
 
     using Newtonsoft.Json;
 
+    /*
+     * This class handles key emulation. It is mapped together with a physical switch/key
+     * by one of the binding classes.
+     * This class if responsible for importing, exporting settings for a certain keypress
+     * as well as executing the key press using a Windows API.
+     */
     [Serializable]
     public class KeyPress
     {
@@ -25,7 +31,7 @@ namespace NonVisuals
 
         /*
          * When this OSKeyPress Executes it should cancel any execution _negatorOSKeyPress does.
-         * No need for constructor of this. It is not know at startup whether there are negators,
+         * No need for constructor of this. It is not known at startup whether there are negators,
          * depends on what the user has configured.
          * It is the binding class that must make sure to set these.
          */
@@ -159,7 +165,7 @@ namespace NonVisuals
 
                     var array = keyPressInfo.VirtualKeyCodes.ToArray();
 
-                    if (Common.APIMode == APIModeEnum.keybd_event)
+                    if (Common.APIModeUsed == APIModeEnum.keybd_event)
                     {
                         KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
 
@@ -338,7 +344,7 @@ namespace NonVisuals
             }
 
             // Insert 1. or 2. indicating API used
-            result.Insert(0, Common.APIMode == APIModeEnum.keybd_event ? "1. " : "2. ");
+            result.Insert(0, Common.APIModeUsed == APIModeEnum.keybd_event ? "1. " : "2. ");
             return result.ToString();
         }
 

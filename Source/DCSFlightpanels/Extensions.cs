@@ -1,10 +1,8 @@
-﻿using NonVisuals.StreamDeck.Panels;
-
-namespace DCSFlightpanels
+﻿namespace DCSFlightpanels
 {
     using CustomControls;
-
-    using NonVisuals.StreamDeck;
+    using NonVisuals.Panels.StreamDeck;
+    using NonVisuals.Panels.StreamDeck.Panels;
 
     public static class Extensions
     {

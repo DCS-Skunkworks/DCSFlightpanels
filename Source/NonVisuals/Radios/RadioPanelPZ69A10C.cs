@@ -16,7 +16,8 @@ namespace NonVisuals.Radios
     using MEF;
     using Plugin;
     using Knobs;
-    using Saitek;
+    using Panels.Saitek;
+    using HID;
 
     /*
      * Pre-programmed radio panel for the A-10C.

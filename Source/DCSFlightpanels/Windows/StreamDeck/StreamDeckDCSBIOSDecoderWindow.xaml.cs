@@ -4,7 +4,6 @@ using DCS_BIOS.EventArgs;
 using DCS_BIOS.Interfaces;
 using DCS_BIOS.Json;
 using NLog;
-using NonVisuals.StreamDeck.Panels;
 
 namespace DCSFlightpanels.Windows.StreamDeck
 {
@@ -25,14 +24,15 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using Shared;
     using NonVisuals;
     using NonVisuals.Interfaces;
-    using NonVisuals.StreamDeck;
+    using NonVisuals.Panels.StreamDeck.Panels;
+    using NonVisuals.Panels.StreamDeck;
 
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.
     /// </summary>
     public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty, IDisposable, IDcsBiosDataListener
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
         private readonly StreamDeckPanel _streamDeckPanel;
         private bool _formLoaded;
@@ -211,7 +211,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "DcsBiosDataReceived()");
+                Logger.Error(ex, "DcsBiosDataReceived()");
             }
         }
 

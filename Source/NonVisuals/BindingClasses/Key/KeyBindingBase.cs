@@ -1,7 +1,7 @@
 using System;
 using ClassLibraryCommon;
 using Newtonsoft.Json;
-using NonVisuals.Saitek;
+using NonVisuals.Panels.Saitek;
 
 namespace NonVisuals.BindingClasses.Key
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using MEF;
-using NonVisuals.Saitek.Panels;
+using NonVisuals.Panels.Saitek.Panels;
 
 namespace NonVisuals.BindingClasses.Key
 {

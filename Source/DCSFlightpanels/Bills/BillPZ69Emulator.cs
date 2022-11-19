@@ -10,7 +10,7 @@ namespace DCSFlightpanels.Bills
 
     using DCS_BIOS;
     using Interfaces;
-    using NonVisuals.Saitek.Panels;
+    using NonVisuals.Panels.Saitek.Panels;
 
     public class BillPZ69Emulator : BillBaseInput
     {
@@ -26,10 +26,9 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public override List<DCSBIOSInput> DCSBIOSInputs
+        protected override List<DCSBIOSInput> DCSBIOSInputs
         {
             get => null;
-            set {}
         }
 
         public override DCSBIOSActionBindingBase DCSBIOSBinding
@@ -52,7 +51,7 @@ namespace DCSFlightpanels.Bills
             return false;
         }
 
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
+        protected override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             throw new Exception("BillPZ69 cannot contain DCS-BIOS");
         }
@@ -67,7 +66,7 @@ namespace DCSFlightpanels.Bills
             return _bipLinkPZ69 == null && (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override bool IsEmptyNoCareBipLink()
+        protected override bool IsEmptyNoCareBipLink()
         {
             return (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }

@@ -1,6 +1,4 @@
-﻿using NonVisuals.StreamDeck.Panels;
-
-namespace DCSFlightpanels.Windows.StreamDeck
+﻿namespace DCSFlightpanels.Windows.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +13,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using Properties;
     using MEF;
     using Newtonsoft.Json;
-    using NonVisuals.StreamDeck;
+    using NonVisuals.Panels.StreamDeck.Panels;
+    using NonVisuals.Panels.StreamDeck;
 
     /// <summary>
     /// Interaction logic for ExportWindow.xaml

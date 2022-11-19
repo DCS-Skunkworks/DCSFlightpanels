@@ -7,7 +7,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
 using NLog;
-using NonVisuals.Saitek;
+using NonVisuals.Panels.Saitek;
 using ThreadState = System.Threading.ThreadState;
 
 /*
@@ -20,7 +20,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
     [Serializable]
     public abstract class DCSBIOSActionBindingBase : IDisposable
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        internal static Logger Logger = LogManager.GetCurrentClassLogger();
         private bool _whenOnTurnedOn = true;
         private string _description;
         [NonSerialized] private Thread _sendDCSBIOSCommandsThread;
@@ -54,6 +54,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
         {
             // Dispose of unmanaged resources.
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public bool IsRunning()
@@ -140,7 +141,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
             { }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 

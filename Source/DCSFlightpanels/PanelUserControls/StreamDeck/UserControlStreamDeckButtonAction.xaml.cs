@@ -1,6 +1,4 @@
-﻿using NonVisuals.StreamDeck.Panels;
-
-namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -19,16 +17,17 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using NLog;
     using NonVisuals;
     using NonVisuals.Interfaces;
-    using NonVisuals.Saitek;
-    using NonVisuals.StreamDeck;
-    using NonVisuals.StreamDeck.Events;
+    using NonVisuals.Panels.StreamDeck.Events;
+    using NonVisuals.Panels.StreamDeck.Panels;
+    using NonVisuals.Panels.StreamDeck;
+    using NonVisuals.Panels.Saitek;
 
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonAction.xaml
     /// </summary>
     public partial class UserControlStreamDeckButtonAction : UserControlBase, IIsDirty, INvStreamDeckListener
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly List<StreamDeckActionTextBox> _textBoxes = new();
 
         private StreamDeckButton _streamDeckButton;
@@ -1051,7 +1050,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1066,7 +1065,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1082,7 +1081,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1099,7 +1098,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1114,7 +1113,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1130,7 +1129,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1149,7 +1148,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1176,7 +1175,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1189,7 +1188,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 

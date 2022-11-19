@@ -10,7 +10,7 @@ namespace DCSFlightpanels.Bills
 
     using DCS_BIOS;
     using Interfaces;
-    using NonVisuals.Saitek.Panels;
+    using NonVisuals.Panels.Saitek.Panels;
 
     public class BillPZ55 : BillBaseInput
     {
@@ -27,18 +27,11 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public override List<DCSBIOSInput> DCSBIOSInputs
+        protected override List<DCSBIOSInput> DCSBIOSInputs
         {
             get
             {
                 return ContainsDCSBIOS() ? _dcsbiosBindingPZ55.DCSBIOSInputs : null;
-            }
-            set
-            {
-                if (ContainsDCSBIOS())
-                {
-                    _dcsbiosBindingPZ55.DCSBIOSInputs = value;
-                }
             }
         }
 
@@ -81,12 +74,12 @@ namespace DCSFlightpanels.Bills
             return (_bipLinkPZ55 == null || _bipLinkPZ55.BIPLights.Count == 0) && (_dcsbiosBindingPZ55?.DCSBIOSInputs == null || _dcsbiosBindingPZ55.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override bool IsEmptyNoCareBipLink()
+        protected override bool IsEmptyNoCareBipLink()
         {
             return (_dcsbiosBindingPZ55?.DCSBIOSInputs == null || _dcsbiosBindingPZ55.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeyPressSequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
+        protected override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
             if (_dcsbiosBindingPZ55 == null)
             {

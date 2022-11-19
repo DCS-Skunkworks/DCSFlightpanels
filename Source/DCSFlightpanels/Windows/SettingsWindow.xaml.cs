@@ -180,13 +180,13 @@ namespace DCSFlightpanels.Windows
                     if (RadioButtonKeyBd.IsChecked == true)
                     {
                         Settings.Default.APIMode = 0;
-                        Common.APIMode = APIModeEnum.keybd_event;
+                        Common.APIModeUsed = APIModeEnum.keybd_event;
                         Settings.Default.Save();
                     }
                     if (RadioButtonSendInput.IsChecked == true)
                     {
                         Settings.Default.APIMode = 1;
-                        Common.APIMode = APIModeEnum.SendInput;
+                        Common.APIModeUsed = APIModeEnum.SendInput;
                         Settings.Default.Save();
                     }
                     if (RadioButtonBelowNormal.IsChecked == true)

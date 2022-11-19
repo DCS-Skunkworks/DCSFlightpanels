@@ -10,7 +10,7 @@ namespace DCS_BIOS
     public class DCSBIOSOutputFormula
     {
         [NonSerialized]
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        internal static Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new();
         private readonly Dictionary<string, double> _variables = new();
 
@@ -62,7 +62,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "ExtractDCSBIOSOutputsInFormula() function");
+                Logger.Error(ex, "ExtractDCSBIOSOutputsInFormula() function");
                 throw;
             }
         }
@@ -104,7 +104,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "CheckForMatch() function");
+                Logger.Error(ex, "CheckForMatch() function");
                 throw;
             }
         }
@@ -138,7 +138,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "CheckForMatch() function");
+                Logger.Error(ex, "CheckForMatch() function");
                 throw;
             }
         }
@@ -164,7 +164,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Evaluate() function");
+                Logger.Error(ex, "Evaluate() function");
                 if (throwException)
                 {
                     throw;

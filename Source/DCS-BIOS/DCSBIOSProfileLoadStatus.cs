@@ -5,7 +5,7 @@ namespace DCS_BIOS
 {
     internal class DCSBIOSProfileLoadStatus
     {
-        private string Profile { get; set; }
+        private string Profile { get; }
         private bool Loaded { get; set; }
         private static readonly List<DCSBIOSProfileLoadStatus> LoadStatusList = new();
 

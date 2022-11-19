@@ -4,6 +4,8 @@
     using ClassLibraryCommon;
 
     using HidLibrary;
+    using HID;
+    using NonVisuals.Panels;
 
     public abstract class CockpitMasterPanel : GamingPanel, IDisposable
     {

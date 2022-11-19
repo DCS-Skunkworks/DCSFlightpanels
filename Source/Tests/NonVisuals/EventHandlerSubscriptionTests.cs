@@ -1,10 +1,10 @@
 ﻿using ClassLibraryCommon;
 using DCS_BIOS.EventArgs;
-using NonVisuals;
 using NonVisuals.EventArgs;
-using NonVisuals.Saitek.Panels;
-using NonVisuals.StreamDeck.Events;
-using NonVisuals.StreamDeck.Panels;
+using NonVisuals.HID;
+using NonVisuals.Panels.Saitek.Panels;
+using NonVisuals.Panels.StreamDeck.Events;
+using NonVisuals.Panels.StreamDeck.Panels;
 using Xunit;
 
 namespace Tests.NonVisuals

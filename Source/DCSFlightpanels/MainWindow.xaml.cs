@@ -11,7 +11,6 @@
     using System.Linq;
     using System.Media;
     using System.Reflection;
-    using System.Text;
     using System.Timers;
     using System.Windows;
     using System.Windows.Controls;
@@ -31,8 +30,6 @@
     using Radios.PreProgrammed;
     using Shared;
     using Windows;
-
-    using Microsoft.Win32;
     using NLog;
     using NLog.Targets;
     using NLog.Targets.Wrappers;
@@ -42,10 +39,12 @@
     using NonVisuals.Plugin;
 
     using Octokit;
+    using NonVisuals.Panels;
+    using NonVisuals.HID;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new();
         private readonly string _windowName = "DCSFlightpanels ";
@@ -121,7 +120,7 @@
             Dispose(true);
 
             // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
         #endregion
 
@@ -159,6 +158,14 @@
                 _profileHandler.FindProfile();
 
                 LabelDonate.IsEnabled = true;
+
+                if (Settings.Default.ShowKeyAPIDialog)
+                {
+                    var apiWindow = new WindowsKeyAPIDialog();
+                    apiWindow.ShowDialog();
+                    Settings.Default.ShowKeyAPIDialog = apiWindow.ShowAtStartUp;
+                }
+
                 _isLoaded = true;
             }
             catch (Exception ex)
@@ -193,10 +200,9 @@
                 }
 
                 FileTarget fileTarget;
-                WrapperTargetBase wrapperTarget = target as WrapperTargetBase;
 
                 // Unwrap the target if necessary.
-                if (wrapperTarget == null)
+                if (target is not WrapperTargetBase wrapperTarget)
                 {
                     fileTarget = target as FileTarget;
                 }
@@ -283,7 +289,7 @@
             {
                 var message = $"DCS-BIOS UPDATES MISSED = {e.GamingPanelEnum} {e.Count}";
                 ShowStatusBarMessage(message);
-                logger.Error(message);
+                Logger.Error(message);
             }
             catch (Exception ex)
             {
@@ -761,7 +767,7 @@
                 Left = Settings.Default.MainWindowLeft;
             }
 
-            Common.APIMode = Settings.Default.APIMode == 0 ? APIModeEnum.keybd_event : APIModeEnum.SendInput;
+            Common.APIModeUsed = Settings.Default.APIMode == 0 ? APIModeEnum.keybd_event : APIModeEnum.SendInput;
         }
 
         private void MainWindowLocationChanged(object sender, EventArgs e)
@@ -926,7 +932,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error checking for newer releases.");
+                Logger.Error(ex, "Error checking for newer releases.");
                 LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
                 LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + Settings.Default.LastDCSBIOSRelease;
             }
@@ -1410,17 +1416,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public static void DeviceAttached(GamingPanelEnum gamingPanelsEnum)
-        {
-            // ignore
-        }
-
-        public static void DeviceDetached(GamingPanelEnum gamingPanelsEnum)
-        {
-            // ignore
-        }
-
+        
         private void ShowStatusBarMessage(string str)
         {
             try
@@ -1494,7 +1490,7 @@
             TryOpenLogFileWithTarget("debug_logfile");
         }
 
-        private void LoadProcessPriority()
+        private static void LoadProcessPriority()
         {
             try
             {
@@ -1584,142 +1580,11 @@
                 ConfigurePlugins();
             }
         }
-
-        private void FixUSBEnhancedPowerManagerIssues()
-        {
-            /*
-             * This is a slightly modified code version of the original code which was made by http://uraster.com
-             */
-            MessageBox.Show("You need to run DCSFP as Administrator for this function to work!");
-            const string SaitekVid = "VID_06A3";
-            var result = new StringBuilder();
-            result.AppendLine("USB Enhanced Power Management Disabler");
-            result.AppendLine("http://uraster.com/en-us/products/usbenhancedpowermanagerdisabler.aspx");
-            result.AppendLine("Copywrite Uraster GmbH");
-            result.AppendLine(new string('=', 60));
-            result.AppendLine("This application disables the enhanced power management for the all USB devices of a specific vendor.");
-            result.AppendLine("You need admin rights to do that.");
-            result.AppendLine("Plug in all devices in the ports you intend to use before continuing.");
-            result.AppendLine(new string('-', 60));
-            result.AppendLine("Vendor ID (VID). For SAITEK use the default of " + SaitekVid);
-
-            try
-            {
-                var devicesDisabled = 0;
-                var devicesAlreadyDisabled = 0;
-                using (var usbDevicesKey = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Enum\USB"))
-                {
-                    if (usbDevicesKey != null)
-                    {
-                        foreach (var usbDeviceKeyName in usbDevicesKey.GetSubKeyNames().Where(name => name.StartsWith(SaitekVid)))
-                        {
-                            result.Append(Environment.NewLine);
-                            result.AppendLine("Processing product : " + GetProductId(SaitekVid, usbDeviceKeyName));
-                            using (var usbDeviceKey = usbDevicesKey.OpenSubKey(usbDeviceKeyName))
-                            {
-                                if (usbDeviceKey != null)
-                                {
-                                    foreach (var instanceKeyName in usbDeviceKey.GetSubKeyNames())
-                                    {
-                                        result.AppendLine("Device instance : " + instanceKeyName);
-                                        using (var instanceKey = usbDeviceKey.OpenSubKey(instanceKeyName))
-                                        {
-                                            if (instanceKey != null)
-                                            {
-                                                using (var deviceParametersKey = instanceKey.OpenSubKey("Device Parameters", true))
-                                                {
-                                                    if (deviceParametersKey == null)
-                                                    {
-                                                        result.AppendLine("no parameters, skipping");
-                                                        continue;
-                                                    }
-
-                                                    var value = deviceParametersKey.GetValue("EnhancedPowerManagementEnabled");
-                                                    if (0.Equals(value))
-                                                    {
-                                                        result.AppendLine("enhanced power management is already disabled");
-                                                        devicesAlreadyDisabled++;
-                                                    }
-                                                    else
-                                                    {
-                                                        result.Append("enhanced power management is enabled, disabling... ");
-                                                        deviceParametersKey.SetValue("EnhancedPowerManagementEnabled", 0);
-                                                        result.AppendLine("now disabled");
-                                                        devicesDisabled++;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    result.AppendLine(new string('-', 60));
-                    result.AppendLine("Done. Unplug all devices and plug them again in the same ports.");
-                    result.AppendLine("Device instances fixed " + devicesDisabled);
-                    result.AppendLine("Device instances already fixed " + devicesAlreadyDisabled);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex, "Error disabling Enhanced USB Power Management.");
-                return;
-            }
-
-            var informationWindow = new InformationTextBlockWindow(result.ToString());
-            informationWindow.ShowDialog();
-        }
-
-        private static string GetProductId(string saitekVID, string usbDeviceKeyName)
-        {
-            var pos = usbDeviceKeyName.IndexOf("&", StringComparison.InvariantCulture);
-            var vid = usbDeviceKeyName.Substring(0, pos);
-            var pid = usbDeviceKeyName.Substring(pos + 1);
-            var result = pid;
-            if (vid == saitekVID)
-            {
-                if (pid.StartsWith("PID_0D06"))
-                {
-                    result += " (Multi panel, PZ70)";
-                }
-                else if (pid.StartsWith("PID_0D05"))
-                {
-                    result += " (Radio panel, PZ69)";
-                }
-                else if (pid.StartsWith("PID_0D67"))
-                {
-                    result += " (Switch panel, PZ55)";
-                }
-                else if (pid.StartsWith("PID_A2AE"))
-                {
-                    result += " (Instrument panel)";
-                }
-                else if (pid.StartsWith("PID_712C"))
-                {
-                    result += " (Yoke)";
-                }
-                else if (pid.StartsWith("PID_0C2D"))
-                {
-                    result += " (Throttle quadrant)";
-                }
-                else if (pid.StartsWith("PID_0763"))
-                {
-                    result += " (Pedals)";
-                }
-                else if (pid.StartsWith("PID_0B4E"))
-                {
-                    result += " (BIP)";
-                }
-            }
-
-            return result;
-        }
-
+        
         private void MenuItemUSBPowerManagement_OnClick(object sender, RoutedEventArgs e)
         {
-            FixUSBEnhancedPowerManagerIssues();
+            MessageBox.Show("You need to run DCSFP as Administrator for this function to work!");
+            USBPowerManagement.FixSaitekUSBEnhancedPowerManagerIssues();
         }
 
         private void MenuItemBugReport_OnClick(object sender, RoutedEventArgs e)

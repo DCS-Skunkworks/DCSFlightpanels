@@ -1,7 +1,6 @@
-﻿using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-using NonVisuals.Saitek.Switches;
-using NonVisuals.StreamDeck;
+﻿using NonVisuals.Panels.Saitek;
+using NonVisuals.Panels.Saitek.Panels;
+using NonVisuals.Panels.Saitek.Switches;
 using Xunit;
 
 namespace Tests.NonVisuals

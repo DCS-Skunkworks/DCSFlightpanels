@@ -14,13 +14,13 @@ namespace DCS_BIOS
 
     public static class DCSBIOSControlLocator
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly List<DCSBIOSControl> DCSBIOSControls = new();
         private static readonly object LockObject = new();
         private static DCSFPProfile _dcsfpProfile;
         private static string _jsonDirectory;
-        public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
+        private const string DCSBIOS_NOT_FOUND_ERROR_MESSAGE = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
 
 
         public static DCSFPProfile Profile
@@ -147,7 +147,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception($"{DCSBIOSNotFoundErrorMessage} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
 
@@ -218,7 +218,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception($"{DCSBIOSNotFoundErrorMessage} ==>[{_jsonDirectory}]<==", ex);
+                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<==", ex);
             }
         }
 
@@ -262,7 +262,7 @@ namespace DCS_BIOS
                 message.AppendLine("---------------------------------------------");
                 dupes.ForEach(dupe => message.AppendLine(dupe));
                 message.AppendLine("---------------------------------------------");
-                logger.Error(message);
+                Logger.Error(message);
             }
         }
         
@@ -284,7 +284,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception($"{DCSBIOSNotFoundErrorMessage} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
 
@@ -316,7 +316,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception($"{DCSBIOSNotFoundErrorMessage} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
         

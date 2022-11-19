@@ -5,8 +5,7 @@
     using ClassLibraryCommon;
 
     using MEF;
-
-    using Saitek;
+    using Panels.Saitek;
 
     /*
      * Used by the generic and emulator version of the PZ69 Radio Panel

@@ -30,7 +30,7 @@ namespace DCS_BIOS
 
     internal class DCSBIOSProtocolParser : IDisposable
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        internal static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly List<string> _errorsLogged = new(10);
         

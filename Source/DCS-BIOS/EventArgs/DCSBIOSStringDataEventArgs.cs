@@ -2,8 +2,8 @@
 {
     public class DCSBIOSStringDataEventArgs : System.EventArgs                 
     {
-        public uint Address { get; set; }
+        public uint Address { get; init; }
 
-        public string StringData { get; set; }
+        public string StringData { get; init; }
     }
 }

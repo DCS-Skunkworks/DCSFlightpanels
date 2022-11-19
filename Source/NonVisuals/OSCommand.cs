@@ -5,12 +5,16 @@
     using System.Media;
     using System.Threading;
     using NLog;
-    using Saitek;
+    using Panels.Saitek;
 
+    /*
+     * Class for handling, executing, importing, exporting Windows commands.
+     * Can be used for starting up certain applications used while playing.
+     */
     [Serializable]
     public class OSCommand
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        internal static Logger Logger = LogManager.GetCurrentClassLogger();
         
         private string _name;
         private volatile bool _isRunning;
@@ -128,7 +132,7 @@
             {
                 SystemSounds.Beep.Play();
                 result = $"Failed to start {Command} with arguments {Arguments}.{ex.Message}\n{ex.StackTrace}";
-                logger.Error(ex, result);
+                Logger.Error(ex, result);
             }
             return result;
         }

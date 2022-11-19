@@ -8,7 +8,8 @@
     using ClassLibraryCommon;
     using EventArgs;
     using Misc;
-    using Saitek.Panels;
+    using HID;
+    using NonVisuals.Panels.Saitek.Panels;
 
     public enum PZ69LCDPosition
     {
@@ -192,7 +193,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "SetPZ69DisplayBytesDefault()");
+                Logger.Error(ex, "SetPZ69DisplayBytesDefault()");
             }
         }
 

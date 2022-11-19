@@ -1,6 +1,7 @@
 ﻿namespace NonVisuals.EventArgs
 {
     using System;
+    using HID;
 
     public class PanelEventArgs : EventArgs
     {

@@ -1,5 +1,5 @@
 ﻿
-using NonVisuals.StreamDeck;
+using NonVisuals.Panels.StreamDeck;
 using System;
 using Xunit;
 

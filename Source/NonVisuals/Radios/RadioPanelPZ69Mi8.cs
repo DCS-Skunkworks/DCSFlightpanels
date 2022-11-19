@@ -17,7 +17,8 @@ namespace NonVisuals.Radios
     using MEF;
     using Plugin;
     using Knobs;
-    using Saitek;
+    using Panels.Saitek;
+    using HID;
 
 
     /*
@@ -766,7 +767,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -982,7 +983,7 @@ namespace NonVisuals.Radios
                     }
                     catch (ThreadAbortException ex)
                     {
-                        logger.Error(ex);
+                        Logger.Error(ex);
                     }
                     catch (Exception ex)
                     {
@@ -996,7 +997,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
 
             // Refresh panel once this debacle is finished
@@ -1014,7 +1015,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1037,7 +1038,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -1226,7 +1227,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
 
             // Refresh panel once this debacle is finished
@@ -1242,7 +1243,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -2285,7 +2286,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -2764,7 +2765,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
         
@@ -2790,7 +2791,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -2805,7 +2806,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -2860,7 +2861,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -2903,7 +2904,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -2970,7 +2971,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return inc;
         }
@@ -3022,7 +3023,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
 
             throw new Exception(
@@ -3087,7 +3088,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -3110,7 +3111,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -3133,7 +3134,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -3156,7 +3157,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -3179,7 +3180,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -3202,7 +3203,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }
@@ -3225,7 +3226,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
             return false;
         }

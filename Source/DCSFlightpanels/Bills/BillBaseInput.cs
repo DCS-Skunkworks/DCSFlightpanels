@@ -20,7 +20,7 @@ namespace DCSFlightpanels.Bills
     using MEF;
 
     using NonVisuals;
-    using NonVisuals.Saitek.Panels;
+    using NonVisuals.Panels.Saitek.Panels;
 
 
     /*
@@ -50,17 +50,17 @@ namespace DCSFlightpanels.Bills
         public abstract bool ContainsDCSBIOS();
         public abstract bool ContainsBIPLink();
         public abstract bool IsEmpty();
-        public abstract bool IsEmptyNoCareBipLink();
-        public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced);
+        protected abstract bool IsEmptyNoCareBipLink();
+        protected abstract void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced);
         public abstract void ClearAll();
         protected abstract void ClearDCSBIOSFromBill();
         public abstract BIPLinkBase BipLink { get; set; }
-        public abstract List<DCSBIOSInput> DCSBIOSInputs { get; set; }
+        protected abstract List<DCSBIOSInput> DCSBIOSInputs { get; }
         public abstract DCSBIOSActionBindingBase DCSBIOSBinding { get; set; }
 
-        protected TextBox TextBox { get; set; }
+        protected TextBox TextBox { get; init; }
         private OSCommand OSCommand { get; set; }
-        public IPanelUI PanelUIParent { get; set; }
+        public IPanelUI PanelUIParent { get; init; }
 
         public OSCommand OSCommandObject
         {
@@ -109,7 +109,7 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        protected void SetTextBoxText(string description, List<DCSBIOSInput> dcsBiosInputs)
+        private void SetTextBoxText(string description, List<DCSBIOSInput> dcsBiosInputs)
         {
             if (dcsBiosInputs != null)
             {

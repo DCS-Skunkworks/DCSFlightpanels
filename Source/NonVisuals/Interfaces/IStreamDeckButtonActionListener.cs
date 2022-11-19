@@ -1,4 +1,4 @@
-﻿using NonVisuals.StreamDeck.Events;
+﻿using NonVisuals.Panels.StreamDeck.Events;
 
 namespace NonVisuals.Interfaces
 {

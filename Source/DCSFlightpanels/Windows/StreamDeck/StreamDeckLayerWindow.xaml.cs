@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using ClassLibraryCommon;
-using NonVisuals.StreamDeck;
-using NonVisuals.StreamDeck.Panels;
+using NonVisuals.Panels.StreamDeck;
+using NonVisuals.Panels.StreamDeck.Panels;
 
 namespace DCSFlightpanels.Windows.StreamDeck
 {

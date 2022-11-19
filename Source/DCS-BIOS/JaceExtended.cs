@@ -6,7 +6,7 @@ namespace DCS_BIOS
 {
     public class JaceExtended
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly object _lockObject = new();
         private readonly CalculationEngine _calculationEngine = new();
@@ -27,7 +27,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "JaceExtended.Evaluate() function");
+                Logger.Error(ex, "JaceExtended.Evaluate() function");
                 throw;
             }
         }

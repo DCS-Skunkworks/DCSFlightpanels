@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using DCS_BIOS;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
+using NonVisuals.Panels.Saitek;
+using NonVisuals.Panels.Saitek.Panels;
 
 namespace NonVisuals.BindingClasses.DCSBIOSBindings
 {

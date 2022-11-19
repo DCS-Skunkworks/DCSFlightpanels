@@ -23,7 +23,7 @@ namespace DCSFlightpanels.Windows
     /// </summary>
     public partial class DCSBiosOutputFormulaWindow : Window, IDcsBiosDataListener, IDisposable
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private readonly string _description;
         private readonly bool _userEditsDescription;
@@ -88,6 +88,7 @@ namespace DCSFlightpanels.Windows
         public void Dispose()
         {
             BIOSEventHandler.DetachDataListener(this);
+            GC.SuppressFinalize(this);
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -136,7 +137,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "DcsBiosDataReceived()");
+                Logger.Error(ex, "DcsBiosDataReceived()");
             }
         }
 

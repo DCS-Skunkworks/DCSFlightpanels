@@ -10,11 +10,12 @@
     using Interfaces;
     using PanelUserControls;
     using Properties;
-    using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Radios;
     using NonVisuals.Radios.Knobs;
+    using NonVisuals.Panels;
+    using NonVisuals.HID;
 
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlMiG21bis.xaml

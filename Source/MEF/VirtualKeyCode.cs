@@ -94,12 +94,16 @@ namespace MEF
         /// <summary>
         /// IME Hanguel mode (maintained for compatibility; use HANGUL)
         /// </summary>
+#pragma warning disable CA1069 // Enums values should not be duplicated
         HANGEUL = 0x15,
+#pragma warning restore CA1069 // Enums values should not be duplicated
 
         /// <summary>
         /// IME Hangul mode
         /// </summary>
+#pragma warning disable CA1069 // Enums values should not be duplicated
         HANGUL = 0x15,
+#pragma warning restore CA1069 // Enums values should not be duplicated
 
         // 0x16 : Undefined
 
@@ -121,7 +125,9 @@ namespace MEF
         /// <summary>
         /// IME Kanji mode
         /// </summary>
+#pragma warning disable CA1069 // Enums values should not be duplicated
         KANJI = 0x19,
+#pragma warning restore CA1069 // Enums values should not be duplicated
 
         // 0x1A : Undefined
 

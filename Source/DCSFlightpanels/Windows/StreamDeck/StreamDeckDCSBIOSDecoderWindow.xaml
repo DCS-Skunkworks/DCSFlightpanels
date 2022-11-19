@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
+        xmlns:streamDeck="clr-namespace:NonVisuals.Panels.StreamDeck;assembly=NonVisuals"
         Title="DCS-BIOS Decoder" 
         Height="550" Width="1200" 
         WindowStartupLocation="CenterScreen" 

@@ -26,7 +26,7 @@ namespace DCS_BIOS
 
     public class DCSBIOS : IDisposable
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        internal static readonly Logger logger = LogManager.GetCurrentClassLogger();
         //public delegate void DcsDataReceivedEventHandler(byte[] bytes);
         //public event DcsDataReceivedEventHandler OnDcsDataReceived;
 

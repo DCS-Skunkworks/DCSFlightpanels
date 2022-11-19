@@ -1,6 +1,6 @@
 ﻿using System;
 using ClassLibraryCommon;
-using NonVisuals.Saitek;
+using NonVisuals.Panels.Saitek;
 
 namespace NonVisuals.BindingClasses.OSCommand
 {

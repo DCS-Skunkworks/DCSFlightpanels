@@ -5,6 +5,7 @@
     using System.Text;
 
     using ClassLibraryCommon;
+    using HID;
 
     public class GenericPanelBinding
     {
@@ -62,10 +63,21 @@
             }
             else
             {
-                _jsonString = _jsonString + Environment.NewLine + jsonLine;
+                _jsonString = _jsonString + Environment.NewLine + ChangeNameSpace(jsonLine);
             }
         }
-        
+
+        /*
+         * Since the implementation of Streamdeck the projects have been organized and namespaces
+         * have changed. Only in the JSON (Streamdeck) are namespaces saved within this project.
+         */
+        private static string ChangeNameSpace(string s)
+        {
+            var result = s;
+
+            result = result.Replace("NonVisuals.StreamDeck", "NonVisuals.Panels.StreamDeck");
+            return result;
+        }
         public GamingPanelEnum PanelType
         {
             get => _panelType;

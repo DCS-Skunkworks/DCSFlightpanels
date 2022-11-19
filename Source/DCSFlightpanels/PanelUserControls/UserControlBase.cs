@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using ClassLibraryCommon;
-using NonVisuals;
-
+using NonVisuals.Panels;
 
 namespace DCSFlightpanels.PanelUserControls
 {

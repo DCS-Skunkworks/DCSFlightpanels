@@ -2,12 +2,13 @@
 using DCS_BIOS;
 using MEF;
 using NonVisuals;
-using NonVisuals.StreamDeck;
-using NonVisuals.StreamDeck.Panels;
 using System.Collections.Generic;
 using System.Drawing;
 using NonVisuals.BindingClasses.BIP;
+using NonVisuals.HID;
 using Xunit;
+using NonVisuals.Panels.StreamDeck.Panels;
+using NonVisuals.Panels.StreamDeck;
 
 namespace Tests.NonVisuals
 {

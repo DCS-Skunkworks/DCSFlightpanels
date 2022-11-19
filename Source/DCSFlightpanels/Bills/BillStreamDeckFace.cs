@@ -1,6 +1,4 @@
-﻿using NonVisuals.StreamDeck.Panels;
-
-namespace DCSFlightpanels.Bills
+﻿namespace DCSFlightpanels.Bills
 {
     using System.Drawing;
     using System.Windows;
@@ -9,7 +7,8 @@ namespace DCSFlightpanels.Bills
     using MEF;
 
     using NonVisuals;
-    using NonVisuals.StreamDeck;
+    using NonVisuals.Panels.StreamDeck;
+    using NonVisuals.Panels.StreamDeck.Panels;
 
     using Brushes = System.Windows.Media.Brushes;
     using Color = System.Drawing.Color;

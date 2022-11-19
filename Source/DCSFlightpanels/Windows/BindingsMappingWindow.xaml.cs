@@ -8,6 +8,7 @@
     using System.Windows.Input;
     using ClassLibraryCommon;
     using NonVisuals;
+    using NonVisuals.Panels;
 
     /// <summary>
     /// Interaction logic for BindingsMappingWindow.xaml

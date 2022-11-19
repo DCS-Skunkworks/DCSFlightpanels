@@ -2,9 +2,9 @@
 {
     public class GamingPanelSkeleton
     {
-        public GamingPanelEnum GamingPanelType { get; set; } = GamingPanelEnum.Unknown;
-        public int VendorId { get; set; }
-        public int ProductId { get; set; }
+        public GamingPanelEnum GamingPanelType { get; }
+        public int VendorId { get; }
+        public int ProductId { get; }
 
         public GamingPanelSkeleton(GamingPanelVendorEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum)
         {

@@ -1,5 +1,5 @@
 ﻿using ClassLibraryCommon;
-using NonVisuals;
+using NonVisuals.Panels;
 
 namespace DCSFlightpanels.Interfaces
 {
