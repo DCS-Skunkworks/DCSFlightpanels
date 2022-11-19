@@ -19,14 +19,14 @@
      * 0xFF -> blank, nothing is shown in that spot.
      *
      */
-    public class PZ69DisplayBytes
+    public static class PZ69DisplayBytes
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Right justify, pad left with blanks.
         /// </summary>
-        public void UnsignedInteger(ref byte[] bytes, uint digits, PZ69LCDPosition pz69LCDPosition)
+        public static void UnsignedInteger(ref byte[] bytes, uint digits, PZ69LCDPosition pz69LCDPosition)
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
@@ -56,7 +56,7 @@
         /// Can deal with multiple '.' chars.
         /// If size does not match 5, it will NOT replace previous characters in the array (no padding left or right).
         /// </summary>
-        public void DefaultStringAsIs(ref byte[] bytes, string digits, PZ69LCDPosition pz69LCDPosition)
+        public static void DefaultStringAsIs(ref byte[] bytes, string digits, PZ69LCDPosition pz69LCDPosition)
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
@@ -94,7 +94,7 @@
             while (i < digits.Length && arrayPosition < maxArrayPosition + 1);
         }
        
-        public void DoubleWithSpecifiedDecimalsPlaces(ref byte[] bytes, double digits, int decimals, PZ69LCDPosition pz69LCDPosition)
+        public static void DoubleWithSpecifiedDecimalsPlaces(ref byte[] bytes, double digits, int decimals, PZ69LCDPosition pz69LCDPosition)
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
@@ -131,7 +131,7 @@
             while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
         }
 
-        public void DoubleJustifyLeft(ref byte[] bytes, double digits, PZ69LCDPosition pz69LCDPosition)
+        public static void DoubleJustifyLeft(ref byte[] bytes, double digits, PZ69LCDPosition pz69LCDPosition)
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
@@ -189,7 +189,7 @@
         /// <summary>
         /// Sets the given position to blank without modifying the other positions in the array
         /// </summary>
-        public void SetPositionBlank(ref byte[] bytes, PZ69LCDPosition pz69LCDPosition)
+        public static void SetPositionBlank(ref byte[] bytes, PZ69LCDPosition pz69LCDPosition)
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var i = 0;
@@ -204,30 +204,14 @@
 
         private static int GetArrayPosition(PZ69LCDPosition pz69LCDPosition)
         {
-            switch (pz69LCDPosition)
+            return pz69LCDPosition switch
             {
-                case PZ69LCDPosition.UPPER_ACTIVE_LEFT:
-                    {
-                        return 1;
-                    }
-
-                case PZ69LCDPosition.UPPER_STBY_RIGHT:
-                    {
-                        return 6;
-                    }
-
-                case PZ69LCDPosition.LOWER_ACTIVE_LEFT:
-                    {
-                        return 11;
-                    }
-
-                case PZ69LCDPosition.LOWER_STBY_RIGHT:
-                    {
-                        return 16;
-                    }
-            }
-
-            return 1;
+                PZ69LCDPosition.UPPER_ACTIVE_LEFT => 1,
+                PZ69LCDPosition.UPPER_STBY_RIGHT => 6,
+                PZ69LCDPosition.LOWER_ACTIVE_LEFT => 11,
+                PZ69LCDPosition.LOWER_STBY_RIGHT => 16,
+                _ => 1
+            };            
         }
     }
 }

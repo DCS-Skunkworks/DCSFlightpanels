@@ -731,6 +731,53 @@ namespace NonVisuals.Saitek.Panels
 
             _dcsbiosBrightnessControl = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsBiosBrightnessBinding.ControlId);
         }
+
+        public static BIPLedPositionEnum GetLedPosition(string imageName)
+        {
+            //ImagePosition_3_4
+            var row = int.Parse(imageName.Substring(14, 1));
+            var index = int.Parse(imageName.Substring(16, 1));
+            return row switch
+            {
+                1 => index switch
+                {
+                    1 => BIPLedPositionEnum.Position_1_1,
+                    2 => BIPLedPositionEnum.Position_1_2,
+                    3 => BIPLedPositionEnum.Position_1_3,
+                    4 => BIPLedPositionEnum.Position_1_4,
+                    5 => BIPLedPositionEnum.Position_1_5,
+                    6 => BIPLedPositionEnum.Position_1_6,
+                    7 => BIPLedPositionEnum.Position_1_7,
+                    8 => BIPLedPositionEnum.Position_1_8,
+                    _=> BIPLedPositionEnum.Position_1_1
+                },
+                2 => index switch
+                {
+                    1 => BIPLedPositionEnum.Position_2_1,
+                    2 => BIPLedPositionEnum.Position_2_2,
+                    3 => BIPLedPositionEnum.Position_2_3,
+                    4 => BIPLedPositionEnum.Position_2_4,
+                    5 => BIPLedPositionEnum.Position_2_5,
+                    6 => BIPLedPositionEnum.Position_2_6,
+                    7 => BIPLedPositionEnum.Position_2_7,
+                    8 => BIPLedPositionEnum.Position_2_8,
+                    _ => BIPLedPositionEnum.Position_1_1
+                },
+                3 => index switch
+                {
+                    1 => BIPLedPositionEnum.Position_3_1,
+                    2 => BIPLedPositionEnum.Position_3_2,
+                    3 => BIPLedPositionEnum.Position_3_3,
+                    4 => BIPLedPositionEnum.Position_3_4,
+                    5 => BIPLedPositionEnum.Position_3_5,
+                    6 => BIPLedPositionEnum.Position_3_6,
+                    7 => BIPLedPositionEnum.Position_3_7,
+                    8 => BIPLedPositionEnum.Position_3_8,
+                    _ => BIPLedPositionEnum.Position_1_1
+                },
+                _ => BIPLedPositionEnum.Position_1_1
+            };
+        }
     }
 
     [Serializable]
@@ -833,4 +880,5 @@ namespace NonVisuals.Saitek.Panels
         ||_ 
         |_  Rightmost RED when not same bit in Byte #3 set
  */
+
 }

@@ -38,7 +38,6 @@
         public long ResetSyncTimeout { get; set; } = 35000000;
 
         private long _syncOKDelayTimeout = 50000000; // 5s
-        private readonly PZ69DisplayBytes _pZ69DisplayBytes = new();
 
         protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
         {
@@ -96,7 +95,7 @@
         /// </summary>
         protected void SetPZ69DisplayBlank(ref byte[] bytes, PZ69LCDPosition pz69LCDPosition)
         {
-            _pZ69DisplayBytes.SetPositionBlank(ref bytes, pz69LCDPosition);
+            PZ69DisplayBytes.SetPositionBlank(ref bytes, pz69LCDPosition);
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e)
@@ -108,12 +107,12 @@
         /// </summary>
         protected void SetPZ69DisplayBytesUnsignedInteger(ref byte[] bytes, uint digits, PZ69LCDPosition pz69LCDPosition)
         {
-            _pZ69DisplayBytes.UnsignedInteger(ref bytes, digits, pz69LCDPosition);
+            PZ69DisplayBytes.UnsignedInteger(ref bytes, digits, pz69LCDPosition);
         }
 
         protected void SetPZ69DisplayBytes(ref byte[] bytes, double digits, int decimals, PZ69LCDPosition pz69LCDPosition)
         {
-            _pZ69DisplayBytes.DoubleWithSpecifiedDecimalsPlaces(ref bytes, digits, decimals, pz69LCDPosition);
+            PZ69DisplayBytes.DoubleWithSpecifiedDecimalsPlaces(ref bytes, digits, decimals, pz69LCDPosition);
         }
 
         public override void Identify()
@@ -189,7 +188,7 @@
         {
             try
             {
-                _pZ69DisplayBytes.DefaultStringAsIs(ref bytes, digits, pz69LCDPosition);
+                PZ69DisplayBytes.DefaultStringAsIs(ref bytes, digits, pz69LCDPosition);
             }
             catch (Exception ex)
             {
@@ -199,7 +198,7 @@
 
         protected void SetPZ69DisplayBytesDefault(ref byte[] bytes, double digits, PZ69LCDPosition pz69LCDPosition)
         {
-            _pZ69DisplayBytes.DoubleJustifyLeft(ref bytes, digits, pz69LCDPosition);
+            PZ69DisplayBytes.DoubleJustifyLeft(ref bytes, digits, pz69LCDPosition);
         }
 
         public void SendLCDData(byte[] array)
