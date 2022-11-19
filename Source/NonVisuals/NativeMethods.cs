@@ -382,7 +382,9 @@
         KANA = 0x15,
         
         // IME Hangul mode
+#pragma warning disable CA1069 // Enums values should not be duplicated
         HANGUL = 0x15,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         
         // IME Junja mode
         JUNJA = 0x17,
@@ -394,7 +396,9 @@
         HANJA = 0x19,
         
         // IME Kanji mode
+#pragma warning disable CA1069 // Enums values should not be duplicated
         KANJI = 0x19,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         
         // ESC key
         ESCAPE = 0x1B,
@@ -855,11 +859,19 @@
     internal enum ScanCodeShort : short
     {
         LBUTTON = 0,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         RBUTTON = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         CANCEL = 70,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         MBUTTON = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         XBUTTON1 = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         XBUTTON2 = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         BACK = 14,
         TAB = 15,
         CLEAR = 76,
@@ -867,19 +879,41 @@
         SHIFT = 42,
         CONTROL = 29,
         MENU = 56,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         PAUSE = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         CAPITAL = 58,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         KANA = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         HANGUL = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         JUNJA = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         FINAL = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         HANJA = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         KANJI = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         ESCAPE = 1,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         CONVERT = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NONCONVERT = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         ACCEPT = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         MODECHANGE = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         SPACE = 57,
         PRIOR = 73,
         NEXT = 81,
@@ -889,9 +923,15 @@
         UP = 72,
         RIGHT = 77,
         DOWN = 80,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         SELECT = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         PRINT = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         EXECUTE = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         SNAPSHOT = 84,
         INSERT = 82,
         DELETE = 83,
@@ -936,21 +976,45 @@
         RWIN = 92,
         APPS = 93,
         SLEEP = 95,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NUMPAD0 = 82,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NUMPAD1 = 79,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NUMPAD2 = 80,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NUMPAD3 = 81,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NUMPAD4 = 75,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NUMPAD5 = 76,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NUMPAD6 = 77,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NUMPAD7 = 71,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NUMPAD8 = 72,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NUMPAD9 = 73,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         MULTIPLY = 55,
         ADD = 78,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         SEPARATOR = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         SUBTRACT = 74,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         DECIMAL = 83,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         DIVIDE = 53,
         F1 = 59,
         F2 = 60,
@@ -977,54 +1041,126 @@
         F23 = 110,
         F24 = 118,
         NUMLOCK = 69,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         SCROLL = 70,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         LSHIFT = 42,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         RSHIFT = 54,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         LCONTROL = 29,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         RCONTROL = 29,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         LMENU = 56,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         RMENU = 56,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         BROWSER_BACK = 106,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         BROWSER_FORWARD = 105,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         BROWSER_REFRESH = 103,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         BROWSER_STOP = 104,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         BROWSER_SEARCH = 101,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         BROWSER_FAVORITES = 102,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         BROWSER_HOME = 50,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         VOLUME_MUTE = 32,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         VOLUME_DOWN = 46,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         VOLUME_UP = 48,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         MEDIA_NEXT_TRACK = 25,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         MEDIA_PREV_TRACK = 16,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         MEDIA_STOP = 36,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         MEDIA_PLAY_PAUSE = 34,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         LAUNCH_MAIL = 108,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         LAUNCH_MEDIA_SELECT = 109,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         LAUNCH_APP1 = 107,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         LAUNCH_APP2 = 33,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         OEM_1 = 39,
         OEM_PLUS = 13,
         OEM_COMMA = 51,
         OEM_MINUS = 12,
         OEM_PERIOD = 52,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         OEM_2 = 53,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         OEM_3 = 41,
         OEM_4 = 26,
         OEM_5 = 43,
         OEM_6 = 27,
         OEM_7 = 40,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         OEM_8 = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         OEM_102 = 86,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         PROCESSKEY = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         PACKET = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         ATTN = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         CRSEL = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         EXSEL = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         EREOF = 93,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         PLAY = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
         ZOOM = 98,
+#pragma warning disable CA1069 // Enums values should not be duplicated
         NONAME = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         PA1 = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1069 // Enums values should not be duplicated
         OEM_CLEAR = 0,
+#pragma warning restore CA1069 // Enums values should not be duplicated
     }
 }

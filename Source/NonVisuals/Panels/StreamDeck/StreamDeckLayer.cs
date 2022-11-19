@@ -81,6 +81,7 @@
             {
                 streamDeckButton?.Dispose();
             }
+            GC.SuppressFinalize(this);
         }
 
         public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)

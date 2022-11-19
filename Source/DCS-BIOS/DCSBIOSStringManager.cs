@@ -24,10 +24,7 @@
 
         private static void CheckInstance()
         {
-            if (_dcsbiosStringListener == null)
-            {
-                _dcsbiosStringListener = new DCSBIOSStringListener();
-            }
+            _dcsbiosStringListener ??= new DCSBIOSStringListener();
         }
 
         public static void Close()

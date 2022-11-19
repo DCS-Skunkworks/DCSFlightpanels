@@ -88,6 +88,7 @@ namespace DCSFlightpanels.Windows
         public void Dispose()
         {
             BIOSEventHandler.DetachDataListener(this);
+            GC.SuppressFinalize(this);
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)

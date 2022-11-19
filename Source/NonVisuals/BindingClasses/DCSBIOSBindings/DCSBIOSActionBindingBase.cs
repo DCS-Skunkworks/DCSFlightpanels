@@ -54,6 +54,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
         {
             // Dispose of unmanaged resources.
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public bool IsRunning()

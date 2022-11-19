@@ -88,6 +88,7 @@ namespace NonVisuals.Panels.StreamDeck
         {
             // Dispose of unmanaged resources.
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         [JsonIgnore]

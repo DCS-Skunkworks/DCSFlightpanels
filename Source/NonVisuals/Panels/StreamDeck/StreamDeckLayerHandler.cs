@@ -103,6 +103,7 @@
             {
                 streamDeckLayer.Dispose();
             }
+            GC.SuppressFinalize(this);
         }
 
         public StreamDeckButton SelectedButton

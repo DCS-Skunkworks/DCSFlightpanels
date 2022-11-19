@@ -52,6 +52,7 @@
         {
             // Dispose of unmanaged resources.
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         [JsonIgnore]

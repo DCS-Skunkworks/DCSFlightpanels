@@ -29,6 +29,7 @@ namespace DCS_BIOS
         public void Dispose()
         {
             BIOSEventHandler.DetachDataListener(this);
+            GC.SuppressFinalize(this);
         }
 
         public void AddStringAddress(uint address, int length)
