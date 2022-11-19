@@ -17,7 +17,7 @@
             <TabItem Header="General Settings" HorizontalAlignment="Left" >
                 <StackPanel Margin="10,5,10,0"  Visibility="Visible">
                     <StackPanel Margin="0,0,0,10">
-                        <Label FontWeight="Bold">API Mode</Label>
+                        <Label FontWeight="Bold">Key API Mode</Label>
                         <RadioButton Name="RadioButtonKeyBd" >keybd_event()</RadioButton>
                         <RadioButton Name="RadioButtonSendInput">SendInput()</RadioButton>
                     </StackPanel>

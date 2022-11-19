@@ -1,0 +1,34 @@
+﻿<Window x:Class="DCSFlightpanels.Windows.WindowsKeyAPIDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DCSFlightpanels.Windows"
+        mc:Ignorable="d"
+        Title="Windows Key API" Height="190" Width="550" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Background="AliceBlue">
+            <TextBlock FontSize="12" Margin="10,10,10,10">
+                <LineBreak/>
+                For key emulation you can use two different Windows APIs. 
+                <LineBreak/>
+                Some games only support one of the APIs.
+                <LineBreak/>
+                If key emulation doesn't work then go to <Italic>Options->Settings</Italic> and switch to the other API.
+            </TextBlock>
+        </StackPanel>
+        <DockPanel Grid.Row="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <CheckBox Name="CheckBoxShowAgain" IsChecked="True" VerticalAlignment="Bottom" Margin="10,10,10,10" HorizontalAlignment="Right" Content="Show at startup?"></CheckBox>
+                <Button Name="ButtonClose" Content="Close" VerticalAlignment="Bottom" Margin="10,10,10,10" HorizontalAlignment="Right" Click="ButtonClose_OnClick"></Button>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

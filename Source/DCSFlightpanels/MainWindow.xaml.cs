@@ -158,6 +158,14 @@
                 _profileHandler.FindProfile();
 
                 LabelDonate.IsEnabled = true;
+
+                if (Settings.Default.ShowKeyAPIDialog)
+                {
+                    var apiWindow = new WindowsKeyAPIDialog();
+                    apiWindow.ShowDialog();
+                    Settings.Default.ShowKeyAPIDialog = apiWindow.ShowAtStartUp;
+                }
+
                 _isLoaded = true;
             }
             catch (Exception ex)

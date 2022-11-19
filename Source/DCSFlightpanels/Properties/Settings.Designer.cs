@@ -406,5 +406,17 @@ namespace DCSFlightpanels.Properties {
                 this["LastProfileDialogLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowKeyAPIDialog {
+            get {
+                return ((bool)(this["ShowKeyAPIDialog"]));
+            }
+            set {
+                this["ShowKeyAPIDialog"] = value;
+            }
+        }
     }
 }
