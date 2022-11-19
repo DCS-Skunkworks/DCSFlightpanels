@@ -5,6 +5,7 @@
     using System.Text;
 
     using ClassLibraryCommon;
+    using HID;
 
     public class GenericPanelBinding
     {

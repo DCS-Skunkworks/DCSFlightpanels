@@ -7,7 +7,7 @@
     using ClassLibraryCommon;
 
     using NonVisuals;
-    using NonVisuals.Saitek;
+    using NonVisuals.Panels.Saitek;
 
 
     public class ContextMenuPanelTextBox : ContextMenu

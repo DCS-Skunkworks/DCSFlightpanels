@@ -1,5 +1,5 @@
 ﻿using MEF;
-using NonVisuals.StreamDeck;
+using NonVisuals.Panels.StreamDeck;
 using System;
 using System.Windows.Media.Imaging;
 

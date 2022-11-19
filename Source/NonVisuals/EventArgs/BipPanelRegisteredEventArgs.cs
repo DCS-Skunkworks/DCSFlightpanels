@@ -1,7 +1,6 @@
 ﻿namespace NonVisuals.EventArgs
 {
-    using Saitek.Panels;
-
+    using NonVisuals.Panels.Saitek.Panels;
     using EventArgs = System.EventArgs;
 
     public class BipPanelRegisteredEventArgs : EventArgs

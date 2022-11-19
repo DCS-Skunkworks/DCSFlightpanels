@@ -20,9 +20,11 @@
     using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
-    using NonVisuals.Saitek;
-    using NonVisuals.Saitek.Panels;
-    using NonVisuals.Saitek.Switches;
+    using NonVisuals.Panels.Saitek.Panels;
+    using NonVisuals.Panels.Saitek.Switches;
+    using NonVisuals.Panels.Saitek;
+    using NonVisuals.Panels;
+    using NonVisuals.HID;
 
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml

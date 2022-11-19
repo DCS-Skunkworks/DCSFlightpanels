@@ -1,6 +1,6 @@
 ﻿namespace NonVisuals.Interfaces
 {
-    using StreamDeck.Events;
+    using Panels.StreamDeck.Events;
 
     public interface INvStreamDeckListener
     {

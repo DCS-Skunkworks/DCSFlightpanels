@@ -5,8 +5,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
+using NonVisuals.Panels.Saitek;
+using NonVisuals.Panels.Saitek.Panels;
 
 namespace DCSFlightpanels.Windows
 {

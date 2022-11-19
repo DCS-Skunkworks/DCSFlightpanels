@@ -22,7 +22,9 @@
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static int _emulationModesFlag = 0;
-        public static APIModeEnum APIMode = 0;
+
+
+        public static APIModeEnum APIModeUsed { get; set; } = 0;
 
         public static void PlaySoundFile(string soundFile, double volume, bool showException = false) //Volume 0 - 100
         {
@@ -45,7 +47,7 @@
                 }
             }
         }
-        
+
         public static string RemoveCurlyBrackets(string s)
         {
             if (string.IsNullOrEmpty(s))
@@ -93,7 +95,7 @@
                 }
             }
         }
-        
+
         public static void SetEmulationModesFlag(int flag)
         {
             _emulationModesFlag = flag;
@@ -116,7 +118,7 @@
         {
             return (_emulationModesFlag & (int)flagValue) > 0;
         }
-        
+
         public static void ClearEmulationModesFlag(EmulationMode flagValue)
         {
             _emulationModesFlag &= ~((int)flagValue);
@@ -208,7 +210,7 @@
             var rel = Uri.UnescapeDataString(uriRelativeTo.MakeRelativeUri(new Uri(path)).ToString()).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             if (!rel.Contains(Path.DirectorySeparatorChar.ToString()))
             {
-                rel = $".{ Path.DirectorySeparatorChar }{ rel }";
+                rel = $".{Path.DirectorySeparatorChar}{rel}";
             }
             return rel;
         }
@@ -232,7 +234,7 @@
                 }
             }
         }
-    
+
 
         public static T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
         {
@@ -243,21 +245,19 @@
             DependencyObject parentObj = VisualTreeHelper.GetParent(child);
 
             //we've reached the end of the tree
-            if (parentObj == null) 
+            if (parentObj == null)
+            {
                 return null;
+            }
 
             // check if the parent matches the type we are requested
-            T parent = parentObj as T;
-
-            if (parent != null)
+            if (parentObj is T parent)
             {
                 return parent;
             }
-            else
-            {
-                // here, To find the next parent in the tree. we are using recursion until we found the requested type or reached to the end of tree.
-                return FindVisualParent<T>(parentObj);
-            }
+
+            // here, To find the next parent in the tree. we are using recursion until we found the requested type or reached to the end of tree.
+            return FindVisualParent<T>(parentObj);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace DCSFlightpanels.Bills
     using MEF;
 
     using NonVisuals;
-    using NonVisuals.Saitek.Panels;
+    using NonVisuals.Panels.Saitek.Panels;
 
 
     /*

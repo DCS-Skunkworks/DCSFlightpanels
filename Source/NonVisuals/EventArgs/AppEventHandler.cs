@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using ClassLibraryCommon;
+using NonVisuals.HID;
 using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
+using NonVisuals.Panels;
+using NonVisuals.Panels.Saitek;
 
 namespace NonVisuals.EventArgs
 {

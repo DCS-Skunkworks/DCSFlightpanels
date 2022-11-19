@@ -1,6 +1,4 @@
-﻿using NonVisuals.StreamDeck.Panels;
-
-namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -19,9 +17,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using NLog;
     using NonVisuals;
     using NonVisuals.Interfaces;
-    using NonVisuals.Saitek;
-    using NonVisuals.StreamDeck;
-    using NonVisuals.StreamDeck.Events;
+    using NonVisuals.Panels.StreamDeck.Events;
+    using NonVisuals.Panels.StreamDeck.Panels;
+    using NonVisuals.Panels.StreamDeck;
+    using NonVisuals.Panels.Saitek;
 
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonAction.xaml

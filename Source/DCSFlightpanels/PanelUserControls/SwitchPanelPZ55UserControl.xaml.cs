@@ -15,18 +15,18 @@ namespace DCSFlightpanels.PanelUserControls
     using CustomControls;
     using Interfaces;
     using Windows;
-
-    using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
-    using NonVisuals.Saitek;
-    using NonVisuals.Saitek.Panels;
-    using NonVisuals.Saitek.Switches;
 
     using Brush = System.Windows.Media.Brush;
     using Brushes = System.Windows.Media.Brushes;
     using Image = System.Windows.Controls.Image;
     using SwitchPanelPZ55Keys = MEF.SwitchPanelPZ55Keys;
+    using NonVisuals.Panels.Saitek.Panels;
+    using NonVisuals.Panels.Saitek.Switches;
+    using NonVisuals.Panels.Saitek;
+    using NonVisuals.Panels;
+    using NonVisuals.HID;
 
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml

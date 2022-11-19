@@ -1,4 +1,4 @@
-﻿using NonVisuals.StreamDeck;
+﻿using NonVisuals.Panels.StreamDeck;
 using OpenMacroBoard.SDK;
 using System.Drawing;
 using System.IO;

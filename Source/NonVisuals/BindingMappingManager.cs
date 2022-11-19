@@ -7,6 +7,8 @@ namespace NonVisuals
     using System.Windows;
 
     using ClassLibraryCommon;
+    using HID;
+    using Panels;
 
     public static class BindingMappingManager
     {

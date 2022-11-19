@@ -4,15 +4,14 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
 
     using System.Windows;
     using System.Windows.Controls;
-
-
-    using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
 
     using NonVisuals.CockpitMaster.Preprogrammed;
     using Interfaces;
     using System;
+    using NonVisuals.Panels;
+    using NonVisuals.HID;
 
     /// <summary>
     /// Logique d'interaction pour Cdu737UserControlAH64D.xaml

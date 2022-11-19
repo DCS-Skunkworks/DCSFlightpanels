@@ -11,9 +11,9 @@
     using Properties;
 
     using NonVisuals;
-    using NonVisuals.StreamDeck;
 
     using Color = System.Drawing.Color;
+    using NonVisuals.Panels.StreamDeck;
 
     public static class StreamDeckUICommon
     {

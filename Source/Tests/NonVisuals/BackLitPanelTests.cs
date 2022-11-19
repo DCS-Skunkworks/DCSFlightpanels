@@ -1,5 +1,5 @@
 ﻿using DCSFlightpanels.PanelUserControls;
-using NonVisuals.Saitek.Panels;
+using NonVisuals.Panels.Saitek.Panels;
 using System;
 using Xunit;
 

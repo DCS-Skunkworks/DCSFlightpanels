@@ -19,13 +19,13 @@
 
 
     using MEF;
-
-    using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Radios;
     using NonVisuals.Radios.Knobs;
-    using NonVisuals.Saitek;
+    using NonVisuals.Panels.Saitek;
+    using NonVisuals.Panels;
+    using NonVisuals.HID;
 
     public partial class RadioPanelPZ69UserControlGeneric : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {

@@ -15,6 +15,7 @@ using Microsoft.Win32;
 using NonVisuals;
 using NonVisuals.EventArgs;
 using NonVisuals.Interfaces;
+using NonVisuals.Panels;
 
 namespace DCSFlightpanels
 {

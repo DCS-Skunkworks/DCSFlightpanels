@@ -7,7 +7,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
 using NLog;
-using NonVisuals.Saitek;
+using NonVisuals.Panels.Saitek;
 using ThreadState = System.Threading.ThreadState;
 
 /*

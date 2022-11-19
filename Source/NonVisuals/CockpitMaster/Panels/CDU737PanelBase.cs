@@ -12,6 +12,7 @@
     using Interfaces;
     using System.Timers;
     using Timer = System.Timers.Timer;
+    using HID;
 
     public enum CDU737Led
     {

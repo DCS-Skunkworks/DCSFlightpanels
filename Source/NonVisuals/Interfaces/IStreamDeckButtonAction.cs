@@ -1,8 +1,7 @@
-﻿using NonVisuals.StreamDeck.Panels;
-
-namespace NonVisuals.Interfaces
+﻿namespace NonVisuals.Interfaces
 {
     using System.Threading;
+    using NonVisuals.Panels.StreamDeck.Panels;
 
     public enum EnumStreamDeckActionType
     {

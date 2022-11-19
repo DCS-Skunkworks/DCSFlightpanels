@@ -1,6 +1,4 @@
-﻿using NonVisuals.StreamDeck.Panels;
-
-namespace DCSFlightpanels.Bills
+﻿namespace DCSFlightpanels.Bills
 {
     using System;
     using System.Collections.Generic;
@@ -8,9 +6,9 @@ namespace DCSFlightpanels.Bills
     using System.Windows.Media;
 
     using DCS_BIOS;
-
-    using NonVisuals.Saitek;
-    using NonVisuals.StreamDeck;
+    using NonVisuals.Panels.Saitek;
+    using NonVisuals.Panels.StreamDeck;
+    using NonVisuals.Panels.StreamDeck.Panels;
 
     /*
      * BillStreamDeckAction is mapped to a TextBox. When the user selects a Streamdeck button

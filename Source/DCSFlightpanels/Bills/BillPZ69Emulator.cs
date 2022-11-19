@@ -10,7 +10,7 @@ namespace DCSFlightpanels.Bills
 
     using DCS_BIOS;
     using Interfaces;
-    using NonVisuals.Saitek.Panels;
+    using NonVisuals.Panels.Saitek.Panels;
 
     public class BillPZ69Emulator : BillBaseInput
     {

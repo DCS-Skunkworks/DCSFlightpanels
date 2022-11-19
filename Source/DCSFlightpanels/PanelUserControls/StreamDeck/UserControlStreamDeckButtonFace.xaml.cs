@@ -1,6 +1,4 @@
-﻿using NonVisuals.StreamDeck.Panels;
-
-namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -20,11 +18,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using NLog;
     using NonVisuals;
     using NonVisuals.Interfaces;
-    using NonVisuals.StreamDeck;
-    using NonVisuals.StreamDeck.Events;
 
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
     using RadioButton = System.Windows.Controls.RadioButton;
+    using NonVisuals.Panels.StreamDeck.Events;
+    using NonVisuals.Panels.StreamDeck.Panels;
+    using NonVisuals.Panels.StreamDeck;
 
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonFace.xaml

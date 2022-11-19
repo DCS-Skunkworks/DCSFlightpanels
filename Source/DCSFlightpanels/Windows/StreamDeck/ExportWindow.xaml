@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels.Windows.StreamDeck"
-        xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
+        xmlns:streamDeck="clr-namespace:NonVisuals.Panels.StreamDeck;assembly=NonVisuals"
         Loaded="ExportWindow_OnLoaded"
         WindowStartupLocation="CenterScreen"
         KeyDown="ExportWindow_OnKeyDown"

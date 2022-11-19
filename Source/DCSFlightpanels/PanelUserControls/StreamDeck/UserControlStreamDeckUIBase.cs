@@ -1,5 +1,4 @@
 ﻿using NonVisuals;
-using NonVisuals.StreamDeck.Panels;
 
 namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
@@ -20,8 +19,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using MEF;
     using NLog;
     using NonVisuals.Interfaces;
-    using NonVisuals.StreamDeck;
-    using NonVisuals.StreamDeck.Events;
+    using NonVisuals.Panels.StreamDeck.Events;
+    using NonVisuals.Panels.StreamDeck.Panels;
+    using NonVisuals.Panels.StreamDeck;
 
     public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, INvStreamDeckListener, IStreamDeckConfigListener, IOledImageListener
     {

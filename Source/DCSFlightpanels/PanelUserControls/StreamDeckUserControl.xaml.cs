@@ -1,6 +1,4 @@
-﻿using NonVisuals.StreamDeck.Panels;
-
-namespace DCSFlightpanels.PanelUserControls
+﻿namespace DCSFlightpanels.PanelUserControls
 {
     using System;
     using System.Collections.Generic;
@@ -14,11 +12,13 @@ namespace DCSFlightpanels.PanelUserControls
     using StreamDeck;
     using DCSFlightpanels.Windows.StreamDeck;
     using NLog;
-    using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
-    using NonVisuals.StreamDeck;
-    using NonVisuals.StreamDeck.Events;
+    using NonVisuals.Panels.StreamDeck.Events;
+    using NonVisuals.Panels.StreamDeck.Panels;
+    using NonVisuals.Panels.StreamDeck;
+    using NonVisuals.Panels;
+    using NonVisuals.HID;
 
     /// <summary>
     /// Interaction logic for StreamDeckUserControl.xaml

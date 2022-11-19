@@ -4,7 +4,6 @@ using DCS_BIOS.EventArgs;
 using DCS_BIOS.Interfaces;
 using DCS_BIOS.Json;
 using NLog;
-using NonVisuals.StreamDeck.Panels;
 
 namespace DCSFlightpanels.Windows.StreamDeck
 {
@@ -25,7 +24,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using Shared;
     using NonVisuals;
     using NonVisuals.Interfaces;
-    using NonVisuals.StreamDeck;
+    using NonVisuals.Panels.StreamDeck.Panels;
+    using NonVisuals.Panels.StreamDeck;
 
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.

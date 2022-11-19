@@ -1,8 +1,7 @@
 ﻿namespace NonVisuals.EventArgs
 {
     using System;
-
-    using Saitek;
+    using Panels.Saitek;
 
     public class LedLightChangeEventArgs : EventArgs
     {

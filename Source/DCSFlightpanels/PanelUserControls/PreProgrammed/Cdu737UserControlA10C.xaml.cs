@@ -2,13 +2,14 @@
 {
     using System.Windows;
     using System.Windows.Controls;
-    using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
 
     using NonVisuals.CockpitMaster.Preprogrammed;
     using Interfaces;
     using System;
+    using NonVisuals.Panels;
+    using NonVisuals.HID;
 
     /// <summary>
     /// Interaction logic for Cdu737UserControlA10C.xaml

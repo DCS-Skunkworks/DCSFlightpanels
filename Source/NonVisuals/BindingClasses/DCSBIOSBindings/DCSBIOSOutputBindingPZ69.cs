@@ -2,8 +2,8 @@
 using System.Globalization;
 using DCS_BIOS;
 using MEF;
+using NonVisuals.Panels.Saitek;
 using NonVisuals.Radios;
-using NonVisuals.Saitek;
 
 namespace NonVisuals.BindingClasses.DCSBIOSBindings
 {

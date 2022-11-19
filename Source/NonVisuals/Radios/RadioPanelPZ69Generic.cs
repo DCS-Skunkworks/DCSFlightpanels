@@ -3,7 +3,6 @@ using NonVisuals.BindingClasses.BIP;
 using NonVisuals.BindingClasses.DCSBIOSBindings;
 using NonVisuals.BindingClasses.Key;
 using NonVisuals.BindingClasses.OSCommand;
-using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Radios
 {
@@ -22,7 +21,9 @@ namespace NonVisuals.Radios
     using Plugin;
     using Knobs;
     using Misc;
-    using Saitek;
+    using NonVisuals.Panels.Saitek.Panels;
+    using Panels.Saitek;
+    using HID;
 
     /*
      * This is the class for the PZ69 Radio Panel that is used when :

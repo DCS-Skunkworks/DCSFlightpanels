@@ -4,8 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
+using NonVisuals.Panels.Saitek;
+using NonVisuals.Panels.Saitek.Panels;
 
 namespace DCSFlightpanels.Windows
 {

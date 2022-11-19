@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
 using Newtonsoft.Json;
-using NonVisuals.Saitek;
+using NonVisuals.Panels.Saitek;
 
 namespace NonVisuals.BindingClasses.BIP
 {

@@ -159,7 +159,7 @@ namespace NonVisuals
 
                     var array = keyPressInfo.VirtualKeyCodes.ToArray();
 
-                    if (Common.APIMode == APIModeEnum.keybd_event)
+                    if (Common.APIModeUsed == APIModeEnum.keybd_event)
                     {
                         KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
 
@@ -338,7 +338,7 @@ namespace NonVisuals
             }
 
             // Insert 1. or 2. indicating API used
-            result.Insert(0, Common.APIMode == APIModeEnum.keybd_event ? "1. " : "2. ");
+            result.Insert(0, Common.APIModeUsed == APIModeEnum.keybd_event ? "1. " : "2. ");
             return result.ToString();
         }
 

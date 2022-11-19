@@ -2,9 +2,9 @@
 {
     using System;
     using System.Globalization;
-    using StreamDeck;
     using TextBox = System.Windows.Controls.TextBox;
     using Newtonsoft.Json;
+    using Panels.StreamDeck;
 
     public static class Extensions
     {

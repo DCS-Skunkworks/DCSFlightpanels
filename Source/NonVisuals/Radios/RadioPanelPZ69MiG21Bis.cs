@@ -14,7 +14,8 @@ namespace NonVisuals.Radios
     using MEF;
     using Plugin;
     using Knobs;
-    using Saitek;
+    using Panels.Saitek;
+    using HID;
 
 
     /*

@@ -1,5 +1,5 @@
 ﻿using System.Windows.Controls;
-using NonVisuals.Saitek;
+using NonVisuals.Panels.Saitek;
 
 namespace DCSFlightpanels.Interfaces
 {

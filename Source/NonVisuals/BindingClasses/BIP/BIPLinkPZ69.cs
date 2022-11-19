@@ -1,6 +1,6 @@
 ﻿using System;
 using MEF;
-using NonVisuals.Saitek.Panels;
+using NonVisuals.Panels.Saitek.Panels;
 
 namespace NonVisuals.BindingClasses.BIP
 {
