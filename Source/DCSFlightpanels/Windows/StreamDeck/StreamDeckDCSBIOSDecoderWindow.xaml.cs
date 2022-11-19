@@ -32,7 +32,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     /// </summary>
     public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty, IDisposable, IDcsBiosDataListener
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
         private readonly StreamDeckPanel _streamDeckPanel;
         private bool _formLoaded;
@@ -211,7 +211,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "DcsBiosDataReceived()");
+                Logger.Error(ex, "DcsBiosDataReceived()");
             }
         }
 

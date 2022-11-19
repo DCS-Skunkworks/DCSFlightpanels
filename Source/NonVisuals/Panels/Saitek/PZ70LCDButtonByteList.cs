@@ -5,7 +5,6 @@
     using MEF;
     using NLog;
     using Panels;
-    using Panels;
 
 
     /*
@@ -13,7 +12,7 @@
      */
     public class PZ70LCDButtonByteList
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /*
             LCD Button Byte
@@ -67,7 +66,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Flipbutton()");
+                Logger.Error(ex, "Flipbutton()");
                 throw;
             }
         }
@@ -90,7 +89,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "IsOn()");
+                Logger.Error(ex, "IsOn()");
                 throw;
             }
         }
@@ -141,7 +140,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
                 throw;
             }
         }
@@ -168,7 +167,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
                 throw;
             }
         }
@@ -191,7 +190,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
                 throw;
             }
         }

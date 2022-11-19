@@ -4,7 +4,6 @@
 
     using Newtonsoft.Json;
     using Panels;
-    using Panels;
 
     [Serializable]
     public abstract class PanelSwitchBIPLightBinding

@@ -21,7 +21,7 @@
      */
     public static class PZ69DisplayBytes
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Right justify, pad left with blanks.
@@ -170,7 +170,7 @@
                 }
                 catch (Exception ex)
                 {
-                    logger.Error(ex, $"SetPZ69DisplayBytesDefault() digitsAsString.Length = {digitsAsString.Length}");
+                    Logger.Error(ex, $"SetPZ69DisplayBytesDefault() digitsAsString.Length = {digitsAsString.Length}");
                 }
 
                 if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')

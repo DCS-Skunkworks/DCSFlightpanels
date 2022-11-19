@@ -5,7 +5,6 @@
 
     using EventArgs;
     using Panels;
-    using Panels;
 
     /*
      * This class is used by the BipFactory class and hold a list of the BIPs connected to the PC.

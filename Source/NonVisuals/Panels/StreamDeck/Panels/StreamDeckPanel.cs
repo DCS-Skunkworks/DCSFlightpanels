@@ -19,7 +19,6 @@
     using OpenMacroBoard.SDK;
 
     using StreamDeckSharp;
-    using Events;
     using NonVisuals;
     using StreamDeck;
     using NonVisuals.Panels.Saitek.Panels;

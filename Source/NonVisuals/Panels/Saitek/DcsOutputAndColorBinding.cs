@@ -6,8 +6,6 @@
     using DCS_BIOS;
     using Panels;
 
-    using Panels;
-
     public enum PanelLEDColor : byte
     {
         DARK = 0x0,

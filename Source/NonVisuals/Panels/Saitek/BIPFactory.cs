@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using Panels;
-    using Panels;
 
     /*
      * This class is used to manage all the BIPs that are connected to the PC.

@@ -18,12 +18,11 @@
     using OpenMacroBoard.SDK;
 
     using StreamDeckSharp;
-    using Events;
     using Panels;
 
     public class StreamDeckLayerHandler : IDisposable
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly StreamDeckPanel _streamDeckPanel;
         private volatile List<StreamDeckLayer> _layerList = new();
@@ -47,7 +46,7 @@
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             Error = (sender, args) =>
                 {
-                    logger.Error($"JSON Error.{args.ErrorContext.Error.Message}");
+                    Logger.Error($"JSON Error.{args.ErrorContext.Error.Message}");
                 }
         };
 

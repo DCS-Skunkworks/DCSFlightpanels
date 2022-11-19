@@ -13,7 +13,7 @@
 
     public static class BitMapCreator
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
         {
@@ -43,7 +43,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Failed to convert Bitmap to BitmapImage.");
+                Logger.Error(ex, "Failed to convert Bitmap to BitmapImage.");
             }
             return null;
         }

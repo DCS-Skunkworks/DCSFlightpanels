@@ -13,7 +13,6 @@
 
     using Interfaces;
     using Events;
-    using Events;
     using Panels;
 
     public enum LayerNavType

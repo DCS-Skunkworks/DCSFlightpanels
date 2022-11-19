@@ -11,7 +11,6 @@
     using System.Linq;
     using System.Media;
     using System.Reflection;
-    using System.Text;
     using System.Timers;
     using System.Windows;
     using System.Windows.Controls;
@@ -31,8 +30,6 @@
     using Radios.PreProgrammed;
     using Shared;
     using Windows;
-
-    using Microsoft.Win32;
     using NLog;
     using NLog.Targets;
     using NLog.Targets.Wrappers;
@@ -47,7 +44,7 @@
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new();
         private readonly string _windowName = "DCSFlightpanels ";
@@ -284,7 +281,7 @@
             {
                 var message = $"DCS-BIOS UPDATES MISSED = {e.GamingPanelEnum} {e.Count}";
                 ShowStatusBarMessage(message);
-                logger.Error(message);
+                Logger.Error(message);
             }
             catch (Exception ex)
             {
@@ -927,7 +924,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error checking for newer releases.");
+                Logger.Error(ex, "Error checking for newer releases.");
                 LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
                 LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + Settings.Default.LastDCSBIOSRelease;
             }

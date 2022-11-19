@@ -4,8 +4,6 @@
     using System.Text;
     using Panels;
 
-    using Panels;
-
     public enum BIPLightDelays
     {
         Zeroms = 0,

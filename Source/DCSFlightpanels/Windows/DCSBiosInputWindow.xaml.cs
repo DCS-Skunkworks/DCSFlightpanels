@@ -10,7 +10,6 @@ using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using DCS_BIOS.Json;
-using NonVisuals;
 
 namespace DCSFlightpanels.Windows
 {

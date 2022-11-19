@@ -1,13 +1,16 @@
 ﻿using ClassLibraryCommon;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NonVisuals
 {
+    /*
+     * Used to turn of automatic USB power management for certain manufacturers panels.
+     * Has shown to be a problem when Windows suddenly turns off the power when it deems
+     * the panel to not be used.
+     */
     public static class USBPowerManagement
     {
 

@@ -20,7 +20,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
     [Serializable]
     public abstract class DCSBIOSActionBindingBase : IDisposable
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        internal static Logger Logger = LogManager.GetCurrentClassLogger();
         private bool _whenOnTurnedOn = true;
         private string _description;
         [NonSerialized] private Thread _sendDCSBIOSCommandsThread;
@@ -140,7 +140,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
             { }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
             }
         }
 

@@ -14,7 +14,7 @@ namespace DCS_BIOS
 
     public class DCSBIOSStringListener : IDcsBiosDataListener, IDisposable
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        internal static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new();
         private readonly object _lockObject = new();

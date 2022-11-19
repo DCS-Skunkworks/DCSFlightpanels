@@ -4,6 +4,9 @@
 
     using Properties;
 
+    /*
+     * Used for accessing main project's settings from auxiliary projects.
+     */
     public static class SettingsManager
     {
         public static Font DefaultFont

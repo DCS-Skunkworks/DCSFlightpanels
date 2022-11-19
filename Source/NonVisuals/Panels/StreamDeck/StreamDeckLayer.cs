@@ -11,7 +11,6 @@
 
     using Interfaces;
     using Events;
-    using Events;
     using Panels;
     using NonVisuals;
 

@@ -1,6 +1,5 @@
 ﻿using ClassLibraryCommon;
 using DCS_BIOS.EventArgs;
-using NonVisuals;
 using NonVisuals.EventArgs;
 using NonVisuals.HID;
 using NonVisuals.Panels.Saitek.Panels;

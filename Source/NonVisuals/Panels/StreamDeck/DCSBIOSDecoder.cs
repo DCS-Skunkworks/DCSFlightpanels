@@ -16,14 +16,13 @@ namespace NonVisuals.Panels.StreamDeck
     using Newtonsoft.Json;
     using NLog;
     using Events;
-    using Events;
     using Panels;
     using NonVisuals;
 
     [Serializable]
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener, IDisposable
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        internal static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula;
         private string _formulaObsolete = string.Empty;
@@ -207,7 +206,7 @@ namespace NonVisuals.Panels.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "DcsBiosDataReceived()");
+                Logger.Error(ex, "DcsBiosDataReceived()");
             }
         }
 
@@ -257,7 +256,7 @@ namespace NonVisuals.Panels.StreamDeck
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "DCSBIOSStringReceived()");
+                Logger.Error(ex, "DCSBIOSStringReceived()");
             }
         }
 
