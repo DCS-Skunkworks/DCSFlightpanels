@@ -22,7 +22,7 @@
     public partial class ImportWindow : IDisposable
     {
         private readonly string _bindingHash;
-        private bool _formLoaded = false;
+        private bool _formLoaded;
         private List<ButtonExport> _buttonExports = new();
         private string _extractedFilesFolder = string.Empty;
 

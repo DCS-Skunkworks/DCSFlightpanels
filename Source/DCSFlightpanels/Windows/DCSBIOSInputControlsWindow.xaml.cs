@@ -18,9 +18,9 @@
         private readonly string _header;
         private List<DCSBIOSInput> _dcsbiosInputs = new();
         private string _description;
-        private bool _isDirty = false;
-        private readonly bool _showSequenced = false;
-        private bool _isSequenced = false;
+        private bool _isDirty;
+        private readonly bool _showSequenced;
+        private bool _isSequenced;
 
         public DCSBIOSInputControlsWindow(string header, string description, bool isSequenced, bool showSequenced)
         {

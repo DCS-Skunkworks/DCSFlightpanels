@@ -18,7 +18,7 @@
     {
         private readonly SortedList<int, IKeyPressInfo> _sortedList = new();
         private bool _isDirty;
-        private bool _formLoaded = false;
+        private bool _formLoaded;
         private readonly bool _supportIndefinite;
 
         public KeySequenceWindow(bool supportIndefinite = true)

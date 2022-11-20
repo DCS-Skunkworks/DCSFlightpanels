@@ -15,9 +15,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
     {
 
         private readonly List<StreamDeckLayer> _existingLayers = new();
-        private bool _loaded = false;
+        private bool _loaded;
         private const int MINIMUM_LENGTH = 3;
-        private StreamDeckLayer _newLayer = null;
+        private StreamDeckLayer _newLayer;
         [NonSerialized]
         private readonly StreamDeckPanel _streamDeckPanel;
 

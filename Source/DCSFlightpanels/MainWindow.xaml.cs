@@ -59,7 +59,7 @@
         private ProfileHandler _profileHandler;
         private DCSBIOS _dcsBios;
         private bool _disablePanelEventsFromBeingRouted;
-        private bool _isLoaded = false;
+        private bool _isLoaded;
 
         public MainWindow()
         {
@@ -78,7 +78,7 @@
         }
 
         #region IDisposable Support
-        private bool _hasBeenCalledAlready = false; // To detect redundant calls
+        private bool _hasBeenCalledAlready; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
         {

@@ -41,7 +41,7 @@ namespace DCSFlightpanels.Windows
         private bool _limitDecimals;
         private int _decimalPlaces;
 
-        private bool _closing = false;
+        private bool _closing;
         private readonly bool _showDecimalSetting;
 
         public DCSBiosOutputFormulaWindow(string description, bool userEditsDescription = false, bool showDecimalSetting = false)

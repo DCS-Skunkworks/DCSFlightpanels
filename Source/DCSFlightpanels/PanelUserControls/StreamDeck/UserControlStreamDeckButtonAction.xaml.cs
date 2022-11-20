@@ -31,10 +31,10 @@
         private readonly List<StreamDeckActionTextBox> _textBoxes = new();
 
         private StreamDeckButton _streamDeckButton;
-        private bool _isLoaded = false;
+        private bool _isLoaded;
         private StreamDeckPanel _streamDeckPanel;
 
-        public bool IsDirty { get; set; } = false;
+        public bool IsDirty { get; set; }
 
         public UserControlStreamDeckButtonAction()
         {

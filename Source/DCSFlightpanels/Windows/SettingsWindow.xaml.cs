@@ -30,11 +30,11 @@ namespace DCSFlightpanels.Windows
         public string PortFromSRS { get; private set; }
         public string IpAddressToSRS { get; private set; }
         public string PortToSRS { get; private set; }
-        public bool GeneralChanged { get; private set; } = false;
-        public bool DCSBIOSChanged { get; private set; } = false;
+        public bool GeneralChanged { get; private set; }
+        public bool DCSBIOSChanged { get; private set; }
         public bool StreamDeckChanged { get; private set; } = false;
 
-        private bool _isLoaded = false;
+        private bool _isLoaded;
         private readonly int _tabIndex;
 
         public SettingsWindow(int tabIndex)

@@ -19,8 +19,8 @@
     {
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly EnumStreamDeckButtonNames _streamDeckButtonName;
-        private bool _isLoaded = false;
-        private DCSBIOSConverter _dcsbiosConverter = null;
+        private bool _isLoaded;
+        private DCSBIOSConverter _dcsbiosConverter;
         private bool _isDirty;
 
         public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, StreamDeckPanel streamDeckPanel)

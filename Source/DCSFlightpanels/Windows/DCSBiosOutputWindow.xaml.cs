@@ -25,7 +25,7 @@ namespace DCSFlightpanels.Windows
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
-        private readonly bool _userEditsDescription = false;
+        private readonly bool _userEditsDescription;
 
         public DCSBiosOutputWindow(string description, bool userEditsDescription = false)
         {
