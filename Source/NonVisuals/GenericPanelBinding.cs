@@ -80,7 +80,7 @@
         public GamingPanelEnum PanelType
         {
             get => _panelType;
-            set => _panelType = value;
+            init => _panelType = value;
         }
 
         public bool HasBeenDeleted { get; set; }

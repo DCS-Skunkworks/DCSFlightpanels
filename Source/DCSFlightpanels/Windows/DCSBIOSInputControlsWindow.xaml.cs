@@ -260,7 +260,7 @@
         public bool IsSequenced
         {
             get => _isSequenced;
-            set
+            init
             {
                 CheckBoxIsSequenced.IsChecked = value;
                 _isSequenced = value;

@@ -181,15 +181,15 @@
             SetLine(9, "* waiting dcsBios data *");
 
             hidReport = new HidReport[] {
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
-                _hidWriteDevice.CreateReport(),
+                HIDWriteDevice.CreateReport(),
+                HIDWriteDevice.CreateReport(),
+                HIDWriteDevice.CreateReport(),
+                HIDWriteDevice.CreateReport(),
+                HIDWriteDevice.CreateReport(),
+                HIDWriteDevice.CreateReport(),
+                HIDWriteDevice.CreateReport(),
+                HIDWriteDevice.CreateReport(),
+                HIDWriteDevice.CreateReport(),
             };
 
             StartTimers();
@@ -417,7 +417,7 @@
                     hidReport[i].Data[0] = (byte)(i + 1);
                     Array.Copy(ScreenBuffer[i], 0, hidReport[i].Data, 1, 63);
                     
-                    _ = _hidWriteDevice.WriteReportAsync(hidReport[i]);
+                    _ = HIDWriteDevice.WriteReportAsync(hidReport[i]);
                 }
 
                 // Handles LED 
@@ -426,7 +426,7 @@
                 BrightAndLedBuffer[3] = LedStatus;
                 hidReport[8].Data = BrightAndLedBuffer;
 
-                _ = _hidWriteDevice.WriteReport(hidReport[8]);
+                _ = HIDWriteDevice.WriteReport(hidReport[8]);
             }
 
         }

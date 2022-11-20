@@ -11,12 +11,12 @@
     {
 
         protected readonly object LockLCDUpdateObject = new();
-        protected HidDevice _hidWriteDevice;
+        protected readonly HidDevice HIDWriteDevice;
 
         protected CockpitMasterPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton) : base(typeOfGamingPanel, hidSkeleton)
         {
             hidSkeleton.PanelHasBeenInstantiated = true;
-            _hidWriteDevice = hidSkeleton.HIDWriteDevice;
+            HIDWriteDevice = hidSkeleton.HIDWriteDevice;
         }
 
         private bool _disposed;
