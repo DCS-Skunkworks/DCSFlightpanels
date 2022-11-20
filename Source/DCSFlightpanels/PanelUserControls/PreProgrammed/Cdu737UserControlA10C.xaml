@@ -15,13 +15,13 @@
         
         <customControls:CDU737UserControl x:Name="CDU737UserControl" />
       
-        <StackPanel x:Name="LBL_Mappings" Orientation="Vertical">
+        <StackPanel Orientation="Vertical">
 
             <Label Content="Mappings" FontSize="24" FontWeight="Bold" />
             <Label Content="Menu buttons are mapped in the same order, as shown on the picture below" FontSize="12" FontWeight="Bold" />
             <Label Content="BRT -/+ are operative - but a bug in DCSBios ATM prevent a correct usage" FontSize="12" FontWeight="Bold" />
 
-            <Image x:Name="mappingA10C" Height="181" Width="372" Source="/PanelUserControls/PreProgrammed/mappingmenukey.jpg"/>
+            <Image Height="181" Width="372" Source="/PanelUserControls/PreProgrammed/mappingmenukey.jpg"/>
             <Label Content="LSK means Left Shift Key, key on the left, numbered from top to bottom" FontSize="12" FontWeight="Bold" />
             <Label Content="LSK 5 and LSK 6 are mapped to P/G" FontSize="12" FontWeight="Bold" />
             <Label Content="Prev Page, Next Page are mapped to P/G" FontSize="12" FontWeight="Bold" />

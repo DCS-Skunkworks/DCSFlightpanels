@@ -12,7 +12,7 @@ namespace DCSFlightpanels.CustomControls
             InitializeComponent();
         }
 
-        public void displayLines(string[] lines, int number)
+        public void DisplayLines(string[] lines, int number)
         {
             CDULines.Text = "";
             for (int i = 0; i < number; i++)

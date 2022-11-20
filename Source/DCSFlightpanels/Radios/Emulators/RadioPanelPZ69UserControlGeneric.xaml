@@ -15,7 +15,7 @@
             <Setter Property="Stretch" Value="None"/>
         </Style>
     </UserControl.Resources>
-    <Grid Name="PZ69Grid" >
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="240" />
             <RowDefinition Height="1*" />

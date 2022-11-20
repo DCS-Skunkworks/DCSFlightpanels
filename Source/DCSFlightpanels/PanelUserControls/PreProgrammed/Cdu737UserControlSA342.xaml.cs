@@ -19,13 +19,13 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
     /// 
     public partial class Cdu737UserControlSA342 : IGamingPanelListener, IGamingPanelUserControl
     {
-        private readonly CDU737PanelSA342 _CDU737PanelSA342;
+        private readonly CDU737PanelSA342 _cdu737PanelSA342;
 
         public Cdu737UserControlSA342(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
 
-            _CDU737PanelSA342 = new CDU737PanelSA342(hidSkeleton);
+            _cdu737PanelSA342 = new CDU737PanelSA342(hidSkeleton);
             
             AppEventHandler.AttachGamingPanelListener(this);
 
@@ -40,7 +40,7 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
             {
                 if (disposing)
                 {
-                    _CDU737PanelSA342.Dispose();
+                    _cdu737PanelSA342.Dispose();
                     AppEventHandler.DetachGamingPanelListener(this);
 
                 }
@@ -68,7 +68,7 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
 
         public override GamingPanel GetGamingPanel()
         {
-            return _CDU737PanelSA342;
+            return _cdu737PanelSA342;
         }
 
 
@@ -89,11 +89,11 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
-            string[] lines = _CDU737PanelSA342.CDULines;
+            string[] lines = _cdu737PanelSA342.CDULines;
             Dispatcher?.BeginInvoke(
             (Action)
             (() => {
-                CDU737UserControl.displayLines(lines, 14);
+                CDU737UserControl.DisplayLines(lines, 14);
             }
             ));
 
@@ -101,11 +101,11 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
-            string[] lines = _CDU737PanelSA342.CDULines;
+            string[] lines = _cdu737PanelSA342.CDULines;
             Dispatcher?.BeginInvoke(
             (Action)
             (() => {
-                CDU737UserControl.displayLines(lines,14);
+                CDU737UserControl.DisplayLines(lines,14);
             }
             ));
 

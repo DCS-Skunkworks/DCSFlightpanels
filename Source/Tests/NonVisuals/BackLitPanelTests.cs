@@ -59,28 +59,28 @@ namespace Tests.NonVisuals
         }
 
         [Theory]
-        [InlineData("______________1a1", BIPLedPositionEnum.Position_1_1)]
-        [InlineData("______________1_1", BIPLedPositionEnum.Position_1_1)]
-        [InlineData("aaaaaaaaaaaaaa1b1", BIPLedPositionEnum.Position_1_1)]
-        [InlineData("aaaaaaaaaaaaaa1b2", BIPLedPositionEnum.Position_1_2)]
-        [InlineData("______________1_8", BIPLedPositionEnum.Position_1_8)]
-        [InlineData("______________2_1", BIPLedPositionEnum.Position_2_1)]
-        [InlineData("______________2_8", BIPLedPositionEnum.Position_2_8)]
-        [InlineData("______x_______3_1", BIPLedPositionEnum.Position_3_1)]
-        [InlineData("___________z__3_4", BIPLedPositionEnum.Position_3_4)]
-        [InlineData("__uu__________3x8", BIPLedPositionEnum.Position_3_8)]
-        [InlineData("ImagePosition_3_4", BIPLedPositionEnum.Position_3_4)]
+        [InlineData("______________1a1", BIPLedPositionEnum.Position11)]
+        [InlineData("______________1_1", BIPLedPositionEnum.Position11)]
+        [InlineData("aaaaaaaaaaaaaa1b1", BIPLedPositionEnum.Position11)]
+        [InlineData("aaaaaaaaaaaaaa1b2", BIPLedPositionEnum.Position12)]
+        [InlineData("______________1_8", BIPLedPositionEnum.Position18)]
+        [InlineData("______________2_1", BIPLedPositionEnum.Position21)]
+        [InlineData("______________2_8", BIPLedPositionEnum.Position28)]
+        [InlineData("______x_______3_1", BIPLedPositionEnum.Position31)]
+        [InlineData("___________z__3_4", BIPLedPositionEnum.Position34)]
+        [InlineData("__uu__________3x8", BIPLedPositionEnum.Position38)]
+        [InlineData("ImagePosition_3_4", BIPLedPositionEnum.Position34)]
         public void GetLedPosition_ShouldReturn_ExpectedEnumValue(string inputString, BIPLedPositionEnum bIPLedPositionEnum)
         {
             Assert.Equal(bIPLedPositionEnum, BacklitPanelBIP.GetLedPosition(inputString));
         }
 
         [Theory]
-        [InlineData("______________1_9", BIPLedPositionEnum.Position_1_1)]
-        [InlineData("______________1_0", BIPLedPositionEnum.Position_1_1)]
-        [InlineData("______________2_0", BIPLedPositionEnum.Position_1_1)]
-        [InlineData("______________2_9", BIPLedPositionEnum.Position_1_1)]
-        [InlineData("______________9_1", BIPLedPositionEnum.Position_1_1)]
+        [InlineData("______________1_9", BIPLedPositionEnum.Position11)]
+        [InlineData("______________1_0", BIPLedPositionEnum.Position11)]
+        [InlineData("______________2_0", BIPLedPositionEnum.Position11)]
+        [InlineData("______________2_9", BIPLedPositionEnum.Position11)]
+        [InlineData("______________9_1", BIPLedPositionEnum.Position11)]
         public void GetLedPosition_ShouldReturn_Position_1_1_ForUnexpectedValues(string inputString, BIPLedPositionEnum bIPLedPositionEnum)
         {
             Assert.Equal(bIPLedPositionEnum, BacklitPanelBIP.GetLedPosition(inputString));

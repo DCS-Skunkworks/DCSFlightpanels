@@ -744,41 +744,41 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 1 => index switch
                 {
-                    1 => BIPLedPositionEnum.Position_1_1,
-                    2 => BIPLedPositionEnum.Position_1_2,
-                    3 => BIPLedPositionEnum.Position_1_3,
-                    4 => BIPLedPositionEnum.Position_1_4,
-                    5 => BIPLedPositionEnum.Position_1_5,
-                    6 => BIPLedPositionEnum.Position_1_6,
-                    7 => BIPLedPositionEnum.Position_1_7,
-                    8 => BIPLedPositionEnum.Position_1_8,
-                    _ => BIPLedPositionEnum.Position_1_1
+                    1 => BIPLedPositionEnum.Position11,
+                    2 => BIPLedPositionEnum.Position12,
+                    3 => BIPLedPositionEnum.Position13,
+                    4 => BIPLedPositionEnum.Position14,
+                    5 => BIPLedPositionEnum.Position15,
+                    6 => BIPLedPositionEnum.Position16,
+                    7 => BIPLedPositionEnum.Position17,
+                    8 => BIPLedPositionEnum.Position18,
+                    _ => BIPLedPositionEnum.Position11
                 },
                 2 => index switch
                 {
-                    1 => BIPLedPositionEnum.Position_2_1,
-                    2 => BIPLedPositionEnum.Position_2_2,
-                    3 => BIPLedPositionEnum.Position_2_3,
-                    4 => BIPLedPositionEnum.Position_2_4,
-                    5 => BIPLedPositionEnum.Position_2_5,
-                    6 => BIPLedPositionEnum.Position_2_6,
-                    7 => BIPLedPositionEnum.Position_2_7,
-                    8 => BIPLedPositionEnum.Position_2_8,
-                    _ => BIPLedPositionEnum.Position_1_1
+                    1 => BIPLedPositionEnum.Position21,
+                    2 => BIPLedPositionEnum.Position22,
+                    3 => BIPLedPositionEnum.Position23,
+                    4 => BIPLedPositionEnum.Position24,
+                    5 => BIPLedPositionEnum.Position25,
+                    6 => BIPLedPositionEnum.Position26,
+                    7 => BIPLedPositionEnum.Position27,
+                    8 => BIPLedPositionEnum.Position28,
+                    _ => BIPLedPositionEnum.Position11
                 },
                 3 => index switch
                 {
-                    1 => BIPLedPositionEnum.Position_3_1,
-                    2 => BIPLedPositionEnum.Position_3_2,
-                    3 => BIPLedPositionEnum.Position_3_3,
-                    4 => BIPLedPositionEnum.Position_3_4,
-                    5 => BIPLedPositionEnum.Position_3_5,
-                    6 => BIPLedPositionEnum.Position_3_6,
-                    7 => BIPLedPositionEnum.Position_3_7,
-                    8 => BIPLedPositionEnum.Position_3_8,
-                    _ => BIPLedPositionEnum.Position_1_1
+                    1 => BIPLedPositionEnum.Position31,
+                    2 => BIPLedPositionEnum.Position32,
+                    3 => BIPLedPositionEnum.Position33,
+                    4 => BIPLedPositionEnum.Position34,
+                    5 => BIPLedPositionEnum.Position35,
+                    6 => BIPLedPositionEnum.Position36,
+                    7 => BIPLedPositionEnum.Position37,
+                    8 => BIPLedPositionEnum.Position38,
+                    _ => BIPLedPositionEnum.Position11
                 },
-                _ => BIPLedPositionEnum.Position_1_1
+                _ => BIPLedPositionEnum.Position11
             };
         }
     }
@@ -786,30 +786,30 @@ namespace NonVisuals.Panels.Saitek.Panels
     [Serializable]
     public enum BIPLedPositionEnum
     {
-        Position_1_1,
-        Position_1_2,
-        Position_1_3,
-        Position_1_4,
-        Position_1_5,
-        Position_1_6,
-        Position_1_7,
-        Position_1_8,
-        Position_2_1,
-        Position_2_2,
-        Position_2_3,
-        Position_2_4,
-        Position_2_5,
-        Position_2_6,
-        Position_2_7,
-        Position_2_8,
-        Position_3_1,
-        Position_3_2,
-        Position_3_3,
-        Position_3_4,
-        Position_3_5,
-        Position_3_6,
-        Position_3_7,
-        Position_3_8
+        Position11,
+        Position12,
+        Position13,
+        Position14,
+        Position15,
+        Position16,
+        Position17,
+        Position18,
+        Position21,
+        Position22,
+        Position23,
+        Position24,
+        Position25,
+        Position26,
+        Position27,
+        Position28,
+        Position31,
+        Position32,
+        Position33,
+        Position34,
+        Position35,
+        Position36,
+        Position37,
+        Position38
     }
 
     /*

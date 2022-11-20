@@ -26,10 +26,6 @@ namespace DCSFlightpanels.Windows
         public string IpAddressToDCSBIOS { get; private set; }
         public string PortToDCSBIOS { get; private set; }
         public string DcsBiosJSONLocation { get; private set; }
-        public string IpAddressFromSRS { get; private set; }
-        public string PortFromSRS { get; private set; }
-        public string IpAddressToSRS { get; private set; }
-        public string PortToSRS { get; private set; }
         public bool GeneralChanged { get; private set; }
         public bool DCSBIOSChanged { get; private set; }
         public bool StreamDeckChanged { get; private set; } = false;

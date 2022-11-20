@@ -6,7 +6,7 @@
                  xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
                  mc:Ignorable="d" 
                  d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlBf109_OnLoaded">
-    <Grid Name="PZ69Grid" >
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="240" />
             <RowDefinition Height="1*" />
@@ -26,7 +26,7 @@
             <ColumnDefinition Width="301*" />
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5">
-            <Image Height="226" Name="ImagePZ69RadioPanel" Stretch="None" Source="/dcsfp;component/Images/PZ69_Radiopanel.jpg" />
+            <Image Height="226" Stretch="None" Source="/dcsfp;component/Images/PZ69_Radiopanel.jpg" />
 
             <!-- UPPER LEFT SELECTOR -->
             <Image Height="76" Name="TopLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="34" />

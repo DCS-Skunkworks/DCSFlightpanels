@@ -13,7 +13,7 @@
             <MenuItem Header="Configure" Name="ContextConfigureLandingGearLED" Click="ContextConfigureLandingGearLEDClick"/>
         </ContextMenu>
     </UserControl.Resources>
-    <Grid Name="PZ55Grid">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="26" />
             <RowDefinition Height="240" />

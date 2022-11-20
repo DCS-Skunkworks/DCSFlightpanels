@@ -18,13 +18,13 @@
     public partial class Cdu737UserControlA10C : IGamingPanelListener,
         IGamingPanelUserControl
     {
-        private readonly CDU737PanelA10C _CDU737PanelA10C;
+        private readonly CDU737PanelA10C _cdu737PanelA10C;
 
         public Cdu737UserControlA10C(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
 
-            _CDU737PanelA10C = new CDU737PanelA10C(hidSkeleton);
+            _cdu737PanelA10C = new CDU737PanelA10C(hidSkeleton);
             //_HIDSkeleton = hidSkeleton;
             AppEventHandler.AttachGamingPanelListener(this);
 
@@ -39,7 +39,7 @@
             {
                 if (disposing)
                 {
-                    _CDU737PanelA10C.Dispose();
+                    _cdu737PanelA10C.Dispose();
                     AppEventHandler.DetachGamingPanelListener(this);
 
                 }
@@ -64,7 +64,7 @@
 
         public override GamingPanel GetGamingPanel()
         {
-            return _CDU737PanelA10C;
+            return _cdu737PanelA10C;
         }
 
 
@@ -85,12 +85,12 @@
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
-            string[] lines = _CDU737PanelA10C.CDULines;
+            string[] lines = _cdu737PanelA10C.CDULines;
             Dispatcher?.BeginInvoke(
             (Action)
             (() =>
             {
-                CDU737UserControl.displayLines(lines, 10);
+                CDU737UserControl.DisplayLines(lines, 10);
             }
             ));
         }
