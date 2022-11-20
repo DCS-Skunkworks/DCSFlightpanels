@@ -630,7 +630,7 @@
             {
                 if (e.RemoteBindingHash == _streamDeckPanel.BindingHash)
                 {
-                    Dispatcher?.BeginInvoke((Action)(SetFormState));
+                    Dispatcher?.BeginInvoke(SetFormState);
                 }
             }
             catch (Exception ex)

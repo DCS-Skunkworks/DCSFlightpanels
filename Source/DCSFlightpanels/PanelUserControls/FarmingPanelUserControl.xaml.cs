@@ -140,7 +140,7 @@
             {
                 if (e.HidInstance.Equals(_farmingSidePanel.HIDInstance) && e.PanelType == GamingPanelEnum.FarmingPanel)
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogFarmingPanel.Text = string.Empty));
                 }
             }
@@ -156,7 +156,7 @@
             {
                 if (_farmingSidePanel.HIDInstance.Equals(e.HidInstance))
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                 }
             }
             catch (Exception ex)

@@ -263,7 +263,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     image.Tag = "RED";
                                 }
 
-                                Dispatcher?.Invoke((Action)Action);
+                                Dispatcher?.Invoke(Action);
                                 break;
                             }
                     }
@@ -282,7 +282,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstance))
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ55.Text = string.Empty));
                 }
             }
@@ -298,7 +298,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_switchPanelPZ55.HIDInstance == e.HidInstance)
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                 }
             }
             catch (Exception ex)

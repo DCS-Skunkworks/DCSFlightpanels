@@ -153,7 +153,7 @@
             {
                 if (e.HidInstance.Equals(_tpmPanel.HIDInstance) && e.PanelType == GamingPanelEnum.TPM)
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Text = string.Empty));
                 }
             }
@@ -169,7 +169,7 @@
             {
                 if (_tpmPanel.HIDInstance.Equals(e.HidInstance))
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                 }
             }
             catch (Exception ex)

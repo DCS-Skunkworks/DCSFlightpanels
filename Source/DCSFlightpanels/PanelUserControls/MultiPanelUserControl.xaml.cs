@@ -182,7 +182,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             if (e.HidInstance.Equals(_multiPanelPZ70.HIDInstance))
             {
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
             }
         }
         
@@ -192,7 +192,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.HidInstance.Equals(_multiPanelPZ70.HIDInstance) && e.PanelType == GamingPanelEnum.PZ70MultiPanel)
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = string.Empty));
                 }
             }

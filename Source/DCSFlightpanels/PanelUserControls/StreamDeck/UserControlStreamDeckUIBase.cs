@@ -481,7 +481,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             {
                 if (_streamDeckPanel.BindingHash == e.BindingHash && _lastShownLayer != e.SelectedLayerName)
                 {
-                    Dispatcher?.BeginInvoke((Action)(UIShowLayer));
+                    Dispatcher?.BeginInvoke(UIShowLayer);
                     _lastShownLayer = e.SelectedLayerName;
                 }
             }

@@ -147,7 +147,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
             CheckBoxTreatStringAsNumber.IsEnabled = RadioButtonStringSource.IsChecked == true;
 
-            CheckBoxUseFormula.IsEnabled = (RadioButtonIntegerSource.IsChecked == true) ||
+            CheckBoxUseFormula.IsEnabled = RadioButtonIntegerSource.IsChecked == true ||
                                            (RadioButtonStringSource.IsChecked == true && CheckBoxTreatStringAsNumber.IsChecked == true);
 
             if (RadioButtonIntegerSource.IsChecked == true)

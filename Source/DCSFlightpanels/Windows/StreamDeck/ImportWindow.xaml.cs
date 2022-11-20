@@ -539,17 +539,17 @@
                 {
                     if (streamDeckButton.Face.GetType() == typeof(DCSBIOSDecoder))
                     {
-                        var decoder = ((DCSBIOSDecoder)streamDeckButton.Face);
+                        var decoder = (DCSBIOSDecoder)streamDeckButton.Face;
                         decoder.SetImageFilePaths(filePath);
                     }
                     else if (streamDeckButton.Face.GetType() == typeof(FaceTypeImage))
                     {
-                        var faceTypeImage = ((FaceTypeImage)streamDeckButton.Face);
+                        var faceTypeImage = (FaceTypeImage)streamDeckButton.Face;
                         faceTypeImage.ImageFile = Path.Combine(filePath, Path.GetFileName(faceTypeImage.ImageFile));
                     }
                     else if (streamDeckButton.Face.GetType() == typeof(FaceTypeDCSBIOSOverlay))
                     {
-                        var faceTypeDCSBIOSOverlay = ((FaceTypeDCSBIOSOverlay)streamDeckButton.Face);
+                        var faceTypeDCSBIOSOverlay = (FaceTypeDCSBIOSOverlay)streamDeckButton.Face;
                         faceTypeDCSBIOSOverlay.BackgroundBitmapPath = Path.Combine(filePath, Path.GetFileName(faceTypeDCSBIOSOverlay.BackgroundBitmapPath));
                     }
                 }

@@ -104,7 +104,7 @@
                     return;
                 }
 
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
             }
             catch (Exception ex)
             {
@@ -124,7 +124,7 @@
                 if (e.PanelType == GamingPanelEnum.PZ69RadioPanel &&
                     e.HidInstance.Equals(_backlitPanelBIP.HIDInstance))
                 {
-                    Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                 }
             }
             catch (Exception ex)
@@ -144,7 +144,7 @@
 
                 if (_backlitPanelBIP.HIDInstance.Equals(e.HidInstance))
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                 }
             }
             catch (Exception ex)
@@ -250,7 +250,7 @@
             {
                 var newColor = PanelLEDColor.DARK;
                 var image = (Image)sender;
-                var currentColor = (PanelLEDColor)(Enum.Parse(typeof(PanelLEDColor), ((string)image.Tag)));
+                var currentColor = (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), (string)image.Tag);
                 if (currentColor == PanelLEDColor.DARK)
                 {
                     image.Source = _greenImage;

@@ -408,7 +408,7 @@
         {
             try
             {
-                var textBox = ((TextBox)sender);
+                var textBox = (TextBox)sender;
 
                 if (textBox.Text.Contains('.'))
                 {
