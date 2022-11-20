@@ -6,9 +6,9 @@
     public class ClickSpeedDetector
     {
         private readonly List<long> _clicksTimeTicksList = new();
-        private int _maxClicksToKeep { get; set; } = 200;
-        private int _defaultPeriod { get; set; } = 2000;
-        private int _clickCountThreshold { get; set; } = 20;
+        private readonly int _maxClicksToKeep  = 200;
+        private readonly int _defaultPeriod  = 2000;
+        private readonly int _clickCountThreshold;
 
         public ClickSpeedDetector(int upperClickThreshold)
         {

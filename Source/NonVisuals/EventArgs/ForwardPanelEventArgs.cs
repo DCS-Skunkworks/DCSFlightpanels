@@ -4,6 +4,6 @@
 
     public class ForwardPanelEventArgs : EventArgs
     {
-        public bool Forward { get; set; }
+        public bool Forward { get; init; }
     }
 }

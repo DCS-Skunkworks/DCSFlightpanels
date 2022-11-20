@@ -5,13 +5,13 @@
 
     public class PanelEventArgs : EventArgs
     {
-        public string HidInstance { get; set; }
+        public string HidInstance { get; init; }
 
-        public HIDSkeleton HidSkeleton { get; set; }
+        public HIDSkeleton HidSkeleton { get; init; }
         
-        public PanelEventType EventType { get; set; }
+        public PanelEventType EventType { get; init; }
 
-        public string OldHidInstance { get; set; }
+        public string OldHidInstance { get; init; }
     }
 
     public enum PanelEventType

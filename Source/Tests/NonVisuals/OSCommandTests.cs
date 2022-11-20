@@ -47,8 +47,10 @@ namespace Tests.NonVisuals
         [InlineData(" ABC 123 ", false)]
         public void IsEmpty_MustReturn_True_If_Command_Is_Empty_Or_Null(string commandValue, bool expectedReturn)
         {
-            OSCommand osCommand = new();
-            osCommand.Command = commandValue;
+            OSCommand osCommand = new()
+            {
+                Command = commandValue
+            };
             Assert.Equal(expectedReturn, osCommand.IsEmpty);
         }
 
@@ -61,8 +63,10 @@ namespace Tests.NonVisuals
         [InlineData(" ABC 123 ")]
         public void Name_MustReturn_Windows_Command_string_If_Name_Is_Empty_Or_Null(string nameValue)
         {
-            OSCommand osCommand = new();
-            osCommand.Name = nameValue;
+            OSCommand osCommand = new()
+            {
+                Name = nameValue
+            };
             string expected = nameValue;
             if (string.IsNullOrEmpty(nameValue))
                 expected = "Windows Command";

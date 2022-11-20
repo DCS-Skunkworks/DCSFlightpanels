@@ -7,10 +7,10 @@
 
     public class SwitchesChangedEventArgs : EventArgs
     {
-        public string HidInstance { get; set; }
+        public string HidInstance { get; init; }
 
-        public GamingPanelEnum PanelType { get; set; }
+        public GamingPanelEnum PanelType { get; init; }
 
-        public HashSet<object> Switches { get; set; }
+        public HashSet<object> Switches { get; init; }
     }
 }

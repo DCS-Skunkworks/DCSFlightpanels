@@ -137,13 +137,11 @@
             return OnDirtyNotificationEventHandler != null && OnDirtyNotificationEventHandler.GetInvocationList().Length > 0;
         }
 
-        public static void SenderNotifiesIsDirty(object sender, EnumStreamDeckButtonNames buttonName, string layerName, string bindingHash)
+        public static void SenderNotifiesIsDirty(object sender, string bindingHash)
         {
             var eventArguments = new StreamDeckDirtyNotificationArgs
             {
-                BindingHash = bindingHash,
-                ButtonName = buttonName,
-                LayerName = layerName
+                BindingHash = bindingHash
             };
 
             OnDirtyNotificationEventHandler?.Invoke(sender, eventArguments);

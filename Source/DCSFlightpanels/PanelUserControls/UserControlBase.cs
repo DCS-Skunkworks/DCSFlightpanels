@@ -44,6 +44,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             // Dispose of unmanaged resources.
             Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
         
         public virtual GamingPanel GetGamingPanel()

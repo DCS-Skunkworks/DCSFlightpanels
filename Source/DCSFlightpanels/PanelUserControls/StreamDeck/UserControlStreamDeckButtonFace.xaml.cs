@@ -206,7 +206,7 @@
         public void SetIsDirty()
         {
             IsDirty = true;
-            SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckButton, string.Empty, _streamDeckPanel.BindingHash);
+            SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckPanel.BindingHash);
         }
 
         private void FillControlLists()

@@ -170,7 +170,5 @@
         {
             return ColorTranslator.FromHtml(hexColor);
         }
-
-        public static string[] ProjectsInSolution = { "DCSFlightpanels", "NonVisuals", "DCS-BIOS", "ClassLibraryCommon" };
     }
 }

@@ -10,9 +10,9 @@ namespace NonVisuals.Panels.StreamDeck.Events
 
     public class ActionTypeChangedEventArgs : EventArgs
     {
-        public string BindingHash { get; set; }
-        public EnumStreamDeckActionType ActionType { get; set; }
-        public string TargetLayerName { get; set; }
+        public string BindingHash { get; init; }
+        public EnumStreamDeckActionType ActionType { get; init; }
+        public string TargetLayerName { get; init; }
     }
 
     /*
@@ -29,8 +29,8 @@ namespace NonVisuals.Panels.StreamDeck.Events
         /*
          * Show selected Button's configuration
          */
-        public string BindingHash { get; set; }
-        public StreamDeckButton SelectedButton { get; set; }
+        public string BindingHash { get; init; }
+        public StreamDeckButton SelectedButton { get; init; }
     }
 
     public class StreamDeckShowNewLayerArgs : EventArgs
@@ -38,8 +38,8 @@ namespace NonVisuals.Panels.StreamDeck.Events
         /*
          * Show new Layer's configuration
          */
-        public string BindingHash { get; set; }
-        public string SelectedLayerName { get; set; }
+        public string BindingHash { get; init; }
+        public string SelectedLayerName { get; init; }
     }
 
     public class RemoteStreamDeckShowNewLayerArgs : EventArgs
@@ -47,8 +47,8 @@ namespace NonVisuals.Panels.StreamDeck.Events
         /*
          * Show new Layer's configuration
          */
-        public string RemoteBindingHash { get; set; }
-        public string SelectedLayerName { get; set; }
+        public string RemoteBindingHash { get; init; }
+        public string SelectedLayerName { get; init; }
     }
 
     public class StreamDeckDirtyReportArgs : CancelEventArgs
@@ -57,7 +57,7 @@ namespace NonVisuals.Panels.StreamDeck.Events
          * Before change, unsaved configurations?
          * Cancel = true means there are...
          */
-        public string BindingHash { get; set; }
+        public string BindingHash { get; init; }
     }
 
     public class StreamDeckDirtyNotificationArgs : CancelEventArgs
@@ -65,10 +65,8 @@ namespace NonVisuals.Panels.StreamDeck.Events
         /*
          * Pro-active
          */
-        public string LayerName { get; set; }
-        public EnumStreamDeckButtonNames ButtonName { get; set; }
-        public bool UndoIsPossible { get; set; } = true;
-        public string BindingHash { get; set; }
+
+        public string BindingHash { get; init; }
     }
 
     public class StreamDeckClearSettingsArgs : EventArgs
@@ -81,17 +79,17 @@ namespace NonVisuals.Panels.StreamDeck.Events
 
     public class StreamDeckSyncConfigurationArgs : EventArgs
     {
-        public string BindingHash { get; set; }
+        public string BindingHash { get; init; }
     }
 
     public class StreamDeckConfigurationChangedArgs : EventArgs
     {
-        public string BindingHash { get; set; }
+        public string BindingHash { get; init; }
     }
 
     public class StreamDeckHideDecoderEventArgs : EventArgs
     {
-        public string BindingHash { get; set; }
+        public string BindingHash { get; init; }
         public string LayerName;
         public EnumStreamDeckButtonNames StreamDeckButtonName;
     }
