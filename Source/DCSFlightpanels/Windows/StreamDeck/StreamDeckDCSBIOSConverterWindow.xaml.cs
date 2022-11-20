@@ -15,7 +15,7 @@
     using NonVisuals.Panels.StreamDeck.Panels;
     using NonVisuals.Panels.StreamDeck;
 
-    public partial class StreamDeckDCSBIOSConverterWindow : Window, IIsDirty
+    public partial class StreamDeckDCSBIOSConverterWindow : IIsDirty
     {
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly EnumStreamDeckButtonNames _streamDeckButtonName;

@@ -11,7 +11,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     /// <summary>
     /// Interaction logic for StreamDeckLayerWindow.xaml
     /// </summary>
-    public partial class StreamDeckLayerWindow : Window
+    public partial class StreamDeckLayerWindow
     {
 
         private readonly List<StreamDeckLayer> _existingLayers = new();

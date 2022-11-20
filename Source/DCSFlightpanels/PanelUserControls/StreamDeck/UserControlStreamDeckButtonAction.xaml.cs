@@ -25,7 +25,7 @@
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonAction.xaml
     /// </summary>
-    public partial class UserControlStreamDeckButtonAction : UserControlBase, IIsDirty, INvStreamDeckListener
+    public partial class UserControlStreamDeckButtonAction : IIsDirty, INvStreamDeckListener
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly List<StreamDeckActionTextBox> _textBoxes = new();

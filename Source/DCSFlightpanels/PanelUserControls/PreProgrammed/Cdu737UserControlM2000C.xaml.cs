@@ -15,9 +15,7 @@
     /// Interaction logic for Cdu737UserControlM2000C.xaml
     /// </summary>
     /// 
-    public partial class Cdu737UserControlM2000C : UserControlBase,
-        IGamingPanelListener,
-        IGamingPanelUserControl
+    public partial class Cdu737UserControlM2000C : IGamingPanelListener, IGamingPanelUserControl
     {
         private readonly CDU737PanelM2000C _CDU737PanelM2000C;
 

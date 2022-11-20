@@ -9,7 +9,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         private static Mutex _mutex;
         private bool _hasHandle;

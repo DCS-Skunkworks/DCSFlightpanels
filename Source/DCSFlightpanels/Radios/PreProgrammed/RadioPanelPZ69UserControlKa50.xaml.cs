@@ -20,7 +20,7 @@
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlKa50.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlKa50 : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class RadioPanelPZ69UserControlKa50 : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69Ka50 _radioPanelPZ69;
 

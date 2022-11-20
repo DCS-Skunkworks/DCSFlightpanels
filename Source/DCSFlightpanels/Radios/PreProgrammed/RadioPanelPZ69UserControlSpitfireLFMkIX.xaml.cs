@@ -20,7 +20,7 @@
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlSpitfireLFMkIX.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlSpitfireLFMkIX : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class RadioPanelPZ69UserControlSpitfireLFMkIX : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69SpitfireLFMkIX _radioPanelPZ69;
 

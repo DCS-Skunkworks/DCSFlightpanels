@@ -8,7 +8,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for AboutFPWindow.xaml
     /// </summary>
-    public partial class AboutFpWindow : Window
+    public partial class AboutFpWindow
     {
         public AboutFpWindow()
         {

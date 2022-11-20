@@ -27,7 +27,7 @@
     using NonVisuals.Panels;
     using NonVisuals.HID;
 
-    public partial class RadioPanelPZ69UserControlGeneric : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class RadioPanelPZ69UserControlGeneric : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private const string UPPER_TEXT = "Upper Dial Profile : ";
         private const string LOWER_TEXT = "Lower Dial Profile : ";

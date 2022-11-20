@@ -16,7 +16,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for DCSBiosOutputWindow.xaml
     /// </summary>
-    public partial class DCSBiosOutputWindow : Window
+    public partial class DCSBiosOutputWindow
     {
         private DCSBIOSOutput _dcsBiosOutput;
         private readonly string _description;

@@ -21,7 +21,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for DCSBiosOutputFormulaWindow.xaml
     /// </summary>
-    public partial class DCSBiosOutputFormulaWindow : Window, IDcsBiosDataListener, IDisposable
+    public partial class DCSBiosOutputFormulaWindow : IDcsBiosDataListener, IDisposable
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;

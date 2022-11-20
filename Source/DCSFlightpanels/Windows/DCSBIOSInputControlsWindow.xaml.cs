@@ -13,7 +13,7 @@
     /// <summary>
     /// Interaction logic for DCSBIOSInputControlsWindow.xaml
     /// </summary>
-    public partial class DCSBIOSInputControlsWindow : Window, IIsDirty
+    public partial class DCSBIOSInputControlsWindow : IIsDirty
     {
         private readonly string _header;
         private List<DCSBIOSInput> _dcsbiosInputs = new();

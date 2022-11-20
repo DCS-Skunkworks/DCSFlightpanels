@@ -22,7 +22,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for JaceSandbox.xaml
     /// </summary>
-    public partial class JaceSandboxWindow : Window, IDcsBiosDataListener, IDisposable
+    public partial class JaceSandboxWindow : IDcsBiosDataListener, IDisposable
     {
         private readonly AutoResetEvent _autoResetEvent = new(false);
         private readonly string _typeToSearch = "Type to search control";

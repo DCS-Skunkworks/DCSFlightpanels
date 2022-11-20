@@ -14,7 +14,7 @@
     /// <summary>
     /// Interaction logic for SequenceWindow.xaml
     /// </summary>
-    public partial class KeySequenceWindow : Window, IIsDirty
+    public partial class KeySequenceWindow : IIsDirty
     {
         private readonly SortedList<int, IKeyPressInfo> _sortedList = new();
         private bool _isDirty;

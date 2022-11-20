@@ -11,7 +11,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for ChooseProfileModuleWindow.xaml
     /// </summary>
-    public partial class ChooseProfileModuleWindow : Window
+    public partial class ChooseProfileModuleWindow
     {
         private DCSFPProfile _dcsfpProfile;
 

@@ -19,7 +19,7 @@
     /// <summary>
     /// Interaction logic for ExportWindow.xaml
     /// </summary>
-    public partial class ImportWindow : Window, IDisposable
+    public partial class ImportWindow : IDisposable
     {
         private readonly string _bindingHash;
         private bool _formLoaded = false;

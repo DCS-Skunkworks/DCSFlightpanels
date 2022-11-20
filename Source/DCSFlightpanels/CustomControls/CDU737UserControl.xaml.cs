@@ -5,7 +5,7 @@ namespace DCSFlightpanels.CustomControls
     /// <summary>
     /// Logique d'interaction pour CDU737UserControl.xaml
     /// </summary>
-    public partial class CDU737UserControl : UserControl
+    public partial class CDU737UserControl
     {
         public CDU737UserControl()
         {

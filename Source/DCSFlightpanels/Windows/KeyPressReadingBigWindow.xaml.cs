@@ -17,7 +17,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for KeyPressWindow.xaml
     /// </summary>
-    public partial class KeyPressReadingBigWindow : Window, IIsDirty
+    public partial class KeyPressReadingBigWindow : IIsDirty
     {
         private bool _isDirty;
         private readonly bool _supportIndefinite;

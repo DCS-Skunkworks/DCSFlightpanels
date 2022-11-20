@@ -29,7 +29,7 @@
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
-    public partial class FarmingPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class FarmingPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
 
         private readonly FarmingSidePanel _farmingSidePanel;

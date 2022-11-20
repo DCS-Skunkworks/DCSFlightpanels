@@ -31,7 +31,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// Interaction logic for MultiPanelUserControl.xaml
     /// </summary>
 
-    public partial class MultiPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class MultiPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
 

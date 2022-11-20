@@ -23,7 +23,7 @@
     /// <summary>
     /// Interaction logic for StreamDeckUserControl.xaml
     /// </summary>
-    public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, INvStreamDeckListener
+    public partial class StreamDeckUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, INvStreamDeckListener
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly StreamDeckPanel _streamDeckPanel;

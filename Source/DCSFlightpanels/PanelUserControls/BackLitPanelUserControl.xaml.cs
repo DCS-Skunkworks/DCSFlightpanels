@@ -22,7 +22,7 @@
     /// <summary>
     /// Interaction logic for BackLitPanelUserControl.xaml
     /// </summary>
-    public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, ILedLightPanelListener
+    public partial class BackLitPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, ILedLightPanelListener
     {
         private readonly BacklitPanelBIP _backlitPanelBIP;
 

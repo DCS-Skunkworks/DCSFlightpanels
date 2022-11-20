@@ -9,7 +9,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     /// <summary>
     /// Interaction logic for UserControlStreamDeckUIMini.xaml
     /// </summary>
-    public partial class UserControlStreamDeckUIMini : UserControlStreamDeckUIBase
+    public partial class UserControlStreamDeckUIMini
     {
         public UserControlStreamDeckUIMini(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
         {

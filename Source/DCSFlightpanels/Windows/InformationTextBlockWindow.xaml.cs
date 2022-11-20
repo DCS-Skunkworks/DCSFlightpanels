@@ -8,7 +8,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for InformationWindow.xaml
     /// </summary>
-    public partial class InformationTextBlockWindow : Window
+    public partial class InformationTextBlockWindow
     {
         private readonly string _message;
 

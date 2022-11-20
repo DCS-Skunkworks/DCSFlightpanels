@@ -17,9 +17,7 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
     /// Logique d'interaction pour Cdu737UserControlAH64D.xaml
     /// </summary>
     /// 
-    public partial class Cdu737UserControlAH64D : UserControlBase,
-        IGamingPanelListener,
-        IGamingPanelUserControl
+    public partial class Cdu737UserControlAH64D : IGamingPanelListener, IGamingPanelUserControl
     {
         private readonly CDU737PanelAH64D _CDU737PanelAH64D;
 

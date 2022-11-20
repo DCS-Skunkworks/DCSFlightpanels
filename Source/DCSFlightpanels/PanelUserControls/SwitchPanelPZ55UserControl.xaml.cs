@@ -31,7 +31,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
-    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI, ILedLightPanelListener
+    public partial class SwitchPanelPZ55UserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI, ILedLightPanelListener
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;

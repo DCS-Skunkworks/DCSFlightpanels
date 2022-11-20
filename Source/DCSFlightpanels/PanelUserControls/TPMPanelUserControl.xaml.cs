@@ -29,7 +29,7 @@
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml
     /// </summary>
-    public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class TPMPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly TPMPanel _tpmPanel;
         private bool _once;

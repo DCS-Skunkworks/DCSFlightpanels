@@ -30,7 +30,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.
     /// </summary>
-    public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty, IDisposable, IDcsBiosDataListener
+    public partial class StreamDeckDCSBIOSDecoderWindow : IIsDirty, IDisposable, IDcsBiosDataListener
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";

@@ -16,7 +16,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for DCSBiosInputWindow.xaml
     /// </summary>
-    public partial class DCSBiosInputWindow : Window
+    public partial class DCSBiosInputWindow
     {
         private DCSBIOSInput _dcsBiosInput;
         private readonly string _description;
