@@ -30,10 +30,9 @@
         private readonly UserControlStreamDeckUIBase _uiButtonGrid;
         private string _comboBoxLayerTextComparison;
 
-        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
             

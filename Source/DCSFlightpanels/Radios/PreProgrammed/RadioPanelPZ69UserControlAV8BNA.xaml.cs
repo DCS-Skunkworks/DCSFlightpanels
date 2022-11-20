@@ -25,10 +25,9 @@
         private readonly RadioPanelPZ69AV8BNA _radioPanelPZ69;
         private bool _userControlLoaded;
 
-        public RadioPanelPZ69UserControlAV8BNA(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public RadioPanelPZ69UserControlAV8BNA(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69AV8BNA(hidSkeleton)

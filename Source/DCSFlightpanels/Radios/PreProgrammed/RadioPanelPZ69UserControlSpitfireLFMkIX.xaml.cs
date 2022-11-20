@@ -24,10 +24,9 @@
     {
         private readonly RadioPanelPZ69SpitfireLFMkIX _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlSpitfireLFMkIX(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public RadioPanelPZ69UserControlSpitfireLFMkIX(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69SpitfireLFMkIX(hidSkeleton)

@@ -24,10 +24,9 @@
     {
         private readonly RadioPanelPZ69FA18C _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlFA18C(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public RadioPanelPZ69UserControlFA18C(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69FA18C(hidSkeleton)

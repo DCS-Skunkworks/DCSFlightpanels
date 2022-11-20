@@ -35,10 +35,9 @@
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
 
 
-        public BackLitPanelUserControl(TabItem parentTabItem, HIDSkeleton hidSkeleton)
+        public BackLitPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
             
             AppEventHandler.AttachGamingPanelListener(this);

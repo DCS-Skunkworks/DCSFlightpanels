@@ -21,10 +21,9 @@
     {
         private readonly CDU737PanelFA18C _CDU737PanelFA18C;
 
-        public Cdu737UserControlFA18C(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public Cdu737UserControlFA18C(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
 
             _CDU737PanelFA18C = new CDU737PanelFA18C(hidSkeleton);
             //_HIDSkeleton = hidSkeleton;

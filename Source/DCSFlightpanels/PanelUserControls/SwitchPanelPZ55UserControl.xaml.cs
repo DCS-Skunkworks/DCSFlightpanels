@@ -43,11 +43,9 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly BitmapImage _greenImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
         private readonly BitmapImage _yellowImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
 
-        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-
-            ParentTabItem = parentTabItem;
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
             AppEventHandler.AttachGamingPanelListener(this);

@@ -17,27 +17,27 @@ namespace DCSFlightpanels
             {
                 if (DCSFPProfile.IsA10C(profile))
                 {
-                    return new Cdu737UserControlA10C(hidSkeleton, parentTabItem);
+                    return new Cdu737UserControlA10C(hidSkeleton);
                 }
                 if (DCSFPProfile.IsAH64D(profile))
                 {
-                    return new Cdu737UserControlAH64D(hidSkeleton, parentTabItem);
+                    return new Cdu737UserControlAH64D(hidSkeleton);
                 }
                 if (DCSFPProfile.IsFA18C(profile))
                 {
-                    return new Cdu737UserControlFA18C(hidSkeleton, parentTabItem);
+                    return new Cdu737UserControlFA18C(hidSkeleton);
                 }
                 if (DCSFPProfile.IsSA342(profile))
                 {
-                    return new Cdu737UserControlSA342(hidSkeleton, parentTabItem);
+                    return new Cdu737UserControlSA342(hidSkeleton);
                 }
                 if (DCSFPProfile.IsF14B(profile))
                 {
-                    return new Cdu737UserControlF14(hidSkeleton, parentTabItem);
+                    return new Cdu737UserControlF14(hidSkeleton);
                 }
                 if (DCSFPProfile.IsM2000C(profile))
                 {
-                    return new Cdu737UserControlM2000C(hidSkeleton, parentTabItem);
+                    return new Cdu737UserControlM2000C(hidSkeleton);
                 }
             }
 

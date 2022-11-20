@@ -23,10 +23,9 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
     {
         private readonly CDU737PanelAH64D _CDU737PanelAH64D;
 
-        public Cdu737UserControlAH64D(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public Cdu737UserControlAH64D(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
 
             _CDU737PanelAH64D = new CDU737PanelAH64D(hidSkeleton);
             

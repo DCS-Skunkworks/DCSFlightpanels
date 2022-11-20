@@ -33,10 +33,9 @@
         private bool _userControlLoaded;
         private bool _textBoxBillsSet;
 
-        public RadioPanelPZ69UserControlEmulator(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public RadioPanelPZ69UserControlEmulator(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             HideAllImages();
 

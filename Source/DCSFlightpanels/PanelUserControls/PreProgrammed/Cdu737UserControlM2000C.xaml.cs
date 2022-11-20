@@ -21,10 +21,9 @@
     {
         private readonly CDU737PanelM2000C _CDU737PanelM2000C;
 
-        public Cdu737UserControlM2000C(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public Cdu737UserControlM2000C(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
 
             _CDU737PanelM2000C = new CDU737PanelM2000C(hidSkeleton);
             AppEventHandler.AttachGamingPanelListener(this);

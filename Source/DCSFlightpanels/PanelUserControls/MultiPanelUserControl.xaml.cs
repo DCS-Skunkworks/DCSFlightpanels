@@ -38,10 +38,9 @@ namespace DCSFlightpanels.PanelUserControls
         private bool _textBoxBillsSet;
 
 
-        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public MultiPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
             AppEventHandler.AttachGamingPanelListener(this); 

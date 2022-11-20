@@ -37,10 +37,9 @@
         private bool _textBoxBillsSet;
         private bool _buttonBillsSet;
 
-        public RadioPanelPZ69UserControlGeneric(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public RadioPanelPZ69UserControlGeneric(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             HideAllImages();
 

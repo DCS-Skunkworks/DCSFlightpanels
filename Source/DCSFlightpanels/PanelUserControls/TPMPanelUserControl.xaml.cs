@@ -37,10 +37,9 @@
 
 
 
-        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public TPMPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             _tpmPanel = new TPMPanel(hidSkeleton);
 

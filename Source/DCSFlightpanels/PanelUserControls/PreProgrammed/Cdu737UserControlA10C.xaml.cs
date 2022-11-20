@@ -21,10 +21,9 @@
     {
         private readonly CDU737PanelA10C _CDU737PanelA10C;
 
-        public Cdu737UserControlA10C(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public Cdu737UserControlA10C(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
 
             _CDU737PanelA10C = new CDU737PanelA10C(hidSkeleton);
             //_HIDSkeleton = hidSkeleton;

@@ -39,11 +39,10 @@
 
 
 
-        public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public FarmingPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-
-            ParentTabItem = parentTabItem;
+            
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);
 
             AppEventHandler.AttachGamingPanelListener(this);
