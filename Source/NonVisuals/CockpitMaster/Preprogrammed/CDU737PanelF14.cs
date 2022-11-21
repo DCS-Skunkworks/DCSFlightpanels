@@ -30,47 +30,46 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         private DCSBIOSOutput _RIO_RADAR_PSTT;
 
         private int _currentHCUMode;
-        private string[] _HCUModes = new string[4]
+        private readonly string[] _hcuModes = new string[4]
         {
             "TID", "TCS", "RADAR", "DDD"
         };
 
         private int _currentWCSmode;
-        private string[] _CWSModes = new string[7] {
+        private readonly string[] _cwsModes = new string[7] {
             "TWS Auto","Puls Sch","TWS Man","PD Sch","PD STT","RWS","Puls Stt"
             };
 
         private bool _disposed;
-        private int _capPage = 0;
+        private int _capPage;
 
         private readonly string[] _categoryNames = { "BIT", "SPL", "NAV", "TAC DATA", "D/L", "TGT DATA" };
 
-        private readonly string[][] _categoryLabelPages = new string[12][]
-        {
+        private readonly string[][] _categoryLabelPages = {
             //              "-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-"
-            new string[5] { "-   disp        rcvr   -","-   cmptr       xmtr   -","- amcs conf    ant ir  -","- mas moat      stt    -","-   fault     spl test -"},
-            new string[5] { "      1          5      ","      2          6      ","      3          7      ","      4          8      ","    disp        nbr     "},
+            new[] { "-   disp        rcvr   -","-   cmptr       xmtr   -","- amcs conf    ant ir  -","- mas moat      stt    -","-   fault     spl test -"},
+            new[] { "      1          5      ","      2          6      ","      3          7      ","      4          8      ","    disp        nbr     "},
             
             //              "-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-"
-            new string[5] { "-   home                ","-    ift        bit    -","-   ip          obc    -","-   gss         maint  -","-   air to      obc    -"},
-            new string[5] { "  on heli               ","    menu    moving tgt  ","  to tgt        bit     ","                disp    ","    ground     displ    "},
+            new[] { "-   home                ","-    ift        bit    -","-   ip          obc    -","-   gss         maint  -","-   air to      obc    -"},
+            new[] { "  on heli               ","    menu    moving tgt  ","  to tgt        bit     ","                disp    ","    ground     displ    "},
 
             //              "-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-"
-            new string[5] { "-   own        tacan   -","- store hdg     rdr    -","- tarps nav     vis    -","-   wind        fix    -","-   tarps     mag var  -"},
-            new string[5] { "    a/c         fix     ","    align       fix     ","     fix        fix     ","  spd hdg      enable   ","               (hdg)    "},
+            new[] { "-   own        tacan   -","- store hdg     rdr    -","- tarps nav     vis    -","-   wind        fix    -","-   tarps     mag var  -"},
+            new[] { "    a/c         fix     ","    align       fix     ","     fix        fix     ","  spd hdg      enable   ","               (hdg)    "},
 
             
             //              "-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-"
-            new string[5] { "-  waypt        home   -","-  waypt         def   -","-  waypt        host   -","-   fix         surf   -","-    ip        pt to   -"},
-            new string[5] { "     1          base    ","     2           pt     ","     3          area    ","     pt         tgt     ","                 pt     "},
+            new[] { "-  waypt        home   -","-  waypt         def   -","-  waypt        host   -","-   fix         surf   -","-    ip        pt to   -"},
+            new[] { "     1          base    ","     2           pt     ","     3          area    ","     pt         tgt     ","                 pt     "},
 
             //              "-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-"
-            new string[5] { "-  wilco       point   -","-  cantco      engage  -","-   nav        flrp    -","-   tid        chaff   -","- f/f nav    f/f auto  -"},
-            new string[5] { "                        ","                        ","    grid                ","    avia       count    ","  update       rstt     "},
+            new[] { "-  wilco       point   -","-  cantco      engage  -","-   nav        flrp    -","-   tid        chaff   -","- f/f nav    f/f auto  -"},
+            new[] { "                        ","                        ","    grid                ","    avia       count    ","  update       rstt     "},
 
             //              "-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-"
-            new string[5] { "-   gnd        friend  -","-  do not        unk   -","-  ift aux      host   -","-   data        mult   -","-   test         sym   -"},
-            new string[5] { "    map                 ","   attack               ","   launch               ","    trans        tgt    ","    tgt       delete    "},
+            new[] { "-   gnd        friend  -","-  do not        unk   -","-  ift aux      host   -","-   data        mult   -","-   test         sym   -"},
+            new[] { "    map                 ","   attack               ","   launch               ","    trans        tgt    ","    tgt       delete    "},
 
         };
 
@@ -293,8 +292,8 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         private void updateCDU()
         {
             SetLine(0, string.Format("{0,-5} {1,-9}{2,9}",  
-                _HCUModes[_currentHCUMode] , 
-                _CWSModes[_currentWCSmode] ,
+                _hcuModes[_currentHCUMode] , 
+                _cwsModes[_currentWCSmode] ,
                 _categoryNames[_capPage]));
 
             // Display Columns for active CAP PAGE starting at line 2. 

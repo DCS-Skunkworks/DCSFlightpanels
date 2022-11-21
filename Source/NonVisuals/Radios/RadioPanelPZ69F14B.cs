@@ -1233,7 +1233,7 @@ namespace NonVisuals.Radios
                                     dial1OkTime = DateTime.Now.Ticks;
                                     var str = RIO_LINK4_TENS_DIAL_COMMAND + (_rioLink4TensCockpitFrequency < desiredPositionDial2 ? inc : dec);
                                     DCSBIOS.Send(str);
-                                    dial1SendCount++;
+                                    dial2SendCount++;
                                     Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 1);
                                 }
                                 Reset(ref dial1Timeout);
@@ -1253,7 +1253,7 @@ namespace NonVisuals.Radios
                                     dial1OkTime = DateTime.Now.Ticks;
                                     var str = RIO_LINK4_ONES_DIAL_COMMAND + (_rioLink4OnesCockpitFrequency < desiredPositionDial3 ? inc : dec);
                                     DCSBIOS.Send(str);
-                                    dial1SendCount++;
+                                    dial3SendCount++;
                                     Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 1);
                                 }
                                 Reset(ref dial1Timeout);

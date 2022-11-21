@@ -77,7 +77,7 @@ namespace NonVisuals.EventArgs
 
         public static void ForwardKeyPressEvent(object sender, bool doForwardActions)
         {
-            OnForwardPanelEventChanged?.Invoke(sender, new ForwardPanelEventArgs() { Forward = doForwardActions });
+            OnForwardPanelEventChanged?.Invoke(sender, new ForwardPanelEventArgs { Forward = doForwardActions });
         }
 
         public static void AttachForwardPanelEventListener(GamingPanel gamingPanel)
