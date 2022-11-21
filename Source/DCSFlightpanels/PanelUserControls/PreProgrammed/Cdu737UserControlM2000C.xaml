@@ -15,7 +15,7 @@
 
         <customControls:CDU737UserControl x:Name="CDU737UserControl" />
 
-        <StackPanel x:Name="LBL_Mappings" Orientation="Vertical" Width="566">
+        <StackPanel x:Name="LBLMappings" Orientation="Vertical" Width="566">
 
             <Label Content="M2000C PCN Mapping" FontSize="24" FontWeight="Bold" />
             <Image Height="272" Width="530" Source="/PanelUserControls/PreProgrammed/pcn-mapping.png"/>

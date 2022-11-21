@@ -13,7 +13,7 @@
     /// <summary>
     /// Interaction logic for BindingsMappingWindow.xaml
     /// </summary>
-    public partial class BindingsMappingWindow : Window
+    public partial class BindingsMappingWindow
     {
         private bool _formLoaded;
         private bool _isDirty;

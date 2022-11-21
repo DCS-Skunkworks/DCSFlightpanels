@@ -31,7 +31,7 @@
 
         public string ControlId
         {
-            get => _dcsbiosOutput == null ? string.Empty : _dcsbiosOutput.ControlId;
+            get => DCSBiosOutput == null ? string.Empty : DCSBiosOutput.ControlId;
         }
 
         public void ImportSettings(string settings)

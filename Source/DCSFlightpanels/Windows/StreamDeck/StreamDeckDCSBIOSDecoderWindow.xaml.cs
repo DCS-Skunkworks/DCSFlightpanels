@@ -30,7 +30,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.
     /// </summary>
-    public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty, IDisposable, IDcsBiosDataListener
+    public partial class StreamDeckDCSBIOSDecoderWindow : IIsDirty, IDisposable, IDcsBiosDataListener
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
@@ -40,10 +40,10 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private DataGrid _popupDataGrid;
         private IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private DCSBIOSControl _dcsbiosControl;
-        private bool _isDirty = false;
-        private bool _populatingData = false;
-        private DCSBIOSDecoder _dcsbiosDecoder = null;
-        private bool _closing = false;
+        private bool _isDirty;
+        private bool _populatingData;
+        private DCSBIOSDecoder _dcsbiosDecoder;
+        private bool _closing;
         private DispatcherTimer _dispatcherTimer;
 
         public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeckPanel)
@@ -147,7 +147,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
             CheckBoxTreatStringAsNumber.IsEnabled = RadioButtonStringSource.IsChecked == true;
 
-            CheckBoxUseFormula.IsEnabled = (RadioButtonIntegerSource.IsChecked == true) ||
+            CheckBoxUseFormula.IsEnabled = RadioButtonIntegerSource.IsChecked == true ||
                                            (RadioButtonStringSource.IsChecked == true && CheckBoxTreatStringAsNumber.IsChecked == true);
 
             if (RadioButtonIntegerSource.IsChecked == true)

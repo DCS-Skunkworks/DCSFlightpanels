@@ -24,7 +24,7 @@
         public abstract bool IsEmpty();
         public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs);
         public abstract void Clear();
-        public TextBox TextBox { get; set; }
+        protected TextBox TextBox { get; init; }
 
         public OSCommand OSCommandObject
         {

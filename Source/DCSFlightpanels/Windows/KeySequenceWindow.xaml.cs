@@ -14,11 +14,11 @@
     /// <summary>
     /// Interaction logic for SequenceWindow.xaml
     /// </summary>
-    public partial class KeySequenceWindow : Window, IIsDirty
+    public partial class KeySequenceWindow : IIsDirty
     {
         private readonly SortedList<int, IKeyPressInfo> _sortedList = new();
         private bool _isDirty;
-        private bool _formLoaded = false;
+        private bool _formLoaded;
         private readonly bool _supportIndefinite;
 
         public KeySequenceWindow(bool supportIndefinite = true)

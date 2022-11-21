@@ -5,7 +5,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for WindowsKeyAPIDialog.xaml
     /// </summary>
-    public partial class WindowsKeyAPIDialog : Window
+    public partial class WindowsKeyAPIDialog
     {
         public bool ShowAtStartUp;
 

@@ -6,8 +6,8 @@
 
     public class PanelInfoArgs : EventArgs
     {
-        public string HidInstance { get; set; }
+        public string HidInstance { get; init; }
 
-        public GamingPanelEnum PanelType { get; set; }
+        public GamingPanelEnum PanelType { get; init; }
     }
 }

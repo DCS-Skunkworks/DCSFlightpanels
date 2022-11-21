@@ -21,7 +21,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for DCSBiosOutputFormulaWindow.xaml
     /// </summary>
-    public partial class DCSBiosOutputFormulaWindow : Window, IDcsBiosDataListener, IDisposable
+    public partial class DCSBiosOutputFormulaWindow : IDcsBiosDataListener, IDisposable
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
@@ -41,7 +41,7 @@ namespace DCSFlightpanels.Windows
         private bool _limitDecimals;
         private int _decimalPlaces;
 
-        private bool _closing = false;
+        private bool _closing;
         private readonly bool _showDecimalSetting;
 
         public DCSBiosOutputFormulaWindow(string description, bool userEditsDescription = false, bool showDecimalSetting = false)
@@ -184,7 +184,7 @@ namespace DCSFlightpanels.Windows
             TextBoxFormula.IsEnabled = LabelFormula.IsEnabled;
             LabelResult.IsEnabled = LabelFormula.IsEnabled;
             ButtonTestFormula.IsEnabled = LabelFormula.IsEnabled;
-            ButtonOk.IsEnabled = (_dcsbiosControl == null && _dcsBiosOutput == null) || (_dcsbiosControl != null || (!string.IsNullOrWhiteSpace(TextBoxFormula.Text) && CheckBoxUseFormula.IsChecked == true));
+            ButtonOk.IsEnabled = (_dcsbiosControl == null && _dcsBiosOutput == null) || _dcsbiosControl != null || (!string.IsNullOrWhiteSpace(TextBoxFormula.Text) && CheckBoxUseFormula.IsChecked == true);
 
             if (_userEditsDescription && string.IsNullOrEmpty(TextBoxUserDescription.Text))
             {

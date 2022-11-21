@@ -15,18 +15,15 @@
     /// Interaction logic for Cdu737UserControlM2000C.xaml
     /// </summary>
     /// 
-    public partial class Cdu737UserControlM2000C : UserControlBase,
-        IGamingPanelListener,
-        IGamingPanelUserControl
+    public partial class Cdu737UserControlM2000C : IGamingPanelListener, IGamingPanelUserControl
     {
-        private readonly CDU737PanelM2000C _CDU737PanelM2000C;
+        private readonly CDU737PanelM2000C _cdu737PanelM2000C;
 
-        public Cdu737UserControlM2000C(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public Cdu737UserControlM2000C(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
 
-            _CDU737PanelM2000C = new CDU737PanelM2000C(hidSkeleton);
+            _cdu737PanelM2000C = new CDU737PanelM2000C(hidSkeleton);
             AppEventHandler.AttachGamingPanelListener(this);
 
             HideAllImages();
@@ -40,7 +37,7 @@
             {
                 if (disposing)
                 {
-                    _CDU737PanelM2000C.Dispose();
+                    _cdu737PanelM2000C.Dispose();
                     AppEventHandler.DetachGamingPanelListener(this);
 
                 }
@@ -65,7 +62,7 @@
 
         public override GamingPanel GetGamingPanel()
         {
-            return _CDU737PanelM2000C;
+            return _cdu737PanelM2000C;
         }
 
 
@@ -86,12 +83,12 @@
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
-            string[] lines = _CDU737PanelM2000C.CDULines;
+            string[] lines = _cdu737PanelM2000C.CDULines;
             Dispatcher?.BeginInvoke(
             (Action)
             (() =>
             {
-                CDU737UserControl.displayLines(lines, 10);
+                CDU737UserControl.DisplayLines(lines, 10);
             }
             ));
         }

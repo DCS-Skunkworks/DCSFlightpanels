@@ -33,10 +33,10 @@
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly List<StreamDeckFaceTextBox> _textBoxList = new();
         private readonly List<RadioButton> _radioButtonList = new();
-        private bool _isLoaded = false;
+        private bool _isLoaded;
         private EnumStreamDeckButtonNames _streamDeckButton;
         private StreamDeckPanel _streamDeckPanel;
-        public bool IsDirty { get; set; } = false;
+        public bool IsDirty { get; set; }
 
         public UserControlStreamDeckButtonFace()
         {
@@ -206,7 +206,7 @@
         public void SetIsDirty()
         {
             IsDirty = true;
-            SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckButton, string.Empty, _streamDeckPanel.BindingHash);
+            SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckPanel.BindingHash);
         }
 
         private void FillControlLists()
@@ -669,7 +669,7 @@
             {
                 if (_streamDeckPanel.BindingHash == e.RemoteBindingHash)
                 {
-                    Dispatcher?.BeginInvoke((Action) (SetFormState));
+                    Dispatcher?.BeginInvoke(SetFormState);
                 }
             }
             catch (Exception ex)

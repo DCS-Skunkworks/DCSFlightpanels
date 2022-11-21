@@ -15,11 +15,11 @@
 
         <customControls:CDU737UserControl x:Name="CDU737UserControl" />
 
-        <StackPanel x:Name="LBL_Mappings" Orientation="Vertical">
+        <StackPanel Orientation="Vertical">
         
             <Label Content="RIO CAP Mappings" FontSize="24" FontWeight="Bold" />
             
-            <Image x:Name="maping_rio" Height="380" Width="273" Source="/Images/rio-cap-f14.png"/>
+            <Image Height="380" Width="273" Source="/Images/rio-cap-f14.png"/>
             
             <Label Content="PREV PAGE and NEXT PAGE move the Rotrary" FontSize="10" FontWeight="Bold" />
             <Label Content="LSK means Left Shift Key, key on the left, numbered from top to bottom" FontSize="10" FontWeight="Bold" />
@@ -28,7 +28,7 @@
             
             <Label Content="HCU Mode Switching" FontSize="12" FontWeight="Bold" />
 
-            <Image x:Name="maping_HCU" Height="80" Width="300" Source="/PanelUserControls/PreProgrammed/hcu-modes-mapping.png"/>
+            <Image Height="80" Width="300" Source="/PanelUserControls/PreProgrammed/hcu-modes-mapping.png"/>
 
         </StackPanel>
     </StackPanel>

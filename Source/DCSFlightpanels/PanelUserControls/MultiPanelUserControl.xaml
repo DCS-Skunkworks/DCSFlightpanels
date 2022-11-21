@@ -11,7 +11,7 @@
     <UserControl.Resources>
     </UserControl.Resources>
     <Grid>
-        <Grid x:Name="PZ70Grid" >
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="26" />
                 <RowDefinition Height="240"/>

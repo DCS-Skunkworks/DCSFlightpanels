@@ -16,10 +16,10 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for KeyPressReadingWindow.xaml
     /// </summary>
-    public partial class KeyPressReadingSmallWindow : Window
+    public partial class KeyPressReadingSmallWindow
     {
-        private bool _isDirty = false;
-        private bool _loaded = false;
+        private bool _isDirty;
+        private bool _loaded;
         private KeyPressLength _keyPressLength;
         private readonly bool _supportIndefinite;
         private bool _doOpenRecording;

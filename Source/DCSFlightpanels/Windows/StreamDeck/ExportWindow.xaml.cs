@@ -16,9 +16,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
     /// <summary>
     /// Interaction logic for ExportWindow.xaml
     /// </summary>
-    public partial class ExportWindow : Window, IDisposable
+    public partial class ExportWindow : IDisposable
     {
-        private bool _formLoaded = false;
+        private bool _formLoaded;
         private readonly StreamDeckPanel _streamDeckPanel;
         private string _zipFileName = string.Empty;
 

@@ -17,18 +17,15 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
     /// Logique d'interaction pour Cdu737UserControlAH64D.xaml
     /// </summary>
     /// 
-    public partial class Cdu737UserControlAH64D : UserControlBase,
-        IGamingPanelListener,
-        IGamingPanelUserControl
+    public partial class Cdu737UserControlAH64D : IGamingPanelListener, IGamingPanelUserControl
     {
-        private readonly CDU737PanelAH64D _CDU737PanelAH64D;
+        private readonly CDU737PanelAH64D _cdu737PanelAH64D;
 
-        public Cdu737UserControlAH64D(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public Cdu737UserControlAH64D(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
 
-            _CDU737PanelAH64D = new CDU737PanelAH64D(hidSkeleton);
+            _cdu737PanelAH64D = new CDU737PanelAH64D(hidSkeleton);
             
             AppEventHandler.AttachGamingPanelListener(this);
 
@@ -43,7 +40,7 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
             {
                 if (disposing)
                 {
-                    _CDU737PanelAH64D.Dispose();
+                    _cdu737PanelAH64D.Dispose();
                     AppEventHandler.DetachGamingPanelListener(this);
 
                 }
@@ -71,7 +68,7 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
 
         public override GamingPanel GetGamingPanel()
         {
-            return _CDU737PanelAH64D;
+            return _cdu737PanelAH64D;
         }
 
 
@@ -92,11 +89,11 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
-            string[] lines = _CDU737PanelAH64D.CDULines;
+            string[] lines = _cdu737PanelAH64D.CDULines;
             Dispatcher?.BeginInvoke(
             (Action)
             (() => {
-                CDU737UserControl.displayLines(lines, 14);
+                CDU737UserControl.DisplayLines(lines, 14);
             }
             ));
 
@@ -104,11 +101,11 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
-            string[] lines = _CDU737PanelAH64D.CDULines;
+            string[] lines = _cdu737PanelAH64D.CDULines;
             Dispatcher?.BeginInvoke(
             (Action)
             (() => {
-                CDU737UserControl.displayLines(lines,14);
+                CDU737UserControl.DisplayLines(lines,14);
             }
             ));
 

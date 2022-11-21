@@ -31,7 +31,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
-    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI, ILedLightPanelListener
+    public partial class SwitchPanelPZ55UserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI, ILedLightPanelListener
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
@@ -43,11 +43,9 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly BitmapImage _greenImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
         private readonly BitmapImage _yellowImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
 
-        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-
-            ParentTabItem = parentTabItem;
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
             AppEventHandler.AttachGamingPanelListener(this);
@@ -265,7 +263,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     image.Tag = "RED";
                                 }
 
-                                Dispatcher?.Invoke((Action)Action);
+                                Dispatcher?.Invoke(Action);
                                 break;
                             }
                     }
@@ -284,7 +282,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstance))
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ55.Text = string.Empty));
                 }
             }
@@ -300,7 +298,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_switchPanelPZ55.HIDInstance == e.HidInstance)
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                 }
             }
             catch (Exception ex)

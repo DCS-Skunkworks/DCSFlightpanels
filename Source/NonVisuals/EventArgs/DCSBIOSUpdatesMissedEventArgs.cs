@@ -6,8 +6,8 @@
     {
         public string HidInstance { get; set; }
 
-        public GamingPanelEnum GamingPanelEnum { get; set; }
+        public GamingPanelEnum GamingPanelEnum { get; init; }
 
-        public int Count { get; set; }
+        public int Count { get; init; }
     }
 }

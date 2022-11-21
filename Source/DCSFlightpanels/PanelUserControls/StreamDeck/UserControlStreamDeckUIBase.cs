@@ -28,7 +28,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         protected readonly List<StreamDeckImage> ButtonImages = new();
         protected bool UserControlLoaded;
-        protected StreamDeckPanel _streamDeckPanel;
+        private StreamDeckPanel _streamDeckPanel;
         private string _lastShownLayer = string.Empty;
         private BillStreamDeckFace SelectedImageBill => (from image in ButtonImages where image.IsSelected select image.Bill).FirstOrDefault();
         private EnumStreamDeckButtonNames SelectedButtonName
@@ -481,7 +481,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             {
                 if (_streamDeckPanel.BindingHash == e.BindingHash && _lastShownLayer != e.SelectedLayerName)
                 {
-                    Dispatcher?.BeginInvoke((Action)(UIShowLayer));
+                    Dispatcher?.BeginInvoke(UIShowLayer);
                     _lastShownLayer = e.SelectedLayerName;
                 }
             }

@@ -152,7 +152,7 @@ namespace DCS_BIOS
                             }
                             catch (Exception ex)
                             {
-                                logger.Error(ex, $"**********Received (0x{data.ToString("x")})");
+                                logger.Error(ex, $"**********Received (0x{data:X}");
                             }
                         }
                     }

@@ -29,7 +29,7 @@
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
-    public partial class FarmingPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class FarmingPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
 
         private readonly FarmingSidePanel _farmingSidePanel;
@@ -39,11 +39,10 @@
 
 
 
-        public FarmingPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public FarmingPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-
-            ParentTabItem = parentTabItem;
+            
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);
 
             AppEventHandler.AttachGamingPanelListener(this);
@@ -141,7 +140,7 @@
             {
                 if (e.HidInstance.Equals(_farmingSidePanel.HIDInstance) && e.PanelType == GamingPanelEnum.FarmingPanel)
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogFarmingPanel.Text = string.Empty));
                 }
             }
@@ -157,7 +156,7 @@
             {
                 if (_farmingSidePanel.HIDInstance.Equals(e.HidInstance))
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                 }
             }
             catch (Exception ex)

@@ -14,7 +14,6 @@
         private string _bindingHash;
         private List<string> _settings = new(50);
         private string _jsonString = string.Empty;
-        private bool _hasBeenDeleted;
 
 
         public GenericPanelBinding()
@@ -81,14 +80,10 @@
         public GamingPanelEnum PanelType
         {
             get => _panelType;
-            set => _panelType = value;
+            init => _panelType = value;
         }
 
-        public bool HasBeenDeleted
-        {
-            get => _hasBeenDeleted;
-            set => _hasBeenDeleted = value;
-        }
+        public bool HasBeenDeleted { get; set; }
 
         public string JSONString
         {
@@ -184,17 +179,14 @@
 
     public class ModifiedGenericBinding
     {
-        private readonly GenericBindingStateEnum _state = GenericBindingStateEnum.Unknown;
-        private readonly GenericPanelBinding _genericPanelBinding;
-
         public ModifiedGenericBinding(GenericBindingStateEnum state, GenericPanelBinding genericPanelBinding)
         {
-            _state = state;
-            _genericPanelBinding = genericPanelBinding;
+            State = state;
+            GenericPanelBinding = genericPanelBinding;
         }
 
-        public GenericBindingStateEnum State => _state;
+        public GenericBindingStateEnum State { get; }
 
-        public GenericPanelBinding GenericPanelBinding => _genericPanelBinding;
+        public GenericPanelBinding GenericPanelBinding { get; }
     }
 }

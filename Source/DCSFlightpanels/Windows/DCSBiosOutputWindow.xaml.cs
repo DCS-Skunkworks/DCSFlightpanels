@@ -16,7 +16,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for DCSBiosOutputWindow.xaml
     /// </summary>
-    public partial class DCSBiosOutputWindow : Window
+    public partial class DCSBiosOutputWindow
     {
         private DCSBIOSOutput _dcsBiosOutput;
         private readonly string _description;
@@ -25,7 +25,7 @@ namespace DCSFlightpanels.Windows
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
-        private readonly bool _userEditsDescription = false;
+        private readonly bool _userEditsDescription;
 
         public DCSBiosOutputWindow(string description, bool userEditsDescription = false)
         {
@@ -54,7 +54,7 @@ namespace DCSFlightpanels.Windows
             {
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
-                _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));
+                _dataGridValues = (DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues");
                 LabelDescription.Content = _description;
                 ShowValues2();
                 _formLoaded = true;

@@ -17,7 +17,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for KeyPressWindow.xaml
     /// </summary>
-    public partial class KeyPressReadingBigWindow : Window, IIsDirty
+    public partial class KeyPressReadingBigWindow : IIsDirty
     {
         private bool _isDirty;
         private readonly bool _supportIndefinite;
@@ -49,7 +49,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                if (((KeyPressLength)ComboBoxKeyPressTime.SelectedItem) == KeyPressLength.Indefinite && !_supportIndefinite)
+                if ((KeyPressLength)ComboBoxKeyPressTime.SelectedItem == KeyPressLength.Indefinite && !_supportIndefinite)
                 {
                     MessageBox.Show("Indefinite is not supported for this device.", "Invalid value", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;

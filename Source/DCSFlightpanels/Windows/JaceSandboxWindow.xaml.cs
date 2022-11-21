@@ -22,22 +22,22 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for JaceSandbox.xaml
     /// </summary>
-    public partial class JaceSandboxWindow : Window, IDcsBiosDataListener, IDisposable
+    public partial class JaceSandboxWindow : IDcsBiosDataListener, IDisposable
     {
         private readonly AutoResetEvent _autoResetEvent = new(false);
         private readonly string _typeToSearch = "Type to search control";
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private readonly JaceExtended _jaceExtended = new();
-        private DCSBIOSOutput _dcsbiosOutput1 = null;
-        private DCSBIOSOutput _dcsbiosOutput2 = null;
-        private DCSBIOSOutput _dcsbiosOutput3 = null;
-        private DCSBIOSOutput _dcsbiosOutput4 = null;
-        private DCSBIOSOutput _dcsbiosOutput5 = null;
-        private volatile uint _value1 = UInt32.MaxValue;
-        private volatile uint _value2 = UInt32.MaxValue;
-        private volatile uint _value3 = UInt32.MaxValue;
-        private volatile uint _value4 = UInt32.MaxValue;
-        private volatile uint _value5 = UInt32.MaxValue;
+        private DCSBIOSOutput _dcsbiosOutput1;
+        private DCSBIOSOutput _dcsbiosOutput2;
+        private DCSBIOSOutput _dcsbiosOutput3;
+        private DCSBIOSOutput _dcsbiosOutput4;
+        private DCSBIOSOutput _dcsbiosOutput5;
+        private volatile uint _value1 = uint.MaxValue;
+        private volatile uint _value2 = uint.MaxValue;
+        private volatile uint _value3 = uint.MaxValue;
+        private volatile uint _value4 = uint.MaxValue;
+        private volatile uint _value5 = uint.MaxValue;
         private bool _dataChanged;
         private bool _formLoaded;
         private bool _isLooping;
@@ -433,7 +433,7 @@ namespace DCSFlightpanels.Windows
             {
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
-                _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));
+                _dataGridValues = (DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues");
 
                 _formLoaded = true;
                 SetFormState();

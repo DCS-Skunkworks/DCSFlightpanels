@@ -29,7 +29,7 @@
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml
     /// </summary>
-    public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class TPMPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly TPMPanel _tpmPanel;
         private bool _once;
@@ -37,10 +37,9 @@
 
 
 
-        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public TPMPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             _tpmPanel = new TPMPanel(hidSkeleton);
 
@@ -154,7 +153,7 @@
             {
                 if (e.HidInstance.Equals(_tpmPanel.HIDInstance) && e.PanelType == GamingPanelEnum.TPM)
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Text = string.Empty));
                 }
             }
@@ -170,7 +169,7 @@
             {
                 if (_tpmPanel.HIDInstance.Equals(e.HidInstance))
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                 }
             }
             catch (Exception ex)

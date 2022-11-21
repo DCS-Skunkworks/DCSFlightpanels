@@ -26,17 +26,16 @@
     using NonVisuals.Panels;
     using NonVisuals.HID;
 
-    public partial class RadioPanelPZ69UserControlEmulator : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class RadioPanelPZ69UserControlEmulator : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly List<Key> _allowedKeys = new(){ Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
         private readonly RadioPanelPZ69Emulator _radioPanelPZ69;
         private bool _userControlLoaded;
         private bool _textBoxBillsSet;
 
-        public RadioPanelPZ69UserControlEmulator(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public RadioPanelPZ69UserControlEmulator(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             HideAllImages();
 
@@ -409,7 +408,7 @@
         {
             try
             {
-                var textBox = ((TextBox)sender);
+                var textBox = (TextBox)sender;
 
                 if (textBox.Text.Contains('.'))
                 {

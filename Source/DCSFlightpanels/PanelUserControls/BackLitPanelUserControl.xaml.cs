@@ -22,7 +22,7 @@
     /// <summary>
     /// Interaction logic for BackLitPanelUserControl.xaml
     /// </summary>
-    public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, ILedLightPanelListener
+    public partial class BackLitPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, ILedLightPanelListener
     {
         private readonly BacklitPanelBIP _backlitPanelBIP;
 
@@ -35,10 +35,9 @@
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
 
 
-        public BackLitPanelUserControl(TabItem parentTabItem, HIDSkeleton hidSkeleton)
+        public BackLitPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
             
             AppEventHandler.AttachGamingPanelListener(this);
@@ -105,7 +104,7 @@
                     return;
                 }
 
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
             }
             catch (Exception ex)
             {
@@ -125,7 +124,7 @@
                 if (e.PanelType == GamingPanelEnum.PZ69RadioPanel &&
                     e.HidInstance.Equals(_backlitPanelBIP.HIDInstance))
                 {
-                    Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                 }
             }
             catch (Exception ex)
@@ -145,7 +144,7 @@
 
                 if (_backlitPanelBIP.HIDInstance.Equals(e.HidInstance))
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                 }
             }
             catch (Exception ex)
@@ -251,7 +250,7 @@
             {
                 var newColor = PanelLEDColor.DARK;
                 var image = (Image)sender;
-                var currentColor = (PanelLEDColor)(Enum.Parse(typeof(PanelLEDColor), ((string)image.Tag)));
+                var currentColor = (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), (string)image.Tag);
                 if (currentColor == PanelLEDColor.DARK)
                 {
                     image.Source = _greenImage;

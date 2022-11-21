@@ -31,17 +31,16 @@ namespace DCSFlightpanels.PanelUserControls
     /// Interaction logic for MultiPanelUserControl.xaml
     /// </summary>
 
-    public partial class MultiPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class MultiPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
 
         private bool _textBoxBillsSet;
 
 
-        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public MultiPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
             AppEventHandler.AttachGamingPanelListener(this); 
@@ -183,7 +182,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             if (e.HidInstance.Equals(_multiPanelPZ70.HIDInstance))
             {
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
             }
         }
         
@@ -193,7 +192,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.HidInstance.Equals(_multiPanelPZ70.HIDInstance) && e.PanelType == GamingPanelEnum.PZ70MultiPanel)
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke(ShowGraphicConfiguration);
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = string.Empty));
                 }
             }

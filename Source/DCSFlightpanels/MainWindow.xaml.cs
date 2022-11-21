@@ -59,7 +59,7 @@
         private ProfileHandler _profileHandler;
         private DCSBIOS _dcsBios;
         private bool _disablePanelEventsFromBeingRouted;
-        private bool _isLoaded = false;
+        private bool _isLoaded;
 
         public MainWindow()
         {
@@ -78,7 +78,7 @@
         }
 
         #region IDisposable Support
-        private bool _hasBeenCalledAlready = false; // To detect redundant calls
+        private bool _hasBeenCalledAlready; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
         {
@@ -397,7 +397,7 @@
                     case GamingPanelEnum.PZ55SwitchPanel:
                         {
                             var tabItem = new TabItem { Header = "PZ55" };
-                            var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton, tabItem);
+                            var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton);
                             _panelUserControls.Add(switchPanelPZ55UserControl);
                             tabItem.Content = switchPanelPZ55UserControl;
                             TabControlPanels.Items.Add(tabItem);
@@ -410,7 +410,7 @@
                     case GamingPanelEnum.PZ70MultiPanel:
                         {
                             var tabItem = new TabItem { Header = "PZ70" };
-                            var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem);
+                            var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton);
                             _panelUserControls.Add(multiPanelUserControl);
                             tabItem.Content = multiPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
@@ -423,7 +423,7 @@
                     case GamingPanelEnum.BackLitPanel:
                         {
                             var tabItem = new TabItem { Header = "B.I.P." };
-                            var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, hidSkeleton);
+                            var backLitPanelUserControl = new BackLitPanelUserControl(hidSkeleton);
                             _panelUserControls.Add(backLitPanelUserControl);
                             tabItem.Content = backLitPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
@@ -436,7 +436,7 @@
                     case GamingPanelEnum.TPM:
                         {
                             var tabItem = new TabItem { Header = "TPM" };
-                            var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem);
+                            var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton);
                             _panelUserControls.Add(tpmPanelUserControl);
                             tabItem.Content = tpmPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
@@ -453,7 +453,7 @@
                     case GamingPanelEnum.StreamDeckMK2:
                         {
                             var tabItemStreamDeck = new TabItem { Header = hidSkeleton.GamingPanelType.GetEnumDescriptionField() };
-                            var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.GamingPanelType, hidSkeleton, tabItemStreamDeck);
+                            var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.GamingPanelType, hidSkeleton);
                             _panelUserControls.Add(streamDeckUserControl);
                             tabItemStreamDeck.Content = streamDeckUserControl;
                             TabControlPanels.Items.Add(tabItemStreamDeck);
@@ -467,7 +467,7 @@
                     case GamingPanelEnum.FarmingPanel:
                         {
                             var tabItem = new TabItem { Header = "Side Panel" };
-                            var farmingSidePanelUserControl = new FarmingPanelUserControl(hidSkeleton, tabItem);
+                            var farmingSidePanelUserControl = new FarmingPanelUserControl(hidSkeleton);
                             _panelUserControls.Add(farmingSidePanelUserControl);
                             tabItem.Content = farmingSidePanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
@@ -482,7 +482,7 @@
                             var tabItem = new TabItem { Header = "PZ69" };
                             if (DCSFPProfile.IsKeyEmulator(_profileHandler.Profile))
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -492,7 +492,7 @@
                             }
                             else if (DCSFPProfile.IsA10C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -502,7 +502,7 @@
                             }
                             else if (DCSFPProfile.IsUH1H(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlUH1H(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlUH1H(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -512,7 +512,7 @@
                             }
                             else if (DCSFPProfile.IsMiG21Bis(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMiG21Bis(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMiG21Bis(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -522,7 +522,7 @@
                             }
                             else if (DCSFPProfile.IsKa50(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlKa50(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlKa50(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -532,7 +532,7 @@
                             }
                             else if (DCSFPProfile.IsMi8MT(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi8(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi8(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -542,7 +542,7 @@
                             }
                             else if (DCSFPProfile.IsBf109K4(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlBf109(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlBf109(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -552,7 +552,7 @@
                             }
                             else if (DCSFPProfile.IsFW190D9(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFw190(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFw190(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -562,7 +562,7 @@
                             }
                             else if (DCSFPProfile.IsP51D(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP51D(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP51D(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -572,7 +572,7 @@
                             }
                             else if (DCSFPProfile.IsF86F(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF86F(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF86F(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -582,7 +582,7 @@
                             }
                             else if (DCSFPProfile.IsSpitfireLFMkIX(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSpitfireLFMkIX(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSpitfireLFMkIX(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -592,7 +592,7 @@
                             }
                             else if (DCSFPProfile.IsAJS37(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAJS37(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAJS37(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -602,7 +602,7 @@
                             }
                             else if (DCSFPProfile.IsSA342(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSA342(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSA342(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -612,7 +612,7 @@
                             }
                             else if (DCSFPProfile.IsFA18C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFA18C(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFA18C(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -622,7 +622,7 @@
                             }
                             else if (DCSFPProfile.IsM2000C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlM2000C(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlM2000C(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -632,7 +632,7 @@
                             }
                             else if (DCSFPProfile.IsF5E(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF5E(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF5E(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -642,7 +642,7 @@
                             }
                             else if (DCSFPProfile.IsF14B(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF14B(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF14B(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -652,7 +652,7 @@
                             }
                             else if (DCSFPProfile.IsAV8B(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAV8BNA(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAV8BNA(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -662,7 +662,7 @@
                             }
                             else if (DCSFPProfile.IsP47D(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP47D(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP47D(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -672,7 +672,7 @@
                             }
                             else if (DCSFPProfile.IsMi24P(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi24P(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi24P(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
@@ -682,7 +682,7 @@
                             }
                             else
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlGeneric(hidSkeleton, tabItem);
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlGeneric(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);

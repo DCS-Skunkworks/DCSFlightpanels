@@ -6,6 +6,6 @@ namespace NonVisuals.EventArgs
 
     public class ProfileHandlerEventArgs : EventArgs
     {
-        public IProfileHandler ProfileHandlerCaller { get; set; }
+        public IProfileHandler ProfileHandlerCaller { get; init; }
     }
 }

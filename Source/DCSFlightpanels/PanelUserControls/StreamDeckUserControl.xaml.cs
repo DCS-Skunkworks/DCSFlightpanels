@@ -23,17 +23,16 @@
     /// <summary>
     /// Interaction logic for StreamDeckUserControl.xaml
     /// </summary>
-    public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, INvStreamDeckListener
+    public partial class StreamDeckUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, INvStreamDeckListener
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly UserControlStreamDeckUIBase _uiButtonGrid;
         private string _comboBoxLayerTextComparison;
 
-        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
             
@@ -631,7 +630,7 @@
             {
                 if (e.RemoteBindingHash == _streamDeckPanel.BindingHash)
                 {
-                    Dispatcher?.BeginInvoke((Action)(SetFormState));
+                    Dispatcher?.BeginInvoke(SetFormState);
                 }
             }
             catch (Exception ex)

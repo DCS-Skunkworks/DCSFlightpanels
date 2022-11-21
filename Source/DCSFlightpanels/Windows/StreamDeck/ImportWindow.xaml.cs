@@ -19,10 +19,10 @@
     /// <summary>
     /// Interaction logic for ExportWindow.xaml
     /// </summary>
-    public partial class ImportWindow : Window, IDisposable
+    public partial class ImportWindow : IDisposable
     {
         private readonly string _bindingHash;
-        private bool _formLoaded = false;
+        private bool _formLoaded;
         private List<ButtonExport> _buttonExports = new();
         private string _extractedFilesFolder = string.Empty;
 
@@ -539,17 +539,17 @@
                 {
                     if (streamDeckButton.Face.GetType() == typeof(DCSBIOSDecoder))
                     {
-                        var decoder = ((DCSBIOSDecoder)streamDeckButton.Face);
+                        var decoder = (DCSBIOSDecoder)streamDeckButton.Face;
                         decoder.SetImageFilePaths(filePath);
                     }
                     else if (streamDeckButton.Face.GetType() == typeof(FaceTypeImage))
                     {
-                        var faceTypeImage = ((FaceTypeImage)streamDeckButton.Face);
+                        var faceTypeImage = (FaceTypeImage)streamDeckButton.Face;
                         faceTypeImage.ImageFile = Path.Combine(filePath, Path.GetFileName(faceTypeImage.ImageFile));
                     }
                     else if (streamDeckButton.Face.GetType() == typeof(FaceTypeDCSBIOSOverlay))
                     {
-                        var faceTypeDCSBIOSOverlay = ((FaceTypeDCSBIOSOverlay)streamDeckButton.Face);
+                        var faceTypeDCSBIOSOverlay = (FaceTypeDCSBIOSOverlay)streamDeckButton.Face;
                         faceTypeDCSBIOSOverlay.BackgroundBitmapPath = Path.Combine(filePath, Path.GetFileName(faceTypeDCSBIOSOverlay.BackgroundBitmapPath));
                     }
                 }

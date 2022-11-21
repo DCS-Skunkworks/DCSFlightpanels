@@ -15,18 +15,16 @@
     /// Interaction logic for Cdu737UserControlF14.xaml
     /// </summary>
     /// 
-    public partial class Cdu737UserControlF14 : UserControlBase,
-        IGamingPanelListener,
+    public partial class Cdu737UserControlF14 : IGamingPanelListener,
         IGamingPanelUserControl
     {
-        private readonly CDU737PanelF14 _CDU737PanelF14;
+        private readonly CDU737PanelF14 _cdu737PanelF14;
 
-        public Cdu737UserControlF14(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public Cdu737UserControlF14(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
 
-            _CDU737PanelF14 = new CDU737PanelF14(hidSkeleton);
+            _cdu737PanelF14 = new CDU737PanelF14(hidSkeleton);
             //_HIDSkeleton = hidSkeleton;
             AppEventHandler.AttachGamingPanelListener(this);
 
@@ -41,7 +39,7 @@
             {
                 if (disposing)
                 {
-                    _CDU737PanelF14.Dispose();
+                    _cdu737PanelF14.Dispose();
                     AppEventHandler.DetachGamingPanelListener(this);
 
                 }
@@ -66,7 +64,7 @@
 
         public override GamingPanel GetGamingPanel()
         {
-            return _CDU737PanelF14;
+            return _cdu737PanelF14;
         }
 
 
@@ -87,12 +85,12 @@
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
-            string[] lines = _CDU737PanelF14.CDULines;
+            string[] lines = _cdu737PanelF14.CDULines;
             Dispatcher?.BeginInvoke(
             (Action)
             (() =>
             {
-                CDU737UserControl.displayLines(lines, 10);
+                CDU737UserControl.DisplayLines(lines, 10);
             }
             ));
         }

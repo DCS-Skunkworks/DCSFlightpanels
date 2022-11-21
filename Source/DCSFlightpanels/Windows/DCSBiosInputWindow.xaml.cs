@@ -16,7 +16,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for DCSBiosInputWindow.xaml
     /// </summary>
-    public partial class DCSBiosInputWindow : Window
+    public partial class DCSBiosInputWindow
     {
         private DCSBIOSInput _dcsBiosInput;
         private readonly string _description;
@@ -61,7 +61,7 @@ namespace DCSFlightpanels.Windows
                 LabelProfileDescription.Content = ProfileHandler.ActiveDCSFPProfile.Description;
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
-                _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));
+                _dataGridValues = (DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues");
                 LabelDescription.Content = _description;
                 ShowValues1();
                 ShowValues2();

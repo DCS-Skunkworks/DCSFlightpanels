@@ -8,7 +8,7 @@
     /// <summary>
     /// Interaction logic for JaceHelpWindow.xaml
     /// </summary>
-    public partial class JaceHelpWindow : Window
+    public partial class JaceHelpWindow
     {
         public JaceHelpWindow()
         {

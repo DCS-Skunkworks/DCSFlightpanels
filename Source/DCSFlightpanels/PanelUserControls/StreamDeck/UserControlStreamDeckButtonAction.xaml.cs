@@ -25,16 +25,16 @@
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonAction.xaml
     /// </summary>
-    public partial class UserControlStreamDeckButtonAction : UserControlBase, IIsDirty, INvStreamDeckListener
+    public partial class UserControlStreamDeckButtonAction : IIsDirty, INvStreamDeckListener
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly List<StreamDeckActionTextBox> _textBoxes = new();
 
         private StreamDeckButton _streamDeckButton;
-        private bool _isLoaded = false;
+        private bool _isLoaded;
         private StreamDeckPanel _streamDeckPanel;
 
-        public bool IsDirty { get; set; } = false;
+        public bool IsDirty { get; set; }
 
         public UserControlStreamDeckButtonAction()
         {
@@ -258,7 +258,7 @@
         public void SetIsDirty()
         {
             IsDirty = true;
-            SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckButton.StreamDeckButtonName, string.Empty, _streamDeckPanel.BindingHash);
+            SDEventHandler.SenderNotifiesIsDirty(this, _streamDeckPanel.BindingHash);
         }
 
         public bool HasConfig
@@ -1060,7 +1060,7 @@
             {
                 if (_streamDeckPanel.BindingHash == e.RemoteBindingHash)
                 {
-                    Dispatcher?.BeginInvoke((Action)(SetFormState));
+                    Dispatcher?.BeginInvoke(SetFormState);
                 }
             }
             catch (Exception ex)

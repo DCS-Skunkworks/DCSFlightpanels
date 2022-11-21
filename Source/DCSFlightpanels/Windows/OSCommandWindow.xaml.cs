@@ -11,9 +11,9 @@
     /// <summary>
     /// Interaction logic for OSCommandWindow.xaml
     /// </summary>
-    public partial class OSCommandWindow : Window, IIsDirty
+    public partial class OSCommandWindow : IIsDirty
     {
-        private bool _isLoaded = false;
+        private bool _isLoaded;
         private OSCommand _operatingSystemCommand;
         private bool _isDirty;
 

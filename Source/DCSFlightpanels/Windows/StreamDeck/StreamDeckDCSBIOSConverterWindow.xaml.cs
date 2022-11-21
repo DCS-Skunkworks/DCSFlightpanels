@@ -15,12 +15,12 @@
     using NonVisuals.Panels.StreamDeck.Panels;
     using NonVisuals.Panels.StreamDeck;
 
-    public partial class StreamDeckDCSBIOSConverterWindow : Window, IIsDirty
+    public partial class StreamDeckDCSBIOSConverterWindow : IIsDirty
     {
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly EnumStreamDeckButtonNames _streamDeckButtonName;
-        private bool _isLoaded = false;
-        private DCSBIOSConverter _dcsbiosConverter = null;
+        private bool _isLoaded;
+        private DCSBIOSConverter _dcsbiosConverter;
         private bool _isDirty;
 
         public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, StreamDeckPanel streamDeckPanel)

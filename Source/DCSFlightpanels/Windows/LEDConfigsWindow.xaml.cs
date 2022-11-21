@@ -13,7 +13,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for LEDConfigsWindow.xaml
     /// </summary>
-    public partial class LEDConfigsWindow : Window
+    public partial class LEDConfigsWindow
     {
         private List<DcsOutputAndColorBinding> _colorOutputBindings;
         private readonly string _description;

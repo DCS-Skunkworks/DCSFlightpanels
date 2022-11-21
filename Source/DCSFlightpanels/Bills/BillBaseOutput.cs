@@ -9,6 +9,6 @@ namespace DCSFlightpanels.Bills
         public abstract bool IsEmpty();
         public abstract void Clear();
 
-        public TextBox TextBox { get; set; }
+        public TextBox TextBox { get; init; }
     }
 }

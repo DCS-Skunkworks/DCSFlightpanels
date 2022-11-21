@@ -13,14 +13,14 @@
     /// <summary>
     /// Interaction logic for DCSBIOSInputControlsWindow.xaml
     /// </summary>
-    public partial class DCSBIOSInputControlsWindow : Window, IIsDirty
+    public partial class DCSBIOSInputControlsWindow : IIsDirty
     {
         private readonly string _header;
         private List<DCSBIOSInput> _dcsbiosInputs = new();
         private string _description;
-        private bool _isDirty = false;
-        private readonly bool _showSequenced = false;
-        private bool _isSequenced = false;
+        private bool _isDirty;
+        private readonly bool _showSequenced;
+        private bool _isSequenced;
 
         public DCSBIOSInputControlsWindow(string header, string description, bool isSequenced, bool showSequenced)
         {
@@ -260,7 +260,7 @@
         public bool IsSequenced
         {
             get => _isSequenced;
-            set
+            init
             {
                 CheckBoxIsSequenced.IsChecked = value;
                 _isSequenced = value;

@@ -20,14 +20,13 @@
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlFw190.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlFw190 : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class RadioPanelPZ69UserControlFw190 : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69Fw190 _radioPanelPZ69;
 
-        public RadioPanelPZ69UserControlFw190(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public RadioPanelPZ69UserControlFw190(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69Fw190(hidSkeleton)

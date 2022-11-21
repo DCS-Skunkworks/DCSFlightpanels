@@ -27,7 +27,7 @@
     using NonVisuals.Panels;
     using NonVisuals.HID;
 
-    public partial class RadioPanelPZ69UserControlGeneric : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class RadioPanelPZ69UserControlGeneric : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private const string UPPER_TEXT = "Upper Dial Profile : ";
         private const string LOWER_TEXT = "Lower Dial Profile : ";
@@ -37,10 +37,9 @@
         private bool _textBoxBillsSet;
         private bool _buttonBillsSet;
 
-        public RadioPanelPZ69UserControlGeneric(HIDSkeleton hidSkeleton, TabItem parentTabItem)
+        public RadioPanelPZ69UserControlGeneric(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            ParentTabItem = parentTabItem;
             
             HideAllImages();
 
@@ -366,7 +365,7 @@
         {
             try
             {
-                var textBox = ((TextBox)sender);
+                var textBox = (TextBox)sender;
 
                 if (textBox.Text.Contains('.'))
                 {

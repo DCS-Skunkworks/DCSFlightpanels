@@ -6,9 +6,9 @@ namespace NonVisuals.EventArgs
 
     public class ProfileEventArgs : EventArgs
     {
-        public GenericPanelBinding PanelBinding { get; set; }
+        public GenericPanelBinding PanelBinding { get; init; }
 
-        public ProfileEventEnum ProfileEventType { get; set; }
+        public ProfileEventEnum ProfileEventType { get; init; }
 
         public DCSFPProfile DCSProfile { get; set; }
     }

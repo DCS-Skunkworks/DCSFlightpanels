@@ -12,7 +12,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for BipLightWindow.xaml
     /// </summary>
-    public partial class BipLightWindow : Window, IIsDirty
+    public partial class BipLightWindow : IIsDirty
     {
         private readonly string _description;
         private bool _formLoaded;

@@ -6,7 +6,7 @@
     /// <summary>
     /// Interaction logic for TextBlockDialogWindow.xaml
     /// </summary>
-    public partial class TextBlockDialogWindow : Window
+    public partial class TextBlockDialogWindow
     {
         public TextBlockDialogWindow(string title)
         {
