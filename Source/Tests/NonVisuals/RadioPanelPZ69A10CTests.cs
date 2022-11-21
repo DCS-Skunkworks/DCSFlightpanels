@@ -187,5 +187,75 @@ namespace Tests.NonVisuals
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10C.GetVhfFmDialFrequencyForPosition(dial, position));
         }
+
+        [Theory]
+        [InlineData(1, 0, "108")]
+        [InlineData(1, 1, "109")]
+        [InlineData(1, 2, "110")]
+        [InlineData(1, 3, "111")]
+
+        [InlineData(2, 0, "10")]
+        [InlineData(2, 1, "15")]
+        [InlineData(2, 2, "30")]
+        [InlineData(2, 3, "35")]
+        [InlineData(2, 4, "50")]
+        [InlineData(2, 5, "55")]
+        [InlineData(2, 6, "70")]
+        [InlineData(2, 7, "75")]
+        [InlineData(2, 8, "90")]
+        [InlineData(2, 9, "95")]
+
+        public void GetILSDialFrequencyForPosition_ShouldReturn_ExpectedValues(int dial, uint position, string expectedValue)
+        {
+            Assert.Equal(expectedValue, RadioPanelPZ69A10C.GetILSDialFrequencyForPosition(dial, position));
+        }
+
+        [Theory]
+        [InlineData(1, 4)]
+        [InlineData(1, 555)]
+        [InlineData(2, 10)]
+        [InlineData(2, 666)]
+        ///previous Non-exhaustive switches that throwed exception is replaced by default handling in switches that also throws a better exception
+        public void GetILSDialFrequencyForPosition_ThrowsException_For_UnexpectedPositionValue_For_DialValue1And4(int dial, uint position)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10C.GetILSDialFrequencyForPosition(dial, position));
+        }
+
+        [Theory]
+        [InlineData(1, 108, 0)]
+        [InlineData(1, 109, 1)]
+        [InlineData(1, 110, 2)]
+        [InlineData(1, 111, 3)]
+
+        [InlineData(2, 10, 0)]
+        [InlineData(2, 15, 1)]
+        [InlineData(2, 30, 2)]
+        [InlineData(2, 35, 3)]
+        [InlineData(2, 50, 4)]
+        [InlineData(2, 55, 5)]
+        [InlineData(2, 70, 6)]
+        [InlineData(2, 75, 7)]
+        [InlineData(2, 90, 8)]
+        [InlineData(2, 95, 9)]
+        public void GetILSDialPosForFrequency_ShouldReturn_ExpectedValues(int dial, int frequency, int expectedValue)
+        {
+            Assert.Equal(expectedValue, RadioPanelPZ69A10C.GetILSDialPosForFrequency(dial, frequency));
+        }
+
+        [Theory]
+        [InlineData(1, -1)]
+        [InlineData(1, 107)]
+        [InlineData(1, 112)]
+        [InlineData(1, 5551)]
+
+        [InlineData(2, -1)]
+        [InlineData(2, 9)]
+        [InlineData(2, 96)]
+        [InlineData(2, 6661)]
+        ///previous Non-exhaustive switches that throwed exception is replaced by default handling in switches that also throws a better exception
+        public void GetILSDialPosForFrequency_ThrowsException_For_UnexpectedPositionValue_For_DialValue1And4(int dial, int frequency)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10C.GetILSDialPosForFrequency(dial, frequency));
+        }
     }
 }

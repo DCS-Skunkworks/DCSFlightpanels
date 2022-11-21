@@ -4079,7 +4079,7 @@ namespace NonVisuals.Radios
             return string.Empty;
         }
 
-        private static string GetILSDialFrequencyForPosition(int dial, uint position)
+        public static string GetILSDialFrequencyForPosition(int dial, uint position)
         {
             // 1 Mhz   "108" "109" "110" "111"
             // 0     1     2     3
@@ -4089,22 +4089,20 @@ namespace NonVisuals.Radios
             {
                 case 1:
                     {
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "108",
                             1 => "109",
                             2 => "110",
-                            3 => "111"
+                            3 => "111",
+                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 1"),
                         };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
                 case 2:
                     {
                         // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
                         // 0    1    2    3    4    5    6    7    8    9
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "10",
@@ -4116,15 +4114,15 @@ namespace NonVisuals.Radios
                             6 => "70",
                             7 => "75",
                             8 => "90",
-                            9 => "95"
+                            9 => "95",
+                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 2"),
                         };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
             return string.Empty;
         }
 
-        private static int GetILSDialPosForFrequency(int dial, int freq)
+        public static int GetILSDialPosForFrequency(int dial, int freq)
         {
             // 1 Mhz   "108" "109" "110" "111"
             // 0     1     2     3
@@ -4134,22 +4132,20 @@ namespace NonVisuals.Radios
             {
                 case 1:
                     {
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return freq switch
                         {
                             108 => 0,
                             109 => 1,
                             110 => 2,
-                            111 => 3
+                            111 => 3,
+                            _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 1")
                         };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
                 case 2:
                     {
                         // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
                         // 0    1    2    3    4    5    6    7    8    9
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return freq switch
                         {
                             10 => 0,
@@ -4161,9 +4157,9 @@ namespace NonVisuals.Radios
                             70 => 6,
                             75 => 7,
                             90 => 8,
-                            95 => 9
+                            95 => 9,
+                            _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 2")
                         };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
             return 0;
