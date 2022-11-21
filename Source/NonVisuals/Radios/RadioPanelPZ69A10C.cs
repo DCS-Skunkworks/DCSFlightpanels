@@ -3924,7 +3924,7 @@ namespace NonVisuals.Radios
                             10 => "13",
                             11 => "14",
                             12 => "15",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position),$"Unexpected position switch value {position} for dial value of 1"),
+                            _ => throw new ArgumentOutOfRangeException(nameof(position),$"VhfAm Unexpected position switch value {position} for dial value of 1"),
                         };
                     }
 
@@ -3948,14 +3948,14 @@ namespace NonVisuals.Radios
                             1 => "2",
                             2 => "5",
                             3 => "7",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"Unexpected position switch value {position} for dial value of 4"),
+                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfAm Unexpected position switch value {position} for dial value of 4"),
                         };
                     }
             }
             return string.Empty;
         }
 
-        private static string GetUhfDialFrequencyForPosition(int dial, uint position)
+        public static string GetUhfDialFrequencyForPosition(int dial, uint position)
         {
             // Frequency selector 1     
             // //"2"  "3"  "A"
@@ -3978,14 +3978,13 @@ namespace NonVisuals.Radios
             {
                 case 1:
                     {
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "2",
                             1 => "3",
-                            2 => "0" // should be "A" // throw new NotImplementedException("check how A should be treated.");
+                            2 => "0", // should be "A" // throw new NotImplementedException("check how A should be treated.");
+                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 1"),
                         };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
                 case 2:
@@ -3999,15 +3998,14 @@ namespace NonVisuals.Radios
                     {
                         // "00" "25" "50" "75", only "00" and "50" used.
                         // Pos     0    1    2    3
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "00",
                             1 => "25",
                             2 => "50",
-                            3 => "75"
+                            3 => "75",
+                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 5"),
                         };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
 
