@@ -4012,7 +4012,7 @@ namespace NonVisuals.Radios
             return string.Empty;
         }
 
-        private static string GetVhfFmDialFrequencyForPosition(int dial, uint position)
+        public static string GetVhfFmDialFrequencyForPosition(int dial, uint position)
         {
 
             // Frequency selector 1      VHFFM_FREQ1
@@ -4032,7 +4032,6 @@ namespace NonVisuals.Radios
             {
                 case 1:
                     {
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "3",
@@ -4047,9 +4046,9 @@ namespace NonVisuals.Radios
                             9 => "12",
                             10 => "13",
                             11 => "14",
-                            12 => "15"
+                            12 => "15",
+                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 1"),
                         };                   
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
                 case 2:
@@ -4066,15 +4065,14 @@ namespace NonVisuals.Radios
                     {
                         // "00" "25" "50" "75"
                         // Pos     0    1    2    3
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                         return position switch
                         {
                             0 => "00",
                             1 => "25",
                             2 => "50",
-                            3 => "75"
+                            3 => "75",
+                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 4"),
                         };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }
 
