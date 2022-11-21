@@ -771,10 +771,10 @@ namespace NonVisuals.Radios
             SaveCockpitFrequencyUhf();
             var frequencyAsString = _uhfBigFrequencyStandby + "." + _uhfSmallFrequencyStandby.ToString().PadLeft(3, '0');
             
-            var desiredDial1Value = 0;
-            var desiredDial2Value = 0;
-            var desiredDial3Value = 0;
-            var desiredDial4Value = 0;
+            int desiredDial1Value;
+            int desiredDial2Value;
+            int desiredDial3Value;
+            int desiredDial4Value;
 
             if (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture) == 2)
             {
@@ -966,10 +966,10 @@ namespace NonVisuals.Radios
             SaveCockpitFrequencyVuhf();
             var frequencyAsString = _vuhfBigFrequencyStandby + "." + _vuhfSmallFrequencyStandby.ToString().PadLeft(3, '0');
 
-            var desiredDial1Value = 0;
-            var desiredDial2Value = 0;
-            var desiredDial3Value = 0;
-            var desiredDial4Value = 0;
+            int desiredDial1Value;
+            int desiredDial2Value;
+            int desiredDial3Value;
+            int desiredDial4Value;
 
             if (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture) == 2)
             {

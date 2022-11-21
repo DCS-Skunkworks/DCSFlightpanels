@@ -706,8 +706,8 @@ namespace NonVisuals.Radios
                         case CurrentFw190RadioMode.FUG16ZY:
                             {
                                 // 1-4
-                                var modeDialPostionAsString = string.Empty;
-                                var fineTunePositionAsString = string.Empty;
+                                string modeDialPostionAsString;
+                                string fineTunePositionAsString;
                                 lock (_lockFug16ZyPresetDialObject1)
                                 {
                                     modeDialPostionAsString = (_fug16ZyPresetCockpitDialPos + 1).ToString();
@@ -728,7 +728,7 @@ namespace NonVisuals.Radios
                             {
                                 // Preset Channel Selector
                                 // 0-1
-                                var positionAsString = string.Empty;
+                                string positionAsString;
                                 lock (_lockFUG25AIFFDialObject1)
                                 {
                                     positionAsString = (_fug25AIFFCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -743,7 +743,7 @@ namespace NonVisuals.Radios
                             {
                                 // Switch
                                 // 0-1
-                                var positionAsString = string.Empty;
+                                string positionAsString;
                                 lock (_lockHomingDialObject1)
                                 {
                                     positionAsString = (_homingCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -766,8 +766,8 @@ namespace NonVisuals.Radios
                         case CurrentFw190RadioMode.FUG16ZY:
                             {
                                 // 1-4
-                                var modeDialPostionAsString = string.Empty;
-                                var fineTunePositionAsString = string.Empty;
+                                string modeDialPostionAsString;
+                                string fineTunePositionAsString;
                                 lock (_lockFug16ZyPresetDialObject1)
                                 {
                                     modeDialPostionAsString = (_fug16ZyPresetCockpitDialPos + 1).ToString();
@@ -788,7 +788,7 @@ namespace NonVisuals.Radios
                             {
                                 // Preset Channel Selector
                                 // 0-1
-                                var positionAsString = string.Empty;
+                                string positionAsString;
                                 lock (_lockFUG25AIFFDialObject1)
                                 {
                                     positionAsString = (_fug25AIFFCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -803,7 +803,7 @@ namespace NonVisuals.Radios
                             {
                                 // Switch
                                 // 0-1
-                                var positionAsString = string.Empty;
+                                string positionAsString;
                                 lock (_lockHomingDialObject1)
                                 {
                                     positionAsString = (_homingCockpitDialPos + 1).ToString().PadLeft(2, ' ');

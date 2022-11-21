@@ -41,11 +41,11 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             };
 
         private bool _disposed;
-        private int capPage = 0;
+        private int _capPage = 0;
 
-        private string[] _categoryNames = { "BIT", "SPL", "NAV", "TAC DATA", "D/L", "TGT DATA" };
+        private readonly string[] _categoryNames = { "BIT", "SPL", "NAV", "TAC DATA", "D/L", "TGT DATA" };
 
-        private string[][] _categoryLabelPages = new string[12][]
+        private readonly string[][] _categoryLabelPages = new string[12][]
         {
             //              "-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-","-0123456789001234567890-"
             new string[5] { "-   disp        rcvr   -","-   cmptr       xmtr   -","- amcs conf    ant ir  -","- mas moat      stt    -","-   fault     spl test -"},
@@ -183,7 +183,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 // RIO CAP CATEGROY
                 if (e.Address == _RIO_CAP_CATEGORY.Address)
                 {
-                    capPage = (int)_RIO_CAP_CATEGORY.GetUIntValue(e.Data);
+                    _capPage = (int)_RIO_CAP_CATEGORY.GetUIntValue(e.Data);
                     updateCDU();
                 }
 
@@ -295,7 +295,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             SetLine(0, string.Format("{0,-5} {1,-9}{2,9}",  
                 _HCUModes[_currentHCUMode] , 
                 _CWSModes[_currentWCSmode] ,
-                _categoryNames[capPage]));
+                _categoryNames[_capPage]));
 
             // Display Columns for active CAP PAGE starting at line 2. 
             // Each Cap page is described with 2 string[5], 1st is the upper line and next is the lower 
@@ -306,12 +306,12 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             {
                 SetLine(currentLine++, 
                     string.Format("{0,24}", 
-                        _categoryLabelPages[2*capPage][line]
+                        _categoryLabelPages[2*_capPage][line]
                         ));
 
                 SetLine(currentLine++,
                     string.Format("{0,24}",
-                        _categoryLabelPages[2 * capPage + 1]
+                        _categoryLabelPages[2 * _capPage + 1]
                         [line]));
             }
 

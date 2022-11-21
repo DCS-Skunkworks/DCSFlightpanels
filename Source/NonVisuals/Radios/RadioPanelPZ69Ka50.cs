@@ -517,20 +517,16 @@ namespace NonVisuals.Radios
                         // Reason for this is to separate the standby frequency from the sync loop
                         // If not the sync would pick up any changes made by the user during the
                         // sync process
-                        var desiredPositionDial1X = 0;
-                        var desiredPositionDial2X = 0;
-                        var desiredPositionDial3X = 0;
-                        var desiredPositionDial4X = 0;
 
                         // 151.95
                         // #1 = 15  (position = value - 3)
                         // #2 = 1   (position = value)
                         // #3 = 9   (position = value)
                         // #4 = 5
-                        desiredPositionDial1X = Array.IndexOf(_r800L1Freq1DialValues, int.Parse(frequencyAsString.Substring(0, 2)));
-                        desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
-                        desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
-                        desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 1));
+                        var desiredPositionDial1X = Array.IndexOf(_r800L1Freq1DialValues, int.Parse(frequencyAsString.Substring(0, 2)));
+                        var desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
+                        var desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
+                        var desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 1));
 
                         do
                         {
@@ -615,11 +611,10 @@ namespace NonVisuals.Radios
                                 dial3OkTime = DateTime.Now.Ticks;
                             }
 
-                            var desiredPositionDial4 = 0;
                             if (Interlocked.Read(ref _r800L1Dial4WaitingForFeedback) == 0)
                             {
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-                                desiredPositionDial4 = desiredPositionDial4X switch
+                                var desiredPositionDial4 = desiredPositionDial4X switch
                                 {
                                     0 => 0,
                                     2 => 0,
@@ -1630,7 +1625,7 @@ namespace NonVisuals.Radios
                                 // Preset Channel Selector
                                 // " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 lock (_lockVhf1DialObject1)
                                 {
                                     channelAsString = (_vhf1CockpitPresetDialPos + 1).ToString().PadLeft(2, ' ');
@@ -1693,9 +1688,9 @@ namespace NonVisuals.Radios
 
                         case CurrentKa50RadioMode.DATALINK:
                             {
-                                uint masterMode = 0;
-                                uint selfId = 0;
-                                uint power = 0;
+                                uint masterMode;
+                                uint selfId;
+                                uint power;
                                 lock (_lockDatalinkMasterModeObject)
                                 {
                                     masterMode = _datalinkMasterModeCockpitPos;
@@ -1731,7 +1726,7 @@ namespace NonVisuals.Radios
                                     };
                                 }
 
-                                uint adfMode = 0;
+                                uint adfMode;
                                 lock (_lockADFModeDialObject)
                                 {
                                     adfMode = _adfModeCockpitPos;
@@ -1809,9 +1804,9 @@ namespace NonVisuals.Radios
 
                         case CurrentKa50RadioMode.DATALINK:
                             {
-                                uint masterMode = 0;
-                                uint selfId = 0;
-                                uint power = 0;
+                                uint masterMode;
+                                uint selfId;
+                                uint power;
                                 lock (_lockDatalinkMasterModeObject)
                                 {
                                     masterMode = _datalinkMasterModeCockpitPos;
@@ -1847,7 +1842,7 @@ namespace NonVisuals.Radios
                                     };
                                 }
 
-                                uint adfMode = 0;
+                                uint adfMode;
                                 lock (_lockADFModeDialObject)
                                 {
                                     adfMode = _adfModeCockpitPos;

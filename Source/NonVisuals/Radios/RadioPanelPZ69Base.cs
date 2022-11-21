@@ -273,7 +273,7 @@
             e.ProfileHandlerCaller.RegisterPanelBinding(this, ExportSettings());
         }
 
-        protected void Reset(ref long syncVariable)
+        protected static void Reset(ref long syncVariable)
         {
             syncVariable = DateTime.Now.Ticks;
         }

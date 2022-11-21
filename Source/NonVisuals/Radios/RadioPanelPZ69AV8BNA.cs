@@ -229,7 +229,7 @@ namespace NonVisuals.Radios
                 {
                     case CurrentAV8BNARadioMode.COMM1:
                         {
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockCOMM1DialsObject)
                             {
                                 frequencyAsString = _comm1Frequency;
@@ -241,7 +241,7 @@ namespace NonVisuals.Radios
 
                     case CurrentAV8BNARadioMode.COMM2:
                         {
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockCOMM2DialsObject)
                             {
                                 frequencyAsString = _comm2Frequency;
@@ -263,7 +263,7 @@ namespace NonVisuals.Radios
                 {
                     case CurrentAV8BNARadioMode.COMM1:
                         {
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockCOMM1DialsObject)
                             {
                                 frequencyAsString = _comm1Frequency;
@@ -275,7 +275,7 @@ namespace NonVisuals.Radios
 
                     case CurrentAV8BNARadioMode.COMM2:
                         {
-                            var frequencyAsString = string.Empty;
+                            string frequencyAsString;
                             lock (_lockCOMM2DialsObject)
                             {
                                 frequencyAsString = _comm2Frequency;

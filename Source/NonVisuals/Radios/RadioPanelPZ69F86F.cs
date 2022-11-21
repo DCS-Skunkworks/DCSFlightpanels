@@ -951,13 +951,13 @@ namespace NonVisuals.Radios
                                 // Preset Channel Selector
                                 // " 1" -> "18"
                                 // Pos     0 .. 17
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 lock (_lockARC27PresetDialObject1)
                                 {
                                     channelAsString = (_arc27PresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
 
-                                var modeAsString = string.Empty;
+                                string modeAsString;
                                 lock (_lockARC27ModeDialObject1)
                                 {
                                     modeAsString = (_arc27ModeCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -979,13 +979,13 @@ namespace NonVisuals.Radios
                             {
                                 // Frequency
                                 // Band
-                                var frequencyAsString = string.Empty;
+                                string frequencyAsString;
                                 lock (_lockARN6FrequencyObject)
                                 {
                                     frequencyAsString = (_arn6CockpitFrequency).ToString().PadLeft(4, ' ');
                                 }
 
-                                var bandAsString = string.Empty;
+                                string bandAsString;
                                 lock (_lockARN6BandObject)
                                 {
                                     bandAsString = (_arn6CockpitBand + 1).ToString().PadLeft(2, ' ');
@@ -999,7 +999,7 @@ namespace NonVisuals.Radios
                         case CurrentF86FRadioMode.ARN6_MODES:
                             {
                                 // Modes
-                                uint mode = 0;
+                                uint mode;
                                 lock (_lockARN6ModeObject)
                                 {
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
@@ -1023,7 +1023,7 @@ namespace NonVisuals.Radios
                                 // Modes
                                 // Emergency ON OFF
                                 // Modes
-                                var modeAsString = string.Empty;
+                                string modeAsString;
                                 lock (_lockAPX6ModeObject)
                                 {
                                     modeAsString = (_apx6ModeCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -1048,13 +1048,13 @@ namespace NonVisuals.Radios
                                 // Preset Channel Selector
                                 // " 1" -> "18"
                                 // Pos     0 .. 17
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 lock (_lockARC27PresetDialObject1)
                                 {
                                     channelAsString = (_arc27PresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
 
-                                var modeAsString = string.Empty;
+                                string modeAsString;
                                 lock (_lockARC27ModeDialObject1)
                                 {
                                     modeAsString = (_arc27ModeCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -1076,13 +1076,13 @@ namespace NonVisuals.Radios
                             {
                                 // Frequency
                                 // Band
-                                var frequencyAsString = string.Empty;
+                                string frequencyAsString;
                                 lock (_lockARN6FrequencyObject)
                                 {
                                     frequencyAsString = (_arn6CockpitFrequency).ToString().PadLeft(4, ' ');
                                 }
 
-                                var bandAsString = string.Empty;
+                                string bandAsString;
                                 lock (_lockARN6BandObject)
                                 {
                                     bandAsString = (_arn6CockpitBand + 1).ToString().PadLeft(2, ' ');
@@ -1096,7 +1096,7 @@ namespace NonVisuals.Radios
                         case CurrentF86FRadioMode.ARN6_MODES:
                             {
                                 // Modes
-                                uint mode = 0;
+                                uint mode;
                                 lock (_lockARN6ModeObject)
                                 {
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
@@ -1120,7 +1120,7 @@ namespace NonVisuals.Radios
                                 // Modes
                                 // Emergency ON OFF
                                 // Modes
-                                var modeAsString = string.Empty;
+                                string modeAsString;
                                 lock (_lockAPX6ModeObject)
                                 {
                                     modeAsString = (_apx6ModeCockpitDialPos).ToString().PadLeft(2, ' ');

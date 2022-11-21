@@ -762,9 +762,9 @@ namespace NonVisuals.Radios
 
                         case CurrentAJS37RadioMode.TILS:
                             {
-                                uint layerSelector = 0;
-                                uint channelSelector = 0;
-                                uint masterModeSelector = 0;
+                                uint layerSelector;
+                                uint channelSelector;
+                                uint masterModeSelector;
                                 lock (_lockTilsChannelSelectorDialObject1)
                                 {
                                     channelSelector = _tilsChannelCockpitValue;
@@ -821,9 +821,9 @@ namespace NonVisuals.Radios
 
                         case CurrentAJS37RadioMode.TILS:
                             {
-                                uint layerSelector = 0;
-                                uint channelSelector = 0;
-                                uint masterModeSelector = 0;
+                                uint layerSelector;
+                                uint channelSelector;
+                                uint masterModeSelector;
                                 lock (_lockTilsChannelSelectorDialObject1)
                                 {
                                     channelSelector = _tilsChannelCockpitValue;

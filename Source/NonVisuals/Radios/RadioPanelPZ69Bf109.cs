@@ -739,11 +739,11 @@ namespace NonVisuals.Radios
                         case CurrentBf109RadioMode.FUG16ZY:
                             {
                                 // 1-4
-                                var modeDialPostionAsString = string.Empty;
-                                var fineTunePositionAsString = string.Empty;
+                                string modeDialPositionAsString;
+                                string fineTunePositionAsString;
                                 lock (_lockFug16ZyPresetDialObject1)
                                 {
-                                    modeDialPostionAsString = (_fug16ZyPresetCockpitDialPos + 1).ToString();
+                                    modeDialPositionAsString = (_fug16ZyPresetCockpitDialPos + 1).ToString();
                                 }
 
                                 lock (_lockFug16ZyFineTuneDialObject1)
@@ -751,7 +751,7 @@ namespace NonVisuals.Radios
 
                                     fineTunePositionAsString = (_fug16ZyFineTuneCockpitDialPos / 10).ToString();
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPostionAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPositionAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
@@ -760,7 +760,7 @@ namespace NonVisuals.Radios
                             {
                                 // Preset Channel Selector
                                 // 0-1
-                                var positionAsString = string.Empty;
+                                string positionAsString;
                                 lock (_lockFUG25AIFFDialObject1)
                                 {
                                     positionAsString = (_fug25aIFFCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -774,7 +774,7 @@ namespace NonVisuals.Radios
                             {
                                 // Switch
                                 // 0-1
-                                var positionAsString = string.Empty;
+                                string positionAsString;
                                 lock (_lockHomingDialObject1)
                                 {
                                     positionAsString = (_homingCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -796,8 +796,8 @@ namespace NonVisuals.Radios
                         case CurrentBf109RadioMode.FUG16ZY:
                             {
                                 // 1-4
-                                var modeDialPostionAsString = string.Empty;
-                                var fineTunePositionAsString = string.Empty;
+                                string modeDialPostionAsString;
+                                string fineTunePositionAsString;
                                 lock (_lockFug16ZyPresetDialObject1)
                                 {
                                     modeDialPostionAsString = (_fug16ZyPresetCockpitDialPos + 1).ToString();
@@ -817,7 +817,7 @@ namespace NonVisuals.Radios
                             {
                                 // Preset Channel Selector
                                 // 0-1
-                                var positionAsString = string.Empty;
+                                string positionAsString;
                                 lock (_lockFUG25AIFFDialObject1)
                                 {
                                     positionAsString = (_fug25aIFFCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -831,7 +831,7 @@ namespace NonVisuals.Radios
                             {
                                 // Switch
                                 // 0-1
-                                var positionAsString = string.Empty;
+                                string positionAsString;
                                 lock (_lockHomingDialObject1)
                                 {
                                     positionAsString = (_homingCockpitDialPos + 1).ToString().PadLeft(2, ' ');

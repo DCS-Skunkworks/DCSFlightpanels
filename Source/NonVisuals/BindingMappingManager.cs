@@ -247,7 +247,7 @@ namespace NonVisuals
              * 1) Check, are there multiple such panels where hardware does not match? If so user must map them
              *    If only 1, then we can map it without asking questions.
              */
-            var count = 0;
+            int count;
             lock (_genericBindingsLock)
             {
                 count = _genericBindings

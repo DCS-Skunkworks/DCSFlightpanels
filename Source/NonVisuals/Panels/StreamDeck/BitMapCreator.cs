@@ -160,7 +160,12 @@
         public static Bitmap FileNotFoundBitmap()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            return new Bitmap(Path.Combine(Path.GetDirectoryName(assembly.Location), @"Images\filenotfound.png"));
+            var directoryName = Path.GetDirectoryName(assembly.Location);
+            if (directoryName == null)
+            {
+                throw new Exception("FileNotFoundBitmap : Failed to get assembly file path.");
+            }
+            return new Bitmap(Path.Combine(directoryName, @"Images\filenotfound.png"));
 
             //Old code does not preserve transparency :
 

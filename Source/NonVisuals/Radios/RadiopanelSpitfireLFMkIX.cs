@@ -730,8 +730,8 @@ namespace NonVisuals.Radios
                             {
                                 // Preset Channel Selector
                                 // 0-1
-                                uint bChannel = 0;
-                                uint dChannel = 0;
+                                uint bChannel;
+                                uint dChannel;
                                 lock (_lockIFFDialObject1)
                                 {
                                     bChannel = _iffBiffCockpitDialPos;
@@ -790,8 +790,8 @@ namespace NonVisuals.Radios
                             {
                                 // Preset Channel Selector
                                 // 0-1
-                                uint bChannel = 0;
-                                uint dChannel = 0;
+                                uint bChannel;
+                                uint dChannel;
                                 lock (_lockIFFDialObject1)
                                 {
                                     bChannel = _iffBiffCockpitDialPos;

@@ -813,11 +813,10 @@ namespace NonVisuals.Radios
             // Frequency selector 4      VHFAM_FREQ4
             // "00" "25" "50" "75", only "00" and "50" used.
             // Pos     0    1    2    3
-            var desiredPositionDial1 = 0;
-            var desiredPositionDial2 = 0;
-            var desiredPositionDial3 = 0;
-            var desiredPositionDial4 = 0;
-            var tmp = 0;
+            int desiredPositionDial1;
+            int desiredPositionDial2;
+            int desiredPositionDial3;
+            int tmp;
 
             if (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture) == 2)
             {
@@ -844,7 +843,7 @@ namespace NonVisuals.Radios
                 tmp = int.Parse(frequencyAsString.Substring(5, 1));
             }
 
-            desiredPositionDial4 = tmp switch
+            var desiredPositionDial4 = tmp switch
             {
                 0 => 0,
                 2 => 1,
@@ -1064,11 +1063,11 @@ namespace NonVisuals.Radios
             // Small dial 0.00-0.95 [step of 0.05]
             var frequencyAsString = _uhfBigFrequencyStandby.ToString(CultureInfo.InvariantCulture) + "." + _uhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
 
-            var freqDial1 = 0;
-            var freqDial2 = 0;
-            var freqDial3 = 0;
-            var freqDial4 = 0;
-            var freqDial5 = 0;
+            int freqDial1;
+            int freqDial2;
+            int freqDial3;
+            int freqDial4;
+            int freqDial5;
 
             // Special case! If Dial 1 = "A" then all digits can be disregarded once they are set to zero
             var index = frequencyAsString.IndexOf(".", StringComparison.InvariantCulture);
@@ -1453,10 +1452,10 @@ namespace NonVisuals.Radios
             // Frequency selector 4      VHFFM_FREQ4
             // "00" "25" "50" "75"
             // Pos     0    1    2    3
-            var desiredPositionDial1 = 0;
-            var desiredPositionDial2 = 0;
-            var desiredPositionDial3 = 0;
-            var desiredPositionDial4 = 0;
+            int desiredPositionDial1;
+            int desiredPositionDial2;
+            int desiredPositionDial3;
+            int desiredPositionDial4;
 
             if (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture) == 2)
             {
@@ -1690,14 +1689,12 @@ namespace NonVisuals.Radios
             // Frequency selector 2   
             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
             // 0    1    2    3    4    5    6    7    8    9
-            var freqDial1 = 0;
-            var freqDial2 = 0;
 
             // 108.95
             // #1 = 0
             // #2 = 9
-            freqDial1 = GetILSDialPosForFrequency(1, int.Parse(frequencyAsString.Substring(0, 3)));
-            freqDial2 = GetILSDialPosForFrequency(2, int.Parse(frequencyAsString.Substring(4, 2)));
+            var freqDial1 = GetILSDialPosForFrequency(1, int.Parse(frequencyAsString.Substring(0, 3)));
+            var freqDial2 = GetILSDialPosForFrequency(2, int.Parse(frequencyAsString.Substring(4, 2)));
 
             // #1
             _shutdownILSThread = true;
@@ -2105,10 +2102,10 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    var dial1 = string.Empty;
-                                    var dial2 = string.Empty;
-                                    var dial3 = string.Empty;
-                                    var dial4 = string.Empty;
+                                    string dial1;
+                                    string dial2;
+                                    string dial3;
+                                    string dial4;
                                     lock (_lockVhfFmDialsObject1)
                                     {
                                         dial1 = GetVhfFmDialFrequencyForPosition(1, _vhfFmCockpitFreq1DialPos);
@@ -2273,10 +2270,10 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    var dial1 = string.Empty;
-                                    var dial2 = string.Empty;
-                                    var dial3 = string.Empty;
-                                    var dial4 = string.Empty;
+                                    string dial1;
+                                    string dial2;
+                                    string dial3;
+                                    string dial4;
                                     lock (_lockVhfFmDialsObject1)
                                     {
                                         dial1 = GetVhfFmDialFrequencyForPosition(1, _vhfFmCockpitFreq1DialPos);
@@ -5020,10 +5017,9 @@ namespace NonVisuals.Radios
                     {
                         lock (_lockVhfAmDialsObject4)
                         {
-                            uint dial4 = 0;
 
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-                            dial4 = _vhfAmCockpitFreq4DialPos switch
+                            uint dial4 = _vhfAmCockpitFreq4DialPos switch
                             {
                                 0 => 0,
                                 1 => 25,
@@ -5144,9 +5140,8 @@ namespace NonVisuals.Radios
                     {
                         lock (_lockVhfFmDialsObject4)
                         {
-                            uint dial4 = 0;
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-                            dial4 = _vhfFmCockpitFreq4DialPos switch
+                            uint dial4 = _vhfFmCockpitFreq4DialPos switch
                             {
                                 0 => 0,
                                 1 => 25,

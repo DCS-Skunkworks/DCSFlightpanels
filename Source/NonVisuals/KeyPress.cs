@@ -137,7 +137,7 @@ namespace NonVisuals
                 }
 
                 Abort = false;
-                _executingThread = new Thread(() => ExecuteThreaded(cancellationToken, _sortedKeyPressInfoList));
+                _executingThread = new Thread(() => ExecuteThreaded(_sortedKeyPressInfoList, cancellationToken));
                 _executingThread.Start();
             }
             catch (Exception ex)
@@ -146,7 +146,7 @@ namespace NonVisuals
             }
         }
 
-        private void ExecuteThreaded(CancellationToken cancellationToken, SortedList<int, IKeyPressInfo> sortedList)
+        private void ExecuteThreaded(SortedList<int, IKeyPressInfo> sortedList, CancellationToken cancellationToken)
         {
             try
             {
@@ -167,13 +167,13 @@ namespace NonVisuals
 
                     if (Common.APIModeUsed == APIModeEnum.keybd_event)
                     {
-                        KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
+                        KeyBdEventAPI(keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress, cancellationToken);
 
                         // Common.DebugP("KeyBdEventAPI result code -----------------------------------> " + Marshal.GetLastWin32Error());
                     }
                     else
                     {
-                        SendKeys(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
+                        SendKeys(keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress, cancellationToken);
 
                         // Common.DebugP("SendKeys result code -----------------------------------> " + Marshal.GetLastWin32Error());
                     }
@@ -190,7 +190,7 @@ namespace NonVisuals
             }
         }
 
-        private void KeyBdEventAPI(CancellationToken cancellationToken, KeyPressLength breakLength, VirtualKeyCode[] virtualKeyCodes, KeyPressLength keyPressLength)
+        private void KeyBdEventAPI(KeyPressLength breakLength, VirtualKeyCode[] virtualKeyCodes, KeyPressLength keyPressLength, CancellationToken cancellationToken)
         {
             var keyPressLengthTimeConsumed = 0;
             var breakLengthConsumed = 0;
@@ -438,7 +438,7 @@ namespace NonVisuals
                 dataString = dataString.Remove(dataString.Length - 1, 1);
 
                 // 1000,VK_D + RETURN + ... + ...
-                keyPressInfo.LengthOfKeyPress = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), dataString.Substring(0, dataString.IndexOf(",", StringComparison.Ordinal)));
+                keyPressInfo.LengthOfKeyPress = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), dataString.AsSpan(0, dataString.IndexOf(",", StringComparison.Ordinal)));
                 dataString = dataString.Substring(dataString.IndexOf(",", StringComparison.Ordinal) + 1);
 
                 // VK_D + RETURN + ... + ...
@@ -497,11 +497,11 @@ namespace NonVisuals
                     entry = entry.Replace("]", string.Empty);
 
                     // FiftyMilliSec,VK_A,FiftyMilliSec
-                    keyPressInfo.LengthOfBreak = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), entry.Substring(0, entry.IndexOf(",", StringComparison.Ordinal)));
+                    keyPressInfo.LengthOfBreak = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), entry.AsSpan(0, entry.IndexOf(",", StringComparison.Ordinal)));
                     entry = entry.Substring(entry.IndexOf(",", StringComparison.Ordinal) + 1);
                     var keys = entry.Substring(0, entry.IndexOf(",", StringComparison.Ordinal));
                     keyPressInfo.VirtualKeyCodes = SplitStringKeyCodes(keys);
-                    keyPressInfo.LengthOfKeyPress = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), entry.Substring(entry.IndexOf(",", StringComparison.Ordinal) + 1));
+                    keyPressInfo.LengthOfKeyPress = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), entry.AsSpan(entry.IndexOf(",", StringComparison.Ordinal) + 1));
                     _sortedKeyPressInfoList.Add(GetNewKeyValue(), keyPressInfo);
                 }
             }
@@ -638,7 +638,7 @@ namespace NonVisuals
              * 
              * 
         */
-        public void SendKeys(CancellationToken cancellationToken, KeyPressLength breakLength, VirtualKeyCode[] virtualKeyCodes, KeyPressLength keyPressLength)
+        public void SendKeys(KeyPressLength breakLength, VirtualKeyCode[] virtualKeyCodes, KeyPressLength keyPressLength, CancellationToken cancellationToken)
         {
             var keyPressLengthTimeConsumed = 0;
             var breakLengthConsumed = 0;

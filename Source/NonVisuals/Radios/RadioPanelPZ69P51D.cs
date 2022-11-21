@@ -500,7 +500,7 @@ namespace NonVisuals.Radios
                         case CurrentP51DRadioMode.VHF:
                             {
                                 // Pos     0    1    2    3    4
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 lock (_lockVhf1DialObject1)
                                 {
                                     channelAsString = _vhf1CockpitPresetActiveButton.ToString();
@@ -523,7 +523,7 @@ namespace NonVisuals.Radios
                         case CurrentP51DRadioMode.VHF:
                             {
                                 // Pos     0    1    2    3    4
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 lock (_lockVhf1DialObject1)
                                 {
                                     channelAsString = _vhf1CockpitPresetActiveButton.ToString();
