@@ -18,7 +18,7 @@ namespace Tests.NonVisuals
         private const string _stringValue2 = "Some string value 2";
         private const string _stringValue3 = "Some string value 3";
         private const int _intValue1 = 456;
-        private Color _colorValue1 = Color.Aquamarine;
+        private readonly Color _colorValue1 = Color.Aquamarine;
 
         [Fact]
         public void KeypressInfo_MustBe_Clonable() {
