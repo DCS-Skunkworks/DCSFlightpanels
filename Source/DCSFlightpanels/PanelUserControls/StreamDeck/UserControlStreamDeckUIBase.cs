@@ -423,9 +423,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 buttonImage.Bill = new BillStreamDeckFace
                 {
                     StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", string.Empty)),
+                    StreamDeckPanelInstance = _streamDeckPanel
                 };
-
-                buttonImage.Bill.StreamDeckPanelInstance = _streamDeckPanel;
                 buttonImage.SetDefaultButtonImage();                
             }
         }
