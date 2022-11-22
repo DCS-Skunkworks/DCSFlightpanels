@@ -209,7 +209,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             try
             {
                 int linesChanged = 0;
-                string incomingData = "";
+                string incomingData;
 
                 if (e.Address.Equals(_PLT_EUFD_LINE14.Address))
                 {

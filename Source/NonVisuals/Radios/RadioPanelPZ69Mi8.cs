@@ -345,7 +345,7 @@ namespace NonVisuals.Radios
                 {
                     // "100.000" - "399.975"
                     // Last digit not used in panel
-                    double tmpFreq = 0;
+                    double tmpFreq;
                     try
                     {
                         tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
@@ -817,20 +817,16 @@ namespace NonVisuals.Radios
                         // Reason for this is to separate the standby frequency from the sync loop
                         // If not the sync would pick up any changes made by the user during the
                         // sync process
-                        var desiredPositionDial1X = 0;
-                        var desiredPositionDial2X = 0;
-                        var desiredPositionDial3X = 0;
-                        var desiredPositionDial4X = 0;
 
                         // 151.95
                         // #1 = 15  (position = value - 3)
                         // #2 = 1   (position = value)
                         // #3 = 9   (position = value)
                         // #4 = 5
-                        desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2)); // Array.IndexOf(_r863ManualFreq1DialValues, int.Parse(xfrequencyAsString.Substring(0, 2)));
-                        desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
-                        desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
-                        desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 2));
+                        var desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2)); // Array.IndexOf(_r863ManualFreq1DialValues, int.Parse(xfrequencyAsString.Substring(0, 2)));
+                        var desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
+                        var desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
+                        var desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 2));
                         Debug.WriteLine("Frequency " + frequencyAsString);
                         Debug.WriteLine("Desired1 " + desiredPositionDial1X);
                         Debug.WriteLine("Desired2 " + desiredPositionDial2X);
@@ -1082,10 +1078,6 @@ namespace NonVisuals.Radios
                         // Reason for this is to separate the standby frequency from the sync loop
                         // If not the sync would pick up any changes made by the user during the
                         // sync process
-                        var desiredPositionDial1X = 0;
-                        var desiredPositionDial2X = 0;
-                        var desiredPositionDial3X = 0;
-                        var desiredPositionDial4X = 0;
 
                         // 02000
                         // 17999
@@ -1093,10 +1085,10 @@ namespace NonVisuals.Radios
                         // #2 = 9   (position = value)
                         // #3 = 9   (position = value)
                         // #4 = 9   (position = value)
-                        desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2));
-                        desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
-                        desiredPositionDial3X = int.Parse(frequencyAsString.Substring(3, 1));
-                        desiredPositionDial4X = int.Parse(frequencyAsString.Substring(4, 1));
+                        var desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2));
+                        var desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
+                        var desiredPositionDial3X = int.Parse(frequencyAsString.Substring(3, 1));
+                        var desiredPositionDial4X = int.Parse(frequencyAsString.Substring(4, 1));
 
                         do
                         {
@@ -2351,8 +2343,8 @@ namespace NonVisuals.Radios
                                 // Preset Channel Selector
                                 // " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-                                var channelAsString = string.Empty;
-                                uint unitSwitch = 0;
+                                string channelAsString;
+                                uint unitSwitch;
                                 lock (_lockR863Preset1DialObject1)
                                 {
                                     channelAsString = (_r863PresetCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -2397,7 +2389,7 @@ namespace NonVisuals.Radios
                                 // Preset Channel Selector
                                 // " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 // Pos     0    1    2    3    4    5    6    7    8    9   10 
-                                var channelAsString = string.Empty;
+                                string channelAsString;
                                 lock (_lockR828Preset1DialObject1)
                                 {
                                     channelAsString = (_r828PresetCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -2413,7 +2405,7 @@ namespace NonVisuals.Radios
                                 // Dial1 XX00
                                 // Dial2 00XX
                                 string channelAsString;
-                                uint backupMain = 0;
+                                uint backupMain;
                                 lock (_lockADFBackupMainDialObject)
                                 {
                                     backupMain = _adfBackupMainCockpitDial1Pos;
@@ -2455,10 +2447,9 @@ namespace NonVisuals.Radios
 
                         case CurrentMi8RadioMode.ARK_UD:
                             {
-                                string stringToBeShownLeft;
-                                uint arkPreset = 0;
-                                uint arkMode = 0;
-                                uint arkBand = 0;
+                                uint arkPreset;
+                                uint arkMode;
+                                uint arkBand;
                                 lock (_lockArkudPresetDialObject)
                                 {
                                     arkPreset = _arkUdPresetCockpitDial1Pos + 1;
@@ -2476,7 +2467,7 @@ namespace NonVisuals.Radios
 
                                 // 1 4 5
                                 // 12345
-                                stringToBeShownLeft = arkBand + "   " + arkMode;
+                                var stringToBeShownLeft = arkBand + "   " + arkMode;
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, arkPreset, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBytesDefault(ref bytes, stringToBeShownLeft, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
@@ -2486,7 +2477,7 @@ namespace NonVisuals.Radios
                             {
                                 // 0-5
                                 string channelAsString;
-                                uint spuICSSwitch = 0;
+                                uint spuICSSwitch;
                                 lock (_lockSpu7DialObject1)
                                 {
                                     channelAsString = (_spu7CockpitDialPos).ToString().PadLeft(2, ' ');
@@ -2552,7 +2543,7 @@ namespace NonVisuals.Radios
                                 // " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
                                 string channelAsString;
-                                uint unitSwitch = 0;
+                                uint unitSwitch;
                                 lock (_lockR863Preset1DialObject1)
                                 {
                                     channelAsString = (_r863PresetCockpitDialPos + 1).ToString().PadLeft(2, ' ');
@@ -2611,7 +2602,7 @@ namespace NonVisuals.Radios
                                 // Dial1 XX00
                                 // Dial2 00XX
                                 string channelAsString;
-                                uint backupMain = 0;
+                                uint backupMain;
                                 lock (_lockADFBackupMainDialObject)
                                 {
                                     backupMain = _adfBackupMainCockpitDial1Pos;
@@ -2653,10 +2644,9 @@ namespace NonVisuals.Radios
 
                         case CurrentMi8RadioMode.ARK_UD:
                             {
-                                string stringToBeShownLeft;
-                                uint arkPreset = 0;
-                                uint arkMode = 0;
-                                uint arkBand = 0;
+                                uint arkPreset;
+                                uint arkMode;
+                                uint arkBand;
                                 lock (_lockArkudPresetDialObject)
                                 {
                                     arkPreset = _arkUdPresetCockpitDial1Pos + 1;
@@ -2674,7 +2664,7 @@ namespace NonVisuals.Radios
 
                                 // 1 4 5
                                 // 12345
-                                stringToBeShownLeft = arkBand + "   " + arkMode;
+                                var stringToBeShownLeft = arkBand + "   " + arkMode;
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, arkPreset, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBytesDefault(ref bytes, stringToBeShownLeft, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
@@ -2684,7 +2674,7 @@ namespace NonVisuals.Radios
                             {
                                 // 0-5
                                 string channelAsString;
-                                uint spuICSSwitch = 0;
+                                uint spuICSSwitch;
                                 lock (_lockSpu7DialObject1)
                                 {
                                     channelAsString = (_spu7CockpitDialPos).ToString().PadLeft(2, ' ');

@@ -35,14 +35,14 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
 
         private DCSBIOSOutput MASTER_CAUTION_LT;
 
-        string cue1 =" ", cue2=" ", cue3 = " ", cue4 = " ", cue5 = " ";
-        string option1 = "    ", option2 = "    ", option3 = "    ", option4 = "    ", option5 = "    ";
+        string _cue1 =" ", _cue2=" ", _cue3 = " ", _cue4 = " ", _cue5 = " ";
+        string _option1 = "    ", _option2 = "    ", _option3 = "    ", _option4 = "    ", _option5 = "    ";
 
-        string scractchpad_number = "        "; //8
-        string scratchpad_1 ="  ";
-        string scratchpad_2 = "  ";
+        string _scratchPadNumber = "        "; //8
+        string _scratchPad1 ="  ";
+        string _scratchPad2 = "  ";
 
-        uint master_caution = 0;
+        uint _masterCaution = 0;
 
         public CDU737PanelFA18C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
@@ -166,10 +166,10 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                 if ( e.Address.Equals(MASTER_CAUTION_LT.Address))
                 {
                     uint newMasterCaution = MASTER_CAUTION_LT.GetUIntValue(e.Data);
-                    if (master_caution != newMasterCaution)
+                    if (_masterCaution != newMasterCaution)
                     {
-                        master_caution = newMasterCaution;
-                        if (master_caution == 0)
+                        _masterCaution = newMasterCaution;
+                        if (_masterCaution == 0)
                         {
                             Led_OFF(CDU737Led.FAIL);
                         }
@@ -194,8 +194,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             
             try
             {
-                int linesChanged = 0;
-                string incomingData = "";
+                string incomingData;
                 const string filler = "                   ";
 
                 SetLine(0, "");
@@ -208,144 +207,131 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                         incomingData = "   ERROR";
                     };
                     
-                    if (string.Compare(incomingData, scractchpad_number) !=0)
+                    if (string.Compare(incomingData, _scratchPadNumber) !=0)
                     {
-                        linesChanged++;
-                        scractchpad_number = incomingData;
+                        _scratchPadNumber = incomingData;
                     }
                 }
                 if (e.Address.Equals(UFC_SCRATCHPAD_STRING_1_DISPLAY.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, scratchpad_1) != 0)
+                    if (string.Compare(incomingData, _scratchPad1) != 0)
                     {
-                        linesChanged++;
-                        scratchpad_1 = incomingData;
+                        _scratchPad1 = incomingData;
                     }
 
                 }
                 if (e.Address.Equals(UFC_SCRATCHPAD_STRING_2_DISPLAY.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, scratchpad_2) != 0)
+                    if (string.Compare(incomingData, _scratchPad2) != 0)
                     {
-                        linesChanged++;
-                        scratchpad_2 = incomingData;
+                        _scratchPad2 = incomingData;
                     }
 
                 }
 
-                SetLine(1, string.Format("{0,2}{1,2}{2,8}" , scratchpad_1, scratchpad_2, scractchpad_number));
+                SetLine(1, string.Format("{0,2}{1,2}{2,8}" , _scratchPad1, _scratchPad2, _scratchPadNumber));
 
                 if (e.Address.Equals(UFC_OPTION_DISPLAY_1.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, option1) != 0)
+                    if (string.Compare(incomingData, _option1) != 0)
                     {
-                        linesChanged++;
-                        option1 = incomingData;
+                        _option1 = incomingData;
                     }
                 }
                 
                 if (e.Address.Equals(UFC_OPTION_CUEING_1.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, cue1) != 0)
+                    if (string.Compare(incomingData, _cue1) != 0)
                     {
-                        linesChanged++;
-                        cue1 = incomingData;
+                        _cue1 = incomingData;
                     }
 
                 }
-                SetLine(2, string.Format("{2,19}{0,1}{1,4}", cue1, option1, filler));
+                SetLine(2, string.Format("{2,19}{0,1}{1,4}", _cue1, _option1, filler));
                 SetLine(3, "");
 
                 if (e.Address.Equals(UFC_OPTION_DISPLAY_2.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, option2) != 0)
+                    if (string.Compare(incomingData, _option2) != 0)
                     {
-                        linesChanged++;
-                        option2 = incomingData;
+                        _option2 = incomingData;
                     }
                 }
 
                 if (e.Address.Equals(UFC_OPTION_CUEING_2.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, cue2) != 0)
+                    if (string.Compare(incomingData, _cue2) != 0)
                     {
-                        linesChanged++;
-                        cue2 = incomingData;
+                        _cue2 = incomingData;
                     }
                 }
-                SetLine(4, string.Format("{2,19}{0,1}{1,4}", cue2, option2, filler));
+                SetLine(4, string.Format("{2,19}{0,1}{1,4}", _cue2, _option2, filler));
                 SetLine(5, "");
 
                 if (e.Address.Equals(UFC_OPTION_DISPLAY_3.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, option3) != 0)
+                    if (string.Compare(incomingData, _option3) != 0)
                     {
-                        linesChanged++;
-                        option3 = incomingData;
+                        _option3 = incomingData;
                     }
                 }
 
                 if (e.Address.Equals(UFC_OPTION_CUEING_3.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, cue3) != 0)
+                    if (string.Compare(incomingData, _cue3) != 0)
                     {
-                        linesChanged++;
-                        cue3 = incomingData;
+                        _cue3 = incomingData;
                     }
                 }
-                SetLine(6, string.Format("{2,19}{0,1}{1,4}", cue3, option3, filler));
+                SetLine(6, string.Format("{2,19}{0,1}{1,4}", _cue3, _option3, filler));
                 SetLine(7, "");
 
                 if (e.Address.Equals(UFC_OPTION_DISPLAY_4.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, option4) != 0)
+                    if (string.Compare(incomingData, _option4) != 0)
                     {
-                        linesChanged++;
-                        option4 = incomingData;
+                        _option4 = incomingData;
                     }
                 }
 
                 if (e.Address.Equals(UFC_OPTION_CUEING_4.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, cue4) != 0)
+                    if (string.Compare(incomingData, _cue4) != 0)
                     {
-                        linesChanged++;
-                        cue4 = incomingData;
+                        _cue4 = incomingData;
                     }
                 }
-                SetLine(8, string.Format("{2,19}{0,1}{1,4}", cue4, option4, filler));
+                SetLine(8, string.Format("{2,19}{0,1}{1,4}", _cue4, _option4, filler));
                 SetLine(9, "");
 
                 if (e.Address.Equals(UFC_OPTION_DISPLAY_5.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, option5) != 0)
+                    if (string.Compare(incomingData, _option5) != 0)
                     {
-                        linesChanged++;
-                        option5 = incomingData;
+                        _option5 = incomingData;
                     }
                 }
 
                 if (e.Address.Equals(UFC_OPTION_CUEING_5.Address))
                 {
                     incomingData = e.StringData;
-                    if (string.Compare(incomingData, cue5) != 0)
+                    if (string.Compare(incomingData, _cue5) != 0)
                     {
-                        linesChanged++;
-                        cue5 = incomingData;
+                        _cue5 = incomingData;
                     }
                 }
-                SetLine(10, string.Format("{2,19}{0,1}{1,4}", cue5, option5,filler));
+                SetLine(10, string.Format("{2,19}{0,1}{1,4}", _cue5, _option5,filler));
                 SetLine(11, "");
 
             }

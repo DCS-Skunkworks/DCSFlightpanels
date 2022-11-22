@@ -497,7 +497,7 @@ namespace NonVisuals.Radios
 
                     case CurrentFA18CRadioMode.ILS:
                         {
-                            uint ilsChannel = 1;
+                            uint ilsChannel;
                             lock (_lockIlsDialsObject)
                             {
                                 ilsChannel = _ilsCockpitChannel;
@@ -580,7 +580,7 @@ namespace NonVisuals.Radios
 
                     case CurrentFA18CRadioMode.ILS:
                         {
-                            uint ilsChannel = 1;
+                            uint ilsChannel;
                             lock (_lockIlsDialsObject)
                             {
                                 ilsChannel = _ilsCockpitChannel;

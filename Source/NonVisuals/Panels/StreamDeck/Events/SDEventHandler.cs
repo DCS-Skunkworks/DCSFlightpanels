@@ -113,16 +113,18 @@
             var eventArguments = new StreamDeckDirtyReportArgs();
 
             OnDirtyConfigurationsEventHandler?.Invoke(sender, eventArguments);
-            foreach (var @delegate in OnDirtyConfigurationsEventHandler.GetInvocationList())
+            if (OnDirtyConfigurationsEventHandler != null)
             {
-                @delegate.DynamicInvoke(sender, eventArguments);
-
-                if (eventArguments.Cancel)
+                foreach (var @delegate in OnDirtyConfigurationsEventHandler.GetInvocationList())
                 {
-                    return true; // There are dirty listeners out there
+                    @delegate.DynamicInvoke(sender, eventArguments);
+
+                    if (eventArguments.Cancel)
+                    {
+                        return true; // There are dirty listeners out there
+                    }
                 }
             }
-
             return false;
         }
 

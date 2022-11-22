@@ -7,9 +7,9 @@ namespace NonVisuals.CockpitMaster.Panels
     {
         const int MAX_CHAR = 24;
 
-        private DisplayedChar[] displayedChars = new DisplayedChar[MAX_CHAR];
+        private DisplayedChar[] _displayedChars = new DisplayedChar[MAX_CHAR];
 
-        private readonly byte[] encodedLine = new byte[36];
+        private readonly byte[] _encodedLine = new byte[36];
         private string _line;
         private CDUColor _lineColor;
 
@@ -51,34 +51,33 @@ namespace NonVisuals.CockpitMaster.Panels
                 // Transcode all Known Chars.
                 for (int i = 0; i < _line.Length; i++)
                 {
-                    CDUCharset converted = convert(_line[i]);
+                    CDUCharset converted = Convert(_line[i]);
 
                     // Defaults to line color, 
                     CDUColor _oldColor = _lineColor;
 
-                    if (displayedChars[i] != null)
+                    if (_displayedChars[i] != null)
                     {
                         // Keep any masks Applied 
-                        _oldColor = displayedChars[i].Color;
+                        _oldColor = _displayedChars[i].Color;
                     }
-                    displayedChars[i] = new DisplayedChar(converted, _oldColor);
+                    _displayedChars[i] = new DisplayedChar(converted, _oldColor);
 
                 }
 
                 // Add spaces for the rest of the Line. 
-                for (int i = _line.Length; i < displayedChars.Length; i++)
+                for (int i = _line.Length; i < _displayedChars.Length; i++)
                 {
-                    displayedChars[i] = new DisplayedChar(CDUCharset.space);
+                    _displayedChars[i] = new DisplayedChar(CDUCharset.Space);
                 }
-                encode();
+                Encode();
 
             }
         }
 
-        private CDUCharset convert(char ch)
+        private CDUCharset Convert(char ch)
         {
-            CDUCharset converted;
-            if (!_convertTable.TryGetValue(ch, out converted))
+            if (!_convertTable.TryGetValue(ch, out var converted))
             {
                 Console.WriteLine(ch); // to Debug Breakpoint un mapped chars
             }
@@ -86,24 +85,24 @@ namespace NonVisuals.CockpitMaster.Panels
             return converted;
         }
 
-        public void setLineWithDisplayedChar(DisplayedChar[] line)
+        public void SetLineWithDisplayedChar(DisplayedChar[] line)
         {
             // Add spaces for the rest of the Line. 
-            displayedChars = line;
-            encode();
+            _displayedChars = line;
+            Encode();
 
         }
 
-        public void setDisplayedCharAt(DisplayedChar ch, int index)
+        public void SetDisplayedCharAt(DisplayedChar ch, int index)
         {
             if (index < 0 || index > MAX_CHAR - 1) throw new ArgumentException("CDUTextLine - Index out of Range 0 - 23");
-            displayedChars[index] = ch;
-            encode();
+            _displayedChars[index] = ch;
+            Encode();
         }
 
-        public byte[] getEncodedBytes()
+        public byte[] GetEncodedBytes()
         {
-            return encodedLine;
+            return _encodedLine;
         }
 
         // This sets the default for the Line 
@@ -113,40 +112,40 @@ namespace NonVisuals.CockpitMaster.Panels
             get { return _lineColor; }
             set { 
                 _lineColor = value;
-                applyColorToLine(value);
+                ApplyColorToLine(value);
             }
         }
 
-        public void applyColorToLine(CDUColor color)
+        public void ApplyColorToLine(CDUColor color)
         {
             for (int i = 0; i < MAX_CHAR; i++)
             {
-                displayedChars[i].Color= color;
+                _displayedChars[i].Color= color;
             }
-            encode();
+            Encode();
         }
 
-        public void applyMaskColor(CDUColor[] colorArray)
+        public void ApplyMaskColor(CDUColor[] colorArray)
         {
             for (int i = 0; i < MAX_CHAR; i++)
             {
-                displayedChars[i].Color = colorArray[i];
+                _displayedChars[i].Color = colorArray[i];
             }
-            encode();
+            Encode();
         }
 
-        private void encode()
+        private void Encode()
         {
             int tempIndex = 0;
 
             for (int c = 0; c < MAX_CHAR; c += 2)
             {
 
-                byte[] tempo = DisplayedChar.encode2chars(displayedChars[c], displayedChars[c + 1]);
+                byte[] tempo = DisplayedChar.Encode2Chars(_displayedChars[c], _displayedChars[c + 1]);
 
-                encodedLine[tempIndex++] = tempo[0];
-                encodedLine[tempIndex++] = tempo[1];
-                encodedLine[tempIndex++] = tempo[2];
+                _encodedLine[tempIndex++] = tempo[0];
+                _encodedLine[tempIndex++] = tempo[1];
+                _encodedLine[tempIndex++] = tempo[2];
 
             }
         }

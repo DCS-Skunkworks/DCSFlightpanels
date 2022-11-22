@@ -101,7 +101,7 @@
             var i = 0;
             var formatString = "0.".PadRight(decimals + 2, '0');
 
-            var numberFormatInfoEmpty = new NumberFormatInfo()
+            var numberFormatInfoEmpty = new NumberFormatInfo
             {
                 NumberDecimalSeparator = ".",
                 NumberGroupSeparator = string.Empty
@@ -140,7 +140,7 @@
             // Debug.WriteLine("Array position = " + arrayPosition);
             // Debug.WriteLine("Max array position = " + (maxArrayPosition));
             var i = 0;
-            var numberFormatInfoFullDisplay = new NumberFormatInfo()
+            var numberFormatInfoFullDisplay = new NumberFormatInfo
             {
                 NumberDecimalSeparator = ".",
                 NumberDecimalDigits = 4,

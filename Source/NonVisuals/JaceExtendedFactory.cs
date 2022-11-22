@@ -24,7 +24,7 @@ namespace NonVisuals
                         var collision = false;
                         while (true)
                         {
-                            if (id == 0 || collision == true)
+                            if (id == 0 || collision)
                             {
                                 id = new Random(DateTime.Now.Millisecond).Next(int.MaxValue);
                             }

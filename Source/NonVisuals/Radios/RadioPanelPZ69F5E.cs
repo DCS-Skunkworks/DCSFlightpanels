@@ -462,19 +462,14 @@ namespace NonVisuals.Radios
             // Small dial 0.00-0.95 [step of 0.05]
             var frequency = _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby;
             var frequencyAsString = frequency.ToString("0.00", NumberFormatInfoFullDisplay);
-
-            var freqDial1 = 0;
-            var freqDial2 = 0;
-            var freqDial3 = 0;
-            var freqDial4 = 0;
-            var freqDial5 = 0;
-            freqDial1 = int.Parse(frequencyAsString.Substring(0, 1));
-            freqDial2 = int.Parse(frequencyAsString.Substring(1, 1));
-            freqDial3 = int.Parse(frequencyAsString.Substring(2, 1));
-            freqDial4 = int.Parse(frequencyAsString.Substring(4, 1));
+            
+            var freqDial1 = int.Parse(frequencyAsString.Substring(0, 1));
+            var freqDial2 = int.Parse(frequencyAsString.Substring(1, 1));
+            var freqDial3 = int.Parse(frequencyAsString.Substring(2, 1));
+            var freqDial4 = int.Parse(frequencyAsString.Substring(4, 1));
 
             var tmp = int.Parse(frequencyAsString.Substring(5, 1));
-            freqDial5 = tmp switch
+            var freqDial5 = tmp switch
             {
                 0 => 0,
                 2 => 1,
@@ -2029,24 +2024,21 @@ namespace NonVisuals.Radios
              */
             try
             {
-                var bigFrequencyAsString = string.Empty;
+                string bigFrequencyAsString;
                 var smallFrequencyAsString = "0.";
                 lock (_lockUhfDialsObject1)
                 {
                     bigFrequencyAsString = GetUhfDialFrequencyForPosition(1, _uhfCockpitFreq1DialPos);
-
                 }
 
                 lock (_lockUhfDialsObject2)
                 {
                     bigFrequencyAsString += GetUhfDialFrequencyForPosition(2, _uhfCockpitFreq2DialPos);
-
                 }
 
                 lock (_lockUhfDialsObject3)
                 {
                     bigFrequencyAsString += GetUhfDialFrequencyForPosition(3, _uhfCockpitFreq3DialPos);
-
                 }
 
                 lock (_lockUhfDialsObject4)

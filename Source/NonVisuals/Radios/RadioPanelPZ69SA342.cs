@@ -451,13 +451,10 @@ namespace NonVisuals.Radios
             var frequency = _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby;
             var frequencyAsString = frequency.ToString("0.000", NumberFormatInfoFullDisplay);
 
-            var desiredPositionDialWholeNumbers = 0;
-            var desiredPositionDecimals = 0;
-
             // 118.950
             // First digit is always 1, no need to do anything about it.
-            desiredPositionDialWholeNumbers = int.Parse(frequencyAsString.Substring(1, 2));
-            desiredPositionDecimals = frequencyAsString.Length < 7 ? int.Parse(frequencyAsString.Substring(4, 2) + "0") : int.Parse(frequencyAsString.Substring(4, 3));
+            var desiredPositionDialWholeNumbers = int.Parse(frequencyAsString.Substring(1, 2));
+            var desiredPositionDecimals = frequencyAsString.Length < 7 ? int.Parse(frequencyAsString.Substring(4, 2) + "0") : int.Parse(frequencyAsString.Substring(4, 3));
 
             // #1
             _shutdownVHFAMThread = true;
@@ -784,7 +781,7 @@ namespace NonVisuals.Radios
                         {
                             // Presets
                             // 0 - 8
-                            uint preset = 0;
+                            uint preset;
                             lock (_lockFmRadioPresetObject)
                             {
                                 preset = _fmRadioPresetCockpitDialPos + 1;
@@ -808,7 +805,7 @@ namespace NonVisuals.Radios
 
                     case CurrentSA342RadioMode.ADF:
                         {
-                            uint tmpValue = 0;
+                            uint tmpValue;
                             lock (_adfSwitchUnitDcsbiosOutput)
                             {
                                 tmpValue = _adfCockpitSelectedUnitValue + 1;
@@ -821,8 +818,8 @@ namespace NonVisuals.Radios
 
                     case CurrentSA342RadioMode.NADIR:
                         {
-                            uint tmpValueMode = 0;
-                            uint tmpValueDopper = 0;
+                            uint tmpValueMode;
+                            uint tmpValueDopper;
                             lock (_lockNADIRUnitObject)
                             {
                                 tmpValueMode = _nadirModeCockpitValue + 1;
@@ -894,7 +891,7 @@ namespace NonVisuals.Radios
                         {
                             // Presets
                             // 0 - 8
-                            uint preset = 0;
+                            uint preset;
                             lock (_lockFmRadioPresetObject)
                             {
                                 preset = _fmRadioPresetCockpitDialPos + 1;
@@ -918,7 +915,7 @@ namespace NonVisuals.Radios
 
                     case CurrentSA342RadioMode.ADF:
                         {
-                            uint tmpValue = 0;
+                            uint tmpValue;
                             lock (_adfSwitchUnitDcsbiosOutput)
                             {
                                 tmpValue = _adfCockpitSelectedUnitValue + 1;
@@ -931,8 +928,8 @@ namespace NonVisuals.Radios
 
                     case CurrentSA342RadioMode.NADIR:
                         {
-                            uint tmpValueMode = 0;
-                            uint tmpValueDopper = 0;
+                            uint tmpValueMode;
+                            uint tmpValueDopper;
                             lock (_lockNADIRUnitObject)
                             {
                                 tmpValueMode = _nadirModeCockpitValue + 1;

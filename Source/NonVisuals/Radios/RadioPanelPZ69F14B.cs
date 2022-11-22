@@ -771,10 +771,10 @@ namespace NonVisuals.Radios
             SaveCockpitFrequencyUhf();
             var frequencyAsString = _uhfBigFrequencyStandby + "." + _uhfSmallFrequencyStandby.ToString().PadLeft(3, '0');
             
-            var desiredDial1Value = 0;
-            var desiredDial2Value = 0;
-            var desiredDial3Value = 0;
-            var desiredDial4Value = 0;
+            int desiredDial1Value;
+            int desiredDial2Value;
+            int desiredDial3Value;
+            int desiredDial4Value;
 
             if (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture) == 2)
             {
@@ -966,10 +966,10 @@ namespace NonVisuals.Radios
             SaveCockpitFrequencyVuhf();
             var frequencyAsString = _vuhfBigFrequencyStandby + "." + _vuhfSmallFrequencyStandby.ToString().PadLeft(3, '0');
 
-            var desiredDial1Value = 0;
-            var desiredDial2Value = 0;
-            var desiredDial3Value = 0;
-            var desiredDial4Value = 0;
+            int desiredDial1Value;
+            int desiredDial2Value;
+            int desiredDial3Value;
+            int desiredDial4Value;
 
             if (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture) == 2)
             {
@@ -1233,7 +1233,7 @@ namespace NonVisuals.Radios
                                     dial1OkTime = DateTime.Now.Ticks;
                                     var str = RIO_LINK4_TENS_DIAL_COMMAND + (_rioLink4TensCockpitFrequency < desiredPositionDial2 ? inc : dec);
                                     DCSBIOS.Send(str);
-                                    dial1SendCount++;
+                                    dial2SendCount++;
                                     Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 1);
                                 }
                                 Reset(ref dial1Timeout);
@@ -1253,7 +1253,7 @@ namespace NonVisuals.Radios
                                     dial1OkTime = DateTime.Now.Ticks;
                                     var str = RIO_LINK4_ONES_DIAL_COMMAND + (_rioLink4OnesCockpitFrequency < desiredPositionDial3 ? inc : dec);
                                     DCSBIOS.Send(str);
-                                    dial1SendCount++;
+                                    dial3SendCount++;
                                     Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 1);
                                 }
                                 Reset(ref dial1Timeout);

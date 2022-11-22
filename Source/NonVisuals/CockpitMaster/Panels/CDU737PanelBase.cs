@@ -70,11 +70,11 @@
             "","","","","","","",
         };
 
-        private HidReport[] hidReport;
+        private HidReport[] _hidReport;
 
         // This byte stores the physical panel Led Status 
         // it's a combination of bits coming from CDU737Led enum
-        private byte LedStatus = 0;
+        private byte _ledStatus = 0;
 
         // Default convertTable to transform chars from DCSBios to 
         // existing chars in the CDU charset
@@ -82,7 +82,7 @@
 
         // storage of lines status in a human comprehensible way
         // is used later to encode the hidreport buffers 
-        private CDUTextLine[] _TextLines = new CDUTextLine[LINES_ON_CDU];
+        private readonly CDUTextLine[] _textLines = new CDUTextLine[LINES_ON_CDU];
 
         private CDUColor _baseColor;
 
@@ -94,7 +94,7 @@
 
                 for (int i=0;i< LINES_ON_CDU;i++ )
                 {
-                    result[i] = _TextLines[i].Line;
+                    result[i] = _textLines[i].Line;
                 }
                 return result;
             }
@@ -113,7 +113,7 @@
                 throw new ArgumentException($"GamingPanelType {GamingPanelEnum.CDU737} expected");
             }
 
-            initCDU();
+            InitCDU();
 
             VendorId = (int)GamingPanelVendorEnum.CockpitMaster;
             ProductId = (int)GamingPanelEnum.CDU737;
@@ -143,7 +143,7 @@
         }
 
 
-        private void initCDU()
+        private void InitCDU()
         {
             // Init ScreenBuffer ( HidReport Representation of the CDU ) 
             // The screen on the physical device is refreshed by sending 
@@ -173,14 +173,14 @@
             // Init Text Lines 
             for (int line = 0; line < LINES_ON_CDU; line++)
             {
-                _TextLines[line] = new CDUTextLine();
+                _textLines[line] = new CDUTextLine();
             }
 
             SetLine(5, "      DCS CDU 737       ");
             SetLine(7, "       by Cerppo        ");
             SetLine(9, "* waiting dcsBios data *");
 
-            hidReport = new HidReport[] {
+            _hidReport = new HidReport[] {
                 HIDWriteDevice.CreateReport(),
                 HIDWriteDevice.CreateReport(),
                 HIDWriteDevice.CreateReport(),
@@ -227,7 +227,7 @@
             set
             {
                 _convertTable = value;
-                foreach (CDUTextLine line in _TextLines) line.ConvertTable = value;
+                foreach (CDUTextLine line in _textLines) line.ConvertTable = value;
             }
         }
 
@@ -328,35 +328,35 @@
 
         public void Led_ON(CDU737Led led)
         {
-           LedStatus |= (byte)led;
+           _ledStatus |= (byte)led;
         }
 
         public void Led_OFF(CDU737Led led)
         {
-            LedStatus &= unchecked((byte)~led);
+            _ledStatus &= unchecked((byte)~led);
         }
 
         public void SetLine(int line, string text)
         {
             if (line < 0 || line > LINES_ON_CDU-1) throw new ArgumentOutOfRangeException(nameof(line), "CDU Line must be 0 to 13");
-            _TextLines[line].Line = text;
+            _textLines[line].Line = text;
         }
 
         public void SetDisplayCharAt( int line, DisplayedChar ch, int index)
         {
             if (line < 0 || line > LINES_ON_CDU - 1) throw new ArgumentOutOfRangeException(nameof(line), "CDU Line must be 0 to 13");
-            _TextLines[line].setDisplayedCharAt(ch, index);
+            _textLines[line].SetDisplayedCharAt(ch, index);
 
         }
 
         public void SetColorForLine( int line, CDUColor color)
         {
-            _TextLines[line].applyColorToLine(color);
+            _textLines[line].ApplyColorToLine(color);
         }
 
         public void SetMaskColorForLine( int line, CDUColor[] mask)
         {
-            _TextLines[line].applyMaskColor(mask);
+            _textLines[line].ApplyMaskColor(mask);
         }
 
         private void TimedDisplayBufferOnCDU(object sender, ElapsedEventArgs e)
@@ -389,7 +389,7 @@
                 {
                     // Scan all the lines, 
                     // copy 63 char in a "buffer" , 
-                    byte[] tempo = _TextLines[line].getEncodedBytes();
+                    byte[] tempo = _textLines[line].GetEncodedBytes();
 
                     for (int i = 0; i < tempo.Length; i++)
                     {
@@ -414,19 +414,19 @@
                     // Doing this here, ensure the Numbering of HidReport is not "broken" 
                     // by mistake, and simplifies "recopy of lines in buffers
                     
-                    hidReport[i].Data[0] = (byte)(i + 1);
-                    Array.Copy(ScreenBuffer[i], 0, hidReport[i].Data, 1, 63);
+                    _hidReport[i].Data[0] = (byte)(i + 1);
+                    Array.Copy(ScreenBuffer[i], 0, _hidReport[i].Data, 1, 63);
                     
-                    _ = HIDWriteDevice.WriteReportAsync(hidReport[i]);
+                    _ = HIDWriteDevice.WriteReportAsync(_hidReport[i]);
                 }
 
                 // Handles LED 
                 // BrightAndLefbuffer[0] = 9 and should not be modified 
                 
-                BrightAndLedBuffer[3] = LedStatus;
-                hidReport[8].Data = BrightAndLedBuffer;
+                BrightAndLedBuffer[3] = _ledStatus;
+                _hidReport[8].Data = BrightAndLedBuffer;
 
-                _ = HIDWriteDevice.WriteReport(hidReport[8]);
+                _ = HIDWriteDevice.WriteReport(_hidReport[8]);
             }
 
         }

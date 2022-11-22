@@ -23,70 +23,70 @@
     }
     public enum CDUCharset
     {
-        space=0,
-        lower = 0x01,
-        greater = 0x02,
-        percent = 0x03,
-        openparent = 0x04,
-        closeparent = 0x05,
-        dot = 0x06,
-        dash = 0x07,
-        slash = 0x08,
-        plus= 0x09,
-        colon = 0x0a,
-        semicolon = 0x0b,
-        emptysquare = 0x0c,
-        uparrow = 0x0d,
-        downarrow = 0xe,
-        leftarrow = 0x0f, 
-        rightarrow = 0x10,
-        degre =0x11,
-        degcelcius =0x12,
-        degfar = 0x13,
-        check = 0x14,
-        needInvertedBig01 = 0x15,
-        needInvertedBig02 = 0x16,
-        needInvertedBig03 = 0x17,
-        needInvertedBig04 = 0x18,
-        needInvertedBig05 = 0x19,
-        needInvertedBig06 = 0x1a,
-        needInvertedBig07 = 0x1b,
-        zero = 0x1c,
-        one = 0x1d,
-        two = 0x1e,
-        three = 0x1f,
-        four =0x20,
-        five = 0x21,
-        six =0x22, 
-        seven= 0x23,
-        eight = 0x24,
-        nine = 0x25,
-        a = 0x26,
-        b =0x27,
-        c =0x28,
-        d= 0x29,
-        e =0x2a,
-        f =0x2b,
-        g = 0x2c,
-        h =0x2d,
-        i =0x2e,
-        j =0x2f,
-        k =0x30,
-        l = 0x31,
-        m = 0x32, 
-        n= 0x33,
-        o = 0x34,
-        p = 0x35,
-        q = 0x36, 
-        r = 0x37, 
-        s = 0x38, 
-        t = 0x39, 
-        u = 0x3a,
-        v = 0x3b,
-        w = 0x3c,
-        x = 0x3d,
-        y = 0x3e,
-        z = 0x3f,
+        Space=0,
+        Lower = 0x01,
+        Greater = 0x02,
+        Percent = 0x03,
+        OpenParent = 0x04,
+        CloseParent = 0x05,
+        Dot = 0x06,
+        Dash = 0x07,
+        Slash = 0x08,
+        Plus= 0x09,
+        Colon = 0x0a,
+        Semicolon = 0x0b,
+        EmptySquare = 0x0c,
+        UpArrow = 0x0d,
+        DownArrow = 0xe,
+        LeftArrow = 0x0f, 
+        RightArrow = 0x10,
+        Degree =0x11,
+        DegCelsius =0x12,
+        DegFarenheit = 0x13,
+        Check = 0x14,
+        NeedInvertedBig01 = 0x15,
+        NeedInvertedBig02 = 0x16,
+        NeedInvertedBig03 = 0x17,
+        NeedInvertedBig04 = 0x18,
+        NeedInvertedBig05 = 0x19,
+        NeedInvertedBig06 = 0x1a,
+        NeedInvertedBig07 = 0x1b,
+        Zero = 0x1c,
+        One = 0x1d,
+        Two = 0x1e,
+        Three = 0x1f,
+        Four =0x20,
+        Five = 0x21,
+        Six =0x22, 
+        Seven= 0x23,
+        Eight = 0x24,
+        Nine = 0x25,
+        A = 0x26,
+        B =0x27,
+        C =0x28,
+        D = 0x29,
+        E =0x2a,
+        F =0x2b,
+        G = 0x2c,
+        H =0x2d,
+        I =0x2e,
+        J =0x2f,
+        K =0x30,
+        L = 0x31,
+        M = 0x32, 
+        N= 0x33,
+        O = 0x34,
+        P = 0x35,
+        Q = 0x36, 
+        R = 0x37, 
+        S = 0x38, 
+        T = 0x39, 
+        U = 0x3a,
+        V = 0x3b,
+        W = 0x3c,
+        X = 0x3d,
+        Y = 0x3e,
+        Z = 0x3f,
 
     }
 
@@ -112,7 +112,7 @@
 
         }
    
-        public byte getCode()
+        public byte GetCode()
         {
             byte _code = (byte) _value;
             if (Inverted) _code |= (byte) Modifier.Inverted;
@@ -121,7 +121,7 @@
 
         }
                 
-        static public byte[] encode2chars(DisplayedChar char1, DisplayedChar char2)
+        static public byte[] Encode2Chars(DisplayedChar char1, DisplayedChar char2)
         {
             // encode 2 consecutive chars 
             // respecting the HIDreport structure
@@ -133,9 +133,9 @@
             // method returns => 0x47 0x73 0x24 
 
             byte[] encoded = new byte[3];
-            encoded[0]= char1.getCode();
-            encoded[1] = (byte)((char2.getCode() << 4) | (byte) char1.Color);
-            encoded[2] = (byte)((char2.getCode() >> 4) | ((byte)char2.Color) << 4);
+            encoded[0]= char1.GetCode();
+            encoded[1] = (byte)((char2.GetCode() << 4) | (byte) char1.Color);
+            encoded[2] = (byte)((char2.GetCode() >> 4) | ((byte)char2.Color) << 4);
             return encoded;
 
         }

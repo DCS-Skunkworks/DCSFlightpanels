@@ -133,12 +133,10 @@ namespace NonVisuals.BindingClasses.Key
                     keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN
                    )
                 {
-                    MultiPanelPZ70Knobs negatorKnob = MultiPanelPZ70Knobs.KNOB_ALT;
-
                     /*
                      * This is actually broken, the dial on PZ70, you should be able to dial in two directions from IAS and get negation.
                      */
-                    negatorKnob = keyBindingPZ70.MultiPanelPZ70Knob switch
+                    MultiPanelPZ70Knobs negatorKnob = keyBindingPZ70.MultiPanelPZ70Knob switch
                     {
                         MultiPanelPZ70Knobs.KNOB_ALT => MultiPanelPZ70Knobs.KNOB_VS,
                         MultiPanelPZ70Knobs.KNOB_VS => MultiPanelPZ70Knobs.KNOB_ALT,
