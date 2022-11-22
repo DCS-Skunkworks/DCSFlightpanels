@@ -472,7 +472,7 @@ namespace HidLibrary
             var callbackDelegate = (ReadCallback)hidAsyncState.CallbackDelegate;
             var data = callerDelegate.EndInvoke(ar);
 
-            if ((callbackDelegate != null)) callbackDelegate.Invoke(data);
+            if (callbackDelegate != null) callbackDelegate.Invoke(data);
         }
 
         protected static void EndReadReport(IAsyncResult ar)
@@ -482,7 +482,7 @@ namespace HidLibrary
             var callbackDelegate = (ReadReportCallback)hidAsyncState.CallbackDelegate;
             var report = callerDelegate.EndInvoke(ar);
 
-            if ((callbackDelegate != null)) callbackDelegate.Invoke(report);
+            if (callbackDelegate != null) callbackDelegate.Invoke(report);
         }
 
         private static void EndWrite(IAsyncResult ar)
@@ -492,7 +492,7 @@ namespace HidLibrary
             var callbackDelegate = (WriteCallback)hidAsyncState.CallbackDelegate;
             var result = callerDelegate.EndInvoke(ar);
 
-            if ((callbackDelegate != null)) callbackDelegate.Invoke(result);
+            if (callbackDelegate != null) callbackDelegate.Invoke(result);
         }
 
         private static void EndWriteReport(IAsyncResult ar)
@@ -502,7 +502,7 @@ namespace HidLibrary
             var callbackDelegate = (WriteCallback)hidAsyncState.CallbackDelegate;
             var result = callerDelegate.EndInvoke(ar);
 
-            if ((callbackDelegate != null)) callbackDelegate.Invoke(result);
+            if (callbackDelegate != null) callbackDelegate.Invoke(result);
         }
 
         private byte[] CreateInputBuffer()

@@ -18,14 +18,16 @@ namespace Tests.NonVisuals
         private const string _stringValue2 = "Some string value 2";
         private const string _stringValue3 = "Some string value 3";
         private const int _intValue1 = 456;
-        private Color _colorValue1 = Color.Aquamarine;
+        private readonly Color _colorValue1 = Color.Aquamarine;
 
         [Fact]
         public void KeypressInfo_MustBe_Clonable() {
-            KeyPressInfo source = new();
-            source.LengthOfKeyPress = KeyPressLength.SecondAndHalf;
-            source.LengthOfBreak = KeyPressLength.FortySecs;
-            
+            KeyPressInfo source = new()
+            {
+                LengthOfKeyPress = KeyPressLength.SecondAndHalf,
+                LengthOfBreak = KeyPressLength.FortySecs
+            };
+
             KeyPressInfo cloned = source.CloneJson();
             
             Assert.NotNull(cloned);
@@ -35,8 +37,10 @@ namespace Tests.NonVisuals
 
         [Fact]
         public void IKeyPressInfo_SortedList_MustBe_Clonable() {
-            SortedList<int, IKeyPressInfo> source = new();
-            source.Add(1, new KeyPressInfo());
+            SortedList<int, IKeyPressInfo> source = new()
+            {
+                { 1, new KeyPressInfo() }
+            };
 
             SortedList<int, IKeyPressInfo> cloned = source.CloneJson();
 
@@ -46,8 +50,10 @@ namespace Tests.NonVisuals
 
         [Fact]
         public void DCSBIOSInput_List_MustBe_Clonable() {
-            List<DCSBIOSInput> source = new();
-            source.Add(new DCSBIOSInput());
+            List<DCSBIOSInput> source = new()
+            {
+                new DCSBIOSInput()
+            };
 
             List<DCSBIOSInput> cloned = source.CloneJson();
 
@@ -58,10 +64,12 @@ namespace Tests.NonVisuals
         [Fact]        
         public void BIPLink_MustBe_Clonable_UseOf_BIPLinkPZ69() {
             //Note: BIPLink is Absract
-            BIPLinkPZ69 source = new();
-            source.Description = _stringValue1;
-            source.WhenTurnedOn = false;
-            
+            BIPLinkPZ69 source = new()
+            {
+                Description = _stringValue1,
+                WhenTurnedOn = false
+            };
+
             BIPLinkPZ69 cloned = source.CloneJson();
 
             Assert.NotNull(cloned);
@@ -72,10 +80,12 @@ namespace Tests.NonVisuals
         [Fact]
         public void BIPLink_MustBe_Clonable_UseOf_BIPLinkPZ55() {
             //Note: BIPLink is Absract
-            BIPLinkPZ55 source = new();
-            source.Description = _stringValue1;
-            source.WhenTurnedOn = false;
-            
+            BIPLinkPZ55 source = new()
+            {
+                Description = _stringValue1,
+                WhenTurnedOn = false
+            };
+
             BIPLinkPZ55 cloned = source.CloneJson();
 
             Assert.NotNull(cloned);
@@ -85,11 +95,13 @@ namespace Tests.NonVisuals
 
         [Fact]
         public void OSCommand_MustBe_Clonable() {
-            OSCommand source = new();
-            source.Name = _stringValue1;
-            source.Arguments = _stringValue2;
-            source.Command = _stringValue3;
-            
+            OSCommand source = new()
+            {
+                Name = _stringValue1,
+                Arguments = _stringValue2,
+                Command = _stringValue3
+            };
+
             OSCommand cloned = source.CloneJson();
 
             Assert.NotNull(cloned);
@@ -100,11 +112,13 @@ namespace Tests.NonVisuals
 
         [Fact]
         public void DCSBIOSDecoder_MustBe_Clonable() {
-            DCSBIOSDecoder source = new();
-            source.ButtonFinalText = _stringValue1;
-            source.ButtonTextTemplate = _stringValue2;
-            source.FontColor = _colorValue1;
-           
+            DCSBIOSDecoder source = new()
+            {
+                ButtonFinalText = _stringValue1,
+                ButtonTextTemplate = _stringValue2,
+                FontColor = _colorValue1
+            };
+
             DCSBIOSDecoder cloned = source.CloneJson();
 
             Assert.NotNull(cloned);
@@ -115,9 +129,11 @@ namespace Tests.NonVisuals
 
         [Fact]
         public void StreamDeckButton_MustBe_Clonable() {
-            StreamDeckButton source = new();
-            source.StreamDeckButtonName = EnumStreamDeckButtonNames.BUTTON1;
-            source.IsVisible = false;
+            StreamDeckButton source = new()
+            {
+                StreamDeckButtonName = EnumStreamDeckButtonNames.BUTTON1,
+                IsVisible = false
+            };
 
             StreamDeckButton cloned = source.CloneJson();
 
@@ -128,10 +144,12 @@ namespace Tests.NonVisuals
 
         [Fact]
         public void DCSBIOSInput_MustBe_Clonable() {
-            DCSBIOSInput source = new();
-            source.ControlId = _stringValue1;
-            source.Delay = _intValue1;
-            source.ControlDescription = _stringValue2;
+            DCSBIOSInput source = new()
+            {
+                ControlId = _stringValue1,
+                Delay = _intValue1,
+                ControlDescription = _stringValue2
+            };
 
             DCSBIOSInput cloned = source.CloneJson();
 
@@ -146,10 +164,12 @@ namespace Tests.NonVisuals
             var gamingPanelSkeleton =
                new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
             StreamDeckPanel streamdeckPanel = new(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), true);
-            DCSBIOSConverter source = new(streamdeckPanel);
-            source.ConverterOutputType = EnumConverterOutputType.Image;
-            source.BackgroundColor = _colorValue1;
-            source.OffsetX = _intValue1;
+            DCSBIOSConverter source = new(streamdeckPanel)
+            {
+                ConverterOutputType = EnumConverterOutputType.Image,
+                BackgroundColor = _colorValue1,
+                OffsetX = _intValue1
+            };
 
             DCSBIOSConverter cloned = source.CloneJson();
 

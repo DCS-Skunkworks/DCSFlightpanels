@@ -180,8 +180,13 @@ namespace DCSFlightpanels.Bills
 
             if (content != null)
             {
-                var copyPackage = new CopyPackage { ContentType = copyContentType, Content = content, SourceName = TextBox.Name };
-                copyPackage.Description = description;
+                CopyPackage copyPackage = new()
+                {
+                    ContentType = copyContentType,
+                    Content = content,
+                    SourceName = TextBox.Name,
+                    Description = description
+                };
                 Clipboard.SetDataObject(copyPackage);
             }
         }
