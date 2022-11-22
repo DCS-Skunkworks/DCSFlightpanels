@@ -253,16 +253,20 @@ namespace DCSFlightpanels.Windows
             {
                 var folderBrowserDialog = new FolderBrowserDialog()
                 {
-                    ShowNewFolderButton = false
+                    ShowNewFolderButton = false,
                 };
-
-                if (!string.IsNullOrEmpty(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation)))
+                
+                var folderLocation = DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);
+                if (!string.IsNullOrEmpty(folderLocation))
                 {
-                    folderBrowserDialog.SelectedPath = DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);
+                    Debug.WriteLine(folderLocation);
+                    folderBrowserDialog.SelectedPath = folderLocation;
+                    folderBrowserDialog.InitialDirectory = folderLocation;
                 }
 
                 if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
+                    Debug.WriteLine("Selected Path : " + folderBrowserDialog.SelectedPath);
                     var result = DCSBIOSCommon.CheckJSONDirectory(folderBrowserDialog.SelectedPath);
                     if (result.Item1 == true && result.Item2 == true)
                     {
