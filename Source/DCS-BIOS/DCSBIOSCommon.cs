@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace DCS_BIOS
 {
@@ -37,14 +38,7 @@ namespace DCS_BIOS
              * This gives a fairly certain indication that the folder is in fact
              * the JSON folder. There are JSON files in other folders but not many.
              */
-            var jsonFileCount = 0;
-            foreach (var filename in files)
-            {
-                if (filename.ToLower().EndsWith(".json"))
-                {
-                    jsonFileCount++;
-                }
-            }
+            var jsonFileCount = files.Count(filename => filename.ToLower().EndsWith(".json"));
 
             return jsonFileCount >= 10 ? new Tuple<bool, bool>(true, true) : new Tuple<bool, bool>(true, false);
         }
@@ -52,9 +46,9 @@ namespace DCS_BIOS
         public static string PrintBitStrings(byte[] array)
         {
             var result = string.Empty;
-            for (int i = 0; i < array.Length; i++)
+            foreach (var b in array)
             {
-                var str = Convert.ToString(array[i], 2).PadLeft(8, '0');
+                var str = Convert.ToString(b, 2).PadLeft(8, '0');
                 result = result + "  " + str;
             }
             return result;

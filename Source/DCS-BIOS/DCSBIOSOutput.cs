@@ -63,14 +63,15 @@ namespace DCS_BIOS
                 MaxValue = dcsbiosOutput.MaxValue,
                 ShiftValue = dcsbiosOutput.ShiftValue
             };
-            if (tmp.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
-            {
-                tmp.SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
-            }
 
-            if (tmp.DCSBiosOutputType == DCSBiosOutputType.StringType)
+            switch (tmp.DCSBiosOutputType)
             {
-                tmp.SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
+                case DCSBiosOutputType.IntegerType:
+                    tmp.SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
+                    break;
+                case DCSBiosOutputType.StringType:
+                    tmp.SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
+                    break;
             }
 
             return tmp;
@@ -104,7 +105,7 @@ namespace DCS_BIOS
             // todo change not processed
             lock (_lockObject)
             {
-                var result = false;
+                bool result;
                 if (DCSBiosOutputType == DCSBiosOutputType.IntegerType && data is uint u)
                 {
                     result = CheckForValueMatchAndChange(u);
@@ -127,13 +128,13 @@ namespace DCS_BIOS
             var tmpData = data;
             var value = (tmpData & Mask) >> ShiftValue;
 
-            bool resultComparison = DCSBiosOutputComparison switch
+            var resultComparison = DCSBiosOutputComparison switch
             {
                 DCSBiosOutputComparison.BiggerThan  => value > _specifiedValueInt,
                 DCSBiosOutputComparison.LessThan    => value < _specifiedValueInt,
                 DCSBiosOutputComparison.NotEquals   => value != _specifiedValueInt,
                 DCSBiosOutputComparison.Equals      => value == _specifiedValueInt,
-                _ => throw new Exception("Unexpected DCSBiosOutputComparison value"),
+                _ => throw new Exception("Unexpected DCSBiosOutputComparison value")
             };
 
             var resultChange = !value.Equals(_lastIntValue);
@@ -177,10 +178,7 @@ namespace DCS_BIOS
             /*
              * Fugly workaround, side effect of using deep clone DCSBIOSDecoder is that this is null
              */
-            if (_lockObject == null)
-            {
-                _lockObject = new object();
-            }
+            _lockObject ??= new object();
 
             lock (_lockObject)
             {

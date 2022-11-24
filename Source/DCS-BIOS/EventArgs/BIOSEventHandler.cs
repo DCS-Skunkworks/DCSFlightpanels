@@ -27,7 +27,7 @@ namespace DCS_BIOS.EventArgs
 
         public static void DCSBIOSDataAvailable(object sender, uint address, uint data)
         {
-            OnDcsDataAddressValue?.Invoke(sender, new DCSBIOSDataEventArgs() { Address = address, Data = data });
+            OnDcsDataAddressValue?.Invoke(sender, new DCSBIOSDataEventArgs { Address = address, Data = data });
         }
 
         /*
@@ -79,7 +79,7 @@ namespace DCS_BIOS.EventArgs
 
         public static void DCSBIOSStringAvailable(object sender, uint address, string data)
         {
-            OnDCSBIOSStringReceived?.Invoke(sender, new DCSBIOSStringDataEventArgs() { Address = address, StringData = data });
+            OnDCSBIOSStringReceived?.Invoke(sender, new DCSBIOSStringDataEventArgs { Address = address, StringData = data });
         }
     }
 }

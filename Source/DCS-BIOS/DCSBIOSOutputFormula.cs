@@ -22,7 +22,7 @@ namespace DCS_BIOS
         private readonly object _jaceLockObject = new();
 
         [NonSerialized]
-        private int _staticUpdateInterval = 0;
+        private int _staticUpdateInterval;
         
 
         public DCSBIOSOutputFormula()

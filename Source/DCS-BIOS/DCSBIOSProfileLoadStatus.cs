@@ -28,12 +28,9 @@ namespace DCS_BIOS
                 return;
             }
 
-            foreach (var loadStatus in LoadStatusList)
+            foreach (var loadStatus in LoadStatusList.Where(loadStatus => loadStatus.Profile == profile))
             {
-                if (loadStatus.Profile == profile)
-                {
-                    loadStatus.Loaded = loaded;
-                }
+                loadStatus.Loaded = loaded;
             }
         }
 

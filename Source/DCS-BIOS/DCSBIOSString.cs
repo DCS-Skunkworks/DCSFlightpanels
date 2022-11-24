@@ -4,23 +4,17 @@
 
     public class DCSBIOSString
     {
-        // Use this, some strings need to be fully contructed before being broadcasted
+        // Use this, some strings need to be fully constructed before being broadcast
         private readonly List<uint> _receivedAddresses = new();
         private readonly string[] _internalBuffer;
         private readonly int _length;
         private uint _address;
         
-        public int Length { get; set; }
         public bool IsComplete => _receivedAddresses.Count == 0;
         public string StringValue => string.Join(string.Empty, _internalBuffer);
         public uint Address
         {
             get => _address;
-            set
-            {
-                _address = value;
-                DCSBIOSProtocolParser.RegisterAddressToBroadCast(_address);
-            }
         }
 
         public DCSBIOSString(uint address, int length)
@@ -28,22 +22,13 @@
             _address = address;
             for (var i = _address; i < _address + length; i += 2)
             {
-                // ommon.DebugP("DCSBIOSString Registering()" + address + ", total length = " + _length);
+                // Common.DebugP("DCSBIOSString Registering()" + address + ", total length = " + _length);
                 DCSBIOSProtocolParser.RegisterAddressToBroadCast(i);
                 _receivedAddresses.Add(i);
             }
 
             _length = length;
             _internalBuffer = new string[_length];
-        }
-
-        public void Reset()
-        {
-            for (var i = _address; i < _address + _length; i += 2)
-            {
-                // Fill list of addresses to listen for
-                _receivedAddresses.Add(i);
-            }
         }
 
         public bool IsMatch(uint address)
@@ -69,7 +54,7 @@
             {
                 _receivedAddresses.Remove(address);
 
-                uint offset = address - _address;
+                var offset = address - _address;
 
                 // Debug.WriteLine("offset is : " + offset);
                 /*for (int i = 0; i < _internalBuffer.Length; i++)
@@ -106,7 +91,7 @@
             {
                 _receivedAddresses.Remove(address);
 
-                uint offset = address - _address;
+                var offset = address - _address;
                 
                 /*Debug.WriteLine("offset is : " + offset);
                 for (int i = 0; i < _internalBuffer.Length; i++)
