@@ -21,7 +21,7 @@ namespace NonVisuals.BindingClasses.BIP
                 throw new ArgumentException("Import string empty. (BIPLinkPZ70)");
             }
 
-            if (settings.StartsWith("TPMPanelBipLink{"))
+            if (settings.StartsWith("MultipanelBIPLink{"))
             {
                 var result = ParseSettingV1(settings);
                 DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), result.Item1);

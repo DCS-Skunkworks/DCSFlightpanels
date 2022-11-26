@@ -16,14 +16,17 @@ namespace DCS_BIOS
         /// 1, 0 : folder found, json not found
         /// 1, 1 : folder not found, (json not found)
         /// </returns>
-        public static Tuple<bool, bool> CheckJSONDirectory(string jsonDirectory)
+        public static Tuple<bool, bool, bool> CheckJSONDirectory(string jsonDirectory)
         {
             jsonDirectory = GetDCSBIOSJSONDirectory(jsonDirectory);
 
             Debug.WriteLine($"\nFolder exists? {Directory.Exists(jsonDirectory)}    {jsonDirectory}\n");
             if (string.IsNullOrEmpty(jsonDirectory) || !Directory.Exists(jsonDirectory))
             {
-                return new Tuple<bool, bool>(false, false);
+                /*
+                 * Folder not found
+                 */
+                return new Tuple<bool, bool, bool>(false, false, false);
             }
 
             var files = Directory.EnumerateFiles(jsonDirectory);
@@ -38,9 +41,16 @@ namespace DCS_BIOS
              * This gives a fairly certain indication that the folder is in fact
              * the JSON folder. There are JSON files in other folders but not many.
              */
-            var jsonFileCount = files.Count(filename => filename.ToLower().EndsWith(".json"));
+            var jsonFound = files.Count(filename => filename.ToLower().EndsWith(".json")) >= 10;
 
-            return jsonFileCount >= 10 ? new Tuple<bool, bool>(true, true) : new Tuple<bool, bool>(true, false);
+            /*
+             * Check that BIOS.lua is located two levels higher in the directory hierarchy as seen
+             * from the JSON files.
+             */
+            var biosLua = Path.Combine(jsonDirectory, "..\\..\\", "BIOS.lua");
+            var biosLuaFound = File.Exists(biosLua);
+
+            return new Tuple<bool, bool, bool>(true, jsonFound, biosLuaFound);
         }
 
         public static string PrintBitStrings(byte[] array)
