@@ -38,7 +38,7 @@ namespace NonVisuals.BindingClasses.BIP
             var parameters = config.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL },
                 StringSplitOptions.RemoveEmptyEntries);
 
-            if (config.Contains("MultiPanel")) // Has additional setting which tells which position leftmost dial is in
+            if (config.Contains("MultiPanel") || config.Contains("Multipanel")) // Has additional setting which tells which position leftmost dial is in
             {
                 // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}
                 var composites = Common.RemoveCurlyBrackets(parameters[0].Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture))).Trim().Split("|", StringSplitOptions.RemoveEmptyEntries);

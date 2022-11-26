@@ -709,7 +709,7 @@ namespace DCSFlightpanels
         private void VerifyDCSBIOSLocation()
         {
             var result = DCSBIOSCommon.CheckJSONDirectory(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
-            if (result.Item1 == true && result.Item2 == true)
+            if (result.Item1 && result.Item2 && result.Item3)
             {
                 return;
             }
@@ -721,12 +721,17 @@ namespace DCSFlightpanels
                 message = "The current DCS-BIOS folder in [Settings] does not exist.";
             }
 
-            if (result.Item1 == true && result.Item2 == false)
+            if (result.Item1 && result.Item2 == false)
             {
                 message = "The DCS-BIOS folder in [Settings] contains no JSON files.";
             }
 
-            if (MessageBox.Show($"Failed to open profile. {message}\nIf you intended to use DCS-BIOS, check the setting [DCS-BIOS JSON Location]. \nDo you want to open [Settings]?"
+            if (result.Item1 && result.Item2 && result.Item3 == false)
+            {
+                message = "The DCS-BIOS file BIOS.lua could not be found in the directory structure.";
+            }
+
+            if (MessageBox.Show($"Failed to open profile:\n\n{message}\n\nIf you intended to use DCS-BIOS, check the setting [DCS-BIOS JSON Location]. \nDo you want to open [Settings]?"
                     , "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 ShowSettingsWindow(1);

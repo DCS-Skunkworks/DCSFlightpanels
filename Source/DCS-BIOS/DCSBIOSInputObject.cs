@@ -16,7 +16,7 @@ namespace DCS_BIOS
          * action = TOGGLE
          * variable_step = <new_value>|-<decrease_by>|+<increase_by>
          */
-        private int _maxValue; //Relevand when _interface = set_state
+        private int _maxValue; //Relevant when _interface = set_state
         private string _specifiedActionArgument; //e.g. TOGGLE
         private uint _specifiedSetStateArgument;
         private int _specifiedVariableStepArgument;
@@ -46,7 +46,7 @@ namespace DCS_BIOS
 
         public string GetDCSBIOSCommand()
         {
-            string command = _interface switch
+            var command = _interface switch
             {
                 DCSBIOSInputType.FIXED_STEP => $"{_controlId} {_specifiedFixedStepArgument}\n",
                 DCSBIOSInputType.SET_STATE  => $"{_controlId} {_specifiedSetStateArgument}\n",

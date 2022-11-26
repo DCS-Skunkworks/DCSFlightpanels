@@ -44,7 +44,7 @@ namespace DCS_BIOS
 
         public string GetDescriptionForInterface(DCSBIOSInputType dcsbiosInputType)
         {
-            DCSBIOSInputObject searched = _dcsbiosInputObjects.FirstOrDefault(x => x.Interface == dcsbiosInputType);
+            var searched = _dcsbiosInputObjects.FirstOrDefault(x => x.Interface == dcsbiosInputType);
 
             return searched != null ? searched.Description : string.Empty;
         }
@@ -56,9 +56,9 @@ namespace DCS_BIOS
                 return -99;
             }
 
-            DCSBIOSInputObject searched = _dcsbiosInputObjects.FirstOrDefault(x => x.Interface == dcsbiosInputType);
+            var searched = _dcsbiosInputObjects.FirstOrDefault(x => x.Interface == dcsbiosInputType);
 
-            return searched != null ? searched.MaxValue : -99;
+            return searched?.MaxValue ?? -99;
         }
 
         public void Consume(DCSBIOSControl dcsbiosControl)
@@ -159,7 +159,7 @@ namespace DCS_BIOS
                 throw new Exception($"DCSBIOSInput cannot import string : {str}");
             }
 
-            value = value.Substring(value.IndexOf("{", StringComparison.InvariantCulture) + 1);
+            value = value[(value.IndexOf("{", StringComparison.InvariantCulture) + 1)..];
 
             // AAP_EGIPWR|FIXED_STEP|INC}
             // AAP_EGIPWR|SET_STATE|65535}

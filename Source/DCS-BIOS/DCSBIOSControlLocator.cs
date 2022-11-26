@@ -101,7 +101,7 @@ namespace DCS_BIOS
 
                 try
                 {
-                    DCSBIOSControl control = GetControl(controlId);
+                    var control = GetControl(controlId);
                     var dcsBIOSOutput = new DCSBIOSOutput();
                     dcsBIOSOutput.Consume(control);
                     return dcsBIOSOutput;
@@ -137,7 +137,7 @@ namespace DCS_BIOS
 
                     foreach (var file in files)
                     {
-                        List<DCSBIOSControl> controls = ReadControlsFromDocJson(file.FullName);
+                        var controls = ReadControlsFromDocJson(file.FullName);
                         DCSBIOSControls.AddRange(controls);
                         PrintDuplicateControlIdentifiers(controls);
                     }
@@ -234,7 +234,7 @@ namespace DCS_BIOS
                 }
 
                 // Debug.Print(dcsbiosControl.identifier);
-                bool found = false;
+                var found = false;
                 foreach (var str in result)
                 {
                     if (str.Trim() == dcsbiosControl.Identifier.Trim())
@@ -265,7 +265,7 @@ namespace DCS_BIOS
                 Logger.Error(message);
             }
         }
-        
+
         private static void LoadMetaDataEnd(string jsonDirectory)
         {
             if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
@@ -292,11 +292,20 @@ namespace DCS_BIOS
         {
             // input is a map from category string to a map from key string to control definition
             // we read it all then flatten the grand children (the control definitions)
-            string input = File.ReadAllText(inputPath);
-            return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, DCSBIOSControl>>>(input)
-                .Values
-                .SelectMany(category => category.Values)
-                .ToList();
+            var input = File.ReadAllText(inputPath);
+            try
+            {
+                return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, DCSBIOSControl>>>(input)!
+                    .Values
+                    .SelectMany(category => category.Values)
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "ReadControlsFromDocJson : Failed to read DCS-BIOS JSON.");
+            }
+
+            return null;
         }
 
         private static void LoadCommonData(string jsonDirectory)
@@ -319,7 +328,7 @@ namespace DCS_BIOS
                 throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
-        
+
         public static IEnumerable<DCSBIOSControl> GetControls()
         {
             LoadControls();
@@ -348,7 +357,7 @@ namespace DCS_BIOS
             }
 
             LoadControls();
-            return DCSBIOSControls.Where(controlObject => (controlObject.Outputs.Count > 0) && controlObject.Outputs[0].OutputDataType == DCSBiosOutputType.StringType);
+            return DCSBIOSControls.Where(controlObject => controlObject.Outputs.Count > 0 && controlObject.Outputs[0].OutputDataType == DCSBiosOutputType.StringType);
         }
 
         public static IEnumerable<DCSBIOSControl> GetIntegerOutputControls()
@@ -359,7 +368,7 @@ namespace DCS_BIOS
             }
 
             LoadControls();
-            return DCSBIOSControls.Where(controlObject => (controlObject.Outputs.Count > 0) && controlObject.Outputs[0].OutputDataType == DCSBiosOutputType.IntegerType);
+            return DCSBIOSControls.Where(controlObject => controlObject.Outputs.Count > 0 && controlObject.Outputs[0].OutputDataType == DCSBiosOutputType.IntegerType);
         }
 
         public static IEnumerable<DCSBIOSControl> GetInputControls()
@@ -370,7 +379,7 @@ namespace DCS_BIOS
             }
 
             LoadControls();
-            return DCSBIOSControls.Where(controlObject => (controlObject.Inputs.Count > 0));
+            return DCSBIOSControls.Where(controlObject => controlObject.Inputs.Count > 0);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace DCS_BIOS
 {
@@ -15,14 +16,17 @@ namespace DCS_BIOS
         /// 1, 0 : folder found, json not found
         /// 1, 1 : folder not found, (json not found)
         /// </returns>
-        public static Tuple<bool, bool> CheckJSONDirectory(string jsonDirectory)
+        public static Tuple<bool, bool, bool> CheckJSONDirectory(string jsonDirectory)
         {
             jsonDirectory = GetDCSBIOSJSONDirectory(jsonDirectory);
 
             Debug.WriteLine($"\nFolder exists? {Directory.Exists(jsonDirectory)}    {jsonDirectory}\n");
             if (string.IsNullOrEmpty(jsonDirectory) || !Directory.Exists(jsonDirectory))
             {
-                return new Tuple<bool, bool>(false, false);
+                /*
+                 * Folder not found
+                 */
+                return new Tuple<bool, bool, bool>(false, false, false);
             }
 
             var files = Directory.EnumerateFiles(jsonDirectory);
@@ -37,24 +41,24 @@ namespace DCS_BIOS
              * This gives a fairly certain indication that the folder is in fact
              * the JSON folder. There are JSON files in other folders but not many.
              */
-            var jsonFileCount = 0;
-            foreach (var filename in files)
-            {
-                if (filename.ToLower().EndsWith(".json"))
-                {
-                    jsonFileCount++;
-                }
-            }
+            var jsonFound = files.Count(filename => filename.ToLower().EndsWith(".json")) >= 10;
 
-            return jsonFileCount >= 10 ? new Tuple<bool, bool>(true, true) : new Tuple<bool, bool>(true, false);
+            /*
+             * Check that BIOS.lua is located two levels higher in the directory hierarchy as seen
+             * from the JSON files.
+             */
+            var biosLua = Path.Combine(jsonDirectory, "..\\..\\", "BIOS.lua");
+            var biosLuaFound = File.Exists(biosLua);
+
+            return new Tuple<bool, bool, bool>(true, jsonFound, biosLuaFound);
         }
 
         public static string PrintBitStrings(byte[] array)
         {
             var result = string.Empty;
-            for (int i = 0; i < array.Length; i++)
+            foreach (var b in array)
             {
-                var str = Convert.ToString(array[i], 2).PadLeft(8, '0');
+                var str = Convert.ToString(b, 2).PadLeft(8, '0');
                 result = result + "  " + str;
             }
             return result;

@@ -30,11 +30,4 @@ namespace DCS_BIOS.Json
         [JsonProperty("physical_variant", Required = Required.Default)]
         public string PhysicalVariant { get; set; }
     }
-
-    public class DCSBIOSControlRootObject
-    {
-        public List<DCSBIOSControl> DCSBIOSControls { get; set; }
-    }
-
-
 }

@@ -10,12 +10,6 @@
             _dcsbiosStringListener.AddStringAddress(address, length);
         }
 
-        public static void AddListeningAddress(uint address, int length)
-        {
-            CheckInstance();
-            AddAddress(address, length);
-        }
-
         public static void AddListeningAddress(DCSBIOSOutput dcsbiosOutput)
         {
             CheckInstance();
@@ -29,7 +23,7 @@
 
         public static void Close()
         {
-            _dcsbiosStringListener = null;
+            _dcsbiosStringListener?.Dispose();
         }
     }
 }

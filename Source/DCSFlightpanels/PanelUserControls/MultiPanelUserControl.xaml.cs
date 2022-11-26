@@ -623,9 +623,9 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var bipLink in _multiPanelPZ70.BIPLinkHashSet)
                 {
-                    var textBox = (PZ70TextBox)GetTextBox(bipLink.MultiPanelPZ70Knob, bipLink.WhenTurnedOn);
                     if (bipLink.DialPosition == _multiPanelPZ70.PZ70DialPosition && bipLink.BIPLights.Count > 0)
                     {
+                        var textBox = (PZ70TextBox)GetTextBox(bipLink.MultiPanelPZ70Knob, bipLink.WhenTurnedOn);
                         textBox.Bill.BipLink = bipLink;
                     }
                 }

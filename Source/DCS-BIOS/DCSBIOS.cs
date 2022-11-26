@@ -93,6 +93,7 @@ namespace DCS_BIOS
 
         public void Dispose()
         {
+            DCSBIOSStringManager.Close();
             Dispose(true);
             GC.SuppressFinalize(this);
         }

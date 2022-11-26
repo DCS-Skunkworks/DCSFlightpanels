@@ -12,6 +12,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using DCSFlightpanels.Properties;
 using NonVisuals.EventArgs;
+using Cursors = System.Windows.Forms.Cursors;
 
 namespace DCSFlightpanels.Windows
 {
@@ -53,6 +54,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
 
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 TabControlSettings.SelectedIndex = _tabIndex;
                 ButtonOk.IsEnabled = false;
                 LoadSettings();
@@ -70,22 +72,29 @@ namespace DCSFlightpanels.Windows
         {
             var result = DCSBIOSCommon.CheckJSONDirectory(DCSBIOSCommon.GetDCSBIOSJSONDirectory(TextBoxDcsBiosJSONLocation.Text));
 
-            if (result.Item1 == false && result.Item2 == false)
+            if (result.Item1 == false && result.Item2 == false && result.Item3 == false)
             {
                 LabelDCSBIOSNotFound.Foreground = Brushes.Red;
                 LabelDCSBIOSNotFound.Content = "<-- Warning, folder does not exist.";
                 return;
             }
 
-            if (result.Item1 == true && result.Item2 == false)
+            if (result.Item1 && result.Item2 == false)
             {
                 LabelDCSBIOSNotFound.Foreground = Brushes.Red;
                 LabelDCSBIOSNotFound.Content = "<-- Warning, folder does not contain JSON files.";
                 return;
             }
+            
+            if (result.Item1 && result.Item2 && result.Item3 == false)
+            {
+                LabelDCSBIOSNotFound.Foreground = Brushes.Red;
+                LabelDCSBIOSNotFound.Content = "<-- Warning, BIOS.lua not found in folder structure.";
+                return;
+            }
 
             LabelDCSBIOSNotFound.Foreground = Brushes.LimeGreen;
-            LabelDCSBIOSNotFound.Content = " JSON files found in folder.";
+            LabelDCSBIOSNotFound.Content = " JSON files and BIOS.lua found.";
         }
 
         private void SetEventsHandlers()
@@ -268,13 +277,17 @@ namespace DCSFlightpanels.Windows
                 {
                     Debug.WriteLine("Selected Path : " + folderBrowserDialog.SelectedPath);
                     var result = DCSBIOSCommon.CheckJSONDirectory(folderBrowserDialog.SelectedPath);
-                    if (result.Item1 == true && result.Item2 == true)
+                    if (result.Item1 && result.Item2 && result.Item3)
                     {
                         TextBoxDcsBiosJSONLocation.Text = folderBrowserDialog.SelectedPath;
                     }
-                    else if (result.Item1 == true && result.Item2 == false)
+                    else if (result.Item1 && result.Item2 == false)
                     {
                         System.Windows.MessageBox.Show("Cannot use selected directory as it did not contain JSON files.", "Invalid directory", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else if (result.Item1 && result.Item2 && result.Item3 == false)
+                    {
+                        System.Windows.MessageBox.Show("Cannot use selected directory.\n\nJSON found but the DCS-BIOS file BIOS.lua could not be found in the directory structure. Without this the aircraft modules can't be read.", "Invalid directory", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
 
