@@ -20,10 +20,10 @@ namespace NonVisuals.Panels.Saitek.Panels
     using Switches;
     using Saitek;
     using HID;
-
-    /*
-     * The implementation class for the Logitech Farming Side Panel
-     */
+    
+    /// <summary>
+    /// The implementation class for the Logitech Farming Side Panel 
+    /// </summary>
     public class FarmingSidePanel : SaitekPanel
     {
         private HashSet<DCSBIOSActionBindingFarmingPanel> _dcsBiosBindings = new();

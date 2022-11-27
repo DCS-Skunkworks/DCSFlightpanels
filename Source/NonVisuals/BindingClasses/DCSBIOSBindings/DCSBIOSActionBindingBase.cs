@@ -10,13 +10,14 @@ using NLog;
 using NonVisuals.Panels.Saitek;
 using ThreadState = System.Threading.ThreadState;
 
-/*
- * This is the base class for dcs-bios bindings.
- * A dcs-bios binding is used when a user maps a physical
- * switch with one or several dcs-bios command(s).
- */
+
+
 namespace NonVisuals.BindingClasses.DCSBIOSBindings
 {
+    /// <summary>
+    ///  This is the base class for dcs-bios bindings.
+    /// A dcs-bios binding is used when a user maps a physical switch with one or several dcs-bios command(s).
+    /// </summary>
     [Serializable]
     public abstract class DCSBIOSActionBindingBase : IDisposable
     {
@@ -104,15 +105,14 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
                         {
                             return;
                         }
-                        var command = dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.GetDCSBIOSCommand();
+                        
                         Thread.Sleep(dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.Delay);
                         if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
                         {
                             return;
                         }
-
-                        Debug.WriteLine("Sending DCS-BIOS command " + command);
-                        DCSBIOS.Send(command);
+                        
+                        dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.SendCommand();
                         _sequenceIndex++;
 
                         if (_sequenceIndex >= dcsbiosInputs.Count)
@@ -125,10 +125,9 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
                 {
                     foreach (var dcsbiosInput in dcsbiosInputs)
                     {
-                        var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
                         Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
 
-                        DCSBIOS.Send(command);
+                        dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.SendCommand();
 
                         if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
                         {

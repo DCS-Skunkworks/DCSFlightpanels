@@ -1,5 +1,8 @@
 ﻿namespace DCS_BIOS
 {
+    /// <summary>
+    /// Easy wrapper for listening to DCS-BIOS strings.
+    /// </summary>
     public static class DCSBIOSStringManager
     {
         private static DCSBIOSStringListener _dcsbiosStringListener;

@@ -20,9 +20,11 @@ namespace NonVisuals.Radios
     using HID;
 
 
-    /*
-     * Pre-programmed radio panel for the SA342.
-     */
+
+
+    /// <summary>
+    /// Pre-programmed radio panel for the SA342. 
+    /// </summary>
     public class RadioPanelPZ69SA342 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentSA342RadioMode

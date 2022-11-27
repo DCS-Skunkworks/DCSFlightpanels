@@ -22,10 +22,10 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-
-    /*
-     * Pre-programmed radio panel for the F/A-18C.
-     */
+    
+    /// <summary>
+    /// Pre-programmed radio panel for the F/A-18C. 
+    /// </summary>
     public class RadioPanelPZ69FA18C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentFA18CRadioMode

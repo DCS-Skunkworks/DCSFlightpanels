@@ -19,10 +19,10 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-
-    /*
-     * Pre-programmed radio panel for the F-14B.
-     */
+    
+    /// <summary>
+    /// Pre-programmed radio panel for the F-14B. 
+    /// </summary>
     public class RadioPanelPZ69F14B : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentF14RadioMode

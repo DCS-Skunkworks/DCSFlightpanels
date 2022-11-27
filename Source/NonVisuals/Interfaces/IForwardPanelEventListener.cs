@@ -2,11 +2,11 @@
 
 namespace NonVisuals.Interfaces
 {
+    /// <summary>
+    /// Used for announcing whether the panels should send key events to Windows API
+    /// </summary>
     public interface IForwardPanelEventListener
     {
-        /*
-         * Used for announcing whether the panels should send key events to Windows API
-         */
         public void SetForwardPanelEvent(object sender, ForwardPanelEventArgs e);
     }
 }

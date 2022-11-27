@@ -20,11 +20,11 @@ namespace NonVisuals.Panels.Saitek.Panels
     using Switches;
     using Saitek;
     using HID;
-
-    /*
-     * The implementation class for the Logitech TPM Panel (TPM)
-     * See bottom of file for communication information.
-     */
+    
+    /// <summary>
+    /// The implementation class for the Logitech TPM Panel (TPM)
+    /// See bottom of file for communication information.
+    /// </summary>
     public class TPMPanel : SaitekPanel
     {
         private readonly object _dcsBiosDataReceivedLock = new();

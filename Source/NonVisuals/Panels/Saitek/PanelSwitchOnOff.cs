@@ -6,20 +6,19 @@
     {
     }
 
-    /*
-     * Each panel has its own set of switches and knobs and buttons.
-     * All switches have (so far) an On or Off mode, knobs that can
-     * be turned have "Increase" or "Decrease".
-     * This is used by the UI, each TextBox is used for one of these
-     * positions (On/Off/Increase/Decrease) for a certain switch/knob/button.
-     *
-     * So when the user sets a value for the Switch Panel's MASTER BAT and OFF
-     * the class contains this information. When the new setting the user has
-     * entered is passed on to the panel instance (responsible for saving the settings)
-     * this class is passed along with the actual setting the user chose such as
-     * key emulation or dcs-bios etc.
-     * So the button ID & On/Off state + actual setting (key/dcs-bios) is passed on to the panel.
-     */
+    /// <summary>
+    /// Each panel has its own set of switches and knobs and buttons.
+    /// All switches have(so far) an On or Off mode, knobs that can
+    /// be turned have "Increase" or "Decrease".
+    /// This is used by the UI, each TextBox is used for one of these
+    /// positions(On/Off/Increase/Decrease) for a certain switch/knob/button.
+    /// So when the user sets a value for the Switch Panel's MASTER BAT and OFF
+    /// the class contains this information.When the new setting the user has
+    /// entered is passed on to the panel instance(responsible for saving the settings)
+    /// this class is passed along with the actual setting the user chose such as
+    /// key emulation or dcs-bios etc.
+    /// So the button ID & On/Off state + actual setting (key/dcs-bios) is passed on to the panel.
+    /// </summary>
     public class PZ55SwitchOnOff : PanelSwitchOnOff
     {
         private readonly SwitchPanelPZ55Keys _switchPanelPZ55Key;

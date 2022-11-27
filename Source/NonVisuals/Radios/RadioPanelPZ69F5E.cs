@@ -19,10 +19,10 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-
-    /*
-     * Pre-programmed radio panel for the F5E.
-     */
+    
+    /// <summary>
+    /// Pre-programmed radio panel for the F5E. 
+    /// </summary>
     public class RadioPanelPZ69F5E : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentF5ERadioMode

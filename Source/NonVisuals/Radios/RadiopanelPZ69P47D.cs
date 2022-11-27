@@ -18,10 +18,12 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
+    
 
-    /*
-     * Pre-programmed radio panel for the P-47D.
-     */
+
+    /// <summary>
+    /// Pre-programmed radio panel for the P-47D. 
+    /// </summary>
     public class RadioPanelPZ69P47D : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentP47DRadioMode

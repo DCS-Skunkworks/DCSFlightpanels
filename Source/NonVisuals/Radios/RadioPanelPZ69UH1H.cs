@@ -21,9 +21,11 @@ namespace NonVisuals.Radios
     using HID;
 
 
-    /*
-     * Pre-programmed radio panel for the UH-1H.
-     */
+
+
+    /// <summary>
+    /// Pre-programmed radio panel for the UH-1H. 
+    /// </summary>
     public class RadioPanelPZ69UH1H : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentUH1HRadioMode

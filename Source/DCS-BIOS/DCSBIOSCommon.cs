@@ -8,7 +8,8 @@ namespace DCS_BIOS
     public static class DCSBIOSCommon
     {
         /// <summary>
-        /// 
+        /// Checks the setting "JSON Directory". This folder must contain all the JSON files
+        /// and two levels up BIOS.lua must be found.
         /// </summary>
         /// <param name="jsonDirectory"></param>
         /// <returns>
@@ -64,6 +65,12 @@ namespace DCS_BIOS
             return result;
         }
 
+        /// <summary>
+        /// DCSFP uses a special keyword for %user% directory as using %user% directly
+        /// from the GUI caused problems. Might work now as this was quite some time ago.
+        /// </summary>
+        /// <param name="jsonDirectory"></param>
+        /// <returns></returns>
         public static string GetDCSBIOSJSONDirectory(string jsonDirectory)
         {
             var replaceString = "$USERDIRECTORY$";

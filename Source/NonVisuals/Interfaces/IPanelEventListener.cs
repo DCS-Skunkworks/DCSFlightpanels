@@ -4,9 +4,9 @@ namespace NonVisuals.Interfaces
 {
     public interface IPanelEventListener
     {
-        /*
-         * Used for announcing panel events, attached, removed, found.
-         */
+        /// <summary>
+        /// Used for announcing panel events, attached, removed, found. 
+        /// </summary>
         public void PanelEvent(object sender, PanelEventArgs e);
     }
 }

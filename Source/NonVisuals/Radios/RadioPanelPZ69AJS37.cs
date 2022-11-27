@@ -18,10 +18,10 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-
-    /*
-     * Pre-programmed radio panel for the AJS37.
-     */
+    
+    /// <summary>
+    /// Pre-programmed radio panel for the AJS37.
+    /// </summary>
     public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentAJS37RadioMode

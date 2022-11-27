@@ -19,9 +19,9 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-    /*
-     * Pre-programmed radio panel for the A-10C.
-     */
+    /// <summary>
+    /// Pre-programmed radio panel for the A-10C.
+    /// </summary>
     public class RadioPanelPZ69A10C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentA10RadioMode

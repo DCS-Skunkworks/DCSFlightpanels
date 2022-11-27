@@ -5,12 +5,12 @@
 
     using EventArgs;
     using Panels;
-
-    /*
-     * This class is used by the BipFactory class and hold a list of the BIPs connected to the PC.
-     * When the user configures a LED on the BIP these two classes are used so that the user
-     * sees the change immediately when selecting from the comboboxes.
-     */
+    
+    /// <summary>
+    /// This class is used by the BipFactory class and hold a list of the BIPs connected to the PC.
+    /// When the user configures a LED on the BIP these two classes are used so that the user
+    /// sees the change immediately when selecting from the comboboxes.
+    /// </summary>
     public class BipEventHandlerManager
     {
         public delegate void BipPanelRegisteredEventHandler(object sender, BipPanelRegisteredEventArgs e);

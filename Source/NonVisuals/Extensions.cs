@@ -25,7 +25,7 @@
             }
 
             //Following line fixes "Could not create an instance of type xxx Type is an interface or abstract class and cannot be instantiated."
-            //when deepcloning IKeyPressInfo from  AddKeySequence(string description, SortedList<int, IKeyPressInfo> keySequence)
+            //when deep cloning IKeyPressInfo from  AddKeySequence(string description, SortedList<int, IKeyPressInfo> keySequence)
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
 
             var jsonString = JsonConvert.SerializeObject(source, settings);

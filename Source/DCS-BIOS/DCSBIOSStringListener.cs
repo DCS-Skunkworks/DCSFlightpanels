@@ -1,24 +1,26 @@
-﻿// ReSharper disable All
-/*
- * Do not adhere to naming standard in DCS-BIOS code, standard are based on DCS-BIOS json files and byte streamnaming
- */
-namespace DCS_BIOS
+﻿namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
 
-    using DCS_BIOS.EventArgs;
-    using DCS_BIOS.Interfaces;
+    using EventArgs;
+    using Interfaces;
     using NLog;
 
-    public class DCSBIOSStringListener : IDcsBiosDataListener, IDisposable
+    /// <summary>
+    /// Classes reports which strings they want to get updates for.
+    /// This class handles the listening and broadcasts the strings
+    /// once they are fully received.
+    /// Used by DCSBIOSStringManager.
+    /// </summary>
+    internal class DCSBIOSStringListener : IDcsBiosDataListener, IDisposable
     {
-        internal static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new();
         private readonly object _lockObject = new();
-        private readonly Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
+        private readonly Encoding _iso88591 = Encoding.GetEncoding("ISO-8859-1");
         
 
         public DCSBIOSStringListener()
@@ -108,7 +110,6 @@ namespace DCS_BIOS
                                 //41 = A
                                 //42 = B
                                 var hex = Convert.ToString(data, 16);
-                                //Debug.WriteLine("hex : " + hex);
 
                                 /*
                                 25.7.2018
@@ -119,8 +120,6 @@ namespace DCS_BIOS
                                     return;
                                 }*/
                                 //Little Endian !
-                                //Common.DebugP("**********data = [" + data + "] ****************");
-                                //Common.DebugP("**********hex = [" + hex + "] ****************");
                                 var secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
                                 var firstChar = string.Empty;
                                 byte[] firstByte = new byte[10];
@@ -130,16 +129,15 @@ namespace DCS_BIOS
                                     //so let's try and just ignore the for number, in this case the 7.
                                     //28.04.2020 JDA
                                     firstByte = new[] { Convert.ToByte(hex.Substring(1, 2), 16) };
-                                    firstChar = _iso8859_1.GetString(firstByte);
+                                    firstChar = _iso88591.GetString(firstByte);
                                 }
                                 else if (hex.Length == 4)
                                 {
                                     firstByte = new[] { Convert.ToByte(hex.Substring(2, 2), 16) };
-                                    firstChar = _iso8859_1.GetString(firstByte);
+                                    firstChar = _iso88591.GetString(firstByte);
                                 }
-                                var secondChar = _iso8859_1.GetString(secondByte);
-                                //Common.DebugP("**********Received (0x" + data.ToString("x") + ") ****************");
-                                //Common.DebugP("**********Received data:(0x" + data.ToString("x") + ") following from DCS : 1st : " + firstChar + "(0x" + firstByte[0].ToString("x") + "), 2nd " + secondChar + "(0x" + secondByte[0].ToString("x") + ") ****************");
+                                var secondChar = _iso88591.GetString(secondByte);
+
                                 if (!string.IsNullOrEmpty(firstChar))
                                 {
                                     kvp.Value.Add(address, firstChar, secondChar);
@@ -148,21 +146,15 @@ namespace DCS_BIOS
                                 {
                                     kvp.Value.Add(address, secondChar);
                                 }
-                                ////Debug.WriteLine("firstChar : " + firstChar + " secondChar : " + secondChar);
                             }
                             catch (Exception ex)
                             {
-                                logger.Error(ex, $"**********Received (0x{data:X}");
+                                Logger.Error(ex, $"**********Received (0x{data:X}");
                             }
                         }
                     }
                 }
             }
-
-            /*foreach (var dcsBiosString in _dcsBiosStrings)
-            {
-                //Debug.WriteLine("Key : " + dcsBiosString.Key + " Value : " + dcsBiosString.Value.StringValue);
-            }*/
         }
 
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)

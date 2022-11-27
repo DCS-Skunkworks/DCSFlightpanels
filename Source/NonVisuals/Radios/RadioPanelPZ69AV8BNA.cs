@@ -18,10 +18,10 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-
-    /*
-     * Pre-programmed radio panel for the AV8BNA.
-     */
+    
+    /// <summary>
+    /// Pre-programmed radio panel for the AV8BNA. 
+    /// </summary>
     public class RadioPanelPZ69AV8BNA : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentAV8BNARadioMode

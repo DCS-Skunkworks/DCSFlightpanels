@@ -4,10 +4,10 @@
     using System.Text;
 
     using DCS_BIOS;
-
-    /*
-     * Used for setting the brightness of the BIP LEDs.
-     */
+    
+    /// <summary>
+    /// Used for setting the brightness of the BIP LEDs. 
+    /// </summary>
     public class DCSBIOSBrightnessBinding
     {
         public static readonly string Keyword = "PanelBrightness";

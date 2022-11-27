@@ -19,9 +19,9 @@ namespace NonVisuals.Radios
     using HID;
 
 
-    /*
-     * Pre-programmed radio panel for the Ka50.
-     */
+    /// <summary>
+    /// Pre-programmed radio panel for the Ka50.
+    /// </summary>
     public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base
     {
         private enum CurrentKa50RadioMode

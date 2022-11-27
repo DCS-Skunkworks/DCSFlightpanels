@@ -24,6 +24,10 @@ namespace DCS_BIOS
         ByteArray = 4
     }
 
+    /// <summary>
+    /// Main class in project. Sends commands to DCS-BIOS and receives data about all cockpit controls
+    /// in the aircraft.
+    /// </summary>
     public class DCSBIOS : IDisposable
     {
         internal static readonly Logger logger = LogManager.GetCurrentClassLogger();

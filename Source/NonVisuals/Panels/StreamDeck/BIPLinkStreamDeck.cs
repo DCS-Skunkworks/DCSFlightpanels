@@ -8,12 +8,11 @@ namespace NonVisuals.Panels.StreamDeck
 
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// This class binds a physical key on a Stream Deck with a BIP LED
+    /// </summary>
     public class BIPLinkStreamDeck : BIPLinkBase
     {
-        /*
-         This class binds a physical key on a Stream Deck with a BIP LED
-         */
-
         [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
         public string Layer { get; set; } = string.Empty;

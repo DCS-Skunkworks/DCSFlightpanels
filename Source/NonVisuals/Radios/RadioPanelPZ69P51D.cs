@@ -17,9 +17,11 @@ namespace NonVisuals.Radios
     using HID;
 
 
-    /*
-     * Pre-programmed radio panel for the P-51D.
-     */
+
+
+    /// <summary>
+    /// Pre-programmed radio panel for the P-51D. 
+    /// </summary>
     public class RadioPanelPZ69P51D : RadioPanelPZ69Base
     {
         private enum CurrentP51DRadioMode

@@ -3,6 +3,10 @@ using Newtonsoft.Json;
 
 namespace DCS_BIOS.Json
 {
+    /// <summary>
+    /// This is a base class for the DCS-BIOS Control as specified in lua / JSON.
+    /// This class is used when reading the JSON.
+    /// </summary>
     public class DCSBIOSControl
     {
 

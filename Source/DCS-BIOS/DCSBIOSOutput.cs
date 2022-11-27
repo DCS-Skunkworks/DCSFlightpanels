@@ -25,6 +25,15 @@ namespace DCS_BIOS
         NotEquals
     }
 
+    /// <summary>
+    /// This class represents the output sent from DCS-BIOS.
+    /// When a DCS-BIOS Control value has been sent each class
+    /// listening for specific DCS-BIOS value(s) (Address & Data)
+    /// can check via the Address part whether it was a match and if
+    /// it was then extract the Data part. Data is bit shifted so it can't be
+    /// read directly. This class holds the information on how much to shift
+    /// and with what.
+    /// </summary>
     [Serializable]
     public class DCSBIOSOutput
     {

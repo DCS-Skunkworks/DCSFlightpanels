@@ -2,6 +2,10 @@
 
 namespace DCS_BIOS.Json
 {
+    /// <summary>
+    /// Used when reading the JSON to create list of the inputs
+    /// that a DCS-BIOS Control has.
+    /// </summary>
     public class DCSBIOSControlInput
     {
 

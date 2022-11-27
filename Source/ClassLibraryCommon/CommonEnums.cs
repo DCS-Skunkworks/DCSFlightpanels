@@ -10,7 +10,10 @@ namespace ClassLibraryCommon
         LowerActive,
         LowerStandby
     }
-
+    
+    /// <summary>
+    /// Used for identifying what a copy package (user copies setting) contains so that the pasting process is easier.
+    /// </summary>
     public enum CopyContentType
     {
         KeyStroke,
@@ -19,13 +22,19 @@ namespace ClassLibraryCommon
         BIPLink,
         OSCommand
     }
-
+    
+    /// <summary>
+    /// The two Windows API:s supported for creating key emulation.
+    /// </summary>
     public enum APIModeEnum
     {
         keybd_event = 0,
         SendInput = 1
     }
 
+    /// <summary>
+    /// The supported manufacturer's Vendor IDs (VID).
+    /// </summary>
     public enum GamingPanelVendorEnum
     {
         Saitek = 0x6A3,
@@ -34,6 +43,9 @@ namespace ClassLibraryCommon
         CockpitMaster = 0x0483,
     }
 
+    /// <summary>
+    /// The Product ID (PID) of the supported panels.
+    /// </summary>
     public enum GamingPanelEnum
     {
         [Description("Cockpit Master 737 CDU")]
