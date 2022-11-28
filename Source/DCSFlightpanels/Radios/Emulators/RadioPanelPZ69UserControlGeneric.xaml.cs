@@ -27,6 +27,10 @@
     using NonVisuals.Panels;
     using NonVisuals.HID;
 
+    /// <summary>
+    /// GUI wrapper for the RadioPanelPZ69Generic. 
+    /// <see cref="RadioPanelPZ69Generic"/>
+    /// </summary>
     public partial class RadioPanelPZ69UserControlGeneric : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private const string UPPER_TEXT = "Upper Dial Profile : ";

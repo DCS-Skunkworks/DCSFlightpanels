@@ -698,6 +698,13 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
+                                /*
+                                 * If the module doesn't have a pre-programmed radio it will end up here. If this is a new user profile
+                                 * then set the value here so that if there is a pre-programmed radio available in the future it won't cause
+                                 * problems. The problem would be that when the user loads the profile the pre-programmed radio is loaded
+                                 * but the user has configs for the generic radio.
+                                 */
+                                _profileHandler.Profile.UseGenericRadio = true;
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
 

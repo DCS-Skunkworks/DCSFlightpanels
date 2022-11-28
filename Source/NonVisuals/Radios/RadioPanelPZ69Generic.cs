@@ -24,12 +24,14 @@ namespace NonVisuals.Radios
     using NonVisuals.Panels.Saitek.Panels;
     using Panels.Saitek;
     using HID;
-    
+
 
     /// <summary>
     /// This is the class for the PZ69 Radio Panel that is used when :
+    /// <remarks>
     /// 1) The DCS module doesn't have a pre-programmed radio
     /// 2) The user chooses to program the radio themselves using e.g. DCS-BIOS
+    /// </remarks>
     /// </summary>
     public class RadioPanelPZ69Generic : RadioPanelPZ69Base
     {
