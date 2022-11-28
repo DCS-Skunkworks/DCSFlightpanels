@@ -44,24 +44,24 @@ namespace NonVisuals.Radios
         private CurrentAH64DRadioMode _currentUpperRadioMode = CurrentAH64DRadioMode.VHF;
         private CurrentAH64DRadioMode _currentLowerRadioMode = CurrentAH64DRadioMode.VHF;
 
-        private DCSBIOSOutput _PLT_EUFD_LINE8;  //VFH Frequencies
-        private DCSBIOSOutput _PLT_EUFD_LINE9;  //UHF Frequencies
-        private DCSBIOSOutput _PLT_EUFD_LINE10; //FM1
-        private DCSBIOSOutput _PLT_EUFD_LINE11; //FM2
-        private DCSBIOSOutput _PLT_EUFD_LINE12; //HF
-        private DCSBIOSOutput _PLT_EUFD_LINE14;
+        private DCSBIOSOutput _pltEUFDLine8;  //VFH Frequencies
+        private DCSBIOSOutput _pltEUFDLine9;  //UHF Frequencies
+        private DCSBIOSOutput _pltEUFDLine10; //FM1
+        private DCSBIOSOutput _pltEUFDLine11; //FM2
+        private DCSBIOSOutput _pltEUFDLine12; //HF
+        private DCSBIOSOutput _pltEUFDLine14;
 
 
-        private string _vhfFrequency = string.Empty;
-        private string _vhfFrequency_Stby = string.Empty;
-        private string _uhfFrequency = string.Empty;
-        private string _uhfFrequency_Stby = string.Empty;
-        private string _fm1Frequency = string.Empty;
-        private string _fm1Frequency_Stby = string.Empty;
-        private string _fm2Frequency = string.Empty;
-        private string _fm2Frequency_Stby = string.Empty;
-        private string _hfFrequency = string.Empty;
-        private string _hfFrequency_Stby = string.Empty;
+        private string _vhfFrequencyActive = string.Empty;
+        private string _vhfFrequencyStby = string.Empty;
+        private string _uhfFrequencyActive = string.Empty;
+        private string _uhfFrequencyStby = string.Empty;
+        private string _fm1FrequencyActive = string.Empty;
+        private string _fm1FrequencyStby = string.Empty;
+        private string _fm2FrequencyActive = string.Empty;
+        private string _fm2FrequencyStby = string.Empty;
+        private string _hfFrequencyActive = string.Empty;
+        private string _hfFrequencyStby = string.Empty;
 
         private int _vhfPresetDialSkipper;
         private int _uhfPresetDialSkipper;
@@ -78,20 +78,20 @@ namespace NonVisuals.Radios
 
         private enum FrequencyType
         {
-            VHF,
-            VHF_Stby,
-            UHF,
-            UHF_Stby,
-            FM1,
-            FM1_Stby,
-            FM2,
-            FM2_Stby,
-            HF,
-            HF_Stby,
+            VHFActive,
+            VHFStby,
+            UHFActive,
+            UHFStby,
+            FM1Active,
+            FM1Stby,
+            FM2Active,
+            FM2Stby,
+            HFActive,
+            HFStby,
         }
 
 
-        private Dictionary<FrequencyType, string> _UfdFrequencies = new();
+        private readonly Dictionary<FrequencyType, string> _ufdFrequencies = new();
 
         public RadioPanelPZ69AH64D(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
@@ -123,23 +123,23 @@ namespace NonVisuals.Radios
         {
             try
             {
-                _PLT_EUFD_LINE8 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE8");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE8);
+                _pltEUFDLine8 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE8");
+                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine8);
 
-                _PLT_EUFD_LINE9 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE9");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE9);
+                _pltEUFDLine9 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE9");
+                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine9);
 
-                _PLT_EUFD_LINE10 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE10");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE10);
+                _pltEUFDLine10 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE10");
+                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine10);
 
-                _PLT_EUFD_LINE11 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE11");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE11);
+                _pltEUFDLine11 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE11");
+                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine11);
 
-                _PLT_EUFD_LINE12 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE12");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE12);
+                _pltEUFDLine12 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE12");
+                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine12);
 
-                _PLT_EUFD_LINE14 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE14");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE14);
+                _pltEUFDLine14 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE14");
+                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine14);
 
                 StartListeningForHidPanelChanges();
             }
@@ -150,27 +150,30 @@ namespace NonVisuals.Radios
             }
         }
 
-        private bool UfdFrequencyHaschanged(FrequencyType frequencyType, string rawFrequencyString)
+        private bool UfdFrequencyHasChanged(FrequencyType frequencyType, string rawFrequencyString)
         {
             try
             {
-                decimal frequencyCheck = decimal.Parse(rawFrequencyString, CultureInfo.InvariantCulture);
+                var frequencyCheck = decimal.Parse(rawFrequencyString, CultureInfo.InvariantCulture);
             }
             catch(Exception)
             {
                 return false;
             }
 
-            if (_UfdFrequencies.ContainsKey(frequencyType) && _UfdFrequencies[frequencyType].Equals(rawFrequencyString))
+            if (_ufdFrequencies.ContainsKey(frequencyType) && _ufdFrequencies[frequencyType].Equals(rawFrequencyString))
+            {
                 return false;
+            }
 
-            if (!_UfdFrequencies.ContainsKey(frequencyType)) 
+            if (!_ufdFrequencies.ContainsKey(frequencyType)) 
             { 
-                _UfdFrequencies.Add(frequencyType, rawFrequencyString); 
+                _ufdFrequencies.Add(frequencyType, rawFrequencyString); 
                 return true;
             }
 
-            _UfdFrequencies[frequencyType] = rawFrequencyString;
+            _ufdFrequencies[frequencyType] = rawFrequencyString;
+
             return true;
         }
 
@@ -180,34 +183,34 @@ namespace NonVisuals.Radios
                 case 8:
                     //"~<>VHF*  134.000   -----              121.500   -----   "
                     return
-                        UfdFrequencyHaschanged(FrequencyType.VHF, udfLineData.Substring(8, 10).Trim())
+                        UfdFrequencyHasChanged(FrequencyType.VHFActive, udfLineData.Substring(8, 10).Trim())
                         ||
-                        UfdFrequencyHaschanged(FrequencyType.VHF_Stby, udfLineData.Substring(38, 10).Trim());
+                        UfdFrequencyHasChanged(FrequencyType.VHFStby, udfLineData.Substring(38, 10).Trim());
                 case 9:
                     //" ==UHF*  263.000   -----              305.000   -----   "
                     return
-                        UfdFrequencyHaschanged(FrequencyType.UHF, udfLineData.Substring(8, 10).Trim())
+                        UfdFrequencyHasChanged(FrequencyType.UHFActive, udfLineData.Substring(8, 10).Trim())
                         ||
-                        UfdFrequencyHaschanged(FrequencyType.UHF_Stby, udfLineData.Substring(38, 10).Trim());
+                        UfdFrequencyHasChanged(FrequencyType.UHFStby, udfLineData.Substring(38, 10).Trim());
                 case 10:
                     //" ==FM1*   30.005   -----    NORM       30.000   -----   "
                     //" <=FM1*   35.125   -----    NORM     | BATUMI   30.045  "
                     return
-                        UfdFrequencyHaschanged(FrequencyType.FM1, udfLineData.Substring(8, 10).Trim())
+                        UfdFrequencyHasChanged(FrequencyType.FM1Active, udfLineData.Substring(8, 10).Trim())
                         ||
-                        UfdFrequencyHaschanged(FrequencyType.FM1_Stby, udfLineData.Substring(38, 10).Trim());
+                        UfdFrequencyHasChanged(FrequencyType.FM1Stby, udfLineData.Substring(38, 10).Trim());
                 case 11:
                     //" ==FM2*   30.005   -----               30.000   -----   "
                     return
-                        UfdFrequencyHaschanged(FrequencyType.FM2, udfLineData.Substring(8, 10).Trim())
+                        UfdFrequencyHasChanged(FrequencyType.FM2Active, udfLineData.Substring(8, 10).Trim())
                         ||
-                        UfdFrequencyHaschanged(FrequencyType.FM2_Stby, udfLineData.Substring(38, 10).Trim());
+                        UfdFrequencyHasChanged(FrequencyType.FM2Stby, udfLineData.Substring(38, 10).Trim());
                 case 12:
                     //" <=HF *    2.0500A -----    LOW        25.5000A -----    "
                     return
-                        UfdFrequencyHaschanged(FrequencyType.HF, udfLineData.Substring(8, 9).Trim())
+                        UfdFrequencyHasChanged(FrequencyType.HFActive, udfLineData.Substring(8, 9).Trim())
                         ||
-                        UfdFrequencyHaschanged(FrequencyType.HF_Stby, udfLineData.Substring(38, 8).Trim());
+                        UfdFrequencyHasChanged(FrequencyType.HFStby, udfLineData.Substring(38, 8).Trim());
                 default:
                     return false;
             }
@@ -218,35 +221,35 @@ namespace NonVisuals.Radios
             try
             {
                 int linesChanged = 0;
-                if (e.Address.Equals(_PLT_EUFD_LINE8.Address)) //VHF
+                if (e.Address.Equals(_pltEUFDLine8.Address)) //VHF
                 {
                     if (UFDStringDataChanged(8, e.StringData))
                     {
                         linesChanged++;
                     }
                 }
-                if (e.Address.Equals(_PLT_EUFD_LINE9.Address)) //UHF
+                if (e.Address.Equals(_pltEUFDLine9.Address)) //UHF
                 {
                     if (UFDStringDataChanged(9, e.StringData))
                     {
                         linesChanged++;
                     }
                 }
-                if (e.Address.Equals(_PLT_EUFD_LINE10.Address)) //FM1
+                if (e.Address.Equals(_pltEUFDLine10.Address)) //FM1
                 {
                     if (UFDStringDataChanged(10, e.StringData))
                     {
                         linesChanged++;
                     }
                 }
-                if (e.Address.Equals(_PLT_EUFD_LINE11.Address)) //FM2
+                if (e.Address.Equals(_pltEUFDLine11.Address)) //FM2
                 {
                     if (UFDStringDataChanged(11, e.StringData))
                     {
                         linesChanged++;
                     }
                 }
-                if (e.Address.Equals(_PLT_EUFD_LINE12.Address)) //HF
+                if (e.Address.Equals(_pltEUFDLine12.Address)) //HF
                 {
                     if (UFDStringDataChanged(12, e.StringData))
                     {
@@ -819,34 +822,34 @@ namespace NonVisuals.Radios
 
         private string GetSafeFrequency(FrequencyType frequencyType)
         {
-            if (!_UfdFrequencies.ContainsKey(frequencyType) || string.IsNullOrEmpty(_UfdFrequencies[frequencyType]))
+            if (!_ufdFrequencies.ContainsKey(frequencyType) || string.IsNullOrEmpty(_ufdFrequencies[frequencyType]))
                 return string.Empty;
 
-             return _UfdFrequencies[frequencyType];
+             return _ufdFrequencies[frequencyType];
         }
 
         private void SetFrequencyBytes(FrequencyType frequencyType, Pz69Mode pz69mode, ref byte[] bytes)
         {
             switch (frequencyType) {
-                case (FrequencyType.VHF):
-                    lock (_vhfFrequency)
+                case (FrequencyType.VHFActive):
+                    lock (_vhfFrequencyActive)
                     {
-                         _vhfFrequency = GetSafeFrequency(FrequencyType.VHF);
-                        if (!string.IsNullOrEmpty(_vhfFrequency))
+                         _vhfFrequencyActive = GetSafeFrequency(FrequencyType.VHFActive);
+                        if (!string.IsNullOrEmpty(_vhfFrequencyActive))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequency, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT) ;
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT) ;
                         }
                         else
                         {
                             SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                     }
-                    lock (_vhfFrequency_Stby)
+                    lock (_vhfFrequencyStby)
                     {
-                        _vhfFrequency_Stby = GetSafeFrequency(FrequencyType.VHF_Stby);
-                        if (!string.IsNullOrEmpty(_vhfFrequency_Stby))
+                        _vhfFrequencyStby = GetSafeFrequency(FrequencyType.VHFStby);
+                        if (!string.IsNullOrEmpty(_vhfFrequencyStby))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequency_Stby, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyStby, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
                         {
@@ -855,52 +858,25 @@ namespace NonVisuals.Radios
                     }
                     break;
 
-                case (FrequencyType.UHF):
-                    lock (_uhfFrequency)
+                case (FrequencyType.UHFActive):
+                    lock (_uhfFrequencyActive)
                     {
-                        _uhfFrequency = GetSafeFrequency(FrequencyType.UHF);
-                        if (!string.IsNullOrEmpty(_uhfFrequency))
+                        _uhfFrequencyActive = GetSafeFrequency(FrequencyType.UHFActive);
+                        if (!string.IsNullOrEmpty(_uhfFrequencyActive))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfFrequency, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                         }
                         else
                         {
                             SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                     }
-                    lock (_uhfFrequency_Stby)
+                    lock (_uhfFrequencyStby)
                     {
-                        _uhfFrequency_Stby = GetSafeFrequency(FrequencyType.UHF_Stby);
-                        if (!string.IsNullOrEmpty(_uhfFrequency_Stby))
+                        _uhfFrequencyStby = GetSafeFrequency(FrequencyType.UHFStby);
+                        if (!string.IsNullOrEmpty(_uhfFrequencyStby))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfFrequency_Stby, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
-                        }
-                        else
-                        {
-                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
-                        }
-                    }
-                    break;
-
-                case (FrequencyType.FM1):
-                    lock (_fm1Frequency)
-                    {
-                        _fm1Frequency = GetSafeFrequency(FrequencyType.FM1);
-                        if (!string.IsNullOrEmpty(_fm1Frequency))
-                        {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_fm1Frequency, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                        }
-                        else
-                        {
-                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
-                        }
-                    }
-                    lock (_fm1Frequency_Stby)
-                    {
-                        _fm1Frequency_Stby = GetSafeFrequency(FrequencyType.FM1_Stby);
-                        if (!string.IsNullOrEmpty(_fm1Frequency_Stby))
-                        {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_fm1Frequency_Stby, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfFrequencyStby, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
                         {
@@ -909,25 +885,25 @@ namespace NonVisuals.Radios
                     }
                     break;
 
-                case (FrequencyType.FM2):
-                    lock (_fm2Frequency)
+                case (FrequencyType.FM1Active):
+                    lock (_fm1FrequencyActive)
                     {
-                        _fm2Frequency = GetSafeFrequency(FrequencyType.FM2);
-                        if (!string.IsNullOrEmpty(_fm2Frequency))
+                        _fm1FrequencyActive = GetSafeFrequency(FrequencyType.FM1Active);
+                        if (!string.IsNullOrEmpty(_fm1FrequencyActive))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_fm2Frequency, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_fm1FrequencyActive, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                         }
                         else
                         {
                             SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                     }
-                    lock (_fm2Frequency_Stby)
+                    lock (_fm1FrequencyStby)
                     {
-                        _fm2Frequency_Stby = GetSafeFrequency(FrequencyType.FM2_Stby);
-                        if (!string.IsNullOrEmpty(_fm2Frequency_Stby))
+                        _fm1FrequencyStby = GetSafeFrequency(FrequencyType.FM1Stby);
+                        if (!string.IsNullOrEmpty(_fm1FrequencyStby))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_fm2Frequency_Stby, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_fm1FrequencyStby, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
                         {
@@ -936,25 +912,52 @@ namespace NonVisuals.Radios
                     }
                     break;
 
-                case (FrequencyType.HF):
-                    lock (_hfFrequency)
+                case (FrequencyType.FM2Active):
+                    lock (_fm2FrequencyActive)
                     {
-                        _hfFrequency = GetSafeFrequency(FrequencyType.HF);
-                        if (!string.IsNullOrEmpty(_hfFrequency))
+                        _fm2FrequencyActive = GetSafeFrequency(FrequencyType.FM2Active);
+                        if (!string.IsNullOrEmpty(_fm2FrequencyActive))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_hfFrequency, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_fm2FrequencyActive, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                         }
                         else
                         {
                             SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                     }
-                    lock (_hfFrequency_Stby)
+                    lock (_fm2FrequencyStby)
                     {
-                        _hfFrequency_Stby = GetSafeFrequency(FrequencyType.HF_Stby);
-                        if (!string.IsNullOrEmpty(_hfFrequency_Stby))
+                        _fm2FrequencyStby = GetSafeFrequency(FrequencyType.FM2Stby);
+                        if (!string.IsNullOrEmpty(_fm2FrequencyStby))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_hfFrequency_Stby, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_fm2FrequencyStby, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                        else
+                        {
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                    }
+                    break;
+
+                case (FrequencyType.HFActive):
+                    lock (_hfFrequencyActive)
+                    {
+                        _hfFrequencyActive = GetSafeFrequency(FrequencyType.HFActive);
+                        if (!string.IsNullOrEmpty(_hfFrequencyActive))
+                        {
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_hfFrequencyActive, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                        }
+                        else
+                        {
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                    }
+                    lock (_hfFrequencyStby)
+                    {
+                        _hfFrequencyStby = GetSafeFrequency(FrequencyType.HFStby);
+                        if (!string.IsNullOrEmpty(_hfFrequencyStby))
+                        {
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_hfFrequencyStby, NumberFormatInfoFullDisplay), 3, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
                         {
@@ -991,30 +994,30 @@ namespace NonVisuals.Radios
                     {
                         case CurrentAH64DRadioMode.VHF:
                             {
-                                SetFrequencyBytes(FrequencyType.VHF, Pz69Mode.UPPER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
 
                         case CurrentAH64DRadioMode.UHF:
                             {
-                                SetFrequencyBytes(FrequencyType.UHF, Pz69Mode.UPPER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
 
                         case CurrentAH64DRadioMode.FM1:
                             {
-                                SetFrequencyBytes(FrequencyType.FM1, Pz69Mode.UPPER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.FM1Active, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
 
                         case CurrentAH64DRadioMode.FM2:
                             {
-                                SetFrequencyBytes(FrequencyType.FM2, Pz69Mode.UPPER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.FM2Active, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
                         case CurrentAH64DRadioMode.HF:
                             {
-                                SetFrequencyBytes(FrequencyType.HF, Pz69Mode.UPPER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.HFActive, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
 
@@ -1029,30 +1032,30 @@ namespace NonVisuals.Radios
                     {
                         case CurrentAH64DRadioMode.VHF:
                             {
-                                SetFrequencyBytes(FrequencyType.VHF, Pz69Mode.LOWER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
 
                         case CurrentAH64DRadioMode.UHF:
                             {
-                                SetFrequencyBytes(FrequencyType.UHF, Pz69Mode.LOWER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
 
                         case CurrentAH64DRadioMode.FM1:
                             {
-                                SetFrequencyBytes(FrequencyType.FM1, Pz69Mode.LOWER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.FM1Active, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
 
                         case CurrentAH64DRadioMode.FM2:
                             {
-                                SetFrequencyBytes(FrequencyType.FM2, Pz69Mode.LOWER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.FM2Active, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
                         case CurrentAH64DRadioMode.HF:
                             {
-                                SetFrequencyBytes(FrequencyType.HF, Pz69Mode.LOWER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.HFActive, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
                         case CurrentAH64DRadioMode.NOUSE:
