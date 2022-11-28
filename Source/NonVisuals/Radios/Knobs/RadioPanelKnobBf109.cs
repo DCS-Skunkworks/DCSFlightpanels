@@ -34,11 +34,9 @@
     }
 
 
-    /*
-     * Represents a knob or button on the PZ69 Radio Panel.
-     * Used by the PZ69 instance to determine what knob & button
-     * the user is manipulating.
-     */
+    /// <summary>
+    /// Represents a knob or button on the PZ69 Radio Panel. Used by the PZ69 instance to determine what knob & button the user is manipulating.
+    /// </summary>
     public class RadioPanelKnobBf109 : ISaitekPanelKnob
     {
         public RadioPanelKnobBf109(int group, int mask, bool isOn, RadioPanelPZ69KnobsBf109 radioPanelPZ69Knob)

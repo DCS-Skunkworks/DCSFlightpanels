@@ -22,11 +22,10 @@ namespace NonVisuals.Radios
     using NonVisuals.Panels.Saitek.Panels;
     using Panels.Saitek;
     using HID;
-
-    /*
-     * This is the class for the PZ69 Radio Panel that is used when the user
-     * has a key emulation only profile open.
-     */
+    
+    /// <summary>
+    /// This is the class for the PZ69 Radio Panel that is used when the user has a key emulation only profile open.
+    /// </summary>
     public class RadioPanelPZ69Emulator : RadioPanelPZ69Base
     {
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new();

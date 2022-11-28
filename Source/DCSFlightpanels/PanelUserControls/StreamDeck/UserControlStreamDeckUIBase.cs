@@ -23,7 +23,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using NonVisuals.Panels.StreamDeck.Panels;
     using NonVisuals.Panels.StreamDeck;
 
-    public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, INvStreamDeckListener, IStreamDeckConfigListener, IOledImageListener
+    public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, INvStreamDeckListener, IStreamDeckConfigListener
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         protected readonly List<StreamDeckImage> ButtonImages = new();

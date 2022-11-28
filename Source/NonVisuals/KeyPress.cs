@@ -14,13 +14,15 @@ namespace NonVisuals
     using MEF;
 
     using Newtonsoft.Json;
+    
 
-    /*
-     * This class handles key emulation. It is mapped together with a physical switch/key
-     * by one of the binding classes.
-     * This class if responsible for importing, exporting settings for a certain keypress
-     * as well as executing the key press using a Windows API.
-     */
+
+    /// <summary>
+    /// This class handles key emulation. It is mapped together with a physical switch/key
+    /// by one of the binding classes.
+    /// This class if responsible for importing, exporting settings for a certain keypress
+    /// as well as executing the key press using a Windows API.
+    /// </summary>
     [Serializable]
     public class KeyPress
     {

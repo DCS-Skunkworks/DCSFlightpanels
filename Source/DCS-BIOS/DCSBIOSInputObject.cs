@@ -4,6 +4,11 @@ using DCS_BIOS.Json;
 namespace DCS_BIOS
 {
 
+    /// <summary>
+    /// This class takes care of a DCS-BIOS Control Input and also
+    /// provides the command string and or sends the command
+    /// that is sent to DCS-BIOS when it should trigger (e.g. user switches a switch).
+    /// </summary>
     [Serializable]
     public class DCSBIOSInputObject
     {
@@ -63,6 +68,11 @@ namespace DCS_BIOS
                 throw new Exception($"Error getting DCS-BIOSInput command. ControlId = {_controlId} Interface = {_interface}");
             }
             return command;
+        }
+
+        public void SendCommand()
+        {
+            DCSBIOS.Send(GetDCSBIOSCommand());
         }
 
         public int Delay

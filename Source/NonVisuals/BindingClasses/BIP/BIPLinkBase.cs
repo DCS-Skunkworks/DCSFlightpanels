@@ -9,14 +9,15 @@ using NonVisuals.Panels.Saitek;
 
 namespace NonVisuals.BindingClasses.BIP
 {
+
+    /// <summary>
+    /// This class binds a physical switch with a BIP LED.
+    /// The user can map a physical switch so that whenever it is flicked
+    /// the BIP will light up in a position chosen by the user.
+    /// </summary>
     [Serializable]
     public abstract class BIPLinkBase
     {
-        /*
-         This class binds a physical switch with a BIP LED.
-         The user can map a physical switch so that whenever it is flicked
-         the BIP will light up in a position chosen by the user.
-         */
         internal SortedList<int, BIPLight> _bipLights = new();
         internal bool WhenOnTurnedOn = true;
         internal string _description;

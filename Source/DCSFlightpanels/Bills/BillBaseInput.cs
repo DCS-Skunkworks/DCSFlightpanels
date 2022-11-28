@@ -23,24 +23,23 @@ namespace DCSFlightpanels.Bills
     using NonVisuals.Panels.Saitek.Panels;
 
 
-    /*
-     * A Bill(Input) is attached to each UI TextBox that is used for adding configuration
-     * to a panel switch/knob/key.
-     * A TextBox by itself can't hold complex information as such.
-     * Each UI Panel Control (Switch/Multi/etc) has its own TextBox type which holds the specific Bill class.
-     *
-     * The Bill *communicates directly* to the Saitek Panel class and updates the settings whenever they are changed.
-     *
-     * The purpose of the Bill is to :
-     * 1) Hold the setting(s) the user has specified
-     * 2) Provide a contextmenu which enables the user to edit/copy/paste/delete settings
-     *    held by the specific TextBox
-     * 3) Handle double clicking
-     *
-     * Each panel type has its own different classes (each panel has unique switches/buttons) for binding a switch / key to a setting.
-     * Using this solution it is possible to for example copy settings from one panel to another.
-     * It is also easy to create the UI infrastructure for a new panel when needed.
-     */
+
+    /// <summary>
+    /// A Bill(Input) is attached to each UI TextBox that is used for adding configuration to a panel switch/knob/key.
+    /// A TextBox by itself can't hold complex information as such. Each UI Panel Control(Switch/Multi/etc) has its own TextBox type which holds the specific Bill class.
+    ///
+    /// The Bill communicates directly to the Saitek Panel class and updates the settings whenever they are changed.
+    ///
+    /// The purpose of the Bill is to :
+    /// 1) Hold the setting(s) the user has specified
+    /// 2) Provide a contextmenu which enables the user to edit/copy/paste/delete settings
+    /// held by the specific TextBox
+    /// 3) Handle double clicking
+    ///
+    /// Each panel type has its own different classes(each panel has unique switches/buttons) for binding a switch / key to a setting.
+    /// Using this solution it is possible to for example copy settings from one panel to another.
+    /// It is also easy to create the UI infrastructure for a new panel when needed.
+    /// </summary>
     public abstract class BillBaseInput
     {
         private readonly SaitekPanel _saitekPanel;

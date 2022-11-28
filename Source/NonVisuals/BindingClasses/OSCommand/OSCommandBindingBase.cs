@@ -4,13 +4,13 @@ using NonVisuals.Panels.Saitek;
 
 namespace NonVisuals.BindingClasses.OSCommand
 {
+    /// <summary>
+    /// This is the base class for all the OSCommand binding classes.
+    /// It is used when a user maps a OSCommand to a physical key on a panel.
+    /// </summary>
     [Serializable]
     public abstract class OSCommandBindingBase
     {
-        /*
-         This is the base class for all the OSCommand binding classes.
-         It is used when a user maps a OSCommand to a physical key on a panel.
-         */
         private bool _whenOnTurnedOn = true;
 
         private NonVisuals.OSCommand _operatingSystemCommand;

@@ -6,6 +6,11 @@
     using System.IO;
     using System.Linq;
 
+    /// <summary>
+    /// Holds information about currently selected profile / module (DCS aircraft/helicopter).
+    /// This class reads all modules from BIOS.lua and the user can then select between these
+    /// when creating a new DCSFP profile.
+    /// </summary>
     public class DCSFPProfile
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();

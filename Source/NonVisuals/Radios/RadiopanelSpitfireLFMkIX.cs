@@ -19,9 +19,11 @@ namespace NonVisuals.Radios
     using HID;
 
 
-    /*
-     * Pre-programmed radio panel for the Spitfire LF MK IX.
-     */
+
+
+    /// <summary>
+    /// Pre-programmed radio panel for the Spitfire LF MK IX. 
+    /// </summary>
     public class RadioPanelPZ69SpitfireLFMkIX : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentSpitfireLFMkIXRadioMode

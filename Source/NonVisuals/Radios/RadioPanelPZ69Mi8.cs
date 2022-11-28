@@ -20,10 +20,11 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
+    
 
-    /*
-     * Pre-programmed radio panel for the Mi8.
-     */
+    /// <summary>
+    /// Pre-programmed radio panel for the Mi8. 
+    /// </summary>
     public class RadioPanelPZ69Mi8 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentMi8RadioMode

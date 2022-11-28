@@ -8,11 +8,13 @@
 
     using Newtonsoft.Json;
 
-    /*
-     * This class contains all information needed for a certain key emulation.
-     * This includes e.g. key(s) to press, breaks in between presses and length
-     * of the actual keypresses.
-     */
+
+
+    /// <summary>
+    /// This class contains all information needed for a certain key emulation.
+    /// This includes e.g.key(s) to press, breaks in between presses and length
+    /// of the actual keypresses.
+    /// </summary>
     [Serializable]
     public class KeyPressInfo : IKeyPressInfo
     {

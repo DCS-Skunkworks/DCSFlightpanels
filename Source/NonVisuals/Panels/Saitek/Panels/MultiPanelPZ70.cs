@@ -21,11 +21,11 @@ namespace NonVisuals.Panels.Saitek.Panels
     using NonVisuals;
     using Saitek;
     using HID;
-
-    /*
-     * The implementation class for the Logitech Multi Panel (PZ70)
-     * See bottom of file for communication information.
-     */
+    
+    /// <summary>
+    /// The implementation class for the Logitech Multi Panel (PZ70)
+    /// See bottom of file for communication information.
+    /// </summary>
     public class MultiPanelPZ70 : SaitekPanel
     {
         private readonly object _lcdLockObject = new();

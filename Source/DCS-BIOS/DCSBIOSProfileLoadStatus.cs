@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace DCS_BIOS
 {
+    /// <summary>
+    /// Convenience class for DCSBIOSControlLocator.
+    /// </summary>
     internal class DCSBIOSProfileLoadStatus
     {
         private string Profile { get; }

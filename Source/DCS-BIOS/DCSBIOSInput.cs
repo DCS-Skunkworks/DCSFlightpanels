@@ -12,12 +12,22 @@ namespace DCS_BIOS
     using Newtonsoft.Json;
     using NLog;
 
+    /// <summary>
+    /// These are used when manipulating a DCS-BIOS Control with Increase or Decrease.
+    /// </summary>
     public enum DCSBIOSFixedStepInput
     {
         INC,
         DEC
     }
 
+    /// <summary>
+    /// Type of manipulation for a DCS-BIOS Control.
+    /// Fixed shifts (+/-) the control using a fixed value.
+    /// Set State sets the control to a specific value.
+    /// Action, e.g. TOGGLE
+    /// Variable Step, you set a step value first and then shifts the control using that.
+    /// </summary>
     public enum DCSBIOSInputType
     {
         FIXED_STEP,
@@ -26,6 +36,13 @@ namespace DCS_BIOS
         VARIABLE_STEP
     }
 
+
+    /// <summary>
+    /// This class is a holder for all input information for a DCSBIOSControl.
+    /// They are used for manipulating a specific cockpit control.
+    /// See DCSBIOSInputType for the input types.
+    /// When the user specifies a DCS-BIOS Control they also select a specific input type.
+    /// </summary>
     [Serializable]
     public class DCSBIOSInput
     {
@@ -33,7 +50,7 @@ namespace DCS_BIOS
         // These are loaded and saved, all the rest are fetched from DCS-BIOS
         private string _controlId;
         
-        // The user has entered these two depending on type
+        // The user has entered one of these two depending on type
         private List<DCSBIOSInputObject> _dcsbiosInputObjects = new();
         private DCSBIOSInputObject _selectedDCSBIOSInput;
 
@@ -59,6 +76,14 @@ namespace DCS_BIOS
             var searched = _dcsbiosInputObjects.FirstOrDefault(x => x.Interface == dcsbiosInputType);
 
             return searched?.MaxValue ?? -99;
+        }
+
+        public static DCSBIOSInput GetDCSBIOSInput(string controlId)
+        {
+            var result = new DCSBIOSInput();
+            var control = DCSBIOSControlLocator.GetControl(controlId);
+            result.Consume(control);
+            return result;
         }
 
         public void Consume(DCSBIOSControl dcsbiosControl)

@@ -30,11 +30,11 @@ namespace NonVisuals.Panels.Saitek.Panels
         LEFT = 0x1,
         RIGHT = 0x2
     }
-
-    /*
-     * The implementation class for the Logitech Switch Panel (PZ55)
-     * See bottom of file for communication information.
-     */
+    
+    /// <summary>
+    /// The implementation class for the Logitech Switch Panel (PZ55)
+    /// See bottom of file for communication information.
+    /// </summary>
     public class SwitchPanelPZ55 : SaitekPanel
     {
         private readonly List<DcsOutputAndColorBindingPZ55> _listColorOutputBinding = new();

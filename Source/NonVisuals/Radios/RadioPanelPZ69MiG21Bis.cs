@@ -18,9 +18,10 @@ namespace NonVisuals.Radios
     using HID;
 
 
-    /*
-     * Pre-programmed radio panel for the MiG21BIS.
-     */
+    
+    /// <summary>
+    /// Pre-programmed radio panel for the MiG21BIS. 
+    /// </summary>
     public class RadioPanelPZ69MiG21Bis : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentMiG21BisRadioMode

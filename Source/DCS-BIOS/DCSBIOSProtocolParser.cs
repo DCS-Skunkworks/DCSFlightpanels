@@ -28,6 +28,12 @@ namespace DCS_BIOS
         DATA_HIGH = 6,
     }
 
+    /// <summary>
+    /// Reads and interprets the data stream sent from DCS-BIOS.
+    /// When a DCS-BIOS Control value has been received it
+    /// checks whether anyone is listening for the specific Address
+    /// and if so then broadcast the information.
+    /// </summary>
     internal class DCSBIOSProtocolParser : IDisposable
     {
         internal static readonly Logger logger = LogManager.GetCurrentClassLogger();

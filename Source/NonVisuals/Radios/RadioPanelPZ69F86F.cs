@@ -18,10 +18,10 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-
-    /*
-     * Pre-programmed radio panel for the F-86F.
-     */
+    
+    /// <summary>
+    /// Pre-programmed radio panel for the F-86F. 
+    /// </summary>
     public class RadioPanelPZ69F86F : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentF86FRadioMode

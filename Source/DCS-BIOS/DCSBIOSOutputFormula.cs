@@ -6,6 +6,10 @@ namespace DCS_BIOS
     using System.Collections.Generic;
     using NLog;
 
+    /// <summary>
+    /// Handles user specified formula and DCSBIOSOutput(s)
+    /// to produce a result based on DCS-BIOS value(s).
+    /// </summary>
     [Serializable]
     public class DCSBIOSOutputFormula
     {

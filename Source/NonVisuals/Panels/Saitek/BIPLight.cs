@@ -26,11 +26,12 @@
         TenSec = 10000,
     }
 
-    /*
-     * This class contains information about a LED on the BIP. Location, color and which BIP it belongs to.
-     * It is used then by e.g. the BipLink classes to map a physical panel switch/key to the BIPLight.
-     * So when the key is pressed the BIP LED will change color accordingly.
-     */
+
+    /// <summary>
+    /// This class contains information about a LED on the BIP. Location, color and which BIP it belongs to.
+    /// It is used then by e.g.the BipLink classes to map a physical panel switch/key to the BIPLight.
+    /// So when the key is pressed the BIP LED will change color accordingly. 
+    /// </summary>
     [Serializable]
     public class BIPLight : PanelSwitchBIPLightBinding
     {

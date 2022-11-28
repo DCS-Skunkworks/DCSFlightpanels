@@ -7,10 +7,13 @@
     using NLog;
     using Panels.Saitek;
 
-    /*
-     * Class for handling, executing, importing, exporting Windows commands.
-     * Can be used for starting up certain applications used while playing.
-     */
+
+
+
+    /// <summary>
+    /// Class for handling, executing, importing, exporting Windows commands.
+    /// Can be used for starting up certain applications used while playing.
+    /// </summary>
     [Serializable]
     public class OSCommand
     {

@@ -12,6 +12,11 @@ namespace DCS_BIOS
     using Newtonsoft.Json;
     using NLog;
 
+    /// <summary>
+    /// Reads the aircraft's / helicopter's JSON file containing the cockpit controls.
+    /// Whenever a class needs a specific DCS-BIOS control it asks for the control using
+    /// this class. There are separate functions for getting a input or output control.
+    /// </summary>
     public static class DCSBIOSControlLocator
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -60,22 +65,7 @@ namespace DCS_BIOS
                 try
                 {
                     LoadControls();
-                    /*if (_listOnce)
-                    {
-                        _listOnce = false;
-                        foreach (var dcsbiosControl in _dcsbiosControls)
-                        {
-                            if (dcsbiosControl.outputs.Count > 0)
-                            {
-                                Console.WriteLine(dcsbiosControl.identifier + " " + dcsbiosControl.outputs[0].address);
-                            }
-                            else
-                            {
-                                Console.WriteLine(dcsbiosControl.identifier);
-                            }
-                        }
-                    }
-                    PrintDuplicateControlIdentifiers(_dcsbiosControls, true);*/
+
                     if (!DCSBIOSControls.Exists(controlObject => controlObject.Identifier.Equals(controlId)))
                     {
                         throw new Exception($"Error, control {controlId} does not exist. ({Profile.Description})");

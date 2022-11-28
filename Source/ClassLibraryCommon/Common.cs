@@ -17,7 +17,10 @@
         KeyboardEmulationOnly = 4,
         NS430Enabled = 16
     }
-
+    
+    /// <summary>
+    /// Common functions used by multiple projects. 
+    /// </summary>
     public static class Common
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();

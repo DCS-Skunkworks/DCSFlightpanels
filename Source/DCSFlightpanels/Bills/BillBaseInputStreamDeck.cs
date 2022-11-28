@@ -10,10 +10,10 @@
 
     using NonVisuals;
 
-
-    /*
-     * BillBaseInputStreamDeck is used by descendants and added to a TextBox.
-     */
+    
+    /// <summary>
+    /// BillBaseInputStreamDeck is used by descendants and added to a TextBox.
+    /// </summary>
     public abstract class BillBaseInputStreamDeck
     {
         private KeyPress _keyPress;

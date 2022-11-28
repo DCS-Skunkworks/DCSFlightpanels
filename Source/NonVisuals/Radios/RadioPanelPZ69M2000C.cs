@@ -19,10 +19,10 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-
-    /*
-     * Pre-programmed radio panel for the M2000C.
-     */
+    
+    /// <summary>
+    /// Pre-programmed radio panel for the M2000C. 
+    /// </summary>
     public class RadioPanelPZ69M2000C : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentM2000CRadioMode

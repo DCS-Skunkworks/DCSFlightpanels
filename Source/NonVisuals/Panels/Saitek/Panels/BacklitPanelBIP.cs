@@ -18,11 +18,11 @@ namespace NonVisuals.Panels.Saitek.Panels
     using Saitek;
     using HID;
 
-    /*
-     * The implementation class for the Logitech Backlit Panel (BIP)
-     * See bottom of file for communication information in
-     * regards of setting the lights.
-     */
+    /// <summary>
+    /// The implementation class for the Logitech Backlit Panel (BIP)
+    /// See bottom of file for communication information in
+    /// regards of setting the lights.
+    /// </summary>
     public class BacklitPanelBIP : SaitekPanel
     {
         private const byte _1BIPMask = 0x01;

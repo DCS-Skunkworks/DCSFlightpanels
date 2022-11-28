@@ -10,9 +10,6 @@
 
     public static class SDEventHandler
     {
-
-
-
         /*
          * This is UI event within Stream Deck. Triggered when user changes value in Layer combobox when assigning a button for changing layer.
          */

@@ -5,14 +5,13 @@ using NonVisuals.Panels.Saitek;
 
 namespace NonVisuals.BindingClasses.Key
 {
+    /// <summary>
+    /// This is the base class for all the key binding classes.
+    /// It is used when a user binds a physical switch to a virtual keypress. (key emulation)
+    /// </summary>
     [Serializable]
     public abstract class KeyBindingBase
     {
-        /*
-         This is the base class for all the key binding classes.
-         It is used when a user binds a physical switch to a virtual 
-         keypress. (key emulation)
-         */
         private KeyPress _keyPress;
         private bool _whenOnTurnedOn = true;
 

@@ -1,5 +1,8 @@
 ﻿namespace ClassLibraryCommon
 {
+    /// <summary>
+    /// Minimum information needed about a gaming panel. Type and manufacturer.
+    /// </summary>
     public class GamingPanelSkeleton
     {
         public GamingPanelEnum GamingPanelType { get; }

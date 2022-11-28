@@ -4,9 +4,9 @@ namespace NonVisuals.Interfaces
 {
     public interface ISettingsModifiedListener
     {
-        /*
-         * Used by ProfileHandler to detect changes in panel configurations.
-         */
+        /// <summary>
+        /// Used by ProfileHandler to detect changes in panel configurations. 
+        /// </summary>
         void SettingsModified(object sender, PanelInfoArgs e); 
     }
 }

@@ -17,10 +17,10 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-
-    /*
-     * Pre-programmed radio panel for the Mi24.
-     */
+    
+    /// <summary>
+    /// Pre-programmed radio panel for the Mi24. 
+    /// </summary>
     public class RadioPanelPZ69Mi24P : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentMi24PRadioMode
