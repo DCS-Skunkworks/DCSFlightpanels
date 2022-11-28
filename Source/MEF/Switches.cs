@@ -66,7 +66,8 @@
         PZ69RadioPanel_PreProg_UH1H,
         [Description("Saitek PZ69 Radio PreProg Panel SpitfireLFMkIX")]
         PZ69RadioPanel_PreProg_SPITFIRELFMKIX,
-
+        [Description("Saitek PZ69 Radio PreProg Panel AH64D")]
+        PZ69RadioPanel_PreProg_AH64D,
     }
 
     /*
