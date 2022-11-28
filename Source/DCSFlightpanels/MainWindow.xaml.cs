@@ -703,6 +703,7 @@
                                  * then set the value here so that if there is a pre-programmed radio available in the future it won't cause
                                  * problems. The problem would be that when the user loads the profile the pre-programmed radio is loaded
                                  * but the user has configs for the generic radio.
+                                 * I.e. no pre-programmed radio exists => UseGenericRadio = true.
                                  */
                                 _profileHandler.Profile.UseGenericRadio = true;
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
