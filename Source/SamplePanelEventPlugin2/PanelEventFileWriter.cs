@@ -95,6 +95,7 @@
                 PluginGamingPanelEnum.PZ69RadioPanel_PreProg_SA342 => GetEventString<RadioPanelPZ69KnobsSA342>(switchId, pressed),
                 PluginGamingPanelEnum.PZ69RadioPanel_PreProg_UH1H => GetEventString<RadioPanelPZ69KnobsUH1H>(switchId, pressed),
                 PluginGamingPanelEnum.PZ69RadioPanel_PreProg_SPITFIRELFMKIX => GetEventString<RadioPanelPZ69KnobsSpitfireLFMkIX>(switchId, pressed),
+                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AH64D => GetEventString<RadioPanelPZ69KnobsAH64D>(switchId, pressed),
 
                 PluginGamingPanelEnum.Unknown 
                 or _ => "Unknown panel."
