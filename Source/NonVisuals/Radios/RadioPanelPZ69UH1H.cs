@@ -730,7 +730,6 @@ namespace NonVisuals.Radios
                 {
                     String str;
                     Interlocked.Exchange(ref _intercommThreadNowSynching, 1);
-                    var dec = "DEC\n";
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial1OkTime = 0;
                     var dial1SendCount = 0;
@@ -753,7 +752,7 @@ namespace NonVisuals.Radios
                                 if (_intercommDialPosStandby != _intercommCockpitDial1Pos)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    str = IntercommDialCommand + (_intercommDialPosStandby < _intercommCockpitDial1Pos ? dec : Increase);
+                                    str = IntercommDialCommand + (_intercommDialPosStandby < _intercommCockpitDial1Pos ? Decrease : Increase);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -1329,7 +1328,7 @@ namespace NonVisuals.Radios
                                 }
                                 else if (_vhfFmCockpitFreq1DialPos > desiredFreqDial1Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_1DIAL_COMMAND + "DEC\n";
+                                    const string str = VHF_FM_FREQ_1DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 1);
@@ -1360,7 +1359,7 @@ namespace NonVisuals.Radios
                                 }
                                 else if (_vhfFmCockpitFreq2DialPos > desiredFreqDial2Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_2DIAL_COMMAND + "DEC\n";
+                                    const string str = VHF_FM_FREQ_2DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 1);
@@ -1391,7 +1390,7 @@ namespace NonVisuals.Radios
                                 }
                                 else if (_vhfFmCockpitFreq3DialPos > desiredFreqDial3Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_3DIAL_COMMAND + "DEC\n";
+                                    const string str = VHF_FM_FREQ_3DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 1);
@@ -1422,7 +1421,7 @@ namespace NonVisuals.Radios
                                 }
                                 else if (_vhfFmCockpitFreq4DialPos > desiredFreqDial4Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + "DEC\n";
+                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 1);
@@ -1541,7 +1540,7 @@ namespace NonVisuals.Radios
                                 }
                                 else if (_adfCockpitFrequencyBand > desiredFreqBandDialPos)
                                 {
-                                    const string str = ADF_FREQUENCY_BAND_COMMAND + "DEC\n";
+                                    const string str = ADF_FREQUENCY_BAND_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     freqBandDialSendCount++;
                                     Interlocked.Exchange(ref _adfFrequencyBandWaitingForFeedback, 1);
@@ -2936,12 +2935,11 @@ namespace NonVisuals.Radios
         {
             /*UH-1H AN/ARC-134 VHF Comm Radio Set*/
             // Large dial 116 - 149 [step of 1]
-            const string dec = "DEC\n";
             Debug.Print("Desired = " + desiredFreq + ", actual = " + actualFreq);
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= 16)
             {
                 Debug.Print("A Returning DEC " + desiredFreq + ", actual = " + actualFreq);
-                return dec;
+                return Decrease;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < 16)
@@ -2959,7 +2957,7 @@ namespace NonVisuals.Radios
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < 16)
             {
                 Debug.Print("D Returning DEC " + desiredFreq + ", actual = " + actualFreq);
-                return dec;
+                return Decrease;
             }
 
             throw new Exception("Should reach this code. GetCommandDirectionForVhfCommDial1(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -2976,10 +2974,9 @@ namespace NonVisuals.Radios
             // 00 05 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95
             // 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20   
             const int breakValue = 50;
-            const string dec = "DEC\n";
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= breakValue)
             {
-                return dec;
+                return Decrease;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < breakValue)
@@ -2994,7 +2991,7 @@ namespace NonVisuals.Radios
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < breakValue)
             {
-                return dec;
+                return Decrease;
             }
 
             throw new Exception("Should reach this code. GetCommandDirectionForVhfCommDial2(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -3004,10 +3001,9 @@ namespace NonVisuals.Radios
         {
             // Large dial 20 - 39 [step of 1]
             // d19 +/-10
-            const string dec = "DEC\n";
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= 10)
             {
-                return dec;
+                return Decrease;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < 10)
@@ -3022,7 +3018,7 @@ namespace NonVisuals.Radios
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < 10)
             {
-                return dec;
+                return Decrease;
             }
 
             throw new Exception("Should reach this code. GetCommandDirectionForUhfDial1(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -3032,10 +3028,9 @@ namespace NonVisuals.Radios
         {
             // 2nd dial 0 - 9 [step of 1]
             // +/-9
-            const string dec = "DEC\n";
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= 5)
             {
-                return dec;
+                return Decrease;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < 5)
@@ -3050,7 +3045,7 @@ namespace NonVisuals.Radios
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < 5)
             {
-                return dec;
+                return Decrease;
             }
 
             throw new Exception("Should reach this code. GetCommandDirectionForUhfDial2(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -3061,10 +3056,9 @@ namespace NonVisuals.Radios
             // 00 05 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95
             // 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20   
             var breakValue = 50;
-            const string dec = "DEC\n";
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= breakValue)
             {
-                return dec;
+                return Decrease;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < breakValue)
@@ -3079,7 +3073,7 @@ namespace NonVisuals.Radios
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < breakValue)
             {
-                return dec;
+                return Decrease;
             }
 
             throw new Exception("Should reach this code. GetCommandDirectionForUhfDial3(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -3089,10 +3083,9 @@ namespace NonVisuals.Radios
         {
             /*UH-1H AN/ARC-134 VHF Comm Radio Set*/
             // Large dial 107-126  [step of 1]
-            const string dec = "DEC\n";
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= 10)
             {
-                return dec;
+                return Decrease;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < 10)
@@ -3107,7 +3100,7 @@ namespace NonVisuals.Radios
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < 10)
             {
-                return dec;
+                return Decrease;
             }
 
             throw new Exception("Should reach this code. GetCommandDirectionForVhfNavDial1(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);

@@ -651,7 +651,7 @@ namespace NonVisuals.Radios
                                         }
                                         else
                                         {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + "DEC\n";
+                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + Decrease;
                                         }
                                         DCSBIOS.Send(str);
                                         Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
@@ -1916,7 +1916,7 @@ namespace NonVisuals.Radios
                     downCount++;
                 } while (tmpActualDialPositionUp != desiredDialPosition);
 
-                return upCount < downCount ? Increase : "DEC\n";
+                return upCount < downCount ? Increase : Decrease;
             }
             catch (Exception ex)
             {

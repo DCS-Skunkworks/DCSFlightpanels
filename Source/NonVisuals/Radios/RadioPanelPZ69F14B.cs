@@ -1175,7 +1175,6 @@ namespace NonVisuals.Radios
                 {
                     Interlocked.Exchange(ref _rioLink4ThreadNowSynching, 1);
 
-                    const string dec = "DEC\n";
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial3Timeout = DateTime.Now.Ticks;
@@ -1210,7 +1209,7 @@ namespace NonVisuals.Radios
                                 if (_rioLink4HundredsCockpitFrequency != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = RIO_LINK4_HUNDREDS_DIAL_COMMAND + (_rioLink4HundredsCockpitFrequency < desiredPositionDial1 ? Increase : dec);
+                                    var str = RIO_LINK4_HUNDREDS_DIAL_COMMAND + (_rioLink4HundredsCockpitFrequency < desiredPositionDial1 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioLinkHundredsWaitingForFeedback, 1);
@@ -1230,7 +1229,7 @@ namespace NonVisuals.Radios
                                 if (_rioLink4TensCockpitFrequency != desiredPositionDial2)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = RIO_LINK4_TENS_DIAL_COMMAND + (_rioLink4TensCockpitFrequency < desiredPositionDial2 ? Increase : dec);
+                                    var str = RIO_LINK4_TENS_DIAL_COMMAND + (_rioLink4TensCockpitFrequency < desiredPositionDial2 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 1);
@@ -1250,7 +1249,7 @@ namespace NonVisuals.Radios
                                 if (_rioLink4OnesCockpitFrequency != desiredPositionDial3)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = RIO_LINK4_ONES_DIAL_COMMAND + (_rioLink4OnesCockpitFrequency < desiredPositionDial3 ? Increase : dec);
+                                    var str = RIO_LINK4_ONES_DIAL_COMMAND + (_rioLink4OnesCockpitFrequency < desiredPositionDial3 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 1);
@@ -1330,7 +1329,6 @@ namespace NonVisuals.Radios
                 {
                     Interlocked.Exchange(ref _pilotTacanThreadNowSynching, 1);
 
-                    const string dec = "DEC\n";
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial3Timeout = DateTime.Now.Ticks;
@@ -1365,7 +1363,7 @@ namespace NonVisuals.Radios
                                 if (_pilotTacanCockpitTensDialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = PILOT_TACAN_TENS_DIAL_COMMAND + (_pilotTacanCockpitTensDialPos < desiredPositionDial1 ? Increase : dec);
+                                    var str = PILOT_TACAN_TENS_DIAL_COMMAND + (_pilotTacanCockpitTensDialPos < desiredPositionDial1 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanTensWaitingForFeedback, 1);
@@ -1387,7 +1385,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
 
-                                    var str = PILOT_TACAN_ONES_DIAL_COMMAND + (_pilotTacanCockpitOnesDialPos < desiredPositionDial2 ? Increase : dec);
+                                    var str = PILOT_TACAN_ONES_DIAL_COMMAND + (_pilotTacanCockpitOnesDialPos < desiredPositionDial2 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanOnesWaitingForFeedback, 1);
@@ -1408,7 +1406,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
 
-                                    var str = PILOT_TACAN_XY_DIAL_COMMAND + (_pilotTacanCockpitXYDialPos < desiredPositionDial3 ? Increase : dec);
+                                    var str = PILOT_TACAN_XY_DIAL_COMMAND + (_pilotTacanCockpitXYDialPos < desiredPositionDial3 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanXYWaitingForFeedback, 1);
@@ -1474,7 +1472,6 @@ namespace NonVisuals.Radios
                 {
                     Interlocked.Exchange(ref _rioTacanThreadNowSynching, 1);
 
-                    const string dec = "DEC\n";
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial3Timeout = DateTime.Now.Ticks;
@@ -1510,7 +1507,7 @@ namespace NonVisuals.Radios
                                 if (_rioTacanCockpitTensDialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = RIO_TACAN_TENS_DIAL_COMMAND + (_rioTacanCockpitTensDialPos < desiredPositionDial1 ? Increase : dec);
+                                    var str = RIO_TACAN_TENS_DIAL_COMMAND + (_rioTacanCockpitTensDialPos < desiredPositionDial1 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioTacanTensWaitingForFeedback, 1);
@@ -1532,7 +1529,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
 
-                                    var str = RIO_TACAN_ONES_DIAL_COMMAND + (_rioTacanCockpitOnesDialPos < desiredPositionDial2 ? Increase : dec);
+                                    var str = RIO_TACAN_ONES_DIAL_COMMAND + (_rioTacanCockpitOnesDialPos < desiredPositionDial2 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _rioTacanOnesWaitingForFeedback, 1);
@@ -1553,7 +1550,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
 
-                                    var str = RIO_TACAN_XY_DIAL_COMMAND + (_rioTacanCockpitXYDialPos < desiredPositionDial3 ? Increase : dec);
+                                    var str = RIO_TACAN_XY_DIAL_COMMAND + (_rioTacanCockpitXYDialPos < desiredPositionDial3 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _rioTacanXYWaitingForFeedback, 1);
@@ -3441,8 +3438,6 @@ namespace NonVisuals.Radios
 
         private static string GetCommandDirection10Dial(int desiredDialPosition, uint actualDialPosition)
         {
-            const string dec = "DEC\n";
-
             var counterUp = 0;
             var counterDown = 0;
 
@@ -3477,7 +3472,7 @@ namespace NonVisuals.Radios
                     break;
                 }
             }
-            return counterUp > counterDown ? dec : Increase;
+            return counterUp > counterDown ? Decrease : Increase;
         }
     }
 }

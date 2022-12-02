@@ -638,7 +638,7 @@ namespace NonVisuals.Radios
                                     else if (_r800L1CockpitFreq4DialPos > desiredPositionDial4)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
-                                        str = R800_L1_FREQ_4DIAL_COMMAND + "DEC\n";
+                                        str = R800_L1_FREQ_4DIAL_COMMAND + Decrease;
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
@@ -2018,7 +2018,6 @@ namespace NonVisuals.Radios
 
         private string GetCommandDirectionForR800L1Dial1(int desiredDialPosition, uint actualDialPosition)
         {
-            const string dec = "DEC\n";
             try
             {
                 var tmpPos = actualDialPosition;
@@ -2069,7 +2068,7 @@ namespace NonVisuals.Radios
 
                 if (countDown < countUp)
                 {
-                    return dec;
+                    return Decrease;
                 }
             }
             catch (Exception ex)
@@ -2084,7 +2083,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                const string dec = "DEC\n";
                 switch (desiredDialPosition)
                 {
                     case 0:
@@ -2103,7 +2101,7 @@ namespace NonVisuals.Radios
                                 case 4:
                                     {
                                         // -4 DEC
-                                        return dec;
+                                        return Decrease;
                                     }
 
                                 case 5:
@@ -2139,7 +2137,7 @@ namespace NonVisuals.Radios
                                 case 4:
                                 case 5:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
 
                                 case 6:
@@ -2174,7 +2172,7 @@ namespace NonVisuals.Radios
                                 case 5:
                                 case 6:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
 
                                 case 7:
@@ -2209,7 +2207,7 @@ namespace NonVisuals.Radios
                                 case 6:
                                 case 7:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
 
                                 case 8:
@@ -2244,7 +2242,7 @@ namespace NonVisuals.Radios
                                 case 7:
                                 case 8:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
 
                                 case 9:
@@ -2279,7 +2277,7 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
                             }
                             break;
@@ -2291,7 +2289,7 @@ namespace NonVisuals.Radios
                             {
                                 case 0:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
 
                                 case 1:
@@ -2313,7 +2311,7 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
                             }
                             break;
@@ -2326,7 +2324,7 @@ namespace NonVisuals.Radios
                                 case 0:
                                 case 1:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
 
                                 case 2:
@@ -2347,7 +2345,7 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
                             }
                             break;
@@ -2361,7 +2359,7 @@ namespace NonVisuals.Radios
                                 case 1:
                                 case 2:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
 
                                 case 3:
@@ -2381,7 +2379,7 @@ namespace NonVisuals.Radios
 
                                 case 9:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
                             }
                             break;
@@ -2396,7 +2394,7 @@ namespace NonVisuals.Radios
                                 case 2:
                                 case 3:
                                     {
-                                        return dec;
+                                        return Decrease;
                                     }
 
                                 case 4:
