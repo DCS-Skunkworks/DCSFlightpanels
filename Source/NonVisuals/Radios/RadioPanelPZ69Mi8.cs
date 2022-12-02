@@ -937,7 +937,7 @@ namespace NonVisuals.Radios
                                     if (_r863ManualCockpitFreq4DialPos < desiredPositionDial4X)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
-                                        str = R863_MANUAL_FREQ_4DIAL_COMMAND + "INC\n";
+                                        str = R863_MANUAL_FREQ_4DIAL_COMMAND + Increase;
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
@@ -1123,7 +1123,7 @@ namespace NonVisuals.Radios
                                         dial1OkTime = DateTime.Now.Ticks;
                                         if (_yadro1ACockpitFreq1DialPos < desiredPositionDial1X)
                                         {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + "INC\n";
+                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + Increase;
                                         }
                                         else
                                         {
@@ -2901,7 +2901,6 @@ namespace NonVisuals.Radios
 
         private static string GetCommandDirectionForR863ManualDial1(int desiredDialPosition, uint actualDialPosition)
         {
-            const string inc = "INC\n";
             const string dec = "DEC\n";
             try
             {
@@ -2956,7 +2955,7 @@ namespace NonVisuals.Radios
 
                 if (upCount < downCount)
                 {
-                    return inc;
+                    return Increase;
                 }
                 return dec;
             }
@@ -2964,14 +2963,13 @@ namespace NonVisuals.Radios
             {
                 Logger.Error(ex);
             }
-            return inc;
+            return Increase;
         }
 
         private static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
         {
             try
             {
-                const string inc = "INC\n";
                 const string dec = "DEC\n";
 
                 var tmpActualDialPositionUp = actualDialPosition;
@@ -3008,7 +3006,7 @@ namespace NonVisuals.Radios
 
                 if (upCount < downCount)
                 {
-                    return inc;
+                    return Increase;
                 }
                 return dec;
             }

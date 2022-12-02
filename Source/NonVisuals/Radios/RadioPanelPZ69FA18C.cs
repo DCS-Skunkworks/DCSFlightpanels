@@ -350,7 +350,7 @@ namespace NonVisuals.Radios
                                 if (_ilsCockpitChannel < standbyPosition)
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_CHANNEL_COMMAND + "INC\n";
+                                    const string str = ILS_CHANNEL_COMMAND + Increase;
                                     DCSBIOS.Send(str);
                                     dialSendCount++;
                                     Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);

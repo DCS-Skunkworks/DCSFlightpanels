@@ -630,7 +630,7 @@ namespace NonVisuals.Radios
                                     if (_r800L1CockpitFreq4DialPos < desiredPositionDial4)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
-                                        str = R800_L1_FREQ_4DIAL_COMMAND + "INC\n";
+                                        str = R800_L1_FREQ_4DIAL_COMMAND + Increase;
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
@@ -2018,7 +2018,6 @@ namespace NonVisuals.Radios
 
         private string GetCommandDirectionForR800L1Dial1(int desiredDialPosition, uint actualDialPosition)
         {
-            const string inc = "INC\n";
             const string dec = "DEC\n";
             try
             {
@@ -2078,14 +2077,13 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
 
-            return inc;
+            return Increase;
         }
 
         private static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
         {
             try
             {
-                const string inc = "INC\n";
                 const string dec = "DEC\n";
                 switch (desiredDialPosition)
                 {
@@ -2115,7 +2113,7 @@ namespace NonVisuals.Radios
                                 case 9:
                                     {
                                         // 5 INC
-                                        return inc;
+                                        return Increase;
                                     }
                             }
                             break;
@@ -2127,7 +2125,7 @@ namespace NonVisuals.Radios
                             {
                                 case 0:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
 
                                 case 1:
@@ -2149,7 +2147,7 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
                             }
                             break;
@@ -2162,7 +2160,7 @@ namespace NonVisuals.Radios
                                 case 0:
                                 case 1:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
 
                                 case 2:
@@ -2183,7 +2181,7 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
                             }
                             break;
@@ -2197,7 +2195,7 @@ namespace NonVisuals.Radios
                                 case 1:
                                 case 2:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
 
                                 case 3:
@@ -2217,7 +2215,7 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
                             }
                             break;
@@ -2232,7 +2230,7 @@ namespace NonVisuals.Radios
                                 case 2:
                                 case 3:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
 
                                 case 4:
@@ -2251,7 +2249,7 @@ namespace NonVisuals.Radios
 
                                 case 9:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
                             }
                             break;
@@ -2267,7 +2265,7 @@ namespace NonVisuals.Radios
                                 case 3:
                                 case 4:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
 
                                 case 5:
@@ -2302,7 +2300,7 @@ namespace NonVisuals.Radios
                                 case 4:
                                 case 5:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
 
                                 case 6:
@@ -2337,7 +2335,7 @@ namespace NonVisuals.Radios
                                 case 5:
                                 case 6:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
 
                                 case 7:
@@ -2372,7 +2370,7 @@ namespace NonVisuals.Radios
                                 case 6:
                                 case 7:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
 
                                 case 8:
@@ -2407,7 +2405,7 @@ namespace NonVisuals.Radios
                                 case 7:
                                 case 8:
                                     {
-                                        return inc;
+                                        return Increase;
                                     }
 
                                 case 9:

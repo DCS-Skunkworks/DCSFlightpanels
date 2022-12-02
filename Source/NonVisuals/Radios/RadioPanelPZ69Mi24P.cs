@@ -647,7 +647,7 @@ namespace NonVisuals.Radios
                                         dial1OkTime = DateTime.Now.Ticks;
                                         if (_yadro1ACockpitFreq1DialPos < desiredPositionDial1X)
                                         {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + "INC\n";
+                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + Increase;
                                         }
                                         else
                                         {
@@ -1916,7 +1916,7 @@ namespace NonVisuals.Radios
                     downCount++;
                 } while (tmpActualDialPositionUp != desiredDialPosition);
 
-                return upCount < downCount ? "INC\n" : "DEC\n";
+                return upCount < downCount ? Increase : "DEC\n";
             }
             catch (Exception ex)
             {
