@@ -4160,7 +4160,7 @@ namespace NonVisuals.Radios
             return 0;
         }
 
-        private static string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
+        public static string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
         {
             switch (desiredDialPosition)
             {
