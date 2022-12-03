@@ -4638,7 +4638,7 @@ namespace NonVisuals.Radios
             throw new Exception("Should not reach this code. private String GetCommandDirectionForVhfDial1(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
         }
 
-        private static string GetCommandDirectionForVhfDial23(int desiredDialPosition, uint actualDialPosition)
+        public static string GetCommandDirectionForVhfDial23(int desiredDialPosition, uint actualDialPosition)
         {
             switch (desiredDialPosition)
             {
