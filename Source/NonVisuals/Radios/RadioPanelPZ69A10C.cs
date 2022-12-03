@@ -980,7 +980,7 @@ namespace NonVisuals.Radios
                                 if (_vhfAmCockpitFreq4DialPos < desiredPositionDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    str = VHF_AM_FREQ_4DIAL_COMMAND + "INC\n";
+                                    str = VHF_AM_FREQ_4DIAL_COMMAND + Increase;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfAmDial4WaitingForFeedback, 1);
@@ -988,7 +988,7 @@ namespace NonVisuals.Radios
                                 else if (_vhfAmCockpitFreq4DialPos > desiredPositionDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    str = VHF_AM_FREQ_4DIAL_COMMAND + "DEC\n";
+                                    str = VHF_AM_FREQ_4DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfAmDial4WaitingForFeedback, 1);
@@ -1249,14 +1249,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq1DialPos < desiredPosition1)
                                 {
-                                    const string str = UHF_FREQ_1DIAL_COMMAND + "INC\n";
+                                    const string str = UHF_FREQ_1DIAL_COMMAND + Increase;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq1DialPos > desiredPosition1)
                                 {
-                                    const string str = UHF_FREQ_1DIAL_COMMAND + "DEC\n";
+                                    const string str = UHF_FREQ_1DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
@@ -1281,14 +1281,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq2DialPos < desiredPosition2)
                                 {
-                                    const string str = UHF_FREQ_2DIAL_COMMAND + "INC\n";
+                                    const string str = UHF_FREQ_2DIAL_COMMAND + Increase;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq2DialPos > desiredPosition2)
                                 {
-                                    const string str = UHF_FREQ_2DIAL_COMMAND + "DEC\n";
+                                    const string str = UHF_FREQ_2DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
@@ -1313,14 +1313,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq3DialPos < desiredPosition3)
                                 {
-                                    const string str = UHF_FREQ_3DIAL_COMMAND + "INC\n";
+                                    const string str = UHF_FREQ_3DIAL_COMMAND + Increase;
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq3DialPos > desiredPosition3)
                                 {
-                                    const string str = UHF_FREQ_3DIAL_COMMAND + "DEC\n";
+                                    const string str = UHF_FREQ_3DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
@@ -1345,14 +1345,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq4DialPos < desiredPosition4)
                                 {
-                                    const string str = UHF_FREQ_4DIAL_COMMAND + "INC\n";
+                                    const string str = UHF_FREQ_4DIAL_COMMAND + Increase;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq4DialPos > desiredPosition4)
                                 {
-                                    const string str = UHF_FREQ_4DIAL_COMMAND + "DEC\n";
+                                    const string str = UHF_FREQ_4DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
@@ -1377,14 +1377,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq5DialPos < desiredPosition5)
                                 {
-                                    const string str = UHF_FREQ_5DIAL_COMMAND + "INC\n";
+                                    const string str = UHF_FREQ_5DIAL_COMMAND + Increase;
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq5DialPos > desiredPosition5)
                                 {
-                                    const string str = UHF_FREQ_5DIAL_COMMAND + "DEC\n";
+                                    const string str = UHF_FREQ_5DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
@@ -1469,16 +1469,14 @@ namespace NonVisuals.Radios
                 desiredPositionDial3 = int.Parse(frequencyAsString.Substring(3, 1));
                 var tmpPosition = int.Parse(frequencyAsString.Substring(4, 2));
 
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                 desiredPositionDial4 = tmpPosition switch
                 {
                     0 => 0,
                     25 => 1,
                     50 => 2,
-                    75 => 3
+                    75 => 3,
+                    _ => throw new Exception($"Unexpected tmpPosition position [{tmpPosition}] in SendVhfFmToDCSBIOS")
                 };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-
             }
             else
             {
@@ -1615,7 +1613,7 @@ namespace NonVisuals.Radios
                                 if (_vhfFmCockpitFreq4DialPos < frequencyDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + "INC\n";
+                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + Increase;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 1);
@@ -1623,7 +1621,7 @@ namespace NonVisuals.Radios
                                 else if (_vhfFmCockpitFreq4DialPos > frequencyDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + "DEC\n";
+                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 1);
@@ -1739,7 +1737,7 @@ namespace NonVisuals.Radios
                                 if (_ilsCockpitFreq1DialPos < position1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_FREQ1_DIAL_COMMAND + "INC\n";
+                                    const string str = ILS_FREQ1_DIAL_COMMAND + Increase;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _ilsDial1WaitingForFeedback, 1);
@@ -1747,7 +1745,7 @@ namespace NonVisuals.Radios
                                 else if (_ilsCockpitFreq1DialPos > position1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_FREQ1_DIAL_COMMAND + "DEC\n";
+                                    const string str = ILS_FREQ1_DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _ilsDial1WaitingForFeedback, 1);
@@ -1769,7 +1767,7 @@ namespace NonVisuals.Radios
                                 if (_ilsCockpitFreq2DialPos < position2)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_FREQ2_DIAL_COMMAND + "INC\n";
+                                    const string str = ILS_FREQ2_DIAL_COMMAND + Increase;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _ilsDial2WaitingForFeedback, 1);
@@ -1777,7 +1775,7 @@ namespace NonVisuals.Radios
                                 else if (_ilsCockpitFreq2DialPos > position2)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_FREQ2_DIAL_COMMAND + "DEC\n";
+                                    const string str = ILS_FREQ2_DIAL_COMMAND + Decrease;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _ilsDial2WaitingForFeedback, 1);
@@ -1859,8 +1857,6 @@ namespace NonVisuals.Radios
                 {
                     Interlocked.Exchange(ref _tacanThreadNowSynching, 1);
 
-                    const string inc = "INC\n";
-                    const string dec = "DEC\n";
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial3Timeout = DateTime.Now.Ticks;
@@ -1898,7 +1894,7 @@ namespace NonVisuals.Radios
                                 if (_tacanCockpitFreq1DialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = TACAN_FREQ1_DIAL_COMMAND + (_tacanCockpitFreq1DialPos < desiredPositionDial1 ? inc : dec);
+                                    var str = TACAN_FREQ1_DIAL_COMMAND + (_tacanCockpitFreq1DialPos < desiredPositionDial1 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 1);
@@ -1921,7 +1917,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
 
-                                    var str = TACAN_FREQ2_DIAL_COMMAND + (_tacanCockpitFreq2DialPos < desiredPositionDial2 ? inc : dec);
+                                    var str = TACAN_FREQ2_DIAL_COMMAND + (_tacanCockpitFreq2DialPos < desiredPositionDial2 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 1);
@@ -1944,7 +1940,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
 
-                                    var str = TACAN_FREQ3_DIAL_COMMAND + (_tacanCockpitFreq3DialPos < desiredPositionDial3 ? inc : dec);
+                                    var str = TACAN_FREQ3_DIAL_COMMAND + (_tacanCockpitFreq3DialPos < desiredPositionDial3 ? Increase : Decrease);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 1);
@@ -2780,7 +2776,6 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch 
                                             { 
                                                 10 => 15,
@@ -2792,9 +2787,9 @@ namespace NonVisuals.Radios
                                                 70 => 75,
                                                 75 => 90,
                                                 90 => 95,
-                                                95 or 100 or 105 => 10 // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
+                                                95 or 100 or 105 => 10, // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
+                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Upper Increase ILS")
                                             };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -2891,7 +2886,6 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 0 or 5 or 10 => 95,
@@ -2903,9 +2897,9 @@ namespace NonVisuals.Radios
                                                 70 => 55,
                                                 75 => 70,
                                                 90 => 75,
-                                                95 => 90
+                                                95 => 90,
+                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Upper Decrease ILS")
                                             };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -3259,7 +3253,6 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 10 => 15,
@@ -3271,9 +3264,9 @@ namespace NonVisuals.Radios
                                                 70 => 75,
                                                 75 => 90,
                                                 90 => 95,
-                                                95 or 100 or 105 => 10 // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
+                                                95 or 100 or 105 => 10, // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
+                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Lower Increase ILS")
                                             };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -3370,7 +3363,6 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 0 or 5 or 10 => 95,
@@ -3382,9 +3374,9 @@ namespace NonVisuals.Radios
                                                 70 => 55,
                                                 75 => 70,
                                                 90 => 75,
-                                                95 => 90
+                                                95 => 90,
+                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Lower Decrease ILS")
                                             };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -4162,10 +4154,8 @@ namespace NonVisuals.Radios
             return 0;
         }
 
-        private static string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
+        public static string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
         {
-            const string inc = "INC\n";
-            const string dec = "DEC\n";
             switch (desiredDialPosition)
             {
                 case 0:
@@ -4186,7 +4176,7 @@ namespace NonVisuals.Radios
                             case 6:
                                 {
                                     // -6
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 7:
@@ -4197,7 +4187,7 @@ namespace NonVisuals.Radios
                             case 12:
                                 {
                                     // 5
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4209,7 +4199,7 @@ namespace NonVisuals.Radios
                         {
                             case 0:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 1:
@@ -4225,7 +4215,7 @@ namespace NonVisuals.Radios
                             case 6:
                             case 7:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 8:
@@ -4234,7 +4224,7 @@ namespace NonVisuals.Radios
                             case 11:
                             case 12:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4247,7 +4237,7 @@ namespace NonVisuals.Radios
                             case 0:
                             case 1:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 2:
@@ -4263,7 +4253,7 @@ namespace NonVisuals.Radios
                             case 7:
                             case 8:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 9:
@@ -4271,7 +4261,7 @@ namespace NonVisuals.Radios
                             case 11:
                             case 12:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4285,7 +4275,7 @@ namespace NonVisuals.Radios
                             case 1:
                             case 2:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 3:
@@ -4301,14 +4291,14 @@ namespace NonVisuals.Radios
                             case 8:
                             case 9:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 10:
                             case 11:
                             case 12:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4323,7 +4313,7 @@ namespace NonVisuals.Radios
                             case 2:
                             case 3:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 4:
@@ -4339,13 +4329,13 @@ namespace NonVisuals.Radios
                             case 9:
                             case 10:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 11:
                             case 12:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4361,7 +4351,7 @@ namespace NonVisuals.Radios
                             case 3:
                             case 4:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 5:
@@ -4377,12 +4367,12 @@ namespace NonVisuals.Radios
                             case 10:
                             case 11:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 12:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4399,7 +4389,7 @@ namespace NonVisuals.Radios
                             case 4:
                             case 5:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 6:
@@ -4415,7 +4405,7 @@ namespace NonVisuals.Radios
                             case 11:
                             case 12:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
                         }
                         break;
@@ -4427,7 +4417,7 @@ namespace NonVisuals.Radios
                         {
                             case 0:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 1:
@@ -4437,7 +4427,7 @@ namespace NonVisuals.Radios
                             case 5:
                             case 6:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 7:
@@ -4452,7 +4442,7 @@ namespace NonVisuals.Radios
                             case 11:
                             case 12:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
                         }
                         break;
@@ -4465,7 +4455,7 @@ namespace NonVisuals.Radios
                             case 0:
                             case 1:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 2:
@@ -4475,7 +4465,7 @@ namespace NonVisuals.Radios
                             case 6:
                             case 7:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 8:
@@ -4489,7 +4479,7 @@ namespace NonVisuals.Radios
                             case 11:
                             case 12:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
                         }
                         break;
@@ -4503,7 +4493,7 @@ namespace NonVisuals.Radios
                             case 1:
                             case 2:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 3:
@@ -4513,7 +4503,7 @@ namespace NonVisuals.Radios
                             case 7:
                             case 8:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 9:
@@ -4526,7 +4516,7 @@ namespace NonVisuals.Radios
                             case 11:
                             case 12:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
                         }
                         break;
@@ -4541,7 +4531,7 @@ namespace NonVisuals.Radios
                             case 2:
                             case 3:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 4:
@@ -4551,7 +4541,7 @@ namespace NonVisuals.Radios
                             case 8:
                             case 9:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 10:
@@ -4563,7 +4553,7 @@ namespace NonVisuals.Radios
                             case 11:
                             case 12:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
                         }
                         break;
@@ -4579,7 +4569,7 @@ namespace NonVisuals.Radios
                             case 3:
                             case 4:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 5:
@@ -4589,7 +4579,7 @@ namespace NonVisuals.Radios
                             case 9:
                             case 10:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 11:
@@ -4600,7 +4590,7 @@ namespace NonVisuals.Radios
 
                             case 12:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
                         }
                         break;
@@ -4617,7 +4607,7 @@ namespace NonVisuals.Radios
                             case 4:
                             case 5:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 6:
@@ -4627,7 +4617,7 @@ namespace NonVisuals.Radios
                             case 10:
                             case 11:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 12:
@@ -4642,11 +4632,8 @@ namespace NonVisuals.Radios
             throw new Exception("Should not reach this code. private String GetCommandDirectionForVhfDial1(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
         }
 
-        private static string GetCommandDirectionForVhfDial23(int desiredDialPosition, uint actualDialPosition)
+        public static string GetCommandDirectionForVhfDial23(int desiredDialPosition, uint actualDialPosition)
         {
-            const string inc = "INC\n";
-            const string dec = "DEC\n";
-
             switch (desiredDialPosition)
             {
                 case 0:
@@ -4665,7 +4652,7 @@ namespace NonVisuals.Radios
                             case 4:
                                 {
                                     // -4 DEC
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 5:
@@ -4675,7 +4662,7 @@ namespace NonVisuals.Radios
                             case 9:
                                 {
                                     // 5 INC
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4687,7 +4674,7 @@ namespace NonVisuals.Radios
                         {
                             case 0:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 1:
@@ -4701,7 +4688,7 @@ namespace NonVisuals.Radios
                             case 4:
                             case 5:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 6:
@@ -4709,7 +4696,7 @@ namespace NonVisuals.Radios
                             case 8:
                             case 9:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4722,7 +4709,7 @@ namespace NonVisuals.Radios
                             case 0:
                             case 1:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 2:
@@ -4736,14 +4723,14 @@ namespace NonVisuals.Radios
                             case 5:
                             case 6:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 7:
                             case 8:
                             case 9:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4757,7 +4744,7 @@ namespace NonVisuals.Radios
                             case 1:
                             case 2:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 3:
@@ -4771,13 +4758,13 @@ namespace NonVisuals.Radios
                             case 6:
                             case 7:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 8:
                             case 9:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4792,7 +4779,7 @@ namespace NonVisuals.Radios
                             case 2:
                             case 3:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 4:
@@ -4806,12 +4793,12 @@ namespace NonVisuals.Radios
                             case 7:
                             case 8:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 9:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
                         }
                         break;
@@ -4827,7 +4814,7 @@ namespace NonVisuals.Radios
                             case 3:
                             case 4:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 5:
@@ -4841,7 +4828,7 @@ namespace NonVisuals.Radios
                             case 8:
                             case 9:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
                         }
                         break;
@@ -4853,7 +4840,7 @@ namespace NonVisuals.Radios
                         {
                             case 0:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 1:
@@ -4862,7 +4849,7 @@ namespace NonVisuals.Radios
                             case 4:
                             case 5:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 6:
@@ -4875,7 +4862,7 @@ namespace NonVisuals.Radios
                             case 8:
                             case 9:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
                         }
                         break;
@@ -4888,7 +4875,7 @@ namespace NonVisuals.Radios
                             case 0:
                             case 1:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 2:
@@ -4897,7 +4884,7 @@ namespace NonVisuals.Radios
                             case 5:
                             case 6:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 7:
@@ -4909,7 +4896,7 @@ namespace NonVisuals.Radios
                             case 8:
                             case 9:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
                         }
                         break;
@@ -4923,7 +4910,7 @@ namespace NonVisuals.Radios
                             case 1:
                             case 2:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 3:
@@ -4932,7 +4919,7 @@ namespace NonVisuals.Radios
                             case 6:
                             case 7:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 8:
@@ -4943,7 +4930,7 @@ namespace NonVisuals.Radios
 
                             case 9:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
                         }
                         break;
@@ -4958,7 +4945,7 @@ namespace NonVisuals.Radios
                             case 2:
                             case 3:
                                 {
-                                    return dec;
+                                    return Decrease;
                                 }
 
                             case 4:
@@ -4967,7 +4954,7 @@ namespace NonVisuals.Radios
                             case 7:
                             case 8:
                                 {
-                                    return inc;
+                                    return Increase;
                                 }
 
                             case 9:
@@ -5007,16 +4994,14 @@ namespace NonVisuals.Radios
                     {
                         lock (_lockVhfAmDialsObject4)
                         {
-
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             uint dial4 = _vhfAmCockpitFreq4DialPos switch
                             {
                                 0 => 0,
                                 1 => 25,
                                 2 => 50,
-                                3 => 75
+                                3 => 75,
+                                _ => throw new Exception($"Unexpected _vhfAmCockpitFreq4DialPos position [{_vhfAmCockpitFreq4DialPos}] in SaveCockpitFrequencyVhfAm")
                             };                            
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             _vhfAmSavedCockpitBigFrequency = double.Parse((_vhfAmCockpitFreq1DialPos + 3) + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfAmSavedCockpitSmallFrequency = double.Parse(_vhfAmCockpitFreq3DialPos + dial4.ToString(NumberFormatInfoFullDisplay).PadLeft(2, '0'), NumberFormatInfoFullDisplay);
                         }
@@ -5130,16 +5115,14 @@ namespace NonVisuals.Radios
                     {
                         lock (_lockVhfFmDialsObject4)
                         {
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             uint dial4 = _vhfFmCockpitFreq4DialPos switch
                             {
                                 0 => 0,
                                 1 => 25,
                                 2 => 50,
-                                3 => 75
+                                3 => 75,
+                                _ => throw new Exception($"Unexpected _vhfFmCockpitFreq4DialPos position [{_vhfFmCockpitFreq4DialPos}] in SaveCockpitFrequencyVhfFm")
                             };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-                           
                             _vhfFmSavedCockpitBigFrequency = uint.Parse((_vhfFmCockpitFreq1DialPos + 3) + _vhfFmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfFmSavedCockpitSmallFrequency = uint.Parse((_vhfFmCockpitFreq3DialPos.ToString() + dial4).PadLeft(3, '0'), NumberFormatInfoFullDisplay);
                         }
