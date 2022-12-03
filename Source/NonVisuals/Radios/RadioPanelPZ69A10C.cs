@@ -3947,42 +3947,28 @@ namespace NonVisuals.Radios
             // Frequency selector 5
             // "00" "25" "50" "75", only "00" and "50" used.
             // Pos     0    1    2    3
-            switch (dial)
-            {
-                case 1:
-                    {
-                        return position switch
-                        {
-                            0 => "2",
-                            1 => "3",
-                            2 => "0", // should be "A" // throw new NotImplementedException("check how A should be treated.");
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 1"),
-                        };
-                    }
+            return dial switch {
+                
+                1 => position switch {
+                        0 => "2",
+                        1 => "3",
+                        2 => "0", // should be "A" // throw new NotImplementedException("check how A should be treated.");
+                        _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 1"),
+                        },
 
-                case 2:
-                case 3:
-                case 4:
-                    {
-                        return position.ToString();
-                    }
+                2 or 3 or 4 => position.ToString(),
 
-                case 5:
-                    {
-                        // "00" "25" "50" "75", only "00" and "50" used.
-                        // Pos     0    1    2    3
-                        return position switch
-                        {
-                            0 => "00",
-                            1 => "25",
-                            2 => "50",
-                            3 => "75",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 5"),
-                        };
-                    }
-            }
-
-            return string.Empty;
+                // "00" "25" "50" "75", only "00" and "50" used.
+                // Pos     0    1    2    3
+                5 => position switch {
+                        0 => "00",
+                        1 => "25",
+                        2 => "50",
+                        3 => "75",
+                        _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 5"),
+                        },
+                _ => string.Empty
+            };
         }
 
         public static string GetVhfFmDialFrequencyForPosition(int dial, uint position)
