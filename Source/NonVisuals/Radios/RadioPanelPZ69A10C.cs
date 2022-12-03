@@ -2776,8 +2776,8 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                                            _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch 
-                                            { 
+                                            _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
+                                            {
                                                 10 => 15,
                                                 15 => 30,
                                                 30 => 35,
@@ -3895,37 +3895,40 @@ namespace NonVisuals.Radios
             // "00" "25" "50" "75", only 0 2 5 7 used.
             // Pos     0    1    2    3
 
-            return dial switch {
-                
-                1 => position switch {
-                        0 => "3",
-                        1 => "4",
-                        2 => "5",
-                        3 => "6",
-                        4 => "7",
-                        5 => "8",
-                        6 => "9",
-                        7 => "10",
-                        8 => "11",
-                        9 => "12",
-                        10 => "13",
-                        11 => "14",
-                        12 => "15",
-                        _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfAm Unexpected position switch value {position} for dial value of 1"),
-                        },
+            return dial switch
+            {
+
+                1 => position switch
+                {
+                    0 => "3",
+                    1 => "4",
+                    2 => "5",
+                    3 => "6",
+                    4 => "7",
+                    5 => "8",
+                    6 => "9",
+                    7 => "10",
+                    8 => "11",
+                    9 => "12",
+                    10 => "13",
+                    11 => "14",
+                    12 => "15",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfAm Unexpected position switch value {position} for dial value of 1"),
+                },
 
                 2 or 3 => position.ToString(),
 
-                4 => position switch {
-                        0 => "0",
-                        1 => "2",
-                        2 => "5",
-                        3 => "7",
-                        _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfAm Unexpected position switch value {position} for dial value of 4"),
-                        },
+                4 => position switch
+                {
+                    0 => "0",
+                    1 => "2",
+                    2 => "5",
+                    3 => "7",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfAm Unexpected position switch value {position} for dial value of 4"),
+                },
 
                 _ => string.Empty
-                };
+            };
         }
 
         public static string GetUhfDialFrequencyForPosition(int dial, uint position)
@@ -3947,26 +3950,29 @@ namespace NonVisuals.Radios
             // Frequency selector 5
             // "00" "25" "50" "75", only "00" and "50" used.
             // Pos     0    1    2    3
-            return dial switch {
-                
-                1 => position switch {
-                        0 => "2",
-                        1 => "3",
-                        2 => "0", // should be "A" // throw new NotImplementedException("check how A should be treated.");
-                        _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 1"),
-                        },
+            return dial switch
+            {
+
+                1 => position switch
+                {
+                    0 => "2",
+                    1 => "3",
+                    2 => "0", // should be "A" // throw new NotImplementedException("check how A should be treated.");
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 1"),
+                },
 
                 2 or 3 or 4 => position.ToString(),
 
                 // "00" "25" "50" "75", only "00" and "50" used.
                 // Pos     0    1    2    3
-                5 => position switch {
-                        0 => "00",
-                        1 => "25",
-                        2 => "50",
-                        3 => "75",
-                        _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 5"),
-                        },
+                5 => position switch
+                {
+                    0 => "00",
+                    1 => "25",
+                    2 => "50",
+                    3 => "75",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 5"),
+                },
                 _ => string.Empty
             };
         }
@@ -3986,9 +3992,11 @@ namespace NonVisuals.Radios
             // Frequency selector 4      VHFFM_FREQ4
             // "00" "25" "50" "75", 0 2 5 7 used.
             // Pos     0    1    2    3
-            return dial switch {
+            return dial switch
+            {
 
-                1 => position switch {
+                1 => position switch
+                {
                     0 => "3",
                     1 => "4",
                     2 => "5",
@@ -4003,19 +4011,20 @@ namespace NonVisuals.Radios
                     11 => "14",
                     12 => "15",
                     _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 1"),
-                    },
+                },
 
                 2 or 3 => position.ToString(),
 
                 // "00" "25" "50" "75"
                 // Pos     0    1    2    3
-                4 => position switch {
+                4 => position switch
+                {
                     0 => "00",
                     1 => "25",
                     2 => "50",
                     3 => "75",
                     _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 4"),
-                    },
+                },
 
                 _ => string.Empty
             };
@@ -4027,17 +4036,20 @@ namespace NonVisuals.Radios
             // 0     1     2     3
             // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
             // 0    1    2    3    4    5    6    7    8    9
-            return dial switch {
+            return dial switch
+            {
 
-                1 => position switch {
+                1 => position switch
+                {
                     0 => "108",
                     1 => "109",
                     2 => "110",
                     3 => "111",
                     _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 1"),
-                    },
+                },
 
-                2 => position switch {
+                2 => position switch
+                {
                     0 => "10",
                     1 => "15",
                     2 => "30",
@@ -4049,8 +4061,8 @@ namespace NonVisuals.Radios
                     8 => "90",
                     9 => "95",
                     _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 2"),
-                    },
-                
+                },
+
                 _ => string.Empty
             };
         }
@@ -4061,18 +4073,21 @@ namespace NonVisuals.Radios
             // 0     1     2     3
             // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
             // 0    1    2    3    4    5    6    7    8    9
-            return dial switch {
-                1 => freq switch {
+            return dial switch
+            {
+                1 => freq switch
+                {
                     108 => 0,
                     109 => 1,
                     110 => 2,
                     111 => 3,
                     _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 1")
-                    },
+                },
 
                 // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
                 // 0    1    2    3    4    5    6    7    8    9
-                2 => freq switch {
+                2 => freq switch
+                {
                     10 => 0,
                     15 => 1,
                     30 => 2,
@@ -4084,7 +4099,7 @@ namespace NonVisuals.Radios
                     90 => 8,
                     95 => 9,
                     _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 2")
-                    },
+                },
 
                 _ => 0
             };
@@ -4937,7 +4952,7 @@ namespace NonVisuals.Radios
                                 2 => 50,
                                 3 => 75,
                                 _ => throw new Exception($"Unexpected _vhfAmCockpitFreq4DialPos position [{_vhfAmCockpitFreq4DialPos}] in SaveCockpitFrequencyVhfAm")
-                            };                            
+                            };
                             _vhfAmSavedCockpitBigFrequency = double.Parse((_vhfAmCockpitFreq1DialPos + 3) + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfAmSavedCockpitSmallFrequency = double.Parse(_vhfAmCockpitFreq3DialPos + dial4.ToString(NumberFormatInfoFullDisplay).PadLeft(2, '0'), NumberFormatInfoFullDisplay);
                         }
