@@ -4061,41 +4061,33 @@ namespace NonVisuals.Radios
             // 0     1     2     3
             // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
             // 0    1    2    3    4    5    6    7    8    9
-            switch (dial)
-            {
-                case 1:
-                    {
-                        return freq switch
-                        {
-                            108 => 0,
-                            109 => 1,
-                            110 => 2,
-                            111 => 3,
-                            _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 1")
-                        };
-                    }
+            return dial switch {
+                1 => freq switch {
+                    108 => 0,
+                    109 => 1,
+                    110 => 2,
+                    111 => 3,
+                    _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 1")
+                    },
 
-                case 2:
-                    {
-                        // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                        // 0    1    2    3    4    5    6    7    8    9
-                        return freq switch
-                        {
-                            10 => 0,
-                            15 => 1,
-                            30 => 2,
-                            35 => 3,
-                            50 => 4,
-                            55 => 5,
-                            70 => 6,
-                            75 => 7,
-                            90 => 8,
-                            95 => 9,
-                            _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 2")
-                        };
-                    }
-            }
-            return 0;
+                // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+                // 0    1    2    3    4    5    6    7    8    9
+                2 => freq switch {
+                    10 => 0,
+                    15 => 1,
+                    30 => 2,
+                    35 => 3,
+                    50 => 4,
+                    55 => 5,
+                    70 => 6,
+                    75 => 7,
+                    90 => 8,
+                    95 => 9,
+                    _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 2")
+                    },
+
+                _ => 0
+            };
         }
 
         public static string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
