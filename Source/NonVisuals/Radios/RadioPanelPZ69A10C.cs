@@ -3973,7 +3973,6 @@ namespace NonVisuals.Radios
 
         public static string GetVhfFmDialFrequencyForPosition(int dial, uint position)
         {
-
             // Frequency selector 1      VHFFM_FREQ1
             // " 3" " 4" " 5" " 6" " 7" " 8" " 9" "10" "11" "12" "13" "14" "15"
             // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
@@ -3987,55 +3986,39 @@ namespace NonVisuals.Radios
             // Frequency selector 4      VHFFM_FREQ4
             // "00" "25" "50" "75", 0 2 5 7 used.
             // Pos     0    1    2    3
-            switch (dial)
-            {
-                case 1:
-                    {
-                        return position switch
-                        {
-                            0 => "3",
-                            1 => "4",
-                            2 => "5",
-                            3 => "6",
-                            4 => "7",
-                            5 => "8",
-                            6 => "9",
-                            7 => "10",
-                            8 => "11",
-                            9 => "12",
-                            10 => "13",
-                            11 => "14",
-                            12 => "15",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 1"),
-                        };                   
-                    }
+            return dial switch {
 
-                case 2:
-                    {
-                        return position.ToString();
-                    }
+                1 => position switch {
+                    0 => "3",
+                    1 => "4",
+                    2 => "5",
+                    3 => "6",
+                    4 => "7",
+                    5 => "8",
+                    6 => "9",
+                    7 => "10",
+                    8 => "11",
+                    9 => "12",
+                    10 => "13",
+                    11 => "14",
+                    12 => "15",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 1"),
+                    },
 
-                case 3:
-                    {
-                        return position.ToString();
-                    }
+                2 or 3 => position.ToString(),
 
-                case 4:
-                    {
-                        // "00" "25" "50" "75"
-                        // Pos     0    1    2    3
-                        return position switch
-                        {
-                            0 => "00",
-                            1 => "25",
-                            2 => "50",
-                            3 => "75",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 4"),
-                        };
-                    }
-            }
+                // "00" "25" "50" "75"
+                // Pos     0    1    2    3
+                4 => position switch {
+                    0 => "00",
+                    1 => "25",
+                    2 => "50",
+                    3 => "75",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 4"),
+                    },
 
-            return string.Empty;
+                _ => string.Empty
+            };
         }
 
         public static string GetILSDialFrequencyForPosition(int dial, uint position)
