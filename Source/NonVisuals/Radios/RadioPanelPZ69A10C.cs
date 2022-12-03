@@ -4027,41 +4027,32 @@ namespace NonVisuals.Radios
             // 0     1     2     3
             // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
             // 0    1    2    3    4    5    6    7    8    9
-            switch (dial)
-            {
-                case 1:
-                    {
-                        return position switch
-                        {
-                            0 => "108",
-                            1 => "109",
-                            2 => "110",
-                            3 => "111",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 1"),
-                        };
-                    }
+            return dial switch {
 
-                case 2:
-                    {
-                        // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                        // 0    1    2    3    4    5    6    7    8    9
-                        return position switch
-                        {
-                            0 => "10",
-                            1 => "15",
-                            2 => "30",
-                            3 => "35",
-                            4 => "50",
-                            5 => "55",
-                            6 => "70",
-                            7 => "75",
-                            8 => "90",
-                            9 => "95",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 2"),
-                        };
-                    }
-            }
-            return string.Empty;
+                1 => position switch {
+                    0 => "108",
+                    1 => "109",
+                    2 => "110",
+                    3 => "111",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 1"),
+                    },
+
+                2 => position switch {
+                    0 => "10",
+                    1 => "15",
+                    2 => "30",
+                    3 => "35",
+                    4 => "50",
+                    5 => "55",
+                    6 => "70",
+                    7 => "75",
+                    8 => "90",
+                    9 => "95",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 2"),
+                    },
+                
+                _ => string.Empty
+            };
         }
 
         public static int GetILSDialPosForFrequency(int dial, int freq)
