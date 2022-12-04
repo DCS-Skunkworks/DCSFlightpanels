@@ -1468,15 +1468,15 @@ namespace NonVisuals.Radios
                 desiredPositionDial2 = int.Parse(frequencyAsString.Substring(1, 1));
                 desiredPositionDial3 = int.Parse(frequencyAsString.Substring(3, 1));
                 var tmpPosition = int.Parse(frequencyAsString.Substring(4, 2));
-
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                 desiredPositionDial4 = tmpPosition switch
                 {
                     0 => 0,
                     25 => 1,
                     50 => 2,
-                    75 => 3,
-                    _ => throw new Exception($"Unexpected tmpPosition position [{tmpPosition}] in SendVhfFmToDCSBIOS")
+                    75 => 3
                 };
+#pragma warning restore CS8509
             }
             else
             {
@@ -2776,6 +2776,7 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 10 => 15,
@@ -2787,9 +2788,9 @@ namespace NonVisuals.Radios
                                                 70 => 75,
                                                 75 => 90,
                                                 90 => 95,
-                                                95 or 100 or 105 => 10, // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
-                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Upper Increase ILS")
+                                                95 or 100 or 105 => 10 // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -2886,6 +2887,7 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 0 or 5 or 10 => 95,
@@ -2897,9 +2899,9 @@ namespace NonVisuals.Radios
                                                 70 => 55,
                                                 75 => 70,
                                                 90 => 75,
-                                                95 => 90,
-                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Upper Decrease ILS")
+                                                95 => 90
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -3253,6 +3255,7 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 10 => 15,
@@ -3264,9 +3267,9 @@ namespace NonVisuals.Radios
                                                 70 => 75,
                                                 75 => 90,
                                                 90 => 95,
-                                                95 or 100 or 105 => 10, // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
-                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Lower Increase ILS")
+                                                95 or 100 or 105 => 10 // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -3363,6 +3366,7 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 0 or 5 or 10 => 95,
@@ -3374,9 +3378,9 @@ namespace NonVisuals.Radios
                                                 70 => 55,
                                                 75 => 70,
                                                 90 => 75,
-                                                95 => 90,
-                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Lower Decrease ILS")
+                                                95 => 90
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -4168,14 +4172,15 @@ namespace NonVisuals.Radios
                     {
                         lock (_lockVhfAmDialsObject4)
                         {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             uint dial4 = _vhfAmCockpitFreq4DialPos switch
                             {
                                 0 => 0,
                                 1 => 25,
                                 2 => 50,
-                                3 => 75,
-                                _ => throw new Exception($"Unexpected _vhfAmCockpitFreq4DialPos position [{_vhfAmCockpitFreq4DialPos}] in SaveCockpitFrequencyVhfAm")
+                                3 => 75
                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             _vhfAmSavedCockpitBigFrequency = double.Parse((_vhfAmCockpitFreq1DialPos + 3) + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfAmSavedCockpitSmallFrequency = double.Parse(_vhfAmCockpitFreq3DialPos + dial4.ToString(NumberFormatInfoFullDisplay).PadLeft(2, '0'), NumberFormatInfoFullDisplay);
                         }
@@ -4289,14 +4294,15 @@ namespace NonVisuals.Radios
                     {
                         lock (_lockVhfFmDialsObject4)
                         {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             uint dial4 = _vhfFmCockpitFreq4DialPos switch
                             {
                                 0 => 0,
                                 1 => 25,
                                 2 => 50,
-                                3 => 75,
-                                _ => throw new Exception($"Unexpected _vhfFmCockpitFreq4DialPos position [{_vhfFmCockpitFreq4DialPos}] in SaveCockpitFrequencyVhfFm")
+                                3 => 75
                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             _vhfFmSavedCockpitBigFrequency = uint.Parse((_vhfFmCockpitFreq1DialPos + 3) + _vhfFmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfFmSavedCockpitSmallFrequency = uint.Parse((_vhfFmCockpitFreq3DialPos.ToString() + dial4).PadLeft(3, '0'), NumberFormatInfoFullDisplay);
                         }
