@@ -1882,7 +1882,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
+        public static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
         {
             try
             {
@@ -1899,7 +1899,7 @@ namespace NonVisuals.Radios
                         tmpActualDialPositionUp++;
                     }
                     upCount++;
-                } while (tmpActualDialPositionUp != desiredDialPosition);
+                } while (tmpActualDialPositionUp != desiredDialPosition); // High probability of infinite loop if parameters are out of scope
 
                 tmpActualDialPositionUp = actualDialPosition;
                 uint downCount = actualDialPosition;
@@ -1914,7 +1914,7 @@ namespace NonVisuals.Radios
                         tmpActualDialPositionUp--;
                     }
                     downCount++;
-                } while (tmpActualDialPositionUp != desiredDialPosition);
+                } while (tmpActualDialPositionUp != desiredDialPosition); // High probability of infinite loop if parameters are out of scope
 
                 return upCount < downCount ? Increase : Decrease;
             }
