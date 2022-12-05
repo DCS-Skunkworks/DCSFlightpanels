@@ -2899,7 +2899,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private static string GetCommandDirectionForR863ManualDial1(int desiredDialPosition, uint actualDialPosition)
+        public static string GetCommandDirectionForR863ManualDial1(int desiredDialPosition, uint actualDialPosition)
         {
             try
             {
@@ -2928,7 +2928,7 @@ namespace NonVisuals.Radios
 
                     upCount++;
                 }
-                while (tmpActualDialPositionUp != desiredDialPosition);
+                while (tmpActualDialPositionUp != desiredDialPosition); // High probability of infinite loop if parameters are out of scope
 
                 // count down
                 var tmpActualDialPositionDown = actualDialPosition;
@@ -2950,7 +2950,7 @@ namespace NonVisuals.Radios
 
                     downCount++;
                 }
-                while (tmpActualDialPositionDown != desiredDialPosition);
+                while (tmpActualDialPositionDown != desiredDialPosition); // High probability of infinite loop if parameters are out of scope
 
                 if (upCount < downCount)
                 {
@@ -2965,7 +2965,7 @@ namespace NonVisuals.Radios
             return Increase;
         }
 
-        private static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
+        public static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
         {
             try
             {
@@ -2983,7 +2983,7 @@ namespace NonVisuals.Radios
                     }
                     upCount++;
                 }
-                while (tmpActualDialPositionUp != desiredDialPosition);
+                while (tmpActualDialPositionUp != desiredDialPosition); // High probability of infinite loop if parameters are out of scope
 
                 tmpActualDialPositionUp = actualDialPosition;
                 var downCount = actualDialPosition;
@@ -2999,7 +2999,7 @@ namespace NonVisuals.Radios
                     }
                     downCount++;
                 }
-                while (tmpActualDialPositionUp != desiredDialPosition);
+                while (tmpActualDialPositionUp != desiredDialPosition); // High probability of infinite loop if parameters are out of scope
 
                 if (upCount < downCount)
                 {

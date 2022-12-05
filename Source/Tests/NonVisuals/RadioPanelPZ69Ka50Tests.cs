@@ -118,9 +118,9 @@ namespace Tests.NonVisuals
         [InlineData(9, 8, RadioPanelPZ69Base.Increase)]
         [InlineData(9, 9, null)]
 
-        public void GetCommandDirectionFor0To9Dials_ShouldReturn_ExpectedValues(int dial, uint position, string expectedValue)
+        public void GetCommandDirectionFor0To9Dials_ShouldReturn_ExpectedValues(int desiredDialPosition, uint actualDialPosition, string expectedValue)
         {
-            Assert.Equal(expectedValue, RadioPanelPZ69Ka50.GetCommandDirectionFor0To9Dials(dial, position));
+            Assert.Equal(expectedValue, RadioPanelPZ69Ka50.GetCommandDirectionFor0To9Dials(desiredDialPosition, actualDialPosition));
         }
 
         [Theory]
