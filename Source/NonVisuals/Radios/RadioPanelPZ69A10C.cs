@@ -1468,15 +1468,15 @@ namespace NonVisuals.Radios
                 desiredPositionDial2 = int.Parse(frequencyAsString.Substring(1, 1));
                 desiredPositionDial3 = int.Parse(frequencyAsString.Substring(3, 1));
                 var tmpPosition = int.Parse(frequencyAsString.Substring(4, 2));
-
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                 desiredPositionDial4 = tmpPosition switch
                 {
                     0 => 0,
                     25 => 1,
                     50 => 2,
-                    75 => 3,
-                    _ => throw new Exception($"Unexpected tmpPosition position [{tmpPosition}] in SendVhfFmToDCSBIOS")
+                    75 => 3
                 };
+#pragma warning restore CS8509
             }
             else
             {
@@ -2776,8 +2776,9 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                                            _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch 
-                                            { 
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+                                            _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
+                                            {
                                                 10 => 15,
                                                 15 => 30,
                                                 30 => 35,
@@ -2787,9 +2788,9 @@ namespace NonVisuals.Radios
                                                 70 => 75,
                                                 75 => 90,
                                                 90 => 95,
-                                                95 or 100 or 105 => 10, // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
-                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Upper Increase ILS")
+                                                95 or 100 or 105 => 10 // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -2886,6 +2887,7 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 0 or 5 or 10 => 95,
@@ -2897,9 +2899,9 @@ namespace NonVisuals.Radios
                                                 70 => 55,
                                                 75 => 70,
                                                 90 => 75,
-                                                95 => 90,
-                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Upper Decrease ILS")
+                                                95 => 90
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -3253,6 +3255,7 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 10 => 15,
@@ -3264,9 +3267,9 @@ namespace NonVisuals.Radios
                                                 70 => 75,
                                                 75 => 90,
                                                 90 => 95,
-                                                95 or 100 or 105 => 10, // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
-                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Lower Increase ILS")
+                                                95 or 100 or 105 => 10 // Just safe guard in case it pops above the limit. Happened to VHF AM for some !?!?!? reason.
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -3363,6 +3366,7 @@ namespace NonVisuals.Radios
                                     case CurrentA10RadioMode.ILS:
                                         {
                                             // "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             _ilsSmallFrequencyStandby = _ilsSmallFrequencyStandby switch
                                             {
                                                 0 or 5 or 10 => 95,
@@ -3374,9 +3378,9 @@ namespace NonVisuals.Radios
                                                 70 => 55,
                                                 75 => 70,
                                                 90 => 75,
-                                                95 => 90,
-                                                _ => throw new Exception($"Unexpected _ilsSmallFrequencyStandby position [{_ilsSmallFrequencyStandby}] in AdjustFrequency - Lower Decrease ILS")
+                                                95 => 90
                                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                                             break;
                                         }
 
@@ -3894,54 +3898,41 @@ namespace NonVisuals.Radios
             // Frequency selector 4      VHFAM_FREQ4
             // "00" "25" "50" "75", only 0 2 5 7 used.
             // Pos     0    1    2    3
-            switch (dial)
+
+            return dial switch
             {
-                case 1:
-                    {
-                        return position switch
-                        {
-                            0 => "3",
-                            1 => "4",
-                            2 => "5",
-                            3 => "6",
-                            4 => "7",
-                            5 => "8",
-                            6 => "9",
-                            7 => "10",
-                            8 => "11",
-                            9 => "12",
-                            10 => "13",
-                            11 => "14",
-                            12 => "15",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position),$"VhfAm Unexpected position switch value {position} for dial value of 1"),
-                        };
-                    }
 
-                case 2:
-                    {
-                        return position.ToString();
-                    }
+                1 => position switch
+                {
+                    0 => "3",
+                    1 => "4",
+                    2 => "5",
+                    3 => "6",
+                    4 => "7",
+                    5 => "8",
+                    6 => "9",
+                    7 => "10",
+                    8 => "11",
+                    9 => "12",
+                    10 => "13",
+                    11 => "14",
+                    12 => "15",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfAm Unexpected position switch value {position} for dial value of 1"),
+                },
 
-                case 3:
-                    {
-                        return position.ToString();
-                    }
+                2 or 3 => position.ToString(),
 
-                case 4:
-                    {
-                        // "00" "25" "50" "75", 0 2 5 7 used.
-                        // Pos     0    1    2    3
-                        return position switch
-                        {
-                            0 => "0",
-                            1 => "2",
-                            2 => "5",
-                            3 => "7",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfAm Unexpected position switch value {position} for dial value of 4"),
-                        };
-                    }
-            }
-            return string.Empty;
+                4 => position switch
+                {
+                    0 => "0",
+                    1 => "2",
+                    2 => "5",
+                    3 => "7",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfAm Unexpected position switch value {position} for dial value of 4"),
+                },
+
+                _ => string.Empty
+            };
         }
 
         public static string GetUhfDialFrequencyForPosition(int dial, uint position)
@@ -3963,47 +3954,35 @@ namespace NonVisuals.Radios
             // Frequency selector 5
             // "00" "25" "50" "75", only "00" and "50" used.
             // Pos     0    1    2    3
-            switch (dial)
+            return dial switch
             {
-                case 1:
-                    {
-                        return position switch
-                        {
-                            0 => "2",
-                            1 => "3",
-                            2 => "0", // should be "A" // throw new NotImplementedException("check how A should be treated.");
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 1"),
-                        };
-                    }
 
-                case 2:
-                case 3:
-                case 4:
-                    {
-                        return position.ToString();
-                    }
+                1 => position switch
+                {
+                    0 => "2",
+                    1 => "3",
+                    2 => "0", // should be "A" // throw new NotImplementedException("check how A should be treated.");
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 1"),
+                },
 
-                case 5:
-                    {
-                        // "00" "25" "50" "75", only "00" and "50" used.
-                        // Pos     0    1    2    3
-                        return position switch
-                        {
-                            0 => "00",
-                            1 => "25",
-                            2 => "50",
-                            3 => "75",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 5"),
-                        };
-                    }
-            }
+                2 or 3 or 4 => position.ToString(),
 
-            return string.Empty;
+                // "00" "25" "50" "75", only "00" and "50" used.
+                // Pos     0    1    2    3
+                5 => position switch
+                {
+                    0 => "00",
+                    1 => "25",
+                    2 => "50",
+                    3 => "75",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"Uhf Unexpected position switch value {position} for dial value of 5"),
+                },
+                _ => string.Empty
+            };
         }
 
         public static string GetVhfFmDialFrequencyForPosition(int dial, uint position)
         {
-
             // Frequency selector 1      VHFFM_FREQ1
             // " 3" " 4" " 5" " 6" " 7" " 8" " 9" "10" "11" "12" "13" "14" "15"
             // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
@@ -4017,55 +3996,42 @@ namespace NonVisuals.Radios
             // Frequency selector 4      VHFFM_FREQ4
             // "00" "25" "50" "75", 0 2 5 7 used.
             // Pos     0    1    2    3
-            switch (dial)
+            return dial switch
             {
-                case 1:
-                    {
-                        return position switch
-                        {
-                            0 => "3",
-                            1 => "4",
-                            2 => "5",
-                            3 => "6",
-                            4 => "7",
-                            5 => "8",
-                            6 => "9",
-                            7 => "10",
-                            8 => "11",
-                            9 => "12",
-                            10 => "13",
-                            11 => "14",
-                            12 => "15",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 1"),
-                        };                   
-                    }
 
-                case 2:
-                    {
-                        return position.ToString();
-                    }
+                1 => position switch
+                {
+                    0 => "3",
+                    1 => "4",
+                    2 => "5",
+                    3 => "6",
+                    4 => "7",
+                    5 => "8",
+                    6 => "9",
+                    7 => "10",
+                    8 => "11",
+                    9 => "12",
+                    10 => "13",
+                    11 => "14",
+                    12 => "15",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 1"),
+                },
 
-                case 3:
-                    {
-                        return position.ToString();
-                    }
+                2 or 3 => position.ToString(),
 
-                case 4:
-                    {
-                        // "00" "25" "50" "75"
-                        // Pos     0    1    2    3
-                        return position switch
-                        {
-                            0 => "00",
-                            1 => "25",
-                            2 => "50",
-                            3 => "75",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 4"),
-                        };
-                    }
-            }
+                // "00" "25" "50" "75"
+                // Pos     0    1    2    3
+                4 => position switch
+                {
+                    0 => "00",
+                    1 => "25",
+                    2 => "50",
+                    3 => "75",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfFm Unexpected position switch value {position} for dial value of 4"),
+                },
 
-            return string.Empty;
+                _ => string.Empty
+            };
         }
 
         public static string GetILSDialFrequencyForPosition(int dial, uint position)
@@ -4074,41 +4040,35 @@ namespace NonVisuals.Radios
             // 0     1     2     3
             // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
             // 0    1    2    3    4    5    6    7    8    9
-            switch (dial)
+            return dial switch
             {
-                case 1:
-                    {
-                        return position switch
-                        {
-                            0 => "108",
-                            1 => "109",
-                            2 => "110",
-                            3 => "111",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 1"),
-                        };
-                    }
 
-                case 2:
-                    {
-                        // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                        // 0    1    2    3    4    5    6    7    8    9
-                        return position switch
-                        {
-                            0 => "10",
-                            1 => "15",
-                            2 => "30",
-                            3 => "35",
-                            4 => "50",
-                            5 => "55",
-                            6 => "70",
-                            7 => "75",
-                            8 => "90",
-                            9 => "95",
-                            _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 2"),
-                        };
-                    }
-            }
-            return string.Empty;
+                1 => position switch
+                {
+                    0 => "108",
+                    1 => "109",
+                    2 => "110",
+                    3 => "111",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 1"),
+                },
+
+                2 => position switch
+                {
+                    0 => "10",
+                    1 => "15",
+                    2 => "30",
+                    3 => "35",
+                    4 => "50",
+                    5 => "55",
+                    6 => "70",
+                    7 => "75",
+                    8 => "90",
+                    9 => "95",
+                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"ILSFreqPos Unexpected position switch value {position} for dial value of 2"),
+                },
+
+                _ => string.Empty
+            };
         }
 
         public static int GetILSDialPosForFrequency(int dial, int freq)
@@ -4117,856 +4077,74 @@ namespace NonVisuals.Radios
             // 0     1     2     3
             // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
             // 0    1    2    3    4    5    6    7    8    9
-            switch (dial)
+            return dial switch
             {
-                case 1:
-                    {
-                        return freq switch
-                        {
-                            108 => 0,
-                            109 => 1,
-                            110 => 2,
-                            111 => 3,
-                            _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 1")
-                        };
-                    }
+                1 => freq switch
+                {
+                    108 => 0,
+                    109 => 1,
+                    110 => 2,
+                    111 => 3,
+                    _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 1")
+                },
 
-                case 2:
-                    {
-                        // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                        // 0    1    2    3    4    5    6    7    8    9
-                        return freq switch
-                        {
-                            10 => 0,
-                            15 => 1,
-                            30 => 2,
-                            35 => 3,
-                            50 => 4,
-                            55 => 5,
-                            70 => 6,
-                            75 => 7,
-                            90 => 8,
-                            95 => 9,
-                            _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 2")
-                        };
-                    }
-            }
-            return 0;
+                // 2 Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
+                // 0    1    2    3    4    5    6    7    8    9
+                2 => freq switch
+                {
+                    10 => 0,
+                    15 => 1,
+                    30 => 2,
+                    35 => 3,
+                    50 => 4,
+                    55 => 5,
+                    70 => 6,
+                    75 => 7,
+                    90 => 8,
+                    95 => 9,
+                    _ => throw new ArgumentOutOfRangeException(nameof(freq), $"ILSPosFreq Unexpected position switch value {freq} for dial value of 2")
+                },
+
+                _ => 0
+            };
         }
 
+        /// <summary>
+        /// See Unit tests for understanding kind of unusual logic here
+        /// </summary>        
         public static string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
         {
-            switch (desiredDialPosition)
-            {
-                case 0:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
+            if (desiredDialPosition == actualDialPosition) 
+                return null;
+            
+            if (desiredDialPosition < 0 || desiredDialPosition > 12 || actualDialPosition < 0 || actualDialPosition > 12)
+                throw new Exception($"Unexpected value for GetCommandDirectionForVhfDial1. Desired: {actualDialPosition} Actual: {actualDialPosition}");
 
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                                {
-                                    // -6
-                                    return Decrease;
-                                }
-
-                            case 7:
-                            case 8:
-                            case 9:
-                            case 10:
-                            case 11:
-                            case 12:
-                                {
-                                    // 5
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 1:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                                {
-                                    return Increase;
-                                }
-
-                            case 1:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                            case 7:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 8:
-                            case 9:
-                            case 10:
-                            case 11:
-                            case 12:
-                                {
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 2:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                                {
-                                    return Increase;
-                                }
-
-                            case 2:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                            case 7:
-                            case 8:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 9:
-                            case 10:
-                            case 11:
-                            case 12:
-                                {
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 3:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                                {
-                                    return Increase;
-                                }
-
-                            case 3:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 4:
-                            case 5:
-                            case 6:
-                            case 7:
-                            case 8:
-                            case 9:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 10:
-                            case 11:
-                            case 12:
-                                {
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 4:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                {
-                                    return Increase;
-                                }
-
-                            case 4:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 5:
-                            case 6:
-                            case 7:
-                            case 8:
-                            case 9:
-                            case 10:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 11:
-                            case 12:
-                                {
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 5:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                                {
-                                    return Increase;
-                                }
-
-                            case 5:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 6:
-                            case 7:
-                            case 8:
-                            case 9:
-                            case 10:
-                            case 11:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 12:
-                                {
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 6:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                                {
-                                    return Increase;
-                                }
-
-                            case 6:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 7:
-                            case 8:
-                            case 9:
-                            case 10:
-                            case 11:
-                            case 12:
-                                {
-                                    return Decrease;
-                                }
-                        }
-                        break;
-                    }
-
-                case 7:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                                {
-                                    return Increase;
-                                }
-
-                            case 7:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 8:
-                            case 9:
-                            case 10:
-                            case 11:
-                            case 12:
-                                {
-                                    return Decrease;
-                                }
-                        }
-                        break;
-                    }
-
-                case 8:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                            case 7:
-                                {
-                                    return Increase;
-                                }
-
-                            case 8:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 9:
-                            case 10:
-                            case 11:
-                            case 12:
-                                {
-                                    return Decrease;
-                                }
-                        }
-                        break;
-                    }
-
-                case 9:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                            case 7:
-                            case 8:
-                                {
-                                    return Increase;
-                                }
-
-                            case 9:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 10:
-                            case 11:
-                            case 12:
-                                {
-                                    return Decrease;
-                                }
-                        }
-                        break;
-                    }
-
-                case 10:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 4:
-                            case 5:
-                            case 6:
-                            case 7:
-                            case 8:
-                            case 9:
-                                {
-                                    return Increase;
-                                }
-
-                            case 10:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 11:
-                            case 12:
-                                {
-                                    return Decrease;
-                                }
-                        }
-                        break;
-                    }
-
-                case 11:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 5:
-                            case 6:
-                            case 7:
-                            case 8:
-                            case 9:
-                            case 10:
-                                {
-                                    return Increase;
-                                }
-
-                            case 11:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 12:
-                                {
-                                    return Decrease;
-                                }
-                        }
-                        break;
-                    }
-
-                case 12:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 6:
-                            case 7:
-                            case 8:
-                            case 9:
-                            case 10:
-                            case 11:
-                                {
-                                    return Increase;
-                                }
-
-                            case 12:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-                        }
-                        break;
-                    }
-            }
-            throw new Exception("Should not reach this code. private String GetCommandDirectionForVhfDial1(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
+            int shift = desiredDialPosition - (int)actualDialPosition;
+           
+            if (shift > 0)
+                return shift <= 6 ? RadioPanelPZ69Base.Increase : RadioPanelPZ69Base.Decrease;
+            else
+                return shift < -6 ? RadioPanelPZ69Base.Increase : RadioPanelPZ69Base.Decrease;
         }
 
+        /// <summary>
+        /// See Unit tests for understanding kind of unusual logic here
+        /// </summary>    
         public static string GetCommandDirectionForVhfDial23(int desiredDialPosition, uint actualDialPosition)
         {
-            switch (desiredDialPosition)
-            {
-                case 0:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
+            if (desiredDialPosition == actualDialPosition)
+                return null;
 
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                                {
-                                    // -4 DEC
-                                    return Decrease;
-                                }
+            if (desiredDialPosition < 0 || desiredDialPosition > 9 || actualDialPosition < 0 || actualDialPosition > 9)
+                throw new Exception($"Unexpected value for GetCommandDirectionForVhfDial23. Desired: {actualDialPosition} Actual: {actualDialPosition}");
 
-                            case 5:
-                            case 6:
-                            case 7:
-                            case 8:
-                            case 9:
-                                {
-                                    // 5 INC
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 1:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                                {
-                                    return Increase;
-                                }
-
-                            case 1:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 6:
-                            case 7:
-                            case 8:
-                            case 9:
-                                {
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 2:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                                {
-                                    return Increase;
-                                }
-
-                            case 2:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 7:
-                            case 8:
-                            case 9:
-                                {
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 3:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                                {
-                                    return Increase;
-                                }
-
-                            case 3:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 4:
-                            case 5:
-                            case 6:
-                            case 7:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 8:
-                            case 9:
-                                {
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 4:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                {
-                                    return Increase;
-                                }
-
-                            case 4:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 5:
-                            case 6:
-                            case 7:
-                            case 8:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 9:
-                                {
-                                    return Increase;
-                                }
-                        }
-                        break;
-                    }
-
-                case 5:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                                {
-                                    return Increase;
-                                }
-
-                            case 5:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 6:
-                            case 7:
-                            case 8:
-                            case 9:
-                                {
-                                    return Decrease;
-                                }
-                        }
-                        break;
-                    }
-
-                case 6:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                                {
-                                    return Increase;
-                                }
-
-                            case 6:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 7:
-                            case 8:
-                            case 9:
-                                {
-                                    return Decrease;
-                                }
-                        }
-                        break;
-                    }
-
-                case 7:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                                {
-                                    return Increase;
-                                }
-
-                            case 7:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 8:
-                            case 9:
-                                {
-                                    return Decrease;
-                                }
-                        }
-                        break;
-                    }
-
-                case 8:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                            case 7:
-                                {
-                                    return Increase;
-                                }
-
-                            case 8:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-
-                            case 9:
-                                {
-                                    return Decrease;
-                                }
-                        }
-                        break;
-                    }
-
-                case 9:
-                    {
-                        switch (actualDialPosition)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                {
-                                    return Decrease;
-                                }
-
-                            case 4:
-                            case 5:
-                            case 6:
-                            case 7:
-                            case 8:
-                                {
-                                    return Increase;
-                                }
-
-                            case 9:
-                                {
-                                    // Do nothing
-                                    return null;
-                                }
-                        }
-                        break;
-                    }
-            }
-            throw new Exception("Should not reach this code. private String GetCommandDirectionForVhfDial23(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
+            int shift = desiredDialPosition - (int)actualDialPosition;
+        
+            if (shift > 0)
+                return shift <= 5 ? RadioPanelPZ69Base.Increase : RadioPanelPZ69Base.Decrease;
+            else
+                return shift <= -5 ? RadioPanelPZ69Base.Increase : RadioPanelPZ69Base.Decrease;
         }
 
         private void SaveCockpitFrequencyVhfAm()
@@ -4994,14 +4172,15 @@ namespace NonVisuals.Radios
                     {
                         lock (_lockVhfAmDialsObject4)
                         {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             uint dial4 = _vhfAmCockpitFreq4DialPos switch
                             {
                                 0 => 0,
                                 1 => 25,
                                 2 => 50,
-                                3 => 75,
-                                _ => throw new Exception($"Unexpected _vhfAmCockpitFreq4DialPos position [{_vhfAmCockpitFreq4DialPos}] in SaveCockpitFrequencyVhfAm")
-                            };                            
+                                3 => 75
+                            };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             _vhfAmSavedCockpitBigFrequency = double.Parse((_vhfAmCockpitFreq1DialPos + 3) + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfAmSavedCockpitSmallFrequency = double.Parse(_vhfAmCockpitFreq3DialPos + dial4.ToString(NumberFormatInfoFullDisplay).PadLeft(2, '0'), NumberFormatInfoFullDisplay);
                         }
@@ -5115,14 +4294,15 @@ namespace NonVisuals.Radios
                     {
                         lock (_lockVhfFmDialsObject4)
                         {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             uint dial4 = _vhfFmCockpitFreq4DialPos switch
                             {
                                 0 => 0,
                                 1 => 25,
                                 2 => 50,
-                                3 => 75,
-                                _ => throw new Exception($"Unexpected _vhfFmCockpitFreq4DialPos position [{_vhfFmCockpitFreq4DialPos}] in SaveCockpitFrequencyVhfFm")
+                                3 => 75
                             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                             _vhfFmSavedCockpitBigFrequency = uint.Parse((_vhfFmCockpitFreq1DialPos + 3) + _vhfFmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
                             _vhfFmSavedCockpitSmallFrequency = uint.Parse((_vhfFmCockpitFreq3DialPos.ToString() + dial4).PadLeft(3, '0'), NumberFormatInfoFullDisplay);
                         }
