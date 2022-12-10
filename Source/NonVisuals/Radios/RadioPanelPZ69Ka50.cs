@@ -2079,7 +2079,7 @@ namespace NonVisuals.Radios
             return Increase;
         }
 
-        private static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
+        public static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
         {
             try
             {
