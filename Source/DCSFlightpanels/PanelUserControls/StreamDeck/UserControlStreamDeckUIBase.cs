@@ -355,7 +355,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 menuItemDelete.IsEnabled = selectedStreamDeckButton.HasConfig;
 
                 var dataObject = Clipboard.GetDataObject();
-                menuItemPaste.IsEnabled = dataObject != null && dataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton");
+                menuItemPaste.IsEnabled = dataObject != null && dataObject.GetDataPresent("NonVisuals.Panels.StreamDeck.StreamDeckButton");
             }
             catch (Exception ex)
             {
@@ -441,13 +441,13 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         protected bool Paste()
         {
             var dataObject = Clipboard.GetDataObject();
-            if (dataObject == null || !dataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton"))
+            if (dataObject == null || !dataObject.GetDataPresent("NonVisuals.Panels.StreamDeck.StreamDeckButton"))
             {
                 return false;
             }
 
             bool result;
-            var newStreamDeckButton = (StreamDeckButton)dataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
+            var newStreamDeckButton = (StreamDeckButton)dataObject.GetData("NonVisuals.Panels.StreamDeck.StreamDeckButton");
             
             var oldStreamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton) &&
