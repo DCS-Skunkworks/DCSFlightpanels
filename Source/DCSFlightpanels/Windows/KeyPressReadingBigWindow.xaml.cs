@@ -318,5 +318,10 @@ namespace DCSFlightpanels.Windows
         {
             Mouse.OverrideCursor = Cursors.Arrow;
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            DarkMode.SetFrameworkElemenDarkMode(this);
+        }
     }
 }

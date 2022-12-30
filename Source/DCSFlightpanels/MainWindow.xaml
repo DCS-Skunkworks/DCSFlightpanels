@@ -148,7 +148,7 @@
             <Label Margin="200,0,0,0" Name="LabelAirframe" FontWeight="Bold" HorizontalAlignment="Stretch" Content="None"/>
 
             <Canvas Margin="540,0,0,0"  Width="70" ToolTip="Don't you want to donate?"  >
-                <Label x:Name="LabelDonate" Foreground="Black" FontSize="16" FontWeight="Bold" MouseEnter="LabelDonate_OnMouseEnter" MouseLeave="LabelDonate_OnMouseLeave" MouseDown="LabelDonate_OnMouseDown">
+                <Label x:Name="LabelDonate" FontSize="16" FontWeight="Bold" MouseEnter="LabelDonate_OnMouseEnter" MouseLeave="LabelDonate_OnMouseLeave" MouseDown="LabelDonate_OnMouseDown">
                     <Label.Triggers>
                         <EventTrigger RoutedEvent="Label.Loaded">
                             <BeginStoryboard>

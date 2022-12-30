@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels"
         mc:Ignorable="d"
-        Title="Working with formulas" Height="800" Width="600" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
+        Title="Working with formulas" Height="800" Width="600" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

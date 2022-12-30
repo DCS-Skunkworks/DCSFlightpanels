@@ -63,6 +63,7 @@
 
         public MainWindow()
         {
+            DarkModePrepare();
             InitializeComponent();
 
             DCSFPProfile.Init();
@@ -75,6 +76,15 @@
             AppEventHandler.AttachPanelEventListener(this);
             AppEventHandler.AttachForwardPanelEventListener(this);
             BIOSEventHandler.AttachConnectionListener(this);
+        }
+
+        private void DarkModePrepare()
+        {
+            DarkMode.DarkModeEnabled = Settings.Default.DarkMode;
+            if (!DarkMode.DarkModeEnabled)
+            {
+                System.Windows.Application.Current.Resources.MergedDictionaries.Clear();              
+            }
         }
 
         #region IDisposable Support
@@ -127,6 +137,7 @@
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 if (_isLoaded)
@@ -167,6 +178,7 @@
                 }
 
                 _isLoaded = true;
+
             }
             catch (Exception ex)
             {

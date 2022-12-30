@@ -1,5 +1,6 @@
 ﻿namespace DCSFlightpanels.Windows
 {
+    using ClassLibraryCommon;
     using System.Windows;
     using System.Windows.Documents;
 
@@ -56,6 +57,11 @@
         public void AddInline(Inline inline)
         {
             TextBlockInformation.Inlines.Add(inline);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            DarkMode.SetFrameworkElemenDarkMode(this);
         }
     }
 }

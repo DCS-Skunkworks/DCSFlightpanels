@@ -35,6 +35,7 @@ namespace DCSFlightpanels.Windows
 
         private void InformationWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 TextBlockInformation.TextWrapping = TextWrapping.Wrap;

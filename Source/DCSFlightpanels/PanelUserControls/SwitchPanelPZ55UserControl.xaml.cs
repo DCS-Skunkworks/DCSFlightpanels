@@ -75,6 +75,7 @@ namespace DCSFlightpanels.PanelUserControls
         private bool _once = true;
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             SetTextBoxBills();
             LoadComboBoxesManualLeds();
             SetContextMenuClickHandlers();
@@ -775,13 +776,13 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetTextBoxBackgroundColors(Brush brush)
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
-            {
-                if (!textBox.IsFocused && textBox.Background != Brushes.Yellow)
-                {
-                    textBox.Background = brush;
-                }
-            }
+            //foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            //{
+            //    if (!textBox.IsFocused && textBox.Background != Brushes.Yellow)
+            //    {
+            //        textBox.Background = brush;
+            //    }
+            //}
             _textBoxBillsSet = true;
         }
 

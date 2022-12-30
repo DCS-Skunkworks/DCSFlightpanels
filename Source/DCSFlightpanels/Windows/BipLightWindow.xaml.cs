@@ -33,6 +33,7 @@ namespace DCSFlightpanels.Windows
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 LabelDescription.Content = _description;

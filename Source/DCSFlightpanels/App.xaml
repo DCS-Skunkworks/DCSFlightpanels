@@ -6,5 +6,27 @@
              ShutdownMode="OnMainWindowClose">
     <windows:Application.Resources>
         <!--StartupUri="MainWindow.xaml"-->
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/ComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/ComboBoxItem.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/CheckBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/Window.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/Label.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/TextBlock.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/Button.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/TabControl.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/TabControlItem.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/TextBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/GroupBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/ToolBar.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/StatusBar.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/Menu.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/MenuItem.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/RadioButton.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/DataGrid.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ClassLibraryCommon;component/DarkMode/DataGridColumnHeader.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </windows:Application.Resources>
 </windows:Application>

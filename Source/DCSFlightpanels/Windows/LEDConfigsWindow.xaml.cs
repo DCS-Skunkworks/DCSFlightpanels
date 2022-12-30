@@ -35,6 +35,7 @@ namespace DCSFlightpanels.Windows
 
         private void LEDConfigsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             TextBoxLabel.Text = _description;
         }
 

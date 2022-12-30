@@ -71,6 +71,7 @@
 
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             SetTextBoxBills();
             UserControlLoaded = true;
             ShowGraphicConfiguration();

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using ClassLibraryCommon;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
@@ -17,7 +18,7 @@ namespace DCSFlightpanels.Windows
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-
+            DarkMode.SetFrameworkElemenDarkMode(this);
         }
 
         private void HyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)

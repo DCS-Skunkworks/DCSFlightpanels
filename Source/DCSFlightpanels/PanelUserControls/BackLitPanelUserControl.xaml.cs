@@ -67,6 +67,7 @@
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             Init();
             UserControlLoaded = true;
             SetContextMenuClickHandlers();

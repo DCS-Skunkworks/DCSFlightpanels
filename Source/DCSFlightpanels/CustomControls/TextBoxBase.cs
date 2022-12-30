@@ -14,8 +14,9 @@
     public abstract class TextBoxBaseInput : TextBox
     {
         public BillBaseInput Bill { get; set; }
-
         protected abstract BillBaseInput GetBill { get; }
+        
+        private Brush _DefaultBackgroundBrush { get; set; } = Brushes.White;
 
         protected TextBoxBaseInput()
         {
@@ -27,6 +28,11 @@
             TextChanged += TextBoxTextChanged;
         }
         
+        protected override void OnStyleChanged(Style oldStyle, Style newStyle)
+        {
+            _DefaultBackgroundBrush = Background;
+        }
+
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -144,7 +150,7 @@
                 }
                 else
                 {
-                    Background = Brushes.White;
+                    Background = _DefaultBackgroundBrush;
                 }
             }
             catch (Exception ex)

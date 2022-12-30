@@ -41,6 +41,7 @@
 
         private void StreamDeckDCSBIOSConverterWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 if (_isLoaded)

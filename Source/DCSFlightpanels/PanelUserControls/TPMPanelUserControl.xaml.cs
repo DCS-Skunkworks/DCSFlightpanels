@@ -68,6 +68,7 @@
         
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             if (!_once)
             {
                 HidePositionIndicators();
