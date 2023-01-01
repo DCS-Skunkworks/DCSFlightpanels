@@ -57,7 +57,9 @@ namespace NonVisuals.BindingClasses.Key
             // FarmingPanelKey{0SWITCHKEY_CLOSE_COWL}\o/OSKeyPress{INFORMATION=^key press sequence^[ThirtyTwoMilliSec,VK_A,ThirtyTwoMilliSec][ThirtyTwoMilliSec,VK_B,ThirtyTwoMilliSec]}
             var parameters = config.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-            if (config.Contains("MultiPanel") || config.Contains("RadioPanel")) // Has additional setting which tells which position leftmost dial is in
+            // Has additional setting which tells which position leftmost dial is in
+            // but Radio Panel Emulator does not have (RadioPanelKey)
+            if (config.Contains("MultiPanel") || config.Contains("RadioPanelKeyDialPos")) 
             {
                 // RadioPanelKeyDialPos{LowerCOM1}
                 // MultiPanelKnob{ALT}
