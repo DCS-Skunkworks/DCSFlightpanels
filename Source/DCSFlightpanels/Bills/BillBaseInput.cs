@@ -342,7 +342,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                if (!(TextBox.IsFocused && Equals(TextBox.Background, Brushes.Yellow)))
+                if (!(TextBox.IsFocused && Equals(TextBox.Background, DarkMode.TextBoxSelectedBackgroundColor)))
                 {
                     // UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
                     _contextMenu.HideAll();
@@ -846,7 +846,7 @@ namespace DCSFlightpanels.Bills
         private void DeleteBIPLink()
         {
             BipLink?.BIPLights?.Clear();
-            if (!TextBox.IsFocused && TextBox.Background != Brushes.Yellow)
+            if (!TextBox.IsFocused && TextBox.Background != DarkMode.TextBoxSelectedBackgroundColor)
             {
                 TextBox.Background = Brushes.White;
             }

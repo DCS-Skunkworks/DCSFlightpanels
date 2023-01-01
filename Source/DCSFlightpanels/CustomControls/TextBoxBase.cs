@@ -16,21 +16,15 @@
         public BillBaseInput Bill { get; set; }
         protected abstract BillBaseInput GetBill { get; }
         
-        private Brush _DefaultBackgroundBrush { get; set; } = Brushes.White;
-
         protected TextBoxBaseInput()
         {
+            this.SetResourceReference(StyleProperty, typeof(TextBox));
             PreviewKeyDown += TextBox_PreviewKeyDown;
             MouseDoubleClick += TextBoxMouseDoubleClick;
             MouseDown += TextBox_OnMouseDown;
             GotFocus += TextBoxGotFocus;
             LostFocus += TextBoxLostFocus;
             TextChanged += TextBoxTextChanged;
-        }
-        
-        protected override void OnStyleChanged(Style oldStyle, Style newStyle)
-        {
-            _DefaultBackgroundBrush = Background;
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -119,7 +113,7 @@
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.Yellow;
+                ((TextBox)sender).Background = DarkMode.TextBoxSelectedBackgroundColor;
             }
             catch (Exception ex)
             {
@@ -131,7 +125,7 @@
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.Yellow;
+                ((TextBox)sender).Background = DarkMode.TextBoxSelectedBackgroundColor;
             }
             catch (Exception ex)
             {
@@ -150,7 +144,7 @@
                 }
                 else
                 {
-                    Background = _DefaultBackgroundBrush;
+                    Background = DarkMode.TextBoxUnselectedBackgroundColor;
                 }
             }
             catch (Exception ex)

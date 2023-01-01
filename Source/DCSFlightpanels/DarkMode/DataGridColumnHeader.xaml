@@ -14,7 +14,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="DataGridColumnHeaderDarkMode" TargetType="{x:Type DataGridColumnHeader}">
+    <Style TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>

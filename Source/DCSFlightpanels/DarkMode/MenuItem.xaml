@@ -3,7 +3,7 @@
 
     <SolidColorBrush x:Key="Menu.Static.Background" Color="#FF484848"/>
     <SolidColorBrush x:Key="Menu.Static.Border" Color="#FF999999"/>
-    <SolidColorBrush x:Key="Menu.Static.Foreground" Color="#FF212121"/>
+    <SolidColorBrush x:Key="Menu.Static.Foreground" Color="#FFD6D6D6"/>
     <SolidColorBrush x:Key="Menu.Static.Separator" Color="#FFD7D7D7"/>
     <SolidColorBrush x:Key="Menu.Disabled.Foreground" Color="#FF707070"/>
     <SolidColorBrush x:Key="MenuItem.Selected.Background" Color="#3D26A0DA"/>
@@ -271,7 +271,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <Style x:Key="MenuItemDarkMode" TargetType="{x:Type MenuItem}">
+    <Style TargetType="{x:Type MenuItem}">
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Background" Value="Transparent"/>

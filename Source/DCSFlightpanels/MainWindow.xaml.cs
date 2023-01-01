@@ -41,6 +41,7 @@
     using Octokit;
     using NonVisuals.Panels;
     using NonVisuals.HID;
+    using Theraot.Collections;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {
@@ -81,10 +82,6 @@
         private void DarkModePrepare()
         {
             DarkMode.DarkModeEnabled = Settings.Default.DarkMode;
-            if (!DarkMode.DarkModeEnabled)
-            {
-                System.Windows.Application.Current.Resources.MergedDictionaries.Clear();              
-            }
         }
 
         #region IDisposable Support

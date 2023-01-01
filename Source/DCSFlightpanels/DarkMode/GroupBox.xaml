@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
-    <Style x:Key="GroupBoxDarkMode" TargetType="{x:Type GroupBox}">
+    <Style TargetType="{x:Type GroupBox}">
         <Setter Property="BorderBrush" Value="#FFABAdB3"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Foreground" Value="#FFABAdB3"/>

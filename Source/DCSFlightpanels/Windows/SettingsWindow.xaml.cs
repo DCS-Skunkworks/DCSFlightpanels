@@ -450,5 +450,23 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+        private void CheckBoxDarkMode_Checked(object sender, RoutedEventArgs e)
+        {
+            //Instant mode switch works but still some minor issues with windows
+            //if (!DarkMode.DarkModeEnabled)
+            //{
+            //    DarkMode.DarkModeEnabled = true;
+            //}
+        }
+
+        private void CheckBoxDarkMode_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //Instant mode switch works but still some minor issues with windows
+            //if (DarkMode.DarkModeEnabled)
+            //{
+            //    DarkMode.DarkModeEnabled = false;
+            //}
+        }
     }
 }

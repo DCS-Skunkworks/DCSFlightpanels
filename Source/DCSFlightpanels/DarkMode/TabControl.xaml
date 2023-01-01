@@ -3,7 +3,7 @@
 
     <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FF242424"/>
     <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
-    <Style x:Key="TabControlDarkMode" TargetType="{x:Type TabControl}">
+    <Style TargetType="{x:Type TabControl}">
         <Setter Property="Padding" Value="2"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>

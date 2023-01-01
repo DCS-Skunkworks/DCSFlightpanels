@@ -24,7 +24,7 @@
     <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
     <SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F0F0F0"/>
     <SolidColorBrush x:Key="TabItem.Disabled.Border" Color="#D9D9D9"/>
-    <Style x:Key="TabControlItemDarkMode" TargetType="{x:Type TabItem}">
+    <Style TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="#FFD6D6D6"/>
         <Setter Property="Background" Value="{StaticResource TabItem.Static.Background}"/>
