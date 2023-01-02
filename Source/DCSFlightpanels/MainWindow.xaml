@@ -74,7 +74,7 @@
                 </Image>
             </Button>
             <Button>
-                <Image Source="/dcsfp;component/Images/OpenPL.bmp" Name="ButtonImageOpen" MouseDown="ButtonImageOpenMouseDown"  ToolTip="Open Profile"/>
+                <Image Source="/dcsfp;component/Images/OpenPL_Transp.bmp" Name="ButtonImageOpen" MouseDown="ButtonImageOpenMouseDown"  ToolTip="Open Profile"/>
             </Button>
             <Button>
                 <Image Source="/dcsfp;component/Images/search_panels3.png" Name="ButtonSearchPanels" MouseDown="ButtonSearchPanels_OnMouseDown"  ToolTip="Search for Panels" IsEnabled="False">

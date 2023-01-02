@@ -36,7 +36,7 @@
                 <ColumnDefinition Width="301*" />
             </Grid.ColumnDefinitions>
             <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
-                <Image Height="226" x:Name="ImagePZ70MultiPanel" Stretch="None" Source="/dcsfp;component/Images/pz70multipanel.jpg"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="13" Grid.RowSpan="4"  />
+                <Image Height="226" x:Name="ImagePZ70MultiPanel" Stretch="None" Source="/dcsfp;component/Images/pz70multipanel_Transp.png"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="13" Grid.RowSpan="4"  />
 
                 <!-- LEFT KNOB -->
                 <Image Height="76" x:Name="ImageLeftKnobAlt" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="62" Canvas.Top="61" />

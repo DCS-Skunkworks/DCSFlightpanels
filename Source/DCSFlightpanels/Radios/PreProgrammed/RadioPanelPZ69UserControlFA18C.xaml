@@ -26,7 +26,7 @@
             <ColumnDefinition Width="301*" />
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5">
-            <Image Height="223" Stretch="None" Source="/dcsfp;component/Images/PZ69_Radiopanel.jpg" Width="596" />
+            <Image Height="223" Stretch="None" Source="/dcsfp;component/Images/PZ69_Radiopanel_Transp.png" Width="596" />
 
             <!-- UPPER LEFT SELECTOR -->
             <Image Height="76" Name="TopLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="34" />
