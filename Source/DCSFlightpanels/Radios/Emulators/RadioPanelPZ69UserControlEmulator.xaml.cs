@@ -374,7 +374,7 @@
         {
             foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
-                if (!Equals(textBox, TextBoxLogPZ69) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
+                if (!Equals(textBox, TextBoxLogPZ69) && textBox.IsFocused && Equals(textBox.Background, DarkMode.TextBoxSelectedBackgroundColor))
                 {
                     return textBox;
                 }

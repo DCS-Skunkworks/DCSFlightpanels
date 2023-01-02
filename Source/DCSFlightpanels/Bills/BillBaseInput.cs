@@ -848,7 +848,7 @@ namespace DCSFlightpanels.Bills
             BipLink?.BIPLights?.Clear();
             if (!TextBox.IsFocused && TextBox.Background != DarkMode.TextBoxSelectedBackgroundColor)
             {
-                TextBox.Background = Brushes.White;
+                TextBox.Background = DarkMode.TextBoxUnselectedBackgroundColor;
             }
             UpdateBIPLinkBindings();
         }

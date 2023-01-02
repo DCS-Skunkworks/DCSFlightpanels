@@ -23,7 +23,7 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _bipLinkTPM = (BIPLinkTPM)value;
-                TextBox.Background = _bipLinkTPM != null ? Brushes.Bisque : Brushes.White;
+                TextBox.Background = _bipLinkTPM != null ? Brushes.Bisque : DarkMode.TextBoxUnselectedBackgroundColor;
             }
         }
 
@@ -95,7 +95,7 @@ namespace DCSFlightpanels.Bills
             _dcsbiosBindingTPM = null;
             _bipLinkTPM = null;
             KeyPress = null;
-            TextBox.Background = Brushes.White;
+            TextBox.Background = DarkMode.TextBoxUnselectedBackgroundColor;
             TextBox.Text = string.Empty;
         }
     }

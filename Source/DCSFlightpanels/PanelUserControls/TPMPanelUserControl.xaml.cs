@@ -234,7 +234,7 @@
         {
             foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
-                if (!Equals(textBox, TextBoxLogTPM) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
+                if (!Equals(textBox, TextBoxLogTPM) && textBox.IsFocused && Equals(textBox.Background, DarkMode.TextBoxSelectedBackgroundColor))
                 {
                     return textBox;
                 }

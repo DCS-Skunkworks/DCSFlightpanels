@@ -34,7 +34,7 @@
             set
             {
                 _bipLinkStreamDeck = value;
-                TextBox.Background = _bipLinkStreamDeck != null ? Brushes.Bisque : Brushes.White;
+                TextBox.Background = _bipLinkStreamDeck != null ? Brushes.Bisque : DarkMode.TextBoxUnselectedBackgroundColor;
             }
         }
 

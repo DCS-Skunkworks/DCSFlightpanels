@@ -750,7 +750,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
 
-                SetTextBoxBackgroundColors(Brushes.White); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
+                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
                 foreach (var bipLinkPZ55 in _switchPanelPZ55.BIPLinkHashSet)
                 {
                     var textBox = (PZ55TextBox)GetTextBox(bipLinkPZ55.SwitchPanelPZ55Key, bipLinkPZ55.WhenTurnedOn);
@@ -778,7 +778,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             //foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             //{
-            //    if (!textBox.IsFocused && textBox.Background != Brushes.Yellow)
+            //    if (!textBox.IsFocused && textBox.Background != DarkMode.TextBoxSelectedBackgroundColor)
             //    {
             //        textBox.Background = brush;
             //    }

@@ -23,7 +23,7 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _bipLinkPZ55 = (BIPLinkPZ55)value;
-                TextBox.Background = _bipLinkPZ55 != null ? Brushes.Bisque : Brushes.White;
+                TextBox.Background = _bipLinkPZ55 != null ? Brushes.Bisque : DarkMode.TextBoxUnselectedBackgroundColor;
             }
         }
 
@@ -95,7 +95,7 @@ namespace DCSFlightpanels.Bills
             _bipLinkPZ55 = null;
             KeyPress = null;
             OSCommandObject = null;
-            TextBox.Background = Brushes.White;
+            TextBox.Background = DarkMode.TextBoxUnselectedBackgroundColor;
             TextBox.Text = string.Empty;
         }
     }

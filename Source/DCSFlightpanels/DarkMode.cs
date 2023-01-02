@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using Theraot.Collections;
 
-namespace ClassLibraryCommon
+namespace DCSFlightpanels
 {
     public static class DarkMode
     {
