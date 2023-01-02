@@ -73,6 +73,7 @@
 
         private void RadioPanelPZ69UserControlEmulator_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
@@ -373,7 +374,7 @@
         {
             foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
-                if (!Equals(textBox, TextBoxLogPZ69) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
+                if (!Equals(textBox, TextBoxLogPZ69) && textBox.IsFocused && Equals(textBox.Background, DarkMode.TextBoxSelectedBackgroundColor))
                 {
                     return textBox;
                 }

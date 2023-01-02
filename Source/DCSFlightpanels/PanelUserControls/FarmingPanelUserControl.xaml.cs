@@ -71,6 +71,7 @@
 
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             SetTextBoxBills();
             UserControlLoaded = true;
             ShowGraphicConfiguration();
@@ -626,7 +627,7 @@
                     }
                 }
 
-                SetTextBoxBackgroundColors(Brushes.White); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
+                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
                 foreach (var bipLink in _farmingSidePanel.BIPLinkHashSet)
                 {
                     var textBox = (FarmingPanelTextBox)GetTextBox(bipLink.FarmingPanelKey, bipLink.WhenTurnedOn);
@@ -650,7 +651,7 @@
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (!textBox.IsFocused && textBox.Background != Brushes.Yellow)
+                if (!textBox.IsFocused && textBox.Background != DarkMode.TextBoxSelectedBackgroundColor)
                 {
                     textBox.Background = brush;
                 }

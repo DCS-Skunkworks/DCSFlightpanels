@@ -23,7 +23,7 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _bipLink = (BIPLinkFarmingPanel)value;
-                TextBox.Background = _bipLink != null ? Brushes.Bisque : Brushes.White;
+                TextBox.Background = _bipLink != null ? Brushes.Bisque : DarkMode.TextBoxUnselectedBackgroundColor;
             }
         }
 
@@ -95,7 +95,7 @@ namespace DCSFlightpanels.Bills
             _bipLink = null;
             KeyPress = null;
             OSCommandObject = null;
-            TextBox.Background = Brushes.White;
+            TextBox.Background = DarkMode.TextBoxUnselectedBackgroundColor;
             TextBox.Text = string.Empty;
         }
     }

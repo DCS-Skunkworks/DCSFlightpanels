@@ -1,5 +1,6 @@
 ﻿namespace DCSFlightpanels.Windows
 {
+    using ClassLibraryCommon;
     using System;
     using System.Diagnostics;
     using System.Windows;
@@ -36,6 +37,11 @@
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            DarkMode.SetFrameworkElemenDarkMode(this);
         }
     }
 }

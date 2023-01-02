@@ -32,7 +32,7 @@
             <ColumnDefinition Width="301*" />
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4">
-            <Image Height="226" Name="ImagePZ55Panel" Stretch="None" Source="/dcsfp;component/Images/PZ55_Switchpanel1.png"  MouseDown="MouseDownFocusLogTextBox" />
+            <Image Height="226" Name="ImagePZ55Panel" Stretch="None" Source="/dcsfp;component/Images/PZ55_Switchpanel1_Transp.png"  MouseDown="MouseDownFocusLogTextBox" />
             <!-- LEFT KNOB -->
             <Image Height="128" Margin="32,11,0,0" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ImageKnobR" Stretch="None" Width="125" Source="/dcsfp;component/Images/knob_R.png" Canvas.Left="-16" Canvas.Top="34" />
             <Image Height="128" Margin="42,11,0,0" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ImageKnobL" Stretch="None" Width="115" Source="/dcsfp;component/Images/knob_L.png" Canvas.Left="-16" Canvas.Top="33" />

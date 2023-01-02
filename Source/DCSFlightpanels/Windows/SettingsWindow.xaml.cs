@@ -47,6 +47,7 @@ namespace DCSFlightpanels.Windows
 
         private void SettingsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 if (_isLoaded)
@@ -110,6 +111,8 @@ namespace DCSFlightpanels.Windows
             CheckBoxMinimizeToTray.Unchecked += GeneralDirty;
             CheckBoxEnablePluginSupport.Checked += GeneralDirty;
             CheckBoxEnablePluginSupport.Unchecked += GeneralDirty;
+            CheckBoxDarkMode.Checked += GeneralDirty;
+            CheckBoxDarkMode.Unchecked += GeneralDirty;
 
             TextBoxDcsBiosJSONLocation.TextChanged += DcsBiosDirty;
             TextBoxDCSBIOSFromIP.TextChanged += DcsBiosDirty;
@@ -160,6 +163,7 @@ namespace DCSFlightpanels.Windows
             CheckBoxMinimizeToTray.IsChecked = Settings.Default.RunMinimized;
             CheckBoxEnablePluginSupport.IsChecked = Settings.Default.EnablePlugin;
             CheckBoxDisableKeyboardAPI.IsChecked = Settings.Default.DisableKeyboardAPI;
+            CheckBoxDarkMode.IsChecked = Settings.Default.DarkMode;
 
             TextBoxDcsBiosJSONLocation.Text = Settings.Default.DCSBiosJSONLocation;
             TextBoxDCSBIOSFromIP.Text = Settings.Default.DCSBiosIPFrom;
@@ -230,6 +234,7 @@ namespace DCSFlightpanels.Windows
                     Settings.Default.RunMinimized = CheckBoxMinimizeToTray.IsChecked == true;
                     Settings.Default.EnablePlugin = CheckBoxEnablePluginSupport.IsChecked == true;
                     Settings.Default.DisableKeyboardAPI = CheckBoxDisableKeyboardAPI.IsChecked == true;
+                    Settings.Default.DarkMode = CheckBoxDarkMode.IsChecked == true;
                     Settings.Default.Save();
                 }
 
@@ -444,6 +449,24 @@ namespace DCSFlightpanels.Windows
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void CheckBoxDarkMode_Checked(object sender, RoutedEventArgs e)
+        {
+            //Instant mode switch works but still some minor issues with windows
+            //if (!DarkMode.DarkModeEnabled)
+            //{
+            //    DarkMode.DarkModeEnabled = true;
+            //}
+        }
+
+        private void CheckBoxDarkMode_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //Instant mode switch works but still some minor issues with windows
+            //if (DarkMode.DarkModeEnabled)
+            //{
+            //    DarkMode.DarkModeEnabled = false;
+            //}
         }
     }
 }

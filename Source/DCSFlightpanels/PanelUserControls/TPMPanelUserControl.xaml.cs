@@ -68,6 +68,7 @@
         
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             if (!_once)
             {
                 HidePositionIndicators();
@@ -233,7 +234,7 @@
         {
             foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
-                if (!Equals(textBox, TextBoxLogTPM) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
+                if (!Equals(textBox, TextBoxLogTPM) && textBox.IsFocused && Equals(textBox.Background, DarkMode.TextBoxSelectedBackgroundColor))
                 {
                     return textBox;
                 }

@@ -43,6 +43,7 @@ namespace DCSFlightpanels.Windows
 
         private void KeyPressReadingWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 if (_loaded)
@@ -68,7 +69,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.Yellow;
+                ((TextBox)sender).Background = DarkMode.TextBoxSelectedBackgroundColor;
                 SetFormState();
             }
             catch (Exception ex)
@@ -81,7 +82,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.White;
+                ((TextBox)sender).Background = DarkMode.TextBoxUnselectedBackgroundColor;
                 SetFormState();
             }
             catch (Exception ex)

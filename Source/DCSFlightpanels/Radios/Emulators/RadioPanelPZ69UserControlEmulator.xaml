@@ -31,7 +31,7 @@
             <ColumnDefinition Width="80*"/>
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5">
-            <Image Height="226" Stretch="None" Source="/dcsfp;component/Images/PZ69_Radiopanel.jpg" />
+            <Image Height="226" Stretch="None" Source="/dcsfp;component/Images/PZ69_Radiopanel_Transp.png" />
 
             <!-- UPPER LEFT SELECTOR -->
             <Image Height="76" Name="TopLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="34" />
@@ -73,7 +73,7 @@
         </Canvas>
 
 
-        <GroupBox Header="Mode Dial"  FontSize="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6" Background="Gainsboro">
+        <GroupBox Header="Mode Dial"  FontSize="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -193,7 +193,7 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Radio Dials"  FontSize="10" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6"  Background="Gainsboro">
+        <GroupBox Header="Radio Dials"  FontSize="10" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />

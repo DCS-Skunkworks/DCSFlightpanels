@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels.Windows"
         mc:Ignorable="d"
-        Title="Windows Key API" Height="190" Width="550" WindowStartupLocation="CenterScreen">
+        Title="Windows Key API" Height="190" Width="550" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />

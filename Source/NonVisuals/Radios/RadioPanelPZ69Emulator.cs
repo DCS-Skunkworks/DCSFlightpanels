@@ -612,11 +612,11 @@ namespace NonVisuals.Radios
             bool found = false;
             if (controlListPZ69 == ControlList.ALL || controlListPZ69 == ControlList.KEYS)
             {
-                foreach (KeyBindingPZ69 keyBindingPZ55 in _keyBindings)
+                foreach (KeyBindingPZ69 keyBindingPZ69 in _keyBindings)
                 {
-                    if (keyBindingPZ55.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && keyBindingPZ55.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
+                    if (keyBindingPZ69.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && keyBindingPZ69.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
                     {
-                        keyBindingPZ55.OSKeyPress = null;
+                        keyBindingPZ69.OSKeyPress = null;
                     }
                     found = true;
                     break;

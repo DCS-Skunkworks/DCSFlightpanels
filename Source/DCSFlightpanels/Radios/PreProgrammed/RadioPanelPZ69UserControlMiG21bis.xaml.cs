@@ -424,6 +424,7 @@
 
         private void RadioPanelPZ69UserControlMiG21Bis_OnLoaded(object sender, RoutedEventArgs e)
         {
+			DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;

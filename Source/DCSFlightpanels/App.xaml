@@ -6,5 +6,30 @@
              ShutdownMode="OnMainWindowClose">
     <windows:Application.Resources>
         <!--StartupUri="MainWindow.xaml"-->
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/ComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/ComboBoxItem.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/CheckBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/Window.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/Label.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/Button.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/TabControl.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/TabControlItem.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/TextBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/GroupBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/ToolBar.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/StatusBar.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/RadioButton.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/DataGrid.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/DataGridColumnHeader.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/DataGridCell.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/ContextMenu.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/Menu.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/MenuItem.xaml"/>
+                -->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </windows:Application.Resources>
 </windows:Application>

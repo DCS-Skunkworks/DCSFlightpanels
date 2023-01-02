@@ -14,11 +14,11 @@
     public abstract class TextBoxBaseInput : TextBox
     {
         public BillBaseInput Bill { get; set; }
-
         protected abstract BillBaseInput GetBill { get; }
-
+        
         protected TextBoxBaseInput()
         {
+            this.SetResourceReference(StyleProperty, typeof(TextBox));
             PreviewKeyDown += TextBox_PreviewKeyDown;
             MouseDoubleClick += TextBoxMouseDoubleClick;
             MouseDown += TextBox_OnMouseDown;
@@ -26,7 +26,7 @@
             LostFocus += TextBoxLostFocus;
             TextChanged += TextBoxTextChanged;
         }
-        
+
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -113,7 +113,7 @@
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.Yellow;
+                ((TextBox)sender).Background = DarkMode.TextBoxSelectedBackgroundColor;
             }
             catch (Exception ex)
             {
@@ -125,7 +125,7 @@
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.Yellow;
+                ((TextBox)sender).Background = DarkMode.TextBoxSelectedBackgroundColor;
             }
             catch (Exception ex)
             {
@@ -144,7 +144,7 @@
                 }
                 else
                 {
-                    Background = Brushes.White;
+                    Background = DarkMode.TextBoxUnselectedBackgroundColor;
                 }
             }
             catch (Exception ex)

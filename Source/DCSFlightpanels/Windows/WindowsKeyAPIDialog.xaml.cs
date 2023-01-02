@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using ClassLibraryCommon;
+using System.Windows;
 
 namespace DCSFlightpanels.Windows
 {
@@ -18,6 +19,11 @@ namespace DCSFlightpanels.Windows
         {
             ShowAtStartUp = CheckBoxShowAgain.IsChecked == true;
             Close();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            DarkMode.SetFrameworkElemenDarkMode(this);
         }
     }
 }

@@ -361,6 +361,7 @@
 
         private void RadioPanelPZ69UserControlSA342_OnLoaded(object sender, RoutedEventArgs e)
         {
+			DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;

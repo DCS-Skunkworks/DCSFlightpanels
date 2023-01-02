@@ -102,8 +102,10 @@
                             Click here for a list of Math functions
                         </Hyperlink>
                         </TextBlock>
-                        <TextBlock Name="TextBlockFormulas" Margin="10,10,10,10" Foreground="DodgerBlue" MouseDown="TextBlockFormulas_OnMouseDown" MouseEnter="Control_OnMouseEnter" MouseLeave="Control_OnMouseLeave">
-                        <Underline>Click here for sample formulas</Underline>
+                        <TextBlock Margin="10,10,10,10">
+                        <Hyperlink NavigateUri="https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Formulas" RequestNavigate="Hyperlink_OnRequestNavigate">
+                            Click here for sample formulas
+                        </Hyperlink>
                         </TextBlock>
                     </StackPanel>
                 </StackPanel>

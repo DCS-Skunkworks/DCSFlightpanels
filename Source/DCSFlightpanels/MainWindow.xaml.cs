@@ -41,6 +41,7 @@
     using Octokit;
     using NonVisuals.Panels;
     using NonVisuals.HID;
+    using Theraot.Collections;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {
@@ -63,6 +64,7 @@
 
         public MainWindow()
         {
+            DarkModePrepare();
             InitializeComponent();
 
             DCSFPProfile.Init();
@@ -75,6 +77,11 @@
             AppEventHandler.AttachPanelEventListener(this);
             AppEventHandler.AttachForwardPanelEventListener(this);
             BIOSEventHandler.AttachConnectionListener(this);
+        }
+
+        private void DarkModePrepare()
+        {
+            DarkMode.DarkModeEnabled = Settings.Default.DarkMode;
         }
 
         #region IDisposable Support
@@ -127,6 +134,7 @@
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
+            DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 if (_isLoaded)
@@ -167,6 +175,7 @@
                 }
 
                 _isLoaded = true;
+
             }
             catch (Exception ex)
             {

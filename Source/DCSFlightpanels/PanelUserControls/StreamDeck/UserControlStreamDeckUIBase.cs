@@ -22,6 +22,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using NonVisuals.Panels.StreamDeck.Events;
     using NonVisuals.Panels.StreamDeck.Panels;
     using NonVisuals.Panels.StreamDeck;
+    using Newtonsoft.Json;
 
     public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, INvStreamDeckListener, IStreamDeckConfigListener
     {
@@ -31,6 +32,18 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private StreamDeckPanel _streamDeckPanel;
         private string _lastShownLayer = string.Empty;
         private BillStreamDeckFace SelectedImageBill => (from image in ButtonImages where image.IsSelected select image.Bill).FirstOrDefault();
+
+        private JsonSerializerSettings _jsonSettings = new()
+        {
+            ContractResolver = new ExcludeObsoletePropertiesResolver(),
+            TypeNameHandling = TypeNameHandling.All,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            Error = (sender, args) =>
+            {
+                Logger.Error($"JSON Error.{args.ErrorContext.Error.Message}");
+            }
+        };
+
         private EnumStreamDeckButtonNames SelectedButtonName
         {
             get
@@ -117,7 +130,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void UIShowLayer()
         {
             try
@@ -194,7 +207,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 if (streamDeckButton.HasConfig)
                 {
                     SetButtonPicture(streamDeckButton);
-                } 
+                }
                 else
                 {
                     buttonImage.SetDefaultButtonImage();
@@ -303,7 +316,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 if (MessageBox.Show("Delete button" + streamDeckButton.StreamDeckButtonName.ToString() + "?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     _streamDeckPanel.SelectedLayer.RemoveButton(streamDeckButton);
-                    SDEventHandler.ClearSettings(this, true, true, true, _streamDeckPanel.BindingHash); 
+                    SDEventHandler.ClearSettings(this, true, true, true, _streamDeckPanel.BindingHash);
                 }
             }
             catch (Exception ex)
@@ -353,9 +366,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 var selectedStreamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
                 menuItemCopy.IsEnabled = selectedStreamDeckButton.HasConfig;
                 menuItemDelete.IsEnabled = selectedStreamDeckButton.HasConfig;
-
-                var dataObject = Clipboard.GetDataObject();
-                menuItemPaste.IsEnabled = dataObject != null && dataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton");
+                
+                menuItemPaste.IsEnabled = Clipboard.GetData(DataFormats.StringFormat) != null;
             }
             catch (Exception ex)
             {
@@ -389,7 +401,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         protected void SetSelectedButtonUIOnly(EnumStreamDeckButtonNames selectedButtonName)
         {
             //Deselect everything selected (normaly should only be 1 currently selected but we never know...
-            ButtonImages.Where(x => x.IsSelected).ToList().ForEach(x => 
+            ButtonImages.Where(x => x.IsSelected).ToList().ForEach(x =>
                 {
                     x.IsSelected = false;
                 });
@@ -425,7 +437,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", string.Empty)),
                     StreamDeckPanelInstance = _streamDeckPanel
                 };
-                buttonImage.SetDefaultButtonImage();                
+                buttonImage.SetDefaultButtonImage();
             }
         }
 
@@ -434,21 +446,22 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             var streamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (streamDeckButton != null)
             {
-                Clipboard.SetDataObject(streamDeckButton.CloneJson());
+                var buttonJSON = JsonConvert.SerializeObject(streamDeckButton, Formatting.Indented, _jsonSettings);
+                Clipboard.SetData(DataFormats.StringFormat, buttonJSON);
             }
         }
 
         protected bool Paste()
         {
-            var dataObject = Clipboard.GetDataObject();
-            if (dataObject == null || !dataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton"))
+            var jsonData = (string)Clipboard.GetData(DataFormats.StringFormat);
+            if (jsonData == null)
             {
                 return false;
             }
 
             bool result;
-            var newStreamDeckButton = (StreamDeckButton)dataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
-            
+            var newStreamDeckButton = JsonConvert.DeserializeObject<StreamDeckButton>(jsonData, _jsonSettings);
+
             var oldStreamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton) &&
                 MessageBox.Show("Overwrite previous configuration (partial or fully)", "Overwrite?)", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -462,7 +475,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             /*
              * 15 Dec 2021 JDA
              * For some reason some properties does not follow through the copying phase, e.g. StreamDeckPanelInstance is null for Face object after copy. Why?
-             * Have to set it, otherwise nullpointer exception.
+             * Have to set it, otherwise null pointer exception.
              */
             oldStreamDeckButton.StreamDeckPanelInstance = oldStreamDeckButton.StreamDeckPanelInstance;
             if (result)
@@ -554,7 +567,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 Logger.Error(ex);
             }
         }
-        
+
         public void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e)
         {
             try
@@ -599,7 +612,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 Logger.Error(ex);
             }
         }
-      
+
 
         protected void CheckButtonControlListValidity()
         {

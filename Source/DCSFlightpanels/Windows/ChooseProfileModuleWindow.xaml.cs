@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
@@ -23,6 +25,7 @@ namespace DCSFlightpanels.Windows
         private void ChooseProfileModuleWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             PopulateAirframeCombobox();
+            DarkMode.SetFrameworkElemenDarkMode(this);
         }
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
@@ -127,5 +130,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+
     }
 }
