@@ -88,7 +88,7 @@
         </Canvas>
 
 
-        <GroupBox Header="Mode Dial"  FontSize="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6" Background="Gainsboro">
+        <GroupBox Header="Mode Dial"  FontSize="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -208,7 +208,7 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Radio Dials"  FontSize="10" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6" Background="Gainsboro">
+        <GroupBox Header="Radio Dials"  FontSize="10" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
