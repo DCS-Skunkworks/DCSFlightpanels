@@ -32,6 +32,8 @@
         
         public ContextMenuPanelTextBox(bool keyboardEmulationOnly)
         {
+            this.SetResourceReference(StyleProperty, typeof(ContextMenu));
+
             _keyboardEmulationOnly = keyboardEmulationOnly;
             
             _contextMenuItemAddNullKey = new MenuItem() { Header = "Add VK_NULL key" };
