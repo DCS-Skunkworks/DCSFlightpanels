@@ -76,6 +76,7 @@ namespace ClassLibraryCommon
                 new() { Source = new Uri("pack://application:,,,/DarkMode/RadioButton.xaml") },
                 new() { Source = new Uri("pack://application:,,,/DarkMode/DataGrid.xaml") },
                 new() { Source = new Uri("pack://application:,,,/DarkMode/DataGridColumnHeader.xaml") },
+                new() { Source = new Uri("pack://application:,,,/DarkMode/DataGridCell.xaml") },
                 new() { Source = new Uri("pack://application:,,,/DarkMode/ContextMenu.xaml") },
                 new() { Source = new Uri("pack://application:,,,/DarkMode/Menu.xaml") },
                 new() { Source = new Uri("pack://application:,,,/DarkMode/MenuItem.xaml") },
