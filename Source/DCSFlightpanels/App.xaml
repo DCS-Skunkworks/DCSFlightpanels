@@ -8,7 +8,8 @@
         <!--StartupUri="MainWindow.xaml"-->
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="pack://application:,,,/DarkMode/ComboBox.xaml"/>
+                <!--
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/ComboBox.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/ComboBoxItem.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/CheckBox.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/Window.xaml"/>
@@ -23,11 +24,11 @@
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/RadioButton.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/DataGrid.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/DataGridColumnHeader.xaml"/>
-                   <ResourceDictionary Source="pack://application:,,,/DarkMode/DataGridCell.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/DataGridCell.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/ContextMenu.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/Menu.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/DarkMode/MenuItem.xaml"/>-->
-             
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/MenuItem.xaml"/>
+                -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </windows:Application.Resources>
