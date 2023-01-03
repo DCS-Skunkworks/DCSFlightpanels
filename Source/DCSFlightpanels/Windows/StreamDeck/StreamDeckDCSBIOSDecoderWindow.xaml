@@ -87,8 +87,8 @@
                                 <ImageBrush ImageSource="/Images/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Fill" />
                             </TextBox.Background>
                         </TextBox>
-                        <TextBox FontSize="10" Height="18" Width="150" Foreground="Blue" Margin="10,10,10,10"   IsReadOnly="True" Name="TextBoxDCSBIOSId" />
-                        <Label Name="LabelInsert" FontSize="9" Margin="10,10,10,10"  Foreground="MediumBlue" Content="Click to insert" MouseEnter="Control_OnMouseEnter" MouseLeave="Control_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
+                        <TextBox FontSize="10" Height="18" Width="150" Foreground="DeepSkyBlue" Margin="10,10,10,10"   IsReadOnly="True" Name="TextBoxDCSBIOSId" />
+                        <Label Name="LabelInsert" FontSize="9" Margin="10,10,10,10"  Foreground="DodgerBlue" Content="Click to insert" MouseEnter="Control_OnMouseEnter" MouseLeave="Control_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
