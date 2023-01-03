@@ -12,7 +12,9 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="0">
-            <TextBlock Margin="10,10,10,10" TextWrapping="Wrap">
+            <GroupBox BorderBrush="Transparent">
+                <!--GroupBox only here for correct DarkMode TextBlock management-->
+                <TextBlock Margin="10,10,10,10" TextWrapping="Wrap">
                 
                     <Hyperlink NavigateUri="https://forums.eagle.ru/showthread.php?t=137670" RequestNavigate="Hyperlink_OnRequestNavigate">
                         Please share your formulas and profiles with other pilots in the support thread!
@@ -53,7 +55,8 @@
                     ifmore(a b c d)<LineBreak/>
                     If a &gt; b then returns c else d<LineBreak/>
                     ifmore(1 2 4 5) = 5<LineBreak/>
-            </TextBlock>
+                </TextBlock>
+            </GroupBox>
         </ScrollViewer>
         <DockPanel  Grid.Row="1">
             <Button Content="Close" Height="23" HorizontalAlignment="Right" x:Name="ButtonClose" Width="75" Margin="0,0,10,0" Click="ButtonClose_OnClick"/>
