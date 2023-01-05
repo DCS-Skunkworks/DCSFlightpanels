@@ -28,6 +28,7 @@
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/ContextMenu.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/Menu.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/DarkMode/MenuItem.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/DarkMode/ScrollBar.xaml"/>
                 -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

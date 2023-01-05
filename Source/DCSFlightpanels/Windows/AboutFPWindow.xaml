@@ -14,7 +14,9 @@
         KeyDown="AboutWindow_OnKeyDown">
 
     <controls:Grid>
-        <StackPanel VerticalAlignment="Top" Width="860" Height="800">
+        <controls:GroupBox BorderBrush="Transparent">
+            <!--GroupBox only here for correct DarkMode TextBlock management-->
+            <StackPanel VerticalAlignment="Top" Width="860" Height="800">
             <controls:TextBlock Height="357" HorizontalAlignment="Left" Margin="12,12,0,0" Name="TextBlockInformation" Text="" VerticalAlignment="Top" Width="819" TextWrapping="Wrap" FontSize="14" >
                 <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/jdahlblom/DCSFlightpanels/releases">
                     <Bold>
@@ -90,6 +92,7 @@
                 <controls:Image Height="382" HorizontalAlignment="Center" Name="Screenshots" Stretch="Uniform" VerticalAlignment="Center" Source="/dcsfp;component/Images/about_image.jpg" Canvas.Top="6" Canvas.Left="6" Width="843" />
             </Canvas>
         </StackPanel>
+        </controls:GroupBox>
         <controls:Image Height="51" HorizontalAlignment="Center" Margin="486,93,109,0" Name="ReSharperImage" Stretch="Uniform" VerticalAlignment="Top" Width="264" Source="/dcsfp;component/Images/resharper_ultimate.jpg" />
         <controls:Image Height="200" HorizontalAlignment="Center" Margin="617,157,42,0" Stretch="Uniform" VerticalAlignment="Top"  Source="/dcsfp;component/Images/FlightPanels01.png" />
     </controls:Grid>

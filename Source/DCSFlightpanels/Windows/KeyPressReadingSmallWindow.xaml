@@ -45,7 +45,7 @@
             <CheckBox Name="CheckBoxOpenRecording" VerticalContentAlignment="Center" Checked="CheckBoxOpenRecording_OnChecked" Unchecked="CheckBoxOpenRecording_OnUnchecked">
                 <TextBlock Text="Open Recording" VerticalAlignment="Center" />
             </CheckBox>
-            <Label Name="LabelOpenRecording" Content="(Wiki)" Foreground="Blue" FontWeight="DemiBold" VerticalAlignment="Center" MouseEnter="LabelOpenRecording_OnMouseEnter" MouseLeave="LabelOpenRecording_OnMouseLeave" MouseDown="LabelOpenRecording_OnMouseDown"></Label>
+            <Label Name="LabelOpenRecording" Content="(Wiki)" Foreground="DodgerBlue" FontWeight="DemiBold" VerticalAlignment="Center" MouseEnter="LabelOpenRecording_OnMouseEnter" MouseLeave="LabelOpenRecording_OnMouseLeave" MouseDown="LabelOpenRecording_OnMouseDown"></Label>
         </StackPanel>
 
         <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left"  Margin="5,0,5,0">

@@ -80,6 +80,7 @@ namespace DCSFlightpanels
                 new() { Source = new Uri("pack://application:,,,/DarkMode/ContextMenu.xaml") },
                 new() { Source = new Uri("pack://application:,,,/DarkMode/Menu.xaml") },
                 new() { Source = new Uri("pack://application:,,,/DarkMode/MenuItem.xaml") },
+                new() { Source = new Uri("pack://application:,,,/DarkMode/ScrollBar.xaml") },
             };
             System.Windows.Application.Current.Resources.MergedDictionaries.AddRange(darKmodeResources);
         }

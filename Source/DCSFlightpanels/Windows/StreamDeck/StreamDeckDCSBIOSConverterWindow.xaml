@@ -132,7 +132,7 @@
                                 </Border>
                             </StackPanel>
                         </StackPanel>
-                        <Label Name="LabelInsertRaw" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
+                        <Label Name="LabelInsertRaw" FontSize="9" Foreground="DodgerBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
@@ -181,7 +181,7 @@
                                 </Border>
                             </StackPanel>
                         </StackPanel>
-                        <Label Name="LabelInsertOverlayImage" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
+                        <Label Name="LabelInsertOverlayImage" FontSize="9" Foreground="DodgerBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
 
                         <Label Content="Selected Image" FontSize="10" Height="23" Margin="0,5,2,0" />
                         <customControls:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" Width="300" IsReadOnly="True" x:Name="TextBoxOverlayImagePath"  IsEnabled="False" Background="LightSteelBlue"/>

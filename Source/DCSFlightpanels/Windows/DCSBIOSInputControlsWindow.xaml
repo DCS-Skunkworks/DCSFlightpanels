@@ -73,7 +73,7 @@
                     <TextBox Name="TextBoxDescription" Margin="5,0,5,0" MaxLength="20" VerticalContentAlignment="Center" FontStyle="Italic" TextWrapping="Wrap"  FontSize="14" MaxLines="1" Grid.ColumnSpan="3" Grid.RowSpan="1" Grid.Row="7" KeyDown="TextBoxDescription_OnKeyDown"/>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Name="CheckBoxIsSequenced" Margin="10,5,0,0" Content="Sequenced Commands" IsChecked="False" Click="CheckBoxIsSequenced_OnClick"/>
-                        <Label Name="LabelSequencedInfo" Content=" ? " FontWeight="Bold" Foreground="Blue" MouseDown="LabelSequencedInfo_OnMouseDown" MouseEnter="LabelSequencedInfo_OnMouseEnter" MouseLeave="LabelSequencedInfo_OnMouseLeave"></Label>
+                        <Label Name="LabelSequencedInfo" Content=" ? " FontWeight="Bold" Foreground="DodgerBlue" MouseDown="LabelSequencedInfo_OnMouseDown" MouseEnter="LabelSequencedInfo_OnMouseEnter" MouseLeave="LabelSequencedInfo_OnMouseLeave"></Label>
                     </StackPanel>
                 </StackPanel>
 

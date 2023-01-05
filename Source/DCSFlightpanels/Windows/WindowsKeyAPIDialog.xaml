@@ -14,16 +14,19 @@
             <RowDefinition Height="5*" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Background="AliceBlue">
-            <TextBlock FontSize="12" Margin="10,10,10,10">
+        <GroupBox BorderBrush="Transparent" >
+            <!--GroupBox only here for correct DarkMode TextBlock management-->
+            <StackPanel Grid.Row="0">
+                <TextBlock FontSize="12" Margin="10,10,10,10">
                 <LineBreak/>
                 For key emulation you can use two different Windows APIs. 
                 <LineBreak/>
                 Some games only support one of the APIs.
                 <LineBreak/>
                 If key emulation doesn't work then go to <Italic>Options->Settings</Italic> and switch to the other API.
-            </TextBlock>
-        </StackPanel>
+                </TextBlock>
+            </StackPanel>
+        </GroupBox>
         <DockPanel Grid.Row="1">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <CheckBox Name="CheckBoxShowAgain" IsChecked="True" VerticalAlignment="Bottom" Margin="10,10,10,10" HorizontalAlignment="Right" Content="Show at startup?"></CheckBox>

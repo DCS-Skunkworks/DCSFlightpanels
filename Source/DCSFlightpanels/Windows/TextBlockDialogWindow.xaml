@@ -15,11 +15,13 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <StackPanel Grid.ColumnSpan="2" Grid.RowSpan="5">
-            <ScrollViewer  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" Height="305">
-                <TextBlock Name="TextBlockInformation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" TextWrapping="Wrap" Margin="10,10,10,10"/>
-            </ScrollViewer>
+            <GroupBox BorderBrush="Transparent">
+                <!--GroupBox only here for correct DarkMode TextBlock management-->
+                <ScrollViewer  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" Height="305">
+                    <TextBlock Name="TextBlockInformation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" TextWrapping="Wrap" Margin="10,10,10,10"/>
+                </ScrollViewer>
+            </GroupBox>
         </StackPanel>
         <StackPanel Grid.Row="5" Grid.Column="1" >
             <Button Name="ButtonOk" Click="ButtonOk_OnClick" Content="Ok" Width="75" HorizontalAlignment="Right" Margin="10,10,10,10"/>
