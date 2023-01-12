@@ -18,7 +18,7 @@ You can use multiple panels of each type and configure them separately.
 
 <br/><br/>
 <p align="center">
-<a href="https://www.jetbrains.com/?from=Flightpanels"><img src="./Documentation/jetbrains.png" width="100"></a>
+<a href="https://jb.gg/OpenSourceSupport"><img src="./Documentation/jetbrains.png" width="100"></a>
 This project is proudly sponsored by Jetbrains Open Source Support Program.
 </p>
 <br/><br/>
