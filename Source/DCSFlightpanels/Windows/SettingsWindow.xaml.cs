@@ -27,8 +27,13 @@ namespace DCSFlightpanels.Windows
         public string IpAddressToDCSBIOS { get; private set; }
         public string PortToDCSBIOS { get; private set; }
         public string DcsBiosJSONLocation { get; private set; }
-        public bool GeneralChanged { get; private set; }
-        public bool DCSBIOSChanged { get; private set; }
+        public string IpAddressFromSRS { get; private set; }
+        public string PortFromSRS { get; private set; }
+        public string IpAddressToSRS { get; private set; }
+        public string PortToSRS { get; private set; }
+        public bool GeneralChanged { get; private set; } = false;
+        public bool DCSBIOSChanged { get; private set; } = false;
+        public bool SRSChanged { get; private set; } = false;
         public bool StreamDeckChanged { get; private set; } = false;
 
         private bool _isLoaded;
@@ -119,6 +124,11 @@ namespace DCSFlightpanels.Windows
             TextBoxDCSBIOSToIP.TextChanged += DcsBiosDirty;
             TextBoxDCSBIOSFromPort.TextChanged += DcsBiosDirty;
             TextBoxDCSBIOSToPort.TextChanged += DcsBiosDirty;
+            
+            TextBoxSRSFromIP.TextChanged += SrsDirty;
+            TextBoxSRSToIP.TextChanged += SrsDirty;
+            TextBoxSRSFromPort.TextChanged += SrsDirty;
+            TextBoxSRSToPort.TextChanged += SrsDirty;
         }
 
         private void LoadSettings()
@@ -170,6 +180,13 @@ namespace DCSFlightpanels.Windows
             TextBoxDCSBIOSToIP.Text = Settings.Default.DCSBiosIPTo;
             TextBoxDCSBIOSFromPort.Text = Settings.Default.DCSBiosPortFrom;
             TextBoxDCSBIOSToPort.Text = Settings.Default.DCSBiosPortTo;
+            if (Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled))
+            {
+                TextBoxSRSFromIP.Text = Settings.Default.SRSIpFrom;
+                TextBoxSRSToIP.Text = Settings.Default.SRSIpTo;
+                TextBoxSRSFromPort.Text = Settings.Default.SRSPortFrom.ToString();
+                TextBoxSRSToPort.Text = Settings.Default.SRSPortTo.ToString();
+            }
         }
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
@@ -183,6 +200,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 CheckValuesDCSBIOS();
+                CheckValuesSRS();
 
                 if (GeneralChanged)
                 {
@@ -245,6 +263,15 @@ namespace DCSFlightpanels.Windows
                     Settings.Default.DCSBiosPortFrom = PortFromDCSBIOS;
                     Settings.Default.DCSBiosIPTo = IpAddressToDCSBIOS;
                     Settings.Default.DCSBiosPortTo = PortToDCSBIOS;
+                    Settings.Default.Save();
+                }
+
+                if (SRSChanged)
+                {
+                    Settings.Default.SRSIpFrom = IpAddressFromSRS;
+                    Settings.Default.SRSPortFrom = int.Parse(PortFromSRS);
+                    Settings.Default.SRSIpTo = IpAddressToSRS;
+                    Settings.Default.SRSPortTo = int.Parse(PortToSRS);
                     Settings.Default.Save();
                 }
 
@@ -387,6 +414,76 @@ namespace DCSFlightpanels.Windows
             }
         }
 
+        private void CheckValuesSRS()
+        {
+            try
+            {
+                IPAddress ipAddress;
+                if (string.IsNullOrEmpty(TextBoxSRSFromIP.Text))
+                {
+                    throw new Exception("SRS IP address from cannot be empty");
+                }
+                if (string.IsNullOrEmpty(TextBoxSRSToIP.Text))
+                {
+                    throw new Exception("SRS IP address to cannot be empty");
+                }
+                if (string.IsNullOrEmpty(TextBoxSRSFromPort.Text))
+                {
+                    throw new Exception("SRS Port from cannot be empty");
+                }
+                if (string.IsNullOrEmpty(TextBoxSRSToPort.Text))
+                {
+                    throw new Exception("SRS Port to cannot be empty");
+                }
+                try
+                {
+                    if (!IPAddress.TryParse(TextBoxSRSFromIP.Text, out ipAddress))
+                    {
+                        throw new Exception();
+                    }
+                    IpAddressFromSRS = TextBoxSRSFromIP.Text;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"SRS Error while checking IP from : {ex.Message}");
+                }
+                try
+                {
+                    if (!IPAddress.TryParse(TextBoxSRSToIP.Text, out ipAddress))
+                    {
+                        throw new Exception();
+                    }
+                    IpAddressToSRS = TextBoxSRSToIP.Text;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"SRS Error while checking IP to : {ex.Message}");
+                }
+                try
+                {
+                    var test = Convert.ToInt32(TextBoxSRSFromPort.Text);
+                    PortFromSRS = TextBoxSRSFromPort.Text;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"SRS Error while Port from : {ex.Message}");
+                }
+                try
+                {
+                    var test = Convert.ToInt32(TextBoxSRSFromPort.Text);
+                    PortToSRS = TextBoxSRSToPort.Text;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"SRS Error while Port to : {ex.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"SRS Error checking values : {Environment.NewLine}{ex.Message}");
+            }
+        }
+
         private void DcsBiosDirty(object sender, TextChangedEventArgs e)
         {
             DCSBIOSChanged = true;
@@ -395,6 +492,7 @@ namespace DCSFlightpanels.Windows
 
         private void SrsDirty(object sender, TextChangedEventArgs e)
         {
+            SRSChanged = true;
             ButtonOk.IsEnabled = true;
         }
 

@@ -14,6 +14,7 @@ aircraft in the Multipanel & Backlit Panel.
 Using DCSFlightpanels as a key emulator it can be used in almost any game like
 Elite Dangerous, War Thunder, Flaming Cliff Series, IL-2.
 You can use multiple panels of each type and configure them separately.
+DCSFlightpanels supports [Simple Radio Standalone](https://github.com/ciribob/DCS-SimpleRadioStandalone) (PZ69 Radio Panel).
 
 
 <br/><br/>

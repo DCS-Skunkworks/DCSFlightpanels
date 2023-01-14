@@ -37,6 +37,7 @@
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.SRS;
 
     using Octokit;
     using NonVisuals.Panels;
@@ -499,7 +500,15 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (DCSAircraft.IsA10C(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
+                            else if (Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled) || DCSFPProfile.IsFlamingCliff(_profileHandler.Profile))
+                            {
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton);
+                                _panelUserControls.Add(radioPanelPZ69UserControl);
+                                tabItem.Content = radioPanelPZ69UserControl;
+                                TabControlPanels.Items.Add(tabItem);
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                            }
+                            else if (DCSFPProfile.IsA10C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -1603,7 +1612,11 @@
                 {
                     LoadProcessPriority();
                 }
-
+                if (settingsWindow.SRSChanged)
+                {
+                    SRSListenerFactory.SetParams(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo);
+                    SRSListenerFactory.ReStart();
+                }
                 ConfigurePlugins();
             }
         }

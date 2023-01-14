@@ -77,6 +77,11 @@
                     var module = new DCSAircraft(2, "Key Emulation", "KEYEMULATOR");
                     ModulesList.Add(module);
                 }
+  				if (!ModulesList.Exists(o => o.ID == 3))
+            	{
+                	var module = new DCSFPProfile(3, "Key Emulation with SRS support", "KEYEMULATOR_SRS");
+                	ModulesList.Add(module);
+            	}
             }
         }
 
@@ -165,6 +170,16 @@
             }
             return module;
         }
+        
+        public static DCSFPProfile GetKeyEmulatorSRS()
+        {
+            var module = Modules.FirstOrDefault(x => IsKeyEmulatorSRS(x));
+            if (module == null)
+            {
+                LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module KeyEmulatorSRS. Modules loaded : {Modules.Count}");
+            }
+            return module;
+        }
 
         public static bool HasNS430()
         {
@@ -191,7 +206,12 @@
             return dcsfpModule.ID == 2;
         }
 
-        public static bool IsFlamingCliff(DCSAircraft dcsfpModule)
+        public static bool IsKeyEmulatorSRS(DCSFPProfile dcsfpModule)
+        {
+            return dcsfpModule.ID == 3;
+        }
+
+        public static bool IsFlamingCliff(DCSFPProfile dcsfpModule)
         {
             return dcsfpModule.ID == 4;
         }
@@ -386,6 +406,7 @@
             int? moduleNumber = oldEnumValue switch
             {
                 "KEYEMULATOR" => 2,
+                "KEYEMULATOR_SRS" => 3,
                 "A4E" => 6,
                 "A10C" => 5,
                 "AH6J" => 7,
