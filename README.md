@@ -1,4 +1,4 @@
-# DCSFlightpanels
+# DCSFlightpanels (DCSFP)
 
 
 
