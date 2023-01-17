@@ -42,7 +42,6 @@
     using Octokit;
     using NonVisuals.Panels;
     using NonVisuals.HID;
-    using Theraot.Collections;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {

@@ -14,12 +14,9 @@
     using NonVisuals.Plugin;
     using NonVisuals.Radios.Knobs;
     using NonVisuals.Radios.SRS;
-    using NLog;
     using NonVisuals.Panels.Saitek;
     using NonVisuals.HID;
     using NonVisuals.BindingClasses.BIP;
-    using NonVisuals.Panels.Saitek.Switches;
-    using System.Windows.Input;
 
     public struct SRSRadioSmallFreqStepping
     {

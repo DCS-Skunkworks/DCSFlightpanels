@@ -1,5 +1,4 @@
 ﻿using NonVisuals.Radios;
-using System;
 using Xunit;
 
 namespace Tests.NonVisuals

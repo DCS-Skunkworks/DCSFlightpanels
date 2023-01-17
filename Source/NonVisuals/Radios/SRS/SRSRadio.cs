@@ -7,9 +7,6 @@
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
-
-    using MEF;
-
     using Newtonsoft.Json;
     using NLog;
     using NonVisuals.Radios.Knobs;
@@ -105,8 +102,7 @@
                     try
                     {
                         var message = Encoding.UTF8.GetString(byteData, 0, byteData.Length);
-
-                        // Console.WriteLine(HIDSkeletonBase.InstanceId + " Message received on UDP");
+                        
                         var srsCombinedRadioState = JsonConvert.DeserializeObject<SRSCombinedRadioState>(message);
                         var srsPlayerRadioInfo = srsCombinedRadioState.RadioInfo;
                         if (srsPlayerRadioInfo != null)

@@ -11,10 +11,6 @@
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.PanelUserControls;
     using DCSFlightpanels.Properties;
-
-    using MEF;
-
-    using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.HID;
     using NonVisuals.Interfaces;

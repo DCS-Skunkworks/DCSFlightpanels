@@ -12,7 +12,6 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using DCSFlightpanels.Properties;
 using NonVisuals.EventArgs;
-using Cursors = System.Windows.Forms.Cursors;
 
 namespace DCSFlightpanels.Windows
 {

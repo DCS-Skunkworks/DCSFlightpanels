@@ -19,7 +19,6 @@ namespace DCSFlightpanels.PanelUserControls
     using NonVisuals.Interfaces;
 
     using Brush = System.Windows.Media.Brush;
-    using Brushes = System.Windows.Media.Brushes;
     using Image = System.Windows.Controls.Image;
     using SwitchPanelPZ55Keys = MEF.SwitchPanelPZ55Keys;
     using NonVisuals.Panels.Saitek.Panels;
