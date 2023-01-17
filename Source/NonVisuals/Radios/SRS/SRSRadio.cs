@@ -60,8 +60,6 @@
 
             return _srsListener;
         }
-
-        public static bool IsRunning => _srsListener != null && _srsListener.IsRunning;
     }
 
     public class SRSRadio
@@ -78,7 +76,6 @@
         private bool _started;
         private readonly object _sendSRSDataLockObject = new object();
         private readonly object _readSRSDataLockObject = new object();
-        public bool IsRunning;
 
 
         public SRSRadio(int portFrom, string ipAddressTo, int portTo)
@@ -93,7 +90,6 @@
         {
             try
             {
-                IsRunning = true;
                 while (!_shutdownThread)
                 {
                     var ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
@@ -129,8 +125,6 @@
             {
                 logger.Error(ex, "SRSListener.ReceiveDataUdp()");
             }
-
-            IsRunning = false;
         }
 
         public int SendDataFunction(string stringData)
