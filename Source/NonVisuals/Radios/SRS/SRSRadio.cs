@@ -7,6 +7,7 @@
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
+    using System.Timers;
     using Newtonsoft.Json;
     using NLog;
     using NonVisuals.Radios.Knobs;
@@ -22,46 +23,6 @@
         void SRSDataReceived(object sender);
     }
 
-    public static class SRSListenerFactory
-    {
-        private static SRSRadio _srsListener;
-        private static string _srsSendToIPUdp = "127.0.0.1";
-        private static int _srsReceivePortUdp = 7082;
-        private static int _srsSendPortUdp = 9040;
-
-        public static void SetParams(int portFrom, string ipAddressTo, int portTo)
-        {
-            _srsSendToIPUdp = ipAddressTo;
-            _srsReceivePortUdp = portFrom;
-            _srsSendPortUdp = portTo;
-        }
-
-        public static void Shutdown()
-        {
-            _srsListener?.Shutdown();
-            _srsListener = null;
-        }
-
-        public static void ReStart()
-        {
-            Shutdown();
-            if (_srsListener == null)
-            {
-                _srsListener = new SRSRadio(_srsReceivePortUdp, _srsSendToIPUdp, _srsSendPortUdp);
-            }
-        }
-
-        public static SRSRadio GetSRSListener()
-        {
-            if (_srsListener == null)
-            {
-                _srsListener = new SRSRadio(_srsReceivePortUdp, _srsSendToIPUdp, _srsSendPortUdp);
-            }
-
-            return _srsListener;
-        }
-    }
-
     public class SRSRadio
     {
         internal static Logger logger = LogManager.GetCurrentClassLogger();
@@ -74,9 +35,12 @@
         private SRSPlayerRadioInfo _srsPlayerRadioInfo;
         private volatile bool _shutdownThread;
         private bool _started;
-        private readonly object _sendSRSDataLockObject = new object();
-        private readonly object _readSRSDataLockObject = new object();
-
+        private readonly object _sendSRSDataLockObject = new();
+        private readonly object _readSRSDataLockObject = new();
+        private IPEndPoint _ipEndPointReceiverUdp;
+        private IPEndPoint _ipEndPointSenderUdp;
+        private System.Timers.Timer _udpReceiveThrottleTimer = new(10) { AutoReset = true }; //Throttle UDP receive every 10 ms in case nothing is available
+        private AutoResetEvent _udpReceiveThrottleAutoResetEvent = new(false);
 
         public SRSRadio(int portFrom, string ipAddressTo, int portTo)
         {
@@ -92,24 +56,26 @@
             {
                 while (!_shutdownThread)
                 {
-                    var ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
-                    
-                    var byteData = _udpReceiveClient.Receive(ref ipEndPointReceiverUdp);
                     try
                     {
-                        var message = Encoding.UTF8.GetString(byteData, 0, byteData.Length);
-                        
-                        var srsCombinedRadioState = JsonConvert.DeserializeObject<SRSCombinedRadioState>(message);
-                        var srsPlayerRadioInfo = srsCombinedRadioState.RadioInfo;
-                        if (srsPlayerRadioInfo != null)
+                        if (_udpReceiveClient.Available > 0)
                         {
-                            lock (_readSRSDataLockObject)
-                            {
-                                _srsPlayerRadioInfo = srsPlayerRadioInfo;
-                            }
+                            var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
+                            var message = Encoding.UTF8.GetString(byteData, 0, byteData.Length);
 
-                            OnSRSDataReceived?.Invoke(this);
+                            var srsCombinedRadioState = JsonConvert.DeserializeObject<SRSCombinedRadioState>(message);
+                            var srsPlayerRadioInfo = srsCombinedRadioState.RadioInfo;
+                            if (srsPlayerRadioInfo != null)
+                            {
+                                lock (_readSRSDataLockObject)
+                                {
+                                    _srsPlayerRadioInfo = srsPlayerRadioInfo;
+                                }
+
+                                OnSRSDataReceived?.Invoke(this);
+                            }
                         }
+                        _udpReceiveThrottleAutoResetEvent.WaitOne(); // Minimizes CPU hit
                     }
                     catch (SocketException)
                     {
@@ -138,7 +104,7 @@
                     var unicodeBytes = Encoding.Unicode.GetBytes(stringData);
                     var asciiBytes = new List<byte>(stringData.Length);
                     asciiBytes.AddRange(Encoding.Convert(Encoding.Unicode, Encoding.ASCII, unicodeBytes));
-                    result = _udpSendClient.Send(asciiBytes.ToArray(), asciiBytes.ToArray().Length, ipEndPointSenderUdp);
+                    result = _udpSendClient.Send(asciiBytes.ToArray(), asciiBytes.ToArray().Length, _ipEndPointSenderUdp);
                 }
                 catch (Exception ex)
                 {
@@ -160,15 +126,14 @@
 
                 _shutdownThread = true;
 
-                var ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
-                var ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIPUdp), _srsSendPortUdp);
-
+                _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
+                _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIPUdp), _srsSendPortUdp);
                 _udpReceiveClient?.Close();
                 _udpReceiveClient = new UdpClient();
                 _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                 _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 200);
                 _udpReceiveClient.ExclusiveAddressUse = false;
-                _udpReceiveClient.Client.Bind(ipEndPointReceiverUdp);
+                _udpReceiveClient.Client.Bind(_ipEndPointReceiverUdp);
                 
                 lock (_sendSRSDataLockObject)
                 {
@@ -179,6 +144,9 @@
                 }
 
                 Thread.Sleep(Constants.ThreadShutDownWaitTime);
+
+                _udpReceiveThrottleTimer.Elapsed += UdpReceiveThrottleTimer_Elapsed;
+                _udpReceiveThrottleTimer.Start();
                 _shutdownThread = false;
                 _srsListeningThread = new Thread(ReceiveDataUdp);
                 _srsListeningThread.Start();
@@ -203,6 +171,10 @@
                     }
                 }
             }
+        }
+        private void UdpReceiveThrottleTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            _udpReceiveThrottleAutoResetEvent.Set();
         }
 
         private CurrentSRSRadioMode TranslateSRSRadioMode(int radioNumber)
@@ -239,11 +211,6 @@
 
             return currentSRSRadioMode;
         }
-
-
-
-
-
 
         public SRSRadioMode GetRadioMode(int radioNumber)
         {
