@@ -50,29 +50,15 @@ namespace DCS_BIOS
         internal static Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// The interfaces the DCSBIOSInput offers.
+        /// All the interfaces this particular DCSBIOSInput offers.
         /// </summary>
         private List<DCSBIOSInputInterface> _dcsbiosInputInterfaces = new();
-
-
-        private DCSBIOSInputInterface _selectedDCSBIOSInterface;
-
+        
         /// <summary>
         /// The interface the user has chosen.
         /// </summary>
         [JsonProperty("SelectedDCSBIOSInterface", Required = Required.Default)]
-        public DCSBIOSInputInterface SelectedDCSBIOSInterface
-        {
-            get => _selectedDCSBIOSInterface;
-            set
-            {
-                if (value == null)
-                {
-                    Debugger.Break();
-                }
-                _selectedDCSBIOSInterface = value;
-            }
-        }
+        public DCSBIOSInputInterface SelectedDCSBIOSInterface { get; set; }
 
         [JsonProperty("ControlId", Required = Required.Default)]
         public string ControlId { get; set; }
