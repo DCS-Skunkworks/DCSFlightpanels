@@ -25,7 +25,7 @@ namespace DCSFlightpanels
         private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
         private const string OPEN_FILE_DIALOG_FILTER = "DCSFlightpanels (.bindings)|*.bindings";
 
-        private static DCSFPProfile _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
+        private static DCSAircraft _dcsAircraft = DCSAircraft.GetNoFrameLoadedYet();
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new();
         private readonly object _lockObject = new();
@@ -56,12 +56,12 @@ namespace DCSFlightpanels
             }
         }
 
-        public DCSFPProfile Profile
+        public DCSAircraft DCSAircraft
         {
-            get => _dcsfpProfile;
+            get => _dcsAircraft;
             set
             {
-                _dcsfpProfile = value;
+                _dcsAircraft = value;
                 SetEmulationModeFlag();
             }
         }
@@ -98,9 +98,9 @@ namespace DCSFlightpanels
             }
         }
 
-        public static DCSFPProfile ActiveDCSFPProfile
+        public static DCSAircraft ActiveDCSAircraft
         {
-            get => _dcsfpProfile;
+            get => _dcsAircraft;
         }
 
         public ProfileHandler(string dcsbiosJSONDirectory, IHardwareConflictResolver hardwareConflictResolver)
@@ -172,15 +172,15 @@ namespace DCSFlightpanels
             }
 
             BindingMappingManager.ClearBindings();
-            DCSFPProfile.SetNoFrameLoadedYetAsProfile();
+            DCSAircraft.SetNoFrameLoadedYetAsProfile();
             Common.ResetEmulationModesFlag();
-            Profile = DCSFPProfile.SelectedProfile;
+            DCSAircraft = DCSAircraft.SelectedAircraft;
 
             _profileLoaded = false;
             _isNewProfile = false;
             _isDirty = false;
             _profileFileHIDInstances.Clear();
-            AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileClosed, null, DCSFPProfile.GetNoFrameLoadedYet());
+            AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileClosed, null, DCSAircraft.GetNoFrameLoadedYet());
 
             return true;
         }
@@ -222,12 +222,12 @@ namespace DCSFlightpanels
             {
                 Common.ResetEmulationModesFlag();
                 _isNewProfile = true;
-                Profile = chooseProfileModuleWindow.Profile;
+                DCSAircraft = chooseProfileModuleWindow.Profile;
 
                 try
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
-                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
+                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, DCSAircraft);
                 }
                 finally
                 {
@@ -311,7 +311,7 @@ namespace DCSFlightpanels
                     string currentBindingHash = null;
                     var insidePanel = false;
                     var insideJSONPanel = false;
-                    DCSFPProfile tmpProfile = null;
+                    DCSAircraft tmpProfile = null;
                     GenericPanelBinding genericPanelBinding = null;
 
                     foreach (var fileLine in fileLines)
@@ -322,18 +322,18 @@ namespace DCSFlightpanels
                             if (fileLine.StartsWith("Airframe=NONE"))
                             {
                                 // Backward compability
-                                tmpProfile = DCSFPProfile.GetKeyEmulator();
+                                tmpProfile = DCSAircraft.GetKeyEmulator();
                             }
                             else
                             {
                                 // Backward compability
                                 var airframeAsString = fileLine.Replace("Airframe=", string.Empty).Trim();
-                                tmpProfile = DCSFPProfile.GetBackwardCompatible(airframeAsString);
+                                tmpProfile = DCSAircraft.GetBackwardCompatible(airframeAsString);
                             }
                         }
                         else if (fileLine.StartsWith("Profile="))
                         {
-                            tmpProfile = DCSFPProfile.GetProfile(int.Parse(fileLine.Replace("Profile=", string.Empty)));
+                            tmpProfile = DCSAircraft.GetAircraft(int.Parse(fileLine.Replace("Profile=", string.Empty)));
                         }
                         else if (fileLine.StartsWith("OperationLevelFlag="))
                         {
@@ -424,10 +424,10 @@ namespace DCSFlightpanels
                         }
                     }
 
-                    DCSFPProfile.SelectedProfile = tmpProfile;
-                    Profile = tmpProfile;
+                    DCSAircraft.SelectedAircraft = tmpProfile;
+                    DCSAircraft = tmpProfile;
 
-                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, Profile);
+                    AppEventHandler.ProfileEvent(this, ProfileEventEnum.ProfileLoaded, null, DCSAircraft);
 
                     return 1;
                 }
@@ -437,7 +437,7 @@ namespace DCSFlightpanels
                     CloseProfile();
                     Common.ShowErrorMessageBox(ex);
 
-                    if (DCSFPProfile.DCSBIOSModulesCount == 0)
+                    if (DCSAircraft.DCSBIOSModulesCount == 0)
                     {
                         VerifyDCSBIOSLocation();
                     }
@@ -477,15 +477,15 @@ namespace DCSFlightpanels
 
         private void SetEmulationModeFlag()
         {
-            if (DCSFPProfile.IsNoFrameLoadedYet(Profile))
+            if (DCSAircraft.IsNoFrameLoadedYet(DCSAircraft))
             {
                 Common.SetEmulationModes(EmulationMode.DCSBIOSInputEnabled | EmulationMode.DCSBIOSOutputEnabled);
             }
-            else if (DCSFPProfile.IsKeyEmulator(Profile))
+            else if (DCSAircraft.IsKeyEmulator(DCSAircraft))
             {
                 Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
             }
-            else if (DCSFPProfile.IsFlamingCliff(Profile))
+            else if (DCSAircraft.IsFlamingCliff(DCSAircraft))
             {
                 Common.SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled);
             }
@@ -612,9 +612,9 @@ namespace DCSFlightpanels
                 var stringBuilder = new StringBuilder();
                 stringBuilder.AppendLine(headerStringBuilder.ToString());
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
-                stringBuilder.AppendLine("Profile=" + Profile.ID);
+                stringBuilder.AppendLine("Profile=" + DCSAircraft.ID);
                 stringBuilder.AppendLine("EmulationModesFlag=" + Common.GetEmulationModesFlag());
-                stringBuilder.AppendLine("UseGenericRadio=" + Profile.UseGenericRadio + Environment.NewLine);
+                stringBuilder.AppendLine("UseGenericRadio=" + DCSAircraft.UseGenericRadio + Environment.NewLine);
 
                 var panelBindings = BindingMappingManager.PanelBindings;
 
@@ -746,7 +746,7 @@ namespace DCSFlightpanels
                 if (settingsWindow.DCSBIOSChanged)
                 {
                     DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    DCSFPProfile.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+                    DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
                 }
             }
         }

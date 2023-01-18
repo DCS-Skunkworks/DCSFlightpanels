@@ -250,7 +250,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                DCSFPProfile.SelectedProfile.Description,
+                                DCSAircraft.SelectedAircraft.Description,
                                 HIDInstance,
                                 PluginGamingPanelEnum.TPM,
                                 (int)tpmPanelSwitch.TPMSwitch,
@@ -265,7 +265,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        DCSFPProfile.SelectedProfile.Description,
+                        DCSAircraft.SelectedAircraft.Description,
                         HIDInstance,
                         PluginGamingPanelEnum.TPM,
                         (int)tpmPanelSwitch.TPMSwitch,

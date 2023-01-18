@@ -103,7 +103,7 @@ namespace NonVisuals.Panels.StreamDeck
                 if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        DCSFPProfile.SelectedProfile.Description,
+                        DCSAircraft.SelectedAircraft.Description,
                         StreamDeckPanelInstance.HIDInstance,
                         StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
                         (int)StreamDeckButtonName,
@@ -181,7 +181,7 @@ namespace NonVisuals.Panels.StreamDeck
                     };
 
                     PluginManager.DoEvent(
-                        DCSFPProfile.SelectedProfile.Description,
+                        DCSAircraft.SelectedAircraft.Description,
                         StreamDeckPanelInstance.HIDInstance,
                         pluginPanel,
                         (int)StreamDeckButtonName,

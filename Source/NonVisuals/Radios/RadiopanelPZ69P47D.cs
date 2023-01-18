@@ -368,7 +368,7 @@ namespace NonVisuals.Radios
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                DCSFPProfile.SelectedProfile.Description,
+                                DCSAircraft.SelectedAircraft.Description,
                                 HIDInstance,
                                 PluginGamingPanelEnum.PZ69RadioPanel_PreProg_P47D,
                                 (int)radioPanelKnob.RadioPanelPZ69Knob,

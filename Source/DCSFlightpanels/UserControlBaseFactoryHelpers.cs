@@ -10,32 +10,32 @@ namespace DCSFlightpanels
     {
         public static IGamingPanelUserControl GetUSerControl(
             GamingPanelEnum gamingPanelType,
-            DCSFPProfile profile,
+            DCSAircraft profile,
             HIDSkeleton hidSkeleton, TabItem parentTabItem)
         {
             if (gamingPanelType == GamingPanelEnum.CDU737)
             {
-                if (DCSFPProfile.IsA10C(profile))
+                if (DCSAircraft.IsA10C(profile))
                 {
                     return new Cdu737UserControlA10C(hidSkeleton);
                 }
-                if (DCSFPProfile.IsAH64D(profile))
+                if (DCSAircraft.IsAH64D(profile))
                 {
                     return new Cdu737UserControlAH64D(hidSkeleton);
                 }
-                if (DCSFPProfile.IsFA18C(profile))
+                if (DCSAircraft.IsFA18C(profile))
                 {
                     return new Cdu737UserControlFA18C(hidSkeleton);
                 }
-                if (DCSFPProfile.IsSA342(profile))
+                if (DCSAircraft.IsSA342(profile))
                 {
                     return new Cdu737UserControlSA342(hidSkeleton);
                 }
-                if (DCSFPProfile.IsF14B(profile))
+                if (DCSAircraft.IsF14B(profile))
                 {
                     return new Cdu737UserControlF14(hidSkeleton);
                 }
-                if (DCSFPProfile.IsM2000C(profile))
+                if (DCSAircraft.IsM2000C(profile))
                 {
                     return new Cdu737UserControlM2000C(hidSkeleton);
                 }

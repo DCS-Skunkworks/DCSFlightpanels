@@ -7,20 +7,20 @@
     using System.Linq;
 
     /// <summary>
-    /// Holds information about currently selected profile / module (DCS aircraft/helicopter).
+    /// Holds information about currently selected aircraft / module (DCS aircraft/helicopter).
     /// This class reads all modules from BIOS.lua and the user can then select between these
     /// when creating a new DCSFP profile.
     /// </summary>
-    public class DCSFPProfile
+    public class DCSAircraft
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly object Lock = new();
-        private static readonly List<DCSFPProfile> ModulesList = new();
+        private static readonly List<DCSAircraft> ModulesList = new();
 
-        public static DCSFPProfile SelectedProfile { get; set; }
+        public static DCSAircraft SelectedAircraft { get; set; }
 
-        private DCSFPProfile(int id, string description, string jsonFilename)
+        private DCSAircraft(int id, string description, string jsonFilename)
         {
             ID = id;
             JSONFilename = jsonFilename;
@@ -40,7 +40,7 @@
 
         public bool UseGenericRadio { get; set; }
 
-        public static List<DCSFPProfile> Modules
+        public static List<DCSAircraft> Modules
         {
             get
             {
@@ -57,7 +57,7 @@
             {
                 lock (Lock)
                 {
-                    return ModulesList.Count - 2; // Two profiles are not DCS-BIOS
+                    return ModulesList.Count - 2; // Two aircraft are not DCS-BIOS
                 }
             }
         }
@@ -68,13 +68,13 @@
             {
                 if (!ModulesList.Exists(o => o.ID == 1))
                 {
-                    var module = new DCSFPProfile(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
+                    var module = new DCSAircraft(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
                     ModulesList.Add(module);
                 }
 
                 if (!ModulesList.Exists(o => o.ID == 2))
                 {
-                    var module = new DCSFPProfile(2, "Key Emulation", "KEYEMULATOR");
+                    var module = new DCSAircraft(2, "Key Emulation", "KEYEMULATOR");
                     ModulesList.Add(module);
                 }
             }
@@ -112,7 +112,7 @@
 
                     lock (Lock)
                     {
-                        ModulesList.Add(new DCSFPProfile(id, properName, json));
+                        ModulesList.Add(new DCSAircraft(id, properName, json));
                     }
                 }
             }
@@ -124,12 +124,12 @@
             throw new Exception(message);
         }
 
-        public static DCSFPProfile GetProfile(int id)
+        public static DCSAircraft GetAircraft(int id)
         {
             var module = Modules.FirstOrDefault(x => x.ID == id);
             if (module == null)
             {
-                LogErrorAndThrowException($"Failed to determine profile ID ({id}) in your bindings file.");
+                LogErrorAndThrowException($"Failed to determine aircraft ID ({id}) in your bindings file.");
             }
             return module;
         }
@@ -139,29 +139,29 @@
             var module = Modules.FirstOrDefault(x => IsNoFrameLoadedYet(x));
             if (module == null)
             {
-                LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
+                LogErrorAndThrowException($"DCSAircraft : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
             }
 
-            SelectedProfile = module;
+            SelectedAircraft = module;
         }
 
 
-        public static DCSFPProfile GetNoFrameLoadedYet()
+        public static DCSAircraft GetNoFrameLoadedYet()
         {
             var module = Modules.FirstOrDefault(x => IsNoFrameLoadedYet(x));
             if (module == null)
             {
-                LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
+                LogErrorAndThrowException($"DCSAircraft : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
             }
             return module;
         }
 
-        public static DCSFPProfile GetKeyEmulator()
+        public static DCSAircraft GetKeyEmulator()
         {
             var module = Modules.FirstOrDefault(x => IsKeyEmulator(x));
             if (module == null)
             {
-                LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module KeyEmulator. Modules loaded : {Modules.Count}");
+                LogErrorAndThrowException($"DCSAircraft : Failed to find internal module KeyEmulator. Modules loaded : {Modules.Count}");
             }
             return module;
         }
@@ -171,217 +171,217 @@
             return Modules.Exists(x => IsNS430(x));
         }
 
-        public static DCSFPProfile GetNS430()
+        public static DCSAircraft GetNS430()
         {
             return Modules.FirstOrDefault(x => IsNS430(x));
         }
 
 
-        public static bool IsNoFrameLoadedYet(DCSFPProfile dcsfpModule)
+        public static bool IsNoFrameLoadedYet(DCSAircraft dcsfpModule)
         {
             /*if (dcsfpModule == null)
             {
-                LogErrorAndThrowException("DCSFPProfile IsNoFrameLoadedYet : Parameter dcsfpModule is null.");
+                LogErrorAndThrowException("DCSAircraft IsNoFrameLoadedYet : Parameter dcsfpModule is null.");
             }*/
             return dcsfpModule.ID == 1;
         }
 
-        public static bool IsKeyEmulator(DCSFPProfile dcsfpModule)
+        public static bool IsKeyEmulator(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 2;
         }
 
-        public static bool IsFlamingCliff(DCSFPProfile dcsfpModule)
+        public static bool IsFlamingCliff(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 4;
         }
 
-        public static bool IsA10C(DCSFPProfile dcsfpModule)
+        public static bool IsA10C(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 5;
         }
 
-        public static bool IsA4E(DCSFPProfile dcsfpModule)
+        public static bool IsA4E(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 6;
         }
 
-        public static bool IsAH6(DCSFPProfile dcsfpModule)
+        public static bool IsAH6(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 7;
         }
 
-        public static bool IsAJS37(DCSFPProfile dcsfpModule)
+        public static bool IsAJS37(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 8;
         }
 
-        public static bool IsAlphajet(DCSFPProfile dcsfpModule)
+        public static bool IsAlphajet(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 9;
         }
 
-        public static bool IsAV8B(DCSFPProfile dcsfpModule)
+        public static bool IsAV8B(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 10;
         }
 
-        public static bool IsBf109K4(DCSFPProfile dcsfpModule)
+        public static bool IsBf109K4(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 11;
         }
 
-        public static bool IsC101(DCSFPProfile dcsfpModule)
+        public static bool IsC101(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 12;
         }
 
-        public static bool IsC130(DCSFPProfile dcsfpModule)
+        public static bool IsC130(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 13;
         }
 
-        public static bool IsChristenEagleII(DCSFPProfile dcsfpModule)
+        public static bool IsChristenEagleII(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 14;
         }
 
-        public static bool IsEdge540(DCSFPProfile dcsfpModule)
+        public static bool IsEdge540(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 15;
         }
 
-        public static bool IsF14B(DCSFPProfile dcsfpModule)
+        public static bool IsF14B(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 16;
         }
 
-        public static bool IsF16C(DCSFPProfile dcsfpModule)
+        public static bool IsF16C(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 17;
         }
 
-        public static bool IsF5E(DCSFPProfile dcsfpModule)
+        public static bool IsF5E(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 18;
         }
 
-        public static bool IsF86F(DCSFPProfile dcsfpModule)
+        public static bool IsF86F(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 19;
         }
 
-        public static bool IsFA18C(DCSFPProfile dcsfpModule)
+        public static bool IsFA18C(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 20;
         }
 
-        public static bool IsFW190A8(DCSFPProfile dcsfpModule)
+        public static bool IsFW190A8(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 21;
         }
 
-        public static bool IsFW190D9(DCSFPProfile dcsfpModule)
+        public static bool IsFW190D9(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 22;
         }
 
-        public static bool IsI16(DCSFPProfile dcsfpModule)
+        public static bool IsI16(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 23;
         }
 
-        public static bool IsJF17(DCSFPProfile dcsfpModule)
+        public static bool IsJF17(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 24;
         }
 
-        public static bool IsKa50(DCSFPProfile dcsfpModule)
+        public static bool IsKa50(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 25;
         }
 
-        public static bool IsL39(DCSFPProfile dcsfpModule)
+        public static bool IsL39(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 26;
         }
 
-        public static bool IsM2000C(DCSFPProfile dcsfpModule)
+        public static bool IsM2000C(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 27;
         }
 
-        public static bool IsMB339PAN(DCSFPProfile dcsfpModule)
+        public static bool IsMB339PAN(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 28;
         }
 
-        public static bool IsMi8MT(DCSFPProfile dcsfpModule)
+        public static bool IsMi8MT(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 29;
         }
 
-        public static bool IsMiG15bis(DCSFPProfile dcsfpModule)
+        public static bool IsMiG15bis(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 30;
         }
 
-        public static bool IsMiG19P(DCSFPProfile dcsfpModule)
+        public static bool IsMiG19P(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 31;
         }
 
-        public static bool IsMiG21Bis(DCSFPProfile dcsfpModule)
+        public static bool IsMiG21Bis(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 32;
         }
 
-        public static bool IsNS430(DCSFPProfile dcsfpModule)
+        public static bool IsNS430(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 33;
         }
 
-        public static bool IsP47D(DCSFPProfile dcsfpModule)
+        public static bool IsP47D(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 34;
         }
 
-        public static bool IsP51D(DCSFPProfile dcsfpModule)
+        public static bool IsP51D(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 35;
         }
 
-        public static bool IsSA342(DCSFPProfile dcsfpModule)
+        public static bool IsSA342(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 36;
         }
 
-        public static bool IsSpitfireLFMkIX(DCSFPProfile dcsfpModule)
+        public static bool IsSpitfireLFMkIX(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 37;
         }
 
-        public static bool IsUH1H(DCSFPProfile dcsfpModule)
+        public static bool IsUH1H(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 38;
         }
 
-        public static bool IsYak52(DCSFPProfile dcsfpModule)
+        public static bool IsYak52(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 39;
         }
 
-        public static bool IsMi24P(DCSFPProfile dcsfpModule)
+        public static bool IsMi24P(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 42;
         }
-        public static bool IsAH64D(DCSFPProfile dcsfpModule)
+        public static bool IsAH64D(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 46;
         }
 
 
-        public static DCSFPProfile GetBackwardCompatible(string oldEnumValue)
+        public static DCSAircraft GetBackwardCompatible(string oldEnumValue)
         {
             int? moduleNumber = oldEnumValue switch
             {

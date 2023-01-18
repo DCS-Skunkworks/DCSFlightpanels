@@ -471,7 +471,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                DCSFPProfile.SelectedProfile.Description,
+                                DCSAircraft.SelectedAircraft.Description,
                                 HIDInstance,
                                 PluginGamingPanelEnum.PZ55SwitchPanel,
                                 (int)switchPanelKey.SwitchPanelPZ55Key,
@@ -487,7 +487,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        DCSFPProfile.SelectedProfile.Description,
+                        DCSAircraft.SelectedAircraft.Description,
                         HIDInstance,
                         PluginGamingPanelEnum.PZ55SwitchPanel,
                         (int)switchPanelKey.SwitchPanelPZ55Key,

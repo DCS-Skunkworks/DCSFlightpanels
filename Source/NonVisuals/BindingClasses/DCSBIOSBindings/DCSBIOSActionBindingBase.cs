@@ -78,7 +78,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
             set => _shutdownCommandsThread = value;
         }
 
-        
+
         public void SendDCSBIOSCommands(CancellationToken cancellationToken)
         {
             CancelSendDCSBIOSCommands = true;
@@ -105,14 +105,14 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
                         {
                             return;
                         }
-                        
-                        Thread.Sleep(dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.Delay);
+
+                        Thread.Sleep(dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInterface.Delay);
                         if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
                         {
                             return;
                         }
-                        
-                        dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.SendCommand();
+
+                        dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInterface.SendCommand();
                         _sequenceIndex++;
 
                         if (_sequenceIndex >= dcsbiosInputs.Count)
@@ -125,10 +125,10 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
                 {
                     foreach (var dcsbiosInput in dcsbiosInputs)
                     {
-                        Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
+                        Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInterface.Delay);
 
-                        dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.SendCommand();
-
+                        dcsbiosInput.SelectedDCSBIOSInterface.SendCommand();
+                        
                         if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
                         {
                             return;
@@ -158,12 +158,12 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
             var configInt = parameters[0]
                 .Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1).Replace("}", "");
             ParseSettingsInt(int.Parse(configInt));
-            
+
             if (config.Contains("MultiPanelDCSBIOSControl") || config.Contains("RadioPanelDCSBIOSControl")) // Has additional setting which tells which position leftmost dial is in
             {
                 //{ALT}
                 mode = Common.RemoveCurlyBrackets(parameters[1]);
-                
+
                 //{FLAPS_LEVER_DOWN|BESKRIVNING}
                 var tmpKey = Common.RemoveCurlyBrackets(parameters[2]).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 key = tmpKey[0];
@@ -208,7 +208,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
             //SwitchPanelDCSBIOSControl{1SWITCHKEY_LIGHTS_PANEL|AAP_STEER}\o/\o/DCSBIOSInput{AAP_STEER|SET_STATE|1|0}
 
             var parameters = config.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
-            
+
             if (config.Contains("MultiPanelDCSBIOSControl") || config.Contains("RadioPanelDCSBIOSControl"))
             {
                 //MultiPanelDCSBIOSControl{ALT}
@@ -217,7 +217,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
 
                 //{1FLAPS_LEVER_DOWN|BESKRIVNING}
                 WhenTurnedOn = Common.RemoveCurlyBrackets(parameters[1]).Substring(0, 1) == "1";
-                
+
                 var tmpKey = Common.RemoveCurlyBrackets(parameters[1]).Substring(1).Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 key = tmpKey[0];
                 if (tmpKey.Length > 1)

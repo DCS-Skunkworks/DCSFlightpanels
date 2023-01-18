@@ -5,14 +5,14 @@ using Xunit;
 
 namespace Tests.DcsBios
 {
-    public class DCSBIOSInputObjectTests
+    public class DCSBIOSInputInterfaceTests
     {
         [Theory]
         [InlineData("fixed_step", DCSBIOSInputType.FIXED_STEP)]
         [InlineData("set_state", DCSBIOSInputType.SET_STATE)]
         [InlineData("action", DCSBIOSInputType.ACTION)]
         [InlineData("variable_step", DCSBIOSInputType.VARIABLE_STEP)]
-        public void Cosume_ShouldSet_4_Properties(string givenControlInterface, DCSBIOSInputType expectedDCSBIOSInputType)
+        public void Consume_ShouldSet_4_Properties(string givenControlInterface, DCSBIOSInputType expectedDCSBIOSInputType)
         {
             string controlId = "ThisIsAControlId";
             DCSBIOSControlInput controlInput = new()
@@ -22,13 +22,13 @@ namespace Tests.DcsBios
                 MaxValue = 666,
                 Argument = "ThisIsAnArgument"
             };
-            DCSBIOSInputObject inputObject = new();
-            inputObject.Consume(controlId, controlInput);
+            DCSBIOSInputInterface inputInterface = new();
+            inputInterface.Consume(controlId, controlInput);
 
-            Assert.Equal(controlId, inputObject.ControlId);
-            Assert.Equal(controlInput.Description, inputObject.Description);
-            Assert.Equal(expectedDCSBIOSInputType, inputObject.Interface);
-            Assert.Equal(controlInput.Argument, inputObject.SpecifiedActionArgument);
+            Assert.Equal(controlId, inputInterface.ControlId);
+            Assert.Equal(controlInput.Description, inputInterface.Description);
+            Assert.Equal(expectedDCSBIOSInputType, inputInterface.Interface);
+            Assert.Equal(controlInput.Argument, inputInterface.SpecifiedActionArgument);
         }
 
         [Theory]
@@ -39,15 +39,15 @@ namespace Tests.DcsBios
         [InlineData(null, DCSBIOSFixedStepInput.DEC, " DEC\n")]
         [InlineData(null, null, " INC\n")]
         public void GetDCSBIOSCommand_FixedStep_ShouldReturn_ExpectedResult(string controlId, DCSBIOSFixedStepInput? specifiedFixedStepArgument, string expectedResult) {
-            DCSBIOSInputObject inputObject = new()
+            DCSBIOSInputInterface inputInterface = new()
             {
                 ControlId = controlId,
                 Interface = DCSBIOSInputType.FIXED_STEP
             };
             if (specifiedFixedStepArgument != null)
-                inputObject.SpecifiedFixedStepArgument = (DCSBIOSFixedStepInput)specifiedFixedStepArgument;
+                inputInterface.SpecifiedFixedStepArgument = (DCSBIOSFixedStepInput)specifiedFixedStepArgument;
 
-            Assert.Equal(expectedResult, inputObject.GetDCSBIOSCommand());
+            Assert.Equal(expectedResult, inputInterface.GetDCSBIOSCommand());
         }
 
         [Theory]
@@ -59,15 +59,15 @@ namespace Tests.DcsBios
         [InlineData(null, null, " 0\n")]
         public void GetDCSBIOSCommand_SetState_ShouldReturn_ExpectedResult(string controlId, uint? specifiedSetStateArgument, string expectedResult)
         {
-            DCSBIOSInputObject inputObject = new()
+            DCSBIOSInputInterface inputInterface = new()
             {
                 ControlId = controlId,
                 Interface = DCSBIOSInputType.SET_STATE
             };
             if (specifiedSetStateArgument != null)
-                inputObject.SpecifiedSetStateArgument = (uint)specifiedSetStateArgument;
+                inputInterface.SpecifiedSetStateArgument = (uint)specifiedSetStateArgument;
 
-            Assert.Equal(expectedResult, inputObject.GetDCSBIOSCommand());
+            Assert.Equal(expectedResult, inputInterface.GetDCSBIOSCommand());
         }
 
         [Theory]
@@ -80,14 +80,14 @@ namespace Tests.DcsBios
         //[InlineData("", null, " 0\n")]
         public void GetDCSBIOSCommand_Action_ShouldReturn_ExpectedResult(string controlId, string specifiedActionArgument, string expectedResult)
         {
-            DCSBIOSInputObject inputObject = new()
+            DCSBIOSInputInterface inputInterface = new()
             {
                 ControlId = controlId,
                 Interface = DCSBIOSInputType.ACTION,
                 SpecifiedActionArgument = specifiedActionArgument
             };
 
-            Assert.Equal(expectedResult, inputObject.GetDCSBIOSCommand());
+            Assert.Equal(expectedResult, inputInterface.GetDCSBIOSCommand());
         }
 
         [Theory]
@@ -103,22 +103,22 @@ namespace Tests.DcsBios
         [InlineData(null, null, " 0\n")]
         public void GetDCSBIOSCommand_VariableStep_ShouldReturn_ExpectedResult(string controlId, int? specifiedVariableStepArgument, string expectedResult)
         {
-            DCSBIOSInputObject inputObject = new()
+            DCSBIOSInputInterface inputInterface = new()
             {
                 ControlId = controlId,
                 Interface = DCSBIOSInputType.VARIABLE_STEP
             };
             if (specifiedVariableStepArgument != null)
-                inputObject.SpecifiedVariableStepArgument = (int)specifiedVariableStepArgument;
+                inputInterface.SpecifiedVariableStepArgument = (int)specifiedVariableStepArgument;
 
-            Assert.Equal(expectedResult, inputObject.GetDCSBIOSCommand());
+            Assert.Equal(expectedResult, inputInterface.GetDCSBIOSCommand());
         }
 
         [Fact]
         public void GetDCSBIOSCommand_WithoutAnyPropertiesSet_ReturnsDefaultValueOfFixedStep()
         {
-            DCSBIOSInputObject inputObject = new();
-            Assert.Equal(" INC\n", inputObject.GetDCSBIOSCommand());
+            DCSBIOSInputInterface inputInterface = new();
+            Assert.Equal(" INC\n", inputInterface.GetDCSBIOSCommand());
         }
 
         [Theory]
@@ -126,17 +126,17 @@ namespace Tests.DcsBios
         [InlineData("", null, DCSBIOSInputType.ACTION)]
         public void GetDCSBIOSCommand_ShouldThrowException_InThoseCases(string controlId, object argument, DCSBIOSInputType? inputType)
         {
-            DCSBIOSInputObject inputObject = new()
+            DCSBIOSInputInterface inputInterface = new()
             {
                 ControlId = controlId,
             };
 
             if (inputType == DCSBIOSInputType.ACTION) 
             {
-                inputObject.SpecifiedActionArgument = (string)argument;
-                inputObject.Interface = DCSBIOSInputType.ACTION;
+                inputInterface.SpecifiedActionArgument = (string)argument;
+                inputInterface.Interface = DCSBIOSInputType.ACTION;
             }
-            Assert.Throws<Exception>(() => inputObject.GetDCSBIOSCommand());
+            Assert.Throws<Exception>(() => inputInterface.GetDCSBIOSCommand());
         }
     }
 }
