@@ -1,5 +1,6 @@
 ﻿using System;
 using ClassLibraryCommon;
+using Newtonsoft.Json;
 using NonVisuals.Panels.Saitek;
 
 namespace NonVisuals.BindingClasses.OSCommand
@@ -12,9 +13,9 @@ namespace NonVisuals.BindingClasses.OSCommand
     public abstract class OSCommandBindingBase
     {
         private bool _whenOnTurnedOn = true;
-
         private NonVisuals.OSCommand _operatingSystemCommand;
-
+        [JsonIgnore] public bool HasSequence => false;
+        [JsonIgnore] public bool IsSequenced => false;
         internal abstract void ImportSettings(string settings);
 
         public abstract string ExportSettings();

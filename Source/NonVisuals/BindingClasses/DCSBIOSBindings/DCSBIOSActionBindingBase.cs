@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
 using NLog;
 using NonVisuals.Panels.Saitek;
+using NonVisuals.Panels.StreamDeck;
 using ThreadState = System.Threading.ThreadState;
 
 
@@ -26,7 +28,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
         private string _description;
         [NonSerialized] private Thread _sendDCSBIOSCommandsThread;
         private volatile List<DCSBIOSInput> _dcsbiosInputs;
-
+        [JsonIgnore] public bool HasSequence => _dcsbiosInputs.Count > 1;
         internal abstract void ImportSettings(string settings);
         public abstract string ExportSettings();
 
@@ -70,20 +72,52 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
             return false;
         }
 
-        protected Thread DCSBIOSCommandsThread => _sendDCSBIOSCommandsThread;
 
-        protected bool CancelSendDCSBIOSCommands
-        {
-            get => _shutdownCommandsThread;
-            set => _shutdownCommandsThread = value;
-        }
-
-
+        /*
+        * We have several options here.
+        * 1) There is only 1 command configured and not repeatable => execute it without thread.
+        * 2) There are multiple commands.
+        *   2a) If Sequenced Execution is configured execute each one in the sequence
+        *       when user keeps pressing the button. No Thread.
+        *   2b) The multiple commands can be seen as a batch and should be all executed
+        *       regardless if the user releases the button. Use Thread.
+        *
+        * 3) Command is repeatable, for single commands only. Just keep executing the command, use thread.
+        */
         public void SendDCSBIOSCommands(CancellationToken cancellationToken)
         {
-            CancelSendDCSBIOSCommands = true;
-            Thread.Sleep(Constants.ThreadShutDownWaitTime);
-            CancelSendDCSBIOSCommands = false;
+            var repeatable = false;
+
+
+            if (this is ActionTypeDCSBIOS)
+            {
+                //Ugly, only Streamdeck has IsRepeatable
+                repeatable = ((ActionTypeDCSBIOS)this).IsRepeatable();
+            }
+
+            if (DCSBIOSInputs.Count == 0)
+            {
+                return;
+            }
+
+            if (_isSequenced && _sequenceIndex <= DCSBIOSInputs.Count - 1)
+            {
+                DCSBIOSInputs[_sequenceIndex].SelectedDCSBIOSInterface.SendCommand();
+                _sequenceIndex++;
+
+                if (_sequenceIndex >= DCSBIOSInputs.Count)
+                {
+                    _sequenceIndex = 0;
+                }
+
+                return;
+            }
+            
+            while (IsRunning())
+            {
+                Thread.Sleep(200);
+            }
+            
             _sendDCSBIOSCommandsThread = new Thread(() => SendDCSBIOSCommandsThread(DCSBIOSInputs, cancellationToken));
             _sendDCSBIOSCommandsThread.Start();
         }
@@ -92,47 +126,15 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
         {
             try
             {
-                if (_isSequenced)
+                foreach (var dcsbiosInput in dcsbiosInputs)
                 {
-                    if (dcsbiosInputs.Count == 0)
+                    Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInterface.Delay);
+
+                    dcsbiosInput.SelectedDCSBIOSInterface.SendCommand();
+
+                    if (_shutdownCommandsThread || cancellationToken.IsCancellationRequested)
                     {
                         return;
-                    }
-
-                    if (_sequenceIndex <= dcsbiosInputs.Count - 1)
-                    {
-                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
-                        {
-                            return;
-                        }
-
-                        Thread.Sleep(dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInterface.Delay);
-                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
-                        {
-                            return;
-                        }
-
-                        dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInterface.SendCommand();
-                        _sequenceIndex++;
-
-                        if (_sequenceIndex >= dcsbiosInputs.Count)
-                        {
-                            _sequenceIndex = 0;
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var dcsbiosInput in dcsbiosInputs)
-                    {
-                        Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInterface.Delay);
-
-                        dcsbiosInput.SelectedDCSBIOSInterface.SendCommand();
-                        
-                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
-                        {
-                            return;
-                        }
                     }
                 }
             }

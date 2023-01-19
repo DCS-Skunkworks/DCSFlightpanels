@@ -7,13 +7,22 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     internal static class Resources
     {
+        private static readonly object LockDefault = new();
+        private static readonly object LockDecoder = new();
+
         public static BitmapImage GetDefaultButtonImageNamed(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            return new BitmapImage(new Uri(StreamDeckConstants.NUMBER_BUTTON_LOCATION + StreamDeckCommon.ButtonNumber(streamDeckButtonName) + "_blue.png", UriKind.Absolute));
+            lock (LockDefault)
+            {
+                return new BitmapImage(new Uri(StreamDeckConstants.NUMBER_BUTTON_LOCATION + StreamDeckCommon.ButtonNumber(streamDeckButtonName) + "_blue.png", UriKind.Absolute));
+            }
         }
         public static BitmapImage GetButtonDcsBiosDecoderRule()
         {
-            return new BitmapImage(new Uri(StreamDeckConstants.StreamDeckGalleryPathMisc + "DcsBiosDecoderRule.png", UriKind.Absolute));
+            lock (LockDecoder)
+            {
+                return new BitmapImage(new Uri(StreamDeckConstants.StreamDeckGalleryPathMisc + "DcsBiosDecoderRule.png", UriKind.Absolute));
+            }
         }
     }
 }

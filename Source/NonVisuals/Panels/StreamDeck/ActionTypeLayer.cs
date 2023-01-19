@@ -28,9 +28,10 @@
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.LayerNavigation;
         public bool IsRepeatable() => false;
+        [JsonIgnore] public bool HasSequence => false;
+        [JsonIgnore] public bool IsSequenced => false;
         private volatile bool _isRunning;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-
 
         [JsonProperty("NavigationType", Required = Required.Default)]
         public LayerNavType NavigationType;

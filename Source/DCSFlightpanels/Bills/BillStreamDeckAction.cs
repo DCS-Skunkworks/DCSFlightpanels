@@ -23,7 +23,7 @@
     {
         private ActionTypeDCSBIOS _dcsbiosBindingStreamDeck;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
-        private StreamDeckPanel _streamDeckPanel;
+        private readonly StreamDeckPanel _streamDeckPanel;
 
         public StreamDeckButtonOnOff Key { get; set; }
         public ActionTypeLayer StreamDeckLayerTarget { get; set; }

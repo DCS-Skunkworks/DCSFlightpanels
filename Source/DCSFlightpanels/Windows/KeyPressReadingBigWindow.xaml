@@ -22,7 +22,7 @@
             <controls:RowDefinition Height="1*" />
         </controls:Grid.RowDefinitions>
         <controls:StackPanel Margin="5,0,5,0">
-            <controls:Label Content="Break (ms)"/>
+            <controls:Label Content="Delay (ms)"/>
             <controls:ComboBox Name="ComboBoxBreak" ItemsSource="{data:Binding Source={StaticResource KeyPressLengthEnum}}" TabIndex="20" SelectionChanged="ComboBoxSelectionChanged" />
             <controls:Label Content="Key press" TabIndex="10" />
             <controls:TextBox Name="TextBoxKeyPress" IsReadOnly="True" PreviewKeyDown="TextBoxPreviewKeyDown" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick"/>
