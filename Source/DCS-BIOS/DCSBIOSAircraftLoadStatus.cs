@@ -6,13 +6,13 @@ namespace DCS_BIOS
     /// <summary>
     /// Convenience class for DCSBIOSControlLocator.
     /// </summary>
-    internal class DCSBIOSProfileLoadStatus
+    internal class DCSBIOSAircraftLoadStatus
     {
         private string Profile { get; }
         private bool Loaded { get; set; }
-        private static readonly List<DCSBIOSProfileLoadStatus> LoadStatusList = new();
+        private static readonly List<DCSBIOSAircraftLoadStatus> LoadStatusList = new();
 
-        private DCSBIOSProfileLoadStatus(string profile, bool loaded)
+        private DCSBIOSAircraftLoadStatus(string profile, bool loaded)
         {
             Profile = profile;
             Loaded = loaded;
@@ -27,7 +27,7 @@ namespace DCS_BIOS
         {
             if (!IsRegistered(profile))
             {
-                LoadStatusList.Add(new DCSBIOSProfileLoadStatus(profile, loaded));
+                LoadStatusList.Add(new DCSBIOSAircraftLoadStatus(profile, loaded));
                 return;
             }
 

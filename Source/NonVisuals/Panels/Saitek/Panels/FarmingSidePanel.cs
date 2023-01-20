@@ -261,7 +261,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(
-                                DCSFPProfile.SelectedProfile.Description,
+                                DCSAircraft.SelectedAircraft.Description,
                                 HIDInstance,
                                 PluginGamingPanelEnum.FarmingPanel,
                                 (int)farmingPanelKey.FarmingPanelMKKey,
@@ -277,7 +277,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        DCSFPProfile.SelectedProfile.Description,
+                        DCSAircraft.SelectedAircraft.Description,
                         HIDInstance,
                         PluginGamingPanelEnum.FarmingPanel,
                         (int)farmingPanelKey.FarmingPanelMKKey,

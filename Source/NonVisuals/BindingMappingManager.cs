@@ -50,7 +50,7 @@ namespace NonVisuals
                     {
                         genericPanelBinding.InUse = true;
                         AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
-                            DCSFPProfile.SelectedProfile);
+                            DCSAircraft.SelectedAircraft);
                     }
                 }
             }
@@ -69,7 +69,7 @@ namespace NonVisuals
                     {
                         genericPanelBinding.InUse = true;
                         AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
-                            DCSFPProfile.SelectedProfile);
+                            DCSAircraft.SelectedAircraft);
                     }
                 }
             }

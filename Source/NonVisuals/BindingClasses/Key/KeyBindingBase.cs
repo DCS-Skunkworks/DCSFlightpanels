@@ -14,6 +14,8 @@ namespace NonVisuals.BindingClasses.Key
     {
         private KeyPress _keyPress;
         private bool _whenOnTurnedOn = true;
+        [JsonIgnore] public bool HasSequence => _keyPress is { HasSequence: true };
+        [JsonIgnore] public bool IsSequenced => false;
 
         public int GetHash()
         {

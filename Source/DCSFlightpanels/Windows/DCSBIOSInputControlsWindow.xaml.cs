@@ -52,7 +52,7 @@
         private void DCSBIOSInputControlsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             DarkMode.SetFrameworkElemenDarkMode(this);
-            TextBoxHeader.Text = _header + Environment.NewLine + ProfileHandler.ActiveDCSFPProfile.Description;
+            TextBoxHeader.Text = _header + Environment.NewLine + ProfileHandler.ActiveDCSAircraft.Description;
             SetFormState();
         }
 
@@ -154,9 +154,7 @@
             var dcsBiosInputWindow = new DCSBiosInputWindow(_header, dcsBIOSInput);
             if (dcsBiosInputWindow.ShowDialog() == true)
             {
-                _dcsbiosInputs.Remove(dcsBIOSInput);
-                var tmpdcsBiosInput = dcsBiosInputWindow.DCSBiosInput;
-                _dcsbiosInputs.Add(tmpdcsBiosInput);
+                _dcsbiosInputs[_dcsbiosInputs.IndexOf(dcsBIOSInput)] = dcsBiosInputWindow.DCSBiosInput;
                 SetIsDirty();
                 ShowItems();
             }

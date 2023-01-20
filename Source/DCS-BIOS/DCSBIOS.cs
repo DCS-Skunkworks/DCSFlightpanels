@@ -4,6 +4,7 @@
  * Do not adhere to naming standard in DCS-BIOS code, standard are based on DCS-BIOS json files and byte streamnaming
  */
 
+using System.Diagnostics;
 using NLog;
 
 namespace DCS_BIOS
@@ -230,6 +231,7 @@ namespace DCS_BIOS
 
         public static int Send(string stringData)
         {
+            Debug.WriteLine($"Sending command : {stringData}");
             return _dcsBIOSInstance.SendDataFunction(stringData);
         }
 

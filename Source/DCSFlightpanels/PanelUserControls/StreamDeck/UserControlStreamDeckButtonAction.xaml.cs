@@ -406,8 +406,7 @@
                     {
                         if (textBoxKeyPress.Bill.ContainsKeyPress())
                         {
-                            ActionTypeKey result;
-                            result = new ActionTypeKey(_streamDeckPanel)
+                            var result = new ActionTypeKey(_streamDeckPanel)
                             {
                                 StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName,
                                 WhenTurnedOn = forButtonPressed,

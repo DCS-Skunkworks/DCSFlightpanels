@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace NonVisuals.Panels.StreamDeck
 {
@@ -24,7 +25,6 @@ namespace NonVisuals.Panels.StreamDeck
         private IStreamDeckButtonAction _buttonActionForPress;
         private IStreamDeckButtonAction _buttonActionForRelease;
         [NonSerialized] private volatile CancellationTokenSource _cancellationTokenSource = new();
-        [NonSerialized] private Thread _keyPressedThread;
         [NonSerialized] private StreamDeckPanel _streamDeckPanel;
         private volatile bool _isVisible;
 
@@ -103,7 +103,7 @@ namespace NonVisuals.Panels.StreamDeck
                 if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
                     PluginManager.DoEvent(
-                        DCSFPProfile.SelectedProfile.Description,
+                        DCSAircraft.SelectedAircraft.Description,
                         StreamDeckPanelInstance.HIDInstance,
                         StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
                         (int)StreamDeckButtonName,
@@ -114,18 +114,24 @@ namespace NonVisuals.Panels.StreamDeck
                 return;
             }
 
-            while (ActionForPress.IsRunning())
+            /*
+             * We have several options here.
+             * 1) There is only 1 command configured and not repeatable => execute it without thread.
+             * 2) There are multiple commands.
+             *   2a) If Sequenced Execution is configured execute each one in the sequence
+             *       when user keeps pressing the button. No Thread.
+             *   2b) The multiple commands can be seen as a batch and should be all executed
+             *       regardless if the user releases the button. Use Thread.
+             *
+             * 3) Command is repeatable, for single commands. Just keep executing them, use thread.
+             *
+             * Commands that must be cancelled by the release of the button are :
+             * 1) Repeatable single command.
+             */
+            _cancellationTokenSource = new CancellationTokenSource();
+            if (ActionForPress.IsRepeatable() && !ActionForPress.HasSequence)
             {
-                _cancellationTokenSource?.Cancel();
-            }
-
-            if (ActionForPress.IsRepeatable())
-            {
-                _cancellationTokenSource = new CancellationTokenSource();
-                var threadCancellationToken = _cancellationTokenSource.Token;
-                Debug.WriteLine("Creating Key Press Thread for Streamdeck");
-                _keyPressedThread = new Thread(() => ThreadedPress(threadCancellationToken));
-                _keyPressedThread.Start();
+                ActionForPress.Execute(_cancellationTokenSource.Token);
             }
             else
             {
@@ -133,35 +139,9 @@ namespace NonVisuals.Panels.StreamDeck
             }
         }
 
-        private void ThreadedPress(CancellationToken threadCancellationToken)
-        {
-            var first = true;
-            while (!threadCancellationToken.IsCancellationRequested)
-            {
-                if (!ActionForPress.IsRunning())
-                {
-                    ActionForPress?.Execute(threadCancellationToken);
-                }
-
-                if (first)
-                {
-                    Thread.Sleep(500);
-                    first = false;
-                }
-                else
-                {
-                    Thread.Sleep(25);
-                }
-            }
-        }
-
         public void DoRelease()
         {
-            while (_keyPressedThread != null)
-            {
-                _cancellationTokenSource?.Cancel();
-                _keyPressedThread = null;
-            }
+            _cancellationTokenSource?.Cancel();
 
             if (ActionForRelease == null)
             {
@@ -181,7 +161,7 @@ namespace NonVisuals.Panels.StreamDeck
                     };
 
                     PluginManager.DoEvent(
-                        DCSFPProfile.SelectedProfile.Description,
+                        DCSAircraft.SelectedAircraft.Description,
                         StreamDeckPanelInstance.HIDInstance,
                         pluginPanel,
                         (int)StreamDeckButtonName,
@@ -196,19 +176,7 @@ namespace NonVisuals.Panels.StreamDeck
                 _cancellationTokenSource?.Cancel();
             }
 
-            /*
-             * Can ActionForRelease really be repeatable??
-             */
-            /*if (ActionForRelease.IsRepeatable())
-            {
-                _cancellationTokenSource = new CancellationTokenSource();
-                var threadCancellationToken = _cancellationTokenSource.Token;
-                ActionForRelease?.Execute(threadCancellationToken);
-            }
-            else
-            {*/
             ActionForRelease.Execute(CancellationToken.None);
-            //}
         }
 
         public bool CheckIfWouldOverwrite(StreamDeckButton newStreamDeckButton)

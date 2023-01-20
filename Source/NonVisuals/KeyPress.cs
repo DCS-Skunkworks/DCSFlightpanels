@@ -30,6 +30,7 @@ namespace NonVisuals
         private SortedList<int, IKeyPressInfo> _sortedKeyPressInfoList = new();
         private string _description = "Key press sequence";
         [NonSerialized] private Thread _executingThread;
+        [JsonIgnore] public bool HasSequence => _sortedKeyPressInfoList.Count > 1;
 
         /*
          * When this OSKeyPress Executes it should cancel any execution _negatorOSKeyPress does.
@@ -57,10 +58,7 @@ namespace NonVisuals
             }
         }
 
-        public KeyPress()
-        {
-
-        }
+        public KeyPress() {}
 
         public KeyPress(string keycodes, KeyPressLength keyPressLength = KeyPressLength.FiftyMilliSec, string description = null)
         {
@@ -112,7 +110,7 @@ namespace NonVisuals
             return false;
         }
 
-        public void Execute(CancellationToken cancellationToken)
+        public void Execute(CancellationToken cancellationToken, bool useThread = true)
         {
             try
             {
@@ -138,9 +136,16 @@ namespace NonVisuals
                     }
                 }
 
-                Abort = false;
-                _executingThread = new Thread(() => ExecuteThreaded(_sortedKeyPressInfoList, cancellationToken));
-                _executingThread.Start();
+                if (useThread)
+                {
+                    Abort = false;
+                    _executingThread = new Thread(() => ExecuteKeyPresses(_sortedKeyPressInfoList, cancellationToken));
+                    _executingThread.Start();
+                }
+                else //här, om 
+                {
+                    ExecuteKeyPresses(_sortedKeyPressInfoList, cancellationToken);
+                }
             }
             catch (Exception ex)
             {
@@ -148,7 +153,7 @@ namespace NonVisuals
             }
         }
 
-        private void ExecuteThreaded(SortedList<int, IKeyPressInfo> sortedList, CancellationToken cancellationToken)
+        private void ExecuteKeyPresses(SortedList<int, IKeyPressInfo> sortedList, CancellationToken cancellationToken)
         {
             try
             {

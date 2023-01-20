@@ -48,7 +48,7 @@
             <Button Content="Ok" Height="23" VerticalAlignment="Bottom" Margin="10,0,0,10"  x:Name="ButtonOk" Width="75" Click="ButtonOkClick" />
             <Button Content="Cancel" Height="23" VerticalAlignment="Bottom" Margin="10,0,10,10" x:Name="ButtonCancel" Width="75" Click="ButtonCancelClick" />
         </StackPanel>
-        <StackPanel Grid.Column="2" Grid.RowSpan="3">
+        <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="3">
             <Label Name="LabelProfileDescription" Content="Profile Description here" HorizontalAlignment="Stretch" Margin="10,0,0,10" FontWeight="Bold" FontSize="12"/>
             <Label Name="LabelDescription" Content="Description here" HorizontalAlignment="Stretch" Margin="10,0,0,10" FontWeight="Bold" FontSize="12"/>
             <Label Content="Type aircraft control search words:" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="True"/>

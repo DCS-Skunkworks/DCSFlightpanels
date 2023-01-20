@@ -10,7 +10,7 @@ namespace NonVisuals.EventArgs
 
         public ProfileEventEnum ProfileEventType { get; init; }
 
-        public DCSFPProfile DCSProfile { get; set; }
+        public DCSAircraft DCSAirCraft { get; set; }
     }
 
     public enum ProfileEventEnum

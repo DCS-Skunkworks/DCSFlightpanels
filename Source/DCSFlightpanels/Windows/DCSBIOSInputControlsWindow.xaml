@@ -29,6 +29,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Control ID" IsReadOnly="True" Binding="{Binding Path=ControlId}"  Width="Auto"/>
                     <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=ControlDescription}" Width="*"/>
+                    <DataGridTextColumn Header="Value" IsReadOnly="True" Binding="{Binding Path=SelectedDCSBIOSInterface.SelectedArgumentValue}" Width="Auto"/>
                     <DataGridTextColumn Header="Delay" IsReadOnly="True" Binding="{Binding Path=Delay}" Width="Auto"/>
                 </DataGrid.Columns>
             </DataGrid>

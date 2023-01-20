@@ -17,10 +17,13 @@ namespace NonVisuals.Panels.StreamDeck
     using Interfaces;
     using Plugin;
     using Panels;
+    using DCS_BIOS;
+    using NLog;
 
     [Serializable]
     public class ActionTypeKey : KeyBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
+        internal static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.KeyPress;
         public bool IsRepeatable() => true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
@@ -69,19 +72,40 @@ namespace NonVisuals.Panels.StreamDeck
             return OSKeyPress.IsRunning();
         }
 
+        /*
+         * We have several options here.
+         * 1) There is only 1 command configured and not repeatable => execute it without thread.
+         * 2) There are multiple commands.
+         *   2a) If Sequenced Execution is configured execute each one in the sequence
+         *       when user keeps pressing the button. No Thread.
+         *   2b) The multiple commands can be seen as a batch and should be all executed
+         *       regardless if the user releases the button. Use Thread.
+         *
+         * 3) Command is repeatable, for single commands. Just keep executing them, use thread.
+         *
+         * Commands that must be cancelled by the release of the button are :
+         * 1) Repeatable single command.
+         */
         public void Execute(CancellationToken threadCancellationToken)
         {
             Common.PlaySoundFile(SoundFile, Volume);
 
             if (!PluginManager.DisableKeyboardAPI)
             {
-                OSKeyPress.Execute(threadCancellationToken);
+                if (OSKeyPress.HasSequence)
+                {
+                    OSKeyPress.Execute(threadCancellationToken);
+                }
+                else
+                {
+                    new Thread(() => SendKeysCommandsThread(threadCancellationToken)).Start();
+                }
             }
 
             if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
             {
                 PluginManager.DoEvent(
-                    DCSFPProfile.SelectedProfile.Description,
+                    DCSAircraft.SelectedAircraft.Description,
                     StreamDeckPanelInstance.HIDInstance,
                     StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
                     (int)StreamDeckButtonName,
@@ -90,6 +114,22 @@ namespace NonVisuals.Panels.StreamDeck
             }
         }
 
+        private void SendKeysCommandsThread(CancellationToken threadCancellationToken)
+        {
+            try
+            {
+                while (!threadCancellationToken.IsCancellationRequested)
+                {
+                    OSKeyPress.Execute(threadCancellationToken, false);
+                }
+            }
+            catch (ThreadAbortException)
+            { }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
 
         [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName
