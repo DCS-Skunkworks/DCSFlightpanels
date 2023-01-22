@@ -9,6 +9,7 @@
     using System.Threading;
     using System.Timers;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using NLog;
     using NonVisuals.Radios.Knobs;
 
@@ -417,20 +418,34 @@
 
         public void ChangeFrequency(CurrentSRSRadioMode currentSRSRadioMode, double value)
         {
-            int radioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode);
-
+            //int radioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode);
             //var result = "{ \"Command\": 0,\"RadioId\": " + radioId + ",\"Frequency\": " + value.ToString("0.000", CultureInfo.InvariantCulture) + " }\n";
-            var result = $@"{{ ""Command"": 99,""RadioId"": {radioId},""Frequency"": {value.ToString("0.000", CultureInfo.InvariantCulture)},""Volume"": 0,""Enabled"": 0,""Code"": 0  }}\n";
-            SendDataFunction(result);
+            //SendDataFunction(result);
+
+            int radioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode);
+            UDPInterfaceCommand udpOrder = new()
+            {
+                Command = UDPInterfaceCommand.UDPCommandType.FREQUENCY_DELTA,
+                RadioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode),
+                Frequency = value,
+            };
+            string order = JsonConvert.SerializeObject(udpOrder);
+            SendDataFunction(order);
         }
 
         public void ToggleBetweenGuardAndFrequency(CurrentSRSRadioMode currentSRSRadioMode)
         {
-            var radioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode);
-            var result = "{\"Command\": 2,\"RadioId\":" + radioId + "}\n";
+            //var radioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode);
+            //var result = "{\"Command\": 2,\"RadioId\":" + radioId + "}\n";
+            // { "Command": 2,"RadioId":2}
 
-            // { "Command": 2,"RadioId":2} 
-            SendDataFunction(result);
+            UDPInterfaceCommand udpOrder = new()
+            {
+                Command = UDPInterfaceCommand.UDPCommandType.TOGGLE_GUARD,
+                RadioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode),
+            };
+            string order = JsonConvert.SerializeObject(udpOrder);
+            SendDataFunction(order);
         }
 
         public void ChangeChannel(CurrentSRSRadioMode currentSRSRadioMode, bool increase)
@@ -443,17 +458,23 @@
                 { "Command": 4,"RadioId":1}
                 --channel down(if channels have been configured)
             */
-            string result;
+            UDPInterfaceCommand udpOrder = new()
+            {
+                RadioId = radioId,
+            };
+
             if (increase)
             {
-                result = "{\"Command\": 3,\"RadioId\":" + radioId + "}\n";
+                //result = "{\"Command\": 3,\"RadioId\":" + radioId + "}\n";
+                udpOrder.Command = UDPInterfaceCommand.UDPCommandType.CHANNEL_UP;
             }
             else
             {
-                result = "{\"Command\": 4,\"RadioId\":" + radioId + "}\n";
+                //result = "{\"Command\": 4,\"RadioId\":" + radioId + "}\n";
+                udpOrder.Command = UDPInterfaceCommand.UDPCommandType.CHANNEL_DOWN;
             }
-
-            SendDataFunction(result);
+            string order = JsonConvert.SerializeObject(udpOrder);
+            SendDataFunction(order);
         }
 
         public void Shutdown()
