@@ -41,6 +41,8 @@
         private IPEndPoint _ipEndPointSenderUdp;
         private System.Timers.Timer _udpReceiveThrottleTimer = new(10) { AutoReset = true }; //Throttle UDP receive every 10 ms in case nothing is available
         private AutoResetEvent _udpReceiveThrottleAutoResetEvent = new(false);
+        public delegate void SRSDataReceivedEventHandler(object sender);
+        public event SRSDataReceivedEventHandler OnSRSDataReceived;
 
         public SRSRadio(int portFrom, string ipAddressTo, int portTo)
         {
@@ -48,6 +50,16 @@
             _srsReceivePortUdp = portFrom;
             _srsSendPortUdp = portTo;
             Startup();
+        }
+
+        public void Attach(ISRSDataListener srsDataListener)
+        {
+            OnSRSDataReceived += srsDataListener.SRSDataReceived;
+        }
+
+        public void Detach(ISRSDataListener srsDataListener)
+        {
+            OnSRSDataReceived -= srsDataListener.SRSDataReceived;
         }
 
         private void ReceiveDataUdp()
@@ -172,50 +184,10 @@
                 }
             }
         }
+
         private void UdpReceiveThrottleTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _udpReceiveThrottleAutoResetEvent.Set();
-        }
-
-        private CurrentSRSRadioMode TranslateSRSRadioMode(int radioNumber)
-        {
-            CurrentSRSRadioMode currentSRSRadioMode;
-
-            switch (radioNumber)
-            {
-                case 1:
-                    currentSRSRadioMode = CurrentSRSRadioMode.COM1;
-                    break;
-                case 2:
-                    currentSRSRadioMode = CurrentSRSRadioMode.COM2;
-                    break;
-                case 3:
-                    currentSRSRadioMode = CurrentSRSRadioMode.NAV1;
-                    break;
-                case 4:
-                    currentSRSRadioMode = CurrentSRSRadioMode.NAV2;
-                    break;
-                case 5:
-                    currentSRSRadioMode = CurrentSRSRadioMode.ADF;
-                    break;
-                case 6:
-                    currentSRSRadioMode = CurrentSRSRadioMode.DME;
-                    break;
-                case 7:
-                    currentSRSRadioMode = CurrentSRSRadioMode.XPDR;
-                    break;
-                default:
-                    currentSRSRadioMode = CurrentSRSRadioMode.COM1;
-                    break;
-            }
-
-            return currentSRSRadioMode;
-        }
-
-        public SRSRadioMode GetRadioMode(int radioNumber)
-        {
-            var currentSRSRadioMode = TranslateSRSRadioMode(radioNumber);
-            return GetRadioMode(currentSRSRadioMode);
         }
 
         public SRSRadioMode GetRadioMode(CurrentSRSRadioMode currentSRSRadioMode)
@@ -295,16 +267,9 @@
                         }
                 }
             }
-
             return SRSRadioMode.Frequency;
         }
-
-        public double GetFrequencyOrChannel(int radioNumber, bool guard = false)
-        {
-            var currentSRSRadioMode = TranslateSRSRadioMode(radioNumber);
-            return GetFrequencyOrChannel(currentSRSRadioMode, guard);
-        }
-
+ 
         public double GetFrequencyOrChannel(CurrentSRSRadioMode currentSRSRadioMode, bool guard = false)
         {
             lock (_readSRSDataLockObject)
@@ -417,202 +382,67 @@
                         }
                 }
             }
-
             return -1;
         }
 
-
-
-
-
-
-        public void ChangeFrequency(int radioNumber, double value)
+        private CurrentSRSRadioMode GetCurrentSrsRadioModeFromRadioId(int radioNumber)
         {
-            var currentSRSRadioMode = TranslateSRSRadioMode(radioNumber);
-            ChangeFrequency(currentSRSRadioMode, value);
+            return radioNumber switch
+            {
+                1 => CurrentSRSRadioMode.COM1,
+                2 => CurrentSRSRadioMode.COM2,
+                3 => CurrentSRSRadioMode.NAV1,
+                4 => CurrentSRSRadioMode.NAV2,
+                5 => CurrentSRSRadioMode.ADF,
+                6 => CurrentSRSRadioMode.DME,
+                7 => CurrentSRSRadioMode.XPDR,
+                _ => CurrentSRSRadioMode.COM1,
+            };
+        }
+
+        private int GetRadioIdFromCurrentSrsRadioMode(CurrentSRSRadioMode currentSRSRadioMode)
+        {
+            return currentSRSRadioMode switch
+            {
+                CurrentSRSRadioMode.COM1 => 1,
+                CurrentSRSRadioMode.COM2 => 2,
+                CurrentSRSRadioMode.NAV1 => 3,
+                CurrentSRSRadioMode.NAV2 => 4,
+                CurrentSRSRadioMode.ADF => 5,
+                CurrentSRSRadioMode.DME => 6,
+                CurrentSRSRadioMode.XPDR => 7,
+                _ => 1
+            };
         }
 
         public void ChangeFrequency(CurrentSRSRadioMode currentSRSRadioMode, double value)
         {
-            int radioId;
-            switch (currentSRSRadioMode)
-            {
-                case CurrentSRSRadioMode.COM1:
-                    {
-                        radioId = 1;
-                        break;
-                    }
+            int radioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode);
 
-                case CurrentSRSRadioMode.COM2:
-                    {
-                        radioId = 2;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.NAV1:
-                    {
-                        radioId = 3;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.NAV2:
-                    {
-                        radioId = 4;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.ADF:
-                    {
-                        radioId = 5;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.DME:
-                    {
-                        radioId = 6;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.XPDR:
-                    {
-                        radioId = 7;
-                        break;
-                    }
-
-                default:
-                    {
-                        radioId = 1;
-                        break;
-                    }
-            }
-            var result = "{ \"Command\": 0,\"RadioId\":" + radioId + ",\"Frequency\": " + value.ToString("0.000", CultureInfo.InvariantCulture) + " }\n";
+            //var result = "{ \"Command\": 0,\"RadioId\": " + radioId + ",\"Frequency\": " + value.ToString("0.000", CultureInfo.InvariantCulture) + " }\n";
+            var result = $@"{{ ""Command"": 99,""RadioId"": {radioId},""Frequency"": {value.ToString("0.000", CultureInfo.InvariantCulture)},""Volume"": 0,""Enabled"": 0,""Code"": 0  }}\n";
             SendDataFunction(result);
-        }
-
-
-
-
-
-
-        public void ToggleGuard(int radioNumber)
-        {
-            var currentSRSRadioMode = TranslateSRSRadioMode(radioNumber);
-            ToggleBetweenGuardAndFrequency(currentSRSRadioMode);
         }
 
         public void ToggleBetweenGuardAndFrequency(CurrentSRSRadioMode currentSRSRadioMode)
         {
-            var radioId = 0;
-            switch (currentSRSRadioMode)
-            {
-                case CurrentSRSRadioMode.COM1:
-                    {
-                        radioId = 1;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.COM2:
-                    {
-                        radioId = 2;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.NAV1:
-                    {
-                        radioId = 3;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.NAV2:
-                    {
-                        radioId = 4;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.ADF:
-                    {
-                        radioId = 5;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.DME:
-                    {
-                        radioId = 6;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.XPDR:
-                    {
-                        radioId = 7;
-                        break;
-                    }
-            }
-
+            var radioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode);
             var result = "{\"Command\": 2,\"RadioId\":" + radioId + "}\n";
 
             // { "Command": 2,"RadioId":2} 
             SendDataFunction(result);
         }
 
-        public void ChangeChannel(int radioNumber, bool increase)
-        {
-            var currentSRSRadioMode = TranslateSRSRadioMode(radioNumber);
-            ChangeChannel(currentSRSRadioMode, increase);
-        }
-
         public void ChangeChannel(CurrentSRSRadioMode currentSRSRadioMode, bool increase)
         {
-            var radioId = 0;
-            switch (currentSRSRadioMode)
-            {
-                case CurrentSRSRadioMode.COM1:
-                    {
-                        radioId = 1;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.COM2:
-                    {
-                        radioId = 2;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.NAV1:
-                    {
-                        radioId = 3;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.NAV2:
-                    {
-                        radioId = 4;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.ADF:
-                    {
-                        radioId = 5;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.DME:
-                    {
-                        radioId = 6;
-                        break;
-                    }
-
-                case CurrentSRSRadioMode.XPDR:
-                    {
-                        radioId = 7;
-                        break;
-                    }
-            }
+            var radioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode);
 
             /*{ "Command": 3,"RadioId":1}
-                        --channel up(if channels have been configured)
+                --channel up(if channels have been configured)
             
-                        { "Command": 4,"RadioId":1}
-                        --channel down(if channels have been configured)*/
+                { "Command": 4,"RadioId":1}
+                --channel down(if channels have been configured)
+            */
             string result;
             if (increase)
             {
@@ -666,20 +496,6 @@
             {
                 logger.Error(ex, "SRSListener.ShutdownRP()");
             }
-        }
-
-
-        public delegate void SRSDataReceivedEventHandler(object sender);
-        public event SRSDataReceivedEventHandler OnSRSDataReceived;
-
-        public void Attach(ISRSDataListener srsDataListener)
-        {
-            OnSRSDataReceived += srsDataListener.SRSDataReceived;
-        }
-
-        public void Detach(ISRSDataListener srsDataListener)
-        {
-            OnSRSDataReceived -= srsDataListener.SRSDataReceived;
         }
     }
 }

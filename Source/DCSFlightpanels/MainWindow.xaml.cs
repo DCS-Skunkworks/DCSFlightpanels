@@ -499,7 +499,7 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                            else if (Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled) || DCSFPProfile.IsFlamingCliff(_profileHandler.Profile))
+                            else if (Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled) || DCSAircraft.IsFlamingCliff(_profileHandler.DCSAircraft))
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -507,7 +507,7 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                             }
-                            else if (DCSFPProfile.IsA10C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
+                            else if (DCSAircraft.IsA10C(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);

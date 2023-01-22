@@ -79,7 +79,7 @@
                 }
   				if (!ModulesList.Exists(o => o.ID == 3))
             	{
-                	var module = new DCSFPProfile(3, "Key Emulation with SRS support", "KEYEMULATOR_SRS");
+                	var module = new DCSAircraft(3, "Key Emulation with SRS support", "KEYEMULATOR_SRS");
                 	ModulesList.Add(module);
             	}
             }
@@ -171,7 +171,7 @@
             return module;
         }
         
-        public static DCSFPProfile GetKeyEmulatorSRS()
+        public static DCSAircraft GetKeyEmulatorSRS()
         {
             var module = Modules.FirstOrDefault(x => IsKeyEmulatorSRS(x));
             if (module == null)
@@ -206,12 +206,12 @@
             return dcsfpModule.ID == 2;
         }
 
-        public static bool IsKeyEmulatorSRS(DCSFPProfile dcsfpModule)
+        public static bool IsKeyEmulatorSRS(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 3;
         }
 
-        public static bool IsFlamingCliff(DCSFPProfile dcsfpModule)
+        public static bool IsFlamingCliff(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 4;
         }
