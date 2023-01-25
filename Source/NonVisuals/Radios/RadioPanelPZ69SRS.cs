@@ -495,7 +495,7 @@
                                                 changeValue = 10.0;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentLowerRadioMode, changeValue);
                                         }
                                     }
 
@@ -519,7 +519,7 @@
                                                 changeValue = -10.0;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentLowerRadioMode, changeValue);
                                         }
                                     }
 
@@ -549,7 +549,7 @@
                                                 changeValue *= 100;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentLowerRadioMode, changeValue);
                                         }
                                     }
 
@@ -579,7 +579,7 @@
                                                 changeValue *= 100;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentLowerRadioMode, changeValue);
                                         }
                                     }
 
@@ -594,7 +594,6 @@
                 Logger.Error(ex);
             }
         }
-
         
         private void ShowFrequenciesOnPanel()
         {
