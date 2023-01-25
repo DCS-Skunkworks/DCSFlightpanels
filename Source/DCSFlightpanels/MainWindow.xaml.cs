@@ -506,6 +506,7 @@
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSAircraft.IsA10C(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
                             {

@@ -96,16 +96,6 @@ namespace NonVisuals.BindingClasses.Key
                 {
                     if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == keyBindingPZ70.MultiPanelPZ70Knob && keyBinding.WhenTurnedOn != keyBindingPZ70.WhenTurnedOn)
                     {
-                        /*if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP ||
-                            keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN)
-                        {
-                            Debug.WriteLine("Adding " + keyBinding.MultiPanelPZ70Knob + "(" + keyBinding.WhenTurnedOn + ") as negator to " +
-                                            keyBindingPZ70.MultiPanelPZ70Knob + "(" + keyBindingPZ70.WhenTurnedOn + ")");
-                        }
-                        if (keyBinding.OSKeyPress.KeyPressSequence.Count == 0)
-                        {
-                            Debugger.Break();
-                        }*/
                         keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                     }
                 }
@@ -154,10 +144,6 @@ namespace NonVisuals.BindingClasses.Key
                     {
                         if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == negatorKnob)
                         {
-                            /*if (keyBinding.OSKeyPress.KeyPressSequence.Count == 0)
-                            {
-                                Debugger.Break();
-                            }*/
                             keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                         }
                     }

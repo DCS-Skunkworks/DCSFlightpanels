@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using NonVisuals.EventArgs;
 
 namespace NonVisuals
@@ -62,6 +63,7 @@ namespace NonVisuals
             {
                 var hardwareFound = HIDHandler.GetInstance().HIDSkeletons
                     .Any(o => o.IsAttached && o.HIDInstance.Equals(hidInstance));
+
                 foreach (var genericPanelBinding in _genericBindings)
                 {
                     if (genericPanelBinding.HIDInstance.Equals(hidInstance) && genericPanelBinding.InUse == false &&
@@ -70,6 +72,7 @@ namespace NonVisuals
                         genericPanelBinding.InUse = true;
                         AppEventHandler.ProfileEvent(null, ProfileEventEnum.ProfileSettings, genericPanelBinding,
                             DCSAircraft.SelectedAircraft);
+                        break;
                     }
                 }
             }
