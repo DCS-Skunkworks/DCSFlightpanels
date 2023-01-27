@@ -1,8 +1,15 @@
-﻿namespace NonVisuals
+﻿using System.Diagnostics;
+
+namespace NonVisuals
 {
     using System;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Used for especially radio dials so that when the user turns the dial faster
+    /// the rate at which it changes the frequency increases. Slowing down resets the
+    /// delta to base line.
+    /// </summary>
     public class ClickSpeedDetector
     {
         private readonly List<long> _clicksTimeTicksList = new();
@@ -54,6 +61,7 @@
         public bool ClickThresholdReached()
         {
             var count = ClicksWithinDefaultPeriod();
+            //Debug.WriteLine($"[{_clickCountThreshold}] Value is {count}. Threshold reached = {count >= _clickCountThreshold}");
             return count >= _clickCountThreshold;
         }
 

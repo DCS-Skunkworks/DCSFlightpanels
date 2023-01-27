@@ -33,7 +33,7 @@
 
         // private List<double> _listMainFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
         // private List<double> _listGuardFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
-        private readonly object _freqListLockObject = new object();
+        private readonly object _freqListLockObject = new();
 
         /*Radio1 COM1*/
         /*Radio2 COM2*/
@@ -52,14 +52,14 @@
         private long _lowerFreqSwitchPressed;
         private int _largeDialSkipper;
         private int _smallDialSkipper;
-        private readonly ClickSpeedDetector _largeDialIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _largeDialDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _firstSmallDialIncreaseChangeMonitor = new ClickSpeedDetector(30);
-        private readonly ClickSpeedDetector _firstSmallDialDecreaseChangeMonitor = new ClickSpeedDetector(30);
-        private readonly ClickSpeedDetector _secondSmallDialIncreaseChangeMonitor = new ClickSpeedDetector(36);
-        private readonly ClickSpeedDetector _secondSmallDialDecreaseChangeMonitor = new ClickSpeedDetector(36);
+        private readonly ClickSpeedDetector _largeDialIncreaseChangeMonitor = new(20);
+        private readonly ClickSpeedDetector _largeDialDecreaseChangeMonitor = new(20);
+        private readonly ClickSpeedDetector _firstSmallDialIncreaseChangeMonitor = new(25);
+        private readonly ClickSpeedDetector _firstSmallDialDecreaseChangeMonitor = new(25);
+        private readonly ClickSpeedDetector _secondSmallDialIncreaseChangeMonitor = new(36);
+        private readonly ClickSpeedDetector _secondSmallDialDecreaseChangeMonitor = new (36);
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
         private double _smallFreqStepping = 0.001;
 
@@ -381,12 +381,7 @@
                                         }
                                         else
                                         {
-                                            var changeValue = 1.0;
-                                            if (_largeDialIncreaseChangeMonitor.ClickThresholdReached())
-                                            {
-                                                changeValue = 5.0;
-                                            }
-
+                                            var changeValue = _largeDialIncreaseChangeMonitor.ClickThresholdReached() ? 10.0 : 1.0;
                                             SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
@@ -405,12 +400,7 @@
                                         }
                                         else
                                         {
-                                            var changeValue = -1.0;
-                                            if (_largeDialDecreaseChangeMonitor.ClickThresholdReached())
-                                            {
-                                                changeValue = -5.0;
-                                            }
-
+                                            var changeValue = _largeDialDecreaseChangeMonitor.ClickThresholdReached() ? -10.0 : -1.0;
                                             SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
@@ -438,7 +428,7 @@
 
                                             if (_secondSmallDialIncreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue *= 100;
+                                                changeValue *= 30;
                                             }
 
                                             SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentUpperRadioMode, changeValue);
@@ -468,7 +458,7 @@
 
                                             if (_secondSmallDialDecreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue *= 100;
+                                                changeValue *= 30;
                                             }
 
                                             SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentUpperRadioMode, changeValue);
@@ -489,12 +479,7 @@
                                         }
                                         else
                                         {
-                                            var changeValue = 1.0;
-                                            if (_largeDialIncreaseChangeMonitor.ClickThresholdReached())
-                                            {
-                                                changeValue = 10.0;
-                                            }
-
+                                            var changeValue = _largeDialIncreaseChangeMonitor.ClickThresholdReached() ? 10.0 : 1.0;
                                             SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentLowerRadioMode, changeValue);
                                         }
                                     }
@@ -513,12 +498,7 @@
                                         }
                                         else
                                         {
-                                            var changeValue = -1.0;
-                                            if (_largeDialDecreaseChangeMonitor.ClickThresholdReached())
-                                            {
-                                                changeValue = -10.0;
-                                            }
-
+                                            var changeValue = _largeDialDecreaseChangeMonitor.ClickThresholdReached() ? -10.0 : -1.0;
                                             SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentLowerRadioMode, changeValue);
                                         }
                                     }
@@ -546,7 +526,7 @@
 
                                             if (_secondSmallDialIncreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue *= 100;
+                                                changeValue *= 30;
                                             }
 
                                             SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentLowerRadioMode, changeValue);
@@ -576,7 +556,7 @@
 
                                             if (_secondSmallDialDecreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                changeValue *= 100;
+                                                changeValue *= 30;
                                             }
 
                                             SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentLowerRadioMode, changeValue);
@@ -766,50 +746,20 @@
         }
 
 
-        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
-            }
-        }
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e) { }
 
-        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e) { }
 
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
-        {
-        }
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
 
-        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
-        {
-        }
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
-        {
-        }
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
 
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
-        {
-        }
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
-        {
-        }
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink) { }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
-        {
-        }
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
     }
 }
