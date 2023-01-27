@@ -19,7 +19,6 @@
     using NonVisuals.Interfaces;
 
     using Brush = System.Windows.Media.Brush;
-    using Brushes = System.Windows.Media.Brushes;
     using NonVisuals.Panels.Saitek.Panels;
     using NonVisuals.Panels.Saitek.Switches;
     using NonVisuals.Panels.Saitek;

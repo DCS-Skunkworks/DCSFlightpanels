@@ -70,9 +70,13 @@ namespace Tests.ClassLibraryCommon
             EmulationMode.DCSBIOSInputEnabled,
             EmulationMode.DCSBIOSOutputEnabled }, 3)]
         [InlineData(new EmulationMode[] {
+            EmulationMode.SRSEnabled,
+            EmulationMode.SRSEnabled }, 8)]
+        [InlineData(new EmulationMode[] {
             EmulationMode.DCSBIOSInputEnabled,
             EmulationMode.DCSBIOSOutputEnabled,
-            EmulationMode.NS430Enabled }, 19)]
+            EmulationMode.SRSEnabled,
+            EmulationMode.NS430Enabled }, 27)]
         public void EmulationModes_SetMultipleValue_ShouldSet_ExpectedValue(EmulationMode[] modes, int expectedValue)
         {
             try
@@ -104,6 +108,31 @@ namespace Tests.ClassLibraryCommon
                 Assert.Throws<Exception>(
                 () => modes.ToList().ForEach(x => Common.SetEmulationModes(x))
                 );
+            }
+            finally
+            {
+                EmulationModes_ResetStaticFlagValuesAfterTest();
+            }
+        }
+
+        [Theory]
+        //we want to remove SRSEnabled in those tests
+        [InlineData(new EmulationMode[] {
+            EmulationMode.DCSBIOSInputEnabled,
+            EmulationMode.DCSBIOSOutputEnabled,
+            EmulationMode.SRSEnabled,
+            EmulationMode.NS430Enabled }, 19)] 
+        
+        [InlineData(new EmulationMode[] {
+            EmulationMode.SRSEnabled }, 0)]
+        public void EmulationModes_Clear_ShouldRemove_TheFlag(EmulationMode[] modes, int expectedValueAfterRemove)
+        {
+            try
+            {
+                modes.ToList().ForEach(x => Common.SetEmulationModes(x));
+                Common.ClearEmulationModesFlag(EmulationMode.SRSEnabled);
+                Common.ClearEmulationModesFlag(EmulationMode.SRSEnabled); //A double clear should not affect result
+                Assert.Equal(expectedValueAfterRemove, Common.GetEmulationModesFlag());
             }
             finally
             {

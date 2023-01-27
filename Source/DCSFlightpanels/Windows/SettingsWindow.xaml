@@ -109,6 +109,19 @@
                     </TextBlock>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="SRS">
+                <StackPanel Name="StackPanelSRSSettings"  Margin="0,0,0,0" Grid.Column="1" Grid.Row="0" >
+                    <Label FontWeight="Bold">SRS Settings</Label>
+                    <Label Content="IP address to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="TextBoxSRSFromIP" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="127.0.0.1"/>
+                    <Label Content="Port to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="TextBoxSRSFromPort" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="7082"/>
+                    <Label Content="IP address to write to" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="TextBoxSRSToIP" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="127.0.0.1"/>
+                    <Label Content="Port to write to " Margin="0,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="TextBoxSRSToPort" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="9040"/>
+                </StackPanel>
+            </TabItem>
         </TabControl>
 
 

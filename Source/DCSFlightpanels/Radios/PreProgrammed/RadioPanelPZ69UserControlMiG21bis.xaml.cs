@@ -8,7 +8,6 @@
     using ClassLibraryCommon;
 
     using Interfaces;
-    using PanelUserControls;
     using Properties;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;

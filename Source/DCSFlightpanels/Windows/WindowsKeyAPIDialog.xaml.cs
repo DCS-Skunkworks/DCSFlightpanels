@@ -1,5 +1,4 @@
-﻿using ClassLibraryCommon;
-using System.Windows;
+﻿using System.Windows;
 
 namespace DCSFlightpanels.Windows
 {

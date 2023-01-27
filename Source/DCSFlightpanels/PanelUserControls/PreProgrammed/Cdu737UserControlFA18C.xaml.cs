@@ -1,7 +1,6 @@
 ﻿namespace DCSFlightpanels.PanelUserControls.PreProgrammed
 {
     using System.Windows;
-    using System.Windows.Controls;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
 

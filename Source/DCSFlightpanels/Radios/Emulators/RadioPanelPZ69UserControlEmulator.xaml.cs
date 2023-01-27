@@ -7,14 +7,11 @@
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
-    using System.Windows.Media;
-
     using ClassLibraryCommon;
 
     using Bills;
     using CustomControls;
     using Interfaces;
-    using PanelUserControls;
     using Properties;
 
     using MEF;

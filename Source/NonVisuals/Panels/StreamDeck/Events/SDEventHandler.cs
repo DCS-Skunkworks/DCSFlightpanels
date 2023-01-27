@@ -1,9 +1,6 @@
 ﻿namespace NonVisuals.Panels.StreamDeck.Events
 {
     using System.Text;
-
-    using MEF;
-
     using Interfaces;
     using Panels;
     using StreamDeck;

@@ -290,19 +290,4 @@
         LowerXPDR = 262144,
         Unknown = 0x80000
     }
-
-    /*
-     *
-     */
-    public enum CurrentSRSRadioMode
-    {
-        COM1 = 0,
-        COM2 = 2,
-        NAV1 = 4,
-        NAV2 = 8,
-        ADF = 16,
-        DME = 32,
-        XPDR = 64
-    }
- 
 }

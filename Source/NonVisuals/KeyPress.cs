@@ -117,12 +117,6 @@ namespace NonVisuals
                 Debug.WriteLine($"Looking for negators. Count is {_negatorOSKeyPresses.Count}");
                 foreach (var negatorOSKeyPress in _negatorOSKeyPresses)
                 {
-                    /*if (negatorOSKeyPress.KeyPressSequence.Count == 0)
-                    {
-                        Debugger.Break();
-                    }
-                    Debug.WriteLine("Current negatorOSKeyPress.KeyPressSequence count is " + negatorOSKeyPress.KeyPressSequence.Count);
-                    Debug.WriteLine("Aborting keypress : " + negatorOSKeyPress.KeyPressSequence[0].VirtualKeyCodesAsString);*/
                     negatorOSKeyPress.Abort = true;
                 }
 

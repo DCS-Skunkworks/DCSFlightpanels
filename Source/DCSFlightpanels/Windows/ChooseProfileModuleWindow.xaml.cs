@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
@@ -97,7 +95,8 @@ namespace DCSFlightpanels.Windows
             {
                 SetAirframe();
                 if (!DCSAircraft.IsFlamingCliff(_dcsAircraft) &&
-                    !DCSAircraft.IsKeyEmulator(_dcsAircraft))
+                    !DCSAircraft.IsKeyEmulator(_dcsAircraft) &&
+                    !DCSAircraft.IsKeyEmulatorSRS(_dcsAircraft))
                 {
                     //User has chosen a DCS-BIOS compatible module
                     StackPanelUseGenericRadio.Visibility = Visibility.Visible;

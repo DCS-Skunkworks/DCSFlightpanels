@@ -485,8 +485,14 @@ namespace DCSFlightpanels
             {
                 Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
             }
+			else if (DCSAircraft.IsKeyEmulatorSRS(DCSAircraft))
+            {
+                Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
+                Common.SetEmulationModes(EmulationMode.SRSEnabled);
+            }			
             else if (DCSAircraft.IsFlamingCliff(DCSAircraft))
             {
+				Common.SetEmulationModes(EmulationMode.SRSEnabled); //???
                 Common.SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled);
             }
             else

@@ -53,13 +53,7 @@ namespace NonVisuals.HID
 
             return stringBuilder.ToString();
         }
-
-        /// <summary>
-        /// searchForNew is used when panel has been detached => attached but not found again because there is no hook (new HID instance ID).
-        /// So already found panels should be left as is.
-        /// </summary>
-        /// <param name="loadStreamDeck"></param>
-        /// <param name="searchForNew"></param>
+        
         public void Startup(bool loadStreamDeck)
         {
             try
@@ -75,10 +69,10 @@ namespace NonVisuals.HID
                                 continue;
                             }
 
-                            var hidIinstance = hidDevice.DevicePath;
-                            if (!HIDDeviceAlreadyExists(hidIinstance))
+                            var hidInstance = hidDevice.DevicePath;
+                            if (!HIDDeviceAlreadyExists(hidInstance))
                             {
-                                var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, hidIinstance);
+                                var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, hidInstance);
                                 HIDSkeletons.Add(hidSkeleton);
 
                                 hidDevice.MonitorDeviceEvents = true;
@@ -103,15 +97,7 @@ namespace NonVisuals.HID
                         }
                     }
                 }
-
-                /*foreach (var hidSkeleton in HIDSkeletons)
-                {
-                    if (hidSkeleton.IsAttached)
-                    {
-                        Debug.WriteLine(hidSkeleton.GamingPanelType + "   " + hidSkeleton.HIDInstance);
-                    }
-                }*/
-                Debug.WriteLine($"*** HIDSkeleton count is {HIDSkeletons.Count}");
+                
                 //Broadcast that this panel was found.
                 HIDSkeletons.FindAll(o => o.IsAttached).ToList().ForEach(o => AppEventHandler.PanelEvent(this, o.HIDInstance, o, PanelEventType.Found));
 

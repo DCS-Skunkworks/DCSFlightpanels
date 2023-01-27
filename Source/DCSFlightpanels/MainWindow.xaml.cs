@@ -37,11 +37,11 @@
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.SRS;
 
     using Octokit;
     using NonVisuals.Panels;
     using NonVisuals.HID;
-    using Theraot.Collections;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {
@@ -497,6 +497,15 @@
                                 TabControlPanels.Items.Add(tabItem);
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            }
+                            else if (Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled) || DCSAircraft.IsFlamingCliff(_profileHandler.DCSAircraft))
+                            {
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton);
+                                _panelUserControls.Add(radioPanelPZ69UserControl);
+                                tabItem.Content = radioPanelPZ69UserControl;
+                                TabControlPanels.Items.Add(tabItem);
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSAircraft.IsA10C(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
@@ -1603,7 +1612,11 @@
                 {
                     LoadProcessPriority();
                 }
-
+                if (settingsWindow.SRSChanged)
+                {
+                    SRSRadioFactory.SetParams(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo);
+                    SRSRadioFactory.ReStart();
+                }
                 ConfigurePlugins();
             }
         }

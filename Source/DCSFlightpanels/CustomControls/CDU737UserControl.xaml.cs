@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-
-namespace DCSFlightpanels.CustomControls
+﻿namespace DCSFlightpanels.CustomControls
 {
     /// <summary>
     /// Logique d'interaction pour CDU737UserControl.xaml

@@ -15,6 +15,7 @@
         DCSBIOSInputEnabled = 1,
         DCSBIOSOutputEnabled = 2,
         KeyboardEmulationOnly = 4,
+        SRSEnabled = 8,
         NS430Enabled = 16
     }
     
