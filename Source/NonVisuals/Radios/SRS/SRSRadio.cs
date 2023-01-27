@@ -96,13 +96,13 @@
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(ex, "SRSListener.ReceiveDataUdp()");
+                        logger.Error(ex, "SRSRadio.ReceiveDataUdp()");
                     }
                 }
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "SRSListener.ReceiveDataUdp()");
+                logger.Error(ex, "SRSRadio.ReceiveDataUdp()");
             }
         }
 
@@ -168,7 +168,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "SRSListener.StartupRP()");
+                logger.Error(ex, "SRSRadio.StartupRP()");
                 if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
                 {
                     _udpReceiveClient.Close();
@@ -515,7 +515,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "SRSListener.ShutdownRP()");
+                logger.Error(ex, "SRSRadio.ShutdownRP()");
             }
         }
     }

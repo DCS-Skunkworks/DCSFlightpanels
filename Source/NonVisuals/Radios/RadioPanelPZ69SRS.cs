@@ -65,8 +65,8 @@
 
         public RadioPanelPZ69SRS(int portFrom, string ipAddressTo, int portTo, HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
-            SRSListenerFactory.SetParams(portFrom, ipAddressTo, portTo);
-            SRSListenerFactory.GetSRSListener().Attach(this);
+            SRSRadioFactory.SetParams(portFrom, ipAddressTo, portTo);
+            SRSRadioFactory.GetSRSRadio().Attach(this);
             CreateRadioKnobs();
             Startup();
         }
@@ -79,8 +79,8 @@
             {
                 if (disposing)
                 {
-                    SRSListenerFactory.GetSRSListener().Detach(this);
-                    SRSListenerFactory.Shutdown();
+                    SRSRadioFactory.GetSRSRadio().Detach(this);
+                    SRSRadioFactory.Shutdown();
                 }
 
                 _disposed = true;
@@ -112,10 +112,10 @@
         {
             try
             {
-                _upperMainFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentUpperRadioMode);
-                _upperGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentUpperRadioMode, true);
-                _lowerMainFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentLowerRadioMode);
-                _lowerGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentLowerRadioMode, true);
+                _upperMainFreq = SRSRadioFactory.GetSRSRadio().GetFrequencyOrChannel(_currentUpperRadioMode);
+                _upperGuardFreq = SRSRadioFactory.GetSRSRadio().GetFrequencyOrChannel(_currentUpperRadioMode, true);
+                _lowerMainFreq = SRSRadioFactory.GetSRSRadio().GetFrequencyOrChannel(_currentLowerRadioMode);
+                _lowerGuardFreq = SRSRadioFactory.GetSRSRadio().GetFrequencyOrChannel(_currentLowerRadioMode, true);
                 Interlocked.Increment(ref _doUpdatePanelLCD);
                 ShowFrequenciesOnPanel();
             }
@@ -307,7 +307,7 @@
                                         var timeSpan = new TimeSpan(DateTime.Now.Ticks - _upperFreqSwitchPressed);
                                         if (timeSpan.Seconds <= 2)
                                         {
-                                            SRSListenerFactory.GetSRSListener().ToggleBetweenGuardAndFrequency(_currentUpperRadioMode);
+                                            SRSRadioFactory.GetSRSRadio().ToggleBetweenGuardAndFrequency(_currentUpperRadioMode);
                                         }
                                     }
 
@@ -326,7 +326,7 @@
                                         var timeSpan = new TimeSpan(DateTime.Now.Ticks - _lowerFreqSwitchPressed);
                                         if (timeSpan.Seconds <= 2)
                                         {
-                                            SRSListenerFactory.GetSRSListener().ToggleBetweenGuardAndFrequency(_currentLowerRadioMode);
+                                            SRSRadioFactory.GetSRSRadio().ToggleBetweenGuardAndFrequency(_currentLowerRadioMode);
                                         }
                                     }
 
@@ -375,9 +375,9 @@
                                     _largeDialIncreaseChangeMonitor.Click();
                                     if (!SkipLargeDialDialChange())
                                     {
-                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
+                                        if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentUpperRadioMode, true);
+                                            SRSRadioFactory.GetSRSRadio().ChangeChannel(_currentUpperRadioMode, true);
                                         }
                                         else
                                         {
@@ -387,7 +387,7 @@
                                                 changeValue = 5.0;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
+                                            SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
 
@@ -399,9 +399,9 @@
                                     _largeDialDecreaseChangeMonitor.Click();
                                     if (!SkipLargeDialDialChange())
                                     {
-                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
+                                        if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentUpperRadioMode, false);
+                                            SRSRadioFactory.GetSRSRadio().ChangeChannel(_currentUpperRadioMode, false);
                                         }
                                         else
                                         {
@@ -411,7 +411,7 @@
                                                 changeValue = -5.0;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
+                                            SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
 
@@ -424,9 +424,9 @@
                                     _secondSmallDialIncreaseChangeMonitor.Click();
                                     if (!SkipSmallDialDialChange())
                                     {
-                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
+                                        if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentUpperRadioMode, true);
+                                            SRSRadioFactory.GetSRSRadio().ChangeChannel(_currentUpperRadioMode, true);
                                         }
                                         else
                                         {
@@ -441,7 +441,7 @@
                                                 changeValue *= 100;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
+                                            SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
 
@@ -454,9 +454,9 @@
                                     _secondSmallDialDecreaseChangeMonitor.Click();
                                     if (!SkipSmallDialDialChange())
                                     {
-                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
+                                        if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentUpperRadioMode, false);
+                                            SRSRadioFactory.GetSRSRadio().ChangeChannel(_currentUpperRadioMode, false);
                                         }
                                         else
                                         {
@@ -471,7 +471,7 @@
                                                 changeValue *= 100;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
+                                            SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
 
@@ -483,9 +483,9 @@
                                     _largeDialIncreaseChangeMonitor.Click();
                                     if (!SkipLargeDialDialChange())
                                     {
-                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
+                                        if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentLowerRadioMode, true);
+                                            SRSRadioFactory.GetSRSRadio().ChangeChannel(_currentLowerRadioMode, true);
                                         }
                                         else
                                         {
@@ -495,7 +495,7 @@
                                                 changeValue = 10.0;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentLowerRadioMode, changeValue);
+                                            SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentLowerRadioMode, changeValue);
                                         }
                                     }
 
@@ -507,9 +507,9 @@
                                     _largeDialDecreaseChangeMonitor.Click();
                                     if (!SkipLargeDialDialChange())
                                     {
-                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
+                                        if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentLowerRadioMode, false);
+                                            SRSRadioFactory.GetSRSRadio().ChangeChannel(_currentLowerRadioMode, false);
                                         }
                                         else
                                         {
@@ -519,7 +519,7 @@
                                                 changeValue = -10.0;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentLowerRadioMode, changeValue);
+                                            SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentLowerRadioMode, changeValue);
                                         }
                                     }
 
@@ -532,9 +532,9 @@
                                     _secondSmallDialIncreaseChangeMonitor.Click();
                                     if (!SkipSmallDialDialChange())
                                     {
-                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
+                                        if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentLowerRadioMode, true);
+                                            SRSRadioFactory.GetSRSRadio().ChangeChannel(_currentLowerRadioMode, true);
                                         }
                                         else
                                         {
@@ -549,7 +549,7 @@
                                                 changeValue *= 100;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentLowerRadioMode, changeValue);
+                                            SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentLowerRadioMode, changeValue);
                                         }
                                     }
 
@@ -562,9 +562,9 @@
                                     _secondSmallDialDecreaseChangeMonitor.Click();
                                     if (!SkipSmallDialDialChange())
                                     {
-                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
+                                        if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentLowerRadioMode, false);
+                                            SRSRadioFactory.GetSRSRadio().ChangeChannel(_currentLowerRadioMode, false);
                                         }
                                         else
                                         {
@@ -579,7 +579,7 @@
                                                 changeValue *= 100;
                                             }
 
-                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentLowerRadioMode, changeValue);
+                                            SRSRadioFactory.GetSRSRadio().ChangeFrequency(_currentLowerRadioMode, changeValue);
                                         }
                                     }
 
@@ -612,7 +612,7 @@
                     {
                         if (_upperMainFreq > 0)
                         {
-                            if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
+                            if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, (uint)Math.Floor(_upperMainFreq), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
@@ -637,7 +637,7 @@
 
                         if (_lowerMainFreq > 0)
                         {
-                            if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
+                            if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, (uint)Math.Floor(_lowerMainFreq), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }

@@ -1614,8 +1614,8 @@
                 }
                 if (settingsWindow.SRSChanged)
                 {
-                    SRSListenerFactory.SetParams(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo);
-                    SRSListenerFactory.ReStart();
+                    SRSRadioFactory.SetParams(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo);
+                    SRSRadioFactory.ReStart();
                 }
                 ConfigurePlugins();
             }
