@@ -68,6 +68,8 @@
         PZ69RadioPanel_PreProg_SPITFIRELFMKIX,
         [Description("Saitek PZ69 Radio PreProg Panel AH64D")]
         PZ69RadioPanel_PreProg_AH64D,
+        [Description("Saitek PZ69 Radio PreProg Panel F16C")]
+        PZ69RadioPanel_PreProg_F16C,
     }
 
     /*

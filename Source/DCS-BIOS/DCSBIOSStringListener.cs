@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
 
     using EventArgs;
@@ -160,6 +161,18 @@
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             UpdateStrings(e.Address, e.Data);
+        }
+
+        public string GetStringAddress(uint address)
+        {
+            try
+            {
+                return (_dcsBiosStrings.Where(x => x.Key == address).First().Value).StringValue;
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
     }

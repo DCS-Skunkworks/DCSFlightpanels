@@ -708,6 +708,16 @@
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
+                            else if (DCSAircraft.IsF16C(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
+                            {
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF16C(hidSkeleton);
+                                _panelUserControls.Add(radioPanelPZ69UserControl);
+                                tabItem.Content = radioPanelPZ69UserControl;
+                                TabControlPanels.Items.Add(tabItem);
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
+
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            }
                             else
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlGeneric(hidSkeleton);
