@@ -1,4 +1,6 @@
-﻿namespace DCS_BIOS
+﻿using System.Diagnostics;
+
+namespace DCS_BIOS
 {
     using System.Collections.Generic;
 
@@ -8,13 +10,19 @@
     /// </summary>
     public class DCSBIOSString
     {
-        // Use this, some strings need to be fully constructed before being broadcast
+        /// <summary>
+        /// Use this, some strings need to be fully constructed before being broadcast.
+        /// Once it has once been complete no further checks is made that all the addresses
+        /// has been received. It will be sent regardless.
+        /// Only the first "build up" of the string uses this.
+        /// </summary>
         private readonly List<uint> _receivedAddresses = new();
         private readonly string[] _internalBuffer;
         private readonly int _length;
         private readonly uint _address;
         
-        public bool IsComplete => _receivedAddresses.Count == 0;
+        public bool IsComplete  => _receivedAddresses.Count == 0;
+
         public string StringValue => string.Join(string.Empty, _internalBuffer);
         public uint Address
         {
@@ -29,9 +37,20 @@
                 DCSBIOSProtocolParser.RegisterAddressToBroadCast(i);
                 _receivedAddresses.Add(i);
             }
-
+            Debug.WriteLine($"************");
             _length = length;
             _internalBuffer = new string[_length];
+        }
+
+        /// <summary>
+        /// Addresses received containing empty payload to be
+        /// considered as unnecessary, for example a string has too
+        /// big memory reserved and the last addresses contain nothing.
+        /// </summary>
+        /// <param name="address"></param>
+        public void RemoveAddress(uint address)
+        {
+            _receivedAddresses.Remove(address);
         }
 
         public bool IsMatch(uint address)

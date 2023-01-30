@@ -95,7 +95,7 @@ namespace DCS_BIOS
                         //kvp.Value.Address == start address for the string
                         if (kvp.Value.IsComplete)
                         {
-                            //Once it is "complete" then just send it each time, do not reset it as there will be no updates from DCS-BIOS unless cockpit value changes.
+                            //Once it has been "complete" one time then just keep sending it each time, do not reset it as there will be no updates from DCS-BIOS unless cockpit value changes.
                             BIOSEventHandler.DCSBIOSStringAvailable(this, kvp.Value.Address, kvp.Value.StringValue);
                         }
                     }
@@ -117,7 +117,13 @@ namespace DCS_BIOS
                                 //Debug.WriteLine(hex);
                                 //See comment below.
                                 if (hex.Length < 2)
-                                {
+                                { 
+                                    /*
+                                     * Remove address as it doesn't contain data. Maybe a dynamic string and right now the string is shorter
+                                     * than the memory space reserved.
+                                     * Now if the string 
+                                     */
+                                    kvp.Value.RemoveAddress(address);
                                     return;
                                 }
                                 /*

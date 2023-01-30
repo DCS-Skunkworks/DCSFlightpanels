@@ -19,6 +19,7 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
     using System.Globalization;
+    using System.Net;
 
 
     /*
@@ -118,7 +119,7 @@ namespace NonVisuals.Radios
 
                 _DEDLine5 = DCSBIOSControlLocator.GetDCSBIOSOutput("DED_LINE_5");
                 DCSBIOSStringManager.AddListeningAddress(_DEDLine5);
-
+                
                 StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
@@ -155,7 +156,7 @@ namespace NonVisuals.Radios
             return true;
         }
 
-        private bool DEDStringDataChanged(int dedLine, string dedLineData)
+        /*private bool DEDStringDataChanged(int dedLine, string dedLineData)
         {
             switch (dedLine) {
                 case 1:
@@ -169,9 +170,9 @@ namespace NonVisuals.Radios
                 case 5: return false;
                 default: return false;
             }
-        }
+        }*/
 
-        private void UpdateDED(object sender, DCSBIOSStringDataEventArgs e) 
+        /*private void UpdateDED(object sender, DCSBIOSStringDataEventArgs e) 
         {
             var line1 = DCSBIOSStringManager.GetStringValue(_DEDLine1.Address);
             var line2 = DCSBIOSStringManager.GetStringValue(_DEDLine2.Address);
@@ -190,7 +191,7 @@ namespace NonVisuals.Radios
                 Interlocked.Increment(ref _doUpdatePanelLCD);
                 ShowFrequenciesOnPanel();
             }
-        }
+        }*/
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
@@ -202,8 +203,7 @@ namespace NonVisuals.Radios
                     e.Address.Equals(_DEDLine4.Address) ||
                     e.Address.Equals(_DEDLine5.Address))
                 {
-                    Debug.WriteLine("****** " + e.StringData.Length);
-                    Debug.WriteLine("->" + e.StringData + "<-");
+                    Debug.WriteLine("****** " + e.StringData.Length + "chars   ->" + e.StringData + "<-\n");
                 }
                 var updateDED =
                     (
@@ -215,7 +215,7 @@ namespace NonVisuals.Radios
                     );
                 if (updateDED)
                 {
-                    UpdateDED(sender, e);
+                    //UpdateDED(sender, e);
                 }
                 DataHasBeenReceivedFromDCSBIOS = true;
             }
