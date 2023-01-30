@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Diagnostics;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -172,19 +173,19 @@ namespace NonVisuals.Radios
 
         private void UpdateDED(object sender, DCSBIOSStringDataEventArgs e) 
         {
-            string line1 = DCSBIOSStringManager.GetStringValue(_DEDLine1.Address);
-            string line2 = DCSBIOSStringManager.GetStringValue(_DEDLine2.Address);
-            string line3 = DCSBIOSStringManager.GetStringValue(_DEDLine3.Address);
-            string line4 = DCSBIOSStringManager.GetStringValue(_DEDLine4.Address);
-            string line5 = DCSBIOSStringManager.GetStringValue(_DEDLine5.Address);
-            bool updateLcd
+            var line1 = DCSBIOSStringManager.GetStringValue(_DEDLine1.Address);
+            var line2 = DCSBIOSStringManager.GetStringValue(_DEDLine2.Address);
+            var line3 = DCSBIOSStringManager.GetStringValue(_DEDLine3.Address);
+            var line4 = DCSBIOSStringManager.GetStringValue(_DEDLine4.Address);
+            var line5 = DCSBIOSStringManager.GetStringValue(_DEDLine5.Address);
+            var updateLcd
                 = DEDStringDataChanged(1, line1) ||
                 DEDStringDataChanged(2, line2) ||
                 DEDStringDataChanged(3, line3) ||
                 DEDStringDataChanged(4, line4) ||
                 DEDStringDataChanged(5, line5);
 
-            if (updateLcd)
+            //if (updateLcd)
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
                 ShowFrequenciesOnPanel();
@@ -195,7 +196,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                bool updateDED =
+                if (e.Address.Equals(_DEDLine1.Address) ||
+                    e.Address.Equals(_DEDLine2.Address) ||
+                    e.Address.Equals(_DEDLine3.Address) ||
+                    e.Address.Equals(_DEDLine4.Address) ||
+                    e.Address.Equals(_DEDLine5.Address))
+                {
+                    Debug.WriteLine("****** " + e.StringData.Length);
+                    Debug.WriteLine("->" + e.StringData + "<-");
+                }
+                var updateDED =
                     (
                     e.Address.Equals(_DEDLine1.Address) ||
                     e.Address.Equals(_DEDLine2.Address) ||
@@ -615,7 +625,7 @@ namespace NonVisuals.Radios
                          _vhfFrequencyActive = GetSafeFrequency(FrequencyType.VHFActive);
                         if (!string.IsNullOrEmpty(_vhfFrequencyActive))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT) ;
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT) ;
                         }
                         else
                         {
@@ -652,12 +662,16 @@ namespace NonVisuals.Radios
                     {
                         case CurrentF16CRadioMode.UHF:
                             {
-                                SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.UPPER, ref bytes);
+                                _uhfFrequencyActive = GetSafeFrequency(FrequencyType.UHFActive);
+                                SetPZ69DisplayBytesDefault(ref bytes, _uhfFrequencyActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                //SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.VHF:
                             {
-                                SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.UPPER, ref bytes);
+                                _vhfFrequencyActive = GetSafeFrequency(FrequencyType.VHFActive);
+                                SetPZ69DisplayBytesDefault(ref bytes, _vhfFrequencyActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                //SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.NOUSE:

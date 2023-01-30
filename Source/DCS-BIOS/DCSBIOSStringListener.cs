@@ -1,4 +1,6 @@
-﻿namespace DCS_BIOS
+﻿using System.Diagnostics;
+
+namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +24,7 @@
         private readonly List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new();
         private readonly object _lockObject = new();
         private readonly Encoding _iso88591 = Encoding.GetEncoding("ISO-8859-1");
-        
+
 
         public DCSBIOSStringListener()
         {
@@ -112,6 +114,12 @@
                                 //42 = B
                                 var hex = Convert.ToString(data, 16);
 
+                                //Debug.WriteLine(hex);
+                                //See comment below.
+                                if (hex.Length < 2)
+                                {
+                                    return;
+                                }
                                 /*
                                 25.7.2018
                                 Was the TACAN problem related to something else? Perhaps to the flickering which was caused in mainwindow's constructor (wrong order instantiation)? Wrong fix which didn't help??
@@ -121,23 +129,44 @@
                                     return;
                                 }*/
                                 //Little Endian !
-                                var secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
+                                byte[] secondByte;
+                                byte[] firstByte;
                                 var firstChar = string.Empty;
-                                byte[] firstByte = new byte[10];
-                                if (hex.Length == 3)
+                                var secondChar = string.Empty;
+
+
+                                //This is fucked up. From my experience DCS-BIOS should always send 2 bytes. 29.01.2023 JDA
+                                switch (hex.Length)
                                 {
-                                    //this is really ugly, will it work ?? keep geting 0x730 from MI-8 R863 where I would except last digit (uneven 7 long frequency)
-                                    //so let's try and just ignore the for number, in this case the 7.
-                                    //28.04.2020 JDA
-                                    firstByte = new[] { Convert.ToByte(hex.Substring(1, 2), 16) };
-                                    firstChar = _iso88591.GetString(firstByte);
+                                    case 2:
+                                        {
+                                            secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
+                                            secondChar = _iso88591.GetString(secondByte);
+                                            //Adding space to have SOMETHING for the first char.
+                                            firstChar = _iso88591.GetString(new byte[]{32});
+                                            break;
+                                        }
+                                    case 3:
+                                        {
+                                            //this is really ugly, will it work ?? keep geting 0x730 from MI-8 R863 where I would except last digit (uneven 7 long frequency)
+                                            //so let's try and just ignore the for number, in this case the 7.
+                                            //28.04.2020 JDA
+                                            secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
+                                            secondChar = _iso88591.GetString(secondByte);
+                                            firstByte = new[] { Convert.ToByte(hex.Substring(1, 2), 16) };
+                                            firstChar = _iso88591.GetString(firstByte);
+                                            break;
+                                        }
+                                    case 4:
+                                        {
+                                            secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
+                                            secondChar = _iso88591.GetString(secondByte);
+                                            firstByte = new[] { Convert.ToByte(hex.Substring(2, 2), 16) };
+                                            firstChar = _iso88591.GetString(firstByte);
+                                            break;
+                                        }
                                 }
-                                else if (hex.Length == 4)
-                                {
-                                    firstByte = new[] { Convert.ToByte(hex.Substring(2, 2), 16) };
-                                    firstChar = _iso88591.GetString(firstByte);
-                                }
-                                var secondChar = _iso88591.GetString(secondByte);
+                                
 
                                 if (!string.IsNullOrEmpty(firstChar))
                                 {
