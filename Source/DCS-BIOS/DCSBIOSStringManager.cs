@@ -28,10 +28,5 @@
         {
             _dcsbiosStringListener?.Dispose();
         }
-
-        public static string GetStringValue(uint address)
-        {
-            return _dcsbiosStringListener.GetStringAddress(address);
-        }
     }
 }
