@@ -19,8 +19,6 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
     using System.Globalization;
-    using System.Net;
-
 
     /*
      * Pre-programmed radio panel for the F-16 C Block 50.
@@ -604,6 +602,7 @@ namespace NonVisuals.Radios
                         if (!string.IsNullOrEmpty(_uhfFrequencyActive))
                         {
                             SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
                         {
@@ -619,6 +618,7 @@ namespace NonVisuals.Radios
                         if (!string.IsNullOrEmpty(_vhfFrequencyActive))
                         {
                             SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT) ;
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
                         {
@@ -655,15 +655,11 @@ namespace NonVisuals.Radios
                     {
                         case CurrentF16CRadioMode.UHF:
                             {
-                                //_uhfFrequencyActive = GetSafeFrequency(FrequencyType.UHFActive);
-                                //SetPZ69DisplayBytesDefault(ref bytes, _uhfFrequencyActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.VHF:
                             {
-                                //_vhfFrequencyActive = GetSafeFrequency(FrequencyType.VHFActive);
-                                //SetPZ69DisplayBytesDefault(ref bytes, _vhfFrequencyActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
@@ -678,16 +674,12 @@ namespace NonVisuals.Radios
                     {
                         case CurrentF16CRadioMode.UHF:
                             {
-                                //_uhfFrequencyActive = GetSafeFrequency(FrequencyType.UHFActive);
-                                //SetPZ69DisplayBytesDefault(ref bytes, _uhfFrequencyActive, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.VHF:
                             {
-                                //_vhfFrequencyActive = GetSafeFrequency(FrequencyType.VHFActive);
                                 SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.LOWER, ref bytes);
-                                //SetPZ69DisplayBytesDefault(ref bytes, _uhfFrequencyActive, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentF16CRadioMode.NOUSE:
