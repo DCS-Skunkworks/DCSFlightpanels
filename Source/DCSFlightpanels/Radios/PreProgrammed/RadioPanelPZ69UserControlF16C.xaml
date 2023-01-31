@@ -72,13 +72,13 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
-                    COM 1 = UHF<LineBreak/>
-                    COM 2 = VHF<LineBreak/>
-                    NAV 1 = <LineBreak/>
-                    NAV 2 = <LineBreak/>
-                    ADF = <LineBreak/> 
-                    ACT/STBY : <LineBreak/> 
-                    Small Wheels: COM1/COM2 Volume inc/dec<LineBreak/>
+                    COM 1 = UHF - Display frequency or preset channel<LineBreak/>
+                    COM 2 = VHF - Display frequency or preset channel<LineBreak/>
+                    NAV 1 = (not used)<LineBreak/>
+                    NAV 2 = (not used)<LineBreak/>
+                    ADF = (not used)<LineBreak/> 
+                    ACT/STBY : (not used)<LineBreak/> 
+                    Small Wheels: COM1/COM2 Volume increase/decrease<LineBreak/>
                 </TextBlock>
             </StackPanel>
         </GroupBox>

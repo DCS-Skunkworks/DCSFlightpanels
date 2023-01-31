@@ -592,6 +592,11 @@ namespace NonVisuals.Radios
              return _dedFrequencies[frequencyType];
         }
 
+        private bool IsPresetFrequency(string frequency)
+        {
+            return !frequency.Contains(".");
+        }
+
         private void SetFrequencyBytes(FrequencyType frequencyType, Pz69Mode pz69mode, ref byte[] bytes)
         {
             switch (frequencyType) {
@@ -601,7 +606,11 @@ namespace NonVisuals.Radios
                         _uhfFrequencyActive = GetSafeFrequency(FrequencyType.UHFActive);
                         if (!string.IsNullOrEmpty(_uhfFrequencyActive))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            if (IsPresetFrequency(_uhfFrequencyActive))
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfFrequencyActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            else
+                                SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            
                             SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
@@ -617,7 +626,11 @@ namespace NonVisuals.Radios
                          _vhfFrequencyActive = GetSafeFrequency(FrequencyType.VHFActive);
                         if (!string.IsNullOrEmpty(_vhfFrequencyActive))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT) ;
+                            if (IsPresetFrequency(_vhfFrequencyActive))
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_vhfFrequencyActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT) ;
+                            else
+                                SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            
                             SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
