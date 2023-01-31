@@ -77,8 +77,6 @@ namespace DCS_BIOS
 
         private void UpdateStrings(uint address, uint data)
         {
-
-            //Common.DebugP("**********address = [" + address + "] ****************");
             lock (_lockObject)
             {
                 if (data == 0x55)
@@ -126,22 +124,13 @@ namespace DCS_BIOS
                                     kvp.Value.RemoveAddress(address);
                                     return;
                                 }
-                                /*
-                                25.7.2018
-                                Was the TACAN problem related to something else? Perhaps to the flickering which was caused in mainwindow's constructor (wrong order instantiation)? Wrong fix which didn't help??
 
-                                if (hex.Length < 4)
-                                {
-                                    return;
-                                }*/
                                 //Little Endian !
                                 byte[] secondByte;
                                 byte[] firstByte;
-                                var firstChar = string.Empty;
                                 var secondChar = string.Empty;
-
-
-                                //This is fucked up. From my experience DCS-BIOS should always send 2 bytes. 29.01.2023 JDA
+                                var firstChar = string.Empty;
+                                
                                 switch (hex.Length)
                                 {
                                     case 2:
@@ -154,7 +143,7 @@ namespace DCS_BIOS
                                         }
                                     case 3:
                                         {
-                                            //this is really ugly, will it work ?? keep geting 0x730 from MI-8 R863 where I would except last digit (uneven 7 long frequency)
+                                            //this is really ugly, will it work ?? keep getting 0x730 from MI-8 R863 where I would except last digit (uneven 7 long frequency)
                                             //so let's try and just ignore the for number, in this case the 7.
                                             //28.04.2020 JDA
                                             secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
