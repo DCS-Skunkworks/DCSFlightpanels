@@ -156,7 +156,7 @@ namespace NonVisuals.Radios
             return true;
         }
 
-        /*private bool DEDStringDataChanged(int dedLine, string dedLineData)
+        private bool DEDLineStringDataChanged(int dedLine, string dedLineData)
         {
             switch (dedLine) {
                 case 1:
@@ -170,52 +170,45 @@ namespace NonVisuals.Radios
                 case 5: return false;
                 default: return false;
             }
-        }*/
-
-        /*private void UpdateDED(object sender, DCSBIOSStringDataEventArgs e) 
-        {
-            var line1 = DCSBIOSStringManager.GetStringValue(_DEDLine1.Address);
-            var line2 = DCSBIOSStringManager.GetStringValue(_DEDLine2.Address);
-            var line3 = DCSBIOSStringManager.GetStringValue(_DEDLine3.Address);
-            var line4 = DCSBIOSStringManager.GetStringValue(_DEDLine4.Address);
-            var line5 = DCSBIOSStringManager.GetStringValue(_DEDLine5.Address);
-            var updateLcd
-                = DEDStringDataChanged(1, line1) ||
-                DEDStringDataChanged(2, line2) ||
-                DEDStringDataChanged(3, line3) ||
-                DEDStringDataChanged(4, line4) ||
-                DEDStringDataChanged(5, line5);
-
-            //if (updateLcd)
-            {
-                Interlocked.Increment(ref _doUpdatePanelLCD);
-                ShowFrequenciesOnPanel();
-            }
-        }*/
+        }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
-                if (e.Address.Equals(_DEDLine1.Address) ||
-                    e.Address.Equals(_DEDLine2.Address) ||
-                    e.Address.Equals(_DEDLine3.Address) ||
-                    e.Address.Equals(_DEDLine4.Address) ||
-                    e.Address.Equals(_DEDLine5.Address))
-                {
-                    Debug.WriteLine("****** " + e.StringData.Length + "chars   ->" + e.StringData + "<-\n");
+                //if (e.Address.Equals(_DEDLine1.Address) ||
+                //    e.Address.Equals(_DEDLine2.Address) ||
+                //    e.Address.Equals(_DEDLine3.Address) ||
+                //    e.Address.Equals(_DEDLine4.Address) ||
+                //    e.Address.Equals(_DEDLine5.Address))
+                //{
+                //    Debug.WriteLine("****** " + e.StringData.Length + "chars   ->" + e.StringData + "<-\n");
+                //}
+                bool updateLcd = false;
+                if (e.Address.Equals(_DEDLine1.Address)){
+                    updateLcd = DEDLineStringDataChanged(1, e.StringData);
                 }
-                var updateDED =
-                    (
-                    e.Address.Equals(_DEDLine1.Address) ||
-                    e.Address.Equals(_DEDLine2.Address) ||
-                    e.Address.Equals(_DEDLine3.Address) ||
-                    e.Address.Equals(_DEDLine4.Address) ||
-                    e.Address.Equals(_DEDLine5.Address)
-                    );
-                if (updateDED)
+                if (e.Address.Equals(_DEDLine2.Address))
                 {
-                    //UpdateDED(sender, e);
+                    updateLcd = DEDLineStringDataChanged(2, e.StringData);
+                }
+                if (e.Address.Equals(_DEDLine3.Address))
+                {
+                    updateLcd = DEDLineStringDataChanged(3, e.StringData);
+                }
+                if (e.Address.Equals(_DEDLine4.Address))
+                {
+                    updateLcd = DEDLineStringDataChanged(4, e.StringData);
+                }
+                if (e.Address.Equals(_DEDLine5.Address))
+                {
+                    updateLcd = DEDLineStringDataChanged(5, e.StringData);
+                }
+
+                if (updateLcd)
+                {
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    ShowFrequenciesOnPanel();
                 }
                 DataHasBeenReceivedFromDCSBIOS = true;
             }
@@ -625,7 +618,7 @@ namespace NonVisuals.Radios
                          _vhfFrequencyActive = GetSafeFrequency(FrequencyType.VHFActive);
                         if (!string.IsNullOrEmpty(_vhfFrequencyActive))
                         {
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT) ;
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT) ;
                         }
                         else
                         {
@@ -662,16 +655,16 @@ namespace NonVisuals.Radios
                     {
                         case CurrentF16CRadioMode.UHF:
                             {
-                                _uhfFrequencyActive = GetSafeFrequency(FrequencyType.UHFActive);
-                                SetPZ69DisplayBytesDefault(ref bytes, _uhfFrequencyActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                //SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.UPPER, ref bytes);
+                                //_uhfFrequencyActive = GetSafeFrequency(FrequencyType.UHFActive);
+                                //SetPZ69DisplayBytesDefault(ref bytes, _uhfFrequencyActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.VHF:
                             {
-                                _vhfFrequencyActive = GetSafeFrequency(FrequencyType.VHFActive);
-                                SetPZ69DisplayBytesDefault(ref bytes, _vhfFrequencyActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                //SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.UPPER, ref bytes);
+                                //_vhfFrequencyActive = GetSafeFrequency(FrequencyType.VHFActive);
+                                //SetPZ69DisplayBytesDefault(ref bytes, _vhfFrequencyActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.NOUSE:
@@ -685,12 +678,16 @@ namespace NonVisuals.Radios
                     {
                         case CurrentF16CRadioMode.UHF:
                             {
+                                //_uhfFrequencyActive = GetSafeFrequency(FrequencyType.UHFActive);
+                                //SetPZ69DisplayBytesDefault(ref bytes, _uhfFrequencyActive, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.VHF:
                             {
+                                //_vhfFrequencyActive = GetSafeFrequency(FrequencyType.VHFActive);
                                 SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.LOWER, ref bytes);
+                                //SetPZ69DisplayBytesDefault(ref bytes, _uhfFrequencyActive, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentF16CRadioMode.NOUSE:
