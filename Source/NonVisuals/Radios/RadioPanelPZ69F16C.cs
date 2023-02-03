@@ -19,6 +19,7 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
     using System.Globalization;
+    using System.Threading.Channels;
 
     /*
      * Pre-programmed radio panel for the F-16 C Block 50.
@@ -48,6 +49,8 @@ namespace NonVisuals.Radios
 
         private string _uhfFrequencyActive = string.Empty;
         private string _vhfFrequencyActive = string.Empty;
+        private string _steerpointActive = string.Empty;
+        private string _timeActive = string.Empty;
 
         private int _uhfPresetDialSkipper;
         private int _vhfPresetDialSkipper;
@@ -67,7 +70,9 @@ namespace NonVisuals.Radios
         private enum FrequencyType
         {
             UHFActive,
-            VHFActive
+            VHFActive,
+            Steerpoint,
+            Time,
         }
 
 
@@ -129,15 +134,6 @@ namespace NonVisuals.Radios
 
         private bool DedFrequencyHasChanged(FrequencyType frequencyType, string rawFrequencyString)
         {
-            try
-            {
-                var frequencyCheck = decimal.Parse(rawFrequencyString, CultureInfo.InvariantCulture);
-            }
-            catch(Exception)
-            {
-                return false;
-            }
-
             if (_dedFrequencies.ContainsKey(frequencyType) && _dedFrequencies[frequencyType].Equals(rawFrequencyString))
             {
                 return false;
@@ -153,21 +149,31 @@ namespace NonVisuals.Radios
 
             return true;
         }
-
+        
         private bool DEDLineStringDataChanged(int dedLine, string dedLineData)
         {
+            bool changes = false;
             switch (dedLine) {
                 case 1:
-                    //" UHF  225.32  STPT a  1  " (25)
-                    return dedLineData.Substring(1, 3) == "UHF" ? DedFrequencyHasChanged(FrequencyType.UHFActive, dedLineData.Substring(6, 6).Trim()) : false;
+                        //" UHF  225.32  STPT a  1  " (25)
+                    if (dedLineData.Substring(1, 3) == "UHF")
+                        changes = DedFrequencyHasChanged(FrequencyType.UHFActive, dedLineData.Substring(6, 6).Trim()) == true;
+                    if (dedLineData.Substring(14, 4) == "STPT")
+                        changes = DedFrequencyHasChanged(FrequencyType.Steerpoint, dedLineData.Substring(20, 3).Trim()) == true;
+                    break;
                 case 2: return false;
                 case 3:
                     //" VHF  145.65   14:20:13  " (25)
-                    return dedLineData.Substring(1, 3) == "VHF" ? DedFrequencyHasChanged(FrequencyType.VHFActive, dedLineData.Substring(6, 6).Trim()) : false;
+                    if (dedLineData.Substring(1, 3) == "VHF")
+                        changes = DedFrequencyHasChanged(FrequencyType.VHFActive, dedLineData.Substring(6, 6).Trim()) == true;
+                    if (dedLineData.Substring(17, 1) == ":" && dedLineData.Substring(20, 1) == ":")
+                        changes = DedFrequencyHasChanged(FrequencyType.Time, dedLineData.Substring(15, 8).Trim()) == true;
+                    break;
                 case 4: return false;
                 case 5: return false;
                 default: return false;
             }
+            return changes;
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -610,8 +616,6 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfFrequencyActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             else
                                 SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            
-                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
                         {
@@ -630,8 +634,6 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_vhfFrequencyActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT) ;
                             else
                                 SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            
-                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
                         {
@@ -639,9 +641,62 @@ namespace NonVisuals.Radios
                         }
                     }
                     break;
+                case (FrequencyType.Steerpoint):
+                    lock (_steerpointActive)
+                    {
+                        _steerpointActive = GetSafeFrequency(FrequencyType.Steerpoint);
+                        if (!string.IsNullOrEmpty(_steerpointActive))
+                        {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_steerpointActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                        else
+                        {
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                    }
+                    break;
+                case (FrequencyType.Time):
+                    lock (_timeActive)
+                    {
+                        _timeActive = GetSafeFrequency(FrequencyType.Time);
+                        if (!string.IsNullOrEmpty(_timeActive))
+                        {
+                            SetPZ69DisplayBytesDefault(ref bytes, GeTimeAsFrequency(_timeActive, false), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                        else
+                        {
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                    }
+                    break;
+
 
                 default:
                     throw new Exception("Unsupported frequency Type");
+            }
+        }
+
+        private string GeTimeAsFrequency(string rawValue, bool cutSeconds)
+        {
+            //Too bad there are no 6 digits on the PZ69 :-\
+            try
+            {
+                if (rawValue.Substring(2, 1) != ":" && rawValue.Substring(5, 1) != ":")
+                    throw new Exception();
+                else
+                {
+                    if (cutSeconds)
+                    {
+                        return $"{rawValue.Substring(0, 2)}.{rawValue.Substring(3, 2)}.{rawValue.Substring(6, 2)}";
+                    }
+                    else
+                    { //cut the first digit of hour part
+                        return $"{rawValue.Substring(1, 1)}.{rawValue.Substring(3, 2)}.{rawValue.Substring(6, 2)}";
+                    }
+                }
+            }
+            catch {
+                return string.Empty;
             }
         }
 
@@ -669,11 +724,13 @@ namespace NonVisuals.Radios
                         case CurrentF16CRadioMode.UHF:
                             {
                                 SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.UPPER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.Steerpoint, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.VHF:
                             {
                                 SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.UPPER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.Time, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.NOUSE:
@@ -688,11 +745,13 @@ namespace NonVisuals.Radios
                         case CurrentF16CRadioMode.UHF:
                             {
                                 SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.LOWER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.Steerpoint, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.VHF:
                             {
                                 SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.LOWER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.Time, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.NOUSE:
