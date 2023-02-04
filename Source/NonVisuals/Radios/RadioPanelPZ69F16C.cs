@@ -30,6 +30,7 @@ namespace NonVisuals.Radios
         {
             UHF,
             VHF,
+            TACAN,
             NOUSE
         }
         private enum Pz69Mode
@@ -67,14 +68,23 @@ namespace NonVisuals.Radios
         private bool _upperFreqSwitchPressedDown;
         private bool _lowerFreqSwitchPressedDown;
 
+        private DEDPageIdentification _CurrentDedPage = DEDPageIdentification.Undefined;
+
         private enum FrequencyType
         {
             UHFActive,
             VHFActive,
             Steerpoint,
             Time,
+            Tacan
         }
 
+        private enum DEDPageIdentification
+        {
+            Undefined,
+            Home,
+            TacanIls
+        }
 
         private readonly Dictionary<FrequencyType, string> _dedFrequencies = new();
 
@@ -149,29 +159,56 @@ namespace NonVisuals.Radios
 
             return true;
         }
-        
+
+        private void TryIdentifyCurrentDedPage(string dedLineData)
+        {
+            _CurrentDedPage = DEDPageIdentification.Undefined;
+            
+            if (dedLineData.Length < 25)
+                return;
+            
+            if (dedLineData.Substring(1, 3) == "UHF" && dedLineData.Substring(14, 4) == "STPT")
+                _CurrentDedPage = DEDPageIdentification.Home;
+
+            //" TCN REC     ILS  ON      "
+            if (dedLineData.Substring(1, 3) == "TCN" && dedLineData.Substring(13, 3) == "ILS")
+                _CurrentDedPage = DEDPageIdentification.TacanIls;
+        }
+
         private bool DEDLineStringDataChanged(int dedLine, string dedLineData)
         {
             bool changes = false;
             switch (dedLine) {
                 case 1:
+                    TryIdentifyCurrentDedPage(dedLineData);
+                    if (_CurrentDedPage == DEDPageIdentification.Home)
+                    {
                         //" UHF  225.32  STPT a  1  " (25)
-                    if (dedLineData.Substring(1, 3) == "UHF")
-                        changes = DedFrequencyHasChanged(FrequencyType.UHFActive, dedLineData.Substring(6, 6).Trim()) == true;
-                    if (dedLineData.Substring(14, 4) == "STPT")
-                        changes = DedFrequencyHasChanged(FrequencyType.Steerpoint, dedLineData.Substring(20, 3).Trim()) == true;
+                        if (dedLineData.Substring(1, 3) == "UHF")
+                            changes = DedFrequencyHasChanged(FrequencyType.UHFActive, dedLineData.Substring(6, 6).Trim()) == true;
+                        if (dedLineData.Substring(14, 4) == "STPT")
+                            changes = DedFrequencyHasChanged(FrequencyType.Steerpoint, dedLineData.Substring(20, 3).Trim()) == true;
+                    }
                     break;
-                case 2: return false;
+                case 2: 
+                    return false;
                 case 3:
-                    //" VHF  145.65   14:20:13  " (25)
-                    if (dedLineData.Substring(1, 3) == "VHF")
-                        changes = DedFrequencyHasChanged(FrequencyType.VHFActive, dedLineData.Substring(6, 6).Trim()) == true;
-                    if (dedLineData.Substring(17, 1) == ":" && dedLineData.Substring(20, 1) == ":")
-                        changes = DedFrequencyHasChanged(FrequencyType.Time, dedLineData.Substring(15, 8).Trim()) == true;
+                    
+                    if (_CurrentDedPage == DEDPageIdentification.Home)
+                    {
+                        //" VHF  145.65   14:20:13  " (25)
+                        if (dedLineData.Substring(1, 3) == "VHF")
+                            changes = DedFrequencyHasChanged(FrequencyType.VHFActive, dedLineData.Substring(6, 6).Trim()) == true;
+                        if (dedLineData.Substring(17, 1) == ":" && dedLineData.Substring(20, 1) == ":")
+                            changes = DedFrequencyHasChanged(FrequencyType.Time, dedLineData.Substring(15, 8).Trim()) == true;
+                    }
                     break;
-                case 4: return false;
-                case 5: return false;
-                default: return false;
+                case 4: 
+                    return false;
+                case 5:
+                    return false;
+                default: 
+                    return false;
             }
             return changes;
         }
