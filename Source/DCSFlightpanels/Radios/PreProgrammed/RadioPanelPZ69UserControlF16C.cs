@@ -141,7 +141,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF16C.UPPER_NO_USE0:
+                        case RadioPanelPZ69KnobsF16C.UPPER_TACAN:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -211,7 +211,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF16C.LOWER_NO_USE0:
+                        case RadioPanelPZ69KnobsF16C.LOWER_TACAN:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
