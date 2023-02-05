@@ -1634,7 +1634,9 @@
         private void MenuItemUSBPowerManagement_OnClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("You need to run DCSFP as Administrator for this function to work!");
-            USBPowerManagement.FixSaitekUSBEnhancedPowerManagerIssues();
+            var result = USBPowerManagement.FixSaitekUSBEnhancedPowerManagerIssues();
+            var informationTextBlockWindow = new InformationTextBlockWindow(result);
+            informationTextBlockWindow.ShowDialog();
         }
 
         private void MenuItemBugReport_OnClick(object sender, RoutedEventArgs e)
