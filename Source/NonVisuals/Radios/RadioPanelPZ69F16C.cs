@@ -18,8 +18,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
-    using System.Globalization;
-
+  
     /*
      * Pre-programmed radio panel for the F-16 C Block 50.
      */
@@ -29,6 +28,8 @@ namespace NonVisuals.Radios
         {
             UHF,
             VHF,
+            TACAN,
+            ILS,
             NOUSE
         }
         private enum Pz69Mode
@@ -48,15 +49,26 @@ namespace NonVisuals.Radios
 
         private string _uhfFrequencyActive = string.Empty;
         private string _vhfFrequencyActive = string.Empty;
+        private string _steerpointActive = string.Empty;
+        private string _timeActive = string.Empty;
+        private string _tacanFrequencyActive = string.Empty;
+        private string _ilsFrequencyActive = string.Empty;
 
-        private int _uhfPresetDialSkipper;
-        private int _vhfPresetDialSkipper;
+        private const string UHF_VOLUME_COMMAND_INC = "COMM1_PWR_KNB +3200\n"; 
+        private const string UHF_VOLUME_COMMAND_DEC = "COMM1_PWR_KNB -3200\n"; 
 
-        private const string UHF_VOLUME_COMMAND_INC = "COMM1_PWR_KNB +3200\n"; //*
-        private const string UHF_VOLUME_COMMAND_DEC = "COMM1_PWR_KNB -3200\n"; //*
+        private const string VHF_VOLUME_COMMAND_INC = "COMM2_PWR_KNB +3200\n"; 
+        private const string VHF_VOLUME_COMMAND_DEC = "COMM2_PWR_KNB -3200\n";
 
-        private const string VHF_VOLUME_COMMAND_INC = "COMM2_PWR_KNB +3200\n"; //*
-        private const string VHF_VOLUME_COMMAND_DEC = "COMM2_PWR_KNB -3200\n"; //*
+        private const string EHSI_CRS_COMMAND_INC = "EHSI_CRS_SET_KNB +6400\n";
+        private const string EHSI_CRS_COMMAND_DEC = "EHSI_CRS_SET_KNB -6400\n";
+
+        private const string EHSI_HDG_COMMAND_INC = "EHSI_HDG_SET_KNB +6400\n";
+        private const string EHSI_HDG_COMMAND_DEC = "EHSI_HDG_SET_KNB -6400\n";
+
+        private const string EHSI_MODE_COMMAND = "EHSI_MODE TOGGLE\n";
+
+
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -64,12 +76,24 @@ namespace NonVisuals.Radios
         private bool _upperFreqSwitchPressedDown;
         private bool _lowerFreqSwitchPressedDown;
 
+        private DEDPageIdentification _CurrentDedPage = DEDPageIdentification.Undefined;
+
         private enum FrequencyType
         {
             UHFActive,
-            VHFActive
+            VHFActive,
+            Steerpoint,
+            Time,
+            Tacan,
+            Ils
         }
 
+        private enum DEDPageIdentification
+        {
+            Undefined,
+            Home,
+            TacanIls
+        }
 
         private readonly Dictionary<FrequencyType, string> _dedFrequencies = new();
 
@@ -117,7 +141,7 @@ namespace NonVisuals.Radios
 
                 _DEDLine5 = DCSBIOSControlLocator.GetDCSBIOSOutput("DED_LINE_5");
                 DCSBIOSStringManager.AddListeningAddress(_DEDLine5);
-                
+
                 StartListeningForHidPanelChanges();
             }
             catch (Exception ex)
@@ -129,15 +153,6 @@ namespace NonVisuals.Radios
 
         private bool DedFrequencyHasChanged(FrequencyType frequencyType, string rawFrequencyString)
         {
-            try
-            {
-                var frequencyCheck = decimal.Parse(rawFrequencyString, CultureInfo.InvariantCulture);
-            }
-            catch(Exception)
-            {
-                return false;
-            }
-
             if (_dedFrequencies.ContainsKey(frequencyType) && _dedFrequencies[frequencyType].Equals(rawFrequencyString))
             {
                 return false;
@@ -154,20 +169,66 @@ namespace NonVisuals.Radios
             return true;
         }
 
+        private void TryIdentifyCurrentDedPage(string dedLineData)
+        {
+            _CurrentDedPage = DEDPageIdentification.Undefined;
+            
+            if (dedLineData.Length < 25)
+                return;
+            
+            if (dedLineData.Substring(1, 3) == "UHF" && dedLineData.Substring(14, 4) == "STPT")
+                _CurrentDedPage = DEDPageIdentification.Home;
+
+            //" TCN REC     ILS  ON      "
+            if (dedLineData.Substring(1, 3) == "TCN" && dedLineData.Substring(13, 3) == "ILS")
+                _CurrentDedPage = DEDPageIdentification.TacanIls;
+        }
+
         private bool DEDLineStringDataChanged(int dedLine, string dedLineData)
         {
+            bool changes = false;
             switch (dedLine) {
                 case 1:
-                    //" UHF  225.32  STPT a  1  " (25)
-                    return dedLineData.Substring(1, 3) == "UHF" ? DedFrequencyHasChanged(FrequencyType.UHFActive, dedLineData.Substring(6, 6).Trim()) : false;
-                case 2: return false;
+                    TryIdentifyCurrentDedPage(dedLineData);
+                    if (_CurrentDedPage == DEDPageIdentification.Home)
+                    {
+                        //" UHF  225.32  STPT a  1  " (25)
+                        if (dedLineData.Substring(1, 3) == "UHF")
+                            changes = DedFrequencyHasChanged(FrequencyType.UHFActive, dedLineData.Substring(6, 6).Trim()) == true;
+                        if (dedLineData.Substring(14, 4) == "STPT")
+                            changes = DedFrequencyHasChanged(FrequencyType.Steerpoint, dedLineData.Substring(20, 3).Trim()) == true;
+                    }
+                    break;
+                case 2:
+                    changes = false;
+                    break;
                 case 3:
-                    //" VHF  145.65   14:20:13  " (25)
-                    return dedLineData.Substring(1, 3) == "VHF" ? DedFrequencyHasChanged(FrequencyType.VHFActive, dedLineData.Substring(6, 6).Trim()) : false;
-                case 4: return false;
-                case 5: return false;
-                default: return false;
+                    if (_CurrentDedPage == DEDPageIdentification.Home)
+                    {
+                        //" VHF  145.65   14:20:13  " (25)
+                        if (dedLineData.Substring(1, 3) == "VHF")
+                            changes = DedFrequencyHasChanged(FrequencyType.VHFActive, dedLineData.Substring(6, 6).Trim()) == true;
+                        if (dedLineData.Substring(17, 1) == ":" && dedLineData.Substring(20, 1) == ":")
+                            changes = DedFrequencyHasChanged(FrequencyType.Time, dedLineData.Substring(15, 8).Trim()) == true;
+                    }
+                    break;
+                case 4:
+                    if (_CurrentDedPage == DEDPageIdentification.TacanIls)
+                    {
+                        //"CHAN* 22*   FRQ  108.10  "
+                        if (dedLineData.Substring(0, 4) == "CHAN")
+                            changes = DedFrequencyHasChanged(FrequencyType.Tacan, dedLineData.Substring(5, 3).Trim()) == true;
+                        if (dedLineData.Substring(12, 3) == "FRQ" && dedLineData.Substring(16, 1) != "*") //ignore temp value
+                            changes = DedFrequencyHasChanged(FrequencyType.Ils, dedLineData.Substring(17, 6).Trim()) == true;
+                    }
+                    break;
+                case 5:
+                    changes = false;
+                    break;
+                default: 
+                    return false;
             }
+            return changes;
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -277,8 +338,22 @@ namespace NonVisuals.Radios
                                     break;
                                 }
 
-                            case RadioPanelPZ69KnobsF16C.UPPER_NO_USE0:
-                            case RadioPanelPZ69KnobsF16C.UPPER_NO_USE1:
+                            case RadioPanelPZ69KnobsF16C.UPPER_TACAN:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetUpperRadioMode(CurrentF16CRadioMode.TACAN);
+                                    }
+                                    break;
+                                }
+                            case RadioPanelPZ69KnobsF16C.UPPER_ILS:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetUpperRadioMode(CurrentF16CRadioMode.ILS);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsF16C.UPPER_NO_USE2:
                             case RadioPanelPZ69KnobsF16C.UPPER_NO_USE3:
                             case RadioPanelPZ69KnobsF16C.UPPER_NO_USE4:
@@ -308,8 +383,22 @@ namespace NonVisuals.Radios
                                     break;
                                 }
 
-                            case RadioPanelPZ69KnobsF16C.LOWER_NO_USE0:
-                            case RadioPanelPZ69KnobsF16C.LOWER_NO_USE1:
+                            case RadioPanelPZ69KnobsF16C.LOWER_TACAN:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentF16CRadioMode.TACAN);
+                                    }
+                                    break;
+                                }
+                            case RadioPanelPZ69KnobsF16C.LOWER_ILS:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentF16CRadioMode.ILS);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsF16C.LOWER_NO_USE2:
                             case RadioPanelPZ69KnobsF16C.LOWER_NO_USE3:
                             case RadioPanelPZ69KnobsF16C.LOWER_NO_USE4:
@@ -330,19 +419,27 @@ namespace NonVisuals.Radios
                             case RadioPanelPZ69KnobsF16C.LOWER_SMALL_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsF16C.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
-                                    // Ignore
+                                    // Ignore for now, done in adjustfrequency function
                                     break;
                                 }
 
                             case RadioPanelPZ69KnobsF16C.UPPER_FREQ_SWITCH:
                                 {
                                     _upperFreqSwitchPressedDown = radioPanelKnob.IsOn;
+                                    if (_currentUpperRadioMode == CurrentF16CRadioMode.TACAN || _currentUpperRadioMode == CurrentF16CRadioMode.ILS)
+                                    {
+                                        DCSBIOS.Send(EHSI_MODE_COMMAND);
+                                    }
                                     break;
                                 }
 
                             case RadioPanelPZ69KnobsF16C.LOWER_FREQ_SWITCH:
                                 {
                                     _lowerFreqSwitchPressedDown = radioPanelKnob.IsOn;
+                                    if (_currentLowerRadioMode == CurrentF16CRadioMode.TACAN || _currentLowerRadioMode == CurrentF16CRadioMode.ILS)
+                                    {
+                                        DCSBIOS.Send(EHSI_MODE_COMMAND);
+                                    }
                                     break;
                                 }
                         }
@@ -398,6 +495,15 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
+                                        case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
+                                            {
+                                                if (!SkipTacanIlsPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(EHSI_HDG_COMMAND_INC);
+                                                }
+                                                break;
+                                            }
                                         case CurrentF16CRadioMode.NOUSE:
                                             {
                                                 break;
@@ -424,6 +530,15 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
+                                        case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
+                                            {
+                                                if (!SkipTacanIlsPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(EHSI_HDG_COMMAND_DEC);
+                                                }
+                                                break;
+                                            }
                                         case CurrentF16CRadioMode.NOUSE:
                                             {
                                                 break;
@@ -439,12 +554,27 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF16CRadioMode.UHF:
                                             {
-                                                DCSBIOS.Send(UHF_VOLUME_COMMAND_INC);
+                                                if (!SkipUHFPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(UHF_VOLUME_COMMAND_INC);
+                                                }
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_INC);
+                                                if (!SkipVHFPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(VHF_VOLUME_COMMAND_INC);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
+                                            {
+                                                if (!SkipTacanIlsPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(EHSI_CRS_COMMAND_INC);
+                                                }
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.NOUSE:
@@ -461,12 +591,27 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF16CRadioMode.UHF:
                                             {
-                                                DCSBIOS.Send(UHF_VOLUME_COMMAND_DEC);
+                                                if (!SkipUHFPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(UHF_VOLUME_COMMAND_DEC);
+                                                }
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_DEC);
+                                                if (!SkipVHFPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(VHF_VOLUME_COMMAND_DEC);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
+                                            {
+                                                if (!SkipTacanIlsPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(EHSI_CRS_COMMAND_DEC);
+                                                }
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.NOUSE:
@@ -495,6 +640,15 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
+                                        case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
+                                            {
+                                                if (!SkipTacanIlsPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(EHSI_HDG_COMMAND_INC);
+                                                }
+                                                break;
+                                            }
                                         case CurrentF16CRadioMode.NOUSE:
                                             {
                                                 break;
@@ -507,6 +661,13 @@ namespace NonVisuals.Radios
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
+                                        case CurrentF16CRadioMode.UHF:
+                                            {
+                                                if (!SkipUHFPresetDialChange())
+                                                {
+                                                }
+                                                break;
+                                            }
                                         case CurrentF16CRadioMode.VHF:
                                             {
                                                 if (!SkipVHFPresetDialChange())
@@ -514,10 +675,12 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
-                                        case CurrentF16CRadioMode.UHF:
+                                        case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
                                             {
-                                                if (!SkipUHFPresetDialChange())
+                                                if (!SkipTacanIlsPresetDialChange())
                                                 {
+                                                    DCSBIOS.Send(EHSI_HDG_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -535,12 +698,27 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF16CRadioMode.UHF:
                                             {
-                                                DCSBIOS.Send(UHF_VOLUME_COMMAND_INC);
+                                                if (!SkipUHFPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(UHF_VOLUME_COMMAND_INC);
+                                                }
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_INC);
+                                                if (!SkipVHFPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(VHF_VOLUME_COMMAND_INC);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
+                                            {
+                                                if (!SkipTacanIlsPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(EHSI_CRS_COMMAND_INC);
+                                                }
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.NOUSE:
@@ -557,12 +735,27 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF16CRadioMode.UHF:
                                             {
-                                                DCSBIOS.Send(UHF_VOLUME_COMMAND_DEC);
+                                                if (!SkipUHFPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(UHF_VOLUME_COMMAND_DEC);
+                                                }
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_DEC);
+                                                if (!SkipVHFPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(VHF_VOLUME_COMMAND_DEC);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
+                                            {
+                                                if (!SkipTacanIlsPresetDialChange())
+                                                {
+                                                    DCSBIOS.Send(EHSI_CRS_COMMAND_DEC);
+                                                }
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.NOUSE:
@@ -610,8 +803,6 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfFrequencyActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             else
                                 SetPZ69DisplayBytes(ref bytes, double.Parse(_uhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            
-                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
                         {
@@ -630,7 +821,71 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_vhfFrequencyActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT) ;
                             else
                                 SetPZ69DisplayBytes(ref bytes, double.Parse(_vhfFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                        }
+                        else
+                        {
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                        }
+                    }
+                    break;
+                case (FrequencyType.Steerpoint):
+                    lock (_steerpointActive)
+                    {
+                        _steerpointActive = GetSafeFrequency(FrequencyType.Steerpoint);
+                        if (!string.IsNullOrEmpty(_steerpointActive))
+                        {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_steerpointActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                        else
+                        {
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                    }
+                    break;
+                case (FrequencyType.Time):
+                    lock (_timeActive)
+                    {
+                        _timeActive = GetSafeFrequency(FrequencyType.Time);
+                        if (!string.IsNullOrEmpty(_timeActive))
+                        {
+                            SetPZ69DisplayBytesDefault(ref bytes, GeTimeAsFrequency(_timeActive, false), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                        else
+                        {
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                    }
+                    break;
+                case (FrequencyType.Tacan):
+                    lock (_tacanFrequencyActive)
+                    {
+                        _tacanFrequencyActive = GetSafeFrequency(FrequencyType.Tacan);
+                        if (!string.IsNullOrEmpty(_tacanFrequencyActive))
+                        {
+                            if (IsPresetFrequency(_tacanFrequencyActive))
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_tacanFrequencyActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            else
+                                SetPZ69DisplayBytes(ref bytes, double.Parse(_tacanFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                        else
+                        {
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                        }
+                    }
+                    break;
+                case (FrequencyType.Ils):
+                    lock (_ilsFrequencyActive)
+                    {
+                        _ilsFrequencyActive = GetSafeFrequency(FrequencyType.Ils);
+                        if (!string.IsNullOrEmpty(_ilsFrequencyActive))
+                        {
+                            if (IsPresetFrequency(_ilsFrequencyActive))
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_ilsFrequencyActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            else
+                                SetPZ69DisplayBytes(ref bytes, double.Parse(_ilsFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+
                             SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         else
@@ -642,6 +897,30 @@ namespace NonVisuals.Radios
 
                 default:
                     throw new Exception("Unsupported frequency Type");
+            }
+        }
+
+        private string GeTimeAsFrequency(string rawValue, bool cutSeconds)
+        {
+            //Too bad there are no 6 digits on the PZ69 :-\
+            try
+            {
+                if (rawValue.Substring(2, 1) != ":" && rawValue.Substring(5, 1) != ":")
+                    throw new Exception();
+                else
+                {
+                    if (cutSeconds)
+                    {
+                        return $"{rawValue.Substring(0, 2)}.{rawValue.Substring(3, 2)}.{rawValue.Substring(6, 2)}";
+                    }
+                    else
+                    { //cut the first digit of hour part
+                        return $"{rawValue.Substring(1, 1)}.{rawValue.Substring(3, 2)}.{rawValue.Substring(6, 2)}";
+                    }
+                }
+            }
+            catch {
+                return string.Empty;
             }
         }
 
@@ -669,11 +948,23 @@ namespace NonVisuals.Radios
                         case CurrentF16CRadioMode.UHF:
                             {
                                 SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.UPPER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.Steerpoint, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.VHF:
                             {
                                 SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.UPPER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.Time, Pz69Mode.UPPER, ref bytes);
+                                break;
+                            }
+                        case CurrentF16CRadioMode.TACAN:
+                            {
+                                SetFrequencyBytes(FrequencyType.Tacan, Pz69Mode.UPPER, ref bytes);
+                                break;
+                            }
+                        case CurrentF16CRadioMode.ILS:
+                            {
+                                SetFrequencyBytes(FrequencyType.Ils, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.NOUSE:
@@ -688,11 +979,23 @@ namespace NonVisuals.Radios
                         case CurrentF16CRadioMode.UHF:
                             {
                                 SetFrequencyBytes(FrequencyType.UHFActive, Pz69Mode.LOWER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.Steerpoint, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.VHF:
                             {
                                 SetFrequencyBytes(FrequencyType.VHFActive, Pz69Mode.LOWER, ref bytes);
+                                SetFrequencyBytes(FrequencyType.Time, Pz69Mode.LOWER, ref bytes);
+                                break;
+                            }
+                        case CurrentF16CRadioMode.TACAN:
+                            {
+                                SetFrequencyBytes(FrequencyType.Tacan, Pz69Mode.LOWER, ref bytes);
+                                break;
+                            }
+                        case CurrentF16CRadioMode.ILS:
+                            {
+                                SetFrequencyBytes(FrequencyType.Ils, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.NOUSE:
@@ -759,46 +1062,16 @@ namespace NonVisuals.Radios
 
         private bool SkipVHFPresetDialChange()
         {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentF16CRadioMode.VHF || _currentLowerRadioMode == CurrentF16CRadioMode.VHF)
-                {
-                    if (_vhfPresetDialSkipper > 2)
-                    {
-                        _vhfPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _vhfPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
             return false;
         }
 
         private bool SkipUHFPresetDialChange()
         {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentF16CRadioMode.UHF || _currentLowerRadioMode == CurrentF16CRadioMode.UHF)
-                {
-                    if (_uhfPresetDialSkipper > 2)
-                    {
-                        _uhfPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _uhfPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
+            return false;        
+        }
+        private bool SkipTacanIlsPresetDialChange()
+        {
+            return false;         
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
