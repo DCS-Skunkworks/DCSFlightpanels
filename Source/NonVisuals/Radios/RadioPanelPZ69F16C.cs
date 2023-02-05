@@ -18,9 +18,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
-    using System.Globalization;
-    using System.Threading.Channels;
-
+  
     /*
      * Pre-programmed radio panel for the F-16 C Block 50.
      */
@@ -31,6 +29,7 @@ namespace NonVisuals.Radios
             UHF,
             VHF,
             TACAN,
+            ILS,
             NOUSE
         }
         private enum Pz69Mode
@@ -53,10 +52,7 @@ namespace NonVisuals.Radios
         private string _steerpointActive = string.Empty;
         private string _timeActive = string.Empty;
         private string _tacanFrequencyActive = string.Empty;
-
-        private int _uhfPresetDialSkipper;
-        private int _vhfPresetDialSkipper;
-        private int _tacanPresetDialSkipper;
+        private string _ilsFrequencyActive = string.Empty;
 
         private const string UHF_VOLUME_COMMAND_INC = "COMM1_PWR_KNB +3200\n"; 
         private const string UHF_VOLUME_COMMAND_DEC = "COMM1_PWR_KNB -3200\n"; 
@@ -88,7 +84,8 @@ namespace NonVisuals.Radios
             VHFActive,
             Steerpoint,
             Time,
-            Tacan
+            Tacan,
+            Ils
         }
 
         private enum DEDPageIdentification
@@ -221,6 +218,8 @@ namespace NonVisuals.Radios
                         //"CHAN* 22*   FRQ  108.10  "
                         if (dedLineData.Substring(0, 4) == "CHAN")
                             changes = DedFrequencyHasChanged(FrequencyType.Tacan, dedLineData.Substring(5, 3).Trim()) == true;
+                        if (dedLineData.Substring(12, 3) == "FRQ" && dedLineData.Substring(16, 1) != "*") //ignore temp value
+                            changes = DedFrequencyHasChanged(FrequencyType.Ils, dedLineData.Substring(17, 6).Trim()) == true;
                     }
                     break;
                 case 5:
@@ -347,7 +346,14 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsF16C.UPPER_NO_USE1:
+                            case RadioPanelPZ69KnobsF16C.UPPER_ILS:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetUpperRadioMode(CurrentF16CRadioMode.ILS);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsF16C.UPPER_NO_USE2:
                             case RadioPanelPZ69KnobsF16C.UPPER_NO_USE3:
                             case RadioPanelPZ69KnobsF16C.UPPER_NO_USE4:
@@ -385,7 +391,14 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsF16C.LOWER_NO_USE1:
+                            case RadioPanelPZ69KnobsF16C.LOWER_ILS:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentF16CRadioMode.ILS);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsF16C.LOWER_NO_USE2:
                             case RadioPanelPZ69KnobsF16C.LOWER_NO_USE3:
                             case RadioPanelPZ69KnobsF16C.LOWER_NO_USE4:
@@ -406,14 +419,14 @@ namespace NonVisuals.Radios
                             case RadioPanelPZ69KnobsF16C.LOWER_SMALL_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsF16C.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
-                                    // Ignore
+                                    // Ignore for now, done in adjustfrequency function
                                     break;
                                 }
 
                             case RadioPanelPZ69KnobsF16C.UPPER_FREQ_SWITCH:
                                 {
                                     _upperFreqSwitchPressedDown = radioPanelKnob.IsOn;
-                                    if (_currentUpperRadioMode == CurrentF16CRadioMode.TACAN)
+                                    if (_currentUpperRadioMode == CurrentF16CRadioMode.TACAN || _currentUpperRadioMode == CurrentF16CRadioMode.ILS)
                                     {
                                         DCSBIOS.Send(EHSI_MODE_COMMAND);
                                     }
@@ -423,7 +436,7 @@ namespace NonVisuals.Radios
                             case RadioPanelPZ69KnobsF16C.LOWER_FREQ_SWITCH:
                                 {
                                     _lowerFreqSwitchPressedDown = radioPanelKnob.IsOn;
-                                    if (_currentLowerRadioMode == CurrentF16CRadioMode.TACAN)
+                                    if (_currentLowerRadioMode == CurrentF16CRadioMode.TACAN || _currentLowerRadioMode == CurrentF16CRadioMode.ILS)
                                     {
                                         DCSBIOS.Send(EHSI_MODE_COMMAND);
                                     }
@@ -483,8 +496,9 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
                                             {
-                                                if (!SkipTacanPresetDialChange())
+                                                if (!SkipTacanIlsPresetDialChange())
                                                 {
                                                     DCSBIOS.Send(EHSI_HDG_COMMAND_INC);
                                                 }
@@ -517,8 +531,9 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
                                             {
-                                                if (!SkipTacanPresetDialChange())
+                                                if (!SkipTacanIlsPresetDialChange())
                                                 {
                                                     DCSBIOS.Send(EHSI_HDG_COMMAND_DEC);
                                                 }
@@ -554,8 +569,9 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
                                             {
-                                                if (!SkipTacanPresetDialChange())
+                                                if (!SkipTacanIlsPresetDialChange())
                                                 {
                                                     DCSBIOS.Send(EHSI_CRS_COMMAND_INC);
                                                 }
@@ -590,8 +606,9 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
                                             {
-                                                if (!SkipTacanPresetDialChange())
+                                                if (!SkipTacanIlsPresetDialChange())
                                                 {
                                                     DCSBIOS.Send(EHSI_CRS_COMMAND_DEC);
                                                 }
@@ -624,8 +641,9 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
                                             {
-                                                if (!SkipTacanPresetDialChange())
+                                                if (!SkipTacanIlsPresetDialChange())
                                                 {
                                                     DCSBIOS.Send(EHSI_HDG_COMMAND_INC);
                                                 }
@@ -658,8 +676,9 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
                                             {
-                                                if (!SkipTacanPresetDialChange())
+                                                if (!SkipTacanIlsPresetDialChange())
                                                 {
                                                     DCSBIOS.Send(EHSI_HDG_COMMAND_DEC);
                                                 }
@@ -694,8 +713,9 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
                                             {
-                                                if (!SkipTacanPresetDialChange())
+                                                if (!SkipTacanIlsPresetDialChange())
                                                 {
                                                     DCSBIOS.Send(EHSI_CRS_COMMAND_INC);
                                                 }
@@ -730,8 +750,9 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentF16CRadioMode.TACAN:
+                                        case CurrentF16CRadioMode.ILS:
                                             {
-                                                if (!SkipTacanPresetDialChange())
+                                                if (!SkipTacanIlsPresetDialChange())
                                                 {
                                                     DCSBIOS.Send(EHSI_CRS_COMMAND_DEC);
                                                 }
@@ -854,7 +875,25 @@ namespace NonVisuals.Radios
                         }
                     }
                     break;
+                case (FrequencyType.Ils):
+                    lock (_ilsFrequencyActive)
+                    {
+                        _ilsFrequencyActive = GetSafeFrequency(FrequencyType.Ils);
+                        if (!string.IsNullOrEmpty(_ilsFrequencyActive))
+                        {
+                            if (IsPresetFrequency(_ilsFrequencyActive))
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_ilsFrequencyActive), pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            else
+                                SetPZ69DisplayBytes(ref bytes, double.Parse(_ilsFrequencyActive, NumberFormatInfoFullDisplay), 2, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
 
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_STBY_RIGHT : PZ69LCDPosition.LOWER_STBY_RIGHT);
+                        }
+                        else
+                        {
+                            SetPZ69DisplayBlank(ref bytes, pz69mode == Pz69Mode.UPPER ? PZ69LCDPosition.UPPER_ACTIVE_LEFT : PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                        }
+                    }
+                    break;
 
                 default:
                     throw new Exception("Unsupported frequency Type");
@@ -923,6 +962,11 @@ namespace NonVisuals.Radios
                                 SetFrequencyBytes(FrequencyType.Tacan, Pz69Mode.UPPER, ref bytes);
                                 break;
                             }
+                        case CurrentF16CRadioMode.ILS:
+                            {
+                                SetFrequencyBytes(FrequencyType.Ils, Pz69Mode.UPPER, ref bytes);
+                                break;
+                            }
                         case CurrentF16CRadioMode.NOUSE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -947,6 +991,11 @@ namespace NonVisuals.Radios
                         case CurrentF16CRadioMode.TACAN:
                             {
                                 SetFrequencyBytes(FrequencyType.Tacan, Pz69Mode.LOWER, ref bytes);
+                                break;
+                            }
+                        case CurrentF16CRadioMode.ILS:
+                            {
+                                SetFrequencyBytes(FrequencyType.Ils, Pz69Mode.LOWER, ref bytes);
                                 break;
                             }
                         case CurrentF16CRadioMode.NOUSE:
@@ -1014,69 +1063,15 @@ namespace NonVisuals.Radios
         private bool SkipVHFPresetDialChange()
         {
             return false;
-            try
-            {
-                if (_currentUpperRadioMode == CurrentF16CRadioMode.VHF || _currentLowerRadioMode == CurrentF16CRadioMode.VHF)
-                {
-                    if (_vhfPresetDialSkipper > 2)
-                    {
-                        _vhfPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _vhfPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
         }
 
         private bool SkipUHFPresetDialChange()
         {
-            return false;
-            try
-            {
-                if (_currentUpperRadioMode == CurrentF16CRadioMode.UHF || _currentLowerRadioMode == CurrentF16CRadioMode.UHF)
-                {
-                    if (_uhfPresetDialSkipper > 2)
-                    {
-                        _uhfPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _uhfPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
+            return false;        
         }
-        private bool SkipTacanPresetDialChange()
+        private bool SkipTacanIlsPresetDialChange()
         {
-            return false;
-            try
-            {
-                if (_currentUpperRadioMode == CurrentF16CRadioMode.TACAN || _currentLowerRadioMode == CurrentF16CRadioMode.TACAN)
-                {
-                    if (_tacanPresetDialSkipper > 2)
-                    {
-                        _tacanPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _tacanPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
+            return false;         
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)

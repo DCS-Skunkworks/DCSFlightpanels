@@ -151,7 +151,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF16C.UPPER_NO_USE1:
+                        case RadioPanelPZ69KnobsF16C.UPPER_ILS:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -221,7 +221,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF16C.LOWER_NO_USE1:
+                        case RadioPanelPZ69KnobsF16C.LOWER_ILS:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
