@@ -11,7 +11,10 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Row="0" Height="319">
+            <GroupBox BorderBrush="Transparent">
+                <!--GroupBox only here for correct DarkMode TextBlock management-->
                 <TextBlock Name="TextBlockInformation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="10,10,10,10"/>
+            </GroupBox>
         </ScrollViewer>
         <Button Name="ButtonOk" Content="Ok" Height="23" Margin="0,0,10,0"  Grid.Row="1" HorizontalAlignment="Right" Width="50" Click="ButtonOkClick"></Button>
     </Grid>

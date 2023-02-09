@@ -46,7 +46,7 @@
                     </GroupBox>
 
                     <TextBlock FontSize="25" HorizontalAlignment="Center" Margin="5,15,5,0" >VERY IMPORTANT - DELETE OLD SETTINGS</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="5,5,5,0" FontSize="14" Background="AliceBlue">
+                    <TextBlock x:Name="ImportantTextBlock" TextWrapping="Wrap" Margin="5,5,5,0" FontSize="14" Background="AliceBlue">
                 <Italic>
                     Do this to avoid weird problems with things not working, settings not taken into account.
                     <LineBreak/>
@@ -87,7 +87,7 @@
                     <TextBox Name="TextBoxDCSBIOSToPort" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="7778"/>
 
                     <TextBlock FontSize="25" HorizontalAlignment="Center" Margin="5,15,5,0" >Problems?</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="5,5,5,0" FontSize="14" Background="AliceBlue">
+                    <TextBlock x:Name="ProblemsTextBlock" TextWrapping="Wrap" Margin="5,5,5,0" FontSize="14" Background="AliceBlue">
                         <Italic>
                             If you have problems with DCS-BIOS the very first thing you must do is to verify that the CTRL-Ref Page works.
                             <LineBreak/>

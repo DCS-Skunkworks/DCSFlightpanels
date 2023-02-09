@@ -42,6 +42,7 @@
     using Octokit;
     using NonVisuals.Panels;
     using NonVisuals.HID;
+    using System.Windows.Media.Imaging;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
     {
@@ -66,6 +67,11 @@
         {
             DarkModePrepare();
             InitializeComponent();
+
+            if (DarkMode.DarkModeEnabled)
+            {
+                ImageDcsBiosConnected.Source = new BitmapImage(new Uri(@"/dcsfp;component/Images/gear-image-darkmode.png", UriKind.Relative));
+            }
 
             DCSAircraft.Init();
 
