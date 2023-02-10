@@ -103,6 +103,49 @@ namespace DCS_BIOS
             }
         }
 
+        /// <summary>
+        /// Simple loading, not bothered with DCSFP various key emulator stuff and such
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <exception cref="Exception"></exception>
+        private static void ReadDataFromJsonFileSimple(string filename)
+        {
+            if (DCSBIOSAircraftLoadStatus.IsLoaded(filename))
+            {
+                return;
+            }
+
+            try
+            {
+                lock (LockObject)
+                {
+                    var directoryInfo = new DirectoryInfo(_jsonDirectory);
+                    IEnumerable<FileInfo> files;
+                    try
+                    {
+                        files = directoryInfo.EnumerateFiles(filename, SearchOption.TopDirectoryOnly);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Failed to find DCS-BIOS files. -> {Environment.NewLine}{ex.Message}");
+                    }
+
+                    foreach (var file in files)
+                    {
+                        var controls = ReadControlsFromDocJson(file.FullName);
+                        DCSBIOSControls.AddRange(controls);
+                        PrintDuplicateControlIdentifiers(controls);
+                    }
+
+                    DCSBIOSAircraftLoadStatus.SetLoaded(filename, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+            }
+        }
+
         private static void ReadDataFromJsonFile(string filename)
         {
             if (DCSBIOSAircraftLoadStatus.IsLoaded(filename) || filename == DCSAircraft.GetKeyEmulator().JSONFilename || filename == DCSAircraft.GetNoFrameLoadedYet().JSONFilename)
@@ -138,6 +181,23 @@ namespace DCS_BIOS
             catch (Exception ex)
             {
                 throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+            }
+        }
+
+        /// <summary>
+        /// Just loads the basics, not bothered with KeyEmulator mode and such
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        public static void LoadControlsSimple()
+        {
+            try
+            {
+                // Load the controls for the actual aircraft/helicopter
+                ReadDataFromJsonFileSimple(DCSAircraft.JSONFilename);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<==", ex);
             }
         }
 
@@ -319,9 +379,16 @@ namespace DCS_BIOS
             }
         }
 
-        public static IEnumerable<DCSBIOSControl> GetControls()
+        public static IEnumerable<DCSBIOSControl> GetControls(bool loadSimple = false)
         {
-            LoadControls();
+            if (loadSimple)
+            {
+                LoadControlsSimple();
+            }
+            else
+            {
+                LoadControls();
+            }
             return DCSBIOSControls;
         }
 

@@ -1,0 +1,66 @@
+﻿<Window x:Class="ControlReference.Windows.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Settings" Height="600" Width="800"
+        Loaded="SettingsWindow_OnLoaded"
+        WindowStartupLocation="CenterScreen" 
+        KeyDown="SettingsWindow_OnKeyDown" Icon="/Images/flightpanels02_8Rc_icon.ico">
+    <Grid Margin="-4,0,4,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        
+                <StackPanel Margin="10,5,10,0" >
+                    <Label FontWeight="Bold">DCS-BIOS Settings</Label>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="DCS-BIOS JSON Location" Foreground="White" Background="#f54747" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                        <Label/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="TextBoxDcsBiosJSONLocation" Height="23" Width="400" IsReadOnly="True" Margin="0,0,0,0" TextWrapping="Wrap" Text="$USERDIRECTORY$\Saved Games\DCS\Scripts\DCS-BIOS\doc\json"/>
+                        <Button Content="..." Height="23" Margin="0,0,0,0" x:Name="ButtonBrowse" Width="75" Click="ButtonBrowse_OnClick" />
+                        <Label Name="LabelDCSBIOSNotFound" FontWeight="DemiBold" Foreground="Red"/>
+                    </StackPanel>
+                    <Label Content="IP address to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="TextBoxDCSBIOSFromIP" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="239.255.50.10"/>
+                    <Label Content="Port to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="TextBoxDCSBIOSFromPort" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="5010"/>
+                    <Label Content="IP address to write to" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="TextBoxDCSBIOSToIP" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="127.0.0.1"/>
+                    <Label Content="Port to write to " Margin="0,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="TextBoxDCSBIOSToPort" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="7778"/>
+
+                    <TextBlock FontSize="25" HorizontalAlignment="Center" Margin="5,15,5,0" >Problems?</TextBlock>
+                    <TextBlock x:Name="ProblemsTextBlock" TextWrapping="Wrap" Margin="5,5,5,0" FontSize="14" Background="AliceBlue">
+                        <Italic>
+                            If you have problems with DCS-BIOS the very first thing you must do is to verify that the CTRL-Ref Page works.
+                            <LineBreak/>
+                            Check out troubleshooting Wiki page and also the Installation page.
+                        </Italic>
+                        <LineBreak/>
+                        <LineBreak/>
+                        <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Troubleshooting">
+                            <Bold>
+                                <Run FontSize="16">Wiki : Troubleshooting</Run>
+                            </Bold>
+                        </Hyperlink>
+                        <LineBreak/>
+                        <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Installation">
+                            <Bold>
+                                <Run FontSize="16">Wiki : Installation</Run>
+                            </Bold>
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+        <StackPanel Margin="0,0,0,0" Grid.Row="1" Orientation="Horizontal"  HorizontalAlignment="Right">
+            <Button Content="Ok" Height="23" VerticalAlignment="Bottom" Margin="10,0,0,10"  x:Name="ButtonOk" Width="75"  Click="ButtonOk_OnClick"/>
+            <Button Content="Cancel" Height="23" VerticalAlignment="Bottom" Margin="10,0,10,10" x:Name="ButtonCancel" Width="75" Click="ButtonCancel_OnClick" />
+        </StackPanel>
+    </Grid>
+
+</Window>

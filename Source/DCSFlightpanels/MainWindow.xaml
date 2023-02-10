@@ -5,14 +5,14 @@
         Height="800" 
         Width="1300" 
         Loaded="WindowLoaded" 
-        WindowStartupLocation="CenterScreen"  
-        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" 
-        Name="DCSFlightpanelsMainWindow" 
         Closing="MainWindowClosing" 
         Closed="MainWindow_OnClosed" 
         LocationChanged="MainWindowLocationChanged" 
         KeyDown="MainWindow_OnKeyDown"
-        SizeChanged="MainWindowSizeChanged">
+        SizeChanged="MainWindowSizeChanged"
+        WindowStartupLocation="CenterScreen"  
+        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" 
+        Name="DCSFlightpanelsMainWindow">
     <Window.Resources>
     </Window.Resources>
     <Grid Name="MainGrid">
