@@ -9,6 +9,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ControlReference.UserControls;
 using ControlReference.Windows;
 using DCS_BIOS.EventArgs;
 using DCS_BIOS.Json;
@@ -19,9 +20,10 @@ namespace ControlReference
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window , IDisposable, IDcsBiosConnectionListener
+    public partial class MainWindow : Window, IDisposable, IDcsBiosConnectionListener
     {
         private IEnumerable<DCSBIOSControl> _loadedControls = null;
+        private readonly List<DCSBIOSControlUserControl> _userControls = new();
         private readonly Timer _dcsStopGearTimer = new(5000);
         private DCSBIOS _dcsBios;
         private bool _formLoaded = false;
@@ -50,7 +52,7 @@ namespace ControlReference
                 _hasBeenCalledAlready = true;
             }
         }
-        
+
         // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
@@ -71,11 +73,13 @@ namespace ControlReference
                 }
 
                 DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), true);
+                DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), true, false);
                 UpdateComboBoxModules();
                 CreateDCSBIOS();
                 StartupDCSBIOS();
                 BIOSEventHandler.AttachConnectionListener(this);
+                _dcsStopGearTimer.Elapsed += TimerStopRotation;
+                _dcsStopGearTimer.Start();
                 _formLoaded = true;
             }
             catch (Exception ex)
@@ -83,7 +87,7 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void SetFormState()
         {
 
@@ -95,7 +99,7 @@ namespace ControlReference
             {
                 return;
             }
-            
+
             _dcsBios = new DCSBIOS(Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
             if (!_dcsBios.HasLastException())
             {
@@ -113,10 +117,9 @@ namespace ControlReference
             }
 
             _dcsBios?.Startup();
-
             _dcsStopGearTimer.Start();
         }
-        
+
         private void MenuSetDCSBIOSPath_OnClick(object sender, RoutedEventArgs e)
         {
             var settingsWindow = new SettingsWindow(0);
@@ -139,14 +142,16 @@ namespace ControlReference
             ComboBoxModules.SelectedIndex = 0;
             UpdateComboBoxCategories();
         }
+
         private void UpdateComboBoxCategories()
         {
-            var categoriesList = _loadedControls.Select(o => o.Category ).DistinctBy(o => o).ToList();
-            categoriesList.Insert(0,"All");
+            var categoriesList = _loadedControls.Select(o => o.Category).DistinctBy(o => o).ToList();
+            categoriesList.Insert(0, "All");
             ComboBoxCategory.DataContext = categoriesList;
             ComboBoxCategory.ItemsSource = categoriesList;
             ComboBoxCategory.Items.Refresh();
             ComboBoxCategory.SelectedIndex = 0;
+            ShowControls();
         }
 
         private void ComboBoxModules_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -163,7 +168,46 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
+        private void ComboBoxCategory_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ShowControls()
+        {
+            try
+            {
+                try
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    _userControls.Clear();
+                    foreach (var dcsbiosControl in _loadedControls)
+                    {
+                        _userControls.Add(new DCSBIOSControlUserControl(dcsbiosControl));
+                    }
+                    ItemsControlControls.ItemsSource = null;
+                    ItemsControlControls.Items.Clear();
+                    ItemsControlControls.ItemsSource = _userControls;
+                    ItemsControlControls.Focus();
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         public void DcsBiosConnectionActive(object sender, DCSBIOSConnectionEventArgs e)
         {
             try
@@ -173,6 +217,19 @@ namespace ControlReference
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TimerStopRotation(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                Dispatcher?.BeginInvoke((Action)(() => ImageDcsBiosConnected.IsEnabled = false));
+                _dcsStopGearTimer.Stop();
+            }
+            catch (Exception)
+            {
+                // ignore
             }
         }
 
@@ -233,7 +290,7 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void MainWindow_OnClosed(object sender, EventArgs e)
         {
             try
@@ -267,7 +324,7 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             try
@@ -289,6 +346,5 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
     }
 }

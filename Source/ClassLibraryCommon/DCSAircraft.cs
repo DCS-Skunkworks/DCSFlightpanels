@@ -87,7 +87,7 @@ namespace ClassLibraryCommon
             }
         }
 
-        public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder, bool loadMetaFiles = false)
+        public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder, bool loadMetaFiles = false, bool loadInternalModules = true)
         {
             var biosLua = Path.Combine(dcsbiosJsonFolder, "..\\..\\", "BIOS.lua");
 
@@ -99,6 +99,10 @@ namespace ClassLibraryCommon
             lock (Lock)
             {
                 ModulesList.Clear();
+                if (loadInternalModules)
+                {
+                    AddInternalModules();
+                }
             }
 
             var stringArray = File.ReadAllLines(biosLua);

@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="DCS-BIOS Control Reference" Height="600" Width="1200"
+        Title="DCS-BIOS Control Reference" 
+        Height="600" Width="700"
+        xmlns:controls="clr-namespace:ControlReference.UserControls"
         Loaded="MainWindow_OnLoaded" 
         Closed="MainWindow_OnClosed" 
         LocationChanged="MainWindow_OnLocationChanged" 
@@ -34,10 +36,10 @@
         </Menu>
         <ToolBar Height="35" HorizontalAlignment="Stretch" Name="ToolBarMain" VerticalAlignment="Top" Grid.Column="0" Grid.Row="1" >
             <ComboBox Name="ComboBoxModules" DisplayMemberPath="Description" Width="200" SelectionChanged="ComboBoxModules_OnSelectionChanged"></ComboBox>
-            <ComboBox Name="ComboBoxCategory" Width="200"></ComboBox>
+            <ComboBox Name="ComboBoxCategory" Width="200" SelectionChanged="ComboBoxCategory_OnSelectionChanged"></ComboBox>
             <TextBox Name="TextBoxSearchControl" Width="150"></TextBox>
             <Button>
-                <Image Source="/Images/search_controls.png" Name="ButtonSearchControls" MouseDown="ButtonSearchControls_OnMouseDown" ToolTip="Search for DCS-BIOS Control"/>
+                <Image IsEnabled="False" Source="/Images/search_controls.png" Name="ButtonSearchControls" MouseDown="ButtonSearchControls_OnMouseDown" ToolTip="Search for DCS-BIOS Control"/>
             </Button>
             <Image Name="ImageDcsBiosConnected"  Margin="10,0,0,0" Source="/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
                 <Image.RenderTransform>
@@ -66,6 +68,12 @@
                 </Image.Style>
             </Image>
         </ToolBar>
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <ItemsControl Name="ItemsControlControls"  >
+
+            </ItemsControl>
+        </ScrollViewer>
 
         <StatusBar Name="StatusBarMainWindow" HorizontalAlignment="Stretch" Height="26" Grid.Row="3" VerticalAlignment="Top" >
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
