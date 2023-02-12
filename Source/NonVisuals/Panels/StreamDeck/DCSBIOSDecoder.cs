@@ -492,6 +492,10 @@ namespace NonVisuals.Panels.StreamDeck
             _dcsbiosConverters.Add(dcsbiosConverter);
         }
 
+        [Obsolete]
+        [JsonIgnore]
+        public List<string> ImageFiles;
+
         public void Replace(DCSBIOSConverter oldDcsBiosValueToFaceConverter, DCSBIOSConverter newDcsBiosValueToFaceConverter)
         {
             Remove(oldDcsBiosValueToFaceConverter);
