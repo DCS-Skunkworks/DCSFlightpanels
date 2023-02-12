@@ -9,10 +9,15 @@
 
     using Interfaces;
     using Panels;
+    using System.IO;
+    using System.Drawing.Imaging;
+    using NLog;
 
     [Serializable]
     public abstract class FaceTypeBase : IDisposable
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         [JsonProperty("FaceType", Required = Required.Default)]
         public EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Unknown;
 
@@ -25,7 +30,6 @@
         private volatile bool _isVisible;
         private int _offsetX;
         private int _offsetY;
-
 
         public abstract int GetHash();
         protected abstract void DrawBitmap();
@@ -139,5 +143,34 @@
             }
         }
 
+        [JsonProperty("RawBitmap", Required = Required.Default)]
+        public byte[] RawBitmap
+        {
+            get {
+                
+                if (Bitmap != null)
+                {
+                    MemoryStream ms = new();
+                    Bitmap.Save(ms, ImageFormat.Png);
+                    return ms.ToArray();
+                } 
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    try
+                    {
+                        using MemoryStream ms = new(value);
+                        Bitmap = new Bitmap(ms);
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Error($"Could not deserialize image: {ex.Message}");
+                    }
+                }
+            }
+        }
     }
 }
