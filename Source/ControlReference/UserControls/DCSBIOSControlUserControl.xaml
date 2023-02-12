@@ -30,7 +30,7 @@
 
         <DockPanel Grid.Row="0" Grid.Column="0" >
             <Label Name="LabelDescription" Content="" DockPanel.Dock="Left"/>
-            <Label Name="LabelControlId" FontStyle="Italic" Content="" DockPanel.Dock="Left" />
+            <Label Name="LabelControlId" FontStyle="Italic" Content="" DockPanel.Dock="Left" MouseEnter="LabelControlId_OnMouseEnter" MouseLeave="LabelControlId_OnMouseLeave" MouseDown="LabelControlId_OnMouseDown"/>
             <Label Name="LabelCategory" FontStyle="Italic" DockPanel.Dock="Right" Content="" HorizontalAlignment="Right"/>
         </DockPanel>
         <StackPanel Name="StackPanelInputInterfaces" Grid.Row="1" Grid.Column="0" >
