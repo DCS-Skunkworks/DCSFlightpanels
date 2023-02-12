@@ -144,24 +144,6 @@
             CheckHomeLayerExists();
         }
 
-        public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
-        {
-            var importLayerNames = buttonExports.Select(o => o.LayerName).Distinct().ToList();
-
-            foreach (var importLayerName in importLayerNames)
-            {
-                if (!LayerExists(importLayerName))
-                {
-                    AddLayer(new StreamDeckLayer(_streamDeckPanel) { Name = importLayerName });
-                }
-
-                var layer = GetLayer(importLayerName);
-                layer.ImportButtons(importMode, buttonExports);
-            }
-
-            SetStreamDeckPanelInstance(_streamDeckPanel);
-        }
-
         public List<ButtonExport> GetButtonExports()
         {
             List<ButtonExport> result = new();
@@ -174,90 +156,6 @@
                 );
             }
             return result;
-        }
-
-        public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
-        {
-            List<string> filesToCompressList = new(); // includes the json file and eventual image files
-
-            StreamDeckCommon.CleanDCSFPTemporaryFolder();
-
-            /*
-                         * Close because the list changes below. If not then subsequent operations by the user
-                         * will cause null exceptions since image path is reset.
-                         */
-            var clonedButtonExports = buttonExports.CloneJson();
-
-            foreach (var buttonExport in clonedButtonExports)
-            {
-                if (buttonExport.Button.ActionForPress != null && buttonExport.Button.ActionForPress.HasSound)
-                {
-                    filesToCompressList = AddFileForCompression(filesToCompressList, buttonExport.Button.ActionForPress.SoundFile);
-                }
-
-                if (buttonExport.Button.ActionForRelease != null && buttonExport.Button.ActionForRelease.HasSound)
-                {
-                    filesToCompressList = AddFileForCompression(filesToCompressList, buttonExport.Button.ActionForRelease.SoundFile);
-                }
-
-                if (buttonExport.Button.Face != null)
-                {
-                    if (buttonExport.Button.Face.GetType() == typeof(DCSBIOSDecoder))
-                    {
-                        var decoder = (DCSBIOSDecoder)buttonExport.Button.Face;
-
-                        foreach (var imageFile in decoder.ImageFiles)
-                        {
-                            filesToCompressList = AddFileForCompression(filesToCompressList, imageFile);
-                        }
-
-                        /*
-                         * We must remove any path imageFilePath.
-                         * When importing a path will be added back following whatever folder
-                         * the user wants the image files to reside in.
-                         */
-                        decoder.ResetImageFilePaths();
-                    }
-                    else if (buttonExport.Button.Face.GetType() == typeof(FaceTypeImage))
-                    {
-                        var faceTypeImage = (FaceTypeImage)buttonExport.Button.Face;
-                        filesToCompressList = AddFileForCompression(filesToCompressList, faceTypeImage.ImageFile);
-                        faceTypeImage.ImageFile = Path.GetFileName(faceTypeImage.ImageFile);
-                    }
-                    else if (buttonExport.Button.Face.GetType() == typeof(FaceTypeDCSBIOSOverlay))
-                    {
-                        var faceTypeDCSBIOSOverlay = (FaceTypeDCSBIOSOverlay)buttonExport.Button.Face;
-                        filesToCompressList = AddFileForCompression(filesToCompressList, faceTypeDCSBIOSOverlay.BackgroundBitmapPath);
-                        faceTypeDCSBIOSOverlay.BackgroundBitmapPath = Path.GetFileName(faceTypeDCSBIOSOverlay.BackgroundBitmapPath);
-                    }
-                }
-            }
-
-            var json = JsonConvert.SerializeObject(clonedButtonExports, INDENTED_FORMATTING, _jsonSettings);
-            var chars = _uniCodeEncoding.GetChars(_uniCodeEncoding.GetBytes(json));
-
-            var filename = StreamDeckCommon.GetDCSFPTemporaryFolder() + "\\" + StreamDeckConstants.BUTTON_EXPORT_FILENAME;
-
-            using (var streamWriter = File.CreateText(filename))
-            {
-                streamWriter.Write(chars);
-            }
-
-            filesToCompressList = AddFileForCompression(filesToCompressList, filename);
-            ZipArchiver.CreateZipFile(compressedFilenameAndPath, filesToCompressList.Distinct().ToList());
-
-            SystemSounds.Asterisk.Play();
-        }
-
-        private static List<string> AddFileForCompression(List<string> list, string file)
-        {
-            if (string.IsNullOrEmpty(file) || !File.Exists(file) || list.Contains(file))
-            {
-                return list;
-            }
-
-            list.Add(file);
-            return list;
         }
 
         public void SetStreamDeckPanelInstance(StreamDeckPanel streamDeckPanel)

@@ -596,35 +596,7 @@
             Debug.WriteLine(_streamDeckPanel.GetLayerHandlerInformation());
             Debug.WriteLine(SDEventHandler.GetInformation());
         }
-
-        private void ButtonImport_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var importWindow = new ImportWindow(_streamDeckPanel.BindingHash);
-                importWindow.Show();
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
-        private void ButtonExport_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var exportWindow = new ExportWindow(_streamDeckPanel);
-                exportWindow.Show();
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-        
+  
         public void RemoteLayerSwitch(object sender, RemoteStreamDeckShowNewLayerArgs e)
         {
             try
@@ -639,6 +611,5 @@
                 Logger.Error(ex);
             }
         }
-
     }
 }

@@ -21,8 +21,6 @@
         public FaceTypeDCSBIOSOverlay()
         { }
 
-
-
         public new void Dispose()
         {
             // Call base class implementation.
