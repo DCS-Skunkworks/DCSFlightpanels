@@ -267,30 +267,10 @@
             }
         }
 
-        [JsonProperty("Description", Required = Required.Default)]
-        public string Description
-        {
-            get
-            {
-                var stringBuilder = new StringBuilder();
-                if (ActionForPress != null)
-                {
-                    stringBuilder.Append("ActionPress : ").Append(_buttonActionForPress.ActionDescription).Append(' ');
-                }
-
-                if (ActionForRelease != null)
-                {
-                    stringBuilder.Append("ActionRelease : ").Append(_buttonActionForRelease.ActionDescription).Append(' ');
-                }
-
-                if (Face != null)
-                {
-                    stringBuilder.Append(Face.FaceDescription).Append(' ');
-                }
-
-                return stringBuilder.ToString();
-            }
-        }
+        [Obsolete]
+        [JsonIgnore]
+        public string Description;
+       
 
         [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName
