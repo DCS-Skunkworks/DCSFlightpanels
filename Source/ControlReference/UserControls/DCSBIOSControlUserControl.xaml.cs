@@ -8,6 +8,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using DCS_BIOS.EventArgs;
+using DCS_BIOS.Interfaces;
 using DCS_BIOS.Json;
 
 namespace ControlReference.UserControls
@@ -15,22 +17,59 @@ namespace ControlReference.UserControls
     /// <summary>
     /// Interaction logic for DCSBIOSControlUserControl.xaml
     /// </summary>
-    public partial class DCSBIOSControlUserControl : UserControl
+    public partial class DCSBIOSControlUserControl : UserControl, IDisposable, IDcsBiosDataListener, IDCSBIOSStringListener
     {
         private readonly DCSBIOSControl _dcsbiosControl;
         private ToolTip _copyToolTip = null;
+        private readonly DCSBIOSOutput _dcsbiosOutput = null;
 
         public DCSBIOSControlUserControl(DCSBIOSControl dcsbiosControl)
         {
             InitializeComponent();
             _dcsbiosControl = dcsbiosControl;
+            _dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsbiosControl.Identifier);
+            if (_dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
+            {
+                DCSBIOSStringManager.AddListeningAddress(_dcsbiosOutput);
+            }
+            
+            BIOSEventHandler.AttachDataListener(this);
+            BIOSEventHandler.AttachStringListener(this);
+        }
+        
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                BIOSEventHandler.DetachDataListener(this);
+                BIOSEventHandler.DetachStringListener(this);
+            }
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        
         private void DCSBIOSControlUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
+                SetFormState();
                 ShowControl();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void SetFormState()
+        {
+            try
+            {
+                ButtonSetVariableStep.IsEnabled = !string.IsNullOrEmpty(TextBoxVariableStepValue.Text);
             }
             catch (Exception ex)
             {
@@ -147,6 +186,134 @@ namespace ControlReference.UserControls
                     Placement = PlacementMode.Bottom,
                     IsOpen = true,
                 };
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
+        {
+            try
+            {
+                if (e.Address == _dcsbiosOutput.Address)
+                {
+                    var value = _dcsbiosOutput.GetUIntValue(e.Data);
+                    Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = value));
+
+                    if (_dcsbiosOutput.MaxValue == 0)
+                    {
+                        return;
+                    }
+                    var percentage = (value * 100) / _dcsbiosOutput.MaxValue;
+                    Dispatcher?.BeginInvoke((Action)(() => LabelPercentage.Content = $"({percentage}%)"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
+        {
+            try
+            {
+                if (e.Address == _dcsbiosOutput.Address)
+                {
+                    Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = $"->{e.StringData}<-"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+
+        private void SliderSetState_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            try
+            {
+                ButtonSetState.Content = e.NewValue;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonFixedStepDec_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DCSBIOS.Send($"{_dcsbiosControl.Identifier} DEC\n");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonFixedStepInc_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DCSBIOS.Send($"{_dcsbiosControl.Identifier} INC\n");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonSetState_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DCSBIOS.Send($"{_dcsbiosControl.Identifier} {Convert.ToUInt32(SliderSetState.Value)}\n");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonSetVariableStep_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DCSBIOS.Send($"{_dcsbiosControl.Identifier} {TextBoxVariableStepValue.Text}\n");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxVariableStepValue_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key is not (>= Key.D0 and <= Key.D9 or >= Key.NumPad0 and <= Key.NumPad9) )
+                {
+                    e.Handled = true;
+                    return;
+                }
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonToggle_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DCSBIOS.Send($"{_dcsbiosControl.Identifier} TOGGLE\n");
             }
             catch (Exception ex)
             {

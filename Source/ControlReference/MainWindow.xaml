@@ -11,7 +11,8 @@
         Closed="MainWindow_OnClosed" 
         LocationChanged="MainWindow_OnLocationChanged" 
         SizeChanged="MainWindow_OnSizeChanged"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="/ctrlref;component/Images/flightpanels02_8Rc_icon.ico" >
 
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
@@ -37,9 +38,9 @@
         <ToolBar Height="35" HorizontalAlignment="Stretch" Name="ToolBarMain" VerticalAlignment="Top" Grid.Column="0" Grid.Row="1" >
             <ComboBox Name="ComboBoxModules" DisplayMemberPath="Description" Width="200" SelectionChanged="ComboBoxModules_OnSelectionChanged"></ComboBox>
             <ComboBox Name="ComboBoxCategory" Width="200" SelectionChanged="ComboBoxCategory_OnSelectionChanged"></ComboBox>
-            <TextBox Name="TextBoxSearchControl" Width="150" KeyUp="TextBoxSearchControl_OnKeyUp"/>
+            <TextBox Name="TextBoxSearchControl" TextWrapping="NoWrap"  IsReadOnly="False" Width="150"  KeyDown="TextBoxSearchControl_OnKeyDown"/>
             <Button>
-                <Image IsEnabled="False" Source="/Images/search_controls.png" Name="ButtonSearchControls" MouseDown="ButtonSearchControls_OnMouseDown" ToolTip="Search for DCS-BIOS Control"/>
+                <Image Source="/Images/search_controls.png" Name="ButtonSearchControls" MouseDown="ButtonSearchControls_OnMouseDown" ToolTip="Search for DCS-BIOS Control"/>
             </Button>
             <Image Name="ImageDcsBiosConnected"  Margin="10,0,0,0" Source="/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
                 <Image.RenderTransform>
@@ -70,7 +71,7 @@
         </ToolBar>
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <ItemsControl Name="ItemsControlControls"  >
+            <ItemsControl Name="ItemsControlControls" SizeChanged="ItemsControlControls_OnSizeChanged" >
 
             </ItemsControl>
         </ScrollViewer>

@@ -15,6 +15,7 @@ using ControlReference.Windows;
 using DCS_BIOS.EventArgs;
 using DCS_BIOS.Json;
 using DCS_BIOS.Interfaces;
+using System.Windows.Threading;
 
 namespace ControlReference
 {
@@ -147,7 +148,6 @@ namespace ControlReference
         private void UpdateComboBoxCategories()
         {
             var categoriesList = _loadedControls.Select(o => o.Category).DistinctBy(o => o).ToList();
-            categoriesList.Insert(0, "All");
             ComboBoxCategory.DataContext = categoriesList;
             ComboBoxCategory.ItemsSource = categoriesList;
             ComboBoxCategory.Items.Refresh();
@@ -174,6 +174,7 @@ namespace ControlReference
         {
             try
             {
+                ShowControls();
             }
             catch (Exception ex)
             {
@@ -189,11 +190,22 @@ namespace ControlReference
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     _dcsbiosUIControlPanels.Clear();
+
                     var filteredControls = _loadedControls;
 
-                    if (ComboBoxCategory.SelectedIndex > 0)
+                    /*
+                     * Limit only on category if user is not searching
+                     */
+                    if (string.IsNullOrEmpty(TextBoxSearchControl.Text) && ComboBoxCategory.SelectedValue != null)
                     {
                         filteredControls = _loadedControls.Where(o => o.Category == ComboBoxCategory.SelectedValue.ToString())
+                            .ToList();
+                    }
+
+                    if (!string.IsNullOrEmpty(TextBoxSearchControl.Text))
+                    {
+                        var searchWord = TextBoxSearchControl.Text.ToLower();
+                        filteredControls = _loadedControls.Where(o => o.Description.ToLower().Contains(searchWord) || o.Identifier.ToLower().Contains(searchWord))
                             .ToList();
                     }
 
@@ -205,12 +217,11 @@ namespace ControlReference
                     ItemsControlControls.Items.Clear();
                     ItemsControlControls.ItemsSource = _dcsbiosUIControlPanels;
 
-                    LabelStatusBarRightInformation.Text = $"{_loadedControls.Count()} DCS-BIOS Controls loaded.";
+                    LabelStatusBarRightInformation.Text = $"{filteredControls.Count()} DCS-BIOS Controls loaded.";
                     ItemsControlControls.Focus();
                 }
                 finally
                 {
-                    Mouse.OverrideCursor = Cursors.Arrow;
                 }
             }
             catch (Exception ex)
@@ -295,6 +306,7 @@ namespace ControlReference
         {
             try
             {
+                ShowControls();
             }
             catch (Exception ex)
             {
@@ -357,12 +369,39 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void TextBoxSearchControl_OnKeyUp(object sender, KeyEventArgs e)
+        
+        private void RenderingComplete()
         {
             try
             {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
 
+        private void ItemsControlControls_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            try
+            {
+                Dispatcher.BeginInvoke(new Action(RenderingComplete), DispatcherPriority.ContextIdle, null);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxSearchControl_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    ShowControls();
+                }
             }
             catch (Exception ex)
             {

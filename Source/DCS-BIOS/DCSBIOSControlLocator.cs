@@ -389,7 +389,14 @@ namespace DCS_BIOS
             {
                 LoadControls();
             }
-            return DCSBIOSControls;
+            var returnList = new List<DCSBIOSControl>();
+            returnList.AddRange(DCSBIOSControls);
+            
+            /*
+             * Reason for this is that the collection can be used in different
+             * locations and there can be problems with "Collection modified during iteration...."
+             */
+            return returnList;
         }
 
         public static IEnumerable<DCSBIOSControl> GetStringOutputControls()

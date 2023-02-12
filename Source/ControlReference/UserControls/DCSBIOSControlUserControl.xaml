@@ -37,26 +37,26 @@
             <StackPanel Name="StackPanelFixedStep" Orientation="Horizontal" >
                 <Label Content="Input Interface: " FontWeight="Bold"/>
                 <Label Content="fixed__step" />
-                <Button Name="ButtonFixedStepDec" Height="22" Content="DEC"/>
-                <Button Name="ButtonFixedStepInc" Height="22" Margin="5,0,0,0" Content="INC"/>
+                <Button Name="ButtonFixedStepDec" Height="22" Content="DEC" Click="ButtonFixedStepDec_OnClick"/>
+                <Button Name="ButtonFixedStepInc" Height="22" Margin="5,0,0,0" Content="INC" Click="ButtonFixedStepInc_OnClick"/>
             </StackPanel>
             <StackPanel Name="StackPanelSetState" Orientation="Horizontal">
                 <Label Content="Input Interface: " FontWeight="Bold"/>
                 <Label Content="set__state" />
-                <Slider Name="SliderSetState" Width="100" Margin="8,0,0,0" VerticalAlignment="Center" />
-                <Button Name="ButtonSetState" Height="22" Content="14321"/>
+                <Slider Name="SliderSetState" IsSnapToTickEnabled="True" TickFrequency="1" Width="100" Margin="8,0,0,0" VerticalAlignment="Center" ValueChanged="SliderSetState_OnValueChanged" />
+                <Button Name="ButtonSetState" Height="22" Margin="5,0,0,0" Content="1" Click="ButtonSetState_OnClick"/>
                 <Label Name="LabelSliderValue"/>
             </StackPanel>
             <StackPanel Name="StackPanelVariableStep" Orientation="Horizontal">
                 <Label Content="Input Interface: " FontWeight="Bold"/>
                 <Label Content="variable__step" />
-                <TextBox Name="TextBoxVariableStepValue" Width="60" Height="22"/>
-                <Button Name="ButtonSetVariableStep" Height="22" Margin="20,0,0,0" Content="SET"/>
+                <TextBox Name="TextBoxVariableStepValue" Width="60" Height="22" KeyDown="TextBoxVariableStepValue_OnKeyDown"  />
+                <Button Name="ButtonSetVariableStep" Height="22" Margin="20,0,0,0" Content="SET" Click="ButtonSetVariableStep_OnClick"/>
             </StackPanel>
             <StackPanel Name="StackPanelAction" Orientation="Horizontal">
                 <Label Content="Input Interface: " FontWeight="Bold"/>
                 <Label Content="action" />
-                <Button Name="ButtonToggle" Height="22" Margin="20,0,0,0" Content="TOGGLE"/>
+                <Button Name="ButtonToggle" Height="22" Margin="20,0,0,0" Content="TOGGLE" Click="ButtonToggle_OnClick"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Output Type: " FontWeight="Bold"/>

@@ -1,45 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>disable</Nullable>
-    <UseWPF>true</UseWPF>
-    <AssemblyName>ctrlref</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>disable</Nullable>
+		<UseWPF>true</UseWPF>
+		<AssemblyName>ctrlref</AssemblyName>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="gear-image.png" />
-    <None Remove="Images\flightpanels02_8Rc_icon.ico" />
-    <None Remove="Images\gear-image.png" />
-    <None Remove="Images\search_controls.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="gear-image.png" />
+		<None Remove="Images\flightpanels02_8Rc_icon.ico" />
+		<None Remove="Images\gear-image.png" />
+		<None Remove="Images\search_controls.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
-    <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
+		<ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="gear-image.png" />
-    <Resource Include="Images\flightpanels02_8Rc_icon.ico" />
-    <Resource Include="Images\gear-image.png" />
-    <Resource Include="Images\search_controls.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="gear-image.png" />
+		<Resource Include="Images\flightpanels02_8Rc_icon.ico" />
+		<Resource Include="Images\gear-image.png" />
+		<Resource Include="Images\search_controls.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Properties\Settings.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+		</Compile>
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="NLog.config">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Properties\Settings.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
 
 </Project>
