@@ -439,7 +439,7 @@
             _streamDeckLayerHandler.ShowPreviousLayer();
         }
 
-        public static Bitmap Validate(string imagePath)
+        public static Bitmap GetBitmapFromPath(string imagePath)
         {
             return BitMapCreator.BitmapOrFileNotFound(imagePath);
         }

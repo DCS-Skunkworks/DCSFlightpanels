@@ -21,6 +21,7 @@
     using NonVisuals.Panels.StreamDeck.Panels;
     using NonVisuals.Panels.StreamDeck;
     using Newtonsoft.Json;
+    using System.Drawing;
 
     public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, INvStreamDeckListener, IStreamDeckConfigListener
     {
@@ -160,7 +161,7 @@
                 {
                     case EnumStreamDeckFaceType.Image:
                         var ftImage = (FaceTypeImage)streamdeckButton.Face;
-                        var bitmap = BitMapCreator.BitmapOrFileNotFound(ftImage.ImageFile);
+                        Bitmap bitmap = ftImage.GetLoadedBitmap_FallBackLoadFile();
                         button.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
                         break;
 
@@ -184,7 +185,7 @@
                 if (streamdeckButton.Face.FaceType == EnumStreamDeckFaceType.Image)
                 {
                     var faceTypeImage = (FaceTypeImage)streamdeckButton.Face;
-                    var bitmap = BitMapCreator.BitmapOrFileNotFound(faceTypeImage.ImageFile);
+                    var bitmap = faceTypeImage.GetLoadedBitmap_FallBackLoadFile();
                     button.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
                 }
             }

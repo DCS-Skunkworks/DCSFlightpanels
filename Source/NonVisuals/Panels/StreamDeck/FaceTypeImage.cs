@@ -73,7 +73,7 @@
         {
             if (_bitmap == null || RefreshBitmap)
             {
-                _bitmap = StreamDeckPanel.Validate(_imageFile);
+                _bitmap = StreamDeckPanel.GetBitmapFromPath(_imageFile);
 
                 if (BitMapCreator.IsSmallerThanStreamdeckDefault(_bitmap))
                 {
@@ -166,5 +166,10 @@
 
         public void AfterClone()
         { }
+
+        public Bitmap GetLoadedBitmap_FallBackLoadFile()
+        {
+            return Bitmap != null ?  Bitmap : BitMapCreator.BitmapOrFileNotFound(ImageFile); //fallback to load file
+        }
     }
 }

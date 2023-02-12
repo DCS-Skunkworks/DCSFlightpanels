@@ -164,6 +164,7 @@
                     {
                         using MemoryStream ms = new(value);
                         Bitmap = new Bitmap(ms);
+                        RefreshBitmap = false; // we already got a bitmap, no need to load from ImageFile property
                     }
                     catch(Exception ex)
                     {
