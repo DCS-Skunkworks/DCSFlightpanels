@@ -8,6 +8,7 @@ using System.Linq;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using ControlReference.UserControls;
 using ControlReference.Windows;
@@ -23,7 +24,7 @@ namespace ControlReference
     public partial class MainWindow : Window, IDisposable, IDcsBiosConnectionListener
     {
         private IEnumerable<DCSBIOSControl> _loadedControls = null;
-        private readonly List<DCSBIOSControlUserControl> _userControls = new();
+        private readonly List<DCSBIOSControlUserControl> _dcsbiosUIControlPanels = new();
         private readonly Timer _dcsStopGearTimer = new(5000);
         private DCSBIOS _dcsBios;
         private bool _formLoaded = false;
@@ -187,14 +188,24 @@ namespace ControlReference
                 try
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
-                    _userControls.Clear();
-                    foreach (var dcsbiosControl in _loadedControls)
+                    _dcsbiosUIControlPanels.Clear();
+                    var filteredControls = _loadedControls;
+
+                    if (ComboBoxCategory.SelectedIndex > 0)
                     {
-                        _userControls.Add(new DCSBIOSControlUserControl(dcsbiosControl));
+                        filteredControls = _loadedControls.Where(o => o.Category == ComboBoxCategory.SelectedValue.ToString())
+                            .ToList();
+                    }
+
+                    foreach (var dcsbiosControl in filteredControls)
+                    {
+                        _dcsbiosUIControlPanels.Add(new DCSBIOSControlUserControl(dcsbiosControl));
                     }
                     ItemsControlControls.ItemsSource = null;
                     ItemsControlControls.Items.Clear();
-                    ItemsControlControls.ItemsSource = _userControls;
+                    ItemsControlControls.ItemsSource = _dcsbiosUIControlPanels;
+
+                    LabelStatusBarRightInformation.Text = $"{_loadedControls.Count()} DCS-BIOS Controls loaded.";
                     ItemsControlControls.Focus();
                 }
                 finally
@@ -340,6 +351,18 @@ namespace ControlReference
                     Settings.Default.MainWindowWidth = Width;
                     Settings.Default.Save();
                 }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxSearchControl_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+
             }
             catch (Exception ex)
             {

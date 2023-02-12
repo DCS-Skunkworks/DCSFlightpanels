@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Media;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using DCS_BIOS;
 using DCS_BIOS.Json;
 
 namespace ControlReference.UserControls
@@ -15,6 +18,7 @@ namespace ControlReference.UserControls
     public partial class DCSBIOSControlUserControl : UserControl
     {
         private readonly DCSBIOSControl _dcsbiosControl;
+        private ToolTip _copyToolTip = null;
 
         public DCSBIOSControlUserControl(DCSBIOSControl dcsbiosControl)
         {
@@ -81,9 +85,20 @@ namespace ControlReference.UserControls
                                     $"Failed to identify Input Interface {dcsbiosControlInput.ControlInterface}.");
                             }
                     }
-
-                    LabelOutputType.Content = _dcsbiosControl.Outputs[0].OutputDataType;
                 }
+
+                if (_dcsbiosControl.Outputs[0].OutputDataType == DCSBiosOutputType.IntegerType)
+                {
+                    LabelOutputType.Content = "integer";
+                    LabelOutputMaxValue.Content = _dcsbiosControl.Outputs[0].MaxValue;
+                }
+                if (_dcsbiosControl.Outputs[0].OutputDataType == DCSBiosOutputType.StringType)
+                {
+                    LabelOutputMaxValueDesc.Content = "Max Length: ";
+                    LabelOutputType.Content = "string";
+                    LabelOutputMaxValue.Content = _dcsbiosControl.Outputs[0].MaxLength;
+                }
+
             }
             catch (Exception ex)
             {
@@ -95,6 +110,7 @@ namespace ControlReference.UserControls
         {
             try
             {
+                Mouse.OverrideCursor = Cursors.Hand;
             }
             catch (Exception ex)
             {
@@ -106,6 +122,11 @@ namespace ControlReference.UserControls
         {
             try
             {
+                Mouse.OverrideCursor = Cursors.Arrow;
+                if (_copyToolTip != null)
+                {
+                    _copyToolTip.IsOpen = false;
+                }
             }
             catch (Exception ex)
             {
@@ -117,6 +138,15 @@ namespace ControlReference.UserControls
         {
             try
             {
+                Clipboard.SetText(_dcsbiosControl.Identifier);
+                SystemSounds.Exclamation.Play();
+                _copyToolTip = new ToolTip
+                {
+                    Content = "Value copied.",
+                    PlacementTarget = LabelControlId,
+                    Placement = PlacementMode.Bottom,
+                    IsOpen = true,
+                };
             }
             catch (Exception ex)
             {
