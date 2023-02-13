@@ -1,4 +1,5 @@
-﻿using DCS_BIOS.Json;
+﻿using System.Diagnostics;
+using DCS_BIOS.Json;
 
 namespace DCS_BIOS
 {
@@ -21,7 +22,7 @@ namespace DCS_BIOS
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private static readonly List<DCSBIOSControl> DCSBIOSControls = new();
+        private static List<DCSBIOSControl> DCSBIOSControls = new();
         private static readonly object LockObject = new();
         private static DCSAircraft _dcsAircraft;
         private static string _jsonDirectory;
@@ -61,7 +62,7 @@ namespace DCS_BIOS
                 {
                     return null;
                 }
-
+                
                 try
                 {
                     LoadControls();
@@ -103,6 +104,49 @@ namespace DCS_BIOS
             }
         }
 
+        /// <summary>
+        /// Simple loading, not bothered with DCSFP various key emulator stuff and such
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <exception cref="Exception"></exception>
+        private static void ReadDataFromJsonFileSimple(string filename)
+        {
+            if (DCSBIOSAircraftLoadStatus.IsLoaded(filename))
+            {
+                return;
+            }
+
+            try
+            {
+                lock (LockObject)
+                {
+                    var directoryInfo = new DirectoryInfo(_jsonDirectory);
+                    IEnumerable<FileInfo> files;
+                    try
+                    {
+                        files = directoryInfo.EnumerateFiles(filename, SearchOption.TopDirectoryOnly);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Failed to find DCS-BIOS files. -> {Environment.NewLine}{ex.Message}");
+                    }
+
+                    foreach (var file in files)
+                    {
+                        var controls = ReadControlsFromDocJson(file.FullName);
+                        DCSBIOSControls.AddRange(controls);
+                        PrintDuplicateControlIdentifiers(controls);
+                    }
+
+                    DCSBIOSAircraftLoadStatus.SetLoaded(filename, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+            }
+        }
+
         private static void ReadDataFromJsonFile(string filename)
         {
             if (DCSBIOSAircraftLoadStatus.IsLoaded(filename) || filename == DCSAircraft.GetKeyEmulator().JSONFilename || filename == DCSAircraft.GetNoFrameLoadedYet().JSONFilename)
@@ -141,6 +185,23 @@ namespace DCS_BIOS
             }
         }
 
+        /// <summary>
+        /// Just loads the basics, not bothered with KeyEmulator mode and such
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        public static void LoadControlsSimple()
+        {
+            try
+            {
+                // Load the controls for the actual aircraft/helicopter
+                ReadDataFromJsonFileSimple(DCSAircraft.JSONFilename);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<==", ex);
+            }
+        }
+
         public static void LoadControls()
         {
             /*
@@ -151,6 +212,16 @@ namespace DCS_BIOS
              *
              * This function will have to change when (if) new types of profiles are added to DCS-BIOS
              */
+
+
+            /*
+             * Check if already loaded.
+             */
+            if (DCSBIOSControls.Count > 0)
+            {
+                return;
+            }
+
             try
             {
                 if (DCSAircraft.IsNoFrameLoadedYet(_dcsAircraft) ||
@@ -193,18 +264,7 @@ namespace DCS_BIOS
                 }
 
                 // Remove duplicates which may come from loading NS430 or other additional profiles
-                while (DCSBIOSControls.Count(controlObject => controlObject.Identifier.Equals("_UPDATE_COUNTER")) > 1)
-                {
-                    DCSBIOSControls.Remove(DCSBIOSControls.FindLast(controlObject =>
-                        controlObject.Identifier.Equals("_UPDATE_COUNTER")));
-                }
-
-                while (DCSBIOSControls.Count(controlObject =>
-                           controlObject.Identifier.Equals("_UPDATE_SKIP_COUNTER")) > 1)
-                {
-                    DCSBIOSControls.Remove(DCSBIOSControls.FindLast(controlObject =>
-                        controlObject.Identifier.Equals("_UPDATE_SKIP_COUNTER")));
-                }
+                DCSBIOSControls = DCSBIOSControls.Distinct(new DCSBIOSControlComparer()).ToList();
             }
             catch (Exception ex)
             {
@@ -319,10 +379,19 @@ namespace DCS_BIOS
             }
         }
 
-        public static IEnumerable<DCSBIOSControl> GetControls()
+        public static IEnumerable<DCSBIOSControl> GetControls(bool loadSimple = false)
         {
-            LoadControls();
-            return DCSBIOSControls;
+            if (loadSimple)
+            {
+                LoadControlsSimple();
+            }
+            else
+            {
+                LoadControls();
+            }
+            
+            // Remove duplicates which may come from loading NS430 or other additional profiles
+            return DCSBIOSControls.Distinct(new DCSBIOSControlComparer()).ToList();
         }
 
         public static IEnumerable<DCSBIOSControl> GetStringOutputControls()

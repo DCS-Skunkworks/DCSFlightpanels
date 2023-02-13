@@ -1,4 +1,6 @@
-﻿namespace ClassLibraryCommon
+﻿using System.Collections.Immutable;
+
+namespace ClassLibraryCommon
 {
     using NLog;
     using System;
@@ -50,7 +52,7 @@
                 }
             }
         }
-        
+
         public static int DCSBIOSModulesCount
         {
             get
@@ -77,15 +79,15 @@
                     var module = new DCSAircraft(2, "Key Emulation", "KEYEMULATOR");
                     ModulesList.Add(module);
                 }
-  				if (!ModulesList.Exists(o => o.ID == 3))
-            	{
-                	var module = new DCSAircraft(3, "Key Emulation with SRS support", "KEYEMULATOR_SRS");
-                	ModulesList.Add(module);
-            	}
+                if (!ModulesList.Exists(o => o.ID == 3))
+                {
+                    var module = new DCSAircraft(3, "Key Emulation with SRS support", "KEYEMULATOR_SRS");
+                    ModulesList.Add(module);
+                }
             }
         }
 
-        public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder)
+        public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder, bool loadMetaFiles = false, bool loadInternalModules = true)
         {
             var biosLua = Path.Combine(dcsbiosJsonFolder, "..\\..\\", "BIOS.lua");
 
@@ -94,7 +96,25 @@
                 return;
             }
 
+            lock (Lock)
+            {
+                ModulesList.Clear();
+                if (loadInternalModules)
+                {
+                    AddInternalModules();
+                }
+            }
+
             var stringArray = File.ReadAllLines(biosLua);
+
+            var searchFilterList = new List<string>()
+            {
+                "MetadataEnd",
+                "MetadataStart",
+                "CommonData"
+            };
+
+            var metaFileId = 500;
 
             // dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]]) -- ID = 5, ProperName = A-10C Thunderbolt II
             foreach (var s in stringArray)
@@ -118,6 +138,15 @@
                     lock (Lock)
                     {
                         ModulesList.Add(new DCSAircraft(id, properName, json));
+                    }
+                }
+                else if (loadMetaFiles && searchFilterList.Any(o => s.Contains(o)))
+                {
+                    var json = s.ToLower().Replace(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower(), string.Empty).Replace(".lua]])", string.Empty).Trim() + ".json";
+                    var properName = json.Replace(".json", "");
+                    lock (Lock)
+                    {
+                        ModulesList.Add(new DCSAircraft(metaFileId++, properName, json));
                     }
                 }
             }
@@ -170,7 +199,7 @@
             }
             return module;
         }
-        
+
         public static DCSAircraft GetKeyEmulatorSRS()
         {
             var module = Modules.FirstOrDefault(x => IsKeyEmulatorSRS(x));

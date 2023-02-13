@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="ControlReference.UserControls.DCSBIOSControlUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ControlReference"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="400"
+             Loaded="DCSBIOSControlUserControl_OnLoaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <Rectangle Grid.Row="0" Grid.Column="0" >
+            <Rectangle.Fill>
+                <SolidColorBrush Color="#FF83F5A0"></SolidColorBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle Grid.Row="2" Grid.Column="0" >
+            <Rectangle.Fill>
+                <SolidColorBrush Color="White"></SolidColorBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <DockPanel Grid.Row="0" Grid.Column="0" >
+            <Label Name="LabelDescription" Content="" DockPanel.Dock="Left"/>
+            <Label Name="LabelControlId" FontStyle="Italic" Content="" DockPanel.Dock="Left" MouseEnter="LabelControlId_OnMouseEnter" MouseLeave="LabelControlId_OnMouseLeave" MouseDown="LabelControlId_OnMouseDown"/>
+            <Label Name="LabelCategory" FontStyle="Italic" DockPanel.Dock="Right" Content="" HorizontalAlignment="Right"/>
+        </DockPanel>
+        <StackPanel Name="StackPanelInputInterfaces" Grid.Row="1" Grid.Column="0" >
+            <StackPanel Name="StackPanelFixedStep" Orientation="Horizontal" >
+                <Label Content="Input Interface: " FontWeight="Bold"/>
+                <Label Content="fixed__step" />
+                <Button Name="ButtonFixedStepDec" Height="22" Content="DEC" Click="ButtonFixedStepDec_OnClick"/>
+                <Button Name="ButtonFixedStepInc" Height="22" Margin="5,0,0,0" Content="INC" Click="ButtonFixedStepInc_OnClick"/>
+            </StackPanel>
+            <StackPanel Name="StackPanelSetState" Orientation="Horizontal">
+                <Label Content="Input Interface: " FontWeight="Bold"/>
+                <Label Content="set__state" />
+                <Slider Name="SliderSetState" IsSnapToTickEnabled="True" TickFrequency="1" Width="100" Margin="8,0,0,0" VerticalAlignment="Center" ValueChanged="SliderSetState_OnValueChanged" />
+                <Button Name="ButtonSetState" Height="22" Margin="5,0,0,0" Content="1" Click="ButtonSetState_OnClick"/>
+                <Label Name="LabelSliderValue"/>
+            </StackPanel>
+            <StackPanel Name="StackPanelVariableStep" Orientation="Horizontal">
+                <Label Content="Input Interface: " FontWeight="Bold"/>
+                <Label Content="variable__step" />
+                <TextBox Name="TextBoxVariableStepValue" Width="60" Height="22" KeyDown="TextBoxVariableStepValue_OnKeyDown"  />
+                <Button Name="ButtonSetVariableStep" Height="22" Margin="20,0,0,0" Content="SET" Click="ButtonSetVariableStep_OnClick"/>
+            </StackPanel>
+            <StackPanel Name="StackPanelAction" Orientation="Horizontal">
+                <Label Content="Input Interface: " FontWeight="Bold"/>
+                <Label Content="action" />
+                <Button Name="ButtonToggle" Height="22" Margin="20,0,0,0" Content="TOGGLE" Click="ButtonToggle_OnClick"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Output Type: " FontWeight="Bold"/>
+                <Label Name="LabelOutputType" Content="" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Name="LabelOutputMaxValueDesc" Content="Max Value: " FontWeight="Bold"/>
+                <Label Name="LabelOutputMaxValue" Content="" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Current Value: " FontWeight="Bold"/>
+                <Label Name="LabelCurrentValue" Content="" />
+                <Label Name="LabelPercentage" Foreground="DarkOrange" FontSize="11" VerticalAlignment="Center" Content="" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

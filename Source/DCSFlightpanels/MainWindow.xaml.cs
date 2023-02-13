@@ -53,7 +53,6 @@
         private readonly Timer _exceptionTimer = new(1000);
         private readonly Timer _statusMessagesTimer = new(1000);
         private readonly Timer _dcsStopGearTimer = new(5000);
-        private readonly Timer _dcsCheckDcsBiosStatusTimer = new(5000);
         private readonly List<string> _statusMessages = new();
         private readonly object _lockObjectStatusMessages = new();
         private readonly List<UserControl> _panelUserControls = new();
@@ -100,7 +99,6 @@
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    _dcsCheckDcsBiosStatusTimer.Dispose();
                     _dcsStopGearTimer.Dispose();
                     _exceptionTimer.Dispose();
                     _statusMessagesTimer.Dispose();
@@ -194,7 +192,6 @@
             _exceptionTimer.Elapsed += TimerCheckExceptions;
             _exceptionTimer.Start();
             _dcsStopGearTimer.Elapsed += TimerStopRotation;
-            _dcsCheckDcsBiosStatusTimer.Elapsed += TimerCheckDcsBiosStatus;
             _statusMessagesTimer.Elapsed += TimerStatusMessagesTimer;
             _statusMessagesTimer.Start();
         }
@@ -340,7 +337,6 @@
             _dcsBios?.Startup();
 
             _dcsStopGearTimer.Start();
-            _dcsCheckDcsBiosStatusTimer.Start();
         }
 
         private void ShutdownDCSBIOS()
@@ -350,7 +346,6 @@
 
             DCSBIOSControlLocator.DCSAircraft = _profileHandler.DCSAircraft;
             _dcsStopGearTimer.Stop();
-            _dcsCheckDcsBiosStatusTimer.Stop();
             ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
         }
 
@@ -901,11 +896,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void TimerCheckDcsBiosStatus(object sender, ElapsedEventArgs e)
-        {
-        }
-
+        
         private async void CheckForNewDCSFPRelease()
         {
             // #if !DEBUG
@@ -1095,7 +1086,6 @@
                 _exceptionTimer.Stop();
                 _dcsStopGearTimer.Stop();
                 _statusMessagesTimer.Stop();
-                _dcsCheckDcsBiosStatusTimer.Stop();
             }
             catch (Exception ex)
             {

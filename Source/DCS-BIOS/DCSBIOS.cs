@@ -168,6 +168,7 @@ namespace DCS_BIOS
             try
             {
                 _isRunning = false;
+                _udpReceiveThrottleAutoResetEvent.Set();
                 _udpReceiveClient?.Close();
                 _dcsProtocolParser?.Shutdown();
 
