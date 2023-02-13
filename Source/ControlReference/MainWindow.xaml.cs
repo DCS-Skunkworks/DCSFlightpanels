@@ -29,6 +29,8 @@ namespace ControlReference
         private readonly Timer _dcsStopGearTimer = new(5000);
         private DCSBIOS _dcsBios;
         private bool _formLoaded = false;
+        private const int MAX_CONTROL_ON_PAGE = 50;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -148,7 +150,7 @@ namespace ControlReference
         private void UpdateComboBoxCategories()
         {
             var categoriesList = _loadedControls.Select(o => o.Category).DistinctBy(o => o).ToList();
-            if (_loadedControls.Count() <= 50)
+            if (_loadedControls.Count() <= MAX_CONTROL_ON_PAGE)
             {
                 /*
                  * If there aren't many controls to show then allow the user to show
@@ -233,6 +235,11 @@ namespace ControlReference
                         var searchWord = TextBoxSearchControl.Text.ToLower();
                         filteredControls = _loadedControls.Where(o => o.Description.ToLower().Contains(searchWord) || o.Identifier.ToLower().Contains(searchWord))
                             .ToList();
+                    }
+
+                    if (filteredControls.Count() > MAX_CONTROL_ON_PAGE)
+                    {
+                        Common.ShowMessageBox($"Query returned too many DCS-BIOS Controls. Max controls that can be displayed at any time is {MAX_CONTROL_ON_PAGE}.");
                     }
 
                     foreach (var dcsbiosControl in filteredControls)
