@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq.Expressions;
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using ControlReference.Events;
 using DCS_BIOS;
 using DCS_BIOS.EventArgs;
 using DCS_BIOS.Interfaces;
@@ -36,8 +35,8 @@ namespace ControlReference.UserControls
             BIOSEventHandler.AttachDataListener(this);
             BIOSEventHandler.AttachStringListener(this);
         }
-        
-        protected virtual void Dispose(bool disposing)
+
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -315,6 +314,42 @@ namespace ControlReference.UserControls
             try
             {
                 DCSBIOS.Send($"{_dcsbiosControl.Identifier} TOGGLE\n");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelCategory_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Hand;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelCategory_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelCategory_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                REFEventHandler.ChangeCategory(this, LabelCategory.Content.ToString());
             }
             catch (Exception ex)
             {

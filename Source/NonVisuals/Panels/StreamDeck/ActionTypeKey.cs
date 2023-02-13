@@ -17,7 +17,6 @@ namespace NonVisuals.Panels.StreamDeck
     using Interfaces;
     using Plugin;
     using Panels;
-    using DCS_BIOS;
     using NLog;
 
     [Serializable]

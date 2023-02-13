@@ -7,7 +7,7 @@
         Title="Settings" Height="450" Width="600"
         Loaded="SettingsWindow_OnLoaded"
         WindowStartupLocation="CenterScreen" 
-        KeyDown="SettingsWindow_OnKeyDown" Icon="/Images/flightpanels02_8Rc_icon.ico">
+        KeyDown="SettingsWindow_OnKeyDown" Icon="/Images/FlightPanels01.png">
     <Grid Margin="-4,0,4,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"/>

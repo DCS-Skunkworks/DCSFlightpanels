@@ -2,7 +2,6 @@
  * naming of all variables can not be changed because these classes are instantiated from Json based on DCS-BIOS naming standard. *
  */
 
-using System.Diagnostics;
 using DCS_BIOS.Json;
 
 namespace DCS_BIOS

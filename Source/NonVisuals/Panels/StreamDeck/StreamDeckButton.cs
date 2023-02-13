@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
-
-namespace NonVisuals.Panels.StreamDeck
+﻿namespace NonVisuals.Panels.StreamDeck
 {
     using System;
     using System.Text;
