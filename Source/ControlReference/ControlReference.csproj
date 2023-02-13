@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<None Remove="gear-image.png" />
+		<None Remove="Images\112_RefreshArrow_Green_32x32_72.png" />
 		<None Remove="Images\flightpanels02_8Rc_icon.ico" />
 		<None Remove="Images\gear-image.png" />
 		<None Remove="Images\search_controls.png" />
@@ -22,6 +23,7 @@
 
 	<ItemGroup>
 		<Resource Include="gear-image.png" />
+		<Resource Include="Images\112_RefreshArrow_Green_32x32_72.png" />
 		<Resource Include="Images\flightpanels02_8Rc_icon.ico" />
 		<Resource Include="Images\gear-image.png" />
 		<Resource Include="Images\search_controls.png" />

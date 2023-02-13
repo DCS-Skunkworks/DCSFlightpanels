@@ -148,6 +148,14 @@ namespace ControlReference
         private void UpdateComboBoxCategories()
         {
             var categoriesList = _loadedControls.Select(o => o.Category).DistinctBy(o => o).ToList();
+            if (_loadedControls.Count() <= 50)
+            {
+                /*
+                 * If there aren't many controls to show then allow the user to show
+                 * all categories at once.
+                 */
+                categoriesList.Insert(0,"All");
+            }
             ComboBoxCategory.DataContext = categoriesList;
             ComboBoxCategory.ItemsSource = categoriesList;
             ComboBoxCategory.Items.Refresh();
@@ -174,7 +182,25 @@ namespace ControlReference
         {
             try
             {
+                TextBoxSearchControl.Text = "";
                 ShowControls();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+        
+        private void ButtonReloadJSON_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var selectedModule = ComboBoxModules.SelectedValue;
+                var selectedCategory = ComboBoxCategory.SelectedValue.ToString();
+                DCSBIOSControlLocator.DCSAircraft = null;
+                UpdateComboBoxModules();
+                ComboBoxModules.SelectedValue = selectedModule;
+                ComboBoxCategory.SelectedValue = selectedCategory;
             }
             catch (Exception ex)
             {
@@ -196,7 +222,7 @@ namespace ControlReference
                     /*
                      * Limit only on category if user is not searching
                      */
-                    if (string.IsNullOrEmpty(TextBoxSearchControl.Text) && ComboBoxCategory.SelectedValue != null)
+                    if (string.IsNullOrEmpty(TextBoxSearchControl.Text) && ComboBoxCategory.SelectedValue != null && ComboBoxCategory.SelectedValue.ToString() != "All")
                     {
                         filteredControls = _loadedControls.Where(o => o.Category == ComboBoxCategory.SelectedValue.ToString())
                             .ToList();
@@ -222,6 +248,7 @@ namespace ControlReference
                 }
                 finally
                 {
+                    Mouse.OverrideCursor = Cursors.Arrow;
                 }
             }
             catch (Exception ex)
@@ -370,30 +397,6 @@ namespace ControlReference
             }
         }
         
-        private void RenderingComplete()
-        {
-            try
-            {
-                Mouse.OverrideCursor = Cursors.Arrow;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ItemsControlControls_OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            try
-            {
-                Dispatcher.BeginInvoke(new Action(RenderingComplete), DispatcherPriority.ContextIdle, null);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void TextBoxSearchControl_OnKeyDown(object sender, KeyEventArgs e)
         {
             try

@@ -1,4 +1,5 @@
-﻿using DCS_BIOS.Json;
+﻿using System.Diagnostics;
+using DCS_BIOS.Json;
 
 namespace DCS_BIOS
 {
@@ -21,7 +22,7 @@ namespace DCS_BIOS
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private static readonly List<DCSBIOSControl> DCSBIOSControls = new();
+        private static List<DCSBIOSControl> DCSBIOSControls = new();
         private static readonly object LockObject = new();
         private static DCSAircraft _dcsAircraft;
         private static string _jsonDirectory;
@@ -61,7 +62,7 @@ namespace DCS_BIOS
                 {
                     return null;
                 }
-
+                
                 try
                 {
                     LoadControls();
@@ -211,6 +212,16 @@ namespace DCS_BIOS
              *
              * This function will have to change when (if) new types of profiles are added to DCS-BIOS
              */
+
+
+            /*
+             * Check if already loaded.
+             */
+            if (DCSBIOSControls.Count > 0)
+            {
+                return;
+            }
+
             try
             {
                 if (DCSAircraft.IsNoFrameLoadedYet(_dcsAircraft) ||
@@ -253,18 +264,7 @@ namespace DCS_BIOS
                 }
 
                 // Remove duplicates which may come from loading NS430 or other additional profiles
-                while (DCSBIOSControls.Count(controlObject => controlObject.Identifier.Equals("_UPDATE_COUNTER")) > 1)
-                {
-                    DCSBIOSControls.Remove(DCSBIOSControls.FindLast(controlObject =>
-                        controlObject.Identifier.Equals("_UPDATE_COUNTER")));
-                }
-
-                while (DCSBIOSControls.Count(controlObject =>
-                           controlObject.Identifier.Equals("_UPDATE_SKIP_COUNTER")) > 1)
-                {
-                    DCSBIOSControls.Remove(DCSBIOSControls.FindLast(controlObject =>
-                        controlObject.Identifier.Equals("_UPDATE_SKIP_COUNTER")));
-                }
+                DCSBIOSControls = DCSBIOSControls.Distinct(new DCSBIOSControlComparer()).ToList();
             }
             catch (Exception ex)
             {
@@ -389,14 +389,9 @@ namespace DCS_BIOS
             {
                 LoadControls();
             }
-            var returnList = new List<DCSBIOSControl>();
-            returnList.AddRange(DCSBIOSControls);
             
-            /*
-             * Reason for this is that the collection can be used in different
-             * locations and there can be problems with "Collection modified during iteration...."
-             */
-            return returnList;
+            // Remove duplicates which may come from loading NS430 or other additional profiles
+            return DCSBIOSControls.Distinct(new DCSBIOSControlComparer()).ToList();
         }
 
         public static IEnumerable<DCSBIOSControl> GetStringOutputControls()

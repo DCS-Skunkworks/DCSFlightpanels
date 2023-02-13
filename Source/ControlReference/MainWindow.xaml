@@ -68,10 +68,13 @@
                     </Style>
                 </Image.Style>
             </Image>
+            <Button>
+                <Image Source="/Images/112_RefreshArrow_Green_32x32_72.png" Name="ButtonReloadJSON" Margin="10,0,0,0" MouseDown="ButtonReloadJSON_OnMouseDown" ToolTip="Reload JSON File"/>
+            </Button>
         </ToolBar>
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <ItemsControl Name="ItemsControlControls" SizeChanged="ItemsControlControls_OnSizeChanged" >
+            <ItemsControl Name="ItemsControlControls"  >
 
             </ItemsControl>
         </ScrollViewer>
