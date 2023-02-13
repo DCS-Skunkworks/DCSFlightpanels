@@ -49,9 +49,9 @@
             </StackPanel>
             <StackPanel Name="StackPanelVariableStep" Orientation="Horizontal">
                 <Label Content="Input Interface: " FontWeight="Bold"/>
-                <Label Content="variable__step" />
+                <Label Content="variable__step  +/-" />
                 <TextBox Name="TextBoxVariableStepValue" Width="60" Height="22" KeyDown="TextBoxVariableStepValue_OnKeyDown"  />
-                <Button Name="ButtonSetVariableStep" Height="22" Margin="20,0,0,0" Content="SET" Click="ButtonSetVariableStep_OnClick"/>
+                <Button Name="ButtonSetVariableStep" Height="22" Margin="20,0,0,0" Content="CHANGE" Click="ButtonSetVariableStep_OnClick"/>
             </StackPanel>
             <StackPanel Name="StackPanelAction" Orientation="Horizontal">
                 <Label Content="Input Interface: " FontWeight="Bold"/>

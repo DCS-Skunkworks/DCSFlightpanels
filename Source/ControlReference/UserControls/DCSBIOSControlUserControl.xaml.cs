@@ -296,7 +296,8 @@ namespace ControlReference.UserControls
         {
             try
             {
-                if (e.Key is not (>= Key.D0 and <= Key.D9 or >= Key.NumPad0 and <= Key.NumPad9) )
+                if (e.Key is not (>= Key.D0 and <= Key.D9 or >= Key.NumPad0 and <= Key.NumPad9) && e.Key != Key.OemMinus && e.Key != Key.OemPlus
+                    && e.Key != Key.Add && e.Key != Key.Subtract)
                 {
                     e.Handled = true;
                     return;
