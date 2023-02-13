@@ -6,12 +6,12 @@
 		<Nullable>disable</Nullable>
 		<UseWPF>true</UseWPF>
 		<AssemblyName>ctrlref</AssemblyName>
+		<PackageIcon>FlightPanels01.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Remove="gear-image.png" />
 		<None Remove="Images\112_RefreshArrow_Green_32x32_72.png" />
-		<None Remove="Images\flightpanels02_8Rc_icon.ico" />
 		<None Remove="Images\gear-image.png" />
 		<None Remove="Images\search_controls.png" />
 	</ItemGroup>
@@ -24,7 +24,7 @@
 	<ItemGroup>
 		<Resource Include="gear-image.png" />
 		<Resource Include="Images\112_RefreshArrow_Green_32x32_72.png" />
-		<Resource Include="Images\flightpanels02_8Rc_icon.ico" />
+		<Resource Include="Images\FlightPanels01.png" />
 		<Resource Include="Images\gear-image.png" />
 		<Resource Include="Images\search_controls.png" />
 	</ItemGroup>
@@ -38,6 +38,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Images\FlightPanels01.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Update="NLog.config">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

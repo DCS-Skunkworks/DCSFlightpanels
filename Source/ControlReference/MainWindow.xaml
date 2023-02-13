@@ -12,7 +12,7 @@
         LocationChanged="MainWindow_OnLocationChanged" 
         SizeChanged="MainWindow_OnSizeChanged"
         WindowStartupLocation="CenterScreen"
-        Icon="/ctrlref;component/Images/flightpanels02_8Rc_icon.ico" >
+        Icon="/ctrlref;component/Images/FlightPanels01.png" >
 
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
