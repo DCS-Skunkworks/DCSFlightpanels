@@ -151,6 +151,7 @@ namespace ControlReference
         private void UpdateComboBoxCategories()
         {
             var categoriesList = _loadedControls.Select(o => o.Category).DistinctBy(o => o).ToList();
+
             if (_loadedControls.Count() <= MAX_CONTROLS_ON_PAGE)
             {
                 /*
