@@ -144,20 +144,6 @@
             CheckHomeLayerExists();
         }
 
-        public List<ButtonExport> GetButtonExports()
-        {
-            List<ButtonExport> result = new();
-            foreach (var streamDeckLayer in _layerList.Where(layer => layer.HasAtLeastOneButtonConfig))
-            {
-                streamDeckLayer.GetButtonsWithConfig().ForEach(
-                    x => result.Add(
-                    new ButtonExport(streamDeckLayer.Name, x.CloneJson())
-                    )
-                );
-            }
-            return result;
-        }
-
         public void SetStreamDeckPanelInstance(StreamDeckPanel streamDeckPanel)
         {
             foreach (var streamDeckLayer in LayerList)
