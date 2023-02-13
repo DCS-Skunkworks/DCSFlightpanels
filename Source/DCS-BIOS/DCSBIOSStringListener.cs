@@ -1,10 +1,7 @@
-﻿using System.Diagnostics;
-
-namespace DCS_BIOS
+﻿namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Text;
 
     using EventArgs;

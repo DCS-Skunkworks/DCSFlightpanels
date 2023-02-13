@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using NonVisuals.EventArgs;
 
 namespace NonVisuals.HID

@@ -1,6 +1,4 @@
-﻿using System.Collections.Immutable;
-
-namespace ClassLibraryCommon
+﻿namespace ClassLibraryCommon
 {
     using NLog;
     using System;

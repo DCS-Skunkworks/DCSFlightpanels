@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using DCS_BIOS.Json;
+﻿using DCS_BIOS.Json;
 
 namespace DCS_BIOS
 {

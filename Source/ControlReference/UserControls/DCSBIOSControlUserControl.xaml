@@ -31,7 +31,7 @@
         <DockPanel Grid.Row="0" Grid.Column="0" >
             <Label Name="LabelDescription" Content="" DockPanel.Dock="Left"/>
             <Label Name="LabelControlId" FontStyle="Italic" Content="" DockPanel.Dock="Left" MouseEnter="LabelControlId_OnMouseEnter" MouseLeave="LabelControlId_OnMouseLeave" MouseDown="LabelControlId_OnMouseDown"/>
-            <Label Name="LabelCategory" FontStyle="Italic" DockPanel.Dock="Right" Content="" HorizontalAlignment="Right"/>
+            <Label Name="LabelCategory" FontStyle="Italic" DockPanel.Dock="Right" Content="" HorizontalAlignment="Right" Margin="0,0,10,0"  MouseEnter="LabelCategory_OnMouseEnter" MouseLeave="LabelCategory_OnMouseLeave" MouseDown="LabelCategory_OnMouseDown"/>
         </DockPanel>
         <StackPanel Name="StackPanelInputInterfaces" Grid.Row="1" Grid.Column="0" >
             <StackPanel Name="StackPanelFixedStep" Orientation="Horizontal" >
@@ -44,7 +44,7 @@
                 <Label Content="Input Interface: " FontWeight="Bold"/>
                 <Label Content="set__state" />
                 <Slider Name="SliderSetState" IsSnapToTickEnabled="True" TickFrequency="1" Width="100" Margin="8,0,0,0" VerticalAlignment="Center" ValueChanged="SliderSetState_OnValueChanged" />
-                <Button Name="ButtonSetState" Height="22" Margin="5,0,0,0" Content="1" Click="ButtonSetState_OnClick"/>
+                <Button Name="ButtonSetState" Height="22" Margin="5,0,0,0" Width="40" Content="0" Click="ButtonSetState_OnClick"/>
                 <Label Name="LabelSliderValue"/>
             </StackPanel>
             <StackPanel Name="StackPanelVariableStep" Orientation="Horizontal">

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using NonVisuals.BindingClasses.BIP;
+﻿using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {

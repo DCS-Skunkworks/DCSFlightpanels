@@ -3,37 +3,37 @@ using ControlReference.Properties;
 using DCS_BIOS;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using ControlReference.UserControls;
 using ControlReference.Windows;
 using DCS_BIOS.EventArgs;
 using DCS_BIOS.Json;
 using DCS_BIOS.Interfaces;
-using System.Windows.Threading;
+using ControlReference.Events;
+using ControlReference.Interfaces;
 
 namespace ControlReference
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IDisposable, IDcsBiosConnectionListener
+    public partial class MainWindow : Window, IDisposable, IDcsBiosConnectionListener, ICategoryChange
     {
         private IEnumerable<DCSBIOSControl> _loadedControls = null;
         private readonly List<DCSBIOSControlUserControl> _dcsbiosUIControlPanels = new();
         private readonly Timer _dcsStopGearTimer = new(5000);
         private DCSBIOS _dcsBios;
         private bool _formLoaded = false;
-        private const int MAX_CONTROL_ON_PAGE = 50;
+        private const int MAX_CONTROLS_ON_PAGE = 50;
 
         public MainWindow()
         {
             InitializeComponent();
+            REFEventHandler.AttachDataListener(this);
         }
 
         private bool _hasBeenCalledAlready;
@@ -48,6 +48,7 @@ namespace ControlReference
                     _dcsBios?.Shutdown();
                     _dcsBios?.Dispose();
                     BIOSEventHandler.DetachConnectionListener(this);
+                    REFEventHandler.AttachDataListener(this);
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -150,7 +151,8 @@ namespace ControlReference
         private void UpdateComboBoxCategories()
         {
             var categoriesList = _loadedControls.Select(o => o.Category).DistinctBy(o => o).ToList();
-            if (_loadedControls.Count() <= MAX_CONTROL_ON_PAGE)
+
+            if (_loadedControls.Count() <= MAX_CONTROLS_ON_PAGE)
             {
                 /*
                  * If there aren't many controls to show then allow the user to show
@@ -162,7 +164,6 @@ namespace ControlReference
             ComboBoxCategory.ItemsSource = categoriesList;
             ComboBoxCategory.Items.Refresh();
             ComboBoxCategory.SelectedIndex = 0;
-            ShowControls();
         }
 
         private void ComboBoxModules_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -173,6 +174,7 @@ namespace ControlReference
                 DCSBIOSControlLocator.DCSAircraft = selectedModule;
                 _loadedControls = DCSBIOSControlLocator.GetControls(true);
                 UpdateComboBoxCategories();
+                ShowControls();
             }
             catch (Exception ex)
             {
@@ -193,6 +195,18 @@ namespace ControlReference
             }
         }
         
+        public void ChangeCategory(object sender, CategoryEventArgs args)
+        {
+            try
+            {
+                ComboBoxCategory.SelectedValue = args.Category;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void ButtonReloadJSON_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             try
@@ -216,6 +230,11 @@ namespace ControlReference
             {
                 try
                 {
+                    if (ComboBoxModules.SelectedValue == null || ComboBoxCategory.SelectedValue == null)
+                    {
+                        return;
+                    }
+
                     Mouse.OverrideCursor = Cursors.Wait;
                     _dcsbiosUIControlPanels.Clear();
 
@@ -237,15 +256,17 @@ namespace ControlReference
                             .ToList();
                     }
 
-                    if (filteredControls.Count() > MAX_CONTROL_ON_PAGE)
+                    if (filteredControls.Count() > MAX_CONTROLS_ON_PAGE)
                     {
-                        Common.ShowMessageBox($"Query returned too many DCS-BIOS Controls. Max controls that can be displayed at any time is {MAX_CONTROL_ON_PAGE}.");
+                        Common.ShowMessageBox($"Query returned too many DCS-BIOS Controls. Max controls that can be displayed at any time is {MAX_CONTROLS_ON_PAGE}.");
+                        return;
                     }
 
                     foreach (var dcsbiosControl in filteredControls)
                     {
                         _dcsbiosUIControlPanels.Add(new DCSBIOSControlUserControl(dcsbiosControl));
                     }
+
                     ItemsControlControls.ItemsSource = null;
                     ItemsControlControls.Items.Clear();
                     ItemsControlControls.ItemsSource = _dcsbiosUIControlPanels;
@@ -418,5 +439,6 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
     }
 }
