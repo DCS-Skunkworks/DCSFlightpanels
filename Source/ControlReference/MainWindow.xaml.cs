@@ -28,7 +28,7 @@ namespace ControlReference
         private readonly Timer _dcsStopGearTimer = new(5000);
         private DCSBIOS _dcsBios;
         private bool _formLoaded = false;
-        private const int MAX_CONTROLS_ON_PAGE = 50;
+        private const int MAX_CONTROLS_ON_PAGE = 70;
 
         public MainWindow()
         {
@@ -258,7 +258,7 @@ namespace ControlReference
 
                     if (filteredControls.Count() > MAX_CONTROLS_ON_PAGE)
                     {
-                        Common.ShowMessageBox($"Query returned too many DCS-BIOS Controls. Max controls that can be displayed at any time is {MAX_CONTROLS_ON_PAGE}.");
+                        Common.ShowMessageBox($"Query returned {filteredControls.Count()} DCS-BIOS Controls. Max controls that can be displayed at any time is {MAX_CONTROLS_ON_PAGE}.");
                         return;
                     }
 
@@ -272,7 +272,11 @@ namespace ControlReference
                     ItemsControlControls.ItemsSource = _dcsbiosUIControlPanels;
 
                     LabelStatusBarRightInformation.Text = $"{filteredControls.Count()} DCS-BIOS Controls loaded.";
-                    ItemsControlControls.Focus();
+
+                    if (filteredControls.Any())
+                    {
+                        ItemsControlControls.Focus();
+                    }
                 }
                 finally
                 {
