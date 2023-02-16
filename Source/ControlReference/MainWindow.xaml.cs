@@ -77,6 +77,7 @@ namespace ControlReference
                     return;
                 }
 
+                SetTopMost();
                 DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
                 DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), true, false);
                 UpdateComboBoxModules();
@@ -444,5 +445,31 @@ namespace ControlReference
             }
         }
 
+        private void SetTopMost()
+        {
+            try
+            {
+                Settings.Default.AlwaysOnTop = !Settings.Default.AlwaysOnTop;
+                Settings.Default.Save();
+                MenuSetAlwaysOnTop.IsChecked = Settings.Default.AlwaysOnTop;
+                Topmost = Settings.Default.AlwaysOnTop;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void MenuSetAlwaysOnTop_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SetTopMost();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }
