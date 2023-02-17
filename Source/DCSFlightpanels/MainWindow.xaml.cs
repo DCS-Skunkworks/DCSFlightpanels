@@ -1552,6 +1552,11 @@
             TryOpenLogFileWithTarget("debug_logfile");
         }
 
+        private void ProfilesAutoBackupFolderOpen_OnClick(object sender, RoutedEventArgs e)
+        {
+            TryOpenAutoBackupFolder();
+        }
+
         private static void LoadProcessPriority()
         {
             try
@@ -1934,5 +1939,14 @@
             });
         }
 
+        private void TryOpenAutoBackupFolder()
+        {
+            ProfileAutoBackup autoBackup = new();
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = autoBackup.AutoBackupFolderPath,
+                UseShellExecute = true
+            });
+        }
     }
 }

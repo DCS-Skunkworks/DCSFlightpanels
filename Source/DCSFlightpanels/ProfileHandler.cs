@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -289,6 +290,20 @@ namespace DCSFlightpanels
                         // Main window will handle this
                         return 0;
                     }
+
+                    //Profile AutoBackup
+                    //If there is an error during autobackup, warning message will be issued and log files will be completed
+                    //But this won't prevent to load the profile.
+                    try
+                    {
+                        ProfileAutoBackup profilesAutoBackup = new();
+                        profilesAutoBackup.BackupProfile(_filename);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Warning. Auto profile backup could not be done: {ex.Message}");
+                    }
+
 
                     /*
                      * Read all information and add HIDInstance(ID) to all lines using BeginPanel and EndPanel
