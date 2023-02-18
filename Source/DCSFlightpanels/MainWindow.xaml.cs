@@ -64,13 +64,6 @@
 
         public MainWindow()
         {
-            if (Settings.Default.UpgradeRequired)
-            {
-                Settings.Default.Upgrade();
-                Settings.Default.UpgradeRequired = false;
-                Settings.Default.Save();
-            }
-
             DarkModePrepare();
             InitializeComponent();
 
@@ -183,6 +176,7 @@
                     var apiWindow = new WindowsKeyAPIDialog();
                     apiWindow.ShowDialog();
                     Settings.Default.ShowKeyAPIDialog = apiWindow.ShowAtStartUp;
+                    Settings.Default.Save();
                 }
 
                 _isLoaded = true;

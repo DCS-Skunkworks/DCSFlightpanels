@@ -128,15 +128,28 @@ namespace ControlReference
 
         private void MenuSetDCSBIOSPath_OnClick(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsWindow(0);
-            if (settingsWindow.ShowDialog() == true)
+            /*
+             * Must remove topmost because settings window will be stuck behind main window.
+             */
+            var topMost = Topmost;
+            Topmost = false;
+            try
             {
-                if (settingsWindow.DCSBIOSChanged)
+
+                var settingsWindow = new SettingsWindow(0);
+                if (settingsWindow.ShowDialog() == true)
                 {
-                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), true);
-                    UpdateComboBoxModules();
+                    if (settingsWindow.DCSBIOSChanged)
+                    {
+                        DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                        DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), true, false);
+                        UpdateComboBoxModules();
+                    }
                 }
+            }
+            finally
+            {
+                Topmost = topMost;
             }
         }
 
@@ -159,7 +172,7 @@ namespace ControlReference
                  * If there aren't many controls to show then allow the user to show
                  * all categories at once.
                  */
-                categoriesList.Insert(0,"All");
+                categoriesList.Insert(0, "All");
             }
             ComboBoxCategory.DataContext = categoriesList;
             ComboBoxCategory.ItemsSource = categoriesList;
@@ -171,6 +184,10 @@ namespace ControlReference
         {
             try
             {
+                if (ComboBoxModules.SelectedValue == null)
+                {
+                    return;
+                }
                 var selectedModule = (DCSAircraft)ComboBoxModules.SelectedItem;
                 DCSBIOSControlLocator.DCSAircraft = selectedModule;
                 _loadedControls = DCSBIOSControlLocator.GetControls(true);
@@ -195,7 +212,7 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         public void ChangeCategory(object sender, CategoryEventArgs args)
         {
             try
@@ -429,7 +446,7 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void TextBoxSearchControl_OnKeyDown(object sender, KeyEventArgs e)
         {
             try
