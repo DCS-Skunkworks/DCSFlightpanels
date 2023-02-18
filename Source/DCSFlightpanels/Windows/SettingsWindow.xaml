@@ -110,7 +110,7 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="SRS">
-                <StackPanel Name="StackPanelSRSSettings"  Margin="0,0,0,0" Grid.Column="1" Grid.Row="0" >
+                <StackPanel Name="StackPanelSRSSettings"  Margin="10,5,10,0" Grid.Column="1" Grid.Row="0" >
                     <Label FontWeight="Bold">SRS Settings</Label>
                     <Label Content="IP address to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>
                     <TextBox Name="TextBoxSRSFromIP" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="127.0.0.1"/>
@@ -120,6 +120,37 @@
                     <TextBox Name="TextBoxSRSToIP" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="127.0.0.1"/>
                     <Label Content="Port to write to " Margin="0,0,0,0" VerticalAlignment="Top"/>
                     <TextBox Name="TextBoxSRSToPort" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="9040"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Auto-backup">
+                <StackPanel Name="StackPanelAutoBackup"  Margin="10,5,10,0" Grid.Column="1" Grid.Row="0" >
+                    <Label FontWeight="Bold">Profiles Auto-backup</Label>
+                    <CheckBox Content="Use profiles auto-backup" Name="AutoBackupActiveCheckBox" IsChecked="True" Margin="0,10,0,0" Click="AutoBackupActiveCheckBox_Click"/>
+                    <CheckBox Content="Use default folder" x:Name="AutoBackupDefaultFolderActiveCheckBox" Margin="0,10,0,0" IsChecked="True" Click="AutoBackupDefaultFolderActiveCheckBox_Click"/>
+                    <Label Margin="0,20,0,0">Custom folder for auto-backups</Label>
+                    <StackPanel Orientation="Horizontal" Margin="10,5,0,0">
+                        <TextBox Name="AutoBackupCustomFolderPath" Height="23" Width="650" IsReadOnly="True" Margin="0,0,0,0" TextWrapping="Wrap" Text="" IsEnabled="False"/>
+                        <Button Content="..." Height="23" Margin="0,0,0,0" x:Name="AutoBackupButtonBrowse" Width="75" Click="AutoBackupButtonBrowse_OnClick" IsEnabled="False"/>
+                    </StackPanel>
+                    <TextBlock FontSize="25" HorizontalAlignment="Center" Margin="5,30,5,0" >Auto-backup?</TextBlock>
+                    <TextBlock x:Name="AutoBackupTextBlock" TextWrapping="Wrap" Margin="5,15,5,0" FontSize="14" Background="AliceBlue">
+                        <Italic>
+                            If enabled, autobackup will make a backup of the profile when you open it.<LineBreak/>
+                            <LineBreak/>
+                            When does it make a backup ?<LineBreak/>
+                            - When you open a profile that has changed since last time you opened it OR when a new version of DCSFP is detected.
+                            <LineBreak/>
+                            <LineBreak/>
+                            What is it used for ?<LineBreak/>
+                            - It's a simple backup of the profile in a zip file. Handy if you want to come back to a previous version or if something goes (very) wrong with a release of DCSFP.
+                            <LineBreak/>
+                            <LineBreak/>
+                            Default folder ?<LineBreak/>
+                            - By default, the profiles are saved in a 'DcsFpProfilesAutoBackup' folder inside your install folder. You can choose another folder if you want.
+                            <LineBreak/>                            
+                        </Italic>
+                        <LineBreak/>
+                    </TextBlock>
                 </StackPanel>
             </TabItem>
         </TabControl>

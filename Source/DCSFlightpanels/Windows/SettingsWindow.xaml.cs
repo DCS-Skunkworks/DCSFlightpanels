@@ -56,6 +56,7 @@ namespace DCSFlightpanels.Windows
             Brush textBlockBackgroundBrush = DarkMode.DarkModeEnabled ? new SolidColorBrush(Colors.SlateGray) : new SolidColorBrush(Colors.AliceBlue);
             ImportantTextBlock.Background = textBlockBackgroundBrush;
             ProblemsTextBlock.Background = textBlockBackgroundBrush;
+            AutoBackupTextBlock.Background = textBlockBackgroundBrush;
             try
             {
                 if (_isLoaded)
@@ -132,6 +133,12 @@ namespace DCSFlightpanels.Windows
             TextBoxSRSToIP.TextChanged += SrsDirty;
             TextBoxSRSFromPort.TextChanged += SrsDirty;
             TextBoxSRSToPort.TextChanged += SrsDirty;
+
+            AutoBackupActiveCheckBox.Checked += GeneralDirty;
+            AutoBackupActiveCheckBox.Unchecked += GeneralDirty;
+            AutoBackupDefaultFolderActiveCheckBox.Checked += GeneralDirty;
+            AutoBackupDefaultFolderActiveCheckBox.Unchecked += GeneralDirty;
+            AutoBackupCustomFolderPath.TextChanged += GeneralDirty;
         }
 
         private void LoadSettings()
@@ -190,6 +197,12 @@ namespace DCSFlightpanels.Windows
                 TextBoxSRSFromPort.Text = Settings.Default.SRSPortFrom.ToString();
                 TextBoxSRSToPort.Text = Settings.Default.SRSPortTo.ToString();
             }
+
+            AutoBackupActiveCheckBox.IsChecked = Settings.Default.AutoBackupActive;
+            AutoBackupDefaultFolderActiveCheckBox.IsChecked = Settings.Default.AutoBackupDefaultFolderActive;
+            AutoBackupCustomFolderPath.Text = Settings.Default.AutoBackupCustomFolderPath;
+            
+            SetAutoBackupFormState();
         }
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
@@ -204,6 +217,7 @@ namespace DCSFlightpanels.Windows
             {
                 CheckValuesDCSBIOS();
                 CheckValuesSRS();
+                CheckValuesAutoBackup();
 
                 if (GeneralChanged)
                 {
@@ -256,6 +270,11 @@ namespace DCSFlightpanels.Windows
                     Settings.Default.EnablePlugin = CheckBoxEnablePluginSupport.IsChecked == true;
                     Settings.Default.DisableKeyboardAPI = CheckBoxDisableKeyboardAPI.IsChecked == true;
                     Settings.Default.DarkMode = CheckBoxDarkMode.IsChecked == true;
+                    
+                    Settings.Default.AutoBackupActive = AutoBackupActiveCheckBox.IsChecked == true;
+                    Settings.Default.AutoBackupDefaultFolderActive = AutoBackupDefaultFolderActiveCheckBox.IsChecked == true;
+                    Settings.Default.AutoBackupCustomFolderPath = AutoBackupCustomFolderPath.Text;
+
                     Settings.Default.Save();
                 }
 
@@ -487,6 +506,14 @@ namespace DCSFlightpanels.Windows
             }
         }
 
+        private void CheckValuesAutoBackup()
+        { 
+            if(AutoBackupDefaultFolderActiveCheckBox.IsChecked == false && !Directory.Exists(AutoBackupCustomFolderPath.Text))
+            {
+                throw new Exception($"Invalid folder selected for Autobackup: [{AutoBackupCustomFolderPath.Text}]");
+            }
+        }
+
         private void DcsBiosDirty(object sender, TextChangedEventArgs e)
         {
             DCSBIOSChanged = true;
@@ -568,6 +595,54 @@ namespace DCSFlightpanels.Windows
             //{
             //    DarkMode.DarkModeEnabled = false;
             //}
+        }
+
+        private void SetAutoBackupFormState()
+        {
+            AutoBackupDefaultFolderActiveCheckBox.IsEnabled = true;
+            AutoBackupCustomFolderPath.IsEnabled = true;
+            AutoBackupButtonBrowse.IsEnabled = true;
+
+            if (AutoBackupActiveCheckBox.IsChecked == false) {
+                AutoBackupDefaultFolderActiveCheckBox.IsEnabled = false;
+                AutoBackupCustomFolderPath.IsEnabled = false;
+                AutoBackupButtonBrowse.IsEnabled = false;
+            }
+
+            if (AutoBackupDefaultFolderActiveCheckBox.IsChecked == true)
+            {
+                AutoBackupCustomFolderPath.IsEnabled = false;
+                AutoBackupButtonBrowse.IsEnabled = false;
+                AutoBackupCustomFolderPath.Text = "";
+            } 
+        }
+
+        private void AutoBackupButtonBrowse_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var folderBrowserDialog = new FolderBrowserDialog();
+
+                if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    AutoBackupCustomFolderPath.Text = folderBrowserDialog.SelectedPath;
+                }
+                SetAutoBackupFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void AutoBackupActiveCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            SetAutoBackupFormState();
+        }
+
+        private void AutoBackupDefaultFolderActiveCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            SetAutoBackupFormState();
         }
     }
 }
