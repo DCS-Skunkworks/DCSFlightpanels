@@ -1942,7 +1942,12 @@
 
         private void TryOpenAutoBackupFolder()
         {
-            ProfileAutoBackup autoBackup = new();
+            string folder = string.Empty;
+            if(Settings.Default.AutoBackupDefaultFolderActive == false && !string.IsNullOrEmpty(Settings.Default.AutoBackupCustomFolderPath))
+            {
+                folder = Settings.Default.AutoBackupCustomFolderPath;
+            }
+            ProfileAutoBackup autoBackup = new(folder);
             Process.Start(new ProcessStartInfo
             {
                 FileName = autoBackup.AutoBackupFolderPath,

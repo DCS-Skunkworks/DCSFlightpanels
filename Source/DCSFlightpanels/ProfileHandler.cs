@@ -296,14 +296,21 @@ namespace DCSFlightpanels
                     //But this won't prevent to load the profile.
                     try
                     {
-                        ProfileAutoBackup profilesAutoBackup = new();
-                        profilesAutoBackup.BackupProfile(_filename);
+                        if (Settings.Default.AutoBackupActive)
+                        {
+                            string folder = string.Empty;
+                            if (Settings.Default.AutoBackupDefaultFolderActive == false && !string.IsNullOrEmpty(Settings.Default.AutoBackupCustomFolderPath))
+                            {
+                                folder = Settings.Default.AutoBackupCustomFolderPath;
+                            }
+                            ProfileAutoBackup profilesAutoBackup = new(folder);
+                            profilesAutoBackup.BackupProfile(_filename);
+                        }
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Warning. Auto profile backup could not be done: {ex.Message}");
                     }
-
 
                     /*
                      * Read all information and add HIDInstance(ID) to all lines using BeginPanel and EndPanel
