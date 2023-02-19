@@ -31,7 +31,7 @@
             MouseUp="DataGridSequences_OnMouseUp">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn Header="Seq #" IsReadOnly="True" Binding="{data:Binding Path=Key}"/>
-                <controls:DataGridTextColumn Header="Break (ms)" IsReadOnly="True" Binding="{data:Binding Path=Value.DelayBefore}"/>
+                <controls:DataGridTextColumn Header="Delay (ms)" IsReadOnly="True" Binding="{data:Binding Path=Value.DelayBefore}"/>
                 <controls:DataGridTextColumn Header="BIP Light" IsReadOnly="True" Binding="{data:Binding Path=Value.BIPLedPosition}"/>
                 <controls:DataGridTextColumn Header="Color" IsReadOnly="True" Binding="{data:Binding Path=Value.LEDColor}"/>
                 <controls:DataGridTextColumn Header="Panel" IsReadOnly="True" Width="*" Binding="{data:Binding Path=Value.Hash}"/>

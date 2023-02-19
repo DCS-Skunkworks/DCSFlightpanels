@@ -39,7 +39,7 @@
 
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn Header="Seq #" IsReadOnly="True" Binding="{data:Binding Path=Key}"/>
-                <controls:DataGridTextColumn Header="Break (ms)" IsReadOnly="True" Binding="{data:Binding Path=Value.LengthOfBreak}"/>
+                <controls:DataGridTextColumn Header="Delay (ms)" IsReadOnly="True" Binding="{data:Binding Path=Value.LengthOfBreak}"/>
                 <controls:DataGridTextColumn Header="Key(s) to press" IsReadOnly="True" Width="*" Binding="{data:Binding Path=Value.VirtualKeyCodesAsString}"/>
                 <controls:DataGridTextColumn Header="Time to press (ms)" IsReadOnly="True" Binding="{data:Binding Path=Value.LengthOfKeyPress}"/>
             </controls:DataGrid.Columns>
