@@ -2,9 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Media;
     using System.Reflection;
     using System.Text;
 
@@ -46,7 +44,18 @@
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             Error = (sender, args) =>
                 {
-                    Logger.Error($"JSON Error.{args.ErrorContext.Error.Message}");
+                    //Trying to get a little more context from object
+                    Logger.Error($"JSON Error.{args.ErrorContext.Error.Message} at {args.CurrentObject.ToString()}");
+                    if (args.CurrentObject is FaceTypeImage && args.ErrorContext.Member.ToString() == "RawBitmap")
+                    {
+                        //Maybe the serialized Base-64 string was heavily corrupted to the point that it contains a non-base 64 character or else.
+                        //Handle this gracefully                        
+                        var faceTypeImage = (FaceTypeImage)args.CurrentObject;
+                        Logger.Error($"Could not deserialize image from bytes array for button {faceTypeImage.StreamDeckButtonName}. Reverting to FileNotFound Bitmap.");
+                        faceTypeImage.Bitmap = BitMapCreator.FileNotFoundBitmap();
+                        faceTypeImage.RefreshBitmap = false;
+                        args.ErrorContext.Handled = true;
+                    }
                 }
         };
 

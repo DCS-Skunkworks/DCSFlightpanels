@@ -168,7 +168,10 @@
                     }
                     catch(Exception ex)
                     {
-                        Logger.Error($"Could not deserialize image: {ex.Message}");
+                        //Maybe the serialized pic was corrupted by the user or something bad happened in the profile, handle this gracefully
+                        Logger.Error($"Could not convert image stream to bitmap image: {ex.Message}. Reverting to FileNotFound image");
+                        Bitmap = BitMapCreator.FileNotFoundBitmap();
+                        RefreshBitmap = false; // we already got a bitmap, no need to load from ImageFile property
                     }
                 }
             }
