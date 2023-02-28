@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Radios.SRS
+﻿using HidSharp.Reports.Units;
+
+namespace NonVisuals.Radios.SRS
 {
     // ReSharper disable All
     /*
@@ -186,6 +188,33 @@
                 rtMode = this.rtMode
 
             };
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var result = 0;
+                result = (result * 397) ^ enc.GetHashCode();
+                result = (result * 397) ^ encKey.GetHashCode();
+                result = (result * 397) ^ encMode.GetHashCode();
+                result = (result * 397) ^ freqMax.GetHashCode();
+                result = (result * 397) ^ freqMin.GetHashCode();
+                result = (result * 397) ^ freq.GetHashCode();
+                result = (result * 397) ^ modulation.GetHashCode();
+                result = (result * 397) ^ name.GetHashCode();
+                result = (result * 397) ^ secFreq.GetHashCode();
+                result = (result * 397) ^ rtMode.GetHashCode();
+                result = (result * 397) ^ retransmit.GetHashCode();
+                result = (result * 397) ^ volume.GetHashCode();
+                result = (result * 397) ^ freqMode.GetHashCode();
+                result = (result * 397) ^ guardFreqMode.GetHashCode();
+                result = (result * 397) ^ volMode.GetHashCode();
+                result = (result * 397) ^ expansion.GetHashCode();
+                result = (result * 397) ^ channel.GetHashCode();
+                result = (result * 397) ^ simul.GetHashCode();
+                return result;
+            }
         }
     }
 }
