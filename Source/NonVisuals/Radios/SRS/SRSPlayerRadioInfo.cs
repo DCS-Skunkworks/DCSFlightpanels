@@ -19,7 +19,7 @@ namespace NonVisuals.Radios.SRS
 
         
         
-        public SRSLatLngPosition latLng = new SRSLatLngPosition();
+        public SRSLatLngPosition latLng = new();
 
         
         
@@ -50,7 +50,7 @@ namespace NonVisuals.Radios.SRS
         
         public bool intercomHotMic = false; //if true switch to intercom and transmit
 
-        public SRSTransponder iff = new SRSTransponder();
+        public SRSTransponder iff = new();
 
         [JsonIgnore]
         public readonly static uint UnitIdOffset = 100000000
@@ -65,7 +65,7 @@ namespace NonVisuals.Radios.SRS
             SimultaneousTransmissionControl.EXTERNAL_DCS_CONTROL;
 
         
-        public SRSAircraftCapabilities capabilities = new SRSAircraftCapabilities();
+        public SRSAircraftCapabilities capabilities = new();
 
         public enum SimultaneousTransmissionControl
         {
@@ -323,6 +323,30 @@ namespace NonVisuals.Radios.SRS
 
             return clone;
 
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var result = 0;
+                foreach (var radio in radios)
+                {
+                    result = (result * 397) ^ radio.GetHashCode();
+                }
+                result = (result * 397) ^ name.GetHashCode();
+                result = (result * 397) ^ latLng.GetHashCode();
+                result = (result * 397) ^ inAircraft.GetHashCode();
+                result = (result * 397) ^ ptt.GetHashCode();
+                result = (result * 397) ^ control.GetHashCode();
+                result = (result * 397) ^ selected.GetHashCode();
+                result = (result * 397) ^ unit.GetHashCode();
+                result = (result * 397) ^ unitId.GetHashCode();
+                result = (result * 397) ^ seat.GetHashCode();
+                result = (result * 397) ^ intercomHotMic.GetHashCode();
+                result = (result * 397) ^ iff.GetHashCode();
+                return result;
+            }
         }
     }
 }
