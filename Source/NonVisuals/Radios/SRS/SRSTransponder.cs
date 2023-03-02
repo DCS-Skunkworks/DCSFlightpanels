@@ -1,4 +1,9 @@
 ﻿using Newtonsoft.Json;
+using static NonVisuals.Radios.SRS.SRSRadioInformation;
+using static System.Data.Odbc.ODBC32;
+using System.Security.Cryptography;
+using System.Threading.Channels;
+using System.Xml.Linq;
 
 namespace NonVisuals.Radios.SRS
 {
@@ -75,6 +80,21 @@ namespace NonVisuals.Radios.SRS
         public SRSTransponder Copy()
         {
             return new SRSTransponder() { mode1 = mode1, mode3 = mode3, mode4 = mode4, status = status, mic = mic };
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var result = 0;
+                result = (result * 397) ^ expansion.GetHashCode();
+                result = (result * 397) ^ mode1.GetHashCode();
+                result = (result * 397) ^ mode3.GetHashCode();
+                result = (result * 397) ^ mode4.GetHashCode();
+                result = (result * 397) ^ mic.GetHashCode();
+                result = (result * 397) ^ status.GetHashCode();
+                return result;
+            }
         }
     }
 }
