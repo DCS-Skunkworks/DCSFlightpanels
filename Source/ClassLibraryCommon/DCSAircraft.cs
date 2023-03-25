@@ -417,7 +417,10 @@
         {
             return dcsfpModule.ID == 39;
         }
-
+        public static bool IsT45C(DCSAircraft dcsfpModule)
+        {
+            return dcsfpModule.ID == 43;
+        }
         public static bool IsMi24P(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 42;
@@ -431,7 +434,7 @@
         public static bool IsAH64D(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 46;
-        }
+        }        
 
 
         public static DCSAircraft GetBackwardCompatible(string oldEnumValue)
