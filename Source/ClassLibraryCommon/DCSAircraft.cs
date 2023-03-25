@@ -422,6 +422,12 @@
         {
             return dcsfpModule.ID == 42;
         }
+
+        public static bool IsMosquito(DCSAircraft dcsfpModule)
+        {
+            return dcsfpModule.ID == 45;
+        }
+
         public static bool IsAH64D(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 46;

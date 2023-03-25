@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
@@ -80,7 +81,7 @@ namespace ControlReference.UserControls
         {
             try
             {
-                LabelControlId.Content = _dcsbiosControl.Identifier;
+                LabelControlId.Content = _dcsbiosControl.Identifier.Replace("_","__");
                 LabelCategory.Content = _dcsbiosControl.Category;
                 LabelDescription.Content = _dcsbiosControl.Description;
 
