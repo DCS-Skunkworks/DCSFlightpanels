@@ -290,6 +290,27 @@ namespace DCSFlightpanels
                         return 0;
                     }
 
+                    //Profile AutoBackup
+                    //If there is an error during autobackup, warning message will be issued and log files will be completed
+                    //But this won't prevent to load the profile.
+                    try
+                    {
+                        if (Settings.Default.AutoBackupActive)
+                        {
+                            string folder = string.Empty;
+                            if (Settings.Default.AutoBackupDefaultFolderActive == false && !string.IsNullOrEmpty(Settings.Default.AutoBackupCustomFolderPath))
+                            {
+                                folder = Settings.Default.AutoBackupCustomFolderPath;
+                            }
+                            ProfileAutoBackup profilesAutoBackup = new(folder);
+                            profilesAutoBackup.BackupProfile(_filename);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Warning. Auto profile backup could not be done: {ex.Message}");
+                    }
+
                     /*
                      * Read all information and add HIDInstance(ID) to all lines using BeginPanel and EndPanel
                      *             
@@ -313,7 +334,6 @@ namespace DCSFlightpanels
                     var insideJSONPanel = false;
                     DCSAircraft tmpProfile = null;
                     GenericPanelBinding genericPanelBinding = null;
-
                     foreach (var fileLine in fileLines)
                     {
                         if (fileLine.StartsWith("Airframe="))
@@ -423,7 +443,6 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-
                     DCSAircraft.SelectedAircraft = tmpProfile;
                     DCSAircraft = tmpProfile;
 

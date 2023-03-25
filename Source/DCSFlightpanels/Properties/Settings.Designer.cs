@@ -478,5 +478,53 @@ namespace DCSFlightpanels.Properties {
                 this["DarkMode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UpgradeRequired {
+            get {
+                return ((bool)(this["UpgradeRequired"]));
+            }
+            set {
+                this["UpgradeRequired"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoBackupActive {
+            get {
+                return ((bool)(this["AutoBackupActive"]));
+            }
+            set {
+                this["AutoBackupActive"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoBackupDefaultFolderActive {
+            get {
+                return ((bool)(this["AutoBackupDefaultFolderActive"]));
+            }
+            set {
+                this["AutoBackupDefaultFolderActive"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AutoBackupCustomFolderPath {
+            get {
+                return ((string)(this["AutoBackupCustomFolderPath"]));
+            }
+            set {
+                this["AutoBackupCustomFolderPath"] = value;
+            }
+        }
     }
 }

@@ -492,53 +492,9 @@ namespace NonVisuals.Panels.StreamDeck
             _dcsbiosConverters.Add(dcsbiosConverter);
         }
 
-        [JsonProperty("ImageFiles", Required = Required.Default)]
-        public List<string> ImageFiles
-        {
-            get
-            {
-                var result = new List<string>();
-
-                foreach (var dcsbiosConverter in _dcsbiosConverters)
-                {
-                    if (!string.IsNullOrEmpty(dcsbiosConverter.ImageFileRelativePath))
-                    {
-                        result.Add(dcsbiosConverter.ImageFileRelativePath);
-                    }
-                }
-
-                return result;
-            }
-        }
-
-        /*
-         * When exporting buttons the image file's path will be removed.
-         * When user import the buttons and specifies to where the images should
-         * be stored then the path is updated again.
-         *
-         * So there will only be the filename in ImageFileRelativePath.
-         */
-        public void ResetImageFilePaths()
-        {
-            foreach (var dcsbiosConverter in _dcsbiosConverters)
-            {
-                if (!string.IsNullOrEmpty(dcsbiosConverter.ImageFileRelativePath))
-                {
-                    dcsbiosConverter.ImageFileRelativePath = Path.GetFileName(dcsbiosConverter.ImageFileRelativePath);
-                }
-            }
-        }
-
-        public void SetImageFilePaths(string path)
-        {
-            foreach (var dcsbiosConverter in _dcsbiosConverters)
-            {
-                if (dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.Image || dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.ImageOverlay)
-                {
-                    dcsbiosConverter.ImageFileRelativePath = path + "\\" + Path.GetFileName(dcsbiosConverter.ImageFileRelativePath);
-                }
-            }
-        }
+        [Obsolete]
+        [JsonIgnore]
+        public List<string> ImageFiles;
 
         public void Replace(DCSBIOSConverter oldDcsBiosValueToFaceConverter, DCSBIOSConverter newDcsBiosValueToFaceConverter)
         {

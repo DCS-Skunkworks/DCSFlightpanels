@@ -230,21 +230,6 @@
             }
         }
 
-        public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
-        {
-            _streamDeckLayerHandler.ImportButtons(importMode, buttonExports);
-        }
-
-        public List<ButtonExport> GetButtonExports()
-        {
-            return _streamDeckLayerHandler.GetButtonExports();
-        }
-
-        public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
-        {
-            _streamDeckLayerHandler.Export(compressedFilenameAndPath, buttonExports);
-        }
-
         private void StreamDeckKeyListener(object sender, KeyEventArgs e)
         {
             if (sender is not IMacroBoard)
@@ -439,7 +424,7 @@
             _streamDeckLayerHandler.ShowPreviousLayer();
         }
 
-        public static Bitmap Validate(string imagePath)
+        public static Bitmap GetBitmapFromPath(string imagePath)
         {
             return BitMapCreator.BitmapOrFileNotFound(imagePath);
         }

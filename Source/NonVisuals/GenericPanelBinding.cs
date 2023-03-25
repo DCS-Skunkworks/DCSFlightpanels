@@ -13,7 +13,7 @@
         private string _hidInstance;
         private string _bindingHash;
         private List<string> _settings = new(50);
-        private string _jsonString = string.Empty;
+        private StringBuilder _jsonString = new();
 
 
         public GenericPanelBinding()
@@ -56,13 +56,13 @@
 
         public void JSONAddLine(string jsonLine)
         {
-            if (string.IsNullOrEmpty(_jsonString))
+           if (_jsonString.Length == 0)
             {
-                _jsonString = jsonLine;
+                _jsonString.Append(jsonLine);
             }
             else
             {
-                _jsonString = _jsonString + Environment.NewLine + RefactorClassNamesAndNameSpaces(jsonLine);
+                _jsonString.AppendLine(RefactorClassNamesAndNameSpaces(jsonLine));
             }
         }
         
@@ -75,13 +75,13 @@
         /// <returns></returns>
         private static string RefactorClassNamesAndNameSpaces(string s)
         {
-            var result = s;
-
+            string result = s;
             result = result.Replace("NonVisuals.StreamDeck", "NonVisuals.Panels.StreamDeck");
             result = result.Replace("InputObject", "InputInterface");
             result = result.Replace("SelectedDCSBIOSInput", "SelectedDCSBIOSInterface");
             return result;
         }
+
         public GamingPanelEnum PanelType
         {
             get => _panelType;
@@ -92,8 +92,12 @@
 
         public string JSONString
         {
-            get => _jsonString;
-            set => _jsonString = value;
+            get => _jsonString.ToString();
+            
+            set {
+                _jsonString.Clear();
+                _jsonString.Append(value);
+                }
         }
 
         /// <summary>
@@ -107,7 +111,7 @@
             {
                 if (IsJSON())
                 {
-                    return _jsonString;
+                    return _jsonString.ToString();
                 }
 
                 var stringBuilder = new StringBuilder(500);

@@ -176,6 +176,7 @@
                     var apiWindow = new WindowsKeyAPIDialog();
                     apiWindow.ShowDialog();
                     Settings.Default.ShowKeyAPIDialog = apiWindow.ShowAtStartUp;
+                    Settings.Default.Save();
                 }
 
                 _isLoaded = true;
@@ -1552,6 +1553,11 @@
             TryOpenLogFileWithTarget("debug_logfile");
         }
 
+        private void ProfilesAutoBackupFolderOpen_OnClick(object sender, RoutedEventArgs e)
+        {
+            TryOpenAutoBackupFolder();
+        }
+
         private static void LoadProcessPriority()
         {
             try
@@ -1934,5 +1940,19 @@
             });
         }
 
+        private void TryOpenAutoBackupFolder()
+        {
+            string folder = string.Empty;
+            if(Settings.Default.AutoBackupDefaultFolderActive == false && !string.IsNullOrEmpty(Settings.Default.AutoBackupCustomFolderPath))
+            {
+                folder = Settings.Default.AutoBackupCustomFolderPath;
+            }
+            ProfileAutoBackup autoBackup = new(folder);
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = autoBackup.AutoBackupFolderPath,
+                UseShellExecute = true
+            });
+        }
     }
 }

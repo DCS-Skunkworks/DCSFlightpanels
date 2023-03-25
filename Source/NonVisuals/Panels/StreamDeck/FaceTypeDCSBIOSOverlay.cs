@@ -21,8 +21,6 @@
         public FaceTypeDCSBIOSOverlay()
         { }
 
-
-
         public new void Dispose()
         {
             // Call base class implementation.
@@ -33,7 +31,7 @@
         {
             if (_backgroundBitmap == null || _loadBackground)
             {
-                _backgroundBitmap = StreamDeckPanel.Validate(_backgroundBitmapPath);
+                _backgroundBitmap = StreamDeckPanel.GetBitmapFromPath(_backgroundBitmapPath);
                 RefreshBitmap = true;
             }
 

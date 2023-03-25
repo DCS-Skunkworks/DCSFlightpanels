@@ -63,7 +63,17 @@ namespace DCSFlightpanels
             try
             {
                 InitNotificationIcon();
-                                
+
+                /*
+                 * Load previous application/user settings.
+                 */
+                if (Settings.Default.UpgradeRequired)
+                {
+                    Settings.Default.Upgrade();
+                    Settings.Default.UpgradeRequired = false;
+                    Settings.Default.Save();
+                }
+
                 Settings.Default.LoadStreamDeck = true; //Default is loading Stream Deck.
                 Settings.Default.Save();
 
