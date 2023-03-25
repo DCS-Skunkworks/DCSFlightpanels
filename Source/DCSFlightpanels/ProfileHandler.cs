@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -335,7 +334,6 @@ namespace DCSFlightpanels
                     var insideJSONPanel = false;
                     DCSAircraft tmpProfile = null;
                     GenericPanelBinding genericPanelBinding = null;
-
                     foreach (var fileLine in fileLines)
                     {
                         if (fileLine.StartsWith("Airframe="))
@@ -445,7 +443,6 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-
                     DCSAircraft.SelectedAircraft = tmpProfile;
                     DCSAircraft = tmpProfile;
 
