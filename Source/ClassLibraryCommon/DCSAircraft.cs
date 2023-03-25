@@ -417,7 +417,10 @@
         {
             return dcsfpModule.ID == 39;
         }
-
+        public static bool IsT45C(DCSAircraft dcsfpModule)
+        {
+            return dcsfpModule.ID == 43;
+        }
         public static bool IsMi24P(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 42;

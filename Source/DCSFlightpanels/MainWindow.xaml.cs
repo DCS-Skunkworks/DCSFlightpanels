@@ -688,6 +688,16 @@
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            }                            
+                            else if (DCSAircraft.IsT45C(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
+                            {
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlT45C(hidSkeleton);
+                                _panelUserControls.Add(radioPanelPZ69UserControl);
+                                tabItem.Content = radioPanelPZ69UserControl;
+                                TabControlPanels.Items.Add(tabItem);
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
+
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
                             else if (DCSAircraft.IsMi24P(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
                             {
