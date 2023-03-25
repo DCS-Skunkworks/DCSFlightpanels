@@ -434,7 +434,7 @@
         public static bool IsAH64D(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 46;
-        }        
+        }
 
 
         public static DCSAircraft GetBackwardCompatible(string oldEnumValue)
