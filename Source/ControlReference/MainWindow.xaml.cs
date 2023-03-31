@@ -155,6 +155,12 @@ namespace ControlReference
 
         private void UpdateComboBoxModules()
         {
+            if (!DCSAircraft.Modules.Any())
+            {
+                MessageBox.Show(this,
+                    "No DCS-BIOS modules found. Make sure DCS-BIOS is correctly installed and that the path is set in Settings.", "DCS-BIOS Not Found", MessageBoxButton.OK);
+                return;
+            }
             ComboBoxModules.DataContext = DCSAircraft.Modules;
             ComboBoxModules.ItemsSource = DCSAircraft.Modules;
             ComboBoxModules.Items.Refresh();
