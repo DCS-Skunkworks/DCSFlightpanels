@@ -48,6 +48,7 @@ namespace DCSFlightpanels.Windows
             {
                 popupSearch.PlacementTarget = textBoxSearch;
                 popupSearch.Placement = PlacementMode.Bottom;
+                dataGridValues.Tag = textBoxSearch;
                 if (!popupSearch.IsOpen)
                 {
                     popupSearch.IsOpen = true;
