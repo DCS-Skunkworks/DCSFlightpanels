@@ -688,5 +688,30 @@ namespace DCSFlightpanels.Windows
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void TextBoxSearch1_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
+
+        private void TextBoxSearch2_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
+
+        private void TextBoxSearch3_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
+
+        private void TextBoxSearch4_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
+
+        private void TextBoxSearch5_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
     }
 }

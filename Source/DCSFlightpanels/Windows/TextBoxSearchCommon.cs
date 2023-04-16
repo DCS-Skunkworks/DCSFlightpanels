@@ -7,6 +7,7 @@ using DCS_BIOS.Json;
 using System.Windows.Controls.Primitives;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace DCSFlightpanels.Windows
 {
@@ -70,6 +71,14 @@ namespace DCSFlightpanels.Windows
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex, "AdjustShownPopupData()");
+            }
+        }
+
+        internal static void HandleFirstSpace(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space && ((TextBox)sender).Text == "")
+            {
+                e.Handled = true;
             }
         }
     }

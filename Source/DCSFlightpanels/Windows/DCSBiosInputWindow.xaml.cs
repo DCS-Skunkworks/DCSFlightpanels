@@ -504,5 +504,9 @@ namespace DCSFlightpanels.Windows
             }
         }
 
+        private void TextBoxSearchWord_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
     }
 }

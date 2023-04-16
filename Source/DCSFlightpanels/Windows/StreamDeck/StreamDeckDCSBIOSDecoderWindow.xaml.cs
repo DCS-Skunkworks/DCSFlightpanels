@@ -949,5 +949,10 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+        private void TextBoxSearchWord_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
     }
 }

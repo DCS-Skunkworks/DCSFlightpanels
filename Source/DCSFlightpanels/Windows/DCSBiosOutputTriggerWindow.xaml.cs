@@ -326,5 +326,10 @@ namespace DCSFlightpanels.Windows
                 Close();
             }
         }
+
+        private void TextBoxSearchWord_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
     }
 }

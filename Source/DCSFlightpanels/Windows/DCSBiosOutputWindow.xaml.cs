@@ -291,5 +291,9 @@ namespace DCSFlightpanels.Windows
             get { return TextBoxUserDescription.Text; }
         }
 
+        private void TextBoxSearchWord_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
     }
 }
