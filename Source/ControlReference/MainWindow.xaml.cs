@@ -153,12 +153,22 @@ namespace ControlReference
             }
         }
 
-        private void UpdateComboBoxModules()
+        private bool CheckDCSBIOSStatus()
         {
             if (!DCSAircraft.Modules.Any())
             {
                 MessageBox.Show(this,
                     "No DCS-BIOS modules found. Make sure DCS-BIOS is correctly installed and that the path is set in Settings.", "DCS-BIOS Not Found", MessageBoxButton.OK);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void UpdateComboBoxModules()
+        {
+            if (!CheckDCSBIOSStatus())
+            {
                 return;
             }
             ComboBoxModules.DataContext = DCSAircraft.Modules;
@@ -235,6 +245,10 @@ namespace ControlReference
         {
             try
             {
+                if (!CheckDCSBIOSStatus())
+                {
+                    return;
+                }
                 var selectedModule = ComboBoxModules.SelectedValue;
                 var selectedCategory = ComboBoxCategory.SelectedValue.ToString();
                 DCSBIOSControlLocator.DCSAircraft = null;
