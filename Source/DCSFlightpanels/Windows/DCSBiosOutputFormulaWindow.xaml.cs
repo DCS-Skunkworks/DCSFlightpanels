@@ -5,13 +5,10 @@ namespace DCSFlightpanels.Windows
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
-    using System.Windows.Media;
-    using System.Windows.Media.Imaging;
     using ClassLibraryCommon;
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
@@ -298,36 +295,11 @@ namespace DCSFlightpanels.Windows
             set { _dcsBiosOutput = value; }
         }
 
-        private void AdjustShownPopupData()
-        {
-            _popupSearch.PlacementTarget = TextBoxSearchWord;
-            _popupSearch.Placement = PlacementMode.Bottom;
-            if (!_popupSearch.IsOpen)
-            {
-                _popupSearch.IsOpen = true;
-            }
-            if (_dataGridValues != null)
-            {
-                if (string.IsNullOrEmpty(TextBoxSearchWord.Text))
-                {
-                    _dataGridValues.DataContext = _dcsbiosControls;
-                    _dataGridValues.ItemsSource = _dcsbiosControls;
-                    _dataGridValues.Items.Refresh();
-                    return;
-                }
-                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.Identifier) && controlObject.Identifier.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper()))
-                    || (!string.IsNullOrWhiteSpace(controlObject.Description) && controlObject.Description.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper())));
-                _dataGridValues.DataContext = subList;
-                _dataGridValues.ItemsSource = subList;
-                _dataGridValues.Items.Refresh();
-            }
-        }
-
         private void TextBoxSearchWord_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
             {
-                AdjustShownPopupData();
+                TextBoxSearchCommon.AdjustShownPopupData(TextBoxSearchWord, _popupSearch, _dataGridValues, _dcsbiosControls);
                 SetFormState();
             }
             catch (Exception ex)
@@ -338,31 +310,7 @@ namespace DCSFlightpanels.Windows
 
         private void TextBoxSearchWord_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            try
-            {
-                if (TextBoxSearchWord.Text == string.Empty)
-                {
-                    // Create an ImageBrush.
-                    var textImageBrush = new ImageBrush
-                    {
-                        ImageSource = new BitmapImage(
-                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)),
-                        AlignmentX = AlignmentX.Left,
-                        Stretch = Stretch.Uniform
-                    };
-
-                    // Use the brush to paint the button's background.
-                    TextBoxSearchWord.Background = textImageBrush;
-                }
-                else
-                {
-                    TextBoxSearchWord.Background = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            TextBoxSearchCommon.SetBackgroundSearchBanner(TextBoxSearchWord);
         }
 
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -599,6 +547,11 @@ namespace DCSFlightpanels.Windows
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void TextBoxSearchWord_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
         }
     }
 }

@@ -445,37 +445,11 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void AdjustShownPopupData(TextBox textBox)
-        {
-            _popupSearch.PlacementTarget = textBox;
-            _popupSearch.Placement = PlacementMode.Bottom;
-            _dataGridValues.Tag = textBox;
-            if (!_popupSearch.IsOpen)
-            {
-                _popupSearch.IsOpen = true;
-            }
-            if (_dataGridValues != null)
-            {
-                if (string.IsNullOrEmpty(textBox.Text))
-                {
-                    _dataGridValues.DataContext = _dcsbiosControls;
-                    _dataGridValues.ItemsSource = _dcsbiosControls;
-                    _dataGridValues.Items.Refresh();
-                    return;
-                }
-                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.Identifier) && controlObject.Identifier.ToUpper().Contains(textBox.Text.ToUpper()))
-                                                                      || (!string.IsNullOrWhiteSpace(controlObject.Description) && controlObject.Description.ToUpper().Contains(textBox.Text.ToUpper())));
-                _dataGridValues.DataContext = subList;
-                _dataGridValues.ItemsSource = subList;
-                _dataGridValues.Items.Refresh();
-            }
-        }
-
         private void TextBoxSearch_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
             {
-                AdjustShownPopupData((TextBox)sender);
+                TextBoxSearchCommon.AdjustShownPopupData((TextBox)sender, _popupSearch, _dataGridValues, _dcsbiosControls);
                 SetFormState();
             }
             catch (Exception ex)
@@ -713,6 +687,31 @@ namespace DCSFlightpanels.Windows
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void TextBoxSearch1_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
+
+        private void TextBoxSearch2_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
+
+        private void TextBoxSearch3_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
+
+        private void TextBoxSearch4_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
+        }
+
+        private void TextBoxSearch5_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
         }
     }
 }

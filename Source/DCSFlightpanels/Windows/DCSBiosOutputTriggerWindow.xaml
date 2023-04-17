@@ -54,7 +54,7 @@
         <StackPanel Grid.Column="2" Grid.RowSpan="6">
             <Label Name="LabelDescription" Content="Description here" HorizontalAlignment="Stretch" Margin="10,0,0,10" FontWeight="Bold" FontSize="12"/>
             <Label Content="Type aircraft control search words:" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="True"/>
-            <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" TextChanged="TextBoxSearchWord_OnTextChanged" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true">
+            <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" TextChanged="TextBoxSearchWord_OnTextChanged" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true" PreviewKeyDown="TextBoxSearchWord_PreviewKeyDown">
                 <TextBox.Background>
                     <ImageBrush ImageSource="/Images/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Uniform" />
                 </TextBox.Background>

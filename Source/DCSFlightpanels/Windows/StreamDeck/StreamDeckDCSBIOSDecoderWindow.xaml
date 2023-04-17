@@ -82,7 +82,7 @@
                     </GroupBox>
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Clear" Height="23" VerticalAlignment="Bottom" Margin="10,10,10,10"  x:Name="ButtonClear1" Width="75" Click="ButtonClear_OnClick"/>
-                        <TextBox Name="TextBoxSearchWord"  Margin="0,10,10,10"  Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus" TextChanged="TextBoxSearch_OnTextChanged">
+                        <TextBox Name="TextBoxSearchWord"  Margin="0,10,10,10"  Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus" TextChanged="TextBoxSearch_OnTextChanged" PreviewKeyDown="TextBoxSearchWord_PreviewKeyDown">
                             <TextBox.Background>
                                 <ImageBrush ImageSource="/Images/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Fill" />
                             </TextBox.Background>

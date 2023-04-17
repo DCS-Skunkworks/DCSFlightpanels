@@ -310,37 +310,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        private void AdjustShownPopupData(TextBox textBox)
-        {
-            _popupSearch.PlacementTarget = textBox;
-            _popupSearch.Placement = PlacementMode.Bottom;
-            _popupDataGrid.Tag = textBox;
-            if (!_popupSearch.IsOpen)
-            {
-                _popupSearch.IsOpen = true;
-            }
-            if (_popupDataGrid != null)
-            {
-                if (string.IsNullOrEmpty(textBox.Text))
-                {
-                    _popupDataGrid.DataContext = _dcsbiosControls;
-                    _popupDataGrid.ItemsSource = _dcsbiosControls;
-                    _popupDataGrid.Items.Refresh();
-                    return;
-                }
-                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.Identifier) && controlObject.Identifier.ToUpper().Contains(textBox.Text.ToUpper()))
-                                                                      || (!string.IsNullOrWhiteSpace(controlObject.Description) && controlObject.Description.ToUpper().Contains(textBox.Text.ToUpper())));
-                _popupDataGrid.DataContext = subList;
-                _popupDataGrid.ItemsSource = subList;
-                _popupDataGrid.Items.Refresh();
-            }
-        }
-
         private void TextBoxSearch_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
             {
-                AdjustShownPopupData((TextBox)sender);
+                TextBoxSearchCommon.AdjustShownPopupData((TextBox)sender, _popupSearch, _popupDataGrid, _dcsbiosControls);
                 SetFormState();
             }
             catch (Exception ex)
@@ -348,7 +322,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
      
         private void SetOffset(Axis offsetAxis, int offsetChangeValue)
         {
@@ -545,31 +518,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void TextBoxSearch_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            try
-            {
-                if (TextBoxSearchWord.Text == string.Empty)
-                {
-                    // Create an ImageBrush.
-                    var textImageBrush = new ImageBrush
-                    {
-                        ImageSource = new BitmapImage(
-                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)
-                        ),
-                        AlignmentX = AlignmentX.Left,
-                        Stretch = Stretch.Uniform
-                    };
-                    // Use the brush to paint the button's background.
-                    TextBoxSearchWord.Background = textImageBrush;
-                }
-                else
-                {
-                    TextBoxSearchWord.Background = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            TextBoxSearchCommon.SetBackgroundSearchBanner(TextBoxSearchWord);
         }
 
         private void ShowConverters()
@@ -999,6 +948,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void TextBoxSearchWord_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearchCommon.HandleFirstSpace(sender, e);
         }
     }
 }
