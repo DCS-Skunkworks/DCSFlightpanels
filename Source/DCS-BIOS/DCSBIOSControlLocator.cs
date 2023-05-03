@@ -61,7 +61,7 @@ namespace DCS_BIOS
                 {
                     return null;
                 }
-                
+
                 try
                 {
                     LoadControls();
@@ -106,15 +106,11 @@ namespace DCS_BIOS
         /// <summary>
         /// Simple loading, not bothered with DCSFP various key emulator stuff and such
         /// </summary>
-        /// <param name="filename"></param>
         /// <exception cref="Exception"></exception>
-        private static void ReadDataFromJsonFileSimple(string filename)
+        public static List<DCSBIOSControl> ReadDataFromJsonFileSimple(string filename, bool onlyDirectResult = false)
         {
-            if (DCSBIOSAircraftLoadStatus.IsLoaded(filename))
-            {
-                return;
-            }
-
+            var result = new List<DCSBIOSControl>();
+            
             try
             {
                 lock (LockObject)
@@ -133,7 +129,11 @@ namespace DCS_BIOS
                     foreach (var file in files)
                     {
                         var controls = ReadControlsFromDocJson(file.FullName);
-                        DCSBIOSControls.AddRange(controls);
+                        if (!onlyDirectResult)
+                        {
+                            DCSBIOSControls.AddRange(controls);
+                        }
+                        result.AddRange(controls);
                         PrintDuplicateControlIdentifiers(controls);
                     }
 
@@ -144,6 +144,8 @@ namespace DCS_BIOS
             {
                 throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
+
+            return result;
         }
 
         private static void ReadDataFromJsonFile(string filename)
@@ -183,22 +185,16 @@ namespace DCS_BIOS
                 throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
-
+        
         /// <summary>
-        /// Just loads the basics, not bothered with KeyEmulator mode and such
+        /// Loads meta controls and returns them in a list.
         /// </summary>
-        /// <exception cref="Exception"></exception>
-        public static void LoadControlsSimple()
+        public static List<DCSBIOSControl> LoadMetaControls()
         {
-            try
-            {
-                // Load the controls for the actual aircraft/helicopter
-                ReadDataFromJsonFileSimple(DCSAircraft.JSONFilename);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<==", ex);
-            }
+            var controlList = ReadDataFromJsonFileSimple("MetadataStart.json", true);
+            controlList.AddRange(ReadDataFromJsonFileSimple("MetadataEnd.json", true));
+            controlList.AddRange(ReadDataFromJsonFileSimple("CommonData.json", true));
+            return controlList;
         }
 
         public static void LoadControls()
@@ -378,17 +374,10 @@ namespace DCS_BIOS
             }
         }
 
-        public static IEnumerable<DCSBIOSControl> GetControls(bool loadSimple = false)
+        public static IEnumerable<DCSBIOSControl> GetControls()
         {
-            if (loadSimple)
-            {
-                LoadControlsSimple();
-            }
-            else
-            {
-                LoadControls();
-            }
-            
+            LoadControls();
+
             // Remove duplicates which may come from loading NS430 or other additional profiles
             return DCSBIOSControls.Distinct(new DCSBIOSControlComparer()).ToList();
         }

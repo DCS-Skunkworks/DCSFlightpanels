@@ -15,25 +15,35 @@ using DCS_BIOS.Json;
 using DCS_BIOS.Interfaces;
 using ControlReference.Events;
 using ControlReference.Interfaces;
+using NLog;
+using System.Diagnostics;
+using System.IO;
+using NLog.Targets.Wrappers;
+using NLog.Targets;
 
 namespace ControlReference
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IDisposable, IDcsBiosConnectionListener, ICategoryChange
+    public partial class MainWindow : Window, IDisposable, IDcsBiosConnectionListener, ICategoryChange, IDCSBIOSStringListener
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private IEnumerable<DCSBIOSControl> _loadedControls = null;
         private readonly List<DCSBIOSControlUserControl> _dcsbiosUIControlPanels = new();
         private readonly Timer _dcsStopGearTimer = new(5000);
         private DCSBIOS _dcsBios;
         private bool _formLoaded = false;
         private const int MAX_CONTROLS_ON_PAGE = 70;
+        private DCSBIOSOutput _dcsbiosVersionOutput;
+        private bool _checkDCSBIOSVersionOnce;
+        private List<DCSBIOSControl> _metaControls;
 
         public MainWindow()
         {
             InitializeComponent();
             REFEventHandler.AttachDataListener(this);
+            BIOSEventHandler.AttachStringListener(this);
         }
 
         private bool _hasBeenCalledAlready;
@@ -48,7 +58,8 @@ namespace ControlReference
                     _dcsBios?.Shutdown();
                     _dcsBios?.Dispose();
                     BIOSEventHandler.DetachConnectionListener(this);
-                    REFEventHandler.AttachDataListener(this);
+                    REFEventHandler.DetachDataListener(this);
+                    BIOSEventHandler.DetachStringListener(this);
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -86,6 +97,7 @@ namespace ControlReference
                 BIOSEventHandler.AttachConnectionListener(this);
                 _dcsStopGearTimer.Elapsed += TimerStopRotation;
                 _dcsStopGearTimer.Start();
+                FindDCSBIOSControls();
                 _formLoaded = true;
             }
             catch (Exception ex)
@@ -97,6 +109,46 @@ namespace ControlReference
         private void SetFormState()
         {
 
+        }
+
+        private void FindDCSBIOSControls()
+        {
+            if (!DCSAircraft.Modules.Any())
+            {
+                return;
+            }
+            _metaControls = DCSBIOSControlLocator.LoadMetaControls();
+            _dcsbiosVersionOutput = new DCSBIOSOutput();
+            _dcsbiosVersionOutput.Consume(_metaControls.Find(o => o.Identifier == "DCS_BIOS"));
+            DCSBIOSStringManager.AddListeningAddress(_dcsbiosVersionOutput);
+        }
+
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
+        {
+            try
+            {
+                if (_checkDCSBIOSVersionOnce || string.IsNullOrWhiteSpace(e.StringData) || _dcsbiosVersionOutput == null)
+                {
+                    return;
+                }
+
+                if (e.Address != _dcsbiosVersionOutput.Address)
+                {
+                    return;
+                }
+
+                Dispatcher?.Invoke(() =>
+                {
+                    LabelDCSBIOSVersion.Visibility = Visibility.Visible;
+                    LabelDCSBIOSVersion.Text = "DCS-BIOS Version : " + e.StringData;
+                });
+
+                _checkDCSBIOSVersionOnce = true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "DCSBIOSStringReceived()");
+            }
         }
 
         private void CreateDCSBIOS()
@@ -206,7 +258,7 @@ namespace ControlReference
                 }
                 var selectedModule = (DCSAircraft)ComboBoxModules.SelectedItem;
                 DCSBIOSControlLocator.DCSAircraft = selectedModule;
-                _loadedControls = DCSBIOSControlLocator.GetControls(true);
+                _loadedControls = DCSBIOSControlLocator.ReadDataFromJsonFileSimple(selectedModule.JSONFilename);
                 UpdateComboBoxCategories();
                 ShowControls();
             }
@@ -508,5 +560,76 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+        private void MenuItemErrorLog_OnClick(object sender, RoutedEventArgs e)
+        {
+            TryOpenLogFileWithTarget("error_logfile");
+        }
+
+        private static void TryOpenLogFileWithTarget(string targetName)
+        {
+            try
+            {
+                string errorLogFilePath = GetLogFilePathByTarget(targetName);
+                if (errorLogFilePath == null || !File.Exists(errorLogFilePath))
+                {
+                    MessageBox.Show($"No log file found {errorLogFilePath}", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = errorLogFilePath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+
+        /// <summary>
+        /// Try to find the path of the log with a file target given as parameter
+        /// See NLog.config in the main folder of the application for configured log targets
+        /// </summary>
+        private static string GetLogFilePathByTarget(string targetName)
+        {
+            string fileName;
+            if (LogManager.Configuration != null && LogManager.Configuration.ConfiguredNamedTargets.Count != 0)
+            {
+                Target target = LogManager.Configuration.FindTargetByName(targetName);
+                if (target == null)
+                {
+                    throw new Exception($"Could not find log with a target named: [{targetName}]. See NLog.config for configured targets");
+                }
+
+                FileTarget fileTarget;
+
+                // Unwrap the target if necessary.
+                if (target is not WrapperTargetBase wrapperTarget)
+                {
+                    fileTarget = target as FileTarget;
+                }
+                else
+                {
+                    fileTarget = wrapperTarget.WrappedTarget as FileTarget;
+                }
+
+                if (fileTarget == null)
+                {
+                    throw new Exception($"Could not get a FileTarget type log from {target.GetType()}");
+                }
+
+                var logEventInfo = new LogEventInfo { TimeStamp = DateTime.Now };
+                fileName = fileTarget.FileName.Render(logEventInfo);
+            }
+            else
+            {
+                throw new Exception("LogManager contains no configuration or there are no named targets. See NLog.config file to configure the logs.");
+            }
+            return fileName;
+        }
+
     }
 }
