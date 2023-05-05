@@ -23,7 +23,7 @@
                         <Label Name="LabelDCSBIOSNotFound" FontWeight="DemiBold" Foreground="Red"/>
             </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Name="TextBoxDcsBiosJSONLocation" Height="23" Width="400" IsReadOnly="True" Margin="0,0,0,0" TextWrapping="Wrap" Text="$USERDIRECTORY$\Saved Games\DCS\Scripts\DCS-BIOS\doc\json"/>
+                        <TextBox Name="TextBoxDcsBiosJSONLocation" Height="23" Width="400" IsReadOnly="True" Margin="0,0,0,0" TextWrapping="Wrap" Text="%userprofile%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json"/>
                         <Button Content="..." Height="23" Margin="0,0,0,0" x:Name="ButtonBrowse" Width="75" Click="ButtonBrowse_OnClick" />
                     </StackPanel>
                     <Label Content="IP address to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>
