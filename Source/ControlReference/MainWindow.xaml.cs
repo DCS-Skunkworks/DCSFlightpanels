@@ -50,9 +50,12 @@ namespace ControlReference
              */
             Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ?
                 Settings.Default.DCSBiosJSONLocation.Replace("$USERDIRECTORY$", "%userprofile%") : Settings.Default.DCSBiosJSONLocation);
+            Settings.Default.Save();
         }
 
         private bool _hasBeenCalledAlready;
+
+        #region Dispose
         protected virtual void Dispose(bool disposing)
         {
             if (!_hasBeenCalledAlready)
@@ -84,6 +87,8 @@ namespace ControlReference
             // TODO: uncomment the following line if the finalizer is overridden above.
             GC.SuppressFinalize(this);
         }
+
+        #endregion
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -119,7 +124,7 @@ namespace ControlReference
 
         private void FindDCSBIOSControls()
         {
-            if (!DCSAircraft.Modules.Any())
+            if (!DCSAircraft.HasDCSBIOSModules)
             {
                 return;
             }

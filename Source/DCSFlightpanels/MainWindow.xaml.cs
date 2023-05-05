@@ -92,6 +92,7 @@ namespace DCSFlightpanels
              */
             Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ?
                 Settings.Default.DCSBiosJSONLocation.Replace("$USERDIRECTORY$", "%userprofile%") : Settings.Default.DCSBiosJSONLocation);
+            Settings.Default.Save();
         }
 
         private void DarkModePrepare()
@@ -203,7 +204,7 @@ namespace DCSFlightpanels
         
         private void FindDCSBIOSControls()
         {
-            if (!DCSAircraft.Modules.Any())
+            if (!DCSAircraft.HasDCSBIOSModules || DCSAircraft.IsKeyEmulator(ProfileHandler.ActiveDCSAircraft) || DCSAircraft.IsKeyEmulatorSRS(ProfileHandler.ActiveDCSAircraft))
             {
                 return;
             }

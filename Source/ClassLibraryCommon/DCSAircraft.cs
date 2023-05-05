@@ -51,13 +51,24 @@
             }
         }
 
+        public static bool HasDCSBIOSModules
+        {
+            get
+            {
+                lock (Lock)
+                {
+                    return ModulesList.Count - 3 > 0; // Three modules are not DCS-BIOS
+                }
+            }
+        }
+
         public static int DCSBIOSModulesCount
         {
             get
             {
                 lock (Lock)
                 {
-                    return ModulesList.Count - 2; // Two aircraft are not DCS-BIOS
+                    return ModulesList.Count - 3; // Three modules are not DCS-BIOS
                 }
             }
         }
