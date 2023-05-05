@@ -29,6 +29,7 @@
                 <MenuItem Name="MenuItemExit" Header="Exit" Click="MenuItemExit_OnClick" />
             </MenuItem>
             <MenuItem Header="Options">
+                <MenuItem Name ="MenuItemErrorLog" Header="Open error log" Click="MenuItemErrorLog_OnClick" />
                 <MenuItem Name ="MenuSetDCSBIOSPath" Header="Set DCS-BIOS Path" Click="MenuSetDCSBIOSPath_OnClick" />
                 <MenuItem Name ="MenuSetAlwaysOnTop" Header="Always On Top" Click="MenuSetAlwaysOnTop_OnClick" />
             </MenuItem>
@@ -84,9 +85,10 @@
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
                 <TextBlock Name="LabelStatusBarLeftInformation" HorizontalAlignment="Right" Margin="0,0,10,0" Width="300"/>
             </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
+            <StatusBarItem HorizontalContentAlignment="Right">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Name="LabelStatusBarRightInformation" Text="" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                    <TextBlock Name="LabelDCSBIOSVersion" Visibility="Hidden" HorizontalAlignment="Right" Margin="0,0,10,0"/>
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>

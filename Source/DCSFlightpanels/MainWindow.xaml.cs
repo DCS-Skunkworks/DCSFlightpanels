@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels
+﻿using DCS_BIOS.Json;
+
+namespace DCSFlightpanels
 {
     /*
     Custom Resharper Naming abbreviations
@@ -44,7 +46,7 @@
     using NonVisuals.HID;
     using System.Windows.Media.Imaging;
 
-    public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener
+    public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener, IDCSBIOSStringListener
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -61,6 +63,8 @@
         private DCSBIOS _dcsBios;
         private bool _disablePanelEventsFromBeingRouted;
         private bool _isLoaded;
+        private DCSBIOSOutput _dcsbiosVersionOutput;
+        private bool _checkDCSBIOSVersionOnce;
 
         public MainWindow()
         {
@@ -81,7 +85,8 @@
             AppEventHandler.AttachSettingsModified(this);
             AppEventHandler.AttachPanelEventListener(this);
             AppEventHandler.AttachForwardPanelEventListener(this);
-            BIOSEventHandler.AttachConnectionListener(this);
+            BIOSEventHandler.AttachConnectionListener(this); 
+            BIOSEventHandler.AttachStringListener(this);
         }
 
         private void DarkModePrepare()
@@ -106,9 +111,10 @@
                     _dcsBios?.Dispose();
                     AppEventHandler.DetachPanelEventListener(this);
                     AppEventHandler.DetachSettingsMonitoringListener(this);
-                    AppEventHandler.DetachSettingsModified(this); 
+                    AppEventHandler.DetachSettingsModified(this);
                     AppEventHandler.DetachForwardPanelEventListener(this);
                     BIOSEventHandler.DetachConnectionListener(this);
+                    BIOSEventHandler.DetachStringListener(this);
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -179,12 +185,54 @@
                     Settings.Default.Save();
                 }
 
+                FindDCSBIOSControls();
+
                 _isLoaded = true;
 
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
+            }
+        }
+        
+        private void FindDCSBIOSControls()
+        {
+            if (!DCSAircraft.Modules.Any())
+            {
+                return;
+            }
+
+            _dcsbiosVersionOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DCS_BIOS");
+            DCSBIOSStringManager.AddListeningAddress(_dcsbiosVersionOutput);
+        }
+
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
+        {
+            try
+            {
+                Debug.WriteLine(e.Address + "  " + e.StringData);
+                if (_checkDCSBIOSVersionOnce || string.IsNullOrWhiteSpace(e.StringData) || _dcsbiosVersionOutput == null)
+                {
+                    return;
+                }
+
+                if (e.Address != _dcsbiosVersionOutput.Address)
+                {
+                    return;
+                }
+
+                Dispatcher?.Invoke(() =>
+                {
+                    LabelDCSBIOSVersion.Visibility = Visibility.Visible;
+                    LabelDCSBIOSVersion.Text = "DCS-BIOS Version : " + e.StringData;
+                });
+
+                _checkDCSBIOSVersionOnce = true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "DCSBIOSStringReceived()");
             }
         }
 
@@ -253,11 +301,13 @@
             if (DCSAircraft.IsNoFrameLoadedYet(dcsAircraft) || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
             {
                 ShutdownDCSBIOS();
+                LabelDCSBIOSVersion.Visibility = Visibility.Hidden;
             }
             else if (!DCSAircraft.IsNoFrameLoadedYet(dcsAircraft))
             {
                 CreateDCSBIOS();
                 StartupDCSBIOS();
+                LabelDCSBIOSVersion.Visibility = Visibility.Visible;
             }
         }
 
@@ -387,12 +437,12 @@
                         {
                             var tabItem = new TabItem { Header = "CDU 737" };
 
-                            IGamingPanelUserControl panel = UserControlBaseFactoryHelpers.GetUSerControl(GamingPanelEnum.CDU737, 
-                                                _profileHandler.DCSAircraft, 
+                            IGamingPanelUserControl panel = UserControlBaseFactoryHelpers.GetUSerControl(GamingPanelEnum.CDU737,
+                                                _profileHandler.DCSAircraft,
                                                 hidSkeleton, tabItem);
                             if (panel != null)
                             {
-                                _panelUserControls.Add((UserControl )panel);
+                                _panelUserControls.Add((UserControl)panel);
                                 tabItem.Content = panel;
                                 TabControlPanels.Items.Add(tabItem);
 
@@ -400,7 +450,7 @@
                                     .Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-                           
+
                             break;
 
 
@@ -689,7 +739,7 @@
                                 _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
-                            }                            
+                            }
                             else if (DCSAircraft.IsT45C(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlT45C(hidSkeleton);
@@ -917,7 +967,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private async void CheckForNewDCSFPRelease()
         {
             // #if !DEBUG
@@ -975,14 +1025,6 @@
                             LabelVersionInformation.Visibility = Visibility.Visible;
                         });
                     }
-
-                    var lastDCSBIOSRelease = await client.Repository.Release.GetLatest("DCSFlightpanels", "dcs-bios");
-                    Dispatcher?.Invoke(() =>
-                    {
-                        LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + lastDCSBIOSRelease.CreatedAt.Date.ToLongDateString();
-                        Settings.Default.LastDCSBIOSRelease = lastDCSBIOSRelease.CreatedAt.Date.ToLongDateString();
-                        Settings.Default.Save();
-                    });
                 }
                 else
                 {
@@ -990,7 +1032,6 @@
                     {
                         LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
                         LabelVersionInformation.Visibility = Visibility.Visible;
-                        LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + Settings.Default.LastDCSBIOSRelease;
                     });
                 }
             }
@@ -998,7 +1039,6 @@
             {
                 Logger.Error(ex, "Error checking for newer releases.");
                 LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
-                LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + Settings.Default.LastDCSBIOSRelease;
             }
 
             // #endif
@@ -1479,7 +1519,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void ShowStatusBarMessage(string str)
         {
             try
@@ -1652,7 +1692,7 @@
                 ConfigurePlugins();
             }
         }
-        
+
         private void MenuItemUSBPowerManagement_OnClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("You need to run DCSFP as Administrator for this function to work!");
@@ -1943,7 +1983,7 @@
         private void TryOpenAutoBackupFolder()
         {
             string folder = string.Empty;
-            if(Settings.Default.AutoBackupDefaultFolderActive == false && !string.IsNullOrEmpty(Settings.Default.AutoBackupCustomFolderPath))
+            if (Settings.Default.AutoBackupDefaultFolderActive == false && !string.IsNullOrEmpty(Settings.Default.AutoBackupCustomFolderPath))
             {
                 folder = Settings.Default.AutoBackupCustomFolderPath;
             }
