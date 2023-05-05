@@ -66,7 +66,7 @@ namespace ControlReference.Windows
 
         private void CheckDCSBIOSStatus()
         {
-            var result = DCSBIOSCommon.CheckJSONDirectory(DCSBIOSCommon.GetDCSBIOSJSONDirectory(TextBoxDcsBiosJSONLocation.Text));
+            var result = DCSBIOSCommon.CheckJSONDirectory(TextBoxDcsBiosJSONLocation.Text);
 
             if (result.Item1 == false && result.Item2 == false && result.Item3 == false)
             {
@@ -151,17 +151,15 @@ namespace ControlReference.Windows
                     ShowNewFolderButton = false,
                 };
                 
-                var folderLocation = DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);
+                var folderLocation = Settings.Default.DCSBiosJSONLocation;
                 if (!string.IsNullOrEmpty(folderLocation))
                 {
-                    Debug.WriteLine(folderLocation);
                     folderBrowserDialog.SelectedPath = folderLocation;
                     folderBrowserDialog.InitialDirectory = folderLocation;
                 }
 
                 if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    Debug.WriteLine("Selected Path : " + folderBrowserDialog.SelectedPath);
                     var result = DCSBIOSCommon.CheckJSONDirectory(folderBrowserDialog.SelectedPath);
                     if (result.Item1 && result.Item2 && result.Item3)
                     {

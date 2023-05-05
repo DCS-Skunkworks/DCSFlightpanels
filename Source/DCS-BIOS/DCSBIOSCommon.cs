@@ -19,9 +19,6 @@ namespace DCS_BIOS
         /// </returns>
         public static Tuple<bool, bool, bool> CheckJSONDirectory(string jsonDirectory)
         {
-            jsonDirectory = GetDCSBIOSJSONDirectory(jsonDirectory);
-
-            Debug.WriteLine($"\nFolder exists? {Directory.Exists(jsonDirectory)}    {jsonDirectory}\n");
             if (string.IsNullOrEmpty(jsonDirectory) || !Directory.Exists(jsonDirectory))
             {
                 /*
@@ -63,30 +60,6 @@ namespace DCS_BIOS
                 result = result + "  " + str;
             }
             return result;
-        }
-
-        /// <summary>
-        /// DCSFP uses a special keyword for %user% directory as using %user% directly
-        /// from the GUI caused problems. Might work now as this was quite some time ago.
-        /// </summary>
-        /// <param name="jsonDirectory"></param>
-        /// <returns></returns>
-        public static string GetDCSBIOSJSONDirectory(string jsonDirectory)
-        {
-            var replaceString = "$USERDIRECTORY$";
-
-            // Cannot use %USERPROFILE%, DirectoryInfo gets crazy
-            if (!string.IsNullOrEmpty(jsonDirectory))
-            {
-                if (jsonDirectory.Contains(replaceString))
-                {
-                    jsonDirectory = jsonDirectory.Replace(replaceString, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
-                }
-
-                return jsonDirectory;
-            }
-
-            return null;
         }
     }
 }

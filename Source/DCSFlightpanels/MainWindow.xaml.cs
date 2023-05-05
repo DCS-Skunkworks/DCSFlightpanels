@@ -87,6 +87,11 @@ namespace DCSFlightpanels
             AppEventHandler.AttachForwardPanelEventListener(this);
             BIOSEventHandler.AttachConnectionListener(this); 
             BIOSEventHandler.AttachStringListener(this);
+            /*
+             * Correct JSON folder path, move away from $USERDIRECTORY$.
+             */
+            Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ?
+                Settings.Default.DCSBiosJSONLocation.Replace("$USERDIRECTORY$", "%userprofile%") : Settings.Default.DCSBiosJSONLocation);
         }
 
         private void DarkModePrepare()
@@ -159,7 +164,7 @@ namespace DCSFlightpanels
 
                 LoadSettings();
 
-                DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+                DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation);
 
                 StartTimers();
 
@@ -1678,7 +1683,7 @@ namespace DCSFlightpanels
                 if (settingsWindow.DCSBIOSChanged)
                 {
                     _profileHandler.DCSBIOSJSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+                    DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation);
                 }
                 if (settingsWindow.GeneralChanged)
                 {

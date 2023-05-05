@@ -44,7 +44,7 @@ namespace DCS_BIOS
         public static string JSONDirectory
         {
             get => _jsonDirectory;
-            set => _jsonDirectory = DCSBIOSCommon.GetDCSBIOSJSONDirectory(value);
+            set => _jsonDirectory = value;
         }
 
         private static void Reset()
