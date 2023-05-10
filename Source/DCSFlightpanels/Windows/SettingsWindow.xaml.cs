@@ -80,7 +80,7 @@ namespace DCSFlightpanels.Windows
 
         private void CheckDCSBIOSStatus()
         {
-            var result = DCSBIOSCommon.CheckJSONDirectory(DCSBIOSCommon.GetDCSBIOSJSONDirectory(TextBoxDcsBiosJSONLocation.Text));
+            var result = DCSBIOSCommon.CheckJSONDirectory(TextBoxDcsBiosJSONLocation.Text);
 
             if (result.Item1 == false && result.Item2 == false && result.Item3 == false)
             {
@@ -185,7 +185,9 @@ namespace DCSFlightpanels.Windows
             CheckBoxDisableKeyboardAPI.IsChecked = Settings.Default.DisableKeyboardAPI;
             CheckBoxDarkMode.IsChecked = Settings.Default.DarkMode;
 
-            TextBoxDcsBiosJSONLocation.Text = Settings.Default.DCSBiosJSONLocation;
+            var settingsFolder = Settings.Default.DCSBiosJSONLocation;
+            
+            TextBoxDcsBiosJSONLocation.Text = settingsFolder;
             TextBoxDCSBIOSFromIP.Text = Settings.Default.DCSBiosIPFrom;
             TextBoxDCSBIOSToIP.Text = Settings.Default.DCSBiosIPTo;
             TextBoxDCSBIOSFromPort.Text = Settings.Default.DCSBiosPortFrom;
@@ -319,7 +321,7 @@ namespace DCSFlightpanels.Windows
                     ShowNewFolderButton = false,
                 };
                 
-                var folderLocation = DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);
+                var folderLocation = Settings.Default.DCSBiosJSONLocation;
                 if (!string.IsNullOrEmpty(folderLocation))
                 {
                     Debug.WriteLine(folderLocation);

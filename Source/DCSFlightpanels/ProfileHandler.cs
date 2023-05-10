@@ -733,7 +733,7 @@ namespace DCSFlightpanels
 
         private void VerifyDCSBIOSLocation()
         {
-            var result = DCSBIOSCommon.CheckJSONDirectory(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+            var result = DCSBIOSCommon.CheckJSONDirectory(Settings.Default.DCSBiosJSONLocation);
             if (result.Item1 && result.Item2 && result.Item3)
             {
                 return;
@@ -771,7 +771,7 @@ namespace DCSFlightpanels
                 if (settingsWindow.DCSBIOSChanged)
                 {
                     DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
+                    DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation);
                 }
             }
         }

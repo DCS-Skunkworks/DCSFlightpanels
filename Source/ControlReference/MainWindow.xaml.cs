@@ -44,9 +44,18 @@ namespace ControlReference
             InitializeComponent();
             REFEventHandler.AttachDataListener(this);
             BIOSEventHandler.AttachStringListener(this);
+
+            /*
+             * Correct JSON folder path, move away from $USERDIRECTORY$.
+             */
+            Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ?
+                Settings.Default.DCSBiosJSONLocation.Replace("$USERDIRECTORY$", "%userprofile%") : Settings.Default.DCSBiosJSONLocation);
+            Settings.Default.Save();
         }
 
         private bool _hasBeenCalledAlready;
+
+        #region Dispose
         protected virtual void Dispose(bool disposing)
         {
             if (!_hasBeenCalledAlready)
@@ -79,6 +88,8 @@ namespace ControlReference
             GC.SuppressFinalize(this);
         }
 
+        #endregion
+
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
@@ -90,7 +101,7 @@ namespace ControlReference
 
                 SetTopMost();
                 DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), true, false);
+                DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, true, false);
                 UpdateComboBoxModules();
                 CreateDCSBIOS();
                 StartupDCSBIOS();
@@ -113,7 +124,7 @@ namespace ControlReference
 
         private void FindDCSBIOSControls()
         {
-            if (!DCSAircraft.Modules.Any())
+            if (!DCSAircraft.HasDCSBIOSModules)
             {
                 return;
             }
@@ -194,7 +205,7 @@ namespace ControlReference
                     if (settingsWindow.DCSBIOSChanged)
                     {
                         DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                        DCSAircraft.FillModulesListFromDcsBios(DCSBIOSCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), true, false);
+                        DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, true, false);
                         UpdateComboBoxModules();
                     }
                 }
