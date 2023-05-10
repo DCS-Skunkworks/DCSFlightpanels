@@ -72,6 +72,8 @@ namespace ClassLibraryCommon
         StreamDeckMK2 = 0x0080,
         [Description("StreamDeck XL")]
         StreamDeckXL = 0x006C,
+        [Description("StreamDeck XL Rev2")]
+        StreamDeckXLRev2 = 0x008F,
         [Description("Logitech Farming Side Panel")]
         FarmingPanel = 0x2218
     }

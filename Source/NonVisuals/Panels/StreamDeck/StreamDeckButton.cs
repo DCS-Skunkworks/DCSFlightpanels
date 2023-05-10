@@ -154,6 +154,7 @@
                         GamingPanelEnum.StreamDeckV2 => PluginGamingPanelEnum.StreamDeckV2,
                         GamingPanelEnum.StreamDeckMK2 => PluginGamingPanelEnum.StreamDeckMK2,
                         GamingPanelEnum.StreamDeckXL => PluginGamingPanelEnum.StreamDeckXL,
+                        GamingPanelEnum.StreamDeckXLRev2 => PluginGamingPanelEnum.StreamDeckXL,
                         _ => PluginGamingPanelEnum.Unknown
                     };
 

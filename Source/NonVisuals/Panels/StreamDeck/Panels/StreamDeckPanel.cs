@@ -104,7 +104,7 @@
                 GamingPanelEnum.StreamDeckV2 or
                 GamingPanelEnum.StreamDeckMK2 => 15,
 
-                GamingPanelEnum.StreamDeckXL => 32,
+                GamingPanelEnum.StreamDeckXL or GamingPanelEnum.StreamDeckXLRev2 => 32,
                 _ => throw new Exception("Failed to determine Stream Deck model")
             };
 

@@ -56,7 +56,7 @@
 
         public void JSONAddLine(string jsonLine)
         {
-           if (_jsonString.Length == 0)
+            if (_jsonString.Length == 0)
             {
                 _jsonString.Append(jsonLine);
             }
@@ -65,7 +65,7 @@
                 _jsonString.AppendLine(RefactorClassNamesAndNameSpaces(jsonLine));
             }
         }
-        
+
         /// <summary>
         /// Since the implementation of Streamdeck the projects have been organized and namespaces
         /// have changed. Only in the JSON (Streamdeck) are namespaces saved within this project.
@@ -93,11 +93,12 @@
         public string JSONString
         {
             get => _jsonString.ToString();
-            
-            set {
+
+            set
+            {
                 _jsonString.Clear();
                 _jsonString.Append(value);
-                }
+            }
         }
 
         /// <summary>
@@ -126,7 +127,12 @@
 
         public bool IsJSON()
         {
-            return (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL || PanelType == GamingPanelEnum.StreamDeckV2 || PanelType == GamingPanelEnum.StreamDeckMK2);
+            return  PanelType == GamingPanelEnum.StreamDeckMini ||
+                    PanelType == GamingPanelEnum.StreamDeck ||
+                    PanelType == GamingPanelEnum.StreamDeckV2 ||
+                    PanelType == GamingPanelEnum.StreamDeckMK2 ||
+                    PanelType == GamingPanelEnum.StreamDeckXL ||
+                    PanelType == GamingPanelEnum.StreamDeckXLRev2;
         }
 
         public void ClearSettings()
