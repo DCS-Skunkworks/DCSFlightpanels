@@ -61,6 +61,7 @@
                         break;
                     }
                 case GamingPanelEnum.StreamDeckXL:
+                case GamingPanelEnum.StreamDeckXLRev2:
                     {
                         var child = new UserControlStreamDeckUIXL(_streamDeckPanel);
                         _uiButtonGrid = child;
