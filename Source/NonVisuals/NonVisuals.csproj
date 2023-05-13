@@ -33,7 +33,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
-    <PackageReference Include="StreamDeckSharp" Version="3.2.0" />
+    <PackageReference Include="OpenMacroBoard.SDK" Version="5.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
+    <PackageReference Include="StreamDeckSharp" Version="4.3.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
   </ItemGroup>
   <PropertyGroup />

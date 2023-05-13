@@ -29,12 +29,14 @@
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="OpenMacroBoard.SDK" Version="5.0.0" />
+    <PackageReference Include="StreamDeckSharp" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Jace" Version="1.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NLog" Version="5.0.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.1.4" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

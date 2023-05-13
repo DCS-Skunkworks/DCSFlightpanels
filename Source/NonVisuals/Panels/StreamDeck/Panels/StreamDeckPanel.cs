@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Panels.StreamDeck.Panels
+﻿using NonVisuals.Images;
+
+namespace NonVisuals.Panels.StreamDeck.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -9,21 +11,19 @@
 
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
-
+    using OpenMacroBoard.SDK;
     using MEF;
     using EventArgs;
     using Interfaces;
     using Saitek;
     using Events;
-
-    using OpenMacroBoard.SDK;
-
-    using StreamDeckSharp;
+    
     using NonVisuals;
     using StreamDeck;
     using NonVisuals.Panels.Saitek.Panels;
     using NonVisuals.Panels;
     using HID;
+    using System.IO;
 
     public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
@@ -40,9 +40,10 @@
         private static readonly object LockObjectStreamDeckPanels = new();
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new();
 
-        private readonly IStreamDeckBoard _streamDeckBoard;
+        private readonly IMacroBoard _streamDeckBoard;
+        private readonly IKeyBitmapFactory _keyBitmapFactory = new KeyBitmapFactory();
 
-        public IStreamDeckBoard StreamDeckBoard => _streamDeckBoard;
+        public IMacroBoard StreamDeckBoard => _streamDeckBoard;
         public int ButtonCount => _buttonCount;
 
         public string SelectedLayerName
@@ -112,7 +113,7 @@
 
             if (!unitTesting)
             {
-                _streamDeckBoard = StreamDeck.OpenDevice(hidSkeleton.HIDInstance, false);
+                _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.HIDInstance, false);
                 _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
             }
             SDEventHandler.AttachStreamDeckListener(this);
@@ -278,8 +279,10 @@
             {
                 return;
             }
-            var keyBitmap = KeyBitmap.Create.FromBitmap(new(bitmap)); //Why new Bitmap(...) ? to eventually convert Format8bppIndexed to Format32bppArgb
-
+            //var keyBitmap = KeyBitmap.Create.FromBitmap(new(bitmap)); //Why new Bitmap(...) ? to eventually convert Format8bppIndexed to Format32bppArgb
+            var memoryStream = new MemoryStream();
+            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            var keyBitmap = _keyBitmapFactory.FromStream(memoryStream);
             lock (_updateStreamDeckOledLockObject)
             {
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);

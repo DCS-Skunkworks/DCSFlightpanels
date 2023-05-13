@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Panels.StreamDeck
+﻿using OpenMacroBoard.SDK;
+
+namespace NonVisuals.Panels.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -12,10 +14,7 @@
     using Newtonsoft.Json.Serialization;
     using NLog;
     using Events;
-
-    using OpenMacroBoard.SDK;
-
-    using StreamDeckSharp;
+    
     using Panels;
 
     public class StreamDeckLayerHandler : IDisposable
@@ -26,7 +25,7 @@
         private volatile List<StreamDeckLayer> _layerList = new();
         private volatile List<string> _layerHistory = new();
         private volatile string _selectedLayerName = string.Empty;
-        private readonly IStreamDeckBoard _streamDeckBoard;
+        private readonly IMacroBoard _streamDeckBoard;
         private EnumStreamDeckButtonNames _selectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
         private bool _jsonImported;

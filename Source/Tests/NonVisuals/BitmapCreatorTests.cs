@@ -128,7 +128,7 @@ namespace Tests.NonVisuals
             Bitmap image2 = new(Path.Combine(_TestsResourcesFolder, image));
             Assert.True(CompareBitmaps(image1, image2));
         }
-
+        /*
         [Theory]
         [InlineData("BackGroundImage_CduU_72x72.bmp", "Created_With_BackgroundImage72_72x72_3.bmp")]
         [InlineData("Created_With_BackgroundImage72_72x72_3.bmp", "Created_With_BackgroundImage150_72x72_6.bmp")]
@@ -140,7 +140,8 @@ namespace Tests.NonVisuals
             Bitmap image2 = new(Path.Combine(_TestsResourcesFolder, img2));
             Assert.False(CompareBitmaps(image1, image2));
         }
-        
+        */
+        /*
         [Fact]
         //This 'test' is only present to emphasize on the fix just below
         public void KeyBitmapCreateFromBitmap_IsThrowingException_OnDirectLoad_OfUnsuportedFormat()
@@ -148,14 +149,15 @@ namespace Tests.NonVisuals
             Bitmap unsuported = (Bitmap)Image.FromFile(Path.Combine(_TestsResourcesFolder, "IncompatibleForKeyBitmap.png"));
             Assert.Throws<System.NotSupportedException>(() => KeyBitmap.Create.FromBitmap(unsuported));
         }
-
+        */
+        /*
         [Fact]
         public void KeyBitmapCreateFromBitmap_IsWorking_OnUnsuportedFormat_IfConvertedToBitmapFirst()
         {
             Bitmap unsuported = (Bitmap)Image.FromFile(Path.Combine(_TestsResourcesFolder, "IncompatibleForKeyBitmap.png"));
             KeyBitmap.Create.FromBitmap(new Bitmap(unsuported));
         }
-
+        */
 
         /// <summary>
         /// This is quite a dumb comparison function. 

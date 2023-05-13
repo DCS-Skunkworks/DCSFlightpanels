@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HidLibrary", "HidLibrary\Hi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SamplePanelEventPlugin2", "SamplePanelEventPlugin2\SamplePanelEventPlugin2.csproj", "{09DB3707-5B46-41CF-AC10-B1ADCD0087A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlReference", "ControlReference\ControlReference.csproj", "{DE157912-48BE-4BA0-ABB1-51E53FCECDF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlReference", "ControlReference\ControlReference.csproj", "{DE157912-48BE-4BA0-ABB1-51E53FCECDF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

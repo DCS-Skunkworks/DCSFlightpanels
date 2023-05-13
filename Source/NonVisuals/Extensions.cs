@@ -5,6 +5,9 @@
     using TextBox = System.Windows.Controls.TextBox;
     using Newtonsoft.Json;
     using Panels.StreamDeck;
+    using SixLabors.ImageSharp.PixelFormats;
+    using SixLabors.ImageSharp;
+    using System.IO;
 
     public static class Extensions
     {
@@ -48,6 +51,19 @@
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Image"/> from a given <see cref="System.Drawing.Bitmap"/>.
+        /// </summary>
+        public static Image ToImageSharpImage(this System.Drawing.Bitmap bitmap)
+        {
+            using var memoryStream = new MemoryStream();
+            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            return Image.Load(memoryStream);
         }
     }
 }
