@@ -1,20 +1,19 @@
-﻿using NonVisuals.Panels.StreamDeck;
-using OpenMacroBoard.SDK;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
+using NonVisuals.Panels.StreamDeck;
 using Xunit;
 
-namespace Tests.NonVisuals
+namespace DCSFPTests.NonVisuals
 {
     public class BitmapCreatorTests
     {
-        private string _TestsResourcesFolder = @"NonVisuals\BitmapCreatorTestsResources\";
+        private readonly string _testsResourcesFolder = @"NonVisuals\BitmapCreatorTestsResources\";
 
         [Fact]
         public void CreateEmptyStreamDeckBitmapShouldReturnExpectedBitmap()
         {
             Bitmap createdBitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(Color.Red);
-            Bitmap expectedBitmap = new(Path.Combine(_TestsResourcesFolder, "EmptyRed_StreamdeckBitmap_72x72.bmp"));
+            Bitmap expectedBitmap = new(Path.Combine(_testsResourcesFolder, "EmptyRed_StreamdeckBitmap_72x72.bmp"));
             Assert.True(CompareBitmaps(expectedBitmap, createdBitmap));
         }
 
@@ -24,10 +23,10 @@ namespace Tests.NonVisuals
         [InlineData(0.7f, 0.8f, 0.9f, "OriginalAdjusted_0.7_0.8_0.9.bmp")]
         public void AdjustBitmap_ShouldReturnExpectedBitmap(float brightness, float contrast, float gamma, string expecteImage)
         {
-            Bitmap originalBitmap = new(Path.Combine(_TestsResourcesFolder, "Original_150x150.bmp"));
+            Bitmap originalBitmap = new(Path.Combine(_testsResourcesFolder, "Original_150x150.bmp"));
             var adjustedBitmap = BitMapCreator.AdjustBitmap(originalBitmap, brightness, contrast, gamma);
 
-            Bitmap expectedBitmap = new(Path.Combine(_TestsResourcesFolder, expecteImage));
+            Bitmap expectedBitmap = new(Path.Combine(_testsResourcesFolder, expecteImage));
             Assert.True(CompareBitmaps(expectedBitmap, adjustedBitmap));
         }
 
@@ -37,17 +36,17 @@ namespace Tests.NonVisuals
         [InlineData("EmptyRed_StreamdeckBitmap_72x72.bmp", "EmptyRed_StreamdeckBitmap_72x72.bmp")]
         public void EnlargeBitmapCanvas_ShouldReturnExpectedBitmap(string sourceImage, string expectedImage)
         {
-            Bitmap originalBitmap = new(Path.Combine(_TestsResourcesFolder, sourceImage));
+            Bitmap originalBitmap = new(Path.Combine(_testsResourcesFolder, sourceImage));
             var enlargedBitmap = BitMapCreator.EnlargeBitmapCanvas(originalBitmap);
 
-            Bitmap expectedBitmap = new(Path.Combine(_TestsResourcesFolder, expectedImage));
+            Bitmap expectedBitmap = new(Path.Combine(_testsResourcesFolder, expectedImage));
             Assert.True(CompareBitmaps(expectedBitmap, enlargedBitmap));
         }
         
         [Fact]
         public void Bitmap2BitmapImage_ToAndFrom_ShouldBePossible()
         {
-            Bitmap originalBitmap = new(Path.Combine(_TestsResourcesFolder, "Original_150x150.bmp"));
+            Bitmap originalBitmap = new(Path.Combine(_testsResourcesFolder, "Original_150x150.bmp"));
             var bitmapImage = BitMapCreator.Bitmap2BitmapImage(originalBitmap);
             Assert.True(CompareBitmaps(BitMapCreator.BitmapImage2Bitmap(bitmapImage), originalBitmap));         
         }
@@ -64,7 +63,7 @@ namespace Tests.NonVisuals
         {
             var createdBitmap = BitMapCreator.CreateStreamDeckBitmap(text, new Font(new FontFamily(fontFamily), fontSize, FontStyle.Bold), Color.Yellow, x, y, Color.Blue);
             
-            Bitmap expectedBitmap = new(Path.Combine(_TestsResourcesFolder, expectedImage));
+            Bitmap expectedBitmap = new(Path.Combine(_testsResourcesFolder, expectedImage));
             Assert.True(CompareBitmaps(expectedBitmap, createdBitmap));
         }
 
@@ -94,16 +93,16 @@ namespace Tests.NonVisuals
         [InlineData("AbC", "Calibri", 20, -10, -10, "BackGroundImage_CduU_30x30.bmp", "Created_With_BackgroundImage30_72x72_7.bmp")]
         public void CreateStreamDeckBitmapWithBackGroundImage_ShouldProduceExpectedBitmap(string text, string fontFamily, int fontSize, int x, int y, string backGroundImage, string expectedImage)
         {
-            Bitmap backgroundImage = new(Path.Combine(_TestsResourcesFolder, backGroundImage));
+            Bitmap backgroundImage = new(Path.Combine(_testsResourcesFolder, backGroundImage));
             var createdBitmap = BitMapCreator.CreateStreamDeckBitmap(text, new Font(new FontFamily(fontFamily), fontSize, FontStyle.Bold), Color.Yellow, x, y, backgroundImage);
-            Bitmap expectedBitmap = new(Path.Combine(_TestsResourcesFolder, expectedImage));
+            Bitmap expectedBitmap = new(Path.Combine(_testsResourcesFolder, expectedImage));
             Assert.True(CompareBitmaps(expectedBitmap, createdBitmap));
         }
 
         [Fact]
         public void BitmapOrFileNotFound_WithValidPath_ShouldReturnExpectedBitmap()
         {
-            Bitmap expectedImage = new(Path.Combine(_TestsResourcesFolder, "BackGroundImage_CduU_72x72.bmp"));
+            Bitmap expectedImage = new(Path.Combine(_testsResourcesFolder, "BackGroundImage_CduU_72x72.bmp"));
             string imageWithValidPath = @"NonVisuals\BitmapCreatorTestsResources\BackGroundImage_CduU_72x72.bmp";
             var loadedImage = BitMapCreator.BitmapOrFileNotFound(imageWithValidPath);
             Assert.True(CompareBitmaps(expectedImage, loadedImage));
@@ -124,8 +123,8 @@ namespace Tests.NonVisuals
         [InlineData("EnlargedBitmapCanvas_FromSmallerThan_72x72.bmp")]
         public void CompareBitmap_ShouldReturnTrue_OnSameImages(string image)
         {
-            Bitmap image1 = new(Path.Combine(_TestsResourcesFolder, image));
-            Bitmap image2 = new(Path.Combine(_TestsResourcesFolder, image));
+            Bitmap image1 = new(Path.Combine(_testsResourcesFolder, image));
+            Bitmap image2 = new(Path.Combine(_testsResourcesFolder, image));
             Assert.True(CompareBitmaps(image1, image2));
         }
         /*
