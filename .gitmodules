@@ -1,0 +1,9 @@
+[submodule "Source/DCSOpenMacroBoard.SDK"]
+	path = Source/DCSOpenMacroBoard.SDK
+	url = https://github.com/DCSFlightpanels/DCSOpenMacroBoard.SDK
+[submodule "Source/DCSStreamDeckSharp"]
+	path = Source/DCSStreamDeckSharp
+	url = https://github.com/DCSFlightpanels/DCSStreamDeckSharp
+[submodule "Source/DCSOpenMacroBoardMetaProject"]
+	path = Source/DCSOpenMacroBoardMetaProject
+	url = https://github.com/DCSFlightpanels/DCSOpenMacroBoardMetaProject

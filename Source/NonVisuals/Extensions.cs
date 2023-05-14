@@ -1,4 +1,6 @@
-﻿namespace NonVisuals
+﻿using System.Drawing;
+
+namespace NonVisuals
 {
     using System;
     using System.Globalization;
@@ -52,6 +54,23 @@
 
             return true;
         }
+
+        /// <summary>
+        /// Get MemoryStream from Bitmap
+        /// </summary>
+        public static MemoryStream GetMemoryStream(this Bitmap bitmap)
+        {
+            if (bitmap == null)
+            {
+                return null;
+            }
+
+            var memoryStream = new MemoryStream();
+            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Bmp);
+            memoryStream.Position = 0;
+            return memoryStream;
+        }
+
 
         /// <summary>
         /// Creates a <see cref="Image"/> from a given <see cref="System.Drawing.Bitmap"/>.

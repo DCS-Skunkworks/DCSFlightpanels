@@ -8,7 +8,7 @@ namespace NonVisuals.Panels.StreamDeck.Panels
     using System.Linq;
     using System.Threading;
     using ClassLibraryCommon;
-
+    using StreamDeckSharp.Internals;
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
     using OpenMacroBoard.SDK;
@@ -279,10 +279,8 @@ namespace NonVisuals.Panels.StreamDeck.Panels
             {
                 return;
             }
-            //var keyBitmap = KeyBitmap.Create.FromBitmap(new(bitmap)); //Why new Bitmap(...) ? to eventually convert Format8bppIndexed to Format32bppArgb
-            var memoryStream = new MemoryStream();
-            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
-            var keyBitmap = _keyBitmapFactory.FromStream(memoryStream);
+
+            var keyBitmap = _keyBitmapFactory.FromStream(bitmap.GetMemoryStream());
             lock (_updateStreamDeckOledLockObject)
             {
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);

@@ -28,14 +28,16 @@
   <ItemGroup>
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
+    <ProjectReference Include="..\DCSOpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
+    <ProjectReference Include="..\DCSStreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj" />
     <ProjectReference Include="..\HidLibrary\HidLibrary.csproj" />
     <ProjectReference Include="..\MEF\MEF.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
-    <PackageReference Include="OpenMacroBoard.SDK" Version="5.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.1.4" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
-    <PackageReference Include="StreamDeckSharp" Version="4.3.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
   </ItemGroup>
   <PropertyGroup />

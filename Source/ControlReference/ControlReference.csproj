@@ -28,8 +28,8 @@
     <Content Include="Images\ctrl-ref.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="OpenMacroBoard.SDK" Version="5.0.0" />
-    <PackageReference Include="StreamDeckSharp" Version="4.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.1.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />

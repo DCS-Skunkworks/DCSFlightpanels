@@ -29,8 +29,6 @@
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="OpenMacroBoard.SDK" Version="5.0.0" />
-    <PackageReference Include="StreamDeckSharp" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
