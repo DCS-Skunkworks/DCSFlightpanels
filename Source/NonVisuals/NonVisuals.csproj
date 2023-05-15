@@ -28,8 +28,8 @@
   <ItemGroup>
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
-    <ProjectReference Include="..\DCSFPOpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
-    <ProjectReference Include="..\DCSFPStreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj" />
+    <ProjectReference Include="..\DCSFPOpenMacroBoardMetaProject\src\DCSFPOpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
+    <ProjectReference Include="..\DCSFPOpenMacroBoardMetaProject\src\DCSFPStreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj" />
     <ProjectReference Include="..\HidLibrary\HidLibrary.csproj" />
     <ProjectReference Include="..\MEF\MEF.csproj" />
   </ItemGroup>

@@ -1,0 +1,3 @@
+[submodule "Source/DCSFPOpenMacroBoardMetaProject"]
+	path = Source/DCSFPOpenMacroBoardMetaProject
+	url = https://github.com/DCSFlightpanels/DCSFPOpenMacroBoardMetaProject
