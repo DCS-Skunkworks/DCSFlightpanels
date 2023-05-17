@@ -1,10 +1,15 @@
-﻿namespace NonVisuals
+﻿using System.Drawing;
+
+namespace NonVisuals
 {
     using System;
     using System.Globalization;
     using TextBox = System.Windows.Controls.TextBox;
     using Newtonsoft.Json;
     using Panels.StreamDeck;
+    using SixLabors.ImageSharp.PixelFormats;
+    using SixLabors.ImageSharp;
+    using System.IO;
 
     public static class Extensions
     {
@@ -48,6 +53,36 @@
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Get MemoryStream from Bitmap
+        /// </summary>
+        public static MemoryStream GetMemoryStream(this Bitmap bitmap)
+        {
+            if (bitmap == null)
+            {
+                return null;
+            }
+
+            var memoryStream = new MemoryStream();
+            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Bmp);
+            memoryStream.Position = 0;
+            return memoryStream;
+        }
+
+
+        /// <summary>
+        /// Creates a <see cref="Image"/> from a given <see cref="System.Drawing.Bitmap"/>.
+        /// </summary>
+        public static Image ToImageSharpImage(this System.Drawing.Bitmap bitmap)
+        {
+            using var memoryStream = new MemoryStream();
+            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            return Image.Load(memoryStream);
         }
     }
 }

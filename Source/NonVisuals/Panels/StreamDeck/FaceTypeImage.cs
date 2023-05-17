@@ -1,4 +1,7 @@
-﻿namespace NonVisuals.Panels.StreamDeck
+﻿using NonVisuals.Images;
+using OpenMacroBoard.SDK;
+
+namespace NonVisuals.Panels.StreamDeck
 {
     using System;
     using System.Drawing;
@@ -7,8 +10,7 @@
     using Newtonsoft.Json;
 
     using Interfaces;
-
-    using OpenMacroBoard.SDK;
+    
     using Panels;
 
     [Serializable]
@@ -21,7 +23,7 @@
         private Font _textFont = SettingsManager.DefaultFont;
         private Color _fontColor = SettingsManager.DefaultFontColor;
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
-
+        private IKeyBitmapFactory _keyBitmapFactory = new KeyBitmapFactory();
 
         [JsonIgnore]
         public bool ConfigurationOK => !string.IsNullOrEmpty(_imageFile);
@@ -86,7 +88,8 @@
 
             if (_keyBitmap == null)
             {
-                _keyBitmap = KeyBitmap.Create.FromBitmap(new Bitmap(_bitmap)); //Why new Bitmap(...) ? to eventually convert Format8bppIndexed to Format32bppArgb
+                //_keyBitmap =  KeyBitmap.Create.FromBitmap(new Bitmap(_bitmap)); //Why new Bitmap(...) ? to eventually convert Format8bppIndexed to Format32bppArgb
+                _keyBitmap = KeyBitmap.Create.FromImageSharpImage(new Bitmap(_bitmap).ToImageSharpImage());
             }
         }
 

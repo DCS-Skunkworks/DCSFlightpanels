@@ -28,6 +28,10 @@
     <Content Include="Images\ctrl-ref.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.1.4" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
   </ItemGroup>
