@@ -29,7 +29,15 @@ jobs:
       with:
         # We must fetch at least the immediate parents so that if this is
         # a pull request then we can checkout the head.
-        fetch-depth: 2
+        fetch-depth: 2        
+        # Whether to checkout submodules: `true` to checkout submodules or `recursive` to
+        # recursively checkout submodules.
+        #
+        # When the `ssh-key` input is not provided, SSH URLs beginning with
+        # `git@github.com:` are converted to HTTPS.
+        #
+        # Default: false
+        submodules: 'recursive'
 
     # If this run was triggered by a pull request event, then checkout
     # the head of the pull request instead of the merge commit.
