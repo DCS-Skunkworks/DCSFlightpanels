@@ -66,8 +66,16 @@ namespace NonVisuals.Radios
         private int _uhfPresetDialSkipper;
         private int _fm1PresetDialSkipper;
         private int _fm2PresetDialSkipper;
-        private const string VHF_VOLUME_COMMAND_INC = "PLT_COM_VHF_VOL +3200\n"; //*
-        private const string VHF_VOLUME_COMMAND_DEC = "PLT_COM_VHF_VOL -3200\n"; //*
+        private int _tempPLT_EUFD_RockerSkipper;
+
+        //private const string VHF_VOLUME_COMMAND_INC = "PLT_COM_VHF_VOL +3200\n"; //*
+        //private const string VHF_VOLUME_COMMAND_DEC = "PLT_COM_VHF_VOL -3200\n"; //*
+
+        private const string PLT_EUFD_COMMAND_SWAP = "PLT_EUFD_SWAP TOGGLE\n";
+
+        private const string PLT_EUFD_COMMAND_IDM = "PLT_EUFD_IDM";
+        private const string PLT_EUFD_COMMAND_RTS = "PLT_EUFD_RTS";
+        private const string PLT_EUFD_COMMAND_WCA = "PLT_EUFD_WCA";
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -423,27 +431,74 @@ namespace NonVisuals.Radios
                                 }
 
                             case RadioPanelPZ69KnobsAH64D.UPPER_LARGE_FREQ_WHEEL_INC:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetTempRockerCommand(PLT_EUFD_COMMAND_IDM, 2);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsAH64D.UPPER_LARGE_FREQ_WHEEL_DEC:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetTempRockerCommand(PLT_EUFD_COMMAND_IDM, 0);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsAH64D.UPPER_SMALL_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsAH64D.UPPER_SMALL_FREQ_WHEEL_DEC:
+                                break;
+
                             case RadioPanelPZ69KnobsAH64D.LOWER_LARGE_FREQ_WHEEL_INC:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetTempRockerCommand(PLT_EUFD_COMMAND_WCA, 2);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsAH64D.LOWER_LARGE_FREQ_WHEEL_DEC:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetTempRockerCommand(PLT_EUFD_COMMAND_WCA, 0);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsAH64D.LOWER_SMALL_FREQ_WHEEL_INC:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetTempRockerCommand(PLT_EUFD_COMMAND_RTS, 2);
+                                    }
+                                    break;
+                                }
+
                             case RadioPanelPZ69KnobsAH64D.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
-                                    // Ignore
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetTempRockerCommand(PLT_EUFD_COMMAND_RTS, 0);
+                                    }
                                     break;
                                 }
 
                             case RadioPanelPZ69KnobsAH64D.UPPER_FREQ_SWITCH:
                                 {
                                     _upperFreqSwitchPressedDown = radioPanelKnob.IsOn;
+                                    {
+                                        DCSBIOS.Send(PLT_EUFD_COMMAND_SWAP);
+                                    }
                                     break;
                                 }
 
                             case RadioPanelPZ69KnobsAH64D.LOWER_FREQ_SWITCH:
                                 {
                                     _lowerFreqSwitchPressedDown = radioPanelKnob.IsOn;
+                                    {
+                                        DCSBIOS.Send(PLT_EUFD_COMMAND_SWAP);
+                                    }
                                     break;
                                 }
                         }
@@ -461,6 +516,15 @@ namespace NonVisuals.Radios
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void SetTempRockerCommand(string dcsBiosCommand, int rockerTempSwitchValue)
+        {
+            if (!SkipTempRockerChange())
+            {
+                DCSBIOS.Send($"{dcsBiosCommand} {rockerTempSwitchValue}\n");
+                DCSBIOS.Send($"{dcsBiosCommand} 1\n");
             }
         }
 
@@ -570,7 +634,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAH64DRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_INC);
+                                          //      DCSBIOS.Send(VHF_VOLUME_COMMAND_INC);
                                                 break;
                                             }
 
@@ -614,7 +678,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_DEC);
+                                            //    DCSBIOS.Send(VHF_VOLUME_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -741,7 +805,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_INC);
+                                             //   DCSBIOS.Send(VHF_VOLUME_COMMAND_INC);
                                                 break;
                                             }
 
@@ -780,7 +844,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_DEC);
+                                             //   DCSBIOS.Send(VHF_VOLUME_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1229,6 +1293,25 @@ namespace NonVisuals.Radios
 
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
+        }
+
+        private bool SkipTempRockerChange()
+        {
+            try
+            {
+                if (_tempPLT_EUFD_RockerSkipper > 2)
+                {
+                    _tempPLT_EUFD_RockerSkipper = 0;
+                    return false;
+                }
+                _tempPLT_EUFD_RockerSkipper++;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+            return false;
         }
     }
 }
