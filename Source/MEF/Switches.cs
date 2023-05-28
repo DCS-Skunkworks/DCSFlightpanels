@@ -26,6 +26,8 @@
         StreamDeckMK2,
         [Description("StreamDeck XL")]
         StreamDeckXL,
+        [Description("StreamDeck Plus")]
+        StreamDeckPlus,
         [Description("Logitech Farming Side Panel")]
         FarmingPanel,
         [Description("Saitek PZ69 Radio PreProg Panel A10C")]

@@ -519,6 +519,7 @@ namespace DCSFlightpanels
                     case GamingPanelEnum.StreamDeckMK2:
                     case GamingPanelEnum.StreamDeckXL:
                     case GamingPanelEnum.StreamDeckXLRev2:
+                    case GamingPanelEnum.StreamDeckPlus:
                         {
                             var tabItemStreamDeck = new TabItem { Header = hidSkeleton.GamingPanelType.GetEnumDescriptionField() };
                             var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.GamingPanelType, hidSkeleton);
@@ -836,7 +837,8 @@ namespace DCSFlightpanels
         {
             var panelOrderList = new List<GamingPanelEnum>
                                      {
-                                        GamingPanelEnum.CDU737,
+                                         GamingPanelEnum.StreamDeckPlus,
+                                         GamingPanelEnum.CDU737,
                                          GamingPanelEnum.StreamDeckXL,
                                          GamingPanelEnum.StreamDeck,
                                          GamingPanelEnum.StreamDeckV2,
