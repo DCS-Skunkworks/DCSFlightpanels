@@ -108,21 +108,6 @@
                 }
 
                 var newlySelectedImage = (StreamDeckImage)sender;
-
-                /*
-                 * Here we must check if event if we can change the button that is selected. If there are unsaved configurations we can't
-                 */
-                if (newlySelectedImage.Bill.Button != _streamDeckPanel.SelectedButton && SDEventHandler.AreThereDirtyListeners(this))
-                {
-                    if (CommonUI.DoDiscardAfterMessage(true, $"Discard Changes to {SelectedButtonName} on {_streamDeckPanel.TypeOfPanel} ?"))
-                    {
-                        SetFormState();
-                    }
-                    else
-                    {
-                        e.Handled = true;
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -482,6 +467,7 @@
                 _streamDeckPanel.SelectedLayer.AddButton(oldStreamDeckButton);
                 UpdateButtonInfoFromSource();
                 SetIsDirty();
+                Clipboard.Clear();
             }
             return result;
         }
