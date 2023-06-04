@@ -87,6 +87,7 @@
             new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckXL),
             new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckXLRev2),
             new GamingPanelSkeleton(GamingPanelVendorEnum.CockpitMaster, GamingPanelEnum.CDU737),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckPlus),
         };
 
         private static void ValidateEmulationModeFlag()

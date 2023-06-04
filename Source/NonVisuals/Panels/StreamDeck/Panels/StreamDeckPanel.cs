@@ -106,6 +106,9 @@ namespace NonVisuals.Panels.StreamDeck.Panels
                 GamingPanelEnum.StreamDeckMK2 => 15,
 
                 GamingPanelEnum.StreamDeckXL or GamingPanelEnum.StreamDeckXLRev2 => 32,
+
+                GamingPanelEnum.StreamDeckPlus => 8,
+
                 _ => throw new Exception("Failed to determine Stream Deck model")
             };
 

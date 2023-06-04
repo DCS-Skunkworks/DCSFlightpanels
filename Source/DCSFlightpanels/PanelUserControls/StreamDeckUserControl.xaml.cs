@@ -68,6 +68,13 @@
                         StackPanelButtonUI.Children.Add(child);
                         break;
                     }
+                case GamingPanelEnum.StreamDeckPlus:
+                    {
+                        var child = new UserControlStreamDeckUIPlus(_streamDeckPanel);
+                        _uiButtonGrid = child;
+                        StackPanelButtonUI.Children.Add(child);
+                        break;
+                    }
             }
 
 

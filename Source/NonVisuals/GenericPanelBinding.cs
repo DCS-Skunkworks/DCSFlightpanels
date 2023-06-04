@@ -127,12 +127,13 @@
 
         public bool IsJSON()
         {
-            return  PanelType == GamingPanelEnum.StreamDeckMini ||
+            return PanelType == GamingPanelEnum.StreamDeckMini ||
                     PanelType == GamingPanelEnum.StreamDeck ||
                     PanelType == GamingPanelEnum.StreamDeckV2 ||
                     PanelType == GamingPanelEnum.StreamDeckMK2 ||
                     PanelType == GamingPanelEnum.StreamDeckXL ||
-                    PanelType == GamingPanelEnum.StreamDeckXLRev2;
+                    PanelType == GamingPanelEnum.StreamDeckXLRev2 ||
+                    PanelType == GamingPanelEnum.StreamDeckPlus;
         }
 
         public void ClearSettings()

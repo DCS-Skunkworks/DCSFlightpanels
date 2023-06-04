@@ -72,7 +72,8 @@
                 or PluginGamingPanelEnum.StreamDeckV2
                 or PluginGamingPanelEnum.StreamDeck
                 or PluginGamingPanelEnum.StreamDeckMini
-                or PluginGamingPanelEnum.StreamDeckXL => GetEventString<EnumStreamDeckButtonNames>(switchId, pressed),
+                or PluginGamingPanelEnum.StreamDeckXL
+                or PluginGamingPanelEnum.StreamDeckPlus => GetEventString<EnumStreamDeckButtonNames>(switchId, pressed),
                 
                 PluginGamingPanelEnum.BackLitPanel => "BIP Event - ATTN : this panel cannot produce events",
 
