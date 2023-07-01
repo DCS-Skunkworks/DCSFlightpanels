@@ -182,7 +182,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     }
                     else
                     {
-                        LabelSourceRawDCSBIOSValue.Content = _dcsbiosDecoder.UintDcsBiosValue;
+                        LabelSourceRawDCSBIOSValue.Content = _dcsbiosDecoder.UIntDcsBiosValue;
                     }
                 }
                 else
@@ -208,7 +208,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     return;
                 }
 
-                _dcsbiosDecoder.FormulaInstance.Evaluate(e.Address, e.Data, 20);
+                _dcsbiosDecoder.FormulaInstance.Evaluate(e.Address, e.Data);
             }
             catch (Exception ex)
             {

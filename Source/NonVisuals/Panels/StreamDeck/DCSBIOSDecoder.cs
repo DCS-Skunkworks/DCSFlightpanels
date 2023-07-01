@@ -190,20 +190,26 @@ namespace NonVisuals.Panels.StreamDeck
                     return;
                 }
 
-                if (FormulaSelectedAndOk() && _dcsbiosOutputFormula.Evaluate(e.Address, e.Data, 20))
+                _refreshInterval++;
+                var result = false;
+
+                if (FormulaSelectedAndOk() && _dcsbiosOutputFormula.Evaluate(e.Address, e.Data))
                 {
-                    _valueUpdated = true;
+                    result = true;
                 }
-                else if (!_useFormula && _dcsbiosOutput?.Address == e.Address)
+                else if (!_useFormula && _dcsbiosOutput?.EvaluateUInt(e.Address, e.Data) == true)
                 {
-                    _refreshInterval++;
-                    if (!Equals(UintDcsBiosValue, e.Data) || _refreshInterval > _refreshIntervalLimit)
-                    {
-                        _refreshInterval = 0;
-                        UintDcsBiosValue = _dcsbiosOutput.GetUIntValue(e.Data);
-                        _valueUpdated = true;
-                    }
+                    UIntDcsBiosValue = _dcsbiosOutput.LastUIntValue;
+                    result = true;
                 }
+
+                if (!result && _refreshInterval <= _refreshIntervalLimit)
+                {
+                    return;
+                }
+
+                _refreshInterval = 0;
+                _valueUpdated = true;
             }
             catch (Exception ex)
             {
@@ -249,7 +255,7 @@ namespace NonVisuals.Panels.StreamDeck
                      */
                     if (_treatStringAsNumber && uint.TryParse(string.IsNullOrWhiteSpace(e.StringData) ? "0" : e.StringData.Substring(0, _dcsbiosOutput.MaxLength), out var tmpUint))
                     {
-                        UintDcsBiosValue = tmpUint;
+                        UIntDcsBiosValue = tmpUint;
                     }
 
                     _valueUpdated = true;
@@ -311,7 +317,7 @@ namespace NonVisuals.Panels.StreamDeck
                 {
                     foreach (var dcsbiosConverter in _dcsbiosConverters)
                     {
-                        if (dcsbiosConverter.CriteriaFulfilled(UseFormula ? FormulaResult : UintDcsBiosValue))
+                        if (dcsbiosConverter.CriteriaFulfilled(UseFormula ? FormulaResult : UIntDcsBiosValue))
                         {
                             _converterBitmap = dcsbiosConverter.Get(_useFormula && _limitDecimalPlaces ? _numberFormatInfoFormula : null);
                             break;
@@ -376,7 +382,7 @@ namespace NonVisuals.Panels.StreamDeck
                 return string.IsNullOrWhiteSpace(StringDcsBiosValue) ? string.Empty : StringDcsBiosValue;
             }
 
-            return UintDcsBiosValue.ToString(CultureInfo.InvariantCulture);
+            return UIntDcsBiosValue.ToString(CultureInfo.InvariantCulture);
         }
 
         [JsonProperty("UseFormula", Required = Required.Default)]
@@ -478,7 +484,7 @@ namespace NonVisuals.Panels.StreamDeck
                  */
                 _valueUpdated = true;
                 _dcsbiosOutput = value;
-                UintDcsBiosValue = uint.MaxValue;
+                UIntDcsBiosValue = uint.MaxValue;
                 StringDcsBiosValue = string.Empty;
                 if (_dcsbiosOutput != null && _dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
                 {

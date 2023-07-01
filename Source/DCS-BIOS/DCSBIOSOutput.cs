@@ -51,6 +51,7 @@ namespace DCS_BIOS
         private int _shiftValue;
         private int _maxLength;
         private volatile uint _lastUIntValue = uint.MaxValue;
+        private volatile string _lastStringValue = "";
         private string _controlType; // display button toggle etc
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
@@ -151,7 +152,7 @@ namespace DCS_BIOS
         /// <param name="address"></param>
         /// <param name="data"></param>
         /// <returns>Returns true when all checks are true.</returns>
-        public bool ValueHasChanged(uint address, uint data)
+        public bool UIntValueHasChanged(uint address, uint data)
         {
             if (address != Address)
             {
@@ -195,7 +196,34 @@ namespace DCS_BIOS
                 return _specifiedValueString.Equals(data);
             }
         }
-        
+
+        /// <summary>
+        /// Checks :
+        /// <para>for address match</para>
+        /// <para>that new string value differs from previous</para>
+        /// <para>stores new value</para>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="stringData"></param>
+        /// <returns>Returns true when all checks are true.</returns>
+        public bool StringValueHasChanged(uint address, string stringData)
+        {
+            if (address != Address)
+            {
+                // Not correct control
+                return false;
+            }
+
+            if ((_lastStringValue ?? string.Empty) != (stringData ?? string.Empty))
+            {
+                _lastStringValue = stringData;
+                return true;
+            }
+            
+            return false;
+        }
+
         public uint GetUIntValue(uint data)
         {
             /*

@@ -119,7 +119,7 @@ namespace DCSFlightpanels.Windows
 
                 lock (_formulaLockObject)
                 {
-                    if (_dcsbiosOutputFormula.CheckForMatch(e.Address, e.Data))
+                    if (_dcsbiosOutputFormula.Evaluate(e.Address, e.Data))
                     {
                         try
                         {

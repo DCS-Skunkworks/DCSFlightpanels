@@ -24,10 +24,8 @@ namespace DCS_BIOS
         
         [NonSerialized]
         private readonly object _jaceLockObject = new();
-
-        [NonSerialized]
-        private int _staticUpdateInterval;
         
+        public double FormulaResult { get; set; }
 
         public DCSBIOSOutputFormula()
         {
@@ -72,35 +70,34 @@ namespace DCS_BIOS
         }
 
 
-        public bool Evaluate(uint address, uint data, int staticUpdateInterval)
+        /// <summary>
+        /// <para>Loops all dcs-bios outputs and checks for address match and that dcs-bios value has changed
+        /// and also that the comparison operator test is true against dcs-bios value.</para>
+        /// <para>Evaluates formula if all matches OK.</para>
+        /// <para>Get result via FormulaResult.</para>
+        /// </summary>
+        /// <returns></returns>
+        public bool Evaluate(uint address, uint data)
         {
             try
             {
-                _staticUpdateInterval++;
                 var result = false;
                 lock (_jaceLockObject)
                 {
                     foreach (var dcsbiosOutput in _dcsbiosOutputs)
                     {
-                        if (dcsbiosOutput.Address == address)
+                        if (!dcsbiosOutput.EvaluateUInt(address, data))
                         {
-                            if (dcsbiosOutput.LastUIntValue != data)
-                            {
-                                dcsbiosOutput.EvaluateUInt(address, data);
-                                result = true;
-                            }
-
-                            result = result || _staticUpdateInterval > staticUpdateInterval;
-
-                            if (result)
-                            {
-                                _staticUpdateInterval = 0;
-                            }
-                            // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
-                            _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastUIntValue;
-                            
-                            //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                            continue;
                         }
+
+                        _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastUIntValue;
+                        result = true;
+                    }
+
+                    if (result)
+                    {
+                        Evaluate(false);
                     }
                 }
 
@@ -114,8 +111,11 @@ namespace DCS_BIOS
         }
 
 
-        // Returns true if address was found in formula
-        // If true do a subsequent call to Evaluate() to get new value
+        /// <summary>
+        /// Returns true if address was found in formula
+        /// If true do a subsequent call to Evaluate() to get new value
+        /// </summary>
+        /// <returns></returns>
         public bool CheckForMatch(uint address, uint data)
         {
             try
@@ -129,11 +129,7 @@ namespace DCS_BIOS
                         {
                             dcsbiosOutput.EvaluateUInt(address, data);
                             result = true;
-
-                            // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
                             _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastUIntValue;
-
-                            //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
                         }
                     }
                 }
@@ -151,19 +147,10 @@ namespace DCS_BIOS
         {
             try
             {
-                /*Console.WriteLine("_formula : " + _formula);
-                foreach (var variable in _variables)
-                {
-                    Console.WriteLine("variable : " + variable.Key + " = " + variable.Value);
-                }*/
-
-                // Debug.WriteLine(_jaceExtended.CalculationEngine.Calculate(_formula, _variables));
-
                 lock (_jaceLockObject)
                 {
-                    //TestCalculation();
-                    
-                    return _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
+                    FormulaResult = _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
+                    return FormulaResult;
                 }
             }
             catch (Exception ex)
@@ -175,7 +162,7 @@ namespace DCS_BIOS
                 }
             }
 
-            return -99;
+            return double.MinValue;
         }
 
         public void ImportString(string str)

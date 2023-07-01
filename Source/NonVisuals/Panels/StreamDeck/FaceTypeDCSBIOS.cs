@@ -160,7 +160,7 @@
             }
         }
 
-        public uint UintDcsBiosValue
+        public uint UIntDcsBiosValue
         {
             get => _uintDcsBiosValue;
             set

@@ -279,306 +279,210 @@ namespace NonVisuals.Radios
              * reset. Reading the dial's position with no change in value will not reset.
              */
             // VHF AM
-            if (e.Address == _vhfAmDcsbiosOutputFreqDial1.Address)
+            if (_vhfAmDcsbiosOutputFreqDial1.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfAmDialsObject1)
                 {
-                    var tmp = _vhfAmCockpitFreq1DialPos;
-                    _vhfAmCockpitFreq1DialPos = _vhfAmDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
-                    if (tmp != _vhfAmCockpitFreq1DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _vhfAmDial1WaitingForFeedback, 0);
-                    }
+                    _vhfAmCockpitFreq1DialPos = _vhfAmDcsbiosOutputFreqDial1.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _vhfAmDial1WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _vhfAmDcsbiosOutputFreqDial2.Address)
+            if (_vhfAmDcsbiosOutputFreqDial2.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfAmDialsObject2)
                 {
-                    var tmp = _vhfAmCockpitFreq2DialPos;
-                    _vhfAmCockpitFreq2DialPos = _vhfAmDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
-                    if (tmp != _vhfAmCockpitFreq2DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _vhfAmDial2WaitingForFeedback, 0);
-                    }
+                    _vhfAmCockpitFreq2DialPos = _vhfAmDcsbiosOutputFreqDial2.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _vhfAmDial2WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _vhfAmDcsbiosOutputFreqDial3.Address)
+            if (_vhfAmDcsbiosOutputFreqDial3.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfAmDialsObject3)
                 {
-                    var tmp = _vhfAmCockpitFreq3DialPos;
-                    _vhfAmCockpitFreq3DialPos = _vhfAmDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
-                    if (tmp != _vhfAmCockpitFreq3DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _vhfAmDial3WaitingForFeedback, 0);
-                    }
+                    _vhfAmCockpitFreq3DialPos = _vhfAmDcsbiosOutputFreqDial3.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _vhfAmDial3WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _vhfAmDcsbiosOutputFreqDial4.Address)
+            if (_vhfAmDcsbiosOutputFreqDial4.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfAmDialsObject4)
                 {
-                    var tmp = _vhfAmCockpitFreq4DialPos;
-                    _vhfAmCockpitFreq4DialPos = _vhfAmDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
-                    if (tmp != _vhfAmCockpitFreq4DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _vhfAmDial4WaitingForFeedback, 0);
-                    }
+                    _vhfAmCockpitFreq4DialPos = _vhfAmDcsbiosOutputFreqDial4.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _vhfAmDial4WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _vhfAmDcsbiosOutputChannelFreqMode.Address)
+            if (_vhfAmDcsbiosOutputChannelFreqMode.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _vhfAmCockpitFreqMode;
-                _vhfAmCockpitFreqMode = _vhfAmDcsbiosOutputChannelFreqMode.GetUIntValue(e.Data);
-                if (tmp != _vhfAmCockpitFreqMode)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _vhfAmCockpitFreqMode = _vhfAmDcsbiosOutputChannelFreqMode.LastUIntValue;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
-            if (e.Address == _vhfAmDcsbiosOutputSelectedChannel.Address)
+            if (_vhfAmDcsbiosOutputSelectedChannel.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _vhfAmCockpitPresetChannel;
-                _vhfAmCockpitPresetChannel = _vhfAmDcsbiosOutputSelectedChannel.GetUIntValue(e.Data) + 1;
-                if (tmp != _vhfAmCockpitPresetChannel)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _vhfAmCockpitPresetChannel = _vhfAmDcsbiosOutputSelectedChannel.LastUIntValue + 1;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
-            if (e.Address == _vhfAmDcsbiosOutputMode.Address)
+            if (_vhfAmDcsbiosOutputMode.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _vhfAmCockpitMode;
-                _vhfAmCockpitMode = _vhfAmDcsbiosOutputMode.GetUIntValue(e.Data);
-                if (tmp != _vhfAmCockpitMode)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _vhfAmCockpitMode = _vhfAmDcsbiosOutputMode.LastUIntValue;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
             // UHF
-            if (e.Address == _uhfDcsbiosOutputFreqDial1.Address)
+            if (_uhfDcsbiosOutputFreqDial1.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockUhfDialsObject1)
                 {
-                    var tmp = _uhfCockpitFreq1DialPos;
-                    _uhfCockpitFreq1DialPos = _uhfDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
-                    if (tmp != _uhfCockpitFreq1DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
-                    }
+                    _uhfCockpitFreq1DialPos = _uhfDcsbiosOutputFreqDial1.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _uhfDcsbiosOutputFreqDial2.Address)
+            if (_uhfDcsbiosOutputFreqDial2.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockUhfDialsObject2)
                 {
-                    var tmp = _uhfCockpitFreq2DialPos;
-                    _uhfCockpitFreq2DialPos = _uhfDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
-                    if (tmp != _uhfCockpitFreq2DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
-                    }
+                    _uhfCockpitFreq2DialPos = _uhfDcsbiosOutputFreqDial2.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _uhfDcsbiosOutputFreqDial3.Address)
+            if (_uhfDcsbiosOutputFreqDial3.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockUhfDialsObject3)
                 {
-                    var tmp = _uhfCockpitFreq3DialPos;
-                    _uhfCockpitFreq3DialPos = _uhfDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
-                    if (tmp != _uhfCockpitFreq3DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
-                    }
+                    _uhfCockpitFreq3DialPos = _uhfDcsbiosOutputFreqDial3.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _uhfDcsbiosOutputFreqDial4.Address)
+            if (_uhfDcsbiosOutputFreqDial4.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockUhfDialsObject4)
                 {
-                    var tmp = _uhfCockpitFreq4DialPos;
-                    _uhfCockpitFreq4DialPos = _uhfDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
-                    if (tmp != _uhfCockpitFreq4DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 0);
-                    }
+                    _uhfCockpitFreq4DialPos = _uhfDcsbiosOutputFreqDial4.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _uhfDcsbiosOutputFreqDial5.Address)
+            if (_uhfDcsbiosOutputFreqDial5.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockUhfDialsObject5)
                 {
-                    var tmp = _uhfCockpitFreq5DialPos;
-                    _uhfCockpitFreq5DialPos = _uhfDcsbiosOutputFreqDial5.GetUIntValue(e.Data);
-                    if (tmp != _uhfCockpitFreq5DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 0);
-                    }
+                    _uhfCockpitFreq5DialPos = _uhfDcsbiosOutputFreqDial5.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _uhfDcsbiosOutputFreqMode.Address)
+            if (_uhfDcsbiosOutputFreqMode.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _uhfCockpitFreqMode;
-                _uhfCockpitFreqMode = _uhfDcsbiosOutputFreqMode.GetUIntValue(e.Data);
-                if (tmp != _uhfCockpitFreqMode)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _uhfCockpitFreqMode = _uhfDcsbiosOutputFreqMode.LastUIntValue;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
-            if (e.Address == _uhfDcsbiosOutputSelectedChannel.Address)
+            if (_uhfDcsbiosOutputSelectedChannel.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _uhfCockpitPresetChannel;
-                _uhfCockpitPresetChannel = _uhfDcsbiosOutputSelectedChannel.GetUIntValue(e.Data) + 1;
-                if (tmp != _uhfCockpitPresetChannel)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _uhfCockpitPresetChannel = _uhfDcsbiosOutputSelectedChannel.LastUIntValue + 1;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
-            if (e.Address == _uhfDcsbiosOutputFunction.Address)
+            if (_uhfDcsbiosOutputFunction.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _uhfCockpitMode;
-                _uhfCockpitMode = _uhfDcsbiosOutputFunction.GetUIntValue(e.Data);
-                if (tmp != _uhfCockpitMode)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _uhfCockpitMode = _uhfDcsbiosOutputFunction.LastUIntValue;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
             // VHF FM
-            if (e.Address == _vhfFmDcsbiosOutputFreqDial1.Address)
+            if (_vhfFmDcsbiosOutputFreqDial1.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfFmDialsObject1)
                 {
-                    var tmp = _vhfFmCockpitFreq1DialPos;
-                    _vhfFmCockpitFreq1DialPos = _vhfFmDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
-                    if (tmp != _vhfFmCockpitFreq1DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 0);
-                    }
+                    _vhfFmCockpitFreq1DialPos = _vhfFmDcsbiosOutputFreqDial1.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _vhfFmDcsbiosOutputFreqDial2.Address)
+            if (_vhfFmDcsbiosOutputFreqDial2.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfFmDialsObject2)
                 {
-                    var tmp = _vhfFmCockpitFreq2DialPos;
-                    _vhfFmCockpitFreq2DialPos = _vhfFmDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
-                    if (tmp != _vhfFmCockpitFreq2DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 0);
-                    }
+                    _vhfFmCockpitFreq2DialPos = _vhfFmDcsbiosOutputFreqDial2.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _vhfFmDcsbiosOutputFreqDial3.Address)
+            if (_vhfFmDcsbiosOutputFreqDial3.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfFmDialsObject3)
                 {
-                    var tmp = _vhfFmCockpitFreq3DialPos;
-                    _vhfFmCockpitFreq3DialPos = _vhfFmDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
-                    if (tmp != _vhfFmCockpitFreq3DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 0);
-                    }
+                    _vhfFmCockpitFreq3DialPos = _vhfFmDcsbiosOutputFreqDial3.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _vhfFmDcsbiosOutputFreqDial4.Address)
+            if (_vhfFmDcsbiosOutputFreqDial4.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfFmDialsObject4)
                 {
-                    var tmp = _vhfFmCockpitFreq4DialPos;
-                    _vhfFmCockpitFreq4DialPos = _vhfFmDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
-                    if (tmp != _vhfFmCockpitFreq4DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 0);
-                    }
+                    _vhfFmCockpitFreq4DialPos = _vhfFmDcsbiosOutputFreqDial4.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _vhfFmDcsbiosOutputFreqMode.Address)
+            if (_vhfFmDcsbiosOutputFreqMode.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _vhfFmCockpitFreqMode;
-                _vhfFmCockpitFreqMode = _vhfFmDcsbiosOutputFreqMode.GetUIntValue(e.Data);
-                if (tmp != _vhfFmCockpitFreqMode)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _vhfFmCockpitFreqMode = _vhfFmDcsbiosOutputFreqMode.LastUIntValue;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
-            if (e.Address == _vhfFmDcsbiosOutputSelectedChannel.Address)
+            if (_vhfFmDcsbiosOutputSelectedChannel.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _vhfFmCockpitPresetChannel;
-                _vhfFmCockpitPresetChannel = _vhfFmDcsbiosOutputSelectedChannel.GetUIntValue(e.Data) + 1;
-                if (tmp != _vhfFmCockpitPresetChannel)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _vhfFmCockpitPresetChannel = _vhfFmDcsbiosOutputSelectedChannel.LastUIntValue + 1;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
-            if (e.Address == _vhfFmDcsbiosOutputMode.Address)
+            if (_vhfFmDcsbiosOutputMode.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _vhfFmCockpitMode;
-                _vhfFmCockpitMode = _vhfFmDcsbiosOutputMode.GetUIntValue(e.Data);
-                if (tmp != _vhfFmCockpitMode)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _vhfFmCockpitMode = _vhfFmDcsbiosOutputMode.LastUIntValue;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
             // ILS
-            if (e.Address == _ilsDcsbiosOutputFreqDial1.Address)
+            if (_ilsDcsbiosOutputFreqDial1.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockIlsDialsObject1)
                 {
-                    var tmp = _ilsCockpitFreq1DialPos;
-                    _ilsCockpitFreq1DialPos = _ilsDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
-                    if (tmp != _ilsCockpitFreq1DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _ilsDial1WaitingForFeedback, 0);
-                    }
+                    _ilsCockpitFreq1DialPos = _ilsDcsbiosOutputFreqDial1.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _ilsDial1WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _ilsDcsbiosOutputFreqDial2.Address)
+            if (_ilsDcsbiosOutputFreqDial2.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockIlsDialsObject2)
                 {
-                    var tmp = _ilsCockpitFreq2DialPos;
-                    _ilsCockpitFreq2DialPos = _ilsDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
-                    if (tmp != _ilsCockpitFreq2DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _ilsDial2WaitingForFeedback, 0);
-                    }
+                    _ilsCockpitFreq2DialPos = _ilsDcsbiosOutputFreqDial2.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _ilsDial2WaitingForFeedback, 0);
                 }
             }
 
@@ -600,11 +504,11 @@ namespace NonVisuals.Radios
                     return;
                 }
 
-                if (e.Address.Equals(_tacanDcsbiosOutputFreqChannel.Address))
+                if (_tacanDcsbiosOutputFreqChannel.StringValueHasChanged(e.Address, e.StringData))
                 {
                     try
                     {
-                        int changeCount = 0;
+                        var changeCount = 0;
 
                         // " 00X" --> "129X"
                         lock (_lockTacanDialsObject1)
@@ -4114,14 +4018,14 @@ namespace NonVisuals.Radios
         /// </summary>        
         public static string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
         {
-            if (desiredDialPosition == actualDialPosition) 
+            if (desiredDialPosition == actualDialPosition)
                 return null;
-            
+
             if (desiredDialPosition < 0 || desiredDialPosition > 12 || actualDialPosition < 0 || actualDialPosition > 12)
                 throw new Exception($"Unexpected value for GetCommandDirectionForVhfDial1. Desired: {actualDialPosition} Actual: {actualDialPosition}");
 
             int shift = desiredDialPosition - (int)actualDialPosition;
-           
+
             if (shift > 0)
                 return shift <= 6 ? RadioPanelPZ69Base.Increase : RadioPanelPZ69Base.Decrease;
             else
@@ -4140,7 +4044,7 @@ namespace NonVisuals.Radios
                 throw new Exception($"Unexpected value for GetCommandDirectionForVhfDial23. Desired: {actualDialPosition} Actual: {actualDialPosition}");
 
             int shift = desiredDialPosition - (int)actualDialPosition;
-        
+
             if (shift > 0)
                 return shift <= 5 ? RadioPanelPZ69Base.Increase : RadioPanelPZ69Base.Decrease;
             else
