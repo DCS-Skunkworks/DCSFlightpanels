@@ -208,7 +208,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     return;
                 }
 
-                _dcsbiosDecoder.FormulaInstance.CheckForMatchAndNewValue(e.Address, e.Data, 20);
+                _dcsbiosDecoder.FormulaInstance.Evaluate(e.Address, e.Data, 20);
             }
             catch (Exception ex)
             {

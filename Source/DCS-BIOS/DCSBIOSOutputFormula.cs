@@ -72,7 +72,7 @@ namespace DCS_BIOS
         }
 
 
-        public bool CheckForMatchAndNewValue(uint address, uint data, int staticUpdateInterval)
+        public bool Evaluate(uint address, uint data, int staticUpdateInterval)
         {
             try
             {
@@ -84,9 +84,9 @@ namespace DCS_BIOS
                     {
                         if (dcsbiosOutput.Address == address)
                         {
-                            if (dcsbiosOutput.LastIntValue != data)
+                            if (dcsbiosOutput.LastUIntValue != data)
                             {
-                                dcsbiosOutput.CheckForValueMatchAndChange(data);
+                                dcsbiosOutput.EvaluateUInt(address, data);
                                 result = true;
                             }
 
@@ -97,7 +97,7 @@ namespace DCS_BIOS
                                 _staticUpdateInterval = 0;
                             }
                             // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
-                            _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                            _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastUIntValue;
                             
                             //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
                         }
@@ -127,11 +127,11 @@ namespace DCS_BIOS
                     {
                         if (dcsbiosOutput.Address == address)
                         {
-                            dcsbiosOutput.CheckForValueMatchAndChange(data);
+                            dcsbiosOutput.EvaluateUInt(address, data);
                             result = true;
 
                             // Console.WriteLine("Variable " + dcsbiosOutput.ControlId + " set to " + dcsbiosOutput.LastIntValue);
-                            _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
+                            _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastUIntValue;
 
                             //_expression.Parameters[dcsbiosOutput.ControlId] = dcsbiosOutput.LastIntValue;
                         }

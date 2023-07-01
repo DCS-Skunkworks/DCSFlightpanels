@@ -41,7 +41,7 @@ namespace DCS_BIOS
         private string _controlId;
 
         // The user has entered these two depending on type
-        private uint _specifiedValueInt;
+        private uint _specifiedValueUInt;
         private string _specifiedValueString = string.Empty;
 
         private string _controlDescription;
@@ -50,7 +50,7 @@ namespace DCS_BIOS
         private uint _mask;
         private int _shiftValue;
         private int _maxLength;
-        private volatile uint _lastIntValue = uint.MaxValue;
+        private volatile uint _lastUIntValue = uint.MaxValue;
         private string _controlType; // display button toggle etc
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
@@ -76,7 +76,7 @@ namespace DCS_BIOS
             switch (tmp.DCSBiosOutputType)
             {
                 case DCSBiosOutputType.IntegerType:
-                    tmp.SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
+                    tmp.SpecifiedValueUInt = dcsbiosOutput.SpecifiedValueUInt;
                     break;
                 case DCSBiosOutputType.StringType:
                     tmp.SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
@@ -100,7 +100,7 @@ namespace DCS_BIOS
             ShiftValue = dcsbiosOutput.ShiftValue;
             if (DCSBiosOutputType == DCSBiosOutputType.IntegerType)
             {
-                SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
+                SpecifiedValueUInt = dcsbiosOutput.SpecifiedValueUInt;
             }
 
             if (DCSBiosOutputType == DCSBiosOutputType.StringType)
@@ -109,79 +109,93 @@ namespace DCS_BIOS
             }
         }
 
-        public bool CheckForValueMatchAndChange(object data)
+        /// <summary>
+        /// Checks :
+        /// <para>* if there is a there is a change in the value since last comparison</para>
+        /// <para>* test is true using chosen comparison operator with new value and reference value</para>
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public bool EvaluateUInt(uint address, uint data)
         {
-            // todo change not processed
-            lock (_lockObject)
+            if (Address != address)
             {
-                bool result;
-                if (DCSBiosOutputType == DCSBiosOutputType.IntegerType && data is uint u)
-                {
-                    result = CheckForValueMatchAndChange(u);
-                }
-                else if (DCSBiosOutputType == DCSBiosOutputType.StringType && data is string s)
-                {
-                    result = CheckForValueMatch(s);
-                }
-                else
-                {
-                    throw new Exception($"Invalid DCSBiosOutput. Data is of type {data.GetType()} but DCSBiosOutputType set to {DCSBiosOutputType}");
-                }
-
-                return result;
+                return false;
             }
-        }
 
-        private bool CheckForValueMatchAndChange(uint data)
-        {
-            var tmpData = data;
-            var value = (tmpData & Mask) >> ShiftValue;
+            var value = (data & Mask) >> ShiftValue;
 
             var resultComparison = DCSBiosOutputComparison switch
             {
-                DCSBiosOutputComparison.BiggerThan  => value > _specifiedValueInt,
-                DCSBiosOutputComparison.LessThan    => value < _specifiedValueInt,
-                DCSBiosOutputComparison.NotEquals   => value != _specifiedValueInt,
-                DCSBiosOutputComparison.Equals      => value == _specifiedValueInt,
+                DCSBiosOutputComparison.BiggerThan => value > _specifiedValueUInt,
+                DCSBiosOutputComparison.LessThan => value < _specifiedValueUInt,
+                DCSBiosOutputComparison.NotEquals => value != _specifiedValueUInt,
+                DCSBiosOutputComparison.Equals => value == _specifiedValueUInt,
                 _ => throw new Exception("Unexpected DCSBiosOutputComparison value")
             };
 
-            var resultChange = !value.Equals(_lastIntValue);
-            if (resultChange)
-            {
-                _lastIntValue = value;
-            }
+            _lastUIntValue = value;
 
-            return resultComparison && resultChange;
+            return resultComparison && !value.Equals(_lastUIntValue);
         }
 
-        public bool CheckForValueMatch(object data)
+        /// <summary>
+        /// Checks :
+        /// <para>for address match</para>
+        /// <para>that new value differs from previous</para>
+        /// <para>stores new value</para>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="data"></param>
+        /// <returns>Returns true when all checks are true.</returns>
+        public bool ValueHasChanged(uint address, uint data)
         {
-            //todo change not processed
+            if (address != Address)
+            {
+                // Not correct control
+                return false;
+            }
+
+            if (GetUIntValue(data) == _lastUIntValue)
+            {
+                // Value hasn't changed
+                return false;
+            }
+
+            _lastUIntValue = GetUIntValue(data);
+            return true;
+        }
+
+        /// <summary>
+        /// Checks :
+        /// <para>* if there is a there is a change in the value since last comparison</para>
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public bool EvaluateString(uint address, string data)
+        {
+            if (address != Address)
+            {
+                // Not correct control
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(data) || string.IsNullOrEmpty(_specifiedValueString))
+            {
+                return false;
+            }
+
             lock (_lockObject)
             {
-                return true switch {
-                  _ when DCSBiosOutputType == DCSBiosOutputType.IntegerType && data is uint u => CheckForValueMatch(u),
-                  _ when DCSBiosOutputType == DCSBiosOutputType.StringType && data is string s => CheckForValueMatch(s),
-                  _ => throw new Exception($"Invalid DCSBiosOutput. Data is of type {data.GetType()} but DCSBiosOutputType set to {DCSBiosOutputType}")
-                };
+                return _specifiedValueString.Equals(data);
             }
         }
-
-        private bool CheckForValueMatch(uint data)
-        {
-            var tmpData = data;
-            var value = (tmpData & Mask) >> ShiftValue;
-
-            return DCSBiosOutputComparison switch {
-                DCSBiosOutputComparison.BiggerThan =>   value > _specifiedValueInt,
-                DCSBiosOutputComparison.LessThan =>     value < _specifiedValueInt,
-                DCSBiosOutputComparison.NotEquals =>    value != _specifiedValueInt,
-                DCSBiosOutputComparison.Equals =>       value == _specifiedValueInt,
-                _ => throw new Exception("Unexpected DCSBiosOutputComparison value")
-            };
-        }
-
+        
         public uint GetUIntValue(uint data)
         {
             /*
@@ -194,21 +208,7 @@ namespace DCS_BIOS
                 return (data & Mask) >> ShiftValue;
             }
         }
-
-        private bool CheckForValueMatch(string data)
-        {
-            lock (_lockObject)
-            {
-                var result = false;
-                if (!string.IsNullOrEmpty(_specifiedValueString) && !string.IsNullOrEmpty(data))
-                {
-                    result = _specifiedValueString.Equals(data);
-                }
-
-                return result;
-            }
-        }
-
+        
         public void Consume(DCSBIOSControl dcsbiosControl)
         {
             _controlId = dcsbiosControl.Identifier;
@@ -245,7 +245,7 @@ namespace DCS_BIOS
                 return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
             }
 
-            return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
+            return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueUInt + "}";
         }
 
         public override string ToString()
@@ -255,7 +255,7 @@ namespace DCS_BIOS
                 return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
             }
 
-            return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueInt + "}";
+            return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueUInt + "}";
         }
 
         public void ImportString(string str)
@@ -282,7 +282,7 @@ namespace DCS_BIOS
             _dcsBiosOutputComparison = (DCSBiosOutputComparison)Enum.Parse(typeof(DCSBiosOutputComparison), entries[1]);
             if (DCSBiosOutputType == DCSBiosOutputType.IntegerType)
             {
-                _specifiedValueInt = (uint)int.Parse(entries[2]);
+                _specifiedValueUInt = (uint)int.Parse(entries[2]);
             }
             else if (DCSBiosOutputType == DCSBiosOutputType.StringType)
             {
@@ -337,9 +337,9 @@ namespace DCS_BIOS
         }
 
         [JsonIgnore]
-        public uint SpecifiedValueInt
+        public uint SpecifiedValueUInt
         {
-            get => _specifiedValueInt;
+            get => _specifiedValueUInt;
             set
             {
                 if (DCSBiosOutputType != DCSBiosOutputType.IntegerType)
@@ -347,7 +347,7 @@ namespace DCS_BIOS
                     throw new Exception($"Invalid DCSBiosOutput. Specified value (trigger value) set to [int] but DCSBiosOutputType set to {DCSBiosOutputType}");
                 }
 
-                _specifiedValueInt = value;
+                _specifiedValueUInt = value;
             }
         }
 
@@ -395,10 +395,10 @@ namespace DCS_BIOS
         }
 
         [JsonIgnore]
-        public uint LastIntValue
+        public uint LastUIntValue
         {
-            get => _lastIntValue;
-            set => _lastIntValue = value;
+            get => _lastUIntValue;
+            set => _lastUIntValue = value;
         }
 
         public static DCSBIOSOutput GetUpdateCounter()

@@ -538,7 +538,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 {
                     if (address == cavb.DCSBiosOutputLED.Address)
                     {
-                        if (cavb.DCSBiosOutputLED.CheckForValueMatch(data))
+                        if (cavb.DCSBiosOutputLED.EvaluateUInt(address, data))
                         {
                             /*
                              * If user tests cockpit lights (especially A-10C and handle light) and triggers (forces) a light change that light
@@ -568,7 +568,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                             }
                         }
 
-                        if (cavb.DCSBiosOutputLED.CheckForValueMatchAndChange(data))
+                        if (cavb.DCSBiosOutputLED.EvaluateUInt(address, data))
                         {
 
                             SetLandingGearLED(cavb);

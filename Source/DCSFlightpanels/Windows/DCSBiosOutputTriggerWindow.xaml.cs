@@ -75,7 +75,7 @@ namespace DCSFlightpanels.Windows
             ComboBoxComparisonCriteria.SelectedValue = _dcsBiosOutput.DCSBiosOutputComparison.GetEnumDescriptionField();
             if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
             {
-                TextBoxTriggerValue.Text = _dcsBiosOutput.SpecifiedValueInt.ToString(CultureInfo.InvariantCulture);
+                TextBoxTriggerValue.Text = _dcsBiosOutput.SpecifiedValueUInt.ToString(CultureInfo.InvariantCulture);
             }
             else
             {
@@ -163,7 +163,7 @@ namespace DCSFlightpanels.Windows
                         }
                         if (_dcsBiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
                         {
-                            _dcsBiosOutput.SpecifiedValueInt = (uint)Convert.ToInt32(TextBoxTriggerValue.Text);
+                            _dcsBiosOutput.SpecifiedValueUInt = (uint)Convert.ToInt32(TextBoxTriggerValue.Text);
                         }
                         else
                         {

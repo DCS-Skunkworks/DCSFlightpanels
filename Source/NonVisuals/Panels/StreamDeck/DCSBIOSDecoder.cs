@@ -190,7 +190,7 @@ namespace NonVisuals.Panels.StreamDeck
                     return;
                 }
 
-                if (FormulaSelectedAndOk() && _dcsbiosOutputFormula.CheckForMatchAndNewValue(e.Address, e.Data, 20))
+                if (FormulaSelectedAndOk() && _dcsbiosOutputFormula.Evaluate(e.Address, e.Data, 20))
                 {
                     _valueUpdated = true;
                 }
