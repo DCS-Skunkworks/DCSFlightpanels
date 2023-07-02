@@ -70,18 +70,13 @@
         {
             try
             {
-                var assembly = Assembly.GetExecutingAssembly();
-
                 // An aggregate catalog that combines multiple catalogs.
                 var catalog = new AggregateCatalog();
 
                 // Adds all the parts found in the same assembly as the Program class.
                 // catalog.Catalogs.Add(new AssemblyCatalog(assembly));
-                Debug.WriteLine(AppDomain.CurrentDomain.BaseDirectory + "Extensions");
                 catalog.Catalogs.Add(new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory + "Extensions"));
-
-                // catalog.Catalogs.Add(new DirectoryCatalog(@"C:\dev\repos\DCSFlightpanels\Source\SamplePanelEventHandlerPlugin\bin\Debug"));
-
+                
                 // Create the CompositionContainer with the parts in the catalog.
                 _container = new CompositionContainer(catalog);
                 _container.ComposeParts(this);

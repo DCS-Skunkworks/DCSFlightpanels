@@ -865,7 +865,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial1OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_1DIAL_COMMAND
-                                              + GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);// + Decrease; // TODO is this still a problem? 30.7.2018 Went into loop GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
+                                              + GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);// + Decrease; // is this still a problem? 30.7.2018 Went into loop GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
 
                                         /*
                                         25.7.2018

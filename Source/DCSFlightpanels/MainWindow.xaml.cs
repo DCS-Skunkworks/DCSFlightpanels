@@ -109,7 +109,7 @@ namespace DCSFlightpanels
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
+                    //  dispose managed state (managed objects).
                     _dcsStopGearTimer.Dispose();
                     _exceptionTimer.Dispose();
                     _statusMessagesTimer.Dispose();
@@ -123,14 +123,14 @@ namespace DCSFlightpanels
                     BIOSEventHandler.DetachStringListener(this);
                 }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                //  free unmanaged resources (unmanaged objects) and override a finalizer below.
 
-                // TODO: set large fields to null.
+                //  set large fields to null.
                 _hasBeenCalledAlready = true;
             }
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        //  override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
         // ~MainWindow() {
         //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
         //   Dispose(false);
@@ -142,7 +142,7 @@ namespace DCSFlightpanels
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
 
-            // TODO: uncomment the following line if the finalizer is overridden above.
+            //  uncomment the following line if the finalizer is overridden above.
             GC.SuppressFinalize(this);
         }
         #endregion
@@ -217,7 +217,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                Debug.WriteLine(e.Address + "  " + e.StringData);
                 if (_checkDCSBIOSVersionOnce || string.IsNullOrWhiteSpace(e.StringData) || _dcsbiosVersionOutput == null)
                 {
                     return;
@@ -1176,7 +1175,7 @@ namespace DCSFlightpanels
 
             try
             {
-                // TODO THIS CAUSES HANGING WHEN CLOSING THE APPLICATION!?!?
+                // THIS CAUSES HANGING WHEN CLOSING THE APPLICATION!?!?
                 // _hidHandler.Shutdown();
             }
             catch (Exception ex)
@@ -1383,57 +1382,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        /*
-        private void NewProfile()
-        {
-            try
-            {
-                if (!CloseProfile())
-                {
-                    return;
-                }
 
-                RestartWithProfile("NEWPROFILE");
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void OpenAnOtherProfile()
-        {
-            if (!CloseProfile())
-            {
-                return;
-            }
-
-            var bindingsFile = _profileHandler.OpenProfile();
-            RestartWithProfile(bindingsFile);
-        }
-        
-        private void RestartWithProfile(string bindingsFile)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(bindingsFile))
-                {
-                    if (bindingsFile != "NEWPROFILE" && !File.Exists(bindingsFile))
-                    {
-                        MessageBox.Show("File " + bindingsFile + " does not exist.", "Error finding file", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    var streamDeckArguments = Settings.Default.LoadStreamDeck ? string.Empty : Constants.CommandLineArgumentNoStreamDeck + " ";
-                    Process.Start("dcsfp.exe", streamDeckArguments + Constants.CommandLineArgumentOpenProfile + "\"" + bindingsFile + "\"");
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-        */
         private void ButtonImageRefreshMouseDown(object sender, MouseButtonEventArgs e)
         {
             try
@@ -2002,6 +1951,23 @@ namespace DCSFlightpanels
                 FileName = autoBackup.AutoBackupFolderPath,
                 UseShellExecute = true
             });
+        }
+
+        private void MenuItemCTRLRef_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = AppDomain.CurrentDomain.BaseDirectory + "ctrlref.exe",
+                    UseShellExecute = true
+                });
+                
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }

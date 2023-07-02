@@ -674,6 +674,11 @@
 
         private void DisplayImagePreview()
         {
+            if (_dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.NotSet)
+            {
+                return;
+            }
+
             System.Windows.Controls.Image imgControl = _dcsbiosConverter.ConverterOutputType switch
             {
                 EnumConverterOutputType.Raw => ButtonImagePreviewRaw,

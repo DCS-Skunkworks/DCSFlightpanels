@@ -8,9 +8,9 @@ namespace NonVisuals.Panels.StreamDeck.Panels
     using System.Linq;
     using System.Threading;
     using ClassLibraryCommon;
-    using StreamDeckSharp.Internals;
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
+    using StreamDeckSharp;
     using OpenMacroBoard.SDK;
     using MEF;
     using EventArgs;

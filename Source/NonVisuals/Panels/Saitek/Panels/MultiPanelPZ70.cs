@@ -46,6 +46,9 @@ namespace NonVisuals.Panels.Saitek.Panels
         private HashSet<BIPLinkPZ70> _bipLinks = new();
         private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
 
+        private readonly uint _refreshInterval = 20;
+        private uint _intervalCounter = 0;
+
         // 0 - 40000
         private int _altLCDKeyEmulatorValue;
 
@@ -106,53 +109,47 @@ namespace NonVisuals.Panels.Saitek.Panels
                 SetLastException(ex);
             }
         }
-
-        private readonly int _refreshIntervalLCD = 20;
-        private int _intervalCounter = 0;
-
+        
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             if (SettingsLoading)
             {
                 return;
             }
-
+            
             UpdateCounter(e.Address, e.Data);
             foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
             {
                 if (!dcsbiosBindingLCDPZ70.HasBinding)
                 {
-                    return;
+                    continue;
                 }
-                if (!dcsbiosBindingLCDPZ70.UseFormula && dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && e.Address == dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.Address)
+
+                if (dcsbiosBindingLCDPZ70.DialPosition != _pz70DialPosition)
                 {
-                    lock (_lcdDataVariablesLockObject)
+                    //Binding isn't for dial's current position
+                    continue;
+                }
+                
+                lock (_lcdDataVariablesLockObject)
+                {
+                    var result = false;
+                    _intervalCounter++;
+                    if (!dcsbiosBindingLCDPZ70.UseFormula && dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.UIntValueHasChanged(e.Address, e.Data))
                     {
-                        _intervalCounter++;
-                        var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
-                        dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(e.Data);
-                        if (tmp.CompareTo(dcsbiosBindingLCDPZ70.CurrentValue) != 0 || _intervalCounter > _refreshIntervalLCD)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                            _intervalCounter = 0;
-                        }
+                        dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.LastUIntValue;
+                        result = true;
                     }
-                }
-                else if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.UseFormula)
-                {
-                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
+                    else if (dcsbiosBindingLCDPZ70.UseFormula && dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate(e.Address, e.Data))
                     {
-                        lock (_lcdDataVariablesLockObject)
-                        {
-                            _intervalCounter++;
-                            var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
-                            dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate(false);
-                            if (tmp.CompareTo(dcsbiosBindingLCDPZ70.CurrentValue) != 0 || _intervalCounter > _refreshIntervalLCD)
-                            {
-                                Interlocked.Increment(ref _doUpdatePanelLCD);
-                                _intervalCounter = 0;
-                            }
-                        }
+                        dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.FormulaResult;
+                        result = true;
+                    }
+
+                    if (result || _intervalCounter > _refreshInterval)
+                    {
+                        _intervalCounter = 0;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
