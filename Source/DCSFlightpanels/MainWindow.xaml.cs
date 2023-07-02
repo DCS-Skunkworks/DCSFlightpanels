@@ -1382,57 +1382,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        /*
-        private void NewProfile()
-        {
-            try
-            {
-                if (!CloseProfile())
-                {
-                    return;
-                }
 
-                RestartWithProfile("NEWPROFILE");
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void OpenAnOtherProfile()
-        {
-            if (!CloseProfile())
-            {
-                return;
-            }
-
-            var bindingsFile = _profileHandler.OpenProfile();
-            RestartWithProfile(bindingsFile);
-        }
-        
-        private void RestartWithProfile(string bindingsFile)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(bindingsFile))
-                {
-                    if (bindingsFile != "NEWPROFILE" && !File.Exists(bindingsFile))
-                    {
-                        MessageBox.Show("File " + bindingsFile + " does not exist.", "Error finding file", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    var streamDeckArguments = Settings.Default.LoadStreamDeck ? string.Empty : Constants.CommandLineArgumentNoStreamDeck + " ";
-                    Process.Start("dcsfp.exe", streamDeckArguments + Constants.CommandLineArgumentOpenProfile + "\"" + bindingsFile + "\"");
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-        */
         private void ButtonImageRefreshMouseDown(object sender, MouseButtonEventArgs e)
         {
             try
@@ -2001,6 +1951,23 @@ namespace DCSFlightpanels
                 FileName = autoBackup.AutoBackupFolderPath,
                 UseShellExecute = true
             });
+        }
+
+        private void MenuItemCTRLRef_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = AppDomain.CurrentDomain.BaseDirectory + "ctrlref.exe",
+                    UseShellExecute = true
+                });
+                
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }
