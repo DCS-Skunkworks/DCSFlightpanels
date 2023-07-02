@@ -622,7 +622,7 @@ namespace NonVisuals.Radios
                     }
                     catch (Exception)
                     {
-                        // TODO Strange values from DCS-BIOS
+                        // Strange values from DCS-BIOS
                     }
                 }
             }

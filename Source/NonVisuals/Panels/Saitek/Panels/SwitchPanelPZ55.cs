@@ -30,7 +30,7 @@ namespace NonVisuals.Panels.Saitek.Panels
         LEFT = 0x1,
         RIGHT = 0x2
     }
-    
+
     /// <summary>
     /// The implementation class for the Logitech Switch Panel (PZ55)
     /// See bottom of file for communication information.
@@ -536,41 +536,30 @@ namespace NonVisuals.Panels.Saitek.Panels
 
                 foreach (var cavb in _listColorOutputBinding)
                 {
-                    if (address == cavb.DCSBiosOutputLED.Address)
+                    if (cavb.DCSBiosOutputLED.UIntConditionIsMet(address, data))
                     {
-                        if (cavb.DCSBiosOutputLED.EvaluateUInt(address, data))
+                        /*
+                         * If user tests cockpit lights (especially A-10C and handle light) and triggers (forces) a light change that light
+                         * will stay on unless there is a overriding light for example landing gear down.
+                         * Landing gear down light is sent regularly but it is processed only if value has changed. This is not the case here 
+                         * as it is GREEN and should nevertheless override the RED light.
+                         * Will this be efficient?
+                         * https://sourceforge.net/p/flightpanels/tickets/13/
+                         */
+                        var color = cavb.LEDColor;
+                        var position = (SwitchPanelPZ55LEDPosition)cavb.SaitekLEDPosition.Position;
+                        var color2 = GetSwitchPanelPZ55LEDColor(position, color);
+
+                        if (position == SwitchPanelPZ55LEDPosition.UP && color2 != _ledUpperColor)
                         {
-                            /*
-                             * If user tests cockpit lights (especially A-10C and handle light) and triggers (forces) a light change that light
-                             * will stay on unless there is a overriding light for example landing gear down.
-                             * Landing gear down light is sent regularly but it is processed only if value has changed. This is not the case here 
-                             * as it is GREEN and should nevertheless override the RED light.
-                             * Will this be efficient?
-                             * https://sourceforge.net/p/flightpanels/tickets/13/
-                             */
-                            var color = cavb.LEDColor;
-                            var position = (SwitchPanelPZ55LEDPosition)cavb.SaitekLEDPosition.Position;
-                            var color2 = GetSwitchPanelPZ55LEDColor(position, color);
-                            if (position == SwitchPanelPZ55LEDPosition.UP && color2 != _ledUpperColor)
-                            {
-
-                                SetLandingGearLED(cavb);
-                            }
-                            else if (position == SwitchPanelPZ55LEDPosition.LEFT && color2 != _ledLeftColor)
-                            {
-
-                                SetLandingGearLED(cavb);
-                            }
-                            else if (position == SwitchPanelPZ55LEDPosition.RIGHT && color2 != _ledRightColor)
-                            {
-
-                                SetLandingGearLED(cavb);
-                            }
+                            SetLandingGearLED(cavb);
                         }
-
-                        if (cavb.DCSBiosOutputLED.EvaluateUInt(address, data))
+                        else if (position == SwitchPanelPZ55LEDPosition.LEFT && color2 != _ledLeftColor)
                         {
-
+                            SetLandingGearLED(cavb);
+                        }
+                        else if (position == SwitchPanelPZ55LEDPosition.RIGHT && color2 != _ledRightColor)
+                        {
                             SetLandingGearLED(cavb);
                         }
                     }

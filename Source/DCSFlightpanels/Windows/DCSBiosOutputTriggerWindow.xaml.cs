@@ -116,7 +116,6 @@ namespace DCSFlightpanels.Windows
             }
             if (TextBoxTriggerValue != null)
             {
-                //todo
                 //TextBoxTriggerValue.IsEnabled = _dcsBiosOutput != null;
             }
         }

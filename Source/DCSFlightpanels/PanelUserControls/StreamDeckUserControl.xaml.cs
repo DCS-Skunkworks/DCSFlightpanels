@@ -199,7 +199,6 @@
         {
             try
             {
-                //todo nada?
             }
             catch (Exception ex)
             {
@@ -453,8 +452,8 @@
                 var streamDeckButton = _streamDeckPanel.SelectedButton;
                 var streamDeckButtonName = streamDeckButton.StreamDeckButtonName;
 
-                streamDeckButton.Face.Dispose(); //todo this must be properly made 
-                streamDeckButton.Face = null; //todo this must be properly made 
+                streamDeckButton.Face.Dispose();
+                streamDeckButton.Face = null;
 
                 if (streamDeckButton.HasConfig)
                 {

@@ -62,7 +62,7 @@ namespace ControlReference
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
+                    //  dispose managed state (managed objects).
                     _dcsStopGearTimer.Dispose();
                     _dcsBios?.Shutdown();
                     _dcsBios?.Dispose();
@@ -71,9 +71,9 @@ namespace ControlReference
                     BIOSEventHandler.DetachStringListener(this);
                 }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                //  free unmanaged resources (unmanaged objects) and override a finalizer below.
 
-                // TODO: set large fields to null.
+                //  set large fields to null.
                 _hasBeenCalledAlready = true;
             }
         }
@@ -84,7 +84,7 @@ namespace ControlReference
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
 
-            // TODO: uncomment the following line if the finalizer is overridden above.
+            //  uncomment the following line if the finalizer is overridden above.
             GC.SuppressFinalize(this);
         }
 

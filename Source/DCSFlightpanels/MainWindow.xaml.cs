@@ -109,7 +109,7 @@ namespace DCSFlightpanels
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
+                    //  dispose managed state (managed objects).
                     _dcsStopGearTimer.Dispose();
                     _exceptionTimer.Dispose();
                     _statusMessagesTimer.Dispose();
@@ -123,14 +123,14 @@ namespace DCSFlightpanels
                     BIOSEventHandler.DetachStringListener(this);
                 }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                //  free unmanaged resources (unmanaged objects) and override a finalizer below.
 
-                // TODO: set large fields to null.
+                //  set large fields to null.
                 _hasBeenCalledAlready = true;
             }
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        //  override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
         // ~MainWindow() {
         //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
         //   Dispose(false);
@@ -142,7 +142,7 @@ namespace DCSFlightpanels
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
 
-            // TODO: uncomment the following line if the finalizer is overridden above.
+            //  uncomment the following line if the finalizer is overridden above.
             GC.SuppressFinalize(this);
         }
         #endregion
@@ -217,7 +217,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                Debug.WriteLine(e.Address + "  " + e.StringData);
                 if (_checkDCSBIOSVersionOnce || string.IsNullOrWhiteSpace(e.StringData) || _dcsbiosVersionOutput == null)
                 {
                     return;
@@ -1176,7 +1175,7 @@ namespace DCSFlightpanels
 
             try
             {
-                // TODO THIS CAUSES HANGING WHEN CLOSING THE APPLICATION!?!?
+                // THIS CAUSES HANGING WHEN CLOSING THE APPLICATION!?!?
                 // _hidHandler.Shutdown();
             }
             catch (Exception ex)

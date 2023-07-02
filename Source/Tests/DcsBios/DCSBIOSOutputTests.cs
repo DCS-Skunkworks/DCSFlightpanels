@@ -38,7 +38,7 @@ namespace Tests.DcsBios
                 DCSBiosOutputComparison = comparisonType,
             };
 
-            Assert.Equal(expectedResult, dcsOutput.EvaluateUInt(99, valueToCompare));
+            Assert.Equal(expectedResult, dcsOutput.UIntConditionIsMet(99, valueToCompare));
         }
 
         [Theory]
@@ -58,7 +58,7 @@ namespace Tests.DcsBios
                 SpecifiedValueString = OriginalValue, //should set DCSBiosOutputType before assign !
             };
 
-            Assert.Equal(expectedResult, dcsOutput.EvaluateString(99, valueToCompare));
+            Assert.Equal(expectedResult, dcsOutput.StringValueHasChanged(99, valueToCompare));
         }
         
         [Theory]
@@ -93,7 +93,7 @@ namespace Tests.DcsBios
                 LastUIntValue = OriginalValue, //<-- != compared to CheckForValueMatch_WithUint 
             };
 
-            Assert.Equal(expectedResult, dcsOutput.EvaluateUInt(99, valueToCompare));
+            Assert.Equal(expectedResult, dcsOutput.UIntConditionIsMet(99, valueToCompare));
             Assert.Equal(valueToCompare, dcsOutput.LastUIntValue);
         }
 
@@ -129,7 +129,7 @@ namespace Tests.DcsBios
                 LastUIntValue = valueToCompare, //<-- != compared to CheckForValueMatch_WithUint 
             };
             //always returns false
-            Assert.False(dcsOutput.EvaluateUInt(99, valueToCompare));
+            Assert.False(dcsOutput.UIntConditionIsMet(99, valueToCompare));
             Assert.Equal(valueToCompare, dcsOutput.LastUIntValue);
         }
 
@@ -166,7 +166,7 @@ namespace Tests.DcsBios
                 LastUIntValue = lastIntValue, //<-- != compared to CheckForValueMatch_WithUint 
             };
 
-            Assert.Equal(expectedResult, dcsOutput.EvaluateUInt(99, valueToCompare));
+            Assert.Equal(expectedResult, dcsOutput.UIntConditionIsMet(99, valueToCompare));
             Assert.Equal(valueToCompare, dcsOutput.LastUIntValue);
         }
 

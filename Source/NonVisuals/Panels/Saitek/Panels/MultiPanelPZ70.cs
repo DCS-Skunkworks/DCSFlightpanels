@@ -116,7 +116,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 return;
             }
-
+            
             UpdateCounter(e.Address, e.Data);
             foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
             {
@@ -128,11 +128,6 @@ namespace NonVisuals.Panels.Saitek.Panels
                 if (dcsbiosBindingLCDPZ70.DialPosition != _pz70DialPosition)
                 {
                     //Binding isn't for dial's current position
-                    continue;
-                }
-
-                if (e.Address != dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.Address)
-                {
                     continue;
                 }
                 

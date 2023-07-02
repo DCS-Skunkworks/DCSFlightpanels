@@ -572,7 +572,7 @@ namespace NonVisuals.Radios
                     {
                         // ignored
                         // Common.LogError(123, "DCSBIOSStringReceived TACAN: >" + e.StringData + "< " + exception.Message + " \n" + exception.StackTrace);
-                        // TODO Strange values from DCS-BIOS
+                        // Strange values from DCS-BIOS
                     }
                 }
             }

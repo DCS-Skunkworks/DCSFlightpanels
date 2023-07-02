@@ -1,4 +1,5 @@
-﻿using DCS_BIOS.Json;
+﻿using System.Diagnostics;
+using DCS_BIOS.Json;
 
 namespace DCS_BIOS
 {
@@ -56,8 +57,9 @@ namespace DCS_BIOS
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
 
+
         [NonSerialized] private object _lockObject = new();
-        
+
         public static DCSBIOSOutput CreateCopy(DCSBIOSOutput dcsbiosOutput)
         {
             var tmp = new DCSBIOSOutput
@@ -119,27 +121,35 @@ namespace DCS_BIOS
         /// <param name="data"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public bool EvaluateUInt(uint address, uint data)
+        public bool UIntConditionIsMet(uint address, uint data)
         {
-            if (Address != address)
+            _lockObject ??= new object();
+            var result = false;
+
+            lock (_lockObject)
             {
-                return false;
+                if (Address != address)
+                {
+                    return false;
+                }
+
+                var newValue = (data & Mask) >> ShiftValue;
+
+                var resultComparison = DCSBiosOutputComparison switch
+                {
+                    DCSBiosOutputComparison.BiggerThan => newValue > _specifiedValueUInt,
+                    DCSBiosOutputComparison.LessThan => newValue < _specifiedValueUInt,
+                    DCSBiosOutputComparison.NotEquals => newValue != _specifiedValueUInt,
+                    DCSBiosOutputComparison.Equals => newValue == _specifiedValueUInt,
+                    _ => throw new Exception("Unexpected DCSBiosOutputComparison value")
+                };
+
+                result = resultComparison && !newValue.Equals(_lastUIntValue);
+                //Debug.WriteLine($"(EvaluateUInt) Result={result} Target={_specifiedValueUInt} Last={_lastUIntValue} New={newValue}");
+                _lastUIntValue = newValue;
             }
 
-            var value = (data & Mask) >> ShiftValue;
-
-            var resultComparison = DCSBiosOutputComparison switch
-            {
-                DCSBiosOutputComparison.BiggerThan => value > _specifiedValueUInt,
-                DCSBiosOutputComparison.LessThan => value < _specifiedValueUInt,
-                DCSBiosOutputComparison.NotEquals => value != _specifiedValueUInt,
-                DCSBiosOutputComparison.Equals => value == _specifiedValueUInt,
-                _ => throw new Exception("Unexpected DCSBiosOutputComparison value")
-            };
-
-            _lastUIntValue = value;
-
-            return resultComparison && !value.Equals(_lastUIntValue);
+            return result;
         }
 
         /// <summary>
@@ -154,47 +164,26 @@ namespace DCS_BIOS
         /// <returns>Returns true when all checks are true.</returns>
         public bool UIntValueHasChanged(uint address, uint data)
         {
-            if (address != Address)
-            {
-                // Not correct control
-                return false;
-            }
-
-            if (GetUIntValue(data) == _lastUIntValue)
-            {
-                // Value hasn't changed
-                return false;
-            }
-
-            _lastUIntValue = GetUIntValue(data);
-            return true;
-        }
-
-        /// <summary>
-        /// Checks :
-        /// <para>* if there is a there is a change in the value since last comparison</para>
-        /// </summary>
-        /// <param name="address"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public bool EvaluateString(uint address, string data)
-        {
-            if (address != Address)
-            {
-                // Not correct control
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(data) || string.IsNullOrEmpty(_specifiedValueString))
-            {
-                return false;
-            }
+            _lockObject ??= new object();
 
             lock (_lockObject)
             {
-                return _specifiedValueString.Equals(data);
+                if (address != Address)
+                {
+                    // Not correct control
+                    return false;
+                }
+
+                if (GetUIntValue(data) == _lastUIntValue)
+                {
+                    // Value hasn't changed
+                    return false;
+                }
+
+                _lastUIntValue = GetUIntValue(data);
             }
+
+            return true;
         }
 
         /// <summary>
@@ -209,18 +198,23 @@ namespace DCS_BIOS
         /// <returns>Returns true when all checks are true.</returns>
         public bool StringValueHasChanged(uint address, string stringData)
         {
-            if (address != Address)
+            _lockObject ??= new object();
+
+            lock (_lockObject)
             {
-                // Not correct control
-                return false;
+                if (address != Address)
+                {
+                    // Not correct control
+                    return false;
+                }
+
+                if ((_lastStringValue ?? string.Empty) != (stringData ?? string.Empty))
+                {
+                    _lastStringValue = stringData;
+                    return true;
+                }
             }
 
-            if ((_lastStringValue ?? string.Empty) != (stringData ?? string.Empty))
-            {
-                _lastStringValue = stringData;
-                return true;
-            }
-            
             return false;
         }
 
@@ -236,7 +230,7 @@ namespace DCS_BIOS
                 return (data & Mask) >> ShiftValue;
             }
         }
-        
+
         public void Consume(DCSBIOSControl dcsbiosControl)
         {
             _controlId = dcsbiosControl.Identifier;
@@ -257,7 +251,7 @@ namespace DCS_BIOS
                 {
                     _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
                 }
-                
+
                 DCSBIOSProtocolParser.RegisterAddressToBroadCast(_address);
             }
             catch (Exception)

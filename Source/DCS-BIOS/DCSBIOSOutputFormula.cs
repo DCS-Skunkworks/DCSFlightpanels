@@ -86,7 +86,7 @@ namespace DCS_BIOS
                 {
                     foreach (var dcsbiosOutput in _dcsbiosOutputs)
                     {
-                        if (!dcsbiosOutput.EvaluateUInt(address, data))
+                        if (!dcsbiosOutput.UIntValueHasChanged(address, data))
                         {
                             continue;
                         }
@@ -125,9 +125,8 @@ namespace DCS_BIOS
                 {
                     foreach (var dcsbiosOutput in _dcsbiosOutputs)
                     {
-                        if (dcsbiosOutput.Address == address)
+                        if (dcsbiosOutput.UIntValueHasChanged(address, data))
                         {
-                            dcsbiosOutput.EvaluateUInt(address, data);
                             result = true;
                             _variables[dcsbiosOutput.ControlId] = dcsbiosOutput.LastUIntValue;
                         }

@@ -193,11 +193,17 @@ namespace NonVisuals.Panels.StreamDeck
                 _refreshInterval++;
                 var result = false;
 
+                //Debug
+                if (!_useFormula && _dcsbiosOutput?.Address != e.Address)
+                {
+                    return;
+                }
+
                 if (FormulaSelectedAndOk() && _dcsbiosOutputFormula.Evaluate(e.Address, e.Data))
                 {
                     result = true;
                 }
-                else if (!_useFormula && _dcsbiosOutput?.EvaluateUInt(e.Address, e.Data) == true)
+                else if (!_useFormula && _dcsbiosOutput?.UIntValueHasChanged(e.Address, e.Data) == true)
                 {
                     UIntDcsBiosValue = _dcsbiosOutput.LastUIntValue;
                     result = true;

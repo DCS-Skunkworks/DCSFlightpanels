@@ -206,7 +206,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 if (address == cavb.DCSBiosOutputLED.Address)
                 {
-                    if (cavb.DCSBiosOutputLED.EvaluateUInt(address, data))
+                    if (cavb.DCSBiosOutputLED.UIntConditionIsMet(address, data))
                     {
                         SetLED((BIPLedPositionEnum)cavb.SaitekLEDPosition.GetPosition(), cavb.LEDColor);
                     }
