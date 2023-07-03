@@ -647,11 +647,11 @@ namespace NonVisuals.Radios
                                         dial1OkTime = DateTime.Now.Ticks;
                                         if (_yadro1ACockpitFreq1DialPos < desiredPositionDial1X)
                                         {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + Increase;
+                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
                                         }
                                         else
                                         {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + Decrease;
+                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                                         }
                                         DCSBIOS.Send(str);
                                         Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
@@ -1916,7 +1916,7 @@ namespace NonVisuals.Radios
                     downCount++;
                 } while (tmpActualDialPositionUp != desiredDialPosition); // High probability of infinite loop if parameters are out of scope
 
-                return upCount < downCount ? Increase : Decrease;
+                return upCount < downCount ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
             }
             catch (Exception ex)
             {

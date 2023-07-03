@@ -32,8 +32,8 @@
         LOWER_LARGE_FREQ_WHEEL_DEC,
         LOWER_FREQ_SWITCH
     }
-
     
+
     /// <summary>
     /// Represents a knob or button on the PZ69 Radio Panel.
     /// Used by the PZ69 instance to determine what knob & button

@@ -350,7 +350,7 @@ namespace NonVisuals.Radios
                                 if (_ilsCockpitChannel < standbyPosition)
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_CHANNEL_COMMAND + Increase;
+                                    const string str = ILS_CHANNEL_COMMAND + DCSBIOS_INCREASE_COMMAND;
                                     DCSBIOS.Send(str);
                                     dialSendCount++;
                                     Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);
@@ -358,7 +358,7 @@ namespace NonVisuals.Radios
                                 else if (_ilsCockpitChannel > standbyPosition)
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_CHANNEL_COMMAND + Decrease;
+                                    const string str = ILS_CHANNEL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                                     DCSBIOS.Send(str);
                                     dialSendCount++;
                                     Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);

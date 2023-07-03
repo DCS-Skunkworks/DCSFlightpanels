@@ -954,7 +954,7 @@ namespace NonVisuals.Radios
                                 if (_tacanCockpitTensDialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = TACAN_TENS_DIAL_COMMAND + (_tacanCockpitTensDialPos < desiredPositionDial1 ? Increase : Decrease);
+                                    var str = TACAN_TENS_DIAL_COMMAND + (_tacanCockpitTensDialPos < desiredPositionDial1 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _tacanTensWaitingForFeedback, 1);
@@ -976,7 +976,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
 
-                                    var str = TACAN_ONES_DIAL_COMMAND + (_tacanCockpitOnesDialPos < desiredPositionDial2 ? Increase : Decrease);
+                                    var str = TACAN_ONES_DIAL_COMMAND + (_tacanCockpitOnesDialPos < desiredPositionDial2 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _tacanOnesWaitingForFeedback, 1);
@@ -1067,7 +1067,7 @@ namespace NonVisuals.Radios
                                 if (_vorCockpitMhzDialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = VOR_MHZ_DIAL_COMMAND + (_vorCockpitMhzDialPos < desiredPositionDial1 ? Increase : Decrease);
+                                    var str = VOR_MHZ_DIAL_COMMAND + (_vorCockpitMhzDialPos < desiredPositionDial1 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _vorMhzWaitingForFeedback, 1);
@@ -1089,7 +1089,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
 
-                                    var str = VOR_KHZ_DIAL_COMMAND + (_vorCockpitKhzDialPos < desiredPositionDial2 ? Increase : Decrease);
+                                    var str = VOR_KHZ_DIAL_COMMAND + (_vorCockpitKhzDialPos < desiredPositionDial2 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _vorKhzWaitingForFeedback, 1);
@@ -2434,7 +2434,7 @@ namespace NonVisuals.Radios
                     break;
                 }
             }
-            return counterUp > counterDown ? Decrease : Increase;
+            return counterUp > counterDown ? DCSBIOS_DECREASE_COMMAND : DCSBIOS_INCREASE_COMMAND;
         }
     }
 }

@@ -52,7 +52,7 @@ namespace DCS_BIOS
         private int _shiftValue;
         private int _maxLength;
         private volatile uint _lastUIntValue = uint.MaxValue;
-        private volatile string _lastStringValue = "";
+        private volatile string _lastStringValue = ""; här
         private string _controlType; // display button toggle etc
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
@@ -374,7 +374,7 @@ namespace DCS_BIOS
         }
 
         [JsonIgnore]
-        public string SpecifiedValueString
+        public string SpecifiedValueString här
         {
             get => _specifiedValueString;
             set

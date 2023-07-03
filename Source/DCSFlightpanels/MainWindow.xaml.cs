@@ -569,7 +569,8 @@ namespace DCSFlightpanels
                             }
                             else if (DCSAircraft.IsA10C(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
                             {
-                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton);
+                                // True means A-10C II
+                                UserControlBase radioPanelPZ69UserControl = _profileHandler.DCSAircraft.Option1 ? new RadioPanelPZ69UserControlA10CII(hidSkeleton) : new RadioPanelPZ69UserControlA10C(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
