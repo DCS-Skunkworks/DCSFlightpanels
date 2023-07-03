@@ -41,51 +41,56 @@ namespace NonVisuals.Radios
         private bool _upperButtonPressedAndDialRotated;
         private bool _lowerButtonPressedAndDialRotated;
 
-        /*A-10C AN/ARC-186(V) VHF AM Radio 1*/
-        // Large dial 116-151 [step of 1]
+        /*A-10C ARC-210 VHF Radio */
+        // Large dial 0-399 [step of 1]
         // Small dial 0.00-0.97 [step of x.x[0 2 5 7]
-        private double _vhfAmBigFrequencyStandby = 116;
-        private double _vhfAmSmallFrequencyStandby;
-        private double _vhfAmSavedCockpitBigFrequency;
-        private double _vhfAmSavedCockpitSmallFrequency;
-        private readonly object _lockVhfAmDialsObject1 = new();
-        private readonly object _lockVhfAmDialsObject2 = new();
-        private readonly object _lockVhfAmDialsObject3 = new();
-        private readonly object _lockVhfAmDialsObject4 = new();
-        private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial1;
-        private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial2;
-        private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial3;
-        private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial4;
-        private volatile uint _vhfAmCockpitFreq1DialPos = 1;
-        private volatile uint _vhfAmCockpitFreq2DialPos = 1;
-        private volatile uint _vhfAmCockpitFreq3DialPos = 1;
-        private volatile uint _vhfAmCockpitFreq4DialPos = 1;
-        private const string VHF_AM_FREQ_1DIAL_COMMAND = "VHFAM_FREQ1 ";
-        private const string VHF_AM_FREQ_2DIAL_COMMAND = "VHFAM_FREQ2 ";
-        private const string VHF_AM_FREQ_3DIAL_COMMAND = "VHFAM_FREQ3 ";
-        private const string VHF_AM_FREQ_4DIAL_COMMAND = "VHFAM_FREQ4 ";
+        private double _arc210VhfBigFrequencyStandby = 116;
+        private double _arc210VhfSmallFrequencyStandby;
+        private double _arc210VhfAmSavedCockpitBigFrequency;
+        private double _arc210VhfAmSavedCockpitSmallFrequency;
+        private readonly object _lockArc210VhfDialsObject1 = new();
+        private readonly object _lockArc210VhfDialsObject2 = new();
+        private readonly object _lockArc210VhfDialsObject3 = new();
+        private readonly object _lockArc210VhfDialsObject4 = new();
+        private readonly object _lockArc210VhfDialsObject5 = new();
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputFreqDial1;
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputFreqDial2;
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputFreqDial3;
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputFreqDial4;
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputFreqDial5;
+        private volatile uint _arc210VhfCockpitFreq1DialPos = 1;
+        private volatile uint _arc210VhfCockpitFreq2DialPos = 1;
+        private volatile uint _arc210VhfCockpitFreq3DialPos = 1;
+        private volatile uint _arc210VhfCockpitFreq4DialPos = 1;
+        private volatile uint _arc210VhfCockpitFreq5DialPos = 1;
+        private const string ARC210_VHF_FREQ_1DIAL_COMMAND = "ARC210_100MHZ_SEL ";
+        private const string ARC210_VHF_FREQ_2DIAL_COMMAND = "ARC210_10MHZ_SEL ";
+        private const string ARC210_VHF_FREQ_3DIAL_COMMAND = "ARC210_1MHZ_SEL ";
+        private const string ARC210_VHF_FREQ_4DIAL_COMMAND = "ARC210_100KHZ_SEL ";
+        private const string ARC210_VHF_FREQ_5DIAL_COMMAND = "ARC210_25KHZ_SEL ";
         private Thread _vhfAmSyncThread;
-        private long _vhfAmThreadNowSynching;
-        private long _vhfAmDial1WaitingForFeedback;
-        private long _vhfAmDial2WaitingForFeedback;
-        private long _vhfAmDial3WaitingForFeedback;
-        private long _vhfAmDial4WaitingForFeedback;
-        private const string VHF_AM_PRESET_INCREASE = "VHFAM_PRESET INC\n";
-        private const string VHF_AM_PRESET_DECREASE = "VHFAM_PRESET DEC\n";
-        private const string VHF_AM_FREQ_MODE_INCREASE = "VHFAM_FREQEMER INC\n";
-        private const string VHF_AM_FREQ_MODE_DECREASE = "VHFAM_FREQEMER DEC\n";
-        private DCSBIOSOutput _vhfAmDcsbiosOutputChannelFreqMode;  // 3 = PRESET
-        private DCSBIOSOutput _vhfAmDcsbiosOutputSelectedChannel;
-        private volatile uint _vhfAmCockpitFreqMode;
-        private volatile uint _vhfAmCockpitPresetChannel;
-        private readonly ClickSpeedDetector _vhfAmChannelClickSpeedDetector = new(8);
-        private readonly ClickSpeedDetector _vhfAmFreqModeClickSpeedDetector = new(6);
+        private long _arc210VhfAmThreadNowSynching;
+        private long _arc210VhfDial1WaitingForFeedback;
+        private long _arc210VhfDial2WaitingForFeedback;
+        private long _arc210VhfDial3WaitingForFeedback;
+        private long _arc210VhfDial4WaitingForFeedback;
+        private long _arc210VhfDial5WaitingForFeedback;
+        /*private const string ARC210_VHF_PRESET_INCREASE = "VHFAM_PRESET INC\n";
+        private const string ARC210_VHF_PRESET_DECREASE = "VHFAM_PRESET DEC\n";
+        private const string ARC210_VHF_FREQ_MODE_INCREASE = "VHFAM_FREQEMER INC\n";
+        private const string ARC210_VHF_FREQ_MODE_DECREASE = "VHFAM_FREQEMER DEC\n";*/
+        //private DCSBIOSOutput _vhfAmDcsbiosOutputChannelFreqMode;  // 3 = PRESET
+        //private DCSBIOSOutput _vhfAmDcsbiosOutputSelectedChannel;
+        //private volatile uint _vhfAmCockpitFreqMode;
+        //private volatile uint _vhfAmCockpitPresetChannel;
+        //private readonly ClickSpeedDetector _vhfAmChannelClickSpeedDetector = new(8);
+        //private readonly ClickSpeedDetector _vhfAmFreqModeClickSpeedDetector = new(6);
 
-        private const string VHF_AM_MODE_INCREASE = "VHFAM_MODE INC\n";
+        /*private const string VHF_AM_MODE_INCREASE = "VHFAM_MODE INC\n";
         private const string VHF_AM_MODE_DECREASE = "VHFAM_MODE DEC\n";
         private DCSBIOSOutput _vhfAmDcsbiosOutputMode;  // VHFAM_MODE
         private volatile uint _vhfAmCockpitMode; // OFF = 0
-        private readonly ClickSpeedDetector _vhfAmModeClickSpeedDetector = new(8);
+        private readonly ClickSpeedDetector _vhfAmModeClickSpeedDetector = new(8);*/
 
         /*A-10C AN/ARC-164 UHF Radio 2*/
         // Large dial 225-399 [step of 1]
@@ -3704,22 +3709,20 @@ namespace NonVisuals.Radios
         {
             try
             {
-                // VHF AM
-                _vhfAmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ1");
+                // ARC-210 VHF
+                _arc210VhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_100MHZ_SEL");
 
-                // _vhfAmDcsbiosOutputFreqDial1.Debug = true;
-                _vhfAmDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ2");
+                _arc210VhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_10MHZ_SEL");
 
-                // _vhfAmDcsbiosOutputFreqDial2.Debug = true;
-                _vhfAmDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ3");
+                _arc210VhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_1MHZ_SEL");
 
-                // _vhfAmDcsbiosOutputFreqDial3.Debug = true;
-                _vhfAmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ4");
+                _arc210VhfDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_100KHZ_SEL");
 
-                // _vhfAmDcsbiosOutputFreqDial4.Debug = true;
-                _vhfAmDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQEMER");
+                _arc210VhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_25KHZ_SEL");
+
+                /*_vhfAmDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQEMER");
                 _vhfAmDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_PRESET");
-                _vhfAmDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_MODE");
+                _vhfAmDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_MODE");*/
 
                 // UHF
                 _uhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_100MHZ_SEL");

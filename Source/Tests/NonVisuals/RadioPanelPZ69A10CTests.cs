@@ -64,7 +64,7 @@ namespace Tests.NonVisuals
         [InlineData(6, 666, "")]
         public void GetVhfAmDialFrequencyForPosition_ShouldReturn_ExpectedValues(int dial, uint position, string expectedValue)
         {
-            Assert.Equal(expectedValue, RadioPanelPZ69A10C.GetVhfAmDialFrequencyForPosition(dial, position));
+            Assert.Equal(expectedValue, RadioPanelPZ69A10CII.GetVhfAmDialFrequencyForPosition(dial, position));
         }
 
         [Theory]
@@ -75,7 +75,7 @@ namespace Tests.NonVisuals
         ///previous Non-exhaustive switches that throwed exception is replaced by default handling in switches that also throws a better exception
         public void GetVhfAmDialFrequencyForPosition_ThrowsException_For_UnexpectedPositionValue_For_DialValue1And4(int dial, uint position)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10C.GetVhfAmDialFrequencyForPosition(dial, position));
+            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10CII.GetVhfAmDialFrequencyForPosition(dial, position));
         }
 
 
@@ -103,7 +103,7 @@ namespace Tests.NonVisuals
 
         public void GetUhfDialFrequencyForPosition_ShouldReturn_ExpectedValues(int dial, uint position, string expectedValue)
         {
-            Assert.Equal(expectedValue, RadioPanelPZ69A10C.GetUhfDialFrequencyForPosition(dial, position));
+            Assert.Equal(expectedValue, RadioPanelPZ69A10CII.GetUhfDialFrequencyForPosition(dial, position));
         }
 
         [Theory]
@@ -114,7 +114,7 @@ namespace Tests.NonVisuals
         ///previous Non-exhaustive switches that throwed exception is replaced by default handling in switches that also throws a better exception
         public void GetUhfDialFrequencyForPosition_ThrowsException_For_UnexpectedPositionValue_For_DialValue1And5(int dial, uint position)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10C.GetUhfDialFrequencyForPosition(dial, position));
+            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10CII.GetUhfDialFrequencyForPosition(dial, position));
         }
 
         [Theory]
@@ -174,7 +174,7 @@ namespace Tests.NonVisuals
         [InlineData(6, 666, "")]
         public void GetVhfFmDialFrequencyForPosition_ShouldReturn_ExpectedValues(int dial, uint position, string expectedValue)
         {
-            Assert.Equal(expectedValue, RadioPanelPZ69A10C.GetVhfFmDialFrequencyForPosition(dial, position));
+            Assert.Equal(expectedValue, RadioPanelPZ69A10CII.GetVhfFmDialFrequencyForPosition(dial, position));
         }
 
         [Theory]
@@ -185,7 +185,7 @@ namespace Tests.NonVisuals
         ///previous Non-exhaustive switches that throwed exception is replaced by default handling in switches that also throws a better exception
         public void GetVhfFmDialFrequencyForPosition_ThrowsException_For_UnexpectedPositionValue_For_DialValue1And4(int dial, uint position)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10C.GetVhfFmDialFrequencyForPosition(dial, position));
+            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10CII.GetVhfFmDialFrequencyForPosition(dial, position));
         }
 
         [Theory]
@@ -207,7 +207,7 @@ namespace Tests.NonVisuals
 
         public void GetILSDialFrequencyForPosition_ShouldReturn_ExpectedValues(int dial, uint position, string expectedValue)
         {
-            Assert.Equal(expectedValue, RadioPanelPZ69A10C.GetILSDialFrequencyForPosition(dial, position));
+            Assert.Equal(expectedValue, RadioPanelPZ69A10CII.GetILSDialFrequencyForPosition(dial, position));
         }
 
         [Theory]
@@ -218,7 +218,7 @@ namespace Tests.NonVisuals
         ///previous Non-exhaustive switches that throwed exception is replaced by default handling in switches that also throws a better exception
         public void GetILSDialFrequencyForPosition_ThrowsException_For_UnexpectedPositionValue_For_DialValue1And4(int dial, uint position)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10C.GetILSDialFrequencyForPosition(dial, position));
+            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10CII.GetILSDialFrequencyForPosition(dial, position));
         }
 
         [Theory]
@@ -239,7 +239,7 @@ namespace Tests.NonVisuals
         [InlineData(2, 95, 9)]
         public void GetILSDialPosForFrequency_ShouldReturn_ExpectedValues(int dial, int frequency, int expectedValue)
         {
-            Assert.Equal(expectedValue, RadioPanelPZ69A10C.GetILSDialPosForFrequency(dial, frequency));
+            Assert.Equal(expectedValue, RadioPanelPZ69A10CII.GetILSDialPosForFrequency(dial, frequency));
         }
 
         [Theory]
@@ -255,7 +255,7 @@ namespace Tests.NonVisuals
         ///previous Non-exhaustive switches that throwed exception is replaced by default handling in switches that also throws a better exception
         public void GetILSDialPosForFrequency_ThrowsException_For_UnexpectedPositionValue_For_DialValue1And4(int dial, int frequency)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10C.GetILSDialPosForFrequency(dial, frequency));
+            Assert.Throws<ArgumentOutOfRangeException>(() => RadioPanelPZ69A10CII.GetILSDialPosForFrequency(dial, frequency));
         }
 
         [Theory]
@@ -443,7 +443,7 @@ namespace Tests.NonVisuals
         [InlineData(12, 12, null)]
         public void GetCommandDirectionForVhfDial1_ShouldReturn_ExpectedValues(int desiredDialPosition, uint actualDialPosition, string expectedValue)
         {
-            Assert.Equal(expectedValue, RadioPanelPZ69A10C.GetCommandDirectionForVhfDial1(desiredDialPosition, actualDialPosition));
+            Assert.Equal(expectedValue, RadioPanelPZ69A10CII.GetCommandDirectionForVhfDial1(desiredDialPosition, actualDialPosition));
         }
 
         [Theory]
@@ -453,7 +453,7 @@ namespace Tests.NonVisuals
         [InlineData(-1, 12)]
         public void GetCommandDirectionForVhfDial1_ThrowsException_For_UnexpectedValues(int desiredDialPosition, uint actualDialPosition)
         {
-            Assert.Throws<Exception>(() => RadioPanelPZ69A10C.GetCommandDirectionForVhfDial1(desiredDialPosition, actualDialPosition));
+            Assert.Throws<Exception>(() => RadioPanelPZ69A10CII.GetCommandDirectionForVhfDial1(desiredDialPosition, actualDialPosition));
         }
         
         [Theory]
@@ -568,7 +568,7 @@ namespace Tests.NonVisuals
         [InlineData(9, 9, null)]
         public void GetCommandDirectionForVhfDial23_ShouldReturn_ExpectedValues(int desiredDialPosition, uint actualDialPosition, string expectedValue)
         {
-            Assert.Equal(expectedValue, RadioPanelPZ69A10C.GetCommandDirectionForVhfDial23(desiredDialPosition, actualDialPosition));
+            Assert.Equal(expectedValue, RadioPanelPZ69A10CII.GetCommandDirectionForVhfDial23(desiredDialPosition, actualDialPosition));
         }
 
         [Theory]
@@ -578,7 +578,7 @@ namespace Tests.NonVisuals
         [InlineData(-1, 6)]
         public void GetCommandDirectionForVhfDial23_ThrowsException_For_UnexpectedValues(int desiredDialPosition, uint actualDialPosition)
         {
-            Assert.Throws<Exception>(() => RadioPanelPZ69A10C.GetCommandDirectionForVhfDial23(desiredDialPosition, actualDialPosition));
+            Assert.Throws<Exception>(() => RadioPanelPZ69A10CII.GetCommandDirectionForVhfDial23(desiredDialPosition, actualDialPosition));
         }
     }
 }
