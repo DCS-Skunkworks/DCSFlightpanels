@@ -84,6 +84,7 @@ namespace DCSFlightpanels.Windows
             {
                 _dcsAircraft = (DCSAircraft)ComboBoxAirframe.SelectedItem;
                 _dcsAircraft.UseGenericRadio = CheckBoxUseGenericRadio.IsChecked == true;
+                _dcsAircraft.Option1 = RadioButtonA10CII.IsChecked == true;
                 DCSAircraft.SelectedAircraft = _dcsAircraft;
                 DCSBIOSControlLocator.DCSAircraft = _dcsAircraft;
             }
@@ -101,6 +102,8 @@ namespace DCSFlightpanels.Windows
                     //User has chosen a DCS-BIOS compatible module
                     StackPanelUseGenericRadio.Visibility = Visibility.Visible;
                 }
+
+                StackPanelA10C.Visibility = DCSAircraft.IsA10C(_dcsAircraft) ? Visibility.Visible : Visibility.Collapsed;
             }
             catch (Exception ex)
             {

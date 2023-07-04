@@ -20,11 +20,15 @@
         </StackPanel>
         <StackPanel Name="StackPanelUseGenericRadio" Grid.Row="1" Visibility="Collapsed">
             <CheckBox Name="CheckBoxUseGenericRadio" IsChecked="False" Content="Use Generic Radio Panel" Margin="10,10,0,0" />
+            <StackPanel Name="StackPanelA10C" Margin="10,5,0,0" Visibility="Collapsed">
+                <RadioButton Name="RadioButtonA10C" GroupName="A10" IsChecked="True">A10-C</RadioButton>
+                <RadioButton Name="RadioButtonA10CII" GroupName="A10">A10-C II</RadioButton>
+            </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="2" >
             <Label Margin="0,15,0,0">
                 <TextBlock TextWrapping="Wrap">
-                    For keyboard emulation only (Switchpanel PZ55, Multipanel PZ70, TPM) choose "KeyEmulator".
+                    For keyboard emulation only (SwitchPanel PZ55, Multipanel PZ70, TPM) choose "KeyEmulator".
                 </TextBlock>
             </Label>
         </StackPanel>

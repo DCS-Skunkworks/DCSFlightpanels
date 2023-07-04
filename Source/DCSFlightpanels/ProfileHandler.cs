@@ -377,6 +377,10 @@ namespace DCSFlightpanels
                         {
                             tmpProfile.UseGenericRadio = bool.Parse(fileLine.Replace("UseGenericRadio=", string.Empty).Trim());
                         }
+                        else if (fileLine.StartsWith("Option1="))
+                        {
+                            tmpProfile.Option1 = bool.Parse(fileLine.Replace("Option1=", string.Empty).Trim());
+                        }
                         else if (!fileLine.StartsWith("#") && fileLine.Length > 0)
                         {
                             // Process all these lines.
@@ -640,6 +644,7 @@ namespace DCSFlightpanels
                 stringBuilder.AppendLine("Profile=" + DCSAircraft.ID);
                 stringBuilder.AppendLine("EmulationModesFlag=" + Common.GetEmulationModesFlag());
                 stringBuilder.AppendLine("UseGenericRadio=" + DCSAircraft.UseGenericRadio + Environment.NewLine);
+                stringBuilder.AppendLine("Option1=" + DCSAircraft.Option1 + Environment.NewLine);
 
                 var panelBindings = BindingMappingManager.PanelBindings;
 

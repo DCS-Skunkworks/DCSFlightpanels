@@ -20,15 +20,15 @@ namespace NonVisuals.Radios
     using HID;
 
     /// <summary>
-    /// Pre-programmed radio panel for the A-10C.
+    /// Pre-programmed radio panel for the A-10C II.
     /// </summary>
-    public class RadioPanelPZ69A10C : RadioPanelPZ69Base, IDCSBIOSStringListener
+    public class RadioPanelPZ69A10CII : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
         private enum CurrentA10RadioMode
         {
             UHF,
             VHFFM,
-            VHFAM,
+            ARC210_VHF,
             TACAN,
             ILS
         }
@@ -41,51 +41,56 @@ namespace NonVisuals.Radios
         private bool _upperButtonPressedAndDialRotated;
         private bool _lowerButtonPressedAndDialRotated;
 
-        /*A-10C AN/ARC-186(V) VHF AM Radio 1*/
-        // Large dial 116-151 [step of 1]
+        /*A-10C ARC-210 VHF Radio */
+        // Large dial 0-399 [step of 1]
         // Small dial 0.00-0.97 [step of x.x[0 2 5 7]
-        private double _vhfAmBigFrequencyStandby = 116;
-        private double _vhfAmSmallFrequencyStandby;
-        private double _vhfAmSavedCockpitBigFrequency;
-        private double _vhfAmSavedCockpitSmallFrequency;
-        private readonly object _lockVhfAmDialsObject1 = new();
-        private readonly object _lockVhfAmDialsObject2 = new();
-        private readonly object _lockVhfAmDialsObject3 = new();
-        private readonly object _lockVhfAmDialsObject4 = new();
-        private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial1;
-        private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial2;
-        private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial3;
-        private DCSBIOSOutput _vhfAmDcsbiosOutputFreqDial4;
-        private volatile uint _vhfAmCockpitFreq1DialPos = 1;
-        private volatile uint _vhfAmCockpitFreq2DialPos = 1;
-        private volatile uint _vhfAmCockpitFreq3DialPos = 1;
-        private volatile uint _vhfAmCockpitFreq4DialPos = 1;
-        private const string VHF_AM_FREQ_1DIAL_COMMAND = "VHFAM_FREQ1 ";
-        private const string VHF_AM_FREQ_2DIAL_COMMAND = "VHFAM_FREQ2 ";
-        private const string VHF_AM_FREQ_3DIAL_COMMAND = "VHFAM_FREQ3 ";
-        private const string VHF_AM_FREQ_4DIAL_COMMAND = "VHFAM_FREQ4 ";
-        private Thread _vhfAmSyncThread;
-        private long _vhfAmThreadNowSynching;
-        private long _vhfAmDial1WaitingForFeedback;
-        private long _vhfAmDial2WaitingForFeedback;
-        private long _vhfAmDial3WaitingForFeedback;
-        private long _vhfAmDial4WaitingForFeedback;
-        private const string VHF_AM_PRESET_INCREASE = "VHFAM_PRESET INC\n";
-        private const string VHF_AM_PRESET_DECREASE = "VHFAM_PRESET DEC\n";
-        private const string VHF_AM_FREQ_MODE_INCREASE = "VHFAM_FREQEMER INC\n";
-        private const string VHF_AM_FREQ_MODE_DECREASE = "VHFAM_FREQEMER DEC\n";
-        private DCSBIOSOutput _vhfAmDcsbiosOutputChannelFreqMode;  // 3 = PRESET
-        private DCSBIOSOutput _vhfAmDcsbiosOutputSelectedChannel;
-        private volatile uint _vhfAmCockpitFreqMode;
-        private volatile uint _vhfAmCockpitPresetChannel;
-        private readonly ClickSpeedDetector _vhfAmChannelClickSpeedDetector = new(8);
-        private readonly ClickSpeedDetector _vhfAmFreqModeClickSpeedDetector = new(6);
+        private double _arc210VhfBigFrequencyStandby = 300;
+        private double _arc210VhfSmallFrequencyStandby;
+        private double _arc210VhfSavedCockpitBigFrequency;
+        private double _arc210VhfSavedCockpitSmallFrequency;
+        private readonly object _lockArc210VhfDialsObject1 = new();
+        private readonly object _lockArc210VhfDialsObject2 = new();
+        private readonly object _lockArc210VhfDialsObject3 = new();
+        private readonly object _lockArc210VhfDialsObject4 = new();
+        private readonly object _lockArc210VhfDialsObject5 = new();
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputFreqDial1;
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputFreqDial2;
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputFreqDial3;
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputFreqDial4;
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputFreqDial5;
+        private volatile uint _arc210VhfCockpitFreq1DialPos = 1;
+        private volatile uint _arc210VhfCockpitFreq2DialPos = 1;
+        private volatile uint _arc210VhfCockpitFreq3DialPos = 1;
+        private volatile uint _arc210VhfCockpitFreq4DialPos = 1;
+        private volatile uint _arc210VhfCockpitFreq5DialPos = 1;
+        private const string ARC210_VHF_FREQ_1DIAL_COMMAND = "ARC210_100MHZ_SEL ";
+        private const string ARC210_VHF_FREQ_2DIAL_COMMAND = "ARC210_10MHZ_SEL ";
+        private const string ARC210_VHF_FREQ_3DIAL_COMMAND = "ARC210_1MHZ_SEL ";
+        private const string ARC210_VHF_FREQ_4DIAL_COMMAND = "ARC210_100KHZ_SEL ";
+        private const string ARC210_VHF_FREQ_5DIAL_COMMAND = "ARC210_25KHZ_SEL ";
+        private Thread _arc210VhfSyncThread;
+        private long _arc210VhfThreadNowSynching;
+        private long _arc210VhfDial1WaitingForFeedback;
+        private long _arc210VhfDial2WaitingForFeedback;
+        private long _arc210VhfDial3WaitingForFeedback;
+        private long _arc210VhfDial4WaitingForFeedback;
+        private long _arc210VhfDial5WaitingForFeedback;
+        /*private const string ARC210_VHF_PRESET_INCREASE = "VHFAM_PRESET INC\n";
+        private const string ARC210_VHF_PRESET_DECREASE = "VHFAM_PRESET DEC\n";
+        private const string ARC210_VHF_FREQ_MODE_INCREASE = "VHFAM_FREQEMER INC\n";
+        private const string ARC210_VHF_FREQ_MODE_DECREASE = "VHFAM_FREQEMER DEC\n";*/
+        //private DCSBIOSOutput _vhfAmDcsbiosOutputChannelFreqMode;  // 3 = PRESET
+        //private DCSBIOSOutput _vhfAmDcsbiosOutputSelectedChannel;
+        //private volatile uint _vhfAmCockpitFreqMode;
+        //private volatile uint _vhfAmCockpitPresetChannel;
+        //private readonly ClickSpeedDetector _vhfAmChannelClickSpeedDetector = new(8);
+        //private readonly ClickSpeedDetector _vhfAmFreqModeClickSpeedDetector = new(6);
 
-        private const string VHF_AM_MODE_INCREASE = "VHFAM_MODE INC\n";
+        /*private const string VHF_AM_MODE_INCREASE = "VHFAM_MODE INC\n";
         private const string VHF_AM_MODE_DECREASE = "VHFAM_MODE DEC\n";
         private DCSBIOSOutput _vhfAmDcsbiosOutputMode;  // VHFAM_MODE
         private volatile uint _vhfAmCockpitMode; // OFF = 0
-        private readonly ClickSpeedDetector _vhfAmModeClickSpeedDetector = new(8);
+        private readonly ClickSpeedDetector _vhfAmModeClickSpeedDetector = new(8);*/
 
         /*A-10C AN/ARC-164 UHF Radio 2*/
         // Large dial 225-399 [step of 1]
@@ -233,9 +238,9 @@ namespace NonVisuals.Radios
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
 
-        private long _doUpdatePanelLCD;
+        private long _doUpdatePanelLCD = 1;
 
-        public RadioPanelPZ69A10C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69A10CII(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             CreateRadioKnobs();
             Startup();
@@ -252,7 +257,7 @@ namespace NonVisuals.Radios
                 if (disposing)
                 {
                     _shutdownUHFThread = true;
-                    _shutdownVHFAMThread = true;
+                    _shutdownARC210VHFThread = true;
                     _shutdownILSThread = true;
                     _shutdownTACANThread = true;
                     _shutdownVHFFMThread = true;
@@ -278,47 +283,57 @@ namespace NonVisuals.Radios
              * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
              * reset. Reading the dial's position with no change in value will not reset.
              */
-            // VHF AM
-            if (_vhfAmDcsbiosOutputFreqDial1.UIntValueHasChanged(e.Address, e.Data))
+            // ARC-210
+            if (_arc210VhfDcsbiosOutputFreqDial1.UIntValueHasChanged(e.Address, e.Data))
             {
-                lock (_lockVhfAmDialsObject1)
+                lock (_lockArc210VhfDialsObject1)
                 {
-                    _vhfAmCockpitFreq1DialPos = _vhfAmDcsbiosOutputFreqDial1.LastUIntValue;
+                    _arc210VhfCockpitFreq1DialPos = _arc210VhfDcsbiosOutputFreqDial1.LastUIntValue;
                     Interlocked.Increment(ref _doUpdatePanelLCD);
-                    Interlocked.Exchange(ref _vhfAmDial1WaitingForFeedback, 0);
+                    Interlocked.Exchange(ref _arc210VhfDial1WaitingForFeedback, 0);
                 }
             }
 
-            if (_vhfAmDcsbiosOutputFreqDial2.UIntValueHasChanged(e.Address, e.Data))
+            if (_arc210VhfDcsbiosOutputFreqDial2.UIntValueHasChanged(e.Address, e.Data))
             {
-                lock (_lockVhfAmDialsObject2)
+                lock (_lockArc210VhfDialsObject2)
                 {
-                    _vhfAmCockpitFreq2DialPos = _vhfAmDcsbiosOutputFreqDial2.LastUIntValue;
+                    _arc210VhfCockpitFreq2DialPos = _arc210VhfDcsbiosOutputFreqDial2.LastUIntValue;
                     Interlocked.Increment(ref _doUpdatePanelLCD);
-                    Interlocked.Exchange(ref _vhfAmDial2WaitingForFeedback, 0);
+                    Interlocked.Exchange(ref _arc210VhfDial2WaitingForFeedback, 0);
                 }
             }
 
-            if (_vhfAmDcsbiosOutputFreqDial3.UIntValueHasChanged(e.Address, e.Data))
+            if (_arc210VhfDcsbiosOutputFreqDial3.UIntValueHasChanged(e.Address, e.Data))
             {
-                lock (_lockVhfAmDialsObject3)
+                lock (_lockArc210VhfDialsObject3)
                 {
-                    _vhfAmCockpitFreq3DialPos = _vhfAmDcsbiosOutputFreqDial3.LastUIntValue;
+                    _arc210VhfCockpitFreq3DialPos = _arc210VhfDcsbiosOutputFreqDial3.LastUIntValue;
                     Interlocked.Increment(ref _doUpdatePanelLCD);
-                    Interlocked.Exchange(ref _vhfAmDial3WaitingForFeedback, 0);
+                    Interlocked.Exchange(ref _arc210VhfDial3WaitingForFeedback, 0);
                 }
             }
 
-            if (_vhfAmDcsbiosOutputFreqDial4.UIntValueHasChanged(e.Address, e.Data))
+            if (_arc210VhfDcsbiosOutputFreqDial4.UIntValueHasChanged(e.Address, e.Data))
             {
-                lock (_lockVhfAmDialsObject4)
+                lock (_lockArc210VhfDialsObject4)
                 {
-                    _vhfAmCockpitFreq4DialPos = _vhfAmDcsbiosOutputFreqDial4.LastUIntValue;
+                    _arc210VhfCockpitFreq4DialPos = _arc210VhfDcsbiosOutputFreqDial4.LastUIntValue;
                     Interlocked.Increment(ref _doUpdatePanelLCD);
-                    Interlocked.Exchange(ref _vhfAmDial4WaitingForFeedback, 0);
+                    Interlocked.Exchange(ref _arc210VhfDial4WaitingForFeedback, 0);
                 }
             }
 
+            if (_arc210VhfDcsbiosOutputFreqDial5.UIntValueHasChanged(e.Address, e.Data))
+            {
+                lock (_lockArc210VhfDialsObject5)
+                {
+                    _arc210VhfCockpitFreq5DialPos = _arc210VhfDcsbiosOutputFreqDial5.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _arc210VhfDial5WaitingForFeedback, 0);
+                }
+            }
+            /*
             if (_vhfAmDcsbiosOutputChannelFreqMode.UIntValueHasChanged(e.Address, e.Data))
             {
                 _vhfAmCockpitFreqMode = _vhfAmDcsbiosOutputChannelFreqMode.LastUIntValue;
@@ -336,7 +351,7 @@ namespace NonVisuals.Radios
                 _vhfAmCockpitMode = _vhfAmDcsbiosOutputMode.LastUIntValue;
                 Interlocked.Increment(ref _doUpdatePanelLCD);
             }
-
+            */
             // UHF
             if (_uhfDcsbiosOutputFreqDial1.UIntValueHasChanged(e.Address, e.Data))
             {
@@ -582,9 +597,9 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10C knob)
+        private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10CII knob)
         {
-            if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsA10C.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsA10C.LOWER_FREQ_SWITCH))
+            if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsA10CII.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsA10CII.LOWER_FREQ_SWITCH))
             {
                 // Don't do anything on the very first button press as the panel sends ALL
                 // switches when it is manipulated the first time
@@ -600,16 +615,16 @@ namespace NonVisuals.Radios
 
             switch (knob)
             {
-                case RadioPanelPZ69KnobsA10C.UPPER_FREQ_SWITCH:
+                case RadioPanelPZ69KnobsA10CII.UPPER_FREQ_SWITCH:
                     {
                         switch (_currentUpperRadioMode)
                         {
-                            case CurrentA10RadioMode.VHFAM:
+                            case CurrentA10RadioMode.ARC210_VHF:
                                 {
-                                    if (_vhfAmCockpitMode != 0 && !VhfAmPresetSelected())
-                                    {
-                                        SendVhfAmToDCSBIOS();
-                                    }
+                                    //if (_vhfAmCockpitMode != 0 && !VhfAmPresetSelected())
+                                    //{
+                                    SendARC210VhfToDCSBIOS();
+                                    //}
                                     break;
                                 }
 
@@ -646,16 +661,16 @@ namespace NonVisuals.Radios
                         break;
                     }
 
-                case RadioPanelPZ69KnobsA10C.LOWER_FREQ_SWITCH:
+                case RadioPanelPZ69KnobsA10CII.LOWER_FREQ_SWITCH:
                     {
                         switch (_currentLowerRadioMode)
                         {
-                            case CurrentA10RadioMode.VHFAM:
+                            case CurrentA10RadioMode.ARC210_VHF:
                                 {
-                                    if (_vhfAmCockpitMode != 0 && !VhfAmPresetSelected())
-                                    {
-                                        SendVhfAmToDCSBIOS();
-                                    }
+                                    //if (_vhfAmCockpitMode != 0 && !VhfAmPresetSelected())
+                                    //{
+                                    SendARC210VhfToDCSBIOS();
+                                    //}
                                     break;
                                 }
 
@@ -694,137 +709,170 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendVhfAmToDCSBIOS()
+        private void SendARC210VhfToDCSBIOS()
         {
-            if (VhfAmNowSyncing())
+            if (ARC210VhfNowSyncing())
             {
                 return;
             }
 
-            SaveCockpitFrequencyVhfAm();
-            var frequencyAsString = _vhfAmBigFrequencyStandby + "." + _vhfAmSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
+            SaveCockpitFrequencyARC210Vhf();
+            var frequencyAsString = _arc210VhfBigFrequencyStandby + "." + _arc210VhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
 
-            // Frequency selector 1      VHFAM_FREQ1
-            // " 3" " 4" " 5" " 6" " 7" " 8" " 9" "10" "11" "12" "13" "14" "15"
-            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+            /*
+             * Dial 1
+             *      " " 1 2 3
+             * Pos   0  1 2 3
+             *
+             * Dial 2
+             *      " " 1 2 3 4 5 6 7 8 9
+             * Pos   0  1 2 3 4 5 6 7 8 9
+             *
+             * Dial 3
+             *       0 1 2 3 4 5 6 7 8
+             * Pos   0 1 2 3 4 5 6 7 8
+             *
+             * "."
+             * 
+             * Dial 4
+             *       0 1 2 3 4 5 6 7 8
+             * Pos   0 1 2 3 4 5 6 7 8
+             * 
+             * Dial 5
+             *       00 25 50 75
+             * Pos    0  1  2  3
+             */
+            var desiredPositionDial1 = 0;
+            var desiredPositionDial2 = 0;
+            var desiredPositionDial3 = 0;
+            var desiredPositionDial4 = 0;
+            var desiredPositionDial5 = 0;
 
-            // Frequency selector 2      VHFAM_FREQ2
-            // 0 1 2 3 4 5 6 7 8 9
-
-            // Frequency selector 3      VHFAM_FREQ3
-            // 0 1 2 3 4 5 6 7 8 9
-
-            // Frequency selector 4      VHFAM_FREQ4
-            // "00" "25" "50" "75", only "00" and "50" used.
-            // Pos     0    1    2    3
-            int desiredPositionDial1;
-            int desiredPositionDial2;
-            int desiredPositionDial3;
-            int tmp;
-
-            if (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture) == 2)
+            /*
+             *   0.000
+             *  20.000
+             * 120.000
+             */
+            switch (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture))
             {
-                // 30.00
-                // #1 = 3  (position = value - 3)
-                // #2 = 0   (position = value)
-                // #3 = 0   (position = value)
-                // #4 = 00
-                desiredPositionDial1 = int.Parse(frequencyAsString.Substring(0, 1)) - 3;
-                desiredPositionDial2 = int.Parse(frequencyAsString.Substring(1, 1));
-                desiredPositionDial3 = int.Parse(frequencyAsString.Substring(3, 1));
-                tmp = int.Parse(frequencyAsString.Substring(4, 1));
-            }
-            else
-            {
-                // 151.95
-                // #1 = 15  (position = value - 3)
-                // #2 = 1   (position = value)
-                // #3 = 9   (position = value)
-                // #4 = 5
-                desiredPositionDial1 = int.Parse(frequencyAsString.Substring(0, 2)) - 3;
-                desiredPositionDial2 = int.Parse(frequencyAsString.Substring(2, 1));
-                desiredPositionDial3 = int.Parse(frequencyAsString.Substring(4, 1));
-                tmp = int.Parse(frequencyAsString.Substring(5, 1));
+                case 1:
+                    {
+                        //"0.000"
+                        desiredPositionDial1 = 0;
+                        desiredPositionDial2 = 0;
+                        desiredPositionDial3 = int.Parse(frequencyAsString[..1]) ;
+                        desiredPositionDial4 = int.Parse(frequencyAsString[2..3]) ;
+                        desiredPositionDial5 = int.Parse(frequencyAsString[3..5]);
+                        break;
+                    }
+                case 2:
+                    {
+                        //"20.000"
+                        desiredPositionDial1 = 0;
+                        desiredPositionDial2 = int.Parse(frequencyAsString[..1]);
+                        desiredPositionDial3 = int.Parse(frequencyAsString[1..2]) ;
+                        desiredPositionDial4 = int.Parse(frequencyAsString[3..4]) ;
+                        desiredPositionDial5 = int.Parse(frequencyAsString[4..6]);
+                        break;
+                    }
+                case 3:
+                    {
+                        //"120.000"
+                        desiredPositionDial1 = int.Parse(frequencyAsString[..1]);
+                        desiredPositionDial2 = int.Parse(frequencyAsString[1..2]);
+                        desiredPositionDial3 = int.Parse(frequencyAsString[2..3]);
+                        desiredPositionDial4 = int.Parse(frequencyAsString[4..5]);
+                        desiredPositionDial5 = int.Parse(frequencyAsString[5..7]);
+                        break;
+                    }
             }
 
-            var desiredPositionDial4 = tmp switch
+            desiredPositionDial5 = desiredPositionDial5 switch
             {
                 0 => 0,
-                2 => 1,
-                5 => 2,
-                7 => 3,
+                25 => 1,
+                50 => 2,
+                75 => 3,
                 _ => 0
             };
 
             // #1
-            _shutdownVHFAMThread = true;
+            _shutdownARC210VHFThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
-            _shutdownVHFAMThread = false;
-            _vhfAmSyncThread = new Thread(() => VhfAmSynchThreadMethod(desiredPositionDial1, desiredPositionDial2, desiredPositionDial3, desiredPositionDial4));
-            _vhfAmSyncThread.Start();
+            _shutdownARC210VHFThread = false;
+            _arc210VhfSyncThread = new Thread(() => ARC210VhfSynchThreadMethod(desiredPositionDial1, desiredPositionDial2, desiredPositionDial3, desiredPositionDial4, desiredPositionDial5));
+            _arc210VhfSyncThread.Start();
         }
 
-        private volatile bool _shutdownVHFAMThread;
-        private void VhfAmSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, int desiredPositionDial4)
+        private volatile bool _shutdownARC210VHFThread;
+        private void ARC210VhfSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, int desiredPositionDial4, int desiredPositionDial5)
         {
             try
             {
                 try
                 {   /*
-                     * A-10C AN/ARC-186(V) VHF AM Radio 1
+                     * A-10C II ARC-210 VHF
                      * 
-                     * Large dial 116-151 [step of 1]
-                     * Small dial 0.00-0.95 [step of 0.05]
+                     * Large dial 0-399 [step of 1]
+                     * Small dial 0.000-0.975 [step of 0.05]
                      */
 
-                    Interlocked.Exchange(ref _vhfAmThreadNowSynching, 1);
-                    long dial1Timeout = DateTime.Now.Ticks;
-                    long dial2Timeout = DateTime.Now.Ticks;
-                    long dial3Timeout = DateTime.Now.Ticks;
-                    long dial4Timeout = DateTime.Now.Ticks;
+                    Interlocked.Exchange(ref _arc210VhfThreadNowSynching, 1);
+                    var dial1Timeout = DateTime.Now.Ticks;
+                    var dial2Timeout = DateTime.Now.Ticks;
+                    var dial3Timeout = DateTime.Now.Ticks;
+                    var dial4Timeout = DateTime.Now.Ticks;
+                    var dial5Timeout = DateTime.Now.Ticks;
                     long dial1OkTime = 0;
                     long dial2OkTime = 0;
                     long dial3OkTime = 0;
                     long dial4OkTime = 0;
+                    long dial5OkTime = 0;
                     var dial1SendCount = 0;
                     var dial2SendCount = 0;
                     var dial3SendCount = 0;
                     var dial4SendCount = 0;
+                    var dial5SendCount = 0;
                     do
                     {
                         if (IsTimedOut(ref dial1Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _vhfAmDial1WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _arc210VhfDial1WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (IsTimedOut(ref dial2Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _vhfAmDial2WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _arc210VhfDial2WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (IsTimedOut(ref dial3Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _vhfAmDial3WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _arc210VhfDial3WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         if (IsTimedOut(ref dial4Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _vhfAmDial4WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _arc210VhfDial4WaitingForFeedback); // Lets do an ugly reset
+                        }
+
+                        if (IsTimedOut(ref dial5Timeout))
+                        {
+                            ResetWaitingForFeedBack(ref _arc210VhfDial5WaitingForFeedback); // Lets do an ugly reset
                         }
 
                         string str;
-                        if (Interlocked.Read(ref _vhfAmDial1WaitingForFeedback) == 0)
+                        if (Interlocked.Read(ref _arc210VhfDial1WaitingForFeedback) == 0)
                         {
-                            lock (_lockVhfAmDialsObject1)
+                            lock (_lockArc210VhfDialsObject1)
                             {
 
-                                if (_vhfAmCockpitFreq1DialPos != desiredPositionDial1)
+                                if (_arc210VhfCockpitFreq1DialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    str = VHF_AM_FREQ_1DIAL_COMMAND + GetCommandDirectionForVhfDial1(desiredPositionDial1, _vhfAmCockpitFreq1DialPos);
+                                    str = ARC210_VHF_FREQ_1DIAL_COMMAND + GetCommandDirectionForARC210VhfDial1(desiredPositionDial1, _arc210VhfCockpitFreq1DialPos);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
-                                    Interlocked.Exchange(ref _vhfAmDial1WaitingForFeedback, 1);
+                                    Interlocked.Exchange(ref _arc210VhfDial1WaitingForFeedback, 1);
                                 }
 
                                 Reset(ref dial1Timeout);
@@ -835,17 +883,17 @@ namespace NonVisuals.Radios
                             dial1OkTime = DateTime.Now.Ticks;
                         }
 
-                        if (Interlocked.Read(ref _vhfAmDial2WaitingForFeedback) == 0)
+                        if (Interlocked.Read(ref _arc210VhfDial2WaitingForFeedback) == 0)
                         {
-                            lock (_lockVhfAmDialsObject2)
+                            lock (_lockArc210VhfDialsObject2)
                             {
-                                if (_vhfAmCockpitFreq2DialPos != desiredPositionDial2)
+                                if (_arc210VhfCockpitFreq2DialPos != desiredPositionDial2)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    str = VHF_AM_FREQ_2DIAL_COMMAND + GetCommandDirectionForVhfDial23(desiredPositionDial2, _vhfAmCockpitFreq2DialPos);
+                                    str = ARC210_VHF_FREQ_2DIAL_COMMAND + GetCommandDirectionForARC210VhfDial23(desiredPositionDial2, _arc210VhfCockpitFreq2DialPos);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
-                                    Interlocked.Exchange(ref _vhfAmDial2WaitingForFeedback, 1);
+                                    Interlocked.Exchange(ref _arc210VhfDial2WaitingForFeedback, 1);
                                 }
 
                                 Reset(ref dial2Timeout);
@@ -856,17 +904,17 @@ namespace NonVisuals.Radios
                             dial2OkTime = DateTime.Now.Ticks;
                         }
 
-                        if (Interlocked.Read(ref _vhfAmDial3WaitingForFeedback) == 0)
+                        if (Interlocked.Read(ref _arc210VhfDial3WaitingForFeedback) == 0)
                         {
-                            lock (_lockVhfAmDialsObject3)
+                            lock (_lockArc210VhfDialsObject3)
                             {
-                                if (_vhfAmCockpitFreq3DialPos != desiredPositionDial3)
+                                if (_arc210VhfCockpitFreq3DialPos != desiredPositionDial3)
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
-                                    str = VHF_AM_FREQ_3DIAL_COMMAND + GetCommandDirectionForVhfDial23(desiredPositionDial3, _vhfAmCockpitFreq3DialPos);
+                                    str = ARC210_VHF_FREQ_3DIAL_COMMAND + GetCommandDirectionForARC210VhfDial23(desiredPositionDial3, _arc210VhfCockpitFreq3DialPos);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
-                                    Interlocked.Exchange(ref _vhfAmDial3WaitingForFeedback, 1);
+                                    Interlocked.Exchange(ref _arc210VhfDial3WaitingForFeedback, 1);
                                 }
 
                                 Reset(ref dial3Timeout);
@@ -877,25 +925,17 @@ namespace NonVisuals.Radios
                             dial3OkTime = DateTime.Now.Ticks;
                         }
 
-                        if (Interlocked.Read(ref _vhfAmDial4WaitingForFeedback) == 0)
+                        if (Interlocked.Read(ref _arc210VhfDial4WaitingForFeedback) == 0)
                         {
-                            lock (_lockVhfAmDialsObject4)
+                            lock (_lockArc210VhfDialsObject4)
                             {
-                                if (_vhfAmCockpitFreq4DialPos < desiredPositionDial4)
+                                if (_arc210VhfCockpitFreq4DialPos != desiredPositionDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    str = VHF_AM_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    str = ARC210_VHF_FREQ_4DIAL_COMMAND + GetCommandDirectionForARC210VhfDial23(desiredPositionDial4, _arc210VhfCockpitFreq4DialPos);
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
-                                    Interlocked.Exchange(ref _vhfAmDial4WaitingForFeedback, 1);
-                                }
-                                else if (_vhfAmCockpitFreq4DialPos > desiredPositionDial4)
-                                {
-                                    dial4OkTime = DateTime.Now.Ticks;
-                                    str = VHF_AM_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                    DCSBIOS.Send(str);
-                                    dial4SendCount++;
-                                    Interlocked.Exchange(ref _vhfAmDial4WaitingForFeedback, 1);
+                                    Interlocked.Exchange(ref _arc210VhfDial4WaitingForFeedback, 1);
                                 }
 
                                 Reset(ref dial4Timeout);
@@ -906,20 +946,50 @@ namespace NonVisuals.Radios
                             dial4OkTime = DateTime.Now.Ticks;
                         }
 
-                        if (dial1SendCount > 12 || dial2SendCount > 10 || dial3SendCount > 10 || dial4SendCount > 5)
+                        if (Interlocked.Read(ref _arc210VhfDial5WaitingForFeedback) == 0)
+                        {
+                            lock (_lockArc210VhfDialsObject5)
+                            {
+                                if (_arc210VhfCockpitFreq5DialPos < desiredPositionDial5)
+                                {
+                                    dial5OkTime = DateTime.Now.Ticks;
+                                    str = ARC210_VHF_FREQ_5DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    DCSBIOS.Send(str);
+                                    dial5SendCount++;
+                                    Interlocked.Exchange(ref _arc210VhfDial5WaitingForFeedback, 1);
+                                }
+                                else if (_arc210VhfCockpitFreq5DialPos > desiredPositionDial5)
+                                {
+                                    dial5OkTime = DateTime.Now.Ticks;
+                                    str = ARC210_VHF_FREQ_5DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    DCSBIOS.Send(str);
+                                    dial5SendCount++;
+                                    Interlocked.Exchange(ref _arc210VhfDial5WaitingForFeedback, 1);
+                                }
+
+                                Reset(ref dial5Timeout);
+                            }
+                        }
+                        else
+                        {
+                            dial5OkTime = DateTime.Now.Ticks;
+                        }
+
+                        if (dial1SendCount > 12 || dial2SendCount > 10 || dial3SendCount > 10 || dial4SendCount > 5 || dial5SendCount > 5)
                         {
                             // "Race" condition detected?
                             dial1SendCount = 0;
                             dial2SendCount = 0;
                             dial3SendCount = 0;
                             dial4SendCount = 0;
+                            dial5SendCount = 0;
                             Thread.Sleep(5000);
                         }
 
                         Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
-                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownVHFAMThread);
-                    SwapCockpitStandbyFrequencyVhfAm();
+                    while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime) || IsTooShort(dial5OkTime)) && !_shutdownARC210VHFThread);
+                    SwapCockpitStandbyFrequencyARC210Vhf();
                     ShowFrequenciesOnPanel();
                 }
                 catch (ThreadAbortException)
@@ -931,7 +1001,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _vhfAmThreadNowSynching, 0);
+                Interlocked.Exchange(ref _arc210VhfThreadNowSynching, 0);
             }
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -1910,9 +1980,9 @@ namespace NonVisuals.Radios
 
                 switch (_currentUpperRadioMode)
                 {
-                    case CurrentA10RadioMode.VHFAM:
+                    case CurrentA10RadioMode.ARC210_VHF:
                         {
-                            if (_upperButtonPressed)
+                            /*if (_upperButtonPressed)
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitFreqMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -1930,11 +2000,11 @@ namespace NonVisuals.Radios
                                     SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                                 else
-                                {
-                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(GetVhfAmFrequencyAsString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby / 1000, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                }
-                            }
+                                {*/
+                            SetPZ69DisplayBytesDefault(ref bytes, double.Parse(GetARC210VhfFrequencyAsString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfBigFrequencyStandby + _arc210VhfSmallFrequencyStandby / 1000, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            /*}
+                        }*/
 
                             break;
                         }
@@ -2088,9 +2158,9 @@ namespace NonVisuals.Radios
                 }
                 switch (_currentLowerRadioMode)
                 {
-                    case CurrentA10RadioMode.VHFAM:
+                    case CurrentA10RadioMode.ARC210_VHF:
                         {
-                            if (_lowerButtonPressed)
+                            /*if (_lowerButtonPressed)
                             {
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitFreqMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -2108,11 +2178,11 @@ namespace NonVisuals.Radios
                                     SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                                 else
-                                {
-                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(GetVhfAmFrequencyAsString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + (_vhfAmSmallFrequencyStandby / 1000), PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                }
-                            }
+                                {*/
+                            SetPZ69DisplayBytesDefault(ref bytes, double.Parse(GetARC210VhfFrequencyAsString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfBigFrequencyStandby + _arc210VhfSmallFrequencyStandby / 1000, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            /*}
+                        }*/
 
                             break;
                         }
@@ -2249,42 +2319,67 @@ namespace NonVisuals.Radios
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
-        private string GetVhfAmFrequencyAsString()
+        private string GetARC210VhfFrequencyAsString()
         {
-            // Frequency selector 1      VHFAM_FREQ1
-            // " 3" " 4" " 5" " 6" " 7" " 8" " 9" "10" "11" "12" "13" "14" "15"
-            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-
-            // Frequency selector 2      VHFAM_FREQ2
-            // 0 1 2 3 4 5 6 7 8 9
-
-            // Frequency selector 3      VHFAM_FREQ3
-            // 0 1 2 3 4 5 6 7 8 9
-
-            // Frequency selector 4      VHFAM_FREQ4
-            // "00" "25" "50" "75", only "00" and "50" used.
-            // Pos     0    1    2    3
+            /*
+             * Dial 1
+             *      " " 1 2 3
+             * Pos   0  1 2 3
+             *
+             * Dial 2
+             *      " " 1 2 3 4 5 6 7 8 9
+             * Pos   0  1 2 3 4 5 6 7 8 9
+             *
+             * Dial 3
+             *       0 1 2 3 4 5 6 7 8
+             * Pos   0 1 2 3 4 5 6 7 8
+             *
+             * "."
+             * 
+             * Dial 4
+             *       0 1 2 3 4 5 6 7 8
+             * Pos   0 1 2 3 4 5 6 7 8
+             * 
+             * Dial 5
+             *       00 25 50 75
+             * Pos    0  1  2  3
+             */
             string frequencyAsString;
 
-            lock (_lockVhfAmDialsObject1)
+            lock (_lockArc210VhfDialsObject1)
             {
-                frequencyAsString = GetVhfAmDialFrequencyForPosition(1, _vhfAmCockpitFreq1DialPos);
+                frequencyAsString = _arc210VhfCockpitFreq1DialPos == 0 ? "" : _arc210VhfCockpitFreq1DialPos.ToString();
             }
 
-            lock (_lockVhfAmDialsObject2)
+            lock (_lockArc210VhfDialsObject2)
             {
-                frequencyAsString += GetVhfAmDialFrequencyForPosition(2, _vhfAmCockpitFreq2DialPos);
+                frequencyAsString += _arc210VhfCockpitFreq1DialPos == 0 && _arc210VhfCockpitFreq2DialPos == 0 ? "" : _arc210VhfCockpitFreq2DialPos.ToString();
+            }
+
+            lock (_lockArc210VhfDialsObject3)
+            {
+                frequencyAsString += _arc210VhfCockpitFreq3DialPos;
             }
 
             frequencyAsString += ".";
-            lock (_lockVhfAmDialsObject3)
+
+            lock (_lockArc210VhfDialsObject4)
             {
-                frequencyAsString += GetVhfAmDialFrequencyForPosition(3, _vhfAmCockpitFreq3DialPos);
+                frequencyAsString += _arc210VhfCockpitFreq4DialPos;
             }
 
-            lock (_lockVhfAmDialsObject4)
+            lock (_lockArc210VhfDialsObject5)
             {
-                frequencyAsString += GetVhfAmDialFrequencyForPosition(4, _vhfAmCockpitFreq4DialPos);
+                var freq = _arc210VhfCockpitFreq5DialPos switch
+                {
+                    0 => "00",
+                    1 => "25",
+                    2 => "50",
+                    3 => "75",
+                    _ => throw new System.Exception($"Unexpected _arc210VhfCockpitFreq5DialPos [{_arc210VhfCockpitFreq5DialPos}]")
+                };
+
+                frequencyAsString += freq;
             }
 
             return frequencyAsString;
@@ -2350,18 +2445,18 @@ namespace NonVisuals.Radios
 
             foreach (var o in hashSet)
             {
-                var radioPanelKnobA10C = (RadioPanelKnobA10C)o;
+                var radioPanelKnobA10C = (RadioPanelKnobA10CII)o;
                 if (radioPanelKnobA10C.IsOn)
                 {
                     switch (radioPanelKnobA10C.RadioPanelPZ69Knob)
                     {
-                        case RadioPanelPZ69KnobsA10C.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_LARGE_FREQ_WHEEL_INC:
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentA10RadioMode.VHFAM:
+                                    case CurrentA10RadioMode.ARC210_VHF:
                                         {
-                                            if (_upperButtonPressed)
+                                            /*if (_upperButtonPressed)
                                             {
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
@@ -2384,7 +2479,15 @@ namespace NonVisuals.Radios
                                                     _vhfAmBigFrequencyStandby++;
                                                 }
                                             }
-
+                                            */
+                                            if (_arc210VhfBigFrequencyStandby.Equals(399.00))
+                                            {
+                                                // @ max value
+                                            }
+                                            else
+                                            {
+                                                _arc210VhfBigFrequencyStandby++;
+                                            }
                                             break;
                                         }
 
@@ -2484,13 +2587,13 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentA10RadioMode.VHFAM:
+                                    case CurrentA10RadioMode.ARC210_VHF:
                                         {
-                                            if (_upperButtonPressed)
+                                            /*if (_upperButtonPressed)
                                             {
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
@@ -2513,7 +2616,15 @@ namespace NonVisuals.Radios
                                                     _vhfAmBigFrequencyStandby--;
                                                 }
                                             }
-
+                                            */
+                                            if (_arc210VhfBigFrequencyStandby.Equals(0.00))
+                                            {
+                                                // @ min value
+                                            }
+                                            else
+                                            {
+                                                _arc210VhfBigFrequencyStandby--;
+                                            }
                                             break;
                                         }
 
@@ -2612,12 +2723,13 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_SMALL_FREQ_WHEEL_INC:
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentA10RadioMode.VHFAM:
+                                    case CurrentA10RadioMode.ARC210_VHF:
                                         {
+                                            /*
                                             if (_upperButtonPressed)
                                             {
                                                 _upperButtonPressedAndDialRotated = true;
@@ -2630,7 +2742,8 @@ namespace NonVisuals.Radios
                                             {
                                                 VHFAmSmallFrequencyStandbyAdjust(true);
                                             }
-
+                                            */
+                                            ARC210VHFSmallFrequencyStandbyAdjust(true);
                                             break;
                                         }
 
@@ -2723,13 +2836,13 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentA10RadioMode.VHFAM:
+                                    case CurrentA10RadioMode.ARC210_VHF:
                                         {
-                                            if (_upperButtonPressed)
+                                            /*if (_upperButtonPressed)
                                             {
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
@@ -2741,7 +2854,8 @@ namespace NonVisuals.Radios
                                             {
                                                 VHFAmSmallFrequencyStandbyAdjust(false);
                                             }
-
+                                            */
+                                            ARC210VHFSmallFrequencyStandbyAdjust(false);
                                             break;
                                         }
 
@@ -2834,12 +2948,13 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_LARGE_FREQ_WHEEL_INC:
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentA10RadioMode.VHFAM:
+                                    case CurrentA10RadioMode.ARC210_VHF:
                                         {
+                                            /*
                                             if (_lowerButtonPressed)
                                             {
                                                 _lowerButtonPressedAndDialRotated = true;
@@ -2863,7 +2978,15 @@ namespace NonVisuals.Radios
                                                     _vhfAmBigFrequencyStandby++;
                                                 }
                                             }
-
+                                            */
+                                            if (!_lowerButtonPressed && _arc210VhfBigFrequencyStandby.Equals(399.00))
+                                            {
+                                                // @ max value
+                                            }
+                                            else
+                                            {
+                                                _arc210VhfBigFrequencyStandby++;
+                                            }
                                             break;
                                         }
 
@@ -2963,12 +3086,13 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentA10RadioMode.VHFAM:
+                                    case CurrentA10RadioMode.ARC210_VHF:
                                         {
+                                            /*
                                             if (_lowerButtonPressed)
                                             {
                                                 _lowerButtonPressedAndDialRotated = true;
@@ -2992,7 +3116,16 @@ namespace NonVisuals.Radios
                                                     _vhfAmBigFrequencyStandby--;
                                                 }
                                             }
+                                            */
 
+                                            if (!_lowerButtonPressed && _arc210VhfBigFrequencyStandby.Equals(0.00))
+                                            {
+                                                // @ max value
+                                            }
+                                            else
+                                            {
+                                                _arc210VhfBigFrequencyStandby--;
+                                            }
                                             break;
                                         }
 
@@ -3091,13 +3224,13 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_SMALL_FREQ_WHEEL_INC:
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentA10RadioMode.VHFAM:
+                                    case CurrentA10RadioMode.ARC210_VHF:
                                         {
-                                            if (_lowerButtonPressed)
+                                            /*if (_lowerButtonPressed)
                                             {
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
@@ -3108,8 +3241,9 @@ namespace NonVisuals.Radios
                                             else
                                             {
                                                 VHFAmSmallFrequencyStandbyAdjust(true);
-                                            }
+                                            }*/
 
+                                            ARC210VHFSmallFrequencyStandbyAdjust(true);
                                             break;
                                         }
 
@@ -3202,12 +3336,13 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentA10RadioMode.VHFAM:
+                                    case CurrentA10RadioMode.ARC210_VHF:
                                         {
+                                            /*
                                             if (_lowerButtonPressed)
                                             {
                                                 _lowerButtonPressedAndDialRotated = true;
@@ -3220,7 +3355,8 @@ namespace NonVisuals.Radios
                                             {
                                                 VHFAmSmallFrequencyStandbyAdjust(false);
                                             }
-
+                                            */
+                                            ARC210VHFSmallFrequencyStandbyAdjust(false);
                                             break;
                                         }
 
@@ -3344,24 +3480,24 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void VHFAmSmallFrequencyStandbyAdjust(bool increase)
+        private void ARC210VHFSmallFrequencyStandbyAdjust(bool increase)
         {
             if (increase)
             {
-                _vhfAmSmallFrequencyStandby += 25;
+                _arc210VhfSmallFrequencyStandby += 25;
             }
             else
             {
-                _vhfAmSmallFrequencyStandby -= 25;
+                _arc210VhfSmallFrequencyStandby -= 25;
             }
 
-            if (_vhfAmSmallFrequencyStandby < 0)
+            if (_arc210VhfSmallFrequencyStandby < 0)
             {
-                _vhfAmSmallFrequencyStandby = 975;
+                _arc210VhfSmallFrequencyStandby = 975;
             }
-            else if (_vhfAmSmallFrequencyStandby > 975)
+            else if (_arc210VhfSmallFrequencyStandby > 975)
             {
-                _vhfAmSmallFrequencyStandby = 0;
+                _arc210VhfSmallFrequencyStandby = 0;
             }
         }
 
@@ -3389,18 +3525,6 @@ namespace NonVisuals.Radios
         private void CheckFrequenciesForValidity()
         {
             // Crude fix if any freqs are outside the valid boundaries
-
-            // VHF AM
-            // 116.00 - 151.975
-            if (_vhfAmBigFrequencyStandby < 116)
-            {
-                _vhfAmBigFrequencyStandby = 116;
-            }
-
-            if (_vhfAmBigFrequencyStandby > 151)
-            {
-                _vhfAmBigFrequencyStandby = 151;
-            }
 
             // VHF FM
             // 30.000 - 76.000Mhz
@@ -3489,21 +3613,21 @@ namespace NonVisuals.Radios
                 Interlocked.Increment(ref _doUpdatePanelLCD);
                 foreach (var radioPanelKnobObject in hashSet)
                 {
-                    var radioPanelKnob = (RadioPanelKnobA10C)radioPanelKnobObject;
+                    var radioPanelKnob = (RadioPanelKnobA10CII)radioPanelKnobObject;
 
                     switch (radioPanelKnob.RadioPanelPZ69Knob)
                     {
-                        case RadioPanelPZ69KnobsA10C.UPPER_VHFAM:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_ARC210VHF:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentA10RadioMode.VHFAM;
+                                    _currentUpperRadioMode = CurrentA10RadioMode.ARC210_VHF;
                                 }
 
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_UHF:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_UHF:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
@@ -3513,7 +3637,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_VHFFM:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_VHFFM:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
@@ -3523,7 +3647,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_ILS:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_ILS:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
@@ -3533,7 +3657,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_TACAN:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_TACAN:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
@@ -3543,27 +3667,27 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_DME:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_DME:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_XPDR:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_XPDR:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_VHFAM:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_ARC210VHF:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentLowerRadioMode = CurrentA10RadioMode.VHFAM;
+                                    _currentLowerRadioMode = CurrentA10RadioMode.ARC210_VHF;
                                 }
 
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_UHF:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_UHF:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
@@ -3573,7 +3697,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_VHFFM:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_VHFFM:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
@@ -3583,7 +3707,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_ILS:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_ILS:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
@@ -3593,7 +3717,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_TACAN:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_TACAN:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
@@ -3603,57 +3727,57 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_DME:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_DME:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_XPDR:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_XPDR:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_LARGE_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_SMALL_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_LARGE_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_SMALL_FREQ_WHEEL_INC:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.UPPER_FREQ_SWITCH:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_FREQ_SWITCH:
                             {
                                 _upperButtonPressed = radioPanelKnob.IsOn;
                                 if (!radioPanelKnob.IsOn)
@@ -3662,7 +3786,7 @@ namespace NonVisuals.Radios
                                     {
                                         // Do not synch if user has pressed the button to configure the radio
                                         // Do when user releases button
-                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10C.UPPER_FREQ_SWITCH);
+                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10CII.UPPER_FREQ_SWITCH);
                                     }
 
                                     _upperButtonPressedAndDialRotated = false;
@@ -3671,7 +3795,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelPZ69KnobsA10C.LOWER_FREQ_SWITCH:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_FREQ_SWITCH:
                             {
                                 _lowerButtonPressed = radioPanelKnob.IsOn;
                                 if (!radioPanelKnob.IsOn)
@@ -3680,7 +3804,7 @@ namespace NonVisuals.Radios
                                     {
                                         // Do not synch if user has pressed the button to configure the radio
                                         // Do when user releases button
-                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10C.LOWER_FREQ_SWITCH);
+                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10CII.LOWER_FREQ_SWITCH);
                                     }
 
                                     _lowerButtonPressedAndDialRotated = false;
@@ -3704,22 +3828,20 @@ namespace NonVisuals.Radios
         {
             try
             {
-                // VHF AM
-                _vhfAmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ1");
+                // ARC-210 VHF
+                _arc210VhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_100MHZ_SEL");
 
-                // _vhfAmDcsbiosOutputFreqDial1.Debug = true;
-                _vhfAmDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ2");
+                _arc210VhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_10MHZ_SEL");
 
-                // _vhfAmDcsbiosOutputFreqDial2.Debug = true;
-                _vhfAmDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ3");
+                _arc210VhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_1MHZ_SEL");
 
-                // _vhfAmDcsbiosOutputFreqDial3.Debug = true;
-                _vhfAmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ4");
+                _arc210VhfDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_100KHZ_SEL");
 
-                // _vhfAmDcsbiosOutputFreqDial4.Debug = true;
-                _vhfAmDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQEMER");
+                _arc210VhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_25KHZ_SEL");
+
+                /*_vhfAmDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQEMER");
                 _vhfAmDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_PRESET");
-                _vhfAmDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_MODE");
+                _vhfAmDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_MODE");*/
 
                 // UHF
                 _uhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_100MHZ_SEL");
@@ -3783,60 +3905,7 @@ namespace NonVisuals.Radios
 
         private void CreateRadioKnobs()
         {
-            SaitekPanelKnobs = RadioPanelKnobA10C.GetRadioPanelKnobs();
-        }
-
-        public static string GetVhfAmDialFrequencyForPosition(int dial, uint position)
-        {
-
-            // Frequency selector 1      VHFAM_FREQ1
-            // " 3" " 4" " 5" " 6" " 7" " 8" " 9" "10" "11" "12" "13" "14" "15"
-            // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-
-            // Frequency selector 2      VHFAM_FREQ2
-            // 0 1 2 3 4 5 6 7 8 9
-
-            // Frequency selector 3      VHFAM_FREQ3
-            // 0 1 2 3 4 5 6 7 8 9
-
-            // Frequency selector 4      VHFAM_FREQ4
-            // "00" "25" "50" "75", only 0 2 5 7 used.
-            // Pos     0    1    2    3
-
-            return dial switch
-            {
-
-                1 => position switch
-                {
-                    0 => "3",
-                    1 => "4",
-                    2 => "5",
-                    3 => "6",
-                    4 => "7",
-                    5 => "8",
-                    6 => "9",
-                    7 => "10",
-                    8 => "11",
-                    9 => "12",
-                    10 => "13",
-                    11 => "14",
-                    12 => "15",
-                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfAm Unexpected position switch value {position} for dial value of 1"),
-                },
-
-                2 or 3 => position.ToString(),
-
-                4 => position switch
-                {
-                    0 => "0",
-                    1 => "2",
-                    2 => "5",
-                    3 => "7",
-                    _ => throw new ArgumentOutOfRangeException(nameof(position), $"VhfAm Unexpected position switch value {position} for dial value of 4"),
-                },
-
-                _ => string.Empty
-            };
+            SaitekPanelKnobs = RadioPanelKnobA10CII.GetRadioPanelKnobs();
         }
 
         public static string GetUhfDialFrequencyForPosition(int dial, uint position)
@@ -4016,6 +4085,35 @@ namespace NonVisuals.Radios
         /// <summary>
         /// See Unit tests for understanding kind of unusual logic here
         /// </summary>        
+        public static string GetCommandDirectionForARC210VhfDial1(int desiredDialPosition, uint actualDialPosition)
+        {
+            if (desiredDialPosition == actualDialPosition)
+                return null;
+
+            if (desiredDialPosition < 0 || desiredDialPosition > 3 || actualDialPosition > 3)
+                throw new Exception($"Unexpected value for GetCommandDirectionForARC210VhfDial1. Desired: {actualDialPosition} Actual: {actualDialPosition}");
+
+            return actualDialPosition < desiredDialPosition ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+        }
+
+        /// <summary>
+        /// See Unit tests for understanding kind of unusual logic here
+        /// </summary>    
+        public static string GetCommandDirectionForARC210VhfDial23(int desiredDialPosition, uint actualDialPosition)
+        {
+            if (desiredDialPosition == actualDialPosition)
+                return null;
+
+            if (desiredDialPosition < 0 || desiredDialPosition > 9 || actualDialPosition > 9)
+                throw new Exception($"Unexpected value for GetCommandDirectionForARC210VhfDial23. Desired: {actualDialPosition} Actual: {actualDialPosition}");
+
+            return actualDialPosition < desiredDialPosition ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+        }
+
+
+        /// <summary>
+        /// See Unit tests for understanding kind of unusual logic here
+        /// </summary>        
         public static string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
         {
             if (desiredDialPosition == actualDialPosition)
@@ -4051,52 +4149,71 @@ namespace NonVisuals.Radios
                 return shift <= -5 ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
         }
 
-        private void SaveCockpitFrequencyVhfAm()
+
+        private void SaveCockpitFrequencyARC210Vhf()
         {
             /*
              * Dial 1
-             *      3   4   5   6   7   8   9   10  11  12  13  14  15
-             * Pos  0   1   2   3   4   5   6   7   8   9   10  11  12
+             *      " " 1 2 3
+             * Pos   0  1 2 3
+             *
              * Dial 2
-             * 0 - 9
-             * 
+             *      " " 1 2 3 4 5 6 7 8 9
+             * Pos   0  1 2 3 4 5 6 7 8 9
+             *
+             * Dial 3
+             *       0 1 2 3 4 5 6 7 8
+             * Pos   0 1 2 3 4 5 6 7 8
+             *
              * "."
              * 
-             * Dial 3
-             * 0 - 9
-             * 
              * Dial 4
-             * 00 25 50 75
+             *       0 1 2 3 4 5 6 7 8
+             * Pos   0 1 2 3 4 5 6 7 8
+             * 
+             * Dial 5
+             *       00 25 50 75
+             * Pos    0  1  2  3
              */
-            lock (_lockVhfAmDialsObject1)
+            lock (_lockArc210VhfDialsObject1)
             {
-                lock (_lockVhfAmDialsObject2)
+                lock (_lockArc210VhfDialsObject2)
                 {
-                    lock (_lockVhfAmDialsObject3)
+                    lock (_lockArc210VhfDialsObject3)
                     {
-                        lock (_lockVhfAmDialsObject4)
+                        lock (_lockArc210VhfDialsObject4)
                         {
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-                            uint dial4 = _vhfAmCockpitFreq4DialPos switch
+                            lock (_lockArc210VhfDialsObject5)
                             {
-                                0 => 0,
-                                1 => 25,
-                                2 => 50,
-                                3 => 75
-                            };
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+                                uint dial5 = _arc210VhfCockpitFreq5DialPos switch
+                                {
+                                    0 => 0,
+                                    1 => 25,
+                                    2 => 50,
+                                    3 => 75
+                                };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-                            _vhfAmSavedCockpitBigFrequency = double.Parse((_vhfAmCockpitFreq1DialPos + 3) + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
-                            _vhfAmSavedCockpitSmallFrequency = double.Parse(_vhfAmCockpitFreq3DialPos + dial4.ToString(NumberFormatInfoFullDisplay).PadLeft(2, '0'), NumberFormatInfoFullDisplay);
+
+                                var bigFreqString = _arc210VhfCockpitFreq1DialPos == 0 ? "" : _arc210VhfCockpitFreq1DialPos.ToString();
+                                bigFreqString += _arc210VhfCockpitFreq1DialPos == 0 && _arc210VhfCockpitFreq2DialPos == 0 ? "" : _arc210VhfCockpitFreq2DialPos.ToString();
+                                bigFreqString += _arc210VhfCockpitFreq3DialPos.ToString();
+                                _arc210VhfSavedCockpitBigFrequency = double.Parse(bigFreqString, NumberFormatInfoFullDisplay);
+
+                                var smallFreqString = _arc210VhfCockpitFreq4DialPos.ToString();
+                                smallFreqString += dial5.ToString();
+                                _arc210VhfSavedCockpitSmallFrequency = double.Parse(smallFreqString, NumberFormatInfoFullDisplay);
+                            }
                         }
                     }
                 }
             }
         }
 
-        private void SwapCockpitStandbyFrequencyVhfAm()
+        private void SwapCockpitStandbyFrequencyARC210Vhf()
         {
-            _vhfAmBigFrequencyStandby = _vhfAmSavedCockpitBigFrequency;
-            _vhfAmSmallFrequencyStandby = _vhfAmSavedCockpitSmallFrequency;
+            _arc210VhfBigFrequencyStandby = _arc210VhfSavedCockpitBigFrequency;
+            _arc210VhfSmallFrequencyStandby = _arc210VhfSavedCockpitSmallFrequency;
         }
 
         private void SaveCockpitFrequencyUhf()
@@ -4272,10 +4389,10 @@ namespace NonVisuals.Radios
             _tacanXYStandby = _tacanSavedCockpitXY;
         }
 
-        private bool VhfAmPresetSelected()
+        /*private bool VhfAmPresetSelected()
         {
             return _vhfAmCockpitFreqMode == 3;
-        }
+        }*/
 
         private bool VhfFmPresetSelected()
         {
@@ -4287,9 +4404,9 @@ namespace NonVisuals.Radios
             return _uhfCockpitFreqMode == 1;
         }
 
-        private bool VhfAmNowSyncing()
+        private bool ARC210VhfNowSyncing()
         {
-            return Interlocked.Read(ref _vhfAmThreadNowSynching) > 0;
+            return Interlocked.Read(ref _arc210VhfThreadNowSynching) > 0;
         }
 
         private bool UhfNowSyncing()

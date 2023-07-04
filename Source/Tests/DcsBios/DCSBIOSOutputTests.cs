@@ -42,20 +42,20 @@ namespace Tests.DcsBios
         }
 
         [Theory]
-        [InlineData("AbC", "AbC", true)]
-        [InlineData("AbC", "ABC", false)]
-        [InlineData("ABC", "AbC", false)]
-        [InlineData("AbC", "DeF", false)]
-        [InlineData("(-Something Ugly&£µLike That%$^)- ", "(-Something Ugly&£µLike That%$^)- ", true)]
+        [InlineData("AbC", "AbC", false)]
+        [InlineData("AbC", "ABC", true)]
+        [InlineData("ABC", "AbC", true)]
+        [InlineData("AbC", "DeF", true)]
+        [InlineData("(-Something Ugly&£µLike That%$^)- ", "(-Something Ugly&£µLike That%$^)- ", false)]
         [InlineData("", "", false)]
-        //NullReferenceException [InlineData(null, null, true)]
-        public void CheckForValueMatch_WithString(string valueToCompare, string OriginalValue, bool expectedResult)
+        
+        public void CheckIfValueHasChanged_WithString(string valueToCompare, string originalValue, bool expectedResult)
         {
             DCSBIOSOutput dcsOutput = new()
             {
                 Address = 99,
                 DCSBiosOutputType = DCSBiosOutputType.StringType,
-                SpecifiedValueString = OriginalValue, //should set DCSBiosOutputType before assign !
+                LastStringValue = originalValue, //should set DCSBiosOutputType before assign !
             };
 
             Assert.Equal(expectedResult, dcsOutput.StringValueHasChanged(99, valueToCompare));

@@ -630,7 +630,7 @@ namespace NonVisuals.Radios
                                     if (_r800L1CockpitFreq4DialPos < desiredPositionDial4)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
-                                        str = R800_L1_FREQ_4DIAL_COMMAND + Increase;
+                                        str = R800_L1_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
@@ -638,7 +638,7 @@ namespace NonVisuals.Radios
                                     else if (_r800L1CockpitFreq4DialPos > desiredPositionDial4)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
-                                        str = R800_L1_FREQ_4DIAL_COMMAND + Decrease;
+                                        str = R800_L1_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
@@ -2068,7 +2068,7 @@ namespace NonVisuals.Radios
 
                 if (countDown < countUp)
                 {
-                    return Decrease;
+                    return DCSBIOS_DECREASE_COMMAND;
                 }
             }
             catch (Exception ex)
@@ -2076,7 +2076,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
 
-            return Increase;
+            return DCSBIOS_INCREASE_COMMAND;
         }
 
         public static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
@@ -2101,7 +2101,7 @@ namespace NonVisuals.Radios
                                 case 4:
                                     {
                                         // -4 DEC
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
 
                                 case 5:
@@ -2111,7 +2111,7 @@ namespace NonVisuals.Radios
                                 case 9:
                                     {
                                         // 5 INC
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
                             }
                             break;
@@ -2123,7 +2123,7 @@ namespace NonVisuals.Radios
                             {
                                 case 0:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
 
                                 case 1:
@@ -2137,7 +2137,7 @@ namespace NonVisuals.Radios
                                 case 4:
                                 case 5:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
 
                                 case 6:
@@ -2145,7 +2145,7 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
                             }
                             break;
@@ -2158,7 +2158,7 @@ namespace NonVisuals.Radios
                                 case 0:
                                 case 1:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
 
                                 case 2:
@@ -2172,14 +2172,14 @@ namespace NonVisuals.Radios
                                 case 5:
                                 case 6:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
 
                                 case 7:
                                 case 8:
                                 case 9:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
                             }
                             break;
@@ -2193,7 +2193,7 @@ namespace NonVisuals.Radios
                                 case 1:
                                 case 2:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
 
                                 case 3:
@@ -2207,13 +2207,13 @@ namespace NonVisuals.Radios
                                 case 6:
                                 case 7:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
 
                                 case 8:
                                 case 9:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
                             }
                             break;
@@ -2228,7 +2228,7 @@ namespace NonVisuals.Radios
                                 case 2:
                                 case 3:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
 
                                 case 4:
@@ -2242,12 +2242,12 @@ namespace NonVisuals.Radios
                                 case 7:
                                 case 8:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
 
                                 case 9:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
                             }
                             break;
@@ -2263,7 +2263,7 @@ namespace NonVisuals.Radios
                                 case 3:
                                 case 4:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
 
                                 case 5:
@@ -2277,7 +2277,7 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
                             }
                             break;
@@ -2289,7 +2289,7 @@ namespace NonVisuals.Radios
                             {
                                 case 0:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
 
                                 case 1:
@@ -2298,7 +2298,7 @@ namespace NonVisuals.Radios
                                 case 4:
                                 case 5:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
 
                                 case 6:
@@ -2311,7 +2311,7 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
                             }
                             break;
@@ -2324,7 +2324,7 @@ namespace NonVisuals.Radios
                                 case 0:
                                 case 1:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
 
                                 case 2:
@@ -2333,7 +2333,7 @@ namespace NonVisuals.Radios
                                 case 5:
                                 case 6:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
 
                                 case 7:
@@ -2345,7 +2345,7 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
                             }
                             break;
@@ -2359,7 +2359,7 @@ namespace NonVisuals.Radios
                                 case 1:
                                 case 2:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
 
                                 case 3:
@@ -2368,7 +2368,7 @@ namespace NonVisuals.Radios
                                 case 6:
                                 case 7:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
 
                                 case 8:
@@ -2379,7 +2379,7 @@ namespace NonVisuals.Radios
 
                                 case 9:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
                             }
                             break;
@@ -2394,7 +2394,7 @@ namespace NonVisuals.Radios
                                 case 2:
                                 case 3:
                                     {
-                                        return Decrease;
+                                        return DCSBIOS_DECREASE_COMMAND;
                                     }
 
                                 case 4:
@@ -2403,7 +2403,7 @@ namespace NonVisuals.Radios
                                 case 7:
                                 case 8:
                                     {
-                                        return Increase;
+                                        return DCSBIOS_INCREASE_COMMAND;
                                     }
 
                                 case 9:

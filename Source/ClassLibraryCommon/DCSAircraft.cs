@@ -40,6 +40,13 @@
 
         public bool UseGenericRadio { get; set; }
 
+        /// <summary>
+        /// This can be used to any purpose.
+        /// Right now used that is true then A-10C II, false => A-10C.
+        /// They have differing radios which means different pre-programmed radios.
+        /// </summary>
+        public bool Option1 { get; set; }
+
         public static List<DCSAircraft> Modules
         {
             get

@@ -937,7 +937,7 @@ namespace NonVisuals.Radios
                                     if (_r863ManualCockpitFreq4DialPos < desiredPositionDial4X)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
-                                        str = R863_MANUAL_FREQ_4DIAL_COMMAND + Increase;
+                                        str = R863_MANUAL_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
@@ -945,7 +945,7 @@ namespace NonVisuals.Radios
                                     else if (_r863ManualCockpitFreq4DialPos > desiredPositionDial4X)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
-                                        str = R863_MANUAL_FREQ_4DIAL_COMMAND + Decrease;
+                                        str = R863_MANUAL_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
@@ -1123,11 +1123,11 @@ namespace NonVisuals.Radios
                                         dial1OkTime = DateTime.Now.Ticks;
                                         if (_yadro1ACockpitFreq1DialPos < desiredPositionDial1X)
                                         {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + Increase;
+                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
                                         }
                                         else
                                         {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + Decrease;
+                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                                         }
 
                                         DCSBIOS.Send(str);
@@ -2954,15 +2954,15 @@ namespace NonVisuals.Radios
 
                 if (upCount < downCount)
                 {
-                    return Increase;
+                    return DCSBIOS_INCREASE_COMMAND;
                 }
-                return Decrease;
+                return DCSBIOS_DECREASE_COMMAND;
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
             }
-            return Increase;
+            return DCSBIOS_INCREASE_COMMAND;
         }
 
         public static string GetCommandDirectionFor0To9Dials(int desiredDialPosition, uint actualDialPosition)
@@ -3003,9 +3003,9 @@ namespace NonVisuals.Radios
 
                 if (upCount < downCount)
                 {
-                    return Increase;
+                    return DCSBIOS_INCREASE_COMMAND;
                 }
-                return Decrease;
+                return DCSBIOS_DECREASE_COMMAND;
             }
             catch (Exception ex)
             {

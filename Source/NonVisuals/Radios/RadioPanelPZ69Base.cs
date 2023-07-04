@@ -24,8 +24,8 @@
     /// </summary>
     public abstract class RadioPanelPZ69Base : SaitekPanel
     {
-        public const string Increase = "INC\n";
-        public const string Decrease = "DEC\n";
+        public const string DCSBIOS_INCREASE_COMMAND = "INC\n";
+        public const string DCSBIOS_DECREASE_COMMAND = "DEC\n";
 
         private byte _ignoreSwitchButtonCounter = 1;
         private readonly NumberFormatInfo _numberFormatInfoFullDisplay;

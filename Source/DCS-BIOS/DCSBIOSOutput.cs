@@ -41,9 +41,8 @@ namespace DCS_BIOS
         // These are loaded and saved, all the rest are fetched from DCS-BIOS
         private string _controlId;
 
-        // The user has entered these two depending on type
+        // The target value used for comparison as chosen by the user
         private uint _specifiedValueUInt;
-        private string _specifiedValueString = string.Empty;
 
         private string _controlDescription;
         private int _maxValue;
@@ -81,9 +80,6 @@ namespace DCS_BIOS
                 case DCSBiosOutputType.IntegerType:
                     tmp.SpecifiedValueUInt = dcsbiosOutput.SpecifiedValueUInt;
                     break;
-                case DCSBiosOutputType.StringType:
-                    tmp.SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
-                    break;
             }
 
             return tmp;
@@ -104,11 +100,6 @@ namespace DCS_BIOS
             if (DCSBiosOutputType == DCSBiosOutputType.IntegerType)
             {
                 SpecifiedValueUInt = dcsbiosOutput.SpecifiedValueUInt;
-            }
-
-            if (DCSBiosOutputType == DCSBiosOutputType.StringType)
-            {
-                SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
             }
         }
 
@@ -260,21 +251,11 @@ namespace DCS_BIOS
             }
         }
 
-        public string ToDebugString()
-        {
-            if (_dcsBiosOutputType == DCSBiosOutputType.StringType)
-            {
-                return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
-            }
-
-            return "DCSBiosOutput{" + _controlId + "|0x" + _address.ToString("x") + "|0x" + _mask.ToString("x") + "|" + _shiftValue + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueUInt + "}";
-        }
-
         public override string ToString()
         {
             if (_dcsBiosOutputType == DCSBiosOutputType.StringType)
             {
-                return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueString + "}";
+                return "";
             }
 
             return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueUInt + "}";
@@ -302,14 +283,7 @@ namespace DCS_BIOS
             var dcsBIOSControl = DCSBIOSControlLocator.GetControl(_controlId);
             Consume(dcsBIOSControl);
             _dcsBiosOutputComparison = (DCSBiosOutputComparison)Enum.Parse(typeof(DCSBiosOutputComparison), entries[1]);
-            if (DCSBiosOutputType == DCSBiosOutputType.IntegerType)
-            {
-                _specifiedValueUInt = (uint)int.Parse(entries[2]);
-            }
-            else if (DCSBiosOutputType == DCSBiosOutputType.StringType)
-            {
-                _specifiedValueString = entries[2];
-            }
+            _specifiedValueUInt = (uint)int.Parse(entries[2]);
         }
 
         [JsonProperty("ControlId", Required = Required.Default)]
@@ -372,22 +346,7 @@ namespace DCS_BIOS
                 _specifiedValueUInt = value;
             }
         }
-
-        [JsonIgnore]
-        public string SpecifiedValueString
-        {
-            get => _specifiedValueString;
-            set
-            {
-                if (DCSBiosOutputType != DCSBiosOutputType.StringType)
-                {
-                    throw new Exception($"Invalid DCSBiosOutput. Specified value (trigger value) set to [String] but DCSBiosOutputType set to {DCSBiosOutputType}");
-                }
-
-                _specifiedValueString = value;
-            }
-        }
-
+        
         [JsonProperty("ControlDescription", Required = Required.Default)]
         public string ControlDescription
         {
@@ -421,6 +380,13 @@ namespace DCS_BIOS
         {
             get => _lastUIntValue;
             set => _lastUIntValue = value;
+        }
+
+        [JsonIgnore]
+        public string LastStringValue
+        {
+            get => _lastStringValue;
+            set => _lastStringValue = value;
         }
 
         public static DCSBIOSOutput GetUpdateCounter()
