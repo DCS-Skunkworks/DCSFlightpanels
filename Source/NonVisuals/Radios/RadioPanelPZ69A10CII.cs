@@ -75,6 +75,20 @@ namespace NonVisuals.Radios
         private long _arc210VhfDial3WaitingForFeedback;
         private long _arc210VhfDial4WaitingForFeedback;
         private long _arc210VhfDial5WaitingForFeedback;
+
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputPresetChannel;
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputPresetChannelFrequency;
+        private DCSBIOSOutput _arc210VhfDcsbiosOutputCockpitFreqMode; // 2 = Presets, 3 = Manual
+        private string _arc210VhfSelectedPresetChannel;
+        private string _arc210VhfSelectedPresetChannelFrequency;
+        private uint _arc210VhfCockpitFreqMode;
+
+        private const string ARC210_VHF_PRESET_DIAL_INCREASE = "ARC210_CHN_KNB +2200";
+        private const string ARC210_VHF_PRESET_DIAL_DECREASE = "ARC210_CHN_KNB -2200";
+        private readonly ClickSpeedDetector _arc210VhfChannelModeClickSpeedDetector = new(8);
+        private const string ARC210_VHF_MODE_DIAL_INCREASE = "ARC210_SEC_SW INC\n";
+        private const string ARC210_VHF_MODE_DIAL_DECREASE = "ARC210_SEC_SW DEC\n";
+
         /*private const string ARC210_VHF_PRESET_INCREASE = "VHFAM_PRESET INC\n";
         private const string ARC210_VHF_PRESET_DECREASE = "VHFAM_PRESET DEC\n";
         private const string ARC210_VHF_FREQ_MODE_INCREASE = "VHFAM_FREQEMER INC\n";
@@ -333,25 +347,13 @@ namespace NonVisuals.Radios
                     Interlocked.Exchange(ref _arc210VhfDial5WaitingForFeedback, 0);
                 }
             }
-            /*
-            if (_vhfAmDcsbiosOutputChannelFreqMode.UIntValueHasChanged(e.Address, e.Data))
+
+            if (_arc210VhfDcsbiosOutputCockpitFreqMode.UIntValueHasChanged(e.Address, e.Data))
             {
-                _vhfAmCockpitFreqMode = _vhfAmDcsbiosOutputChannelFreqMode.LastUIntValue;
+                _arc210VhfCockpitFreqMode = _arc210VhfDcsbiosOutputCockpitFreqMode.LastUIntValue;
                 Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
-            if (_vhfAmDcsbiosOutputSelectedChannel.UIntValueHasChanged(e.Address, e.Data))
-            {
-                _vhfAmCockpitPresetChannel = _vhfAmDcsbiosOutputSelectedChannel.LastUIntValue + 1;
-                Interlocked.Increment(ref _doUpdatePanelLCD);
-            }
-
-            if (_vhfAmDcsbiosOutputMode.UIntValueHasChanged(e.Address, e.Data))
-            {
-                _vhfAmCockpitMode = _vhfAmDcsbiosOutputMode.LastUIntValue;
-                Interlocked.Increment(ref _doUpdatePanelLCD);
-            }
-            */
             // UHF
             if (_uhfDcsbiosOutputFreqDial1.UIntValueHasChanged(e.Address, e.Data))
             {
@@ -515,8 +517,19 @@ namespace NonVisuals.Radios
                 // Common.DebugP("RadioPanelPZ69A10C Received DCSBIOS stringData : ->" + e.StringData + "<-");
                 if (string.IsNullOrWhiteSpace(e.StringData))
                 {
-                    // Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
+                }
+
+                if (_arc210VhfDcsbiosOutputPresetChannel.StringValueHasChanged(e.Address, e.StringData))
+                {
+                    _arc210VhfSelectedPresetChannel = _arc210VhfDcsbiosOutputPresetChannel.LastStringValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                }
+
+                if (_arc210VhfDcsbiosOutputPresetChannelFrequency.StringValueHasChanged(e.Address, e.StringData))
+                {
+                    _arc210VhfSelectedPresetChannelFrequency = _arc210VhfDcsbiosOutputPresetChannelFrequency.LastStringValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
 
                 if (_tacanDcsbiosOutputFreqChannel.StringValueHasChanged(e.Address, e.StringData))
@@ -621,10 +634,10 @@ namespace NonVisuals.Radios
                         {
                             case CurrentA10RadioMode.ARC210_VHF:
                                 {
-                                    //if (_vhfAmCockpitMode != 0 && !VhfAmPresetSelected())
-                                    //{
-                                    SendARC210VhfToDCSBIOS();
-                                    //}
+                                    if (ARC210VhfManualSelected())
+                                    {
+                                        SendARC210VhfToDCSBIOS();
+                                    }
                                     break;
                                 }
 
@@ -667,10 +680,10 @@ namespace NonVisuals.Radios
                         {
                             case CurrentA10RadioMode.ARC210_VHF:
                                 {
-                                    //if (_vhfAmCockpitMode != 0 && !VhfAmPresetSelected())
-                                    //{
-                                    SendARC210VhfToDCSBIOS();
-                                    //}
+                                    if (ARC210VhfManualSelected())
+                                    {
+                                        SendARC210VhfToDCSBIOS();
+                                    }
                                     break;
                                 }
 
@@ -760,8 +773,8 @@ namespace NonVisuals.Radios
                         //"0.000"
                         desiredPositionDial1 = 0;
                         desiredPositionDial2 = 0;
-                        desiredPositionDial3 = int.Parse(frequencyAsString[..1]) ;
-                        desiredPositionDial4 = int.Parse(frequencyAsString[2..3]) ;
+                        desiredPositionDial3 = int.Parse(frequencyAsString[..1]);
+                        desiredPositionDial4 = int.Parse(frequencyAsString[2..3]);
                         desiredPositionDial5 = int.Parse(frequencyAsString[3..5]);
                         break;
                     }
@@ -770,8 +783,8 @@ namespace NonVisuals.Radios
                         //"20.000"
                         desiredPositionDial1 = 0;
                         desiredPositionDial2 = int.Parse(frequencyAsString[..1]);
-                        desiredPositionDial3 = int.Parse(frequencyAsString[1..2]) ;
-                        desiredPositionDial4 = int.Parse(frequencyAsString[3..4]) ;
+                        desiredPositionDial3 = int.Parse(frequencyAsString[1..2]);
+                        desiredPositionDial4 = int.Parse(frequencyAsString[3..4]);
                         desiredPositionDial5 = int.Parse(frequencyAsString[4..6]);
                         break;
                     }
@@ -1982,29 +1995,23 @@ namespace NonVisuals.Radios
                 {
                     case CurrentA10RadioMode.ARC210_VHF:
                         {
-                            /*if (_upperButtonPressed)
+                            if (_upperButtonPressed)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitFreqMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                            }
-                            else if (_vhfAmCockpitMode != 0 && VhfAmPresetSelected())
-                            {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitPresetChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                //Here user switches between presets and manual, so we should show _arc210VhfCockpitFreqMode
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arc210VhfCockpitFreqMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
-                            else
+                            else if (ARC210VhfPresetSelected())
                             {
-                                if (_vhfAmCockpitMode == 0)
-                                {
-                                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                }
-                                else
-                                {*/
-                            SetPZ69DisplayBytesDefault(ref bytes, double.Parse(GetARC210VhfFrequencyAsString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfBigFrequencyStandby + _arc210VhfSmallFrequencyStandby / 1000, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                            /*}
-                        }*/
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfSelectedPresetChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfSelectedPresetChannelFrequency, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            }
+                            else if (ARC210VhfManualSelected())
+                            {
+
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(GetARC210VhfFrequencyAsString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfBigFrequencyStandby + _arc210VhfSmallFrequencyStandby / 1000, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            }
 
                             break;
                         }
@@ -2031,7 +2038,7 @@ namespace NonVisuals.Radios
                                 else
                                 {
                                     SetPZ69DisplayBytesDefault(ref bytes, double.Parse(GetUhfFrequencyAsString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + (_uhfSmallFrequencyStandby / 1000), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby / 1000, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
 
@@ -2160,29 +2167,23 @@ namespace NonVisuals.Radios
                 {
                     case CurrentA10RadioMode.ARC210_VHF:
                         {
-                            /*if (_lowerButtonPressed)
+                            if (_lowerButtonPressed)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitFreqMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
-                            }
-                            else if (_vhfAmCockpitMode != 0 && VhfAmPresetSelected())
-                            {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfAmCockpitPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                //Here user switches between presets and manual, so we should show _arc210VhfCockpitFreqMode
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arc210VhfCockpitFreqMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
-                            else
+                            else if (ARC210VhfPresetSelected())
                             {
-                                if (_vhfAmCockpitMode == 0)
-                                {
-                                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                }
-                                else
-                                {*/
-                            SetPZ69DisplayBytesDefault(ref bytes, double.Parse(GetARC210VhfFrequencyAsString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfBigFrequencyStandby + _arc210VhfSmallFrequencyStandby / 1000, PZ69LCDPosition.LOWER_STBY_RIGHT);
-                            /*}
-                        }*/
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfSelectedPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfSelectedPresetChannelFrequency, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            }
+                            else if (ARC210VhfManualSelected())
+                            {
+
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(GetARC210VhfFrequencyAsString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfBigFrequencyStandby + _arc210VhfSmallFrequencyStandby / 1000, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            }
 
                             break;
                         }
@@ -2456,10 +2457,10 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentA10RadioMode.ARC210_VHF:
                                         {
-                                            /*if (_upperButtonPressed)
+                                            if (_upperButtonPressed)
                                             {
                                                 _upperButtonPressedAndDialRotated = true;
-                                                if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
+                                                if (_arc210VhfChannelModeClickSpeedDetector.ClickAndCheck())
                                                 {
                                                     DCSBIOS.Send(VHF_AM_MODE_INCREASE);
                                                 }
@@ -3839,6 +3840,14 @@ namespace NonVisuals.Radios
 
                 _arc210VhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_25KHZ_SEL");
 
+                _arc210VhfDcsbiosOutputCockpitFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_SEC_SW");
+
+                _arc210VhfDcsbiosOutputPresetChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_ACTIVE_CHANNEL");
+                DCSBIOSStringManager.AddListeningAddress(_arc210VhfDcsbiosOutputPresetChannel);
+
+                _arc210VhfDcsbiosOutputPresetChannelFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC210_FREQUENCY");
+                DCSBIOSStringManager.AddListeningAddress(_arc210VhfDcsbiosOutputPresetChannelFrequency);
+
                 /*_vhfAmDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQEMER");
                 _vhfAmDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_PRESET");
                 _vhfAmDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_MODE");*/
@@ -3876,7 +3885,7 @@ namespace NonVisuals.Radios
 
                 // TACAN
                 _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
-                DCSBIOSStringManager.AddListeningAddress(_tacanDcsbiosOutputFreqChannel); // _tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
+                DCSBIOSStringManager.AddListeningAddress(_tacanDcsbiosOutputFreqChannel);
 
                 StartListeningForHidPanelChanges();
 
@@ -4397,6 +4406,16 @@ namespace NonVisuals.Radios
         private bool VhfFmPresetSelected()
         {
             return _vhfFmCockpitFreqMode == 3;
+        }
+
+        private bool ARC210VhfPresetSelected()
+        {
+            return _arc210VhfCockpitFreqMode == 2;
+        }
+
+        private bool ARC210VhfManualSelected()
+        {
+            return _arc210VhfCockpitFreqMode == 3;
         }
 
         private bool UhfPresetSelected()
