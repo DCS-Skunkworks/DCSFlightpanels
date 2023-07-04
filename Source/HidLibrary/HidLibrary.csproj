@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net20;net35;netstandard2;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net35;netstandard2;net6.0-windows</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Version>3.2.49</Version>
     <Company>Ultraviolet Catastrophe</Company>
@@ -34,7 +34,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
     <PackageReference Include="NLog">
-      <Version>5.1.4</Version>
+      <Version>5.2.1</Version>
     </PackageReference>
   </ItemGroup>
 
@@ -45,6 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 

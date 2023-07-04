@@ -109,7 +109,7 @@
                    });
                     switch (radioKnob.RadioPanelPZ69Knob)
                     {
-                        case RadioPanelPZ69KnobsA10CII.UPPER_ARC210VHF:
+                        case RadioPanelPZ69KnobsA10CII.UPPER_ARC210_VHF:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -179,7 +179,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsA10CII.LOWER_ARC210VHF:
+                        case RadioPanelPZ69KnobsA10CII.LOWER_ARC210_VHF:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(

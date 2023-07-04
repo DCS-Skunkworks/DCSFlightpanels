@@ -7,7 +7,7 @@
     
     public enum RadioPanelPZ69KnobsA10CII
     {
-        UPPER_ARC210VHF,
+        UPPER_ARC210_VHF,
         UPPER_UHF,
         UPPER_VHFFM,
         UPPER_ILS,
@@ -19,7 +19,7 @@
         UPPER_LARGE_FREQ_WHEEL_INC,
         UPPER_LARGE_FREQ_WHEEL_DEC,
         UPPER_FREQ_SWITCH,
-        LOWER_ARC210VHF,
+        LOWER_ARC210_VHF,
         LOWER_UHF,
         LOWER_VHFFM,
         LOWER_ILS,
@@ -85,14 +85,14 @@
                 new RadioPanelKnobA10CII(1, 1 << 6, true, RadioPanelPZ69KnobsA10CII.UPPER_FREQ_SWITCH),
                 new RadioPanelKnobA10CII(1, 1 << 7, true, RadioPanelPZ69KnobsA10CII.LOWER_FREQ_SWITCH),
                 // Group 2
-                new RadioPanelKnobA10CII(0, 1 << 0, true, RadioPanelPZ69KnobsA10CII.UPPER_ARC210VHF), // UPPER COM 1
+                new RadioPanelKnobA10CII(0, 1 << 0, true, RadioPanelPZ69KnobsA10CII.UPPER_ARC210_VHF), // UPPER COM 1
                 new RadioPanelKnobA10CII(0, 1 << 1, true, RadioPanelPZ69KnobsA10CII.UPPER_UHF), // UPPER COM 2
                 new RadioPanelKnobA10CII(0, 1 << 2, true, RadioPanelPZ69KnobsA10CII.UPPER_VHFFM), // UPPER NAV 1
                 new RadioPanelKnobA10CII(0, 1 << 3, true, RadioPanelPZ69KnobsA10CII.UPPER_ILS), // UPPER NAV 2
                 new RadioPanelKnobA10CII(0, 1 << 4, true, RadioPanelPZ69KnobsA10CII.UPPER_TACAN), // UPPER ADF
                 new RadioPanelKnobA10CII(0, 1 << 5, true, RadioPanelPZ69KnobsA10CII.UPPER_DME), // UPPER DME
                 new RadioPanelKnobA10CII(0, 1 << 6, true, RadioPanelPZ69KnobsA10CII.UPPER_XPDR), // UPPER XPDR
-                new RadioPanelKnobA10CII(0, 1 << 7, true, RadioPanelPZ69KnobsA10CII.LOWER_ARC210VHF) // LOWER COM 1 
+                new RadioPanelKnobA10CII(0, 1 << 7, true, RadioPanelPZ69KnobsA10CII.LOWER_ARC210_VHF) // LOWER COM 1 
             };
 
             return result;
