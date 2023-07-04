@@ -55,7 +55,7 @@ namespace Tests.DcsBios
             {
                 Address = 99,
                 DCSBiosOutputType = DCSBiosOutputType.StringType,
-                SpecifiedValueString = originalValue, //should set DCSBiosOutputType before assign !
+                LastStringValue = originalValue, //should set DCSBiosOutputType before assign !
             };
 
             Assert.Equal(expectedResult, dcsOutput.StringValueHasChanged(99, valueToCompare));

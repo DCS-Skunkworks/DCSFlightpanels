@@ -77,10 +77,6 @@ namespace DCSFlightpanels.Windows
             {
                 TextBoxTriggerValue.Text = _dcsBiosOutput.SpecifiedValueUInt.ToString(CultureInfo.InvariantCulture);
             }
-            else
-            {
-                TextBoxTriggerValue.Text = _dcsBiosOutput.SpecifiedValueString;
-            }
         }
 
         private void ShowValues2()
