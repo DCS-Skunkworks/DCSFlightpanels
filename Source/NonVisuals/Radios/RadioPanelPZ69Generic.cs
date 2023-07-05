@@ -244,15 +244,12 @@ namespace NonVisuals.Radios
                         {
                             return;
                         }
-                        if (!dcsbiosBindingLCD.UseFormula && e.Address == dcsbiosBindingLCD.DCSBIOSOutputObject.Address)
+                        if (!dcsbiosBindingLCD.UseFormula && dcsbiosBindingLCD.DCSBIOSOutputObject.UIntValueHasChanged(e.Address, e.Data))
                         {
                             lock (_lcdDataVariablesLockObject)
                             {
-                                var tmp = dcsbiosBindingLCD.CurrentValue;
-                                dcsbiosBindingLCD.CurrentValue =
-                                    (int)dcsbiosBindingLCD.DCSBIOSOutputObject.GetUIntValue(e.Data);
-                                if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 &&
-                                    (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition ||
+                                dcsbiosBindingLCD.CurrentValue = (int)dcsbiosBindingLCD.DCSBIOSOutputObject.LastUIntValue;
+                                if ((dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition ||
                                      dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
                                 {
                                     // Update only if this LCD binding is in current use
@@ -266,11 +263,8 @@ namespace NonVisuals.Radios
                             {
                                 if (dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
                                 {
-                                    var tmp = dcsbiosBindingLCD.CurrentValue;
-                                    dcsbiosBindingLCD.CurrentValue =
-                                        (int)dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate(false);
-                                    if (tmp.CompareTo(dcsbiosBindingLCD.CurrentValue) != 0 &&
-                                        (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition ||
+                                    dcsbiosBindingLCD.CurrentValue = (int)dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate(false);
+                                    if ((dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition ||
                                          dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
                                     {
                                         // Update only if this LCD binding is in current use

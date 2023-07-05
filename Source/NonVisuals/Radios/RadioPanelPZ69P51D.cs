@@ -90,97 +90,72 @@ namespace NonVisuals.Radios
                 */
 
                 // VHF On Off
-                if (e.Address == _vhf1DcsbiosOutputPresetButton0.Address)
+                if (_vhf1DcsbiosOutputPresetButton0.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockVhf1DialObject1)
                     {
-                        var tmp = _vhf1CockpitPresetActiveButton;
-                        if (_vhf1DcsbiosOutputPresetButton0.GetUIntValue(e.Data) == 1)
+                        if (_vhf1DcsbiosOutputPresetButton0.LastUIntValue == 1)
                         {
                             // Radio is off
                             _vhf1CockpitPresetActiveButton = 0;
                         }
-
-                        if (tmp != _vhf1CockpitPresetActiveButton)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // VHF A
-                if (e.Address == _vhf1DcsbiosOutputPresetButton1.Address)
+                if (_vhf1DcsbiosOutputPresetButton1.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockVhf1DialObject1)
                     {
-                        var tmp = _vhf1CockpitPresetActiveButton;
-                        if (_vhf1DcsbiosOutputPresetButton1.GetUIntValue(e.Data) == 1)
+                        if (_vhf1DcsbiosOutputPresetButton1.LastUIntValue == 1)
                         {
                             // Radio is on A
                             _vhf1CockpitPresetActiveButton = 1;
                         }
-
-                        if (tmp != _vhf1CockpitPresetActiveButton)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // VHF B
-                if (e.Address == _vhf1DcsbiosOutputPresetButton2.Address)
+                if (_vhf1DcsbiosOutputPresetButton2.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockVhf1DialObject1)
                     {
-                        var tmp = _vhf1CockpitPresetActiveButton;
-                        if (_vhf1DcsbiosOutputPresetButton2.GetUIntValue(e.Data) == 1)
+                        if (_vhf1DcsbiosOutputPresetButton2.LastUIntValue == 1)
                         {
                             // Radio is on A
                             _vhf1CockpitPresetActiveButton = 2;
                         }
-
-                        if (tmp != _vhf1CockpitPresetActiveButton)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // VHF C
-                if (e.Address == _vhf1DcsbiosOutputPresetButton3.Address)
+                if (_vhf1DcsbiosOutputPresetButton3.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockVhf1DialObject1)
                     {
-                        var tmp = _vhf1CockpitPresetActiveButton;
-                        if (_vhf1DcsbiosOutputPresetButton3.GetUIntValue(e.Data) == 1)
+                        if (_vhf1DcsbiosOutputPresetButton3.LastUIntValue == 1)
                         {
                             // Radio is on A
                             _vhf1CockpitPresetActiveButton = 3;
                         }
-
-                        if (tmp != _vhf1CockpitPresetActiveButton)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // VHF D
-                if (e.Address == _vhf1DcsbiosOutputPresetButton4.Address)
+                if (_vhf1DcsbiosOutputPresetButton4.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockVhf1DialObject1)
                     {
-                        var tmp = _vhf1CockpitPresetActiveButton;
-                        if (_vhf1DcsbiosOutputPresetButton4.GetUIntValue(e.Data) == 1)
+                        if (_vhf1DcsbiosOutputPresetButton4.LastUIntValue == 1)
                         {
                             // Radio is on A
                             _vhf1CockpitPresetActiveButton = 4;
                         }
-
-                        if (tmp != _vhf1CockpitPresetActiveButton)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
@@ -657,7 +632,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

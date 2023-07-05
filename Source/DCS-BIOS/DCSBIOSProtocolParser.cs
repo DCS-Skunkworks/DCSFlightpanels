@@ -217,10 +217,6 @@ namespace DCS_BIOS
                         
                         if (IsBroadcastable(_address))
                         {
-                            if (_address == 5352)
-                            {
-                                Debug.Print("SENDING FROM DCS-BIOS address & value --> " + _address + "  " + _data);
-                            }
                             try
                             {
                                 BIOSEventHandler.DCSBIOSDataAvailable(this, _address, _data);

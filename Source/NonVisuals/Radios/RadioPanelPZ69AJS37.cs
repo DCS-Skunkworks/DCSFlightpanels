@@ -18,7 +18,7 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-    
+
     /// <summary>
     /// Pre-programmed radio panel for the AJS37.
     /// </summary>
@@ -127,7 +127,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
 
             ShowFrequenciesOnPanel();
@@ -148,44 +148,32 @@ namespace NonVisuals.Radios
                 */
 
                 // TILS Channel Selector
-                if (e.Address == _tilsChannelSelectorDcsbiosOutput.Address)
+                if (_tilsChannelSelectorDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockTilsChannelSelectorDialObject1)
                     {
-                        var tmp = _tilsChannelCockpitValue;
-                        _tilsChannelCockpitValue = _tilsChannelSelectorDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _tilsChannelCockpitValue)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _tilsChannelCockpitValue = _tilsChannelSelectorDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // TILS Channel Mode
-                if (e.Address == _tilsChannelLayerSelectorDcsbiosOutput.Address)
+                if (_tilsChannelLayerSelectorDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockTilsChannelLayerSelectorObject2)
                     {
-                        var tmp = _tilsChannelLayerSelectorCockpitValue;
-                        _tilsChannelLayerSelectorCockpitValue = _tilsChannelLayerSelectorDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _tilsChannelLayerSelectorCockpitValue)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _tilsChannelLayerSelectorCockpitValue = _tilsChannelLayerSelectorDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // Master Mode Selector
-                if (e.Address == _masterModeSelectorDcsbiosOutput.Address)
+                if (_masterModeSelectorDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockMasterModeSelectorObject)
                     {
-                        var tmp = _masterModeSelectorCockpitValue;
-                        _masterModeSelectorCockpitValue = _masterModeSelectorDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _masterModeSelectorCockpitValue)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _masterModeSelectorCockpitValue = _masterModeSelectorDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
@@ -195,7 +183,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -279,7 +267,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -429,7 +417,7 @@ namespace NonVisuals.Radios
                                     break;
                                 }
                         }
-                        
+
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
                             PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AJS37, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
@@ -440,7 +428,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -723,7 +711,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -869,7 +857,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
@@ -907,7 +895,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

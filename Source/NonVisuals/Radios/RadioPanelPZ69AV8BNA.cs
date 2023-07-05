@@ -18,7 +18,7 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-    
+
     /// <summary>
     /// Pre-programmed radio panel for the AV8BNA. 
     /// </summary>
@@ -33,7 +33,7 @@ namespace NonVisuals.Radios
 
         private CurrentAV8BNARadioMode _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM1;
         private CurrentAV8BNARadioMode _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM1;
-        
+
         /* COMM1 V/UHF AN/ARC-210 */
         // Large dial xxx-xxx [step of 1]
         // Small dial 0.00-0.97 [step of x.x[0 2 5 7]
@@ -114,35 +114,27 @@ namespace NonVisuals.Radios
         {
             try
             {
-                if (e.Address == _comm1DcsbiosOutputFreq.Address)
+                if (_comm1DcsbiosOutputFreq.StringValueHasChanged(e.Address, e.StringData))
                 {
                     lock (_lockCOMM1DialsObject)
                     {
-                        var tmp = _comm1Frequency;
                         _comm1Frequency = e.StringData;
-                        if (tmp != _comm1Frequency)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
-                if (e.Address == _comm2DcsbiosOutputFreq.Address)
+                if (_comm2DcsbiosOutputFreq.StringValueHasChanged(e.Address, e.StringData))
                 {
                     lock (_lockCOMM2DialsObject)
                     {
-                        var tmp = _comm2Frequency;
                         _comm2Frequency = e.StringData;
-                        if (tmp != _comm2Frequency)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
         }
 
@@ -296,7 +288,7 @@ namespace NonVisuals.Radios
             }
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-        
+
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             if (SkipCurrentFrequencyChange())
@@ -696,7 +688,7 @@ namespace NonVisuals.Radios
                 SetLastException(ex);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

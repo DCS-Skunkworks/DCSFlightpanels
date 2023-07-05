@@ -18,7 +18,7 @@ namespace NonVisuals.Radios
     using HID;
 
 
-    
+
     /// <summary>
     /// Pre-programmed radio panel for the MiG21BIS. 
     /// </summary>
@@ -121,77 +121,52 @@ namespace NonVisuals.Radios
              */
 
             // Radio
-            if (e.Address == _radioDcsbiosOutputFreqSelectorPosition.Address)
+            if (_radioDcsbiosOutputFreqSelectorPosition.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockRadioFreqSelectorPositionObject)
                 {
-                    var tmp = _radioFreqSelectorPositionCockpit;
-                    if (tmp != _radioFreqSelectorPositionCockpit)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        _radioFreqSelectorPositionCockpit = _radioDcsbiosOutputFreqSelectorPosition.GetUIntValue(e.Data);
-
-                    }
+                    _radioFreqSelectorPositionCockpit = _radioDcsbiosOutputFreqSelectorPosition.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
             // RSBN Nav
-            if (e.Address == _rsbnNavChannelCockpitOutput.Address)
+            if (_rsbnNavChannelCockpitOutput.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockRsbnNavChannelObject)
                 {
-                    var tmp = _rsbnNavChannelCockpit;
-
-                    _rsbnNavChannelCockpit = _rsbnNavChannelCockpitOutput.GetUIntValue(e.Data);
-                    if (tmp != _rsbnNavChannelCockpit)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                    }
+                    _rsbnNavChannelCockpit = _rsbnNavChannelCockpitOutput.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
             // RSBN ILS
-            if (e.Address == _rsbnILSChannelCockpitOutput.Address)
+            if (_rsbnILSChannelCockpitOutput.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockRsbnilsChannelObject)
                 {
-                    var tmp = _rsbnILSChannelCockpit;
-
-                    _rsbnILSChannelCockpit = _rsbnILSChannelCockpitOutput.GetUIntValue(e.Data);
-                    if (tmp != _rsbnILSChannelCockpit)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                    }
+                    _rsbnILSChannelCockpit = _rsbnILSChannelCockpitOutput.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
             // ARC Sector
-            if (e.Address == _arcSectorCockpitOutput.Address)
+            if (_arcSectorCockpitOutput.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockARCSectorObject)
                 {
-                    var tmp = _arcSectorCockpit;
-
-                    _arcSectorCockpit = _arcSectorCockpitOutput.GetUIntValue(e.Data);
-                    if (tmp != _arcSectorCockpit)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                    }
+                    _arcSectorCockpit = _arcSectorCockpitOutput.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
             // ARC Preset
-            if (e.Address == _arcPresetChannelCockpitOutput.Address)
+            if (_arcPresetChannelCockpitOutput.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockARCPresetChannelObject)
                 {
-                    var tmp = _arcPresetChannelCockpit;
-
-                    _arcPresetChannelCockpit = _arcPresetChannelCockpitOutput.GetUIntValue(e.Data) + 1;
-                    if (tmp != _arcPresetChannelCockpit)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                    }
+                    _arcPresetChannelCockpit = _arcPresetChannelCockpitOutput.LastUIntValue + 1;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -798,8 +773,8 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
-        public override void ClearSettings(bool setIsDirty = false) {}
+
+        public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {

@@ -22,7 +22,7 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-    
+
     /// <summary>
     /// Pre-programmed radio panel for the F/A-18C. 
     /// </summary>
@@ -57,7 +57,7 @@ namespace NonVisuals.Radios
         private volatile uint _comm1CockpitFreq = 12400;
         private volatile uint _comm1CockpitChannel = 1; // channel number 1 to 24
         private long _comm1DialWaitingForFeedback;
-       
+
         /*FA-18C COMM2 radio*/
         private const string COMM2_CHANNEL_INC = "UFC_COMM2_CHANNEL_SELECT INC\n";
         private const string COMM2_CHANNEL_DEC = "UFC_COMM2_CHANNEL_SELECT DEC\n";
@@ -115,7 +115,7 @@ namespace NonVisuals.Radios
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -131,69 +131,49 @@ namespace NonVisuals.Radios
              */
 
             // COMM 1
-            if (e.Address == _comm1DcsbiosOutputFreq.Address)
+            if (_comm1DcsbiosOutputFreq.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockCOMM1DialsObject)
                 {
-                    var tmp = _comm1CockpitFreq;
-                    _comm1CockpitFreq = _comm1DcsbiosOutputFreq.GetUIntValue(e.Data);
-                    if (tmp != _comm1CockpitFreq)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _comm1DialWaitingForFeedback, 0);
-                    }
+                    _comm1CockpitFreq = _comm1DcsbiosOutputFreq.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _comm1DialWaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _comm1DcsbiosOutputChannel.Address)
+            if (_comm1DcsbiosOutputChannel.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _comm1CockpitChannel;
-                _comm1CockpitChannel = _comm1DcsbiosOutputChannel.GetUIntValue(e.Data);
-                if (tmp != _comm1CockpitChannel)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _comm1CockpitChannel = _comm1DcsbiosOutputChannel.LastUIntValue;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
             // COMM2
-            if (e.Address == _comm2DcsbiosOutputFreq.Address)
+            if (_comm2DcsbiosOutputFreq.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockComm2DialObject)
                 {
-                    var tmp = _comm2CockpitFreq;
-                    _comm2CockpitFreq = _comm2DcsbiosOutputFreq.GetUIntValue(e.Data);
-                    if (tmp != _comm2CockpitFreq)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _comm2DialWaitingForFeedback, 0);
-                    }
+                    _comm2CockpitFreq = _comm2DcsbiosOutputFreq.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _comm2DialWaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _comm2DcsbiosOutputChannel.Address)
+            if (_comm2DcsbiosOutputChannel.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _comm2CockpitChannel;
-                _comm2CockpitChannel = _comm2DcsbiosOutputChannel.GetUIntValue(e.Data);
-                if (tmp != _comm2CockpitChannel)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _comm2CockpitChannel = _comm2DcsbiosOutputChannel.LastUIntValue;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
             // VHF FM
 
             // ILS
-            if (e.Address == _ilsDcsbiosOutputChannel.Address)
+            if (_ilsDcsbiosOutputChannel.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockIlsDialsObject)
                 {
-                    var tmp = _ilsCockpitChannel;
-                    _ilsCockpitChannel = _ilsDcsbiosOutputChannel.GetUIntValue(e.Data) + 1;
-                    if (tmp != _ilsCockpitChannel)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 0);
-                    }
+                    _ilsCockpitChannel = _ilsDcsbiosOutputChannel.LastUIntValue + 1;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 0);
                 }
             }
 
@@ -306,7 +286,7 @@ namespace NonVisuals.Radios
                     }
             }
         }
-        
+
         private void SendILSToDCSBIOS()
         {
             if (IlsNowSyncing())
@@ -934,7 +914,7 @@ namespace NonVisuals.Radios
         private void CheckFrequenciesForValidity()
         {
             // Crude fix if any freqs are outside the valid boundaries
-            
+
             // VHF FM
             // 30.000 - 76.000Mhz
 
@@ -1256,7 +1236,7 @@ namespace NonVisuals.Radios
         {
             SaitekPanelKnobs = RadioPanelKnobFA18C.GetRadioPanelKnobs();
         }
-        
+
         private void SaveCockpitFrequencyIls()
         {
             lock (_lockIlsDialsObject)
@@ -1269,7 +1249,7 @@ namespace NonVisuals.Radios
         {
             _ilsChannelStandby = _ilsSavedCockpitChannel;
         }
-        
+
         private bool IlsNowSyncing()
         {
             return Interlocked.Read(ref _ilsThreadNowSynching) > 0;

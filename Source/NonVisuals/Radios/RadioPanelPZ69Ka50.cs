@@ -203,147 +203,106 @@ namespace NonVisuals.Radios
                  */
 
                 // VHF1 Preset Channel Dial
-                if (e.Address == _vhf1DcsbiosOutputPresetDial.Address)
+                if (_vhf1DcsbiosOutputPresetDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockVhf1DialObject1)
                     {
-                        var tmp = _vhf1CockpitPresetDialPos;
-                        _vhf1CockpitPresetDialPos = _vhf1DcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        if (tmp != _vhf1CockpitPresetDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _vhf1CockpitPresetDialPos = _vhf1DcsbiosOutputPresetDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // VHF2 Dial 1 R-800L1
-                if (e.Address == _r800L1DcsbiosOutputFreqDial1.Address)
+                if (_r800L1DcsbiosOutputFreqDial1.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockR800L1DialsObject1)
                     {
-                        var tmp = _r800L1CockpitFreq1DialPos;
-                        _r800L1CockpitFreq1DialPos = _r800L1DcsbiosOutputFreqDial1.GetUIntValue(e.Data);
-                        if (tmp != _r800L1CockpitFreq1DialPos)
-                        {
-                            // Debug.WriteLine("_r800l1CockpitFreq1DialPos was " + tmp + ", is now " + _r800l1CockpitFreq1DialPos);
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                            Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 0);
-                        }
+                        _r800L1CockpitFreq1DialPos = _r800L1DcsbiosOutputFreqDial1.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                        Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 0);
                     }
                 }
 
                 // VHF2 Dial 2 R-800L1
-                if (e.Address == _r800L1DcsbiosOutputFreqDial2.Address)
+                if (_r800L1DcsbiosOutputFreqDial2.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockR800L1DialsObject2)
                     {
-                        var tmp = _r800L1CockpitFreq2DialPos;
-                        _r800L1CockpitFreq2DialPos = _r800L1DcsbiosOutputFreqDial2.GetUIntValue(e.Data);
-                        if (tmp != _r800L1CockpitFreq2DialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                            Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 0);
-                        }
+                        _r800L1CockpitFreq2DialPos = _r800L1DcsbiosOutputFreqDial2.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                        Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 0);
                     }
                 }
 
                 // VHF2 Dial 3 R-800L1
-                if (e.Address == _r800L1DcsbiosOutputFreqDial3.Address)
+                if (_r800L1DcsbiosOutputFreqDial3.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockR800L1DialsObject3)
                     {
-                        var tmp = _r800L1CockpitFreq3DialPos;
-                        _r800L1CockpitFreq3DialPos = _r800L1DcsbiosOutputFreqDial3.GetUIntValue(e.Data);
-                        if (tmp != _r800L1CockpitFreq3DialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                            Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 0);
-                        }
+                        _r800L1CockpitFreq3DialPos = _r800L1DcsbiosOutputFreqDial3.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                        Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 0);
                     }
                 }
 
                 // VHF2 Dial 4 R-800L1
-                if (e.Address == _r800L1DcsbiosOutputFreqDial4.Address)
+                if (_r800L1DcsbiosOutputFreqDial4.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockR800L1DialsObject4)
                     {
-                        var tmp = _r800L1CockpitFreq4DialPos;
-                        _r800L1CockpitFreq4DialPos = _r800L1DcsbiosOutputFreqDial4.GetUIntValue(e.Data);
-                        if (tmp != _r800L1CockpitFreq4DialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                            Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 0);
-                        }
+                        _r800L1CockpitFreq4DialPos = _r800L1DcsbiosOutputFreqDial4.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                        Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 0);
                     }
                 }
 
                 // NAV2 Datalink Master Mode
-                if (e.Address == _datalinkMasterModeDcsbiosOutput.Address)
+                if (_datalinkMasterModeDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockDatalinkMasterModeObject)
                     {
-                        var tmp = _datalinkMasterModeCockpitPos;
-                        _datalinkMasterModeCockpitPos = _datalinkMasterModeDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _datalinkMasterModeCockpitPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _datalinkMasterModeCockpitPos = _datalinkMasterModeDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // NAV2 Datalink Self ID
-                if (e.Address == _datalinkSelfIdDcsbiosOutput.Address)
+                if (_datalinkSelfIdDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockDatalinkSelfIdObject)
                     {
-                        var tmp = _datalinkSelfIdCockpitPos;
-                        _datalinkSelfIdCockpitPos = _datalinkSelfIdDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _datalinkSelfIdCockpitPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _datalinkSelfIdCockpitPos = _datalinkSelfIdDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // NAV2 Datalink Power ON/OFF
-                if (e.Address == _datalinkPowerOnOffDcsbiosOutput.Address)
+                if (_datalinkPowerOnOffDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockDatalinkPowerOnOffObject)
                     {
-                        var tmp = _datalinkPowerOnOffCockpitPos;
-                        _datalinkPowerOnOffCockpitPos = _datalinkPowerOnOffDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _datalinkPowerOnOffCockpitPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _datalinkPowerOnOffCockpitPos = _datalinkPowerOnOffDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // ADF Preset Dial
-                if (e.Address == _adfDcsbiosOutputPresetDial.Address)
+                if (_adfDcsbiosOutputPresetDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockADFDialObject1)
                     {
-                        var tmp = _adfCockpitPresetDialPos;
-                        _adfCockpitPresetDialPos = _adfDcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        if (tmp != _adfCockpitPresetDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _adfCockpitPresetDialPos = _adfDcsbiosOutputPresetDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // ADF Mode
-                if (e.Address == _adfModeDcsbiosOutput.Address)
+                if (_adfModeDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockADFModeDialObject)
                     {
-                        var tmp = _adfModeCockpitPos;
-                        _adfModeCockpitPos = _adfModeDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _adfModeCockpitPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _adfModeCockpitPos = _adfModeDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
@@ -619,7 +578,7 @@ namespace NonVisuals.Radios
                                     0 => 0,
                                     2 => 0,
                                     5 => 2,
-                                    7 => 2 
+                                    7 => 2
                                 };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 
@@ -1908,7 +1867,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false)
         {
         }

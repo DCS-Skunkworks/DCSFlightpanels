@@ -113,6 +113,7 @@ namespace DCS_BIOS
 
         /// <summary>
         /// Returns true if address was found in formula
+        /// and that the value has changed.
         /// If true do a subsequent call to Evaluate() to get new value
         /// </summary>
         /// <returns></returns>

@@ -142,114 +142,82 @@ namespace NonVisuals.Radios
                  */
 
                 // HF Radio Off Button
-                if (e.Address == _hfRadioOffDcsbiosOutput.Address)
+                if (_hfRadioOffDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
-                        var tmp = _hfRadioOffCockpitButton;
-                        _hfRadioOffCockpitButton = _hfRadioOffDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _hfRadioOffCockpitButton)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _hfRadioOffCockpitButton = _hfRadioOffDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // HF Radio Channel A Button
-                if (e.Address == _hfRadioChannelAPresetDcsbiosOutput.Address)
+                if (_hfRadioChannelAPresetDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
-                        var tmp = _hfRadioChannelACockpitButton;
-                        _hfRadioChannelACockpitButton = _hfRadioChannelAPresetDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _hfRadioChannelACockpitButton)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _hfRadioChannelACockpitButton = _hfRadioChannelAPresetDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // HF Radio Channel B Button
-                if (e.Address == _hfRadioChannelBPresetDcsbiosOutput.Address)
+                if (_hfRadioChannelBPresetDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
-                        var tmp = _hfRadioChannelBCockpitButton;
-                        _hfRadioChannelBCockpitButton = _hfRadioChannelBPresetDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _hfRadioChannelBCockpitButton)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _hfRadioChannelBCockpitButton = _hfRadioChannelBPresetDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // HF Radio Channel C Button
-                if (e.Address == _hfRadioChannelCPresetDcsbiosOutput.Address)
+                if (_hfRadioChannelCPresetDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
-                        var tmp = _hfRadioChannelCCockpitButton;
-                        _hfRadioChannelCCockpitButton = _hfRadioChannelCPresetDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _hfRadioChannelCCockpitButton)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _hfRadioChannelCCockpitButton = _hfRadioChannelCPresetDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // HF Radio Channel B Button
-                if (e.Address == _hfRadioChannelDPresetDcsbiosOutput.Address)
+                if (_hfRadioChannelDPresetDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
-                        var tmp = _hfRadioChannelDCockpitButton;
-                        _hfRadioChannelDCockpitButton = _hfRadioChannelDPresetDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _hfRadioChannelDCockpitButton)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _hfRadioChannelDCockpitButton = _hfRadioChannelDPresetDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // HF Radio Mode
-                if (e.Address == _hfRadioModeDialPresetDcsbiosOutput.Address)
+                if (_hfRadioModeDialPresetDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockHFRadioModeDialObject1)
                     {
-                        var tmp = _hfRadioModeCockpitDialPosition;
-                        _hfRadioModeCockpitDialPosition = _hfRadioModeDialPresetDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _hfRadioModeCockpitDialPosition)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _hfRadioModeCockpitDialPosition = _hfRadioModeDialPresetDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // IFF B
-                if (e.Address == _iffBiffDcsbiosOutputDial.Address)
+                if (_iffBiffDcsbiosOutputDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockIFFDialObject1)
                     {
-                        var tmp = _iffBiffCockpitDialPos;
-                        _iffBiffCockpitDialPos = _iffBiffDcsbiosOutputDial.GetUIntValue(e.Data);
-                        if (tmp != _iffBiffCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _iffBiffCockpitDialPos = _iffBiffDcsbiosOutputDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // HF Radio Channel B Button
-                if (e.Address == _iffDiffDcsbiosOutputDial.Address)
+                if (_iffDiffDcsbiosOutputDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockIFFDialObject1)
                     {
-                        var tmp = _iffDiffCockpitDialPos;
-                        _iffDiffCockpitDialPos = _iffDiffDcsbiosOutputDial.GetUIntValue(e.Data);
-                        if (tmp != _iffDiffCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _iffDiffCockpitDialPos = _iffDiffDcsbiosOutputDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
@@ -851,7 +819,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false)
         {
         }
@@ -865,7 +833,7 @@ namespace NonVisuals.Radios
         {
             SaitekPanelKnobs = RadioPanelKnobSpitfireLFMkIX.GetRadioPanelKnobs();
         }
-        
+
         private void SetUpperRadioMode(CurrentSpitfireLFMkIXRadioMode currentSpitfireLFMkIXRadioMode)
         {
             try
