@@ -18,7 +18,7 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-    
+
     /// <summary>
     /// Pre-programmed radio panel for the F-86F. 
     /// </summary>
@@ -133,19 +133,11 @@ namespace NonVisuals.Radios
         {
             try
             {
-                /*
-                if (string.IsNullOrWhiteSpace(e.StringData))
-                {
-                    Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
-                    return;
-                }*/
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
-
-            // ShowFrequenciesOnPanel();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -155,94 +147,70 @@ namespace NonVisuals.Radios
                 UpdateCounter(e.Address, e.Data);
 
                 /*
-                                 * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
-                                 * Once a dial has been deemed to be "off" position and needs to be changed
-                                 * a change command is sent to DCS-BIOS.
-                                 * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
-                                 * reset. Reading the dial's position with no change in value will not reset.
-                                 */
+                 * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
+                 * Once a dial has been deemed to be "off" position and needs to be changed
+                 * a change command is sent to DCS-BIOS.
+                 * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
+                 * reset. Reading the dial's position with no change in value will not reset.
+                 */
 
                 // ARC-27 Preset Channel Dial
-                if (e.Address == _arc27PresetDcsbiosOutputPresetDial.Address)
+                if (_arc27PresetDcsbiosOutputPresetDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockARC27PresetDialObject1)
                     {
-                        var tmp = _arc27PresetCockpitDialPos;
-                        _arc27PresetCockpitDialPos = _arc27PresetDcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        if (tmp != _arc27PresetCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _arc27PresetCockpitDialPos = _arc27PresetDcsbiosOutputPresetDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // ARC-27 Mode Dial
-                if (e.Address == _arc27ModeDcsbiosOutputDial.Address)
+                if (_arc27ModeDcsbiosOutputDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockARC27ModeDialObject1)
                     {
-                        var tmp = _arc27ModeCockpitDialPos;
-                        _arc27ModeCockpitDialPos = _arc27ModeDcsbiosOutputDial.GetUIntValue(e.Data);
-                        if (tmp != _arc27ModeCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _arc27ModeCockpitDialPos = _arc27ModeDcsbiosOutputDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // ARN-6 Frequency
-                if (e.Address == _arn6ManualDcsbiosOutputCockpitFrequency.Address)
+                if (_arn6ManualDcsbiosOutputCockpitFrequency.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockARN6FrequencyObject)
                     {
-                        var tmp = _arn6CockpitFrequency;
-                        _arn6CockpitFrequency = _arn6ManualDcsbiosOutputCockpitFrequency.GetUIntValue(e.Data);
-                        if (tmp != _arn6CockpitFrequency)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _arn6CockpitFrequency = _arn6ManualDcsbiosOutputCockpitFrequency.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // ARN-6 Band
-                if (e.Address == _arn6BandDcsbiosOutputCockpit.Address)
+                if (_arn6BandDcsbiosOutputCockpit.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockARN6BandObject)
                     {
-                        var tmp = _arn6CockpitBand;
-                        _arn6CockpitBand = _arn6BandDcsbiosOutputCockpit.GetUIntValue(e.Data);
-                        if (tmp != _arn6CockpitBand)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _arn6CockpitBand = _arn6BandDcsbiosOutputCockpit.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // ARN-6 Modes
-                if (e.Address == _arn6ModeDcsbiosOutputPresetDial.Address)
+                if (_arn6ModeDcsbiosOutputPresetDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockARN6ModeObject)
                     {
-                        var tmp = _arn6ModeCockpitDialPos;
-                        _arn6ModeCockpitDialPos = _arn6ModeDcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        if (tmp != _arn6ModeCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _arn6ModeCockpitDialPos = _arn6ModeDcsbiosOutputPresetDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // APX-6 Modes
-                if (e.Address == _apx6ModeDcsbiosOutputCockpit.Address)
+                if (_apx6ModeDcsbiosOutputCockpit.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockAPX6ModeObject)
                     {
-                        var tmp = _apx6ModeCockpitDialPos;
-                        _apx6ModeCockpitDialPos = _apx6ModeDcsbiosOutputCockpit.GetUIntValue(e.Data);
-                        if (tmp != _apx6ModeCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _apx6ModeCockpitDialPos = _apx6ModeDcsbiosOutputCockpit.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
@@ -252,7 +220,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -345,7 +313,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -526,7 +494,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -921,7 +889,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1143,7 +1111,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
@@ -1183,7 +1151,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

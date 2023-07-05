@@ -200,7 +200,7 @@ namespace NonVisuals.Radios
             // Call base class implementation.
             base.Dispose(disposing);
         }
-       
+
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -215,133 +215,95 @@ namespace NonVisuals.Radios
              */
 
             // VHF AM
-            if (e.Address == _vhfAmDcsbiosOutputReading10S.Address)
+            if (_vhfAmDcsbiosOutputReading10S.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfAm10SObject)
                 {
                     // When dialing this radio a lot of intermediate (incorrect) raw values are sent. Only trap
                     // know raw values as in the member array _dialPositions
-                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading10S.GetUIntValue(e.Data)))
+                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading10S.LastUIntValue))
                     {
-                        var tmp = _vhfAmCockpit10SFrequencyValue;
-                        _vhfAmCockpit10SFrequencyValue = _vhfAmDcsbiosOutputReading10S.GetUIntValue(e.Data);
-                        if (tmp != _vhfAmCockpit10SFrequencyValue)
-                        {
-                            // Debug.Print("RECEIVE _vhfAmCockpit10sFrequencyValue " + _vhfAmCockpit10sFrequencyValue);
-                            Interlocked.Exchange(ref _vhfAmValue1WaitingForFeedback, 0);
-                        }
+                        _vhfAmCockpit10SFrequencyValue = _vhfAmDcsbiosOutputReading10S.LastUIntValue;
+                        Interlocked.Exchange(ref _vhfAmValue1WaitingForFeedback, 0);
                     }
                 }
             }
 
-            if (e.Address == _vhfAmDcsbiosOutputReading1S.Address)
+            if (_vhfAmDcsbiosOutputReading1S.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfAm1SObject)
                 {
-                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading1S.GetUIntValue(e.Data)))
+                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading1S.LastUIntValue))
                     {
-                        var tmp = _vhfAmCockpit1SFrequencyValue;
-                        _vhfAmCockpit1SFrequencyValue = _vhfAmDcsbiosOutputReading1S.GetUIntValue(e.Data);
-                        if (tmp != _vhfAmCockpit1SFrequencyValue)
-                        {
-                            // Debug.Print("RECEIVE _vhfAmCockpit1sFrequencyValue " + _vhfAmCockpit1sFrequencyValue);
-                            Interlocked.Exchange(ref _vhfAmValue2WaitingForFeedback, 0);
-                        }
+                        _vhfAmCockpit1SFrequencyValue = _vhfAmDcsbiosOutputReading1S.LastUIntValue;
+                        Interlocked.Exchange(ref _vhfAmValue2WaitingForFeedback, 0);
                     }
                 }
             }
 
-            if (e.Address == _vhfAmDcsbiosOutputReadingDecimal10S.Address)
+            if (_vhfAmDcsbiosOutputReadingDecimal10S.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVhfAmDecimal10SObject)
                 {
-                    // Debug.Print("RECEIVE _vhfAmCockpitDecimal10sFrequencyValue " + _vhfAmCockpitDecimal10sFrequencyValue);
-                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReadingDecimal10S.GetUIntValue(e.Data)))
+                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReadingDecimal10S.LastUIntValue))
                     {
-                        var tmp = _vhfAmCockpitDecimal10SFrequencyValue;
-                        _vhfAmCockpitDecimal10SFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal10S.GetUIntValue(e.Data);
-                        if (tmp != _vhfAmCockpitDecimal10SFrequencyValue)
-                        {
-                            // Debug.Print("RECEIVE _vhfAmCockpitDecimal10sFrequencyValue " + _vhfAmCockpitDecimal10sFrequencyValue);
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                            Interlocked.Exchange(ref _vhfAmValue3WaitingForFeedback, 0);
-                        }
+                        _vhfAmCockpitDecimal10SFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal10S.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                        Interlocked.Exchange(ref _vhfAmValue3WaitingForFeedback, 0);
                     }
                 }
             }
 
-            if (e.Address == _vhfAmDcsbiosOutputReadingDecimal100S.Address)
+            if (_vhfAmDcsbiosOutputReadingDecimal100S.UIntValueHasChanged(e.Address, e.Data))
             {
-                // Debug.Print("RECEIVE _vhfAmCockpitDecimal100sFrequencyValue (" + _vhfAmDcsbiosOutputReadingDecimal100s.Address + ") " + _vhfAmCockpitDecimal100sFrequencyValue);
                 lock (_lockVhfAmDecimal100SObject)
                 {
-                    if (CorrectPositionDecimal100S(_vhfAmDcsbiosOutputReadingDecimal100S.GetUIntValue(e.Data)))
+                    if (CorrectPositionDecimal100S(_vhfAmDcsbiosOutputReadingDecimal100S.LastUIntValue))
                     {
-                        var tmp = _vhfAmCockpitDecimal100SFrequencyValue;
-                        _vhfAmCockpitDecimal100SFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal100S.GetUIntValue(e.Data);
-                        if (tmp != _vhfAmCockpitDecimal100SFrequencyValue)
-                        {
-                            // Debug.Print("RECEIVE _vhfAmCockpitDecimal100sFrequencyValue " + _vhfAmCockpitDecimal100sFrequencyValue);
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                            Interlocked.Exchange(ref _vhfAmValue4WaitingForFeedback, 0);
-                        }
+                        _vhfAmCockpitDecimal100SFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal100S.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                        Interlocked.Exchange(ref _vhfAmValue4WaitingForFeedback, 0);
                     }
                 }
             }
 
             // VHF FM PR4G
-            if (e.Address == _fmRadioPresetDcsbiosOutput.Address)
+            if (_fmRadioPresetDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockFmRadioPresetObject)
                 {
-                    var tmp = _fmRadioPresetCockpitDialPos;
-                    _fmRadioPresetCockpitDialPos = _fmRadioPresetDcsbiosOutput.GetUIntValue(e.Data);
-                    if (tmp != _fmRadioPresetCockpitDialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                    }
+                    _fmRadioPresetCockpitDialPos = _fmRadioPresetDcsbiosOutput.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
             // ADF
-            if (e.Address == _adfSwitchUnitDcsbiosOutput.Address)
+            if (_adfSwitchUnitDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockAdfUnitObject)
                 {
-                    var tmp = _adfCockpitSelectedUnitValue;
-                    _adfCockpitSelectedUnitValue = _adfSwitchUnitDcsbiosOutput.GetUIntValue(e.Data);
-                    if (tmp != _adfCockpitSelectedUnitValue)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                    }
+                    _adfCockpitSelectedUnitValue = _adfSwitchUnitDcsbiosOutput.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
             // NADIR Mode
-            if (e.Address == _nadirModeDcsbiosOutput.Address)
+            if (_nadirModeDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockNADIRUnitObject)
                 {
-                    var tmp = _nadirModeCockpitValue;
-                    _nadirModeCockpitValue = _nadirModeDcsbiosOutput.GetUIntValue(e.Data);
-                    if (tmp != _nadirModeCockpitValue)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                    }
+                    _nadirModeCockpitValue = _nadirModeDcsbiosOutput.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
             // NADIR Doppler Mode
-            if (e.Address == _nadirDopplerModeDcsbiosOutput.Address)
+            if (_nadirDopplerModeDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockNADIRUnitObject)
                 {
-                    var tmp = _nadirDopplerModeCockpitValue;
-                    _nadirDopplerModeCockpitValue = _nadirDopplerModeDcsbiosOutput.GetUIntValue(e.Data);
-                    if (tmp != _nadirDopplerModeCockpitValue)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                    }
+                    _nadirDopplerModeCockpitValue = _nadirDopplerModeDcsbiosOutput.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
                 }
             }
 
@@ -1785,7 +1747,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false)
         {
         }
@@ -1866,7 +1828,7 @@ namespace NonVisuals.Radios
                             16383 => "25",
                             32767 => "50",
                             49151 => "75",
-                        };                        
+                        };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
             }

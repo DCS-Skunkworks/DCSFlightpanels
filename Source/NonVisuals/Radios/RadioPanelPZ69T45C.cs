@@ -21,7 +21,7 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-    
+
     /// <summary>
     /// Pre-programmed radio panel for the T-45C. 
     /// </summary>
@@ -243,143 +243,103 @@ namespace NonVisuals.Radios
              * reset. Reading the dial's position with no change in value will not reset.
              */
             // COMM 1 VHF UHF
-            if (e.Address == _vuhf1DcsbiosOutputBigFrequencyNumber.Address)
+            if (_vuhf1DcsbiosOutputBigFrequencyNumber.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVuhf1BigFreqObject)
                 {
-                    var tmp = _vuhf1CockpitBigFrequency;
-                    _vuhf1CockpitBigFrequency = _vuhf1DcsbiosOutputBigFrequencyNumber.GetUIntValue(e.Data);
-                    if (tmp != _vuhf1CockpitBigFrequency)
-                    {
-                        var asString = _vuhf1CockpitBigFrequency.ToString().PadLeft(3, '0');
-                        _vuhf1CockpitDial1Frequency = uint.Parse(asString.Substring(0, 2));
-                        _vuhf1CockpitDial2Frequency = uint.Parse(asString.Substring(2, 1));
-                        Interlocked.Exchange(ref _vuhf1Dial1WaitingForFeedback, 0);
-                        Interlocked.Exchange(ref _vuhf1Dial2WaitingForFeedback, 0);
-                        Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                    }
+                    _vuhf1CockpitBigFrequency = _vuhf1DcsbiosOutputBigFrequencyNumber.LastUIntValue;
+                    var asString = _vuhf1CockpitBigFrequency.ToString().PadLeft(3, '0');
+                    _vuhf1CockpitDial1Frequency = uint.Parse(asString.Substring(0, 2));
+                    _vuhf1CockpitDial2Frequency = uint.Parse(asString.Substring(2, 1));
+                    Interlocked.Exchange(ref _vuhf1Dial1WaitingForFeedback, 0);
+                    Interlocked.Exchange(ref _vuhf1Dial2WaitingForFeedback, 0);
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
 
-            if (e.Address == _vuhf1DcsbiosOutputDial3FrequencyNumber.Address)
+            if (_vuhf1DcsbiosOutputDial3FrequencyNumber.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVuhf1Dial3FreqObject)
                 {
-                    var tmp = _vuhf1CockpitDial3Frequency;
-                    _vuhf1CockpitDial3Frequency = _vuhf1DcsbiosOutputDial3FrequencyNumber.GetUIntValue(e.Data);
-                    if (tmp != _vuhf1CockpitDial3Frequency)
-                    {
-                        Interlocked.Exchange(ref _vuhf1Dial3WaitingForFeedback, 0);
-                        Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                    }
+                    _vuhf1CockpitDial3Frequency = _vuhf1DcsbiosOutputDial3FrequencyNumber.LastUIntValue;
+                    Interlocked.Exchange(ref _vuhf1Dial3WaitingForFeedback, 0);
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
 
-            if (e.Address == _vuhf1DcsbiosOutputDial4FrequencyNumber.Address)
+            if (_vuhf1DcsbiosOutputDial4FrequencyNumber.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVuhf1Dial4FreqObject)
                 {
-                    var tmp = _vuhf1CockpitDial4Frequency;
-                    _vuhf1CockpitDial4Frequency = _vuhf1DcsbiosOutputDial4FrequencyNumber.GetUIntValue(e.Data);
-                    if (tmp != _vuhf1CockpitDial4Frequency)
-                    {
-                        Interlocked.Exchange(ref _vuhf1Dial4WaitingForFeedback, 0);
-                        Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                    }
+                    _vuhf1CockpitDial4Frequency = _vuhf1DcsbiosOutputDial4FrequencyNumber.LastUIntValue;
+                    Interlocked.Exchange(ref _vuhf1Dial4WaitingForFeedback, 0);
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
 
             // COMM 2 VHF UHF
-            if (e.Address == _vuhf2DcsbiosOutputBigFrequencyNumber.Address)
+            if (_vuhf2DcsbiosOutputBigFrequencyNumber.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVuhf2BigFreqObject)
                 {
-                    var tmp = _vuhf2CockpitBigFrequency;
-                    _vuhf2CockpitBigFrequency = _vuhf2DcsbiosOutputBigFrequencyNumber.GetUIntValue(e.Data);
-                    if (tmp != _vuhf2CockpitBigFrequency)
-                    {
-                        var asString = _vuhf2CockpitBigFrequency.ToString().PadLeft(3, '0');
-                        _vuhf2CockpitDial1Frequency = uint.Parse(asString.Substring(0, 2));
-                        _vuhf2CockpitDial2Frequency = uint.Parse(asString.Substring(2, 1));
-                        Interlocked.Exchange(ref _vuhf2Dial1WaitingForFeedback, 0);
-                        Interlocked.Exchange(ref _vuhf2Dial2WaitingForFeedback, 0);
-                        Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                    }
+                    _vuhf2CockpitBigFrequency = _vuhf2DcsbiosOutputBigFrequencyNumber.LastUIntValue;
+                    var asString = _vuhf2CockpitBigFrequency.ToString().PadLeft(3, '0');
+                    _vuhf2CockpitDial1Frequency = uint.Parse(asString.Substring(0, 2));
+                    _vuhf2CockpitDial2Frequency = uint.Parse(asString.Substring(2, 1));
+                    Interlocked.Exchange(ref _vuhf2Dial1WaitingForFeedback, 0);
+                    Interlocked.Exchange(ref _vuhf2Dial2WaitingForFeedback, 0);
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
 
-            if (e.Address == _vuhf2DcsbiosOutputDial3FrequencyNumber.Address)
+            if (_vuhf2DcsbiosOutputDial3FrequencyNumber.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVuhf2Dial3FreqObject)
                 {
-                    var tmp = _vuhf2CockpitDial3Frequency;
-                    _vuhf2CockpitDial3Frequency = _vuhf2DcsbiosOutputDial3FrequencyNumber.GetUIntValue(e.Data);
-                    if (tmp != _vuhf2CockpitDial3Frequency)
-                    {
-                        Interlocked.Exchange(ref _vuhf2Dial3WaitingForFeedback, 0);
-                        Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                    }
+                    _vuhf2CockpitDial3Frequency = _vuhf2DcsbiosOutputDial3FrequencyNumber.LastUIntValue;
+                    Interlocked.Exchange(ref _vuhf2Dial3WaitingForFeedback, 0);
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
 
-            if (e.Address == _vuhf2DcsbiosOutputDial4FrequencyNumber.Address)
+            if (_vuhf2DcsbiosOutputDial4FrequencyNumber.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockVuhf2Dial4FreqObject)
                 {
-                    var tmp = _vuhf2CockpitDial4Frequency;
-                    _vuhf2CockpitDial4Frequency = _vuhf2DcsbiosOutputDial4FrequencyNumber.GetUIntValue(e.Data);
-                    if (tmp != _vuhf2CockpitDial4Frequency)
-                    {
-                        Interlocked.Exchange(ref _vuhf2Dial4WaitingForFeedback, 0);
-                        Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                    }
+                    _vuhf2CockpitDial4Frequency = _vuhf2DcsbiosOutputDial4FrequencyNumber.LastUIntValue;
+                    Interlocked.Exchange(ref _vuhf2Dial4WaitingForFeedback, 0);
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
 
             // NAV 1 TACAN
-            if (e.Address == _tacanDcsbiosOutputTensDial.Address)
+            if (_tacanDcsbiosOutputTensDial.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _tacanCockpitTensDialPos;
-                _tacanCockpitTensDialPos = _tacanDcsbiosOutputTensDial.GetUIntValue(e.Data);
-                if (tmp != _tacanCockpitTensDialPos)
-                {
-                    Interlocked.Exchange(ref _tacanTensWaitingForFeedback, 0);
-                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                }
+                _tacanCockpitTensDialPos = _tacanDcsbiosOutputTensDial.LastUIntValue;
+                Interlocked.Exchange(ref _tacanTensWaitingForFeedback, 0);
+                Interlocked.Add(ref _doUpdatePanelLCD, 5);
             }
 
-            if (e.Address == _tacanDcsbiosOutputOnesDial.Address)
+            if (_tacanDcsbiosOutputOnesDial.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _tacanCockpitOnesDialPos;
-                _tacanCockpitOnesDialPos = _tacanDcsbiosOutputOnesDial.GetUIntValue(e.Data);
-                if (tmp != _tacanCockpitOnesDialPos)
-                {
-                    Interlocked.Exchange(ref _tacanOnesWaitingForFeedback, 0);
-                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                }
+                _tacanCockpitOnesDialPos = _tacanDcsbiosOutputOnesDial.LastUIntValue;
+                Interlocked.Exchange(ref _tacanOnesWaitingForFeedback, 0);
+                Interlocked.Add(ref _doUpdatePanelLCD, 5);
             }
 
             // NAV 2 VOR
-            if (e.Address == _vorDcsbiosOutputMhzDial.Address)
+            if (_vorDcsbiosOutputMhzDial.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _vorCockpitMhzDialPos;
-                _vorCockpitMhzDialPos = _vorDcsbiosOutputMhzDial.GetUIntValue(e.Data);
-                if (tmp != _vorCockpitMhzDialPos)
-                {
-                    Interlocked.Exchange(ref _vorMhzWaitingForFeedback, 0);
-                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                }
+                _vorCockpitMhzDialPos = _vorDcsbiosOutputMhzDial.LastUIntValue;
+                Interlocked.Exchange(ref _vorMhzWaitingForFeedback, 0);
+                Interlocked.Add(ref _doUpdatePanelLCD, 5);
             }
 
-            if (e.Address == _vorDcsbiosOutputKhzDial.Address)
+            if (_vorDcsbiosOutputKhzDial.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _vorCockpitKhzDialPos;
-                _vorCockpitKhzDialPos = _vorDcsbiosOutputKhzDial.GetUIntValue(e.Data);
-                if (tmp != _vorCockpitKhzDialPos)
-                {
-                    Interlocked.Exchange(ref _vorKhzWaitingForFeedback, 0);
-                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                }
+                _vorCockpitKhzDialPos = _vorDcsbiosOutputKhzDial.LastUIntValue;
+                Interlocked.Exchange(ref _vorKhzWaitingForFeedback, 0);
+                Interlocked.Add(ref _doUpdatePanelLCD, 5);
             }
 
             // Set once
@@ -1182,7 +1142,7 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockTacanOnesObject)
                                 {
-                                    frequencyAsString =  _tacanCockpitTensDialPos.ToString() + _tacanCockpitOnesDialPos.ToString();
+                                    frequencyAsString = _tacanCockpitTensDialPos.ToString() + _tacanCockpitOnesDialPos.ToString();
                                 }
                             }
                             SetPZ69DisplayBytesUnsignedInteger(ref bytes, uint.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -1503,7 +1463,7 @@ namespace NonVisuals.Radios
                                         {
                                             if (!_upperButtonPressed)
                                             {
-                                               VUHF1SmallFrequencyStandbyAdjust(false);
+                                                VUHF1SmallFrequencyStandbyAdjust(false);
                                             }
                                             break;
                                         }
@@ -1625,7 +1585,7 @@ namespace NonVisuals.Radios
 
                                             if (!_lowerButtonPressed)
                                             {
-                                                    AdjustVUHF2BigFrequency(false);
+                                                AdjustVUHF2BigFrequency(false);
                                             }
                                             break;
                                         }
@@ -2188,7 +2148,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
                     }
-                    
+
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
                         PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_T45C, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
@@ -2233,7 +2193,7 @@ namespace NonVisuals.Radios
                 SetLastException(ex);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

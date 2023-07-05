@@ -17,7 +17,7 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-    
+
     /// <summary>
     /// Pre-programmed radio panel for the Mi24. 
     /// </summary>
@@ -124,7 +124,7 @@ namespace NonVisuals.Radios
         private const string ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC = "PLT_ARC_FREQ_R_10 DEC\n";
         private int _adfPresetDial1Skipper;
         private int _adfPresetDial2Skipper;
-        
+
 
         //0 = Backup ADF
         //1 = Main ADF
@@ -148,8 +148,8 @@ namespace NonVisuals.Radios
         private volatile uint _dmeBackupCockpitPresetDial1Pos = 0;
         private const string DME_BACKUP1_KHZ_PRESET_COMMAND_INC = "PLT_ARC_FREQ_R_1 INC\n";
         private const string DME_BACKUP1_KHZ_PRESET_COMMAND_DEC = "PLT_ARC_FREQ_R_1 DEC\n";
-        
-       
+
+
         /*Mi-24P SPU-8 XPDR*/
         //Large dial 0-5 [step of 1]
         //Small dial volume control
@@ -206,21 +206,13 @@ namespace NonVisuals.Radios
                     return;
                 }
 
-                if (e.Address.Equals(_yadro1ADcsbiosOutputCockpitFrequency.Address))
+                if (_yadro1ADcsbiosOutputCockpitFrequency.StringValueHasChanged(e.Address, e.StringData))
                 {
                     // "02000.0" - "17999.9"
                     // Last digit not used in panel
-                    double tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
-                    if (!tmpFreq.Equals(_yadro1ACockpitFrequency))
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                    }
-                    if (tmpFreq.Equals(_yadro1ACockpitFrequency))
-                    {
-                        //No need to process same data over and over
-                        return;
-                    }
-                    _yadro1ACockpitFrequency = tmpFreq;
+                    _yadro1ACockpitFrequency = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    
                     lock (_lockYadro1ADialsObject1)
                     {
                         // "02000.0" - "*17*999.9"
@@ -289,157 +281,113 @@ namespace NonVisuals.Radios
                  */
 
                 //R-863 Preset Channel Dial
-                if (e.Address == _r863Preset1DcsbiosOutputPresetDial.Address)
+                if (_r863Preset1DcsbiosOutputPresetDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockR863Preset1DialObject1)
                     {
-                        var tmp = _r863PresetCockpitDialPos;
-                        _r863PresetCockpitDialPos = _r863Preset1DcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        if (tmp != _r863PresetCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _r863PresetCockpitDialPos = _r863Preset1DcsbiosOutputPresetDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 //YaDRO-1A
                 //R-828 Preset Channel Dial
-                if (e.Address == _r828Preset1DcsbiosOutputDial.Address)
+                if (_r828Preset1DcsbiosOutputDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockR828Preset1DialObject1)
                     {
-                        var tmp = _r828PresetCockpitDialPos;
-                        _r828PresetCockpitDialPos = _r828Preset1DcsbiosOutputDial.GetUIntValue(e.Data);
-                        if (tmp != _r828PresetCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _r828PresetCockpitDialPos = _r828Preset1DcsbiosOutputDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 //ADF Main Preset Dial 1
-                if (e.Address == _adfMainDcsbiosOutputPresetDial1.Address)
+                if (_adfMainDcsbiosOutputPresetDial1.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockADFMainDialObject1)
                     {
-                        var tmp = _adfMainCockpitPresetDial1Pos;
-                        _adfMainCockpitPresetDial1Pos = _adfMainDcsbiosOutputPresetDial1.GetUIntValue(e.Data);
-                        if (tmp != _adfMainCockpitPresetDial1Pos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _adfMainCockpitPresetDial1Pos = _adfMainDcsbiosOutputPresetDial1.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 //ADF Main Preset Dial 2
-                if (e.Address == _adfMainDcsbiosOutputPresetDial2.Address)
+                if (_adfMainDcsbiosOutputPresetDial2.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockADFMainDialObject2)
                     {
-                        var tmp = _adfMainCockpitPresetDial2Pos;
-                        _adfMainCockpitPresetDial2Pos = _adfMainDcsbiosOutputPresetDial2.GetUIntValue(e.Data);
-                        if (tmp != _adfMainCockpitPresetDial2Pos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _adfMainCockpitPresetDial2Pos = _adfMainDcsbiosOutputPresetDial2.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 //ADF Backup Preset Dial 1
-                if (e.Address == _adfBackupDcsbiosOutputPresetDial1.Address)
+                if (_adfBackupDcsbiosOutputPresetDial1.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockADFBackupDialObject1)
                     {
-                        var tmp = _adfBackupCockpitPresetDial1Pos;
-                        _adfBackupCockpitPresetDial1Pos = _adfBackupDcsbiosOutputPresetDial1.GetUIntValue(e.Data);
-                        if (tmp != _adfBackupCockpitPresetDial1Pos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _adfBackupCockpitPresetDial1Pos = _adfBackupDcsbiosOutputPresetDial1.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 //ADF Backup Preset Dial 2
-                if (e.Address == _adfBackupDcsbiosOutputPresetDial2.Address)
+                if (_adfBackupDcsbiosOutputPresetDial2.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockADFBackupDialObject2)
                     {
-                        var tmp = _adfBackupCockpitPresetDial2Pos;
-                        _adfBackupCockpitPresetDial2Pos = _adfBackupDcsbiosOutputPresetDial2.GetUIntValue(e.Data);
-                        if (tmp != _adfBackupCockpitPresetDial2Pos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _adfBackupCockpitPresetDial2Pos = _adfBackupDcsbiosOutputPresetDial2.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 //ADF Backup or Main
-                if (e.Address == _adfBackupMainDcsbiosOutputPresetDial.Address)
+                if (_adfBackupMainDcsbiosOutputPresetDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockADFBackupMainDialObject)
                     {
-                        var tmp = _adfBackupMainCockpitDial1Pos;
-                        _adfBackupMainCockpitDial1Pos = _adfBackupMainDcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        if (tmp != _adfBackupMainCockpitDial1Pos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _adfBackupMainCockpitDial1Pos = _adfBackupMainDcsbiosOutputPresetDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 //DME Main Preset Dial 1
-                if (e.Address == _dmeMainDcsbiosOutputPresetDial1.Address)
+                if (_dmeMainDcsbiosOutputPresetDial1.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockDMEMainDialObject1)
                     {
-                        var tmp = _dmeMainCockpitPresetDial1Pos;
-                        _dmeMainCockpitPresetDial1Pos = _dmeMainDcsbiosOutputPresetDial1.GetUIntValue(e.Data);
-                        if (tmp != _dmeMainCockpitPresetDial1Pos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _dmeMainCockpitPresetDial1Pos = _dmeMainDcsbiosOutputPresetDial1.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 //DME Backup Preset Dial 1
-                if (e.Address == _dmeBackupDcsbiosOutputPresetDial1.Address)
+                if (_dmeBackupDcsbiosOutputPresetDial1.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockDMEBackupDialObject1)
                     {
-                        var tmp = _dmeBackupCockpitPresetDial1Pos;
-                        _dmeBackupCockpitPresetDial1Pos = _dmeBackupDcsbiosOutputPresetDial1.GetUIntValue(e.Data);
-                        if (tmp != _dmeBackupCockpitPresetDial1Pos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _dmeBackupCockpitPresetDial1Pos = _dmeBackupDcsbiosOutputPresetDial1.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 //SPU-8 Dial
-                if (e.Address == _spu8DcsbiosOutputPresetDial.Address)
+                if (_spu8DcsbiosOutputPresetDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockSpu8DialObject1)
                     {
-                        var tmp = _spu8CockpitDialPos;
-                        _spu8CockpitDialPos = _spu8DcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        if (tmp != _spu8CockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _spu8CockpitDialPos = _spu8DcsbiosOutputPresetDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 //SPU-8 Radio/ICS
-                if (e.Address == _spu8ICSSwitchDcsbiosOutput.Address)
+                if (_spu8ICSSwitchDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockSpu8ICSSwitchObject)
                     {
-                        var tmp = _spu8ICSSwitchCockpitDialPos;
-                        _spu8ICSSwitchCockpitDialPos = _spu8ICSSwitchDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _spu8ICSSwitchCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _spu8ICSSwitchCockpitDialPos = _spu8ICSSwitchDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
@@ -775,60 +723,60 @@ namespace NonVisuals.Radios
                         switch (radioPanelKnob.RadioPanelPZ69Knob)
                         {
                             case RadioPanelPZ69KnobsMi24P.UPPER_R863_MANUAL:
-                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_MANUAL);
+                                SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_MANUAL);
                                 break;
-               
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_R863_PRESET:
-                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_PRESET);
+                                SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_PRESET);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.UPPER_YADRO1A:
-                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.YADRO1A);
+                                SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.YADRO1A);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.UPPER_R828:
-                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R828_PRESETS);
+                                SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R828_PRESETS);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.UPPER_ADF_ARK15:
-                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.ADF_ARK15_HIGH);
+                                SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.ADF_ARK15_HIGH);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.UPPER_SPU8:
-                                    SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.SPU8);
+                                SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.SPU8);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.LOWER_R863_MANUAL:
-                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_MANUAL);
+                                SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_MANUAL);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.LOWER_R863_PRESET:
-                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_PRESET);
+                                SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R863_PRESET);
                                 break;
                             case RadioPanelPZ69KnobsMi24P.LOWER_YADRO1A:
-                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.YADRO1A);
+                                SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.YADRO1A);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.LOWER_R828:
-                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R828_PRESETS);
+                                SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.R828_PRESETS);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.LOWER_ADF_ARK15:
-                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.ADF_ARK15_HIGH);
+                                SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.ADF_ARK15_HIGH);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.LOWER_SPU8:
-                                    SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.SPU8);
+                                SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.SPU8);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.UPPER_ARK_UD:
-                                   SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.DME_ARK15_LOW);
+                                SetUpperRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.DME_ARK15_LOW);
                                 break;
 
                             case RadioPanelPZ69KnobsMi24P.LOWER_ARK_UD:
-                                   SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.DME_ARK15_LOW);
+                                SetLowerRadioMode(radioPanelKnob.IsOn, CurrentMi24PRadioMode.DME_ARK15_LOW);
                                 break;
- 
+
                             case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_INC:
                             case RadioPanelPZ69KnobsMi24P.UPPER_LARGE_FREQ_WHEEL_DEC:
                             case RadioPanelPZ69KnobsMi24P.UPPER_SMALL_FREQ_WHEEL_INC:
@@ -1491,7 +1439,7 @@ namespace NonVisuals.Radios
                             {
                                 //Dial1 XX0..
                                 //Dial2 00X..
-                               
+
                                 uint backupMain;
                                 lock (_lockADFBackupMainDialObject)
                                 {
@@ -1554,7 +1502,7 @@ namespace NonVisuals.Radios
                                         }
                                     }
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, _ark15_LowFrequency.PadLeft(6,' '), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _ark15_LowFrequency.PadLeft(6, ' '), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 if (_currentLowerRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH)
                                 {
                                     SetPZ69DisplayBytesDefault(ref bytes, Ark15MergedFrequencies, PZ69LCDPosition.LOWER_STBY_RIGHT); //update also the higher frequency display with the new value
@@ -1787,7 +1735,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
@@ -2065,8 +2013,9 @@ namespace NonVisuals.Radios
 
         private string Ark15MergedFrequencies
         {
-            get {
-                return (_ark15_HighFrequency + _ark15_LowFrequency).PadLeft(6,' '); 
+            get
+            {
+                return (_ark15_HighFrequency + _ark15_LowFrequency).PadLeft(6, ' ');
             }
         }
     }

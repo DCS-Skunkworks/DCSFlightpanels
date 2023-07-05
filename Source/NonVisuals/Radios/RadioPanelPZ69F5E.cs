@@ -19,7 +19,7 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-    
+
     /// <summary>
     /// Pre-programmed radio panel for the F5E. 
     /// </summary>
@@ -135,7 +135,7 @@ namespace NonVisuals.Radios
             BIOSEventHandler.AttachStringListener(this);
             BIOSEventHandler.AttachDataListener(this);
         }
-        
+
         private bool _disposed;
         // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
@@ -172,104 +172,72 @@ namespace NonVisuals.Radios
 
 
             // UHF
-            if (e.Address == _uhfDcsbiosOutputFreqDial1.Address)
+            if (_uhfDcsbiosOutputFreqDial1.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockUhfDialsObject1)
                 {
-                    var tmp = _uhfCockpitFreq1DialPos;
-                    _uhfCockpitFreq1DialPos = 4 - _uhfDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
-                    if (tmp != _uhfCockpitFreq1DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
-                    }
+                    _uhfCockpitFreq1DialPos = 4 - _uhfDcsbiosOutputFreqDial1.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _uhfDcsbiosOutputFreqDial2.Address)
+            if (_uhfDcsbiosOutputFreqDial2.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockUhfDialsObject2)
                 {
-                    var tmp = _uhfCockpitFreq2DialPos;
-                    _uhfCockpitFreq2DialPos = 10 - _uhfDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
-                    if (tmp != _uhfCockpitFreq2DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
-                    }
+                    _uhfCockpitFreq2DialPos = 10 - _uhfDcsbiosOutputFreqDial2.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _uhfDcsbiosOutputFreqDial3.Address)
+            if (_uhfDcsbiosOutputFreqDial3.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockUhfDialsObject3)
                 {
-                    var tmp = _uhfCockpitFreq3DialPos;
-                    _uhfCockpitFreq3DialPos = 10 - _uhfDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
-                    if (tmp != _uhfCockpitFreq3DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
-                    }
+                    _uhfCockpitFreq3DialPos = 10 - _uhfDcsbiosOutputFreqDial3.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _uhfDcsbiosOutputFreqDial4.Address)
+            if (_uhfDcsbiosOutputFreqDial4.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockUhfDialsObject4)
                 {
-                    var tmp = _uhfCockpitFreq4DialPos;
-                    _uhfCockpitFreq4DialPos = 10 - _uhfDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
-                    if (tmp != _uhfCockpitFreq4DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 0);
-                    }
+                    _uhfCockpitFreq4DialPos = 10 - _uhfDcsbiosOutputFreqDial4.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _uhfDcsbiosOutputFreqDial5.Address)
+            if (_uhfDcsbiosOutputFreqDial5.UIntValueHasChanged(e.Address, e.Data))
             {
                 lock (_lockUhfDialsObject5)
                 {
-                    var tmp = _uhfCockpitFreq5DialPos;
-                    _uhfCockpitFreq5DialPos = 4 - _uhfDcsbiosOutputFreqDial5.GetUIntValue(e.Data);
-                    if (tmp != _uhfCockpitFreq5DialPos)
-                    {
-                        Interlocked.Increment(ref _doUpdatePanelLCD);
-                        Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 0);
-                    }
+                    _uhfCockpitFreq5DialPos = 4 - _uhfDcsbiosOutputFreqDial5.LastUIntValue;
+                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                    Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 0);
                 }
             }
 
-            if (e.Address == _uhfDcsbiosOutputFreqMode.Address)
+            if (_uhfDcsbiosOutputFreqMode.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _uhfCockpitFreqMode;
-                _uhfCockpitFreqMode = _uhfDcsbiosOutputFreqMode.GetUIntValue(e.Data);
-                if (tmp != _uhfCockpitFreqMode)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _uhfCockpitFreqMode = _uhfDcsbiosOutputFreqMode.LastUIntValue;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
-            if (e.Address == _uhfDcsbiosOutputSelectedChannel.Address)
+            if (_uhfDcsbiosOutputSelectedChannel.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _uhfCockpitPresetChannel;
-                _uhfCockpitPresetChannel = _uhfDcsbiosOutputSelectedChannel.GetUIntValue(e.Data) + 1;
-                if (tmp != _uhfCockpitPresetChannel)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _uhfCockpitPresetChannel = _uhfDcsbiosOutputSelectedChannel.LastUIntValue + 1;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
-            if (e.Address == _uhfDcsbiosOutputFunction.Address)
+            if (_uhfDcsbiosOutputFunction.UIntValueHasChanged(e.Address, e.Data))
             {
-                var tmp = _uhfCockpitFunction;
-                _uhfCockpitFunction = _uhfDcsbiosOutputFunction.GetUIntValue(e.Data);
-                if (tmp != _uhfCockpitFunction)
-                {
-                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                }
+                _uhfCockpitFunction = _uhfDcsbiosOutputFunction.LastUIntValue;
+                Interlocked.Increment(ref _doUpdatePanelLCD);
             }
 
             // TACAN is set via String listener
@@ -290,7 +258,7 @@ namespace NonVisuals.Radios
                     return;
                 }
 
-                if (e.Address.Equals(_tacanDcsbiosOutputFreqChannel.Address))
+                if (_tacanDcsbiosOutputFreqChannel.StringValueHasChanged(e.Address,e.StringData))
                 {
                     try
                     {
@@ -363,7 +331,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
         }
 
@@ -462,7 +430,7 @@ namespace NonVisuals.Radios
             // Small dial 0.00-0.95 [step of 0.05]
             var frequency = _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby;
             var frequencyAsString = frequency.ToString("0.00", NumberFormatInfoFullDisplay);
-            
+
             var freqDial1 = int.Parse(frequencyAsString.Substring(0, 1));
             var freqDial2 = int.Parse(frequencyAsString.Substring(1, 1));
             var freqDial3 = int.Parse(frequencyAsString.Substring(2, 1));
@@ -718,7 +686,7 @@ namespace NonVisuals.Radios
                 { }
                 catch (Exception ex)
                 {
-                    Common.ShowErrorMessageBox( ex);
+                    Common.ShowErrorMessageBox(ex);
                 }
             }
             finally
@@ -885,7 +853,7 @@ namespace NonVisuals.Radios
                 { }
                 catch (Exception ex)
                 {
-                    Common.ShowErrorMessageBox( ex);
+                    Common.ShowErrorMessageBox(ex);
                 }
             }
             finally
@@ -1970,7 +1938,7 @@ namespace NonVisuals.Radios
                             2 => "2",
                             3 => "3",
                             4 => "4"
-                        };                        
+                        };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
                     }
 
@@ -2059,7 +2027,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "SaveCockpitFrequencyUhf()");
+                Common.ShowErrorMessageBox(ex, "SaveCockpitFrequencyUhf()");
                 throw;
             }
         }

@@ -18,7 +18,7 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
 
-    
+
     /// <summary>
     /// Pre-programmed radio panel for the FW190. 
     /// </summary>
@@ -143,7 +143,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
         }
 
@@ -162,58 +162,42 @@ namespace NonVisuals.Radios
                 */
 
                 // FuG 16ZY Preset Channel Dial
-                if (e.Address == _fug16ZyPresetDcsbiosOutputPresetDial.Address)
+                if (_fug16ZyPresetDcsbiosOutputPresetDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockFug16ZyPresetDialObject1)
                     {
-                        var tmp = _fug16ZyPresetCockpitDialPos;
-                        _fug16ZyPresetCockpitDialPos = _fug16ZyPresetDcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        if (tmp != _fug16ZyPresetCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _fug16ZyPresetCockpitDialPos = _fug16ZyPresetDcsbiosOutputPresetDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // FuG 16ZY Fine Tune Dial
-                if (e.Address == _fug16ZyFineTuneDcsbiosOutputDial.Address)
+                if (_fug16ZyFineTuneDcsbiosOutputDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockFug16ZyFineTuneDialObject1)
                     {
-                        var tmp = _fug16ZyFineTuneCockpitDialPos;
-                        _fug16ZyFineTuneCockpitDialPos = _fug16ZyFineTuneDcsbiosOutputDial.GetUIntValue(e.Data);
-                        if (tmp != _fug16ZyFineTuneCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _fug16ZyFineTuneCockpitDialPos = _fug16ZyFineTuneDcsbiosOutputDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // FuG 25A IFF Channel Dial
-                if (e.Address == _fug25AIFFDcsbiosOutputDial.Address)
+                if (_fug25AIFFDcsbiosOutputDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockFUG25AIFFDialObject1)
                     {
-                        var tmp = _fug25AIFFCockpitDialPos;
-                        _fug25AIFFCockpitDialPos = _fug25AIFFDcsbiosOutputDial.GetUIntValue(e.Data);
-                        if (tmp != _fug25AIFFCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _fug25AIFFCockpitDialPos = _fug25AIFFDcsbiosOutputDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
                 // FuG 16ZY Homing Switch
-                if (e.Address == _homingDcsbiosOutputPresetDial.Address)
+                if (_homingDcsbiosOutputPresetDial.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockHomingDialObject1)
                     {
-                        var tmp = _homingCockpitDialPos;
-                        _homingCockpitDialPos = _homingDcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        if (tmp != _homingCockpitDialPos)
-                        {
-                            Interlocked.Increment(ref _doUpdatePanelLCD);
-                        }
+                        _homingCockpitDialPos = _homingDcsbiosOutputPresetDial.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
@@ -860,7 +844,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
@@ -943,7 +927,7 @@ namespace NonVisuals.Radios
             }
             return false;
         }
-        
+
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
 
         public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }

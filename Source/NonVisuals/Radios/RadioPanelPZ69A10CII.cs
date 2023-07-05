@@ -2013,8 +2013,6 @@ namespace NonVisuals.Radios
                                 var standbyFreqSmall = _arc210VhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
                                 SetPZ69DisplayBytesDefault(ref bytes, GetARC210VhfFrequencyAsString(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesDefault(ref bytes, $"{_arc210VhfBigFrequencyStandby}.{standbyFreqSmall}", PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                Debug.WriteLine($"ACTIVE  {GetARC210VhfFrequencyAsString()}");
-                                Debug.WriteLine($"STANDBY {_arc210VhfBigFrequencyStandby}.{standbyFreqSmall}");
                             }
 
                             break;
