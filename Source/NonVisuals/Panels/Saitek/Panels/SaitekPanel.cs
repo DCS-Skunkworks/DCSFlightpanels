@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Diagnostics;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Panels.Saitek.Panels
 {

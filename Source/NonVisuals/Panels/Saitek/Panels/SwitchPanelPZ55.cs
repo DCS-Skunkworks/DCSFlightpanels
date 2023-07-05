@@ -433,6 +433,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 // Looks which switches has been switched and sees whether any key emulation has been tied to them.
                 var switchPanelKey = (SwitchPanelKey)switchPanelKeyObject;
+                
                 var found = false;
 
                 // Look if leds are manually operated

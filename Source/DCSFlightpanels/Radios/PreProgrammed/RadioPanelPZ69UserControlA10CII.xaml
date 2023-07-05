@@ -68,7 +68,7 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
-                    COM 1 = ARC-210 VHF<LineBreak/>
+                    COM 1 = ARC-210 VHF*<LineBreak/>
                     COM 2 = AN/ARC-164 UHF*<LineBreak/>
                     NAV 1 = AN/ARC-186(V) VHF FM*<LineBreak/>
                     NAV 2 = ILS<LineBreak/>
@@ -110,18 +110,18 @@
 
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
             <Label Content="ARC-210 VHF" FontWeight="Bold"/>
-            <Image Height="110" Source="/dcsfp;component/Images/A-10C_an_arc_186_vhf_am_radio1.png" />
+            <Image Height="200" Source="/dcsfp;component/Images/A10C_arc210_vhf.jpg" />
             <Label Content="AN/ARC-186 VHF FM" FontWeight="Bold"/>
             <Image Height="110" Source="/dcsfp;component/Images/A10C_an_arc_186_VHF_FM_radio2.png" />
-            <Label Content="ILS" FontWeight="Bold"/>
-            <Image Height="80" Source="/dcsfp;component/Images/A-10C_ILS.png" />
         </StackPanel>
-        <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="3">
+        <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="5">
             <Label Name="LabelAirframe" Content="A-10C II" FontSize="30" FontWeight="Bold"/>
             <Label Content="AN/ARC-164 UHF" FontWeight="Bold"/>
             <Image Height="160" Source="/dcsfp;component/Images/A-10C_an_arc_164_UHF_radio2.png" />
             <Label Content="TACAN" FontWeight="Bold"/>
             <Image Height="110" Source="/dcsfp;component/Images/A-10C_TACAN.png" />
+            <Label Content="ILS" FontWeight="Bold"/>
+            <Image Height="80" Source="/dcsfp;component/Images/A-10C_ILS.png" />
         </StackPanel>
         <DockPanel Grid.Column="6" Grid.Row="2" Grid.RowSpan="5" LastChildFill="False">
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">

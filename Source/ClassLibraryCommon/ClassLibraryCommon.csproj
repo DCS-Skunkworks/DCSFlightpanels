@@ -24,11 +24,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NLog" Version="5.1.4" />
+    <PackageReference Include="NLog" Version="5.2.1" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.ServiceModel.Federation" Version="4.10.2" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.3" />
+    <PackageReference Include="System.ServiceModel.Federation" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
