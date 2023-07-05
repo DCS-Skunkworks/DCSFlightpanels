@@ -2010,8 +2010,11 @@ namespace NonVisuals.Radios
                             }
                             else if (ARC210VhfManualSelected())
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(GetARC210VhfFrequencyAsString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, _arc210VhfBigFrequencyStandby + _arc210VhfSmallFrequencyStandby / 1000, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                var standbyFreqSmall = _arc210VhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
+                                SetPZ69DisplayBytesDefault(ref bytes, GetARC210VhfFrequencyAsString(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, $"{_arc210VhfBigFrequencyStandby}.{standbyFreqSmall}", PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                Debug.WriteLine($"ACTIVE  {GetARC210VhfFrequencyAsString()}");
+                                Debug.WriteLine($"STANDBY {_arc210VhfBigFrequencyStandby}.{standbyFreqSmall}");
                             }
 
                             break;
@@ -2387,7 +2390,7 @@ namespace NonVisuals.Radios
 
                 frequencyAsString += freq;
             }
-
+            
             return frequencyAsString;
         }
 
@@ -4142,10 +4145,7 @@ namespace NonVisuals.Radios
                                 bigFreqString += _arc210VhfCockpitFreq1DialPos == 0 && _arc210VhfCockpitFreq2DialPos == 0 ? "" : _arc210VhfCockpitFreq2DialPos.ToString();
                                 bigFreqString += _arc210VhfCockpitFreq3DialPos.ToString();
                                 _arc210VhfSavedCockpitBigFrequency = double.Parse(bigFreqString, NumberFormatInfoFullDisplay);
-
-                                var smallFreqString = _arc210VhfCockpitFreq4DialPos.ToString();
-                                smallFreqString += dial5.ToString();
-                                _arc210VhfSavedCockpitSmallFrequency = double.Parse(smallFreqString, NumberFormatInfoFullDisplay);
+                                _arc210VhfSavedCockpitSmallFrequency = _arc210VhfCockpitFreq4DialPos * 100 + dial5;
                             }
                         }
                     }
