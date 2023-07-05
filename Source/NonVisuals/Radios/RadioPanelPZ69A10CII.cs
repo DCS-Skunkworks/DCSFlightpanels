@@ -4140,7 +4140,6 @@ namespace NonVisuals.Radios
                                     3 => 75
                                 };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-
                                 var bigFreqString = _arc210VhfCockpitFreq1DialPos == 0 ? "" : _arc210VhfCockpitFreq1DialPos.ToString();
                                 bigFreqString += _arc210VhfCockpitFreq1DialPos == 0 && _arc210VhfCockpitFreq2DialPos == 0 ? "" : _arc210VhfCockpitFreq2DialPos.ToString();
                                 bigFreqString += _arc210VhfCockpitFreq3DialPos.ToString();
