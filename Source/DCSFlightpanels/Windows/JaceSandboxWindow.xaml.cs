@@ -247,77 +247,61 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            if (_dcsbiosOutput1?.Address == e.Address)
+            if (_dcsbiosOutput1?.UIntValueHasChanged(e.Address, e.Data) == true)
             {
-                Debug.WriteLine(_dcsbiosOutput1.GetUIntValue(e.Data));
-                if (!Equals(_value1, _dcsbiosOutput1.GetUIntValue(e.Data)))
-                {
-                    _value1 = _dcsbiosOutput1.GetUIntValue(e.Data);
-                    _dataChanged = true;
-                    Dispatcher?.BeginInvoke(
-                        (Action)delegate
-                        {
-                            LabelSourceRawValue1.Content = "Value : " + _value1;
-                        });
-                }
+                _value1 = _dcsbiosOutput1.GetUIntValue(e.Data);
+                _dataChanged = true;
+                Dispatcher?.BeginInvoke(
+                    (Action)delegate
+                    {
+                        LabelSourceRawValue1.Content = "Value : " + _value1;
+                    });
             }
-            if (_dcsbiosOutput2?.Address == e.Address)
+            if (_dcsbiosOutput2?.UIntValueHasChanged(e.Address, e.Data) == true)
             {
-                if (!Equals(_value2, _dcsbiosOutput2.GetUIntValue(e.Data)))
-                {
-                    _value2 = _dcsbiosOutput2.GetUIntValue(e.Data);
-                    _dataChanged = true;
-                    Dispatcher?.BeginInvoke(
-                        (Action)delegate
-                        {
-                            LabelSourceRawValue2.Content = "Value : " + _value2;
-                        });
-                }
+                _value2 = _dcsbiosOutput2.GetUIntValue(e.Data);
+                _dataChanged = true;
+                Dispatcher?.BeginInvoke(
+                    (Action)delegate
+                    {
+                        LabelSourceRawValue2.Content = "Value : " + _value2;
+                    });
             }
-            if (_dcsbiosOutput3?.Address == e.Address)
+            if (_dcsbiosOutput3?.UIntValueHasChanged(e.Address, e.Data) == true)
             {
-                if (!Equals(_value3, _dcsbiosOutput3.GetUIntValue(e.Data)))
-                {
-                    _value3 = _dcsbiosOutput3.GetUIntValue(e.Data);
-                    _dataChanged = true;
-                    Dispatcher?.BeginInvoke(
-                        (Action)delegate
-                        {
-                            LabelSourceRawValue3.Content = "Value : " + _value3;
-                        });
-                }
+                _value3 = _dcsbiosOutput3.GetUIntValue(e.Data);
+                _dataChanged = true;
+                Dispatcher?.BeginInvoke(
+                    (Action)delegate
+                    {
+                        LabelSourceRawValue3.Content = "Value : " + _value3;
+                    });
             }
-            if (_dcsbiosOutput4?.Address == e.Address)
+            if (_dcsbiosOutput4?.UIntValueHasChanged(e.Address, e.Data) == true)
             {
-                if (!Equals(_value4, _dcsbiosOutput4.GetUIntValue(e.Data)))
-                {
-                    _value4 = _dcsbiosOutput4.GetUIntValue(e.Data);
-                    _dataChanged = true;
-                    Dispatcher?.BeginInvoke(
-                        (Action)delegate
-                        {
-                            LabelSourceRawValue4.Content = "Value : " + _value4;
-                        });
-                }
+                _value4 = _dcsbiosOutput4.GetUIntValue(e.Data);
+                _dataChanged = true;
+                Dispatcher?.BeginInvoke(
+                    (Action)delegate
+                    {
+                        LabelSourceRawValue4.Content = "Value : " + _value4;
+                    });
             }
-            if (_dcsbiosOutput5?.Address == e.Address)
+            if (_dcsbiosOutput5?.UIntValueHasChanged(e.Address, e.Data) == true)
             {
-                if (!Equals(_value5, _dcsbiosOutput5.GetUIntValue(e.Data)))
-                {
-                    _value5 = _dcsbiosOutput5.GetUIntValue(e.Data);
-                    _dataChanged = true;
-                    Dispatcher?.BeginInvoke(
-                        (Action)delegate
-                        {
-                            LabelSourceRawValue5.Content = "Value : " + _value5;
-                        });
-                }
+                _value5 = _dcsbiosOutput5.GetUIntValue(e.Data);
+                _dataChanged = true;
+                Dispatcher?.BeginInvoke(
+                    (Action)delegate
+                    {
+                        LabelSourceRawValue5.Content = "Value : " + _value5;
+                    });
             }
         }
 
@@ -441,7 +425,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -454,7 +438,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -600,7 +584,7 @@ namespace DCSFlightpanels.Windows
                     FileName = e.Uri.AbsoluteUri,
                     UseShellExecute = true
                 });
-                
+
                 e.Handled = true;
             }
             catch (Exception ex)
@@ -650,30 +634,30 @@ namespace DCSFlightpanels.Windows
                 switch (((Label)sender).Name)
                 {
                     case "LabelInsert1":
-                    {
-                        textBox = TextBoxId1;
-                        break;
-                    }
+                        {
+                            textBox = TextBoxId1;
+                            break;
+                        }
                     case "LabelInsert2":
-                    {
-                        textBox = TextBoxId2;
-                        break;
-                    }
+                        {
+                            textBox = TextBoxId2;
+                            break;
+                        }
                     case "LabelInsert3":
-                    {
-                        textBox = TextBoxId3;
-                        break;
-                    }
+                        {
+                            textBox = TextBoxId3;
+                            break;
+                        }
                     case "LabelInsert4":
-                    {
-                        textBox = TextBoxId4;
-                        break;
-                    }
+                        {
+                            textBox = TextBoxId4;
+                            break;
+                        }
                     case "LabelInsert5":
-                    {
-                        textBox = TextBoxId5;
-                        break;
-                    }
+                        {
+                            textBox = TextBoxId5;
+                            break;
+                        }
                 }
 
                 if (textBox == null)
