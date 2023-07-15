@@ -110,7 +110,7 @@
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="4">
             <Label Name="LabelAirframe" Content="Mosquito FB Mk. VI" FontSize="30" FontWeight="Bold"/>
             <Label Content="Radio" FontWeight="Bold"/>
-            <Image Height="340" Source="/dcsfp;component/Images/mosquito_radio.png"/>
+            <Image Height="440" Source="/dcsfp;component/Images/mosquito_radio.png"/>
         </StackPanel>
         <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="3" >
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">
