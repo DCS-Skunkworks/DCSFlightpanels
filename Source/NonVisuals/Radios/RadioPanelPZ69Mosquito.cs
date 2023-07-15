@@ -30,6 +30,11 @@ namespace NonVisuals.Radios
             NOUSE
         }
 
+        private bool _upperButtonPressed;
+        private bool _lowerButtonPressed;
+        private bool _upperButtonPressedAndDialRotated;
+        private bool _lowerButtonPressedAndDialRotated;
+
         private CurrentMosquitoRadioMode _currentUpperRadioMode = CurrentMosquitoRadioMode.VHF;
         private CurrentMosquitoRadioMode _currentLowerRadioMode = CurrentMosquitoRadioMode.VHF;
 
@@ -43,9 +48,13 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _vhf1DcsbiosOutputPresetButton3;
         private DCSBIOSOutput _vhf1DcsbiosOutputPresetButton4;
         private volatile uint _vhf1CockpitPresetActiveButton;
-        private int _vhf1PresetDialSkipper;
         private const string VHF1_VOLUME_KNOB_COMMAND_INC = "RADIO_VOL +2000\n";
         private const string VHF1_VOLUME_KNOB_COMMAND_DEC = "RADIO_VOL -2000\n";
+        private const string VHF1_RADIO_LIGHT_SWITCH_COMMAND = "RADIO_L_DIM TOGGLE\n";
+        private readonly object _lockHFRadioModeDialObject1 = new();
+        private volatile uint _vhfRadioModeCockpitPosition = 1;
+        private DCSBIOSOutput _vhfRadioModeDcsbiosOutput;
+        private int _vhfDialChangeSkipper;
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -159,6 +168,16 @@ namespace NonVisuals.Radios
                     }
                 }
 
+                // HF Radio Mode
+                if (_vhfRadioModeDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
+                {
+                    lock (_lockHFRadioModeDialObject1)
+                    {
+                        _vhfRadioModeCockpitPosition = _vhfRadioModeDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                    }
+                }
+
                 // Set once
                 DataHasBeenReceivedFromDCSBIOS = true;
                 ShowFrequenciesOnPanel();
@@ -250,9 +269,17 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentUpperRadioMode == CurrentMosquitoRadioMode.VHF)
                                     {
-                                        if (radioPanelKnob.IsOn)
+                                        _upperButtonPressed = radioPanelKnob.IsOn;
+                                        if (!radioPanelKnob.IsOn)
                                         {
+                                            if (!_upperButtonPressedAndDialRotated)
+                                            {
+                                                // Do not synch if user has pressed the button to configure the radio
+                                                // Do when user releases button
+                                                DCSBIOS.Send(VHF1_RADIO_LIGHT_SWITCH_COMMAND);
+                                            }
 
+                                            _upperButtonPressedAndDialRotated = false;
                                         }
                                     }
                                     break;
@@ -262,8 +289,17 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentLowerRadioMode == CurrentMosquitoRadioMode.VHF)
                                     {
-                                        if (radioPanelKnob.IsOn)
+                                        _lowerButtonPressed = radioPanelKnob.IsOn;
+                                        if (!radioPanelKnob.IsOn)
                                         {
+                                            if (!_lowerButtonPressedAndDialRotated)
+                                            {
+                                                // Do not synch if user has pressed the button to configure the radio
+                                                // Do when user releases button
+                                                DCSBIOS.Send(VHF1_RADIO_LIGHT_SWITCH_COMMAND);
+                                            }
+
+                                            _lowerButtonPressedAndDialRotated = false;
                                         }
                                     }
                                     break;
@@ -303,32 +339,28 @@ namespace NonVisuals.Radios
                         {
                             case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_INC:
                                 {
-                                    switch (_currentUpperRadioMode)
+                                    // MODE
+                                    if (!SkipDialChange())
                                     {
-                                        case CurrentMosquitoRadioMode.VHF:
-                                            {
-                                                if (!SkipVhf1PresetDialChange())
-                                                {
-                                                    SendIncVHFPresetCommand();
-                                                }
-                                                break;
-                                            }
+                                        var s = GetHFRadioModeStringCommand(true);
+                                        if (!string.IsNullOrEmpty(s))
+                                        {
+                                            DCSBIOS.Send(s);
+                                        }
                                     }
                                     break;
                                 }
 
                             case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
-                                    switch (_currentUpperRadioMode)
+                                    // MODE
+                                    if (!SkipDialChange())
                                     {
-                                        case CurrentMosquitoRadioMode.VHF:
-                                            {
-                                                if (!SkipVhf1PresetDialChange())
-                                                {
-                                                    SendDecVHFPresetCommand();
-                                                }
-                                                break;
-                                            }
+                                        var s = GetHFRadioModeStringCommand(false);
+                                        if (!string.IsNullOrEmpty(s))
+                                        {
+                                            DCSBIOS.Send(s);
+                                        }
                                     }
                                     break;
                                 }
@@ -339,7 +371,15 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentMosquitoRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
+                                                if (_upperButtonPressed)
+                                                {
+                                                    _upperButtonPressedAndDialRotated = true;
+                                                    DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
+                                                }
+                                                else if (!SkipDialChange())
+                                                {
+                                                    SendIncVHFPresetCommand();
+                                                }
                                                 break;
                                             }
                                     }
@@ -352,7 +392,15 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentMosquitoRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
+                                                if (_upperButtonPressed)
+                                                {
+                                                    _upperButtonPressedAndDialRotated = true;
+                                                    DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
+                                                }
+                                                else if (!SkipDialChange())
+                                                {
+                                                    SendDecVHFPresetCommand();
+                                                }
                                                 break;
                                             }
                                     }
@@ -361,32 +409,28 @@ namespace NonVisuals.Radios
 
                             case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
-                                    switch (_currentLowerRadioMode)
+                                    // MODE
+                                    if (!SkipDialChange())
                                     {
-                                        case CurrentMosquitoRadioMode.VHF:
-                                            {
-                                                if (!SkipVhf1PresetDialChange())
-                                                {
-                                                    SendIncVHFPresetCommand();
-                                                }
-                                                break;
-                                            }
+                                        var s = GetHFRadioModeStringCommand(true);
+                                        if (!string.IsNullOrEmpty(s))
+                                        {
+                                            DCSBIOS.Send(s);
+                                        }
                                     }
                                     break;
                                 }
 
                             case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
-                                    switch (_currentLowerRadioMode)
+                                    // MODE
+                                    if (!SkipDialChange())
                                     {
-                                        case CurrentMosquitoRadioMode.VHF:
-                                            {
-                                                if (!SkipVhf1PresetDialChange())
-                                                {
-                                                    SendDecVHFPresetCommand();
-                                                }
-                                                break;
-                                            }
+                                        var s = GetHFRadioModeStringCommand(false);
+                                        if (!string.IsNullOrEmpty(s))
+                                        {
+                                            DCSBIOS.Send(s);
+                                        }
                                     }
                                     break;
                                 }
@@ -397,7 +441,15 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentMosquitoRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
+                                                if (_lowerButtonPressed)
+                                                {
+                                                    _lowerButtonPressedAndDialRotated = true;
+                                                    DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
+                                                }
+                                                else if (!SkipDialChange())
+                                                {
+                                                    SendIncVHFPresetCommand();
+                                                }
                                                 break;
                                             }
                                     }
@@ -410,7 +462,15 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentMosquitoRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
+                                                if (_lowerButtonPressed)
+                                                {
+                                                    _lowerButtonPressedAndDialRotated = true;
+                                                    DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
+                                                }
+                                                else if (!SkipDialChange())
+                                                {
+                                                    SendDecVHFPresetCommand();
+                                                }
                                                 break;
                                             }
                                     }
@@ -428,18 +488,18 @@ namespace NonVisuals.Radios
             }
         }
 
-        private bool SkipVhf1PresetDialChange()
+        private bool SkipDialChange()
         {
             try
             {
                 if (_currentUpperRadioMode == CurrentMosquitoRadioMode.VHF || _currentLowerRadioMode == CurrentMosquitoRadioMode.VHF)
                 {
-                    if (_vhf1PresetDialSkipper > 2)
+                    if (_vhfDialChangeSkipper > 2)
                     {
-                        _vhf1PresetDialSkipper = 0;
+                        _vhfDialChangeSkipper = 0;
                         return false;
                     }
-                    _vhf1PresetDialSkipper++;
+                    _vhfDialChangeSkipper++;
                     return true;
                 }
             }
@@ -476,6 +536,13 @@ namespace NonVisuals.Radios
                     {
                         case CurrentMosquitoRadioMode.VHF:
                             {
+                                if (_upperButtonPressed)
+                                {
+                                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    break;
+                                }
+
                                 // Pos     0    1    2    3    4
                                 string channelAsString;
                                 lock (_lockVhf1DialObject1)
@@ -484,7 +551,7 @@ namespace NonVisuals.Radios
                                 }
 
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfRadioModeCockpitPosition, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
 
@@ -495,10 +562,18 @@ namespace NonVisuals.Radios
                                 break;
                             }
                     }
+
                     switch (_currentLowerRadioMode)
                     {
                         case CurrentMosquitoRadioMode.VHF:
                             {
+                                if (_lowerButtonPressed)
+                                {
+                                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    break;
+                                }
+
                                 // Pos     0    1    2    3    4
                                 string channelAsString;
                                 lock (_lockVhf1DialObject1)
@@ -507,7 +582,7 @@ namespace NonVisuals.Radios
                                 }
 
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfRadioModeCockpitPosition, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
 
@@ -527,6 +602,18 @@ namespace NonVisuals.Radios
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
+        }
+
+        private string GetHFRadioModeStringCommand(bool moveUp)
+        {
+            lock (_lockHFRadioModeDialObject1)
+            {
+                if (moveUp)
+                {
+                    return "RADIO_T_MODE " + (_vhfRadioModeCockpitPosition + 1) + "\n";
+                }
+                return "RADIO_T_MODE " + (_vhfRadioModeCockpitPosition - 1) + "\n";
+            }
         }
 
         private void SendIncVHFPresetCommand()
@@ -622,6 +709,7 @@ namespace NonVisuals.Radios
                 _vhf1DcsbiosOutputPresetButton2 = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_B");
                 _vhf1DcsbiosOutputPresetButton3 = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_C");
                 _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_D");
+                _vhfRadioModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_T_MODE");
 
                 StartListeningForHidPanelChanges();
 
