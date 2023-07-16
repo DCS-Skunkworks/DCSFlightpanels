@@ -7,7 +7,7 @@
     public enum RadioPanelPZ69KnobsP51D
     {
         UPPER_VHF,   //COM1
-        UPPER_NO_USE0,  //COM2
+        UPPER_LF_RADIO,  //COM2
         UPPER_NO_USE1, //NAV1
         UPPER_NO_USE2, //NAV2
         UPPER_NO_USE3, //ADF
@@ -19,7 +19,7 @@
         UPPER_LARGE_FREQ_WHEEL_DEC,
         UPPER_FREQ_SWITCH,
         LOWER_VHF,
-        LOWER_NO_USE0,
+        LOWER_LF_RADIO,
         LOWER_NO_USE1,
         LOWER_NO_USE2,
         LOWER_NO_USE3,
@@ -69,7 +69,7 @@
                 new RadioPanelKnobP51D(2, 1 << 6, true, RadioPanelPZ69KnobsP51D.LOWER_LARGE_FREQ_WHEEL_INC),
                 new RadioPanelKnobP51D(2, 1 << 7, false, RadioPanelPZ69KnobsP51D.LOWER_LARGE_FREQ_WHEEL_DEC),
                 // Group 1
-                new RadioPanelKnobP51D(1, 1 << 0, true, RadioPanelPZ69KnobsP51D.LOWER_NO_USE0), // LOWER COM2
+                new RadioPanelKnobP51D(1, 1 << 0, true, RadioPanelPZ69KnobsP51D.LOWER_LF_RADIO), // LOWER COM2
                 new RadioPanelKnobP51D(1, 1 << 1, true, RadioPanelPZ69KnobsP51D.LOWER_NO_USE1), // LOWER NAV1
                 new RadioPanelKnobP51D(1, 1 << 2, true, RadioPanelPZ69KnobsP51D.LOWER_NO_USE2), // LOWER NAV2
                 new RadioPanelKnobP51D(1, 1 << 3, true, RadioPanelPZ69KnobsP51D.LOWER_NO_USE3), // LOWER ADF
@@ -79,7 +79,7 @@
                 new RadioPanelKnobP51D(1, 1 << 7, true, RadioPanelPZ69KnobsP51D.LOWER_FREQ_SWITCH),
                 // Group 2
                 new RadioPanelKnobP51D(0, 1 << 0, true, RadioPanelPZ69KnobsP51D.UPPER_VHF), // UPPER COM1
-                new RadioPanelKnobP51D(0, 1 << 1, true, RadioPanelPZ69KnobsP51D.UPPER_NO_USE0), // UPPER COM2
+                new RadioPanelKnobP51D(0, 1 << 1, true, RadioPanelPZ69KnobsP51D.UPPER_LF_RADIO), // UPPER COM2
                 new RadioPanelKnobP51D(0, 1 << 2, true, RadioPanelPZ69KnobsP51D.UPPER_NO_USE1), // UPPER NAV1
                 new RadioPanelKnobP51D(0, 1 << 3, true, RadioPanelPZ69KnobsP51D.UPPER_NO_USE2), // UPPER NAV2
                 new RadioPanelKnobP51D(0, 1 << 4, true, RadioPanelPZ69KnobsP51D.UPPER_NO_USE3), // UPPER ADF

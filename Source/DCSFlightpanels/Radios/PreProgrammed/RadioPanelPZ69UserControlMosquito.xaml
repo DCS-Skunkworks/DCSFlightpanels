@@ -68,14 +68,17 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
-                    COM 1 = <LineBreak/>
-                    Large Dial : Radio Mode
-                    <LineBreak/>
-                    Small Dial : VHF Presets 0 - 4 (0 = Off) 
-                    <LineBreak/>
-                    ACT/STBY + Small Dial : Volume
-                    <LineBreak/>
-                    ACT/STBY : Radio Dimmer
+                    COM 1 VHF = <LineBreak/>
+                    <TextBlock Margin="15,0,0,0">
+                        Large Dial : Radio Mode
+                        <LineBreak/>
+                        Small Dial : VHF Presets 0 - 4 (0 = Off) 
+                        <LineBreak/>
+                        ACT/STBY + Small Dial : Volume
+                        <LineBreak/>
+                        ACT/STBY : Radio Dimmer
+                        <LineBreak/>
+                    </TextBlock>
                 </TextBlock>
             </StackPanel>
         </GroupBox>

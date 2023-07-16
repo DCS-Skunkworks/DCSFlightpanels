@@ -26,13 +26,13 @@
         public RadioPanelPZ69UserControlP47D(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            
+
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69P47D(hidSkeleton)
             {
                 FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
             };
-            
+
             AppEventHandler.AttachGamingPanelListener(this);
         }
 
@@ -54,7 +54,7 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
@@ -71,7 +71,7 @@
         }
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
-        
+
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
@@ -83,16 +83,16 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
-        public void ProfileEvent(object sender, ProfileEventArgs e){}
-        
+        public void ProfileEvent(object sender, ProfileEventArgs e) { }
+
         public void SettingsApplied(object sender, PanelInfoArgs e) { }
 
         public void SettingsModified(object sender, PanelInfoArgs e) { }
-        
+
         private void SetGraphicsState(HashSet<object> knobs)
         {
             try
@@ -119,7 +119,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsP47D.UPPER_NO_USE5: //case RadioPanelPZ69KnobsP47D.UPPER_IFF:
+                        case RadioPanelPZ69KnobsP47D.UPPER_LFRADIO:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -189,7 +189,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsP47D.LOWER_NO_USE5: //case RadioPanelPZ69KnobsP47D.LOWER_IFF:
+                        case RadioPanelPZ69KnobsP47D.LOWER_LFRADIO:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -354,13 +354,13 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
         private void RadioPanelPZ69UserControlP47D_OnLoaded(object sender, RoutedEventArgs e)
         {
-			DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElemenDarkMode(this);
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
@@ -374,7 +374,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -392,7 +392,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -409,7 +409,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -426,7 +426,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -443,7 +443,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -460,7 +460,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 

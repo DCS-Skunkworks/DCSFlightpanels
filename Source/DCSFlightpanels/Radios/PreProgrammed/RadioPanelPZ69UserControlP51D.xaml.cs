@@ -119,7 +119,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsP51D.UPPER_NO_USE0:
+                        case RadioPanelPZ69KnobsP51D.UPPER_LF_RADIO:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -189,7 +189,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsP51D.LOWER_NO_USE0:
+                        case RadioPanelPZ69KnobsP51D.LOWER_LF_RADIO:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
