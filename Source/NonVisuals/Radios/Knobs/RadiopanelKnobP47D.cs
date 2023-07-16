@@ -7,7 +7,7 @@
     public enum RadioPanelPZ69KnobsP47D
     {
         UPPER_HFRADIO,      //COM1
-        UPPER_NO_USE5, //IFF = 2,      //COM2
+        UPPER_LFRADIO, //DETROLA      //COM2
         UPPER_NO_USE0,          //NAV1
         UPPER_NO_USE1,             //NAV2
         UPPER_NO_USE2,       //ADF
@@ -19,7 +19,7 @@
         UPPER_LARGE_FREQ_WHEEL_DEC,
         UPPER_FREQ_SWITCH,
         LOWER_HFRADIO,   //COM1
-        LOWER_NO_USE5, //IFF = 8192,   //COM2
+        LOWER_LFRADIO, //DETROLA      //COM2
         LOWER_NO_USE0,      //NAV1
         LOWER_NO_USE1,          //NAV2
         LOWER_NO_USE2,    //ADF
@@ -69,7 +69,7 @@
                 new RadioPanelKnobP47D(2, 1 << 6, true, RadioPanelPZ69KnobsP47D.LOWER_LARGE_FREQ_WHEEL_INC),
                 new RadioPanelKnobP47D(2, 1 << 7, false, RadioPanelPZ69KnobsP47D.LOWER_LARGE_FREQ_WHEEL_DEC),
                 // Group 1
-                new RadioPanelKnobP47D(1, 1 << 0, true, RadioPanelPZ69KnobsP47D.LOWER_NO_USE5), // LOWER_IFF)); //LOWER COM2
+                new RadioPanelKnobP47D(1, 1 << 0, true, RadioPanelPZ69KnobsP47D.LOWER_LFRADIO), // LOWER COM2
                 new RadioPanelKnobP47D(1, 1 << 1, true, RadioPanelPZ69KnobsP47D.LOWER_NO_USE0), // LOWER NAV1
                 new RadioPanelKnobP47D(1, 1 << 2, true, RadioPanelPZ69KnobsP47D.LOWER_NO_USE1), // LOWER NAV2
                 new RadioPanelKnobP47D(1, 1 << 3, true, RadioPanelPZ69KnobsP47D.LOWER_NO_USE2), // LOWER ADF
@@ -79,7 +79,7 @@
                 new RadioPanelKnobP47D(1, 1 << 7, true, RadioPanelPZ69KnobsP47D.LOWER_FREQ_SWITCH),
                 // Group 2
                 new RadioPanelKnobP47D(0, 1 << 0, true, RadioPanelPZ69KnobsP47D.UPPER_HFRADIO), // UPPER COM1
-                new RadioPanelKnobP47D(0, 1 << 1, true, RadioPanelPZ69KnobsP47D.UPPER_NO_USE5), // UPPER_IFF)); //UPPER COM2
+                new RadioPanelKnobP47D(0, 1 << 1, true, RadioPanelPZ69KnobsP47D.UPPER_LFRADIO), // UPPER COM2
                 new RadioPanelKnobP47D(0, 1 << 2, true, RadioPanelPZ69KnobsP47D.UPPER_NO_USE0), // UPPER NAV1
                 new RadioPanelKnobP47D(0, 1 << 3, true, RadioPanelPZ69KnobsP47D.UPPER_NO_USE1), // UPPER NAV2
                 new RadioPanelKnobP47D(0, 1 << 4, true, RadioPanelPZ69KnobsP47D.UPPER_NO_USE2), // UPPER ADF

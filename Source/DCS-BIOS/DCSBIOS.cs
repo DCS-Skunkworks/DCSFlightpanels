@@ -232,7 +232,7 @@ namespace DCS_BIOS
 
         public static int Send(string stringData)
         {
-            Debug.WriteLine($"Sending command : {stringData}");
+            //Debug.WriteLine($"Sending command : {stringData}");
             return _dcsBIOSInstance.SendDataFunction(stringData);
         }
 
