@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Diagnostics;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -81,9 +82,10 @@ namespace NonVisuals.Radios
         private volatile uint _lfRadioFrequencyCockpitValue = 1;
         private volatile uint _lfRadioVolumeCockpitValue;
         private int _lfRadioPresetDialSkipper;
-        private readonly uint _lfFrequencyChangeValue = 5000;
-        private readonly uint _lfVolumeChangeValue = 5000;
-
+        private readonly uint _lfFrequencyChangeValue = 50;
+        private readonly uint _lfVolumeChangeValue = 200;
+        private readonly ClickSpeedDetector _lfFrequencyDialChangeMonitor = new(15);
+        private readonly ClickSpeedDetector _lfVolumeDialChangeMonitor = new(15);
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -421,11 +423,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
                                             {
-                                                // VOLUME
-                                                if (!SkipLFRadioDialChange())
-                                                {
-                                                    DCSBIOS.Send(GetDetrolaVolumeStringCommand(true));
-                                                }
+                                                SendLFVolumeCommand(true);
                                                 break;
                                             }
                                         case CurrentP47DRadioMode.NOUSE:
@@ -455,11 +453,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
                                             {
-                                                // VOLUME
-                                                if (!SkipLFRadioDialChange())
-                                                {
-                                                    DCSBIOS.Send(GetDetrolaVolumeStringCommand(false));
-                                                }
+                                                SendLFVolumeCommand(false);
                                                 break;
                                             }
                                     }
@@ -489,11 +483,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
                                             {
-                                                // FREQUENCY
-                                                if (!SkipLFRadioDialChange())
-                                                {
-                                                    DCSBIOS.Send(GetDetrolaFrequencyStringCommand(true));
-                                                }
+                                                SendLFFrequencyCommand(true);
                                                 break;
                                             }
                                     }
@@ -523,11 +513,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
                                             {
-                                                // FREQUENCY
-                                                if (!SkipLFRadioDialChange())
-                                                {
-                                                    DCSBIOS.Send(GetDetrolaFrequencyStringCommand(false));
-                                                }
+                                                SendLFFrequencyCommand(false);
                                                 break;
                                             }
                                     }
@@ -553,11 +539,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
                                             {
-                                                // VOLUME
-                                                if (!SkipLFRadioDialChange())
-                                                {
-                                                    DCSBIOS.Send(GetDetrolaVolumeStringCommand(true));
-                                                }
+                                                SendLFVolumeCommand(true);
                                                 break;
                                             }
                                     }
@@ -583,11 +565,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
                                             {
-                                                // VOLUME
-                                                if (!SkipLFRadioDialChange())
-                                                {
-                                                    DCSBIOS.Send(GetDetrolaVolumeStringCommand(false));
-                                                }
+                                                SendLFVolumeCommand(false);
                                                 break;
                                             }
                                     }
@@ -617,11 +595,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
                                             {
-                                                // FREQUENCY
-                                                if (!SkipLFRadioDialChange())
-                                                {
-                                                    DCSBIOS.Send(GetDetrolaFrequencyStringCommand(true));
-                                                }
+                                                SendLFFrequencyCommand(true);
                                                 break;
                                             }
                                     }
@@ -651,11 +625,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
                                             {
-                                                // FREQUENCY
-                                                if (!SkipLFRadioDialChange())
-                                                {
-                                                    DCSBIOS.Send(GetDetrolaFrequencyStringCommand(false));
-                                                }
+                                                SendLFFrequencyCommand(false);
                                                 break;
                                             }
                                     }
@@ -952,6 +922,16 @@ namespace NonVisuals.Radios
             return false;
         }
 
+        private void SendLFFrequencyCommand(bool increase)
+        {
+            DCSBIOS.Send(GetDetrolaFrequencyStringCommand(increase, _lfFrequencyDialChangeMonitor.ClickAndCheck() ? _lfFrequencyChangeValue * 10 : _lfFrequencyChangeValue));
+        }
+
+        private void SendLFVolumeCommand(bool increase)
+        {
+            DCSBIOS.Send(GetDetrolaVolumeStringCommand(increase, _lfVolumeDialChangeMonitor.ClickAndCheck() ? _lfVolumeChangeValue * 10 : _lfVolumeChangeValue));
+        }
+
         private string GetHFRadioChannelStringCommand(bool moveUp)
         {
             lock (_lockVHFRadioPresetDialObject1)
@@ -1017,37 +997,39 @@ namespace NonVisuals.Radios
             }
         }
 
-        private string GetDetrolaFrequencyStringCommand(bool moveUp)
+        private string GetDetrolaFrequencyStringCommand(bool moveUp, uint changeValue)
         {
             lock (_lockLFRadioFrequencyDialObject1)
             {
+                uint newValue;
                 if (moveUp)
                 {
-                    var newValue = _lfRadioFrequencyDCSBIOSValue + _lfFrequencyChangeValue > 0xFFFF ? 0xFFFF : _lfRadioFrequencyDCSBIOSValue + _lfFrequencyChangeValue;
-                    return $"DETROLA_FREQUENCY {newValue}\n";
+                    newValue = _lfRadioFrequencyDCSBIOSValue + changeValue > 0xFFFF ? 0xFFFF : _lfRadioFrequencyDCSBIOSValue + changeValue;
+                    return $"DETROLA_FREQU_SEL {newValue}\n";
                 }
 
-                return $"DETROLA_FREQUENCY {_lfRadioFrequencyDCSBIOSValue - _lfFrequencyChangeValue}\n";
+                newValue = _lfRadioFrequencyDCSBIOSValue < changeValue ? 0 : _lfRadioFrequencyDCSBIOSValue - changeValue;
+                return $"DETROLA_FREQU_SEL {newValue}\n";
             }
         }
 
-        private string GetDetrolaVolumeStringCommand(bool moveUp)
+        private string GetDetrolaVolumeStringCommand(bool moveUp, uint changeValue)
         {
             lock (_lockLFRadioVolumeDialObject1)
             {
+                uint newValue;
                 if (moveUp)
                 {
-                    var newValue = _lfRadioVolumeDCSBIOSValue + _lfVolumeChangeValue > 0xFFFF ? 0xFFFF : _lfRadioVolumeDCSBIOSValue + _lfVolumeChangeValue;
-                    return $"DETROLA_VOLUME {newValue}\n";
+                    newValue = _lfRadioVolumeDCSBIOSValue + changeValue > 0xFFFF ? 0xFFFF : _lfRadioVolumeDCSBIOSValue + changeValue;
+                    return $"DETROLA_VOL {newValue}\n";
                 }
 
-                return $"DETROLA_VOLUME {_lfRadioVolumeDCSBIOSValue - _lfVolumeChangeValue}\n";
+                newValue = _lfRadioVolumeDCSBIOSValue < changeValue ? 0 : _lfRadioVolumeDCSBIOSValue - changeValue;
+                return $"DETROLA_VOL {newValue}\n";
             }
         }
 
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
-        {
-        }
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
 
         public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
         {

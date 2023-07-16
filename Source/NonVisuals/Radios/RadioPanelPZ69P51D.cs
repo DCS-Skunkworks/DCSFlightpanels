@@ -61,6 +61,24 @@ namespace NonVisuals.Radios
         private int _vhfRadioDialSkipper;
         private const string VHF_RADIO_LIGHT_SWITCH_COMMAND = "RADIO_LIGHTS_DIMMER TOGGLE\n";
 
+        /*
+         *  LF DETROLA RADIO
+         *  COM1 Large : Volume Dial
+         *  COM1 Small : Frequency Dial        
+         */
+        private readonly object _lockLFRadioFrequencyDialObject1 = new();
+        private readonly object _lockLFRadioVolumeDialObject1 = new();
+        private DCSBIOSOutput _lfRadioFrequencyDcsbiosOutput;
+        private DCSBIOSOutput _lfRadioVolumeDcsbiosOutput;
+        private volatile uint _lfRadioFrequencyDCSBIOSValue = 1;
+        private volatile uint _lfRadioVolumeDCSBIOSValue;
+        private volatile uint _lfRadioFrequencyCockpitValue = 1;
+        private volatile uint _lfRadioVolumeCockpitValue;
+        private int _lfRadioPresetDialSkipper;
+        private readonly uint _lfFrequencyChangeValue = 50;
+        private readonly uint _lfVolumeChangeValue = 200;
+        private readonly ClickSpeedDetector _lfFrequencyDialChangeMonitor = new(15);
+        private readonly ClickSpeedDetector _lfVolumeDialChangeMonitor = new(15);
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -190,6 +208,30 @@ namespace NonVisuals.Radios
                     lock (_lockVhf1DialObject1)
                     {
                         _vhfRadioModeCockpitDial2Position = _vhf1RadioModeDial2PresetDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                    }
+                }
+
+                // LF DETROLA Frequency
+                if (_lfRadioFrequencyDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
+                {
+                    lock (_lockLFRadioFrequencyDialObject1)
+                    {
+                        _lfRadioFrequencyDCSBIOSValue = _lfRadioFrequencyDcsbiosOutput.LastUIntValue;
+                        //Range is 200 - 400kHz (DCS-BIOS value 0 - 65535)
+                        _lfRadioFrequencyCockpitValue = Convert.ToUInt32(Convert.ToDouble(_lfRadioFrequencyDCSBIOSValue) / 65535 * 200 + 200);
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                    }
+                }
+
+                // LF DETROLA Volume
+                if (_lfRadioVolumeDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
+                {
+                    lock (_lockLFRadioVolumeDialObject1)
+                    {
+                        _lfRadioVolumeDCSBIOSValue = _lfRadioVolumeDcsbiosOutput.LastUIntValue;
+                        //0 - 100
+                        _lfRadioVolumeCockpitValue = Convert.ToUInt32(Convert.ToDouble(_lfRadioVolumeDCSBIOSValue) / 65535 * 100);
                         Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
@@ -381,6 +423,11 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
+                                        case CurrentP51DRadioMode.DETROLA:
+                                            {
+                                                SendLFVolumeCommand(true);
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -399,6 +446,11 @@ namespace NonVisuals.Radios
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
+                                                break;
+                                            }
+                                        case CurrentP51DRadioMode.DETROLA:
+                                            {
+                                                SendLFVolumeCommand(false);
                                                 break;
                                             }
                                     }
@@ -425,6 +477,11 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
+                                        case CurrentP51DRadioMode.DETROLA:
+                                            {
+                                                SendLFFrequencyCommand(true);
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -449,6 +506,11 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
+                                        case CurrentP51DRadioMode.DETROLA:
+                                            {
+                                                SendLFFrequencyCommand(false);
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -469,6 +531,11 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
+                                        case CurrentP51DRadioMode.DETROLA:
+                                            {
+                                                SendLFVolumeCommand(true);
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -487,6 +554,11 @@ namespace NonVisuals.Radios
                                                         DCSBIOS.Send(s);
                                                     }
                                                 }
+                                                break;
+                                            }
+                                        case CurrentP51DRadioMode.DETROLA:
+                                            {
+                                                SendLFVolumeCommand(false);
                                                 break;
                                             }
                                     }
@@ -513,6 +585,11 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
+                                        case CurrentP51DRadioMode.DETROLA:
+                                            {
+                                                SendLFFrequencyCommand(true);
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -535,6 +612,11 @@ namespace NonVisuals.Radios
                                                         SendDecVHFPresetCommand();
                                                     }
                                                 }
+                                                break;
+                                            }
+                                        case CurrentP51DRadioMode.DETROLA:
+                                            {
+                                                SendLFFrequencyCommand(false);
                                                 break;
                                             }
                                     }
@@ -641,7 +723,15 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
-
+                        case CurrentP51DRadioMode.DETROLA:
+                            {
+                                lock (_lockLFRadioFrequencyDialObject1)
+                                {
+                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, _lfRadioFrequencyCockpitValue, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, _lfRadioVolumeCockpitValue, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                }
+                                break;
+                            }
                         case CurrentP51DRadioMode.NOUSE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -669,6 +759,15 @@ namespace NonVisuals.Radios
 
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfRadioModeCockpitDial1Position, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                break;
+                            }
+                        case CurrentP51DRadioMode.DETROLA:
+                            {
+                                lock (_lockLFRadioFrequencyDialObject1)
+                                {
+                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, _lfRadioFrequencyCockpitValue, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, _lfRadioVolumeCockpitValue, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                }
                                 break;
                             }
 
@@ -726,6 +825,50 @@ namespace NonVisuals.Radios
                             break;
                         }
                 }
+            }
+        }
+
+
+        private void SendLFFrequencyCommand(bool increase)
+        {
+            DCSBIOS.Send(GetDetrolaFrequencyStringCommand(increase, _lfFrequencyDialChangeMonitor.ClickAndCheck() ? _lfFrequencyChangeValue * 10 : _lfFrequencyChangeValue));
+        }
+
+        private void SendLFVolumeCommand(bool increase)
+        {
+            DCSBIOS.Send(GetDetrolaVolumeStringCommand(increase, _lfVolumeDialChangeMonitor.ClickAndCheck() ? _lfVolumeChangeValue * 10 : _lfVolumeChangeValue));
+        }
+
+
+        private string GetDetrolaFrequencyStringCommand(bool moveUp, uint changeValue)
+        {
+            lock (_lockLFRadioFrequencyDialObject1)
+            {
+                uint newValue;
+                if (moveUp)
+                {
+                    newValue = _lfRadioFrequencyDCSBIOSValue + changeValue > 0xFFFF ? 0xFFFF : _lfRadioFrequencyDCSBIOSValue + changeValue;
+                    return $"DETROLA_FREQUENCY {newValue}\n";
+                }
+
+                newValue = _lfRadioFrequencyDCSBIOSValue < changeValue ? 0 : _lfRadioFrequencyDCSBIOSValue - changeValue;
+                return $"DETROLA_FREQUENCY {newValue}\n";
+            }
+        }
+
+        private string GetDetrolaVolumeStringCommand(bool moveUp, uint changeValue)
+        {
+            lock (_lockLFRadioVolumeDialObject1)
+            {
+                uint newValue;
+                if (moveUp)
+                {
+                    newValue = _lfRadioVolumeDCSBIOSValue + changeValue > 0xFFFF ? 0xFFFF : _lfRadioVolumeDCSBIOSValue + changeValue;
+                    return $"DETROLA_VOLUME {newValue}\n";
+                }
+
+                newValue = _lfRadioVolumeDCSBIOSValue < changeValue ? 0 : _lfRadioVolumeDCSBIOSValue - changeValue;
+                return $"DETROLA_VOLUME {newValue}\n";
             }
         }
 
@@ -818,6 +961,9 @@ namespace NonVisuals.Radios
                 _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_RADIO_CHAN_D");
                 _vhf1RadioModeDial1PresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_MODE2");
                 _vhf1RadioModeDial2PresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_MODE3");
+                // LF DETROLA
+                _lfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DETROLA_FREQUENCY");
+                _lfRadioVolumeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DETROLA_VOLUME");
 
                 StartListeningForHidPanelChanges();
 
