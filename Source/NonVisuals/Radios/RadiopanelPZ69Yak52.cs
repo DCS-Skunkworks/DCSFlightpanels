@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using NonVisuals.BindingClasses.BIP;
+﻿using NonVisuals.BindingClasses.BIP;
+using NonVisuals.Helpers;
 
 namespace NonVisuals.Radios
 {
@@ -30,7 +30,8 @@ namespace NonVisuals.Radios
         private enum CurrentYak52RadioMode
         {
             VHF,
-            ADF,
+            ADF_FRONT,
+            ADF_REAR,
             NOUSE
         }
 
@@ -68,23 +69,29 @@ namespace NonVisuals.Radios
         private const string VHF_RADIO_FREQUENCY = "BAKLAN5_FREQ";
 
         /*
-         *  LF DETROLA RADIO
-         *  COM1 Large : Volume Dial
-         *  COM1 Small : Frequency Dial        
+         *  ADF
+         *  COM2 Large : Volume Dial
+         *  COM2 Small : ADF Channel
+         *  ACT/STBY + Dial => Rear ADF
          */
-        private readonly object _lockLFRadioFrequencyDialObject1 = new();
-        private readonly object _lockLFRadioVolumeDialObject1 = new();
-        private DCSBIOSOutput _lfRadioFrequencyDcsbiosOutput;
-        private DCSBIOSOutput _lfRadioVolumeDcsbiosOutput;
-        private volatile uint _lfRadioFrequencyDCSBIOSValue = 1;
-        private volatile uint _lfRadioVolumeDCSBIOSValue;
-        private volatile uint _lfRadioFrequencyCockpitValue = 1;
-        private volatile uint _lfRadioVolumeCockpitValue;
-        private int _lfRadioPresetDialSkipper;
-        private readonly uint _lfFrequencyChangeValue = 50;
-        private readonly uint _lfVolumeChangeValue = 200;
-        private readonly ClickSpeedDetector _lfFrequencyDialChangeMonitor = new(15);
-        private readonly ClickSpeedDetector _lfVolumeDialChangeMonitor = new(15);
+        private readonly object _lockADFFrontChannelObject1 = new();
+        private DCSBIOSOutput _adfFrontChannelDialDcsbiosOutput;
+        private volatile uint _adfFrontChannelCockpitPosition;
+        private readonly object _lockADFRearChannelObject1 = new();
+        private DCSBIOSOutput _adfRearChannelDialDcsbiosOutput;
+        private volatile uint _adfRearChannelCockpitPosition;
+        private const string ADF_FRONT_CHANNEL = "FRONT_RDF_CHANNEL";
+        private const string ADF_FRONT_CHANNEL_INC = "FRONT_RDF_CHANNEL INC\n";
+        private const string ADF_FRONT_CHANNEL_DEC = "FRONT_RDF_CHANNEL DEC\n";
+        private const string ADF_FRONT_VOLUME_INC = "FRONT_RDF_VOLUME +5000\n";
+        private const string ADF_FRONT_VOLUME_DEC = "FRONT_RDF_VOLUME -5000\n";
+        private const string ADF_REAR_CHANNEL = "REAR_RDF_CHANNEL";
+        private const string ADF_REAR_CHANNEL_INC = "REAR_RDF_CHANNEL INC\n";
+        private const string ADF_REAR_CHANNEL_DEC = "REAR_RDF_CHANNEL DEC\n";
+        private const string ADF_REAR_VOLUME_INC = "REAR_RDF_VOLUME +5000\n";
+        private const string ADF_REAR_VOLUME_DEC = "REAR_RDF_VOLUME -5000\n";
+        private ClickSkipper _adfFrontClickSkipper = new ClickSkipper(2);
+        private ClickSkipper _adfRearClickSkipper = new ClickSkipper(2);
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -164,6 +171,26 @@ namespace NonVisuals.Radios
                     }
                 }
 
+                // Front ADF Channel
+                if (_adfFrontChannelDialDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
+                {
+                    lock (_lockADFFrontChannelObject1)
+                    {
+                        _adfFrontChannelCockpitPosition = _adfFrontChannelDialDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                    }
+                }
+
+                // Rear ADF Channel
+                if (_adfRearChannelDialDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
+                {
+                    lock (_lockADFRearChannelObject1)
+                    {
+                        _adfRearChannelCockpitPosition = _adfRearChannelDialDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                    }
+                }
+
                 // ADF
                 /*
                 if (_vhfRadioChannelAPresetDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
@@ -214,16 +241,24 @@ namespace NonVisuals.Radios
 
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsYak52.UPPER_ADF:
+                            case RadioPanelPZ69KnobsYak52.UPPER_ADF_FRONT:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentYak52RadioMode.ADF);
+                                        SetUpperRadioMode(CurrentYak52RadioMode.ADF_FRONT);
                                     }
 
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE0:
+                            case RadioPanelPZ69KnobsYak52.UPPER_ADF_REAR:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetUpperRadioMode(CurrentYak52RadioMode.ADF_REAR);
+                                    }
+
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsYak52.UPPER_NO_USE1:
                             case RadioPanelPZ69KnobsYak52.UPPER_NO_USE2:
                             case RadioPanelPZ69KnobsYak52.UPPER_NO_USE3:
@@ -244,15 +279,22 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsYak52.LOWER_ADF:
+                            case RadioPanelPZ69KnobsYak52.LOWER_ADF_FRONT:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentYak52RadioMode.ADF);
+                                        SetLowerRadioMode(CurrentYak52RadioMode.ADF_FRONT);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE0:
+                            case RadioPanelPZ69KnobsYak52.LOWER_ADF_REAR:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentYak52RadioMode.ADF_REAR);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsYak52.LOWER_NO_USE1:
                             case RadioPanelPZ69KnobsYak52.LOWER_NO_USE2:
                             case RadioPanelPZ69KnobsYak52.LOWER_NO_USE3:
@@ -366,9 +408,14 @@ namespace NonVisuals.Radios
                                                 SendVHFMhzCommand(true);
                                                 break;
                                             }
-                                        case CurrentYak52RadioMode.ADF:
+                                        case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                //SendLFVolumeCommand(true);
+                                                DCSBIOS.Send(ADF_FRONT_VOLUME_INC);
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.ADF_REAR:
+                                            {
+                                                DCSBIOS.Send(ADF_REAR_VOLUME_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.NOUSE:
@@ -388,9 +435,14 @@ namespace NonVisuals.Radios
                                                 SendVHFMhzCommand(false);
                                                 break;
                                             }
-                                        case CurrentYak52RadioMode.ADF:
+                                        case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                //SendLFVolumeCommand(false);
+                                                DCSBIOS.Send(ADF_FRONT_VOLUME_DEC);
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.ADF_REAR:
+                                            {
+                                                DCSBIOS.Send(ADF_REAR_VOLUME_DEC);
                                                 break;
                                             }
                                     }
@@ -414,9 +466,20 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
-                                        case CurrentYak52RadioMode.ADF:
+                                        case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                //SendLFFrequencyCommand(true);
+                                                if (_adfFrontClickSkipper.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(ADF_FRONT_CHANNEL_INC);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.ADF_REAR:
+                                            {
+                                                if (_adfRearClickSkipper.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(ADF_REAR_CHANNEL_INC);
+                                                }
                                                 break;
                                             }
                                     }
@@ -440,9 +503,20 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
-                                        case CurrentYak52RadioMode.ADF:
+                                        case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                //SendLFFrequencyCommand(false);
+                                                if (_adfFrontClickSkipper.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(ADF_FRONT_CHANNEL_DEC);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.ADF_REAR:
+                                            {
+                                                if (_adfRearClickSkipper.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(ADF_REAR_CHANNEL_DEC);
+                                                }
                                                 break;
                                             }
                                     }
@@ -458,9 +532,14 @@ namespace NonVisuals.Radios
                                                 SendVHFMhzCommand(true);
                                                 break;
                                             }
-                                        case CurrentYak52RadioMode.ADF:
+                                        case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                //SendLFVolumeCommand(true);
+                                                DCSBIOS.Send(ADF_FRONT_VOLUME_INC);
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.ADF_REAR:
+                                            {
+                                                DCSBIOS.Send(ADF_REAR_VOLUME_INC);
                                                 break;
                                             }
                                     }
@@ -476,9 +555,14 @@ namespace NonVisuals.Radios
                                                 SendVHFMhzCommand(false);
                                                 break;
                                             }
-                                        case CurrentYak52RadioMode.ADF:
+                                        case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                //SendLFVolumeCommand(false);
+                                                DCSBIOS.Send(ADF_FRONT_VOLUME_DEC);
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.ADF_REAR:
+                                            {
+                                                DCSBIOS.Send(ADF_REAR_VOLUME_DEC);
                                                 break;
                                             }
                                     }
@@ -502,9 +586,20 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
-                                        case CurrentYak52RadioMode.ADF:
+                                        case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                //SendLFFrequencyCommand(true);
+                                                if (_adfFrontClickSkipper.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(ADF_FRONT_CHANNEL_INC);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.ADF_REAR:
+                                            {
+                                                if (_adfRearClickSkipper.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(ADF_REAR_CHANNEL_INC);
+                                                }
                                                 break;
                                             }
                                     }
@@ -528,9 +623,21 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
-                                        case CurrentYak52RadioMode.ADF:
+                                        case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                //SendLFFrequencyCommand(false);
+                                                if (_adfFrontClickSkipper.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(ADF_FRONT_CHANNEL_DEC);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.ADF_REAR:
+                                            {
+                                                if (_adfRearClickSkipper.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(ADF_REAR_CHANNEL_DEC);
+                                                }
+
                                                 break;
                                             }
                                     }
@@ -581,12 +688,27 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfRadioSquelchSwitchCockpitPosition, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
-                        case CurrentYak52RadioMode.ADF:
+                        case CurrentYak52RadioMode.ADF_FRONT:
                             {
-                                lock (_lockLFRadioFrequencyDialObject1)
+                                lock (_lockADFFrontChannelObject1)
                                 {
-                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, _lfRadioFrequencyCockpitValue, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, _lfRadioVolumeCockpitValue, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    lock (_lockADFRearChannelObject1)
+                                    {
+                                        SetPZ69DisplayBytesUnsignedInteger(ref bytes, _adfFrontChannelCockpitPosition, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    }
+                                }
+                                break;
+                            }
+                        case CurrentYak52RadioMode.ADF_REAR:
+                            {
+                                lock (_lockADFFrontChannelObject1)
+                                {
+                                    lock (_lockADFRearChannelObject1)
+                                    {
+                                        SetPZ69DisplayBytesUnsignedInteger(ref bytes, _adfRearChannelCockpitPosition, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    }
                                 }
                                 break;
                             }
@@ -613,12 +735,27 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, _vhfRadioSquelchSwitchCockpitPosition, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
-                        case CurrentYak52RadioMode.ADF:
+                        case CurrentYak52RadioMode.ADF_FRONT:
                             {
-                                lock (_lockLFRadioFrequencyDialObject1)
+                                lock (_lockADFFrontChannelObject1)
                                 {
-                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, _lfRadioFrequencyCockpitValue, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, _lfRadioVolumeCockpitValue, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    lock (_lockADFRearChannelObject1)
+                                    {
+                                        SetPZ69DisplayBytesUnsignedInteger(ref bytes, _adfFrontChannelCockpitPosition, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    }
+                                }
+                                break;
+                            }
+                        case CurrentYak52RadioMode.ADF_REAR:
+                            {
+                                lock (_lockADFFrontChannelObject1)
+                                {
+                                    lock (_lockADFRearChannelObject1)
+                                    {
+                                        SetPZ69DisplayBytesUnsignedInteger(ref bytes, _adfRearChannelCockpitPosition, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    }
                                 }
                                 break;
                             }
@@ -654,6 +791,10 @@ namespace NonVisuals.Radios
                 _vhfRadioSquelchSwitchDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(VHF_RADIO_SQUELCH_TOGGLE);
                 _vhfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(VHF_RADIO_FREQUENCY);
                 DCSBIOSStringManager.AddListeningAddress(_vhfRadioFrequencyDcsbiosOutput);
+
+                // ADF
+                _adfFrontChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(ADF_FRONT_CHANNEL);
+                _adfRearChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(ADF_REAR_CHANNEL);
 
                 StartListeningForHidPanelChanges();
             }

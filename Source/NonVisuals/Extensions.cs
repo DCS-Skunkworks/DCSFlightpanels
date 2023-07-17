@@ -7,7 +7,6 @@ namespace NonVisuals
     using TextBox = System.Windows.Controls.TextBox;
     using Newtonsoft.Json;
     using Panels.StreamDeck;
-    using SixLabors.ImageSharp.PixelFormats;
     using SixLabors.ImageSharp;
     using System.IO;
 

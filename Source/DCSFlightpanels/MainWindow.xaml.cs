@@ -1,6 +1,4 @@
-﻿using DCS_BIOS.Json;
-
-namespace DCSFlightpanels
+﻿namespace DCSFlightpanels
 {
     /*
     Custom Resharper Naming abbreviations

@@ -6,7 +6,6 @@ namespace NonVisuals.Panels.StreamDeck
     using System.Collections.Generic;
     using System.Drawing;
     using System.Globalization;
-    using System.IO;
     using System.Text;
     using System.Threading;
     using DCS_BIOS;

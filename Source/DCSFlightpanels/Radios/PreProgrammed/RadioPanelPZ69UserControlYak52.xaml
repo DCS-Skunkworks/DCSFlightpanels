@@ -81,11 +81,20 @@
                     </TextBlock>
                 </TextBlock>
                 <TextBlock FontSize="10" FontWeight="Bold">
-                    COM 2 DETROLA = <LineBreak/>
+                    ADF : FRONT ADF = <LineBreak/>
                     <TextBlock Margin="15,0,0,0">
                         Large Dial : Volume
                         <LineBreak/>
-                        Small Dial : Frequency
+                        Small Dial : Channel
+                        <LineBreak/>
+                    </TextBlock>
+                </TextBlock>
+                <TextBlock FontSize="10" FontWeight="Bold">
+                    DME : REAR ADF = <LineBreak/>
+                    <TextBlock Margin="15,0,0,0">
+                        Large Dial : Volume
+                        <LineBreak/>
+                        Small Dial : Channel
                         <LineBreak/>
                     </TextBlock>
                 </TextBlock>
@@ -118,13 +127,14 @@
             </StackPanel>
         </GroupBox>
 
-        <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
-
+        <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="6">
+            <Label Content="Radio" FontWeight="Bold"/>
+            <Image Height="300" Source="/dcsfp;component/Images/YAK52_VHF.jpg" />
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="5">
             <Label Name="LabelAirframe" Content="Yak-52" FontSize="30" FontWeight="Bold" Grid.Column="4" Grid.Row="0"/>
-            <Label Content="Radio" FontWeight="Bold"/>
-            <Image Height="300" Source="/dcsfp;component/Images/YAK52_VHF.jpg" />
+            <Label Content="ADF" FontWeight="Bold"/>
+            <Image Height="300" Source="/dcsfp;component/Images/YAK52_ADF.jpg" />
         </StackPanel>
         <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="3" >
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">

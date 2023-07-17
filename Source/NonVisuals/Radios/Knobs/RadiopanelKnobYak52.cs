@@ -7,11 +7,11 @@
     public enum RadioPanelPZ69KnobsYak52
     {
         UPPER_VHF,      //COM1
-        UPPER_ADF, //COM2
-        UPPER_NO_USE0,          //NAV1
-        UPPER_NO_USE1,             //NAV2
-        UPPER_NO_USE2,       //ADF
-        UPPER_NO_USE3,          //DME_
+        UPPER_NO_USE1, //COM2
+        UPPER_NO_USE2,          //NAV1
+        UPPER_NO_USE3,             //NAV2
+        UPPER_ADF_FRONT,       //ADF
+        UPPER_ADF_REAR,          //DME_
         UPPER_NO_USE4,            //XPDR
         UPPER_SMALL_FREQ_WHEEL_INC,
         UPPER_SMALL_FREQ_WHEEL_DEC,
@@ -19,11 +19,11 @@
         UPPER_LARGE_FREQ_WHEEL_DEC,
         UPPER_FREQ_SWITCH,
         LOWER_VHF,   //COM1
-        LOWER_ADF, //DETROLA      //COM2
-        LOWER_NO_USE0,      //NAV1
-        LOWER_NO_USE1,          //NAV2
-        LOWER_NO_USE2,    //ADF
-        LOWER_NO_USE3,      //DME_
+        LOWER_NO_USE1,      //COM2
+        LOWER_NO_USE2,      //NAV1
+        LOWER_NO_USE3,          //NAV2
+        LOWER_ADF_FRONT,    //ADF
+        LOWER_ADF_REAR,      //DME_
         LOWER_NO_USE4,        //XPDR
         LOWER_SMALL_FREQ_WHEEL_INC,
         LOWER_SMALL_FREQ_WHEEL_DEC,
@@ -69,21 +69,21 @@
                 new RadioPanelKnobYak52(2, 1 << 6, true, RadioPanelPZ69KnobsYak52.LOWER_LARGE_FREQ_WHEEL_INC),
                 new RadioPanelKnobYak52(2, 1 << 7, false, RadioPanelPZ69KnobsYak52.LOWER_LARGE_FREQ_WHEEL_DEC),
                 // Group 1
-                new RadioPanelKnobYak52(1, 1 << 0, true, RadioPanelPZ69KnobsYak52.LOWER_ADF), // LOWER COM2
-                new RadioPanelKnobYak52(1, 1 << 1, true, RadioPanelPZ69KnobsYak52.LOWER_NO_USE0), // LOWER NAV1
-                new RadioPanelKnobYak52(1, 1 << 2, true, RadioPanelPZ69KnobsYak52.LOWER_NO_USE1), // LOWER NAV2
-                new RadioPanelKnobYak52(1, 1 << 3, true, RadioPanelPZ69KnobsYak52.LOWER_NO_USE2), // LOWER ADF
-                new RadioPanelKnobYak52(1, 1 << 4, true, RadioPanelPZ69KnobsYak52.LOWER_NO_USE3), // LOWER DME
+                new RadioPanelKnobYak52(1, 1 << 0, true, RadioPanelPZ69KnobsYak52.LOWER_NO_USE1), // LOWER COM2
+                new RadioPanelKnobYak52(1, 1 << 1, true, RadioPanelPZ69KnobsYak52.LOWER_NO_USE2), // LOWER NAV1
+                new RadioPanelKnobYak52(1, 1 << 2, true, RadioPanelPZ69KnobsYak52.LOWER_NO_USE3), // LOWER NAV2
+                new RadioPanelKnobYak52(1, 1 << 3, true, RadioPanelPZ69KnobsYak52.LOWER_ADF_FRONT), // LOWER ADF
+                new RadioPanelKnobYak52(1, 1 << 4, true, RadioPanelPZ69KnobsYak52.LOWER_ADF_REAR), // LOWER DME
                 new RadioPanelKnobYak52(1, 1 << 5, true, RadioPanelPZ69KnobsYak52.LOWER_NO_USE4), // LOWER XPDR
                 new RadioPanelKnobYak52(1, 1 << 6, true, RadioPanelPZ69KnobsYak52.UPPER_FREQ_SWITCH),
                 new RadioPanelKnobYak52(1, 1 << 7, true, RadioPanelPZ69KnobsYak52.LOWER_FREQ_SWITCH),
                 // Group 2
                 new RadioPanelKnobYak52(0, 1 << 0, true, RadioPanelPZ69KnobsYak52.UPPER_VHF), // UPPER COM1
-                new RadioPanelKnobYak52(0, 1 << 1, true, RadioPanelPZ69KnobsYak52.UPPER_ADF), // UPPER COM2
-                new RadioPanelKnobYak52(0, 1 << 2, true, RadioPanelPZ69KnobsYak52.UPPER_NO_USE0), // UPPER NAV1
-                new RadioPanelKnobYak52(0, 1 << 3, true, RadioPanelPZ69KnobsYak52.UPPER_NO_USE1), // UPPER NAV2
-                new RadioPanelKnobYak52(0, 1 << 4, true, RadioPanelPZ69KnobsYak52.UPPER_NO_USE2), // UPPER ADF
-                new RadioPanelKnobYak52(0, 1 << 5, true, RadioPanelPZ69KnobsYak52.UPPER_NO_USE3), // UPPER DME
+                new RadioPanelKnobYak52(0, 1 << 1, true, RadioPanelPZ69KnobsYak52.UPPER_NO_USE1), // UPPER COM2
+                new RadioPanelKnobYak52(0, 1 << 2, true, RadioPanelPZ69KnobsYak52.UPPER_NO_USE2), // UPPER NAV1
+                new RadioPanelKnobYak52(0, 1 << 3, true, RadioPanelPZ69KnobsYak52.UPPER_NO_USE3), // UPPER NAV2
+                new RadioPanelKnobYak52(0, 1 << 4, true, RadioPanelPZ69KnobsYak52.UPPER_ADF_FRONT), // UPPER ADF
+                new RadioPanelKnobYak52(0, 1 << 5, true, RadioPanelPZ69KnobsYak52.UPPER_ADF_REAR), // UPPER DME
                 new RadioPanelKnobYak52(0, 1 << 6, true, RadioPanelPZ69KnobsYak52.UPPER_NO_USE4), // UPPER XPDR
                 new RadioPanelKnobYak52(0, 1 << 7, true, RadioPanelPZ69KnobsYak52.LOWER_VHF) // LOWER COM1
             };

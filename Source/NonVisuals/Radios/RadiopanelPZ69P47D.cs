@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using NonVisuals.BindingClasses.BIP;
+﻿using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -18,6 +17,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
 
 

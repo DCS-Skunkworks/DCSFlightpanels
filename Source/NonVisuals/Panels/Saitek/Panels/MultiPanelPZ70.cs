@@ -21,7 +21,8 @@ namespace NonVisuals.Panels.Saitek.Panels
     using NonVisuals;
     using Saitek;
     using HID;
-    
+    using NonVisuals.Helpers;
+
     /// <summary>
     /// The implementation class for the Logitech Multi Panel (PZ70)
     /// See bottom of file for communication information.

@@ -1,7 +1,6 @@
 ﻿namespace NonVisuals.Panels.StreamDeck
 {
     using System;
-    using System.Text;
     using System.Threading;
 
     using ClassLibraryCommon;

@@ -15,7 +15,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
-    using System.Threading.Channels;
+    using NonVisuals.Helpers;
 
 
 

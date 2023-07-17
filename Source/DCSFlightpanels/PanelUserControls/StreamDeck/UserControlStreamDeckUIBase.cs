@@ -12,8 +12,6 @@
 
     using Bills;
     using CustomControls;
-    using Shared;
-
     using MEF;
     using NLog;
     using NonVisuals.Interfaces;

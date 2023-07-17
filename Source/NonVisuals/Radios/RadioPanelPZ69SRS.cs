@@ -17,6 +17,7 @@
     using NonVisuals.Panels.Saitek;
     using NonVisuals.HID;
     using NonVisuals.BindingClasses.BIP;
+    using NonVisuals.Helpers;
 
     public struct SRSRadioSmallFreqStepping
     {

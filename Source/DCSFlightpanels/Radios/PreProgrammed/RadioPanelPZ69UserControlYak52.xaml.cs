@@ -119,7 +119,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.UPPER_ADF:
+                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE1:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -129,7 +129,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE0:
+                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE2:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -139,7 +139,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE1:
+                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE3:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -149,7 +149,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE2:
+                        case RadioPanelPZ69KnobsYak52.UPPER_ADF_FRONT:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -159,7 +159,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE3:
+                        case RadioPanelPZ69KnobsYak52.UPPER_ADF_REAR:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -189,7 +189,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.LOWER_ADF:
+                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE1:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -199,7 +199,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE0:
+                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE2:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -209,7 +209,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE1:
+                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE3:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -219,7 +219,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE2:
+                        case RadioPanelPZ69KnobsYak52.LOWER_ADF_FRONT:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -229,7 +229,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE3:
+                        case RadioPanelPZ69KnobsYak52.LOWER_ADF_REAR:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(

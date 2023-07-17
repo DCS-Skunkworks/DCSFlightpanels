@@ -1,5 +1,4 @@
 ﻿using DCS_BIOS;
-using System;
 using Xunit;
 
 namespace Tests.DcsBios

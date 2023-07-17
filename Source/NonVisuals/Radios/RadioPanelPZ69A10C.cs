@@ -18,6 +18,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
     /// <summary>
     /// Pre-programmed radio panel for the A-10C.

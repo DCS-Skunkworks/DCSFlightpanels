@@ -6,9 +6,6 @@ namespace NonVisuals.Radios
     using System.Collections.Generic;
     using System.Globalization;
     using System.Threading;
-
-    using System.Diagnostics;
-
     using ClassLibraryCommon;
 
     using DCS_BIOS;
@@ -20,6 +17,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
 
     /// <summary>
