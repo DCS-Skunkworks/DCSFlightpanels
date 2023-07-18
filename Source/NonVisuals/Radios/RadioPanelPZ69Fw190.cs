@@ -395,19 +395,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
-                                                }
+                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                if (!_fug25AIFFDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG25_AIFF_COMMAND_INC);
-                                                }
+                                                _fug25AIFFDialSkipper.Click(FUG25_AIFF_COMMAND_INC);
                                                 break;
                                             }
 
@@ -431,19 +425,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
-                                                }
+                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                if (!_fug25AIFFDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG25_AIFF_COMMAND_DEC);
-                                                }
+                                                _fug25AIFFDialSkipper.Click(FUG25_AIFF_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -527,19 +515,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
-                                                }
+                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                if (!_fug25AIFFDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG25_AIFF_COMMAND_INC);
-                                                }
+                                                _fug25AIFFDialSkipper.Click(FUG25_AIFF_COMMAND_INC);
                                                 break;
                                             }
 
@@ -563,19 +545,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
-                                                }
+                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                if (!_fug25AIFFDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG25_AIFF_COMMAND_DEC);
-                                                }
+                                                _fug25AIFFDialSkipper.Click(FUG25_AIFF_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -811,7 +787,7 @@ namespace NonVisuals.Radios
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
-        
+
         public sealed override void Startup()
         {
             try
@@ -874,7 +850,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
         public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
         public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }

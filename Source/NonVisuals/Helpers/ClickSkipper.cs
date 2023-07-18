@@ -15,7 +15,7 @@ namespace NonVisuals.Helpers
         {
             _clicksToSkip = clicksToSkip;
         }
-        
+
         /// <summary>
         /// Returns true if should skip.
         /// </summary>
@@ -37,7 +37,7 @@ namespace NonVisuals.Helpers
         /// Executes DCS-BIOS command if not skipping.
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSkip(string dcsBIOSCommand)
+        public bool Click(string dcsBIOSCommand)
         {
             _clicksDetected++;
             if (_clicksDetected <= _clicksToSkip)
@@ -46,7 +46,12 @@ namespace NonVisuals.Helpers
             }
 
             _clicksDetected = 0;
-            DCSBIOS.Send(dcsBIOSCommand);
+
+            if (!string.IsNullOrEmpty(dcsBIOSCommand))
+            {
+                DCSBIOS.Send(dcsBIOSCommand);
+            }
+
             return false;
         }
     }

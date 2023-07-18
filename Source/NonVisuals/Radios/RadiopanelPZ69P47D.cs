@@ -404,15 +404,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP47DRadioMode.VHF:
                                             {
-                                                // MODE
-                                                if (!_vhfRadioModePresetDialSkipper.ShouldSkip())
-                                                {
-                                                    var s = GetHFRadioModeStringCommand(true);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
-                                                }
+                                                _vhfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
@@ -435,14 +427,7 @@ namespace NonVisuals.Radios
                                         case CurrentP47DRadioMode.VHF:
                                             {
                                                 // MODE
-                                                if (!_vhfRadioModePresetDialSkipper.ShouldSkip())
-                                                {
-                                                    var s = GetHFRadioModeStringCommand(false);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
-                                                }
+                                                _vhfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
@@ -465,13 +450,9 @@ namespace NonVisuals.Radios
                                                     _upperButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF_VOLUME_KNOB_COMMAND_INC);
                                                 }
-                                                else if (!_vhfRadioChannelPresetDialSkipper.ShouldSkip())
+                                                else
                                                 {
-                                                    var s = GetHFRadioChannelStringCommand(true);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
+                                                    _vhfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(true));
                                                 }
                                                 break;
                                             }
@@ -495,13 +476,9 @@ namespace NonVisuals.Radios
                                                     _upperButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-                                                else if (!_vhfRadioChannelPresetDialSkipper.ShouldSkip())
+                                                else
                                                 {
-                                                    var s = GetHFRadioChannelStringCommand(false);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
+                                                    _vhfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(false));
                                                 }
                                                 break;
                                             }
@@ -520,15 +497,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP47DRadioMode.VHF:
                                             {
-                                                // MODE
-                                                if (!_vhfRadioModePresetDialSkipper.ShouldSkip())
-                                                {
-                                                    var s = GetHFRadioModeStringCommand(true);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
-                                                }
+                                                _vhfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
@@ -546,15 +515,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP47DRadioMode.VHF:
                                             {
-                                                // MODE
-                                                if (!_vhfRadioModePresetDialSkipper.ShouldSkip())
-                                                {
-                                                    var s = GetHFRadioModeStringCommand(false);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
-                                                }
+                                                _vhfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
@@ -577,13 +538,9 @@ namespace NonVisuals.Radios
                                                     _lowerButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF_VOLUME_KNOB_COMMAND_INC);
                                                 }
-                                                else if (!_vhfRadioChannelPresetDialSkipper.ShouldSkip())
+                                                else 
                                                 {
-                                                    var s = GetHFRadioChannelStringCommand(true);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
+                                                    _vhfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(true));
                                                 }
                                                 break;
                                             }
@@ -607,13 +564,9 @@ namespace NonVisuals.Radios
                                                     _lowerButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-                                                else if (!_vhfRadioChannelPresetDialSkipper.ShouldSkip())
+                                                else
                                                 {
-                                                    var s = GetHFRadioChannelStringCommand(false);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
+                                                    _vhfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(false));
                                                 }
                                                 break;
                                             }

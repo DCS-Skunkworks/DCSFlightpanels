@@ -335,29 +335,13 @@ namespace NonVisuals.Radios
                         {
                             case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_INC:
                                 {
-                                    // MODE
-                                    if (!_vhfDialChangeSkipper.ShouldSkip())
-                                    {
-                                        var s = GetHFRadioModeStringCommand(true);
-                                        if (!string.IsNullOrEmpty(s))
-                                        {
-                                            DCSBIOS.Send(s);
-                                        }
-                                    }
+                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(true));
                                     break;
                                 }
 
                             case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
-                                    // MODE
-                                    if (!_vhfDialChangeSkipper.ShouldSkip())
-                                    {
-                                        var s = GetHFRadioModeStringCommand(false);
-                                        if (!string.IsNullOrEmpty(s))
-                                        {
-                                            DCSBIOS.Send(s);
-                                        }
-                                    }
+                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(false));
                                     break;
                                 }
 
@@ -393,7 +377,7 @@ namespace NonVisuals.Radios
                                                     _upperButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-                                                else if (!_vhfDialChangeSkipper.ShouldSkip())
+                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) ;
                                                 {
                                                     SendDecVHFPresetCommand();
                                                 }
@@ -406,28 +390,14 @@ namespace NonVisuals.Radios
                             case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     // MODE
-                                    if (!_vhfDialChangeSkipper.ShouldSkip())
-                                    {
-                                        var s = GetHFRadioModeStringCommand(true);
-                                        if (!string.IsNullOrEmpty(s))
-                                        {
-                                            DCSBIOS.Send(s);
-                                        }
-                                    }
+                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(true));
                                     break;
                                 }
 
                             case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     // MODE
-                                    if (!_vhfDialChangeSkipper.ShouldSkip())
-                                    {
-                                        var s = GetHFRadioModeStringCommand(false);
-                                        if (!string.IsNullOrEmpty(s))
-                                        {
-                                            DCSBIOS.Send(s);
-                                        }
-                                    }
+                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(false));
                                     break;
                                 }
 
@@ -442,7 +412,7 @@ namespace NonVisuals.Radios
                                                     _lowerButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 }
-                                                else if (!_vhfDialChangeSkipper.ShouldSkip())
+                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) ;
                                                 {
                                                     SendIncVHFPresetCommand();
                                                 }
@@ -463,7 +433,7 @@ namespace NonVisuals.Radios
                                                     _lowerButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-                                                else if (!_vhfDialChangeSkipper.ShouldSkip())
+                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) ;
                                                 {
                                                     SendDecVHFPresetCommand();
                                                 }
@@ -483,7 +453,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         private void ShowFrequenciesOnPanel()
         {
             try
@@ -666,7 +636,7 @@ namespace NonVisuals.Radios
                 }
             }
         }
-        
+
         public sealed override void Startup()
         {
             try

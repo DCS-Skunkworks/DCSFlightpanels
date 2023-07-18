@@ -988,11 +988,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!_adf10SDialSkipper.ShouldSkip())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digit10S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf10SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit10S, true));
                                             break;
                                         }
 
@@ -1059,11 +1055,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!_adf100SDialSkipper.ShouldSkip())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digit100S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf100SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit100S, true));
                                             break;
                                         }
 
@@ -1128,11 +1120,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!_adf1SDialSkipper.ShouldSkip())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digits1S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, true));
                                             break;
                                         }
 
@@ -1197,11 +1185,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!_adf1SDialSkipper.ShouldSkip())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digits1S, false);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, false));
                                             break;
                                         }
 
@@ -1273,11 +1257,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!_adf10SDialSkipper.ShouldSkip())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digit10S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf10SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit10S, true));
                                             break;
                                         }
 
@@ -1344,11 +1324,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!_adf100SDialSkipper.ShouldSkip())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digit100S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf100SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit100S, true));
                                             break;
                                         }
 
@@ -1413,11 +1389,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!_adf1SDialSkipper.ShouldSkip())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digits1S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, true));
                                             break;
                                         }
 
@@ -1482,11 +1454,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!_adf1SDialSkipper.ShouldSkip())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digits1S, false);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, false));
                                             break;
                                         }
 
@@ -1752,7 +1720,7 @@ namespace NonVisuals.Radios
         {
             throw new Exception("Radio Panel does not support color bindings with DCS-BIOS.");
         }
-        
+
         private void CreateRadioKnobs()
         {
             SaitekPanelKnobs = RadioPanelKnobSA342.GetRadioPanelKnobs();
@@ -1941,7 +1909,7 @@ namespace NonVisuals.Radios
             }
             return false;
         }
-        
+
         private string GetAdfCommand(AdfDigit adfDigit, bool increase)
         {
             lock (_lockAdfUnitObject)
@@ -1986,7 +1954,7 @@ namespace NonVisuals.Radios
             }
             return string.Empty;
         }
-        
+
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
         public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
         public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }

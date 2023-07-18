@@ -399,19 +399,13 @@ namespace NonVisuals.Radios
                                         case CurrentBf109RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
-                                                }
+                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                if (!_fug25aIFFDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG25AIFFCommandInc);
-                                                }
+                                                _fug25aIFFDialSkipper.Click(FUG25AIFFCommandInc);
                                                 break;
                                             }
 
@@ -435,19 +429,13 @@ namespace NonVisuals.Radios
                                         case CurrentBf109RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
-                                                }
+                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                if (!_fug25aIFFDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG25AIFFCommandDec);
-                                                }
+                                                _fug25aIFFDialSkipper.Click(FUG25AIFFCommandDec);
                                                 break;
                                             }
 
@@ -545,19 +533,13 @@ namespace NonVisuals.Radios
                                         case CurrentBf109RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
-                                                }
+                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                if (!_fug25aIFFDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG25AIFFCommandInc);
-                                                }
+                                                _fug25aIFFDialSkipper.Click(FUG25AIFFCommandInc);
                                                 break;
                                             }
 
@@ -581,19 +563,13 @@ namespace NonVisuals.Radios
                                         case CurrentBf109RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
-                                                }
+                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                if (!_fug25aIFFDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(FUG25AIFFCommandDec);
-                                                }
+                                                _fug25aIFFDialSkipper.Click(FUG25AIFFCommandDec);
                                                 break;
                                             }
 
@@ -838,7 +814,7 @@ namespace NonVisuals.Radios
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-        
+
         public sealed override void Startup()
         {
             try

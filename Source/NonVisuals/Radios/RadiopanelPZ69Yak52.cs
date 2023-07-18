@@ -108,8 +108,8 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _gmkLatitudeDialDcsbiosOutput;
         private volatile uint _gmkLatitudeCockpitPosition;
         private const string GMK_LATITUDE_SELECTOR = "FRONT_SDG_LAT";
-        private const string GMK_LATITUDE_SELECTOR_INC = "FRONT_SDG_LAT +2000\n";
-        private const string GMK_LATITUDE_SELECTOR_DEC = "FRONT_SDG_LAT -2000\n";
+        private const string GMK_LATITUDE_SELECTOR_INC = "FRONT_SDG_LAT +500\n";
+        private const string GMK_LATITUDE_SELECTOR_DEC = "FRONT_SDG_LAT -500\n";
         private readonly object _lockGMKHeadingSelectorObject1 = new();
         private DCSBIOSOutput _gmkHeadingSelectorDialDcsbiosOutput;
         private volatile uint _gmkHeadingSelectorCockpitPosition;
@@ -534,7 +534,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.GMK:
                                             {
-                                                DCSBIOS.Send(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(false));
+                                                DCSBIOS.Send(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_DEC : GetGMKHeadingSelectorCommand(false));
                                                 break;
                                             }
                                     }
@@ -560,18 +560,12 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                if (!_adfFrontClickSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_FRONT_CHANNEL_INC);
-                                                }
+                                                _adfFrontClickSkipper.Click(ADF_FRONT_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                if (!_adfRearClickSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_REAR_CHANNEL_INC);
-                                                }
+                                                _adfRearClickSkipper.Click(ADF_REAR_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
@@ -609,18 +603,12 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                if (!_adfFrontClickSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_FRONT_CHANNEL_DEC);
-                                                }
+                                                _adfFrontClickSkipper.Click(ADF_FRONT_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                if (!_adfRearClickSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_REAR_CHANNEL_DEC);
-                                                }
+                                                _adfRearClickSkipper.Click(ADF_REAR_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
@@ -660,7 +648,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.GMK:
                                             {
-                                                DCSBIOS.Send(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(true));
+                                                DCSBIOS.Send(_lowerButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(true));
                                                 break;
                                             }
                                     }
@@ -688,7 +676,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.GMK:
                                             {
-                                                DCSBIOS.Send(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(false));
+                                                DCSBIOS.Send(_lowerButtonPressed ? GMK_HEMISPHERE_SELECTOR_DEC : GetGMKHeadingSelectorCommand(false));
                                                 break;
                                             }
                                     }
@@ -714,18 +702,12 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                if (!_adfFrontClickSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_FRONT_CHANNEL_INC);
-                                                }
+                                                _adfFrontClickSkipper.Click(ADF_FRONT_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                if (!_adfRearClickSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_REAR_CHANNEL_INC);
-                                                }
+                                                _adfRearClickSkipper.Click(ADF_REAR_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
@@ -763,30 +745,23 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                if (!_adfFrontClickSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_FRONT_CHANNEL_DEC);
-                                                }
+                                                _adfFrontClickSkipper.Click(ADF_FRONT_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                if (!_adfRearClickSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_REAR_CHANNEL_DEC);
-                                                }
-
+                                                _adfRearClickSkipper.Click(ADF_REAR_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
                                             {
                                                 if (_lowerButtonPressed)
                                                 {
-                                                    DCSBIOS.Send(GMK_MODE_SELECTOR_INC);
+                                                    DCSBIOS.Send(GMK_MODE_SELECTOR_DEC);
                                                 }
                                                 else
                                                 {
-                                                    DCSBIOS.Send(GMK_LATITUDE_SELECTOR_INC);
+                                                    DCSBIOS.Send(GMK_LATITUDE_SELECTOR_DEC);
                                                 }
                                                 break;
                                             }

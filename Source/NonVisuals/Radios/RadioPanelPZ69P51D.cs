@@ -406,14 +406,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                if (!_vhfRadioDialSkipper.ShouldSkip())
-                                                {
-                                                    var s = GetHFRadioModeStringCommand(true);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
-                                                }
+                                                _vhfRadioDialSkipper.Click(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
                                         case CurrentP51DRadioMode.DETROLA:
@@ -431,14 +424,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                if (!_vhfRadioDialSkipper.ShouldSkip())
-                                                {
-                                                    var s = GetHFRadioModeStringCommand(false);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
-                                                }
+                                                _vhfRadioDialSkipper.Click(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
                                         case CurrentP51DRadioMode.DETROLA:
@@ -487,7 +473,7 @@ namespace NonVisuals.Radios
                                                     _upperButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-                                                else if (!_vhfRadioDialSkipper.ShouldSkip())
+                                                else if (!_vhfRadioDialSkipper.ShouldSkip());
                                                 {
                                                     SendDecVHFPresetCommand();
                                                 }
@@ -508,14 +494,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                if (!_vhfRadioDialSkipper.ShouldSkip())
-                                                {
-                                                    var s = GetHFRadioModeStringCommand(true);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
-                                                }
+                                                _vhfRadioDialSkipper.Click(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
                                         case CurrentP51DRadioMode.DETROLA:
@@ -533,14 +512,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                if (!_vhfRadioDialSkipper.ShouldSkip())
-                                                {
-                                                    var s = GetHFRadioModeStringCommand(false);
-                                                    if (!string.IsNullOrEmpty(s))
-                                                    {
-                                                        DCSBIOS.Send(s);
-                                                    }
-                                                }
+                                                _vhfRadioDialSkipper.Click(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
                                         case CurrentP51DRadioMode.DETROLA:
@@ -563,7 +535,7 @@ namespace NonVisuals.Radios
                                                     _lowerButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 }
-                                                else if (!_vhfRadioDialSkipper.ShouldSkip())
+                                                else if (!_vhfRadioDialSkipper.ShouldSkip());
                                                 {
                                                     SendIncVHFPresetCommand();
                                                 }
@@ -589,7 +561,7 @@ namespace NonVisuals.Radios
                                                     _lowerButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-                                                else if (!_vhfRadioDialSkipper.ShouldSkip())
+                                                else if (!_vhfRadioDialSkipper.ShouldSkip());
                                                 {
                                                     SendDecVHFPresetCommand();
                                                 }

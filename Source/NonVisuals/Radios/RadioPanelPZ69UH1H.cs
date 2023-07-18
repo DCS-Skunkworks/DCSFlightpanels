@@ -1912,10 +1912,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!_interCommSkipper.ShouldSkip())
-                                            {
-                                                DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
-                                            }
+                                            _interCommSkipper.Click(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
 
@@ -1981,10 +1978,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!_interCommSkipper.ShouldSkip())
-                                            {
-                                                DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
-                                            }
+                                            _interCommSkipper.Click(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
 
@@ -2049,10 +2043,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!_interCommSkipper.ShouldSkip())
-                                            {
-                                                DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_INC);
-                                            }
+                                            _interCommSkipper.Click(INTERCOMM_DIAL_COMMAND_INC);
                                             break;
                                         }
 
@@ -2114,10 +2105,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!_interCommSkipper.ShouldSkip())
-                                            {
-                                                DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_DEC);
-                                            }
+                                            _interCommSkipper.Click(INTERCOMM_DIAL_COMMAND_DEC);
                                             break;
                                         }
 
@@ -2178,10 +2166,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!_interCommSkipper.ShouldSkip())
-                                            {
-                                                DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
-                                            }
+                                            _interCommSkipper.Click(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
 
@@ -2247,10 +2232,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!_interCommSkipper.ShouldSkip())
-                                            {
-                                                DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
-                                            }
+                                            _interCommSkipper.Click(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
 
@@ -2315,10 +2297,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!_interCommSkipper.ShouldSkip())
-                                            {
-                                                DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_INC);
-                                            }
+                                            _interCommSkipper.Click(INTERCOMM_DIAL_COMMAND_INC);
                                             break;
                                         }
 
@@ -2380,10 +2359,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!_interCommSkipper.ShouldSkip())
-                                            {
-                                                DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_DEC);
-                                            }
+                                            _interCommSkipper.Click(INTERCOMM_DIAL_COMMAND_DEC);
                                             break;
                                         }
 

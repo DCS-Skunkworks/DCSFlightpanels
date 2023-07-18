@@ -924,10 +924,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                if (!_vhf1PresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(VHF1_PRESET_COMMAND_INC);
-                                                }
+                                                _vhf1PresetDialSkipper.Click(VHF1_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -960,19 +957,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                if (!_datalinkMasterModeDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_INC);
-                                                }
+                                                _datalinkMasterModeDialSkipper.Click(DATALINK_MASTER_MODE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                if (!_adfPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_PRESET_COMMAND_INC);
-                                                }
+                                                _adfPresetDialSkipper.Click(ADF_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -990,10 +981,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                if (!_vhf1PresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(VHF1_PRESET_COMMAND_DEC);
-                                                }
+                                                _vhf1PresetDialSkipper.Click(VHF1_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1026,19 +1014,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                if (!_datalinkMasterModeDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_DEC);
-                                                }
+                                                _datalinkMasterModeDialSkipper.Click(DATALINK_MASTER_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                if (!_adfPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_PRESET_COMMAND_DEC);
-                                                }
+                                                _adfPresetDialSkipper.Click(ADF_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1081,10 +1063,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                if (!_datalinkSelfIdDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_INC);
-                                                }
+                                                _datalinkSelfIdDialSkipper.Click(DATALINK_SELF_ID_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1133,10 +1112,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                if (!_datalinkSelfIdDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_DEC);
-                                                }
+                                                _datalinkSelfIdDialSkipper.Click(DATALINK_SELF_ID_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1160,10 +1136,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                if (!_vhf1PresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(VHF1_PRESET_COMMAND_INC);
-                                                }
+                                                _vhf1PresetDialSkipper.Click(VHF1_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1210,19 +1183,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                if (!_datalinkMasterModeDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_INC);
-                                                }
+                                                _datalinkMasterModeDialSkipper.Click(DATALINK_MASTER_MODE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                if (!_adfPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_PRESET_COMMAND_INC);
-                                                }
+                                                _adfPresetDialSkipper.Click(ADF_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1240,10 +1207,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                if (!_vhf1PresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(VHF1_PRESET_COMMAND_DEC);
-                                                }
+                                                _vhf1PresetDialSkipper.Click(VHF1_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1290,19 +1254,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                if (!_datalinkMasterModeDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_DEC);
-                                                }
+                                                _datalinkMasterModeDialSkipper.Click(DATALINK_MASTER_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                if (!_adfPresetDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(ADF_PRESET_COMMAND_DEC);
-                                                }
+                                                _adfPresetDialSkipper.Click(ADF_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1346,10 +1304,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                if (!_datalinkSelfIdDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_INC);
-                                                }
+                                                _datalinkSelfIdDialSkipper.Click(DATALINK_SELF_ID_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1398,10 +1353,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                if (!_datalinkSelfIdDialSkipper.ShouldSkip())
-                                                {
-                                                    DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_DEC);
-                                                }
+                                                _datalinkSelfIdDialSkipper.Click(DATALINK_SELF_ID_COMMAND_DEC);
                                                 break;
                                             }
 
