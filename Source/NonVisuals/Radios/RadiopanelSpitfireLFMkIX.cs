@@ -17,6 +17,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
 
 
@@ -65,12 +66,12 @@ namespace NonVisuals.Radios
         private volatile uint _hfRadioChannelBCockpitButton;
         private volatile uint _hfRadioChannelCCockpitButton;
         private volatile uint _hfRadioChannelDCockpitButton;
-        private int _hfRadioChannelPresetDialSkipper;
+        private readonly ClickSkipper _hfRadioChannelPresetDialSkipper = new(2);
         private const string HF_RADIO_LIGHT_SWITCH_COMMAND = "RCTRL_DIM TOGGLE\n";
         private readonly object _lockHFRadioModeDialObject1 = new();
         private volatile uint _hfRadioModeCockpitDialPosition = 1;
         private DCSBIOSOutput _hfRadioModeDialPresetDcsbiosOutput;
-        private int _hfRadioModePresetDialSkipper;
+        private readonly ClickSkipper _hfRadioModePresetDialSkipper = new(2);
 
         /* 
                 *  COM2 Large IFF Circuit D
@@ -82,8 +83,8 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _iffDiffDcsbiosOutputDial;
         private volatile uint _iffBiffCockpitDialPos = 1;
         private volatile uint _iffDiffCockpitDialPos;
-        private int _iffBiffDialSkipper;
-        private int _iffDiffDialSkipper;
+        private readonly ClickSkipper  _iffBiffDialSkipper = new(2);
+        private readonly ClickSkipper _iffDiffDialSkipper = new(2);
         private const string IFFB_COMMAND_INC = "IFF_B INC\n";
         private const string IFFB_COMMAND_DEC = "IFF_B DEC\n";
         private const string IFFD_COMMAND_INC = "IFF_D INC\n";
@@ -388,7 +389,7 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // MODE
-                                                if (!SkipHFRadioModeDialChange())
+                                                if (!_hfRadioModePresetDialSkipper.ShouldSkip())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(true);
                                                     if (!string.IsNullOrEmpty(s))
@@ -401,7 +402,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                if (!SkipIffdDialChange())
+                                                if (!_iffDiffDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(IFFD_COMMAND_INC);
                                                 }
@@ -423,7 +424,7 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // MODE
-                                                if (!SkipHFRadioModeDialChange())
+                                                if (!_hfRadioModePresetDialSkipper.ShouldSkip())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(false);
                                                     if (!string.IsNullOrEmpty(s))
@@ -436,7 +437,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                if (!SkipIffdDialChange())
+                                                if (!_iffDiffDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(IFFD_COMMAND_DEC);
                                                 }
@@ -453,7 +454,7 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // CHANNEL
-                                                if (!SkipHFRadioChannelPresetDialChange())
+                                                if (!_hfRadioChannelPresetDialSkipper.ShouldSkip())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(true);
                                                     if (!string.IsNullOrEmpty(s))
@@ -466,7 +467,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                if (!SkipIffbDialChange())
+                                                if (!_iffBiffDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(IFFB_COMMAND_INC);
                                                 }
@@ -483,7 +484,7 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // CHANNEL
-                                                if (!SkipHFRadioChannelPresetDialChange())
+                                                if (!_hfRadioChannelPresetDialSkipper.ShouldSkip())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(false);
                                                     if (!string.IsNullOrEmpty(s))
@@ -496,7 +497,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                if (!SkipIffbDialChange())
+                                                if (!_iffBiffDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(IFFB_COMMAND_DEC);
                                                 }
@@ -513,7 +514,7 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // MODE
-                                                if (!SkipHFRadioModeDialChange())
+                                                if (!_hfRadioModePresetDialSkipper.ShouldSkip())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(true);
                                                     if (!string.IsNullOrEmpty(s))
@@ -526,7 +527,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                if (!SkipIffdDialChange())
+                                                if (!_iffDiffDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(IFFD_COMMAND_INC);
                                                 }
@@ -543,7 +544,7 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // MODE
-                                                if (!SkipHFRadioModeDialChange())
+                                                if (!_hfRadioModePresetDialSkipper.ShouldSkip())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(false);
                                                     if (!string.IsNullOrEmpty(s))
@@ -556,7 +557,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                if (!SkipIffdDialChange())
+                                                if (!_iffDiffDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(IFFD_COMMAND_DEC);
                                                 }
@@ -573,7 +574,7 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // CHANNEL
-                                                if (!SkipHFRadioChannelPresetDialChange())
+                                                if (!_hfRadioChannelPresetDialSkipper.ShouldSkip())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(true);
                                                     if (!string.IsNullOrEmpty(s))
@@ -586,7 +587,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                if (!SkipIffbDialChange())
+                                                if (!_iffBiffDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(IFFB_COMMAND_INC);
                                                 }
@@ -603,7 +604,7 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // CHANNEL
-                                                if (!SkipHFRadioChannelPresetDialChange())
+                                                if (!_hfRadioChannelPresetDialSkipper.ShouldSkip())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(false);
                                                     if (!string.IsNullOrEmpty(s))
@@ -616,7 +617,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                if (!SkipIffbDialChange())
+                                                if (!_iffBiffDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(IFFB_COMMAND_DEC);
                                                 }
@@ -849,95 +850,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-
-        private bool SkipHFRadioChannelPresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSpitfireLFMkIXRadioMode.HFRADIO || _currentLowerRadioMode == CurrentSpitfireLFMkIXRadioMode.HFRADIO)
-                {
-                    if (_hfRadioChannelPresetDialSkipper > 2)
-                    {
-                        _hfRadioChannelPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _hfRadioChannelPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipIffdDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSpitfireLFMkIXRadioMode.IFF || _currentLowerRadioMode == CurrentSpitfireLFMkIXRadioMode.IFF)
-                {
-                    if (_iffDiffDialSkipper > 2)
-                    {
-                        _iffDiffDialSkipper = 0;
-                        return false;
-                    }
-                    _iffDiffDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipIffbDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSpitfireLFMkIXRadioMode.IFF || _currentLowerRadioMode == CurrentSpitfireLFMkIXRadioMode.IFF)
-                {
-                    if (_iffBiffDialSkipper > 2)
-                    {
-                        _iffBiffDialSkipper = 0;
-                        return false;
-                    }
-                    _iffBiffDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipHFRadioModeDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSpitfireLFMkIXRadioMode.HFRADIO || _currentLowerRadioMode == CurrentSpitfireLFMkIXRadioMode.HFRADIO)
-                {
-                    if (_hfRadioModePresetDialSkipper > 2)
-                    {
-                        _hfRadioModePresetDialSkipper = 0;
-                        return false;
-                    }
-                    _hfRadioModePresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
+        
         private string GetHFRadioChannelStringCommand(bool moveUp)
         {
             lock (_lockHFRadioPresetDialObject1)

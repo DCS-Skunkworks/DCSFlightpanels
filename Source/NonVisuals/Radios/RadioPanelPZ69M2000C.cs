@@ -17,6 +17,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
 
     /// <summary>
@@ -47,7 +48,7 @@ namespace NonVisuals.Radios
         private volatile uint _vhfPresetCockpitDialPos = 1;
         private const string VHF_PRESET_COMMAND_INC = "VHF_CH_SEL INC\n";
         private const string VHF_PRESET_COMMAND_DEC = "VHF_CH_SEL DEC\n";
-        private int _vhfPresetDialSkipper;
+        private readonly ClickSkipper _vhfPresetDialSkipper = new(2);
         private const string VHF_VOLUME_COMMAND_INC = "VUHF_RADIO_VOL_KNOB +3200\n";
         private const string VHF_VOLUME_COMMAND_DEC = "VUHF_RADIO_VOL_KNOB -3200\n";
 
@@ -62,7 +63,7 @@ namespace NonVisuals.Radios
         private volatile uint _uhfPresetCockpitDialPos = 1;
         private const string UHF_PRESET_COMMAND_INC = "UHF_PRESET_KNOB INC\n";
         private const string UHF_PRESET_COMMAND_DEC = "UHF_PRESET_KNOB DEC\n";
-        private int _uhfPresetDialSkipper;
+        private readonly ClickSkipper _uhfPresetDialSkipper = new(2);
         private const string UHF_VOLUME_COMMAND_INC = "UHF_RADIO_VOL_KNOB +3200\n";
         private const string UHF_VOLUME_COMMAND_DEC = "UHF_RADIO_VOL_KNOB -3200\n";
 
@@ -78,7 +79,7 @@ namespace NonVisuals.Radios
         private const string TACAN_TENS_COMMAND_DEC = "TAC_CH_10_SEL DEC\n";
         private const string TACAN_ONES_COMMAND_INC = "TAC_CH_1_SEL INC\n";
         private const string TACAN_ONES_COMMAND_DEC = "TAC_CH_1_SEL DEC\n";
-        private int _tacanDialSkipper;
+        private readonly ClickSkipper _tacanDialSkipper = new(2);
         private DCSBIOSOutput _tacanDcsbiosOutputDialModeSelect;
         private DCSBIOSOutput _tacanDcsbiosOutputDialXYSelect;
         private volatile uint _tacanModeSelectCockpitDialPos = 1;
@@ -98,7 +99,7 @@ namespace NonVisuals.Radios
         private const string VOR_DECIMALS_COMMAND_DEC = "VORILS_FREQ_DECIMAL DEC\n";
         private const string VOR_ONES_COMMAND_INC = "VORILS_FREQ_WHOLE INC\n";
         private const string VOR_ONES_COMMAND_DEC = "VORILS_FREQ_WHOLE DEC\n";
-        private int _vorDialSkipper;
+        private readonly ClickSkipper _vorDialSkipper = new(2);
         private DCSBIOSOutput _vorDcsbiosOutputDialPower;
         private DCSBIOSOutput _vorDcsbiosOutputDialTest;
         private volatile uint _vorPowerCockpitDialPos = 1;
@@ -481,7 +482,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                if (!SkipVUHFPresetDialChange())
+                                                if (!_vhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(VHF_PRESET_COMMAND_INC);
                                                 }
@@ -490,7 +491,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                if (!SkipUHFPresetDialChange())
+                                                if (!_uhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(UHF_PRESET_COMMAND_INC);
                                                 }
@@ -499,7 +500,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                if (!SkipTACANDialChange())
+                                                if (!_tacanDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_INC : TACAN_TENS_COMMAND_INC);
                                                 }
@@ -508,7 +509,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                if (!SkipVORDialChange())
+                                                if (!_vorDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? VOR_POWER_COMMAND_INC : VOR_DECIMALS_COMMAND_INC);
                                                 }
@@ -529,7 +530,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                if (!SkipVUHFPresetDialChange())
+                                                if (!_vhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(VHF_PRESET_COMMAND_DEC);
                                                 }
@@ -538,7 +539,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                if (!SkipUHFPresetDialChange())
+                                                if (!_uhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(UHF_PRESET_COMMAND_DEC);
                                                 }
@@ -547,7 +548,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                if (!SkipTACANDialChange())
+                                                if (!_tacanDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_DEC : TACAN_TENS_COMMAND_DEC);
                                                 }
@@ -556,7 +557,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                if (!SkipVORDialChange())
+                                                if (!_vorDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? VOR_POWER_COMMAND_DEC : VOR_DECIMALS_COMMAND_DEC);
                                                 }
@@ -584,7 +585,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                if (!SkipTACANDialChange())
+                                                if (!_tacanDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_INC : TACAN_ONES_COMMAND_INC);
                                                 }
@@ -593,7 +594,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                if (!SkipVORDialChange())
+                                                if (!_vorDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? VOR_TEST_COMMAND_INC : VOR_ONES_COMMAND_INC);
                                                 }
@@ -626,7 +627,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                if (!SkipTACANDialChange())
+                                                if (!_tacanDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_DEC : TACAN_ONES_COMMAND_DEC);
                                                 }
@@ -635,7 +636,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                if (!SkipVORDialChange())
+                                                if (!_vorDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_upperFreqSwitchPressedDown ? VOR_TEST_COMMAND_DEC : VOR_ONES_COMMAND_DEC);
                                                 }
@@ -656,7 +657,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                if (!SkipVUHFPresetDialChange())
+                                                if (!_vhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(VHF_PRESET_COMMAND_INC);
                                                 }
@@ -665,7 +666,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                if (!SkipUHFPresetDialChange())
+                                                if (!_uhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(UHF_PRESET_COMMAND_INC);
                                                 }
@@ -674,7 +675,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                if (!SkipTACANDialChange())
+                                                if (!_tacanDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_INC : TACAN_TENS_COMMAND_INC);
                                                 }
@@ -683,7 +684,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                if (!SkipVORDialChange())
+                                                if (!_vorDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? VOR_POWER_COMMAND_INC : VOR_DECIMALS_COMMAND_INC);
                                                 }
@@ -704,7 +705,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                if (!SkipVUHFPresetDialChange())
+                                                if (!_vhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(VHF_PRESET_COMMAND_DEC);
                                                 }
@@ -713,7 +714,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                if (!SkipUHFPresetDialChange())
+                                                if (!_uhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(UHF_PRESET_COMMAND_DEC);
                                                 }
@@ -722,7 +723,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                if (!SkipTACANDialChange())
+                                                if (!_tacanDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_DEC : TACAN_TENS_COMMAND_DEC);
                                                 }
@@ -731,7 +732,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                if (!SkipVORDialChange())
+                                                if (!_vorDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? VOR_POWER_COMMAND_DEC : VOR_DECIMALS_COMMAND_DEC);
                                                 }
@@ -764,7 +765,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                if (!SkipTACANDialChange())
+                                                if (!_tacanDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_INC : TACAN_ONES_COMMAND_INC);
                                                 }
@@ -773,7 +774,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                if (!SkipVORDialChange())
+                                                if (!_vorDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? VOR_TEST_COMMAND_INC : VOR_ONES_COMMAND_INC);
                                                 }
@@ -806,7 +807,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                if (!SkipTACANDialChange())
+                                                if (!_tacanDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_DEC : TACAN_ONES_COMMAND_DEC);
                                                 }
@@ -815,7 +816,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                if (!SkipVORDialChange())
+                                                if (!_vorDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(_lowerFreqSwitchPressedDown ? VOR_TEST_COMMAND_DEC : VOR_ONES_COMMAND_DEC);
                                                 }
@@ -1124,117 +1125,12 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-
-        private bool SkipVUHFPresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentM2000CRadioMode.VUHF || _currentLowerRadioMode == CurrentM2000CRadioMode.VUHF)
-                {
-                    if (_vhfPresetDialSkipper > 2)
-                    {
-                        _vhfPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _vhfPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipUHFPresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentM2000CRadioMode.UHF || _currentLowerRadioMode == CurrentM2000CRadioMode.UHF)
-                {
-                    if (_uhfPresetDialSkipper > 2)
-                    {
-                        _uhfPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _uhfPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipTACANDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentM2000CRadioMode.TACAN || _currentLowerRadioMode == CurrentM2000CRadioMode.TACAN)
-                {
-                    if (_tacanDialSkipper > 2)
-                    {
-                        _tacanDialSkipper = 0;
-                        return false;
-                    }
-                    _tacanDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipVORDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentM2000CRadioMode.VOR || _currentLowerRadioMode == CurrentM2000CRadioMode.VOR)
-                {
-                    if (_vorDialSkipper > 2)
-                    {
-                        _vorDialSkipper = 0;
-                        return false;
-                    }
-                    _vorDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
-        {
-        }
-
-        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
-        {
-        }
-
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
-        {
-        }
-
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
-        {
-        }
-
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
-        {
-        }
-
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
-        {
-        }
+        
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink) { }
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
     }
 }

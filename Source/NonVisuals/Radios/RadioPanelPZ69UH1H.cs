@@ -1,4 +1,5 @@
 using NonVisuals.BindingClasses.BIP;
+using NonVisuals.Helpers;
 
 namespace NonVisuals.Radios
 {
@@ -43,7 +44,7 @@ namespace NonVisuals.Radios
 
         /*UH-1H INTERCOMM*/
         // PVT INT 1 2 3 4  (6 positions 0-5)
-        private volatile int _interCommSkipper;
+        private readonly ClickSkipper _interCommSkipper = new(2);
         private readonly object _lockIntercommDialObject = new();
         private DCSBIOSOutput _interCommDcsbiosOutputCockpitPos;
         private volatile uint _interCommCockpitDial1Pos;
@@ -1911,7 +1912,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!SkipIntercomm())
+                                            if (!_interCommSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
                                             }
@@ -1980,7 +1981,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!SkipIntercomm())
+                                            if (!_interCommSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
                                             }
@@ -2048,7 +2049,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!SkipIntercomm())
+                                            if (!_interCommSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_INC);
                                             }
@@ -2113,7 +2114,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!SkipIntercomm())
+                                            if (!_interCommSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_DEC);
                                             }
@@ -2177,7 +2178,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!SkipIntercomm())
+                                            if (!_interCommSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
                                             }
@@ -2246,7 +2247,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!SkipIntercomm())
+                                            if (!_interCommSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
                                             }
@@ -2314,7 +2315,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!SkipIntercomm())
+                                            if (!_interCommSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_INC);
                                             }
@@ -2379,7 +2380,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            if (!SkipIntercomm())
+                                            if (!_interCommSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_DEC);
                                             }
@@ -2566,22 +2567,7 @@ namespace NonVisuals.Radios
 
             return result;
         }
-
-        private bool SkipIntercomm()
-        {
-            if (_currentUpperRadioMode == CurrentUH1HRadioMode.INTERCOMM || _currentLowerRadioMode == CurrentUH1HRadioMode.INTERCOMM)
-            {
-                if (_interCommSkipper > 1)
-                {
-                    _interCommSkipper = 0;
-                    return false;
-                }
-                Interlocked.Increment(ref _interCommSkipper);
-                return true;
-            }
-            return false;
-        }
-
+        
         protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
             Interlocked.Increment(ref _doUpdatePanelLCD);

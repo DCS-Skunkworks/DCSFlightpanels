@@ -46,13 +46,13 @@ namespace NonVisuals.Radios
         private volatile uint _arc27PresetCockpitDialPos = 1;
         private const string ARC27_PRESET_COMMAND_INC = "ARC27_CHAN_SEL INC\n";
         private const string ARC27_PRESET_COMMAND_DEC = "ARC27_CHAN_SEL DEC\n";
-        private int _arc27PresetDialSkipper;
+        private readonly ClickSkipper _arc27PresetDialSkipper = new(2);
         private readonly object _lockARC27ModeDialObject1 = new();
         private DCSBIOSOutput _arc27ModeDcsbiosOutputDial;
         private volatile uint _arc27ModeCockpitDialPos = 1;
         private const string ARC27_MODE_COMMAND_INC = "ARC27_PWR_SEL INC\n";
         private const string ARC27_MODE_COMMAND_DEC = "ARC27_PWR_SEL DEC\n";
-        private int _arc27ModeDialSkipper;
+        private readonly ClickSkipper _arc27ModeDialSkipper = new(2);
 
         /*F-86F ARC-27 PRESETS COM2*/
         // Small dial Volume Control
@@ -76,7 +76,7 @@ namespace NonVisuals.Radios
         private const string ARN6_FREQUENCY_COMMAND_DEC = "ARN_6_TUNE -50\n";
         private const string ARN6_BAND_DIAL_COMMAND_INC = "ARN6_CHAN_SEL INC\n";
         private const string ARN6_BAND_DIAL_COMMAND_DEC = "ARN6_CHAN_SEL DEC\n";
-        private int _arn6BandDialSkipper;
+        private readonly ClickSkipper _arn6BandDialSkipper = new(2);
 
         /*F-86F ARN-6 MODES NAV2*/
         // Large dial MODES
@@ -86,7 +86,7 @@ namespace NonVisuals.Radios
         private volatile uint _arn6ModeCockpitDialPos = 1;
         private const string ARN6_MODE_COMMAND_INC = "ARN6_FUNC_SEL INC\n";
         private const string ARN6_MODE_COMMAND_DEC = "ARN6_FUNC_SEL DEC\n";
-        private int _arn6ModeDialSkipper;
+        private readonly ClickSkipper _arn6ModeDialSkipper = new(2);
         private const string ARN6_VOLUME_KNOB_COMMAND_INC = "ARN_6_VOL +2500\n";
         private const string ARN6_VOLUME_KNOB_COMMAND_DEC = "ARN_6_VOL -2500\n";
 
@@ -96,7 +96,7 @@ namespace NonVisuals.Radios
         // ACT-STBY, Toggles IFF Dial Stop Button, button must be depressed to go into Emergency Mode.
         private volatile uint _apx6ModeCockpitDialPos = 1;
         private readonly object _lockAPX6ModeObject = new();
-        private int _apx6ModeDialSkipper;
+        private readonly ClickSkipper _apx6ModeDialSkipper = new(2);
         private DCSBIOSOutput _apx6ModeDcsbiosOutputCockpit;
         private const string APX6_MODE_DIAL_COMMAND_INC = "APX6_MASTER INC\n";
         private const string APX6_MODE_DIAL_COMMAND_DEC = "APX6_MASTER DEC\n";
@@ -516,7 +516,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                if (!SkipARC27PresetDialChange())
+                                                if (!_arc27PresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_INC);
                                                 }
@@ -532,7 +532,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                if (!SkipARN6ModeDialChange())
+                                                if (!_arn6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_INC);
                                                 }
@@ -541,7 +541,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                if (!SkipAPX6ModeDialChange())
+                                                if (!_apx6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_INC);
                                                 }
@@ -562,7 +562,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                if (!SkipARC27PresetDialChange())
+                                                if (!_arc27PresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_DEC);
                                                 }
@@ -578,7 +578,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                if (!SkipARN6ModeDialChange())
+                                                if (!_arn6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_DEC);
                                                 }
@@ -587,7 +587,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                if (!SkipAPX6ModeDialChange())
+                                                if (!_apx6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_DEC);
                                                 }
@@ -608,7 +608,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                if (!SkipARC27ModeDialChange())
+                                                if (!_arc27ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_INC);
                                                 }
@@ -623,7 +623,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                if (!SkipARN6BandDialChange())
+                                                if (!_arn6BandDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_INC);
                                                 }
@@ -632,7 +632,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                if (!SkipARN6ModeDialChange())
+                                                if (!_arn6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_INC);
                                                 }
@@ -654,7 +654,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                if (!SkipARC27ModeDialChange())
+                                                if (!_arc27ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_DEC);
                                                 }
@@ -669,7 +669,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                if (!SkipARN6BandDialChange())
+                                                if (!_arn6BandDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_DEC);
                                                 }
@@ -678,7 +678,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                if (!SkipARN6ModeDialChange())
+                                                if (!_arn6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_DEC);
                                                 }
@@ -700,7 +700,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                if (!SkipARC27PresetDialChange())
+                                                if (!_arc27PresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_INC);
                                                 }
@@ -716,7 +716,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                if (!SkipARN6ModeDialChange())
+                                                if (!_arn6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_INC);
                                                 }
@@ -725,7 +725,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                if (!SkipAPX6ModeDialChange())
+                                                if (!_apx6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_INC);
                                                 }
@@ -746,7 +746,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                if (!SkipARC27PresetDialChange())
+                                                if (!_arc27PresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARC27_PRESET_COMMAND_DEC);
                                                 }
@@ -762,7 +762,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                if (!SkipARN6ModeDialChange())
+                                                if (!_arn6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_MODE_COMMAND_DEC);
                                                 }
@@ -771,7 +771,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                if (!SkipAPX6ModeDialChange())
+                                                if (!_apx6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(APX6_MODE_DIAL_COMMAND_DEC);
                                                 }
@@ -792,7 +792,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                if (!SkipARC27ModeDialChange())
+                                                if (!_arc27ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_INC);
                                                 }
@@ -807,7 +807,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                if (!SkipARN6BandDialChange())
+                                                if (!_arn6BandDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_INC);
                                                 }
@@ -816,7 +816,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                if (!SkipARN6ModeDialChange())
+                                                if (!_arn6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_INC);
                                                 }
@@ -838,7 +838,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                if (!SkipARC27ModeDialChange())
+                                                if (!_arc27ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARC27_MODE_COMMAND_DEC);
                                                 }
@@ -853,7 +853,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                if (!SkipARN6BandDialChange())
+                                                if (!_arn6BandDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_BAND_DIAL_COMMAND_DEC);
                                                 }
@@ -862,7 +862,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                if (!SkipARN6ModeDialChange())
+                                                if (!_arn6ModeDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ARN6_VOLUME_KNOB_COMMAND_DEC);
                                                 }
@@ -1178,124 +1178,12 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-
-        private bool SkipARC27PresetDialChange()
-        {
-            try
-            {
-                if (_arc27PresetDialSkipper > 2)
-                {
-                    _arc27PresetDialSkipper = 0;
-                    return false;
-                }
-                _arc27PresetDialSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipARC27ModeDialChange()
-        {
-            try
-            {
-                if (_arc27ModeDialSkipper > 2)
-                {
-                    _arc27ModeDialSkipper = 0;
-                    return false;
-                }
-                _arc27ModeDialSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipARN6BandDialChange()
-        {
-            try
-            {
-                if (_arn6BandDialSkipper > 2)
-                {
-                    _arn6BandDialSkipper = 0;
-                    return false;
-                }
-                _arn6BandDialSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipARN6ModeDialChange()
-        {
-            try
-            {
-                if (_arn6ModeDialSkipper > 2)
-                {
-                    _arn6ModeDialSkipper = 0;
-                    return false;
-                }
-                _arn6ModeDialSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipAPX6ModeDialChange()
-        {
-            try
-            {
-                if (_apx6ModeDialSkipper > 2)
-                {
-                    _apx6ModeDialSkipper = 0;
-                    return false;
-                }
-                _apx6ModeDialSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
-        {
-        }
-
-        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
-        {
-        }
-
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
-        {
-        }
-
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
-        {
-        }
-
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
-        {
-        }
-
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
-        {
-        }
+        
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink) { }
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
     }
 }

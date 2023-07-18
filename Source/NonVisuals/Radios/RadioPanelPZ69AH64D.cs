@@ -1,4 +1,5 @@
 ﻿using NonVisuals.BindingClasses.BIP;
+using NonVisuals.Helpers;
 
 namespace NonVisuals.Radios
 {
@@ -62,15 +63,12 @@ namespace NonVisuals.Radios
         private string _hfFrequencyActive = string.Empty;
         private string _hfFrequencyStby = string.Empty;
 
-        private int _vhfPresetDialSkipper;
-        private int _uhfPresetDialSkipper;
-        private int _fm1PresetDialSkipper;
-        private int _fm2PresetDialSkipper;
-        private int _tempPLT_EUFD_RockerSkipper;
-
-        //private const string VHF_VOLUME_COMMAND_INC = "PLT_COM_VHF_VOL +3200\n"; //*
-        //private const string VHF_VOLUME_COMMAND_DEC = "PLT_COM_VHF_VOL -3200\n"; //*
-
+        private readonly ClickSkipper _vhfPresetDialSkipper = new (2);
+        private readonly ClickSkipper _uhfPresetDialSkipper = new (2);
+        private readonly ClickSkipper _fm1PresetDialSkipper = new (2);
+        private readonly ClickSkipper _fm2PresetDialSkipper = new (2);
+        private readonly ClickSkipper _tempPLT_EUFD_RockerSkipper = new (2);
+        
         private const string PLT_EUFD_COMMAND_SWAP = "PLT_EUFD_SWAP TOGGLE\n";
 
         private const string PLT_EUFD_COMMAND_IDM = "PLT_EUFD_IDM";
@@ -516,7 +514,7 @@ namespace NonVisuals.Radios
 
         private void SetTempRockerCommand(string dcsBiosCommand, int rockerTempSwitchValue)
         {
-            if (!SkipTempRockerChange())
+            if (!_tempPLT_EUFD_RockerSkipper.ShouldSkip())
             {
                 DCSBIOS.Send($"{dcsBiosCommand} {rockerTempSwitchValue}\n");
                 DCSBIOS.Send($"{dcsBiosCommand} 1\n");
@@ -546,7 +544,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAH64DRadioMode.VHF:
                                             {
-                                                if (!SkipVHFPresetDialChange())
+                                                if (!_vhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -554,7 +552,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.UHF:
                                             {
-                                                if (!SkipUHFPresetDialChange())
+                                                if (!_uhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -562,7 +560,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM1:
                                             {
-                                                if (!SkipFM1DialChange())
+                                                if (!_fm1PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -570,7 +568,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM2:
                                             {
-                                                if (!SkipFM2DialChange())
+                                                if (!_fm2PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -590,7 +588,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAH64DRadioMode.VHF:
                                             {
-                                                if (!SkipVHFPresetDialChange())
+                                                if (!_vhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -598,7 +596,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.UHF:
                                             {
-                                                if (!SkipUHFPresetDialChange())
+                                                if (!_uhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -606,7 +604,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM1:
                                             {
-                                                if (!SkipFM1DialChange())
+                                                if (!_fm1PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -614,7 +612,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM2:
                                             {
-                                                if (!SkipFM2DialChange())
+                                                if (!_fm2PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -640,7 +638,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM1:
                                             {
-                                                if (!SkipFM1DialChange())
+                                                if (!_fm1PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -648,7 +646,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM2:
                                             {
-                                                if (!SkipFM2DialChange())
+                                                if (!_fm2PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -679,7 +677,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM1:
                                             {
-                                                if (!SkipFM1DialChange())
+                                                if (!_fm1PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -687,7 +685,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM2:
                                             {
-                                                if (!SkipFM2DialChange())
+                                                if (!_fm2PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -707,7 +705,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAH64DRadioMode.VHF:
                                             {
-                                                if (!SkipVHFPresetDialChange())
+                                                if (!_vhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -715,7 +713,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.UHF:
                                             {
-                                                if (!SkipUHFPresetDialChange())
+                                                if (!_uhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -723,7 +721,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM1:
                                             {
-                                                if (!SkipFM1DialChange())
+                                                if (!_fm1PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -731,7 +729,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM2:
                                             {
-                                                if (!SkipFM2DialChange())
+                                                if (!_fm2PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -751,7 +749,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAH64DRadioMode.VHF:
                                             {
-                                                if (!SkipVHFPresetDialChange())
+                                                if (!_vhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -759,7 +757,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.UHF:
                                             {
-                                                if (!SkipUHFPresetDialChange())
+                                                if (!_uhfPresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -767,7 +765,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM1:
                                             {
-                                                if (!SkipFM1DialChange())
+                                                if (!_fm1PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -775,7 +773,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM2:
                                             {
-                                                if (!SkipFM2DialChange())
+                                                if (!_fm2PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -806,7 +804,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM1:
                                             {
-                                                if (!SkipFM1DialChange())
+                                                if (!_fm1PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -814,7 +812,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM2:
                                             {
-                                                if (!SkipFM2DialChange())
+                                                if (!_fm2PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -845,7 +843,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM1:
                                             {
-                                                if (!SkipFM1DialChange())
+                                                if (!_fm1PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -853,7 +851,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAH64DRadioMode.FM2:
                                             {
-                                                if (!SkipFM2DialChange())
+                                                if (!_fm2PresetDialSkipper.ShouldSkip())
                                                 {
                                                 }
                                                 break;
@@ -1173,136 +1171,12 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-
-        private bool SkipVHFPresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentAH64DRadioMode.VHF || _currentLowerRadioMode == CurrentAH64DRadioMode.VHF)
-                {
-                    if (_vhfPresetDialSkipper > 2)
-                    {
-                        _vhfPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _vhfPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipUHFPresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentAH64DRadioMode.UHF || _currentLowerRadioMode == CurrentAH64DRadioMode.UHF)
-                {
-                    if (_uhfPresetDialSkipper > 2)
-                    {
-                        _uhfPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _uhfPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipFM1DialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentAH64DRadioMode.FM1 || _currentLowerRadioMode == CurrentAH64DRadioMode.FM1)
-                {
-                    if (_fm1PresetDialSkipper > 2)
-                    {
-                        _fm1PresetDialSkipper = 0;
-                        return false;
-                    }
-                    _fm1PresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipFM2DialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentAH64DRadioMode.FM2 || _currentLowerRadioMode == CurrentAH64DRadioMode.FM2)
-                {
-                    if (_fm2PresetDialSkipper > 2)
-                    {
-                        _fm2PresetDialSkipper = 0;
-                        return false;
-                    }
-                    _fm2PresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
-        {
-        }
-
-        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
-        {
-        }
-
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
-        {
-        }
-
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
-        {
-        }
-
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
-        {
-        }
-
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
-        {
-        }
-
-        private bool SkipTempRockerChange()
-        {
-            try
-            {
-                if (_tempPLT_EUFD_RockerSkipper > 2)
-                {
-                    _tempPLT_EUFD_RockerSkipper = 0;
-                    return false;
-                }
-                _tempPLT_EUFD_RockerSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
+        
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink) { }
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) {}
     }
 }

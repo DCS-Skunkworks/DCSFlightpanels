@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Helpers
+﻿using DCS_BIOS;
+
+namespace NonVisuals.Helpers
 {
     /// <summary>
     /// Used for especially radio dials so that when the user turns the dial the
@@ -15,20 +17,37 @@
         }
         
         /// <summary>
-        /// Returns true if should not skip.
+        /// Returns true if should skip.
         /// </summary>
         /// <returns></returns>
-        public bool ClickAndCheck()
+        public bool ShouldSkip()
         {
             _clicksDetected++;
             if (_clicksDetected <= _clicksToSkip)
             {
-                return false; // skip
+                return true; // skip
             }
 
             _clicksDetected = 0;
-            return true;
+            return false;
         }
-        
+
+        /// <summary>
+        /// Returns true if should skip.
+        /// Executes DCS-BIOS command if not skipping.
+        /// </summary>
+        /// <returns></returns>
+        public bool ShouldSkip(string dcsBIOSCommand)
+        {
+            _clicksDetected++;
+            if (_clicksDetected <= _clicksToSkip)
+            {
+                return true; // skip
+            }
+
+            _clicksDetected = 0;
+            DCSBIOS.Send(dcsBIOSCommand);
+            return false;
+        }
     }
 }

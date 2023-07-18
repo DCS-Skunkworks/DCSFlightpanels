@@ -560,7 +560,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                if (_adfFrontClickSkipper.ClickAndCheck())
+                                                if (!_adfFrontClickSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ADF_FRONT_CHANNEL_INC);
                                                 }
@@ -568,7 +568,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                if (_adfRearClickSkipper.ClickAndCheck())
+                                                if (!_adfRearClickSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ADF_REAR_CHANNEL_INC);
                                                 }
@@ -609,7 +609,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                if (_adfFrontClickSkipper.ClickAndCheck())
+                                                if (!_adfFrontClickSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ADF_FRONT_CHANNEL_DEC);
                                                 }
@@ -617,7 +617,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                if (_adfRearClickSkipper.ClickAndCheck())
+                                                if (!_adfRearClickSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ADF_REAR_CHANNEL_DEC);
                                                 }
@@ -714,7 +714,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                if (_adfFrontClickSkipper.ClickAndCheck())
+                                                if (!_adfFrontClickSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ADF_FRONT_CHANNEL_INC);
                                                 }
@@ -722,7 +722,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                if (_adfRearClickSkipper.ClickAndCheck())
+                                                if (!_adfRearClickSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ADF_REAR_CHANNEL_INC);
                                                 }
@@ -763,7 +763,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                if (_adfFrontClickSkipper.ClickAndCheck())
+                                                if (!_adfFrontClickSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ADF_FRONT_CHANNEL_DEC);
                                                 }
@@ -771,7 +771,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                if (_adfRearClickSkipper.ClickAndCheck())
+                                                if (!_adfRearClickSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(ADF_REAR_CHANNEL_DEC);
                                                 }

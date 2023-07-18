@@ -110,14 +110,14 @@ namespace NonVisuals.Panels.Saitek.Panels
                 SetLastException(ex);
             }
         }
-        
+
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             if (SettingsLoading)
             {
                 return;
             }
-            
+
             UpdateCounter(e.Address, e.Data);
             foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
             {
@@ -131,7 +131,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                     //Binding isn't for dial's current position
                     continue;
                 }
-                
+
                 lock (_lcdDataVariablesLockObject)
                 {
                     var result = false;
@@ -1168,8 +1168,10 @@ namespace NonVisuals.Panels.Saitek.Panels
             }
         }
 
-        protected bool SkipCurrentLcdKnobChange(bool change = true)
+        private bool SkipCurrentLcdKnobChange()
         {
+            _knobSensitivitySkipper++;
+
             switch (_lcdKnobSensitivity)
             {
                 case 0:
@@ -1181,11 +1183,6 @@ namespace NonVisuals.Panels.Saitek.Panels
                 case -1:
                     {
                         // Skip every 2 manipulations
-                        if (change)
-                        {
-                            _knobSensitivitySkipper++;
-                        }
-
                         if (_knobSensitivitySkipper <= 2)
                         {
                             return true;
@@ -1198,11 +1195,6 @@ namespace NonVisuals.Panels.Saitek.Panels
                 case -2:
                     {
                         // Skip every 4 manipulations
-                        if (change)
-                        {
-                            _knobSensitivitySkipper++;
-                        }
-
                         if (_knobSensitivitySkipper <= 4)
                         {
                             return true;
@@ -1212,16 +1204,14 @@ namespace NonVisuals.Panels.Saitek.Panels
                         break;
                     }
             }
+
             return false;
         }
 
-        protected bool SkipCurrentLcdKnobChangeLCD(bool change = true)
+        private bool SkipCurrentLcdKnobChangeLCD()
         {
             // Skip every 3 manipulations
-            if (change)
-            {
-                _knobSensitivitySkipper++;
-            }
+            _knobSensitivitySkipper++;
 
             if (_knobSensitivitySkipper <= 3)
             {

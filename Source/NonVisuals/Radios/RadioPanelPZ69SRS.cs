@@ -51,8 +51,8 @@
         private double _lowerGuardFreq;
         private long _upperFreqSwitchPressed;
         private long _lowerFreqSwitchPressed;
-        private int _largeDialSkipper;
-        private int _smallDialSkipper;
+        private readonly ClickSkipper _largeDialSkipper = new(2);
+        private readonly ClickSkipper _smallDialSkipper = new(2);
         private readonly ClickSpeedDetector _largeDialIncreaseChangeMonitor = new(20);
         private readonly ClickSpeedDetector _largeDialDecreaseChangeMonitor = new(20);
         private readonly ClickSpeedDetector _firstSmallDialIncreaseChangeMonitor = new(25);
@@ -369,7 +369,7 @@
                             case RadioPanelPZ69KnobsSRS.UPPER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     _largeDialIncreaseChangeMonitor.Click();
-                                    if (!SkipLargeDialDialChange())
+                                    if (!_largeDialSkipper.ShouldSkip())
                                     {
                                         if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
@@ -388,7 +388,7 @@
                             case RadioPanelPZ69KnobsSRS.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     _largeDialDecreaseChangeMonitor.Click();
-                                    if (!SkipLargeDialDialChange())
+                                    if (!_largeDialSkipper.ShouldSkip())
                                     {
                                         if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
@@ -408,7 +408,7 @@
                                 {
                                     _firstSmallDialIncreaseChangeMonitor.Click();
                                     _secondSmallDialIncreaseChangeMonitor.Click();
-                                    if (!SkipSmallDialDialChange())
+                                    if (!_smallDialSkipper.ShouldSkip())
                                     {
                                         if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
@@ -438,7 +438,7 @@
                                 {
                                     _firstSmallDialDecreaseChangeMonitor.Click();
                                     _secondSmallDialDecreaseChangeMonitor.Click();
-                                    if (!SkipSmallDialDialChange())
+                                    if (!_smallDialSkipper.ShouldSkip())
                                     {
                                         if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
@@ -467,7 +467,7 @@
                             case RadioPanelPZ69KnobsSRS.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     _largeDialIncreaseChangeMonitor.Click();
-                                    if (!SkipLargeDialDialChange())
+                                    if (!_largeDialSkipper.ShouldSkip())
                                     {
                                         if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
@@ -486,7 +486,7 @@
                             case RadioPanelPZ69KnobsSRS.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     _largeDialDecreaseChangeMonitor.Click();
-                                    if (!SkipLargeDialDialChange())
+                                    if (!_largeDialSkipper.ShouldSkip())
                                     {
                                         if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
@@ -506,7 +506,7 @@
                                 {
                                     _firstSmallDialIncreaseChangeMonitor.Click();
                                     _secondSmallDialIncreaseChangeMonitor.Click();
-                                    if (!SkipSmallDialDialChange())
+                                    if (!_smallDialSkipper.ShouldSkip())
                                     {
                                         if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
@@ -536,7 +536,7 @@
                                 {
                                     _firstSmallDialDecreaseChangeMonitor.Click();
                                     _secondSmallDialDecreaseChangeMonitor.Click();
-                                    if (!SkipSmallDialDialChange())
+                                    if (!_smallDialSkipper.ShouldSkip())
                                     {
                                         if (SRSRadioFactory.GetSRSRadio().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
@@ -692,49 +692,7 @@
                 Logger.Error(ex);
             }
         }
-
-        private bool SkipSmallDialDialChange()
-        {
-            try
-            {
-                if (_smallDialSkipper > 2)
-                {
-                    _smallDialSkipper = 0;
-                    return false;
-                }
-
-                _smallDialSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-
-            return false;
-        }
-
-        private bool SkipLargeDialDialChange()
-        {
-            try
-            {
-                if (_largeDialSkipper > 2)
-                {
-                    _largeDialSkipper = 0;
-                    return false;
-                }
-
-                _largeDialSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-
-            return false;
-        }
-
+        
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e) { }
 

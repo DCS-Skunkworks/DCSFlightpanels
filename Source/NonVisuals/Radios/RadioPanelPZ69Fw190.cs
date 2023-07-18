@@ -1,4 +1,5 @@
 ﻿using NonVisuals.BindingClasses.BIP;
+using NonVisuals.Helpers;
 
 namespace NonVisuals.Radios
 {
@@ -76,7 +77,7 @@ namespace NonVisuals.Radios
         private volatile uint _fug16ZyPresetCockpitDialPos = 1;
         private const string FUG16_ZY_PRESET_COMMAND_INC = "RADIO_MODE INC\n";
         private const string FUG16_ZY_PRESET_COMMAND_DEC = "RADIO_MODE DEC\n";
-        private int _fug16ZyPresetDialSkipper;
+        private readonly ClickSkipper _fug16ZyPresetDialSkipper = new(2);
         private readonly object _lockFug16ZyFineTuneDialObject1 = new();
         private DCSBIOSOutput _fug16ZyFineTuneDcsbiosOutputDial;
         private volatile uint _fug16ZyFineTuneCockpitDialPos = 1;
@@ -92,7 +93,7 @@ namespace NonVisuals.Radios
         private volatile uint _fug25AIFFCockpitDialPos = 1;
         private const string FUG25_AIFF_COMMAND_INC = "FUG25_MODE INC\n";
         private const string FUG25_AIFF_COMMAND_DEC = "FUG25_MODE DEC\n";
-        private int _fug25AIFFDialSkipper;
+        private readonly ClickSkipper _fug25AIFFDialSkipper = new(2);
         private const string RADIO_VOLUME_KNOB_COMMAND_INC = "FUG16_VOLUME +1000\n";
         private const string RADIO_VOLUME_KNOB_COMMAND_DEC = "FUG16_VOLUME -1000\n";
         private const string FU_G25_A_TEST_COMMAND_INC = "FUG25_TEST INC\n";
@@ -394,7 +395,7 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!SkipFuG16ZYPresetDialChange())
+                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
                                                 }
@@ -403,7 +404,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                if (!SkipIFFDialChange())
+                                                if (!_fug25AIFFDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(FUG25_AIFF_COMMAND_INC);
                                                 }
@@ -430,7 +431,7 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!SkipFuG16ZYPresetDialChange())
+                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 }
@@ -439,7 +440,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                if (!SkipIFFDialChange())
+                                                if (!_fug25AIFFDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(FUG25_AIFF_COMMAND_DEC);
                                                 }
@@ -526,7 +527,7 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!SkipFuG16ZYPresetDialChange())
+                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
                                                 }
@@ -535,7 +536,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                if (!SkipIFFDialChange())
+                                                if (!_fug25AIFFDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(FUG25_AIFF_COMMAND_INC);
                                                 }
@@ -562,7 +563,7 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                if (!SkipFuG16ZYPresetDialChange())
+                                                if (!_fug16ZyPresetDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 }
@@ -571,7 +572,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                if (!SkipIFFDialChange())
+                                                if (!_fug25AIFFDialSkipper.ShouldSkip())
                                                 {
                                                     DCSBIOS.Send(FUG25_AIFF_COMMAND_DEC);
                                                 }
@@ -873,61 +874,12 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-
-        private bool SkipFuG16ZYPresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentFw190RadioMode.FUG16ZY || _currentLowerRadioMode == CurrentFw190RadioMode.FUG16ZY)
-                {
-                    if (_fug16ZyPresetDialSkipper > 2)
-                    {
-                        _fug16ZyPresetDialSkipper = 0;
-                        return false;
-                    }
-                    _fug16ZyPresetDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipIFFDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentFw190RadioMode.IFF || _currentLowerRadioMode == CurrentFw190RadioMode.IFF)
-                {
-                    if (_fug25AIFFDialSkipper > 2)
-                    {
-                        _fug25AIFFDialSkipper = 0;
-                        return false;
-                    }
-                    _fug25AIFFDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
+        
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
-
         public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
-
         public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
-
         public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }
-
         public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink) { }
-
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
     }
 }

@@ -48,7 +48,7 @@ namespace NonVisuals.Radios
         private volatile uint _r863PresetCockpitDialPos = 0;
         private const string R863_PRESET_COMMAND_INC = "PLT_R863_CHAN INC\n";
         private const string R863_PRESET_COMMAND_DEC = "PLT_R863_CHAN DEC\n";
-        private int _r863PresetDialSkipper;
+        private readonly ClickSkipper _r863PresetDialSkipper = new(2);
         private const string R863_PRESET_VOLUME_KNOB_COMMAND_INC = "PLT_R863_VOL +2500\n";
         private const string R863_PRESET_VOLUME_KNOB_COMMAND_DEC = "PLT_R863_VOL -2500\n";
 
@@ -92,7 +92,7 @@ namespace NonVisuals.Radios
         private volatile uint _r828PresetCockpitDialPos = 0;
         private const string R828_PRESET_COMMAND_INC = "PLT_R828_CHAN INC\n";
         private const string R828_PRESET_COMMAND_DEC = "PLT_R828_CHAN DEC\n";
-        private int _r828PresetDialSkipper;
+        private readonly ClickSkipper _r828PresetDialSkipper = new(2);
         private const string R828_PRESET_VOLUME_KNOB_COMMAND_INC = "PLT_R828_VOL +2500\n";
         private const string R828_PRESET_VOLUME_KNOB_COMMAND_DEC = "PLT_R828_VOL -2500\n";
 
@@ -123,8 +123,8 @@ namespace NonVisuals.Radios
         private const string ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC = "PLT_ARC_FREQ_R_100 DEC\n";
         private const string ADF_BACKUP10_KHZ_PRESET_COMMAND_INC = "PLT_ARC_FREQ_R_10 INC\n";
         private const string ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC = "PLT_ARC_FREQ_R_10 DEC\n";
-        private int _adfPresetDial1Skipper;
-        private int _adfPresetDial2Skipper;
+        private readonly ClickSkipper _adfPresetDial1Skipper = new (2);
+        private readonly ClickSkipper _adfPresetDial2Skipper = new(2);
 
 
         //0 = Backup ADF
@@ -141,7 +141,7 @@ namespace NonVisuals.Radios
         private volatile uint _dmeMainCockpitPresetDial1Pos = 0;
         private const string DME_MAIN1_KHZ_PRESET_COMMAND_INC = "PLT_ARC_FREQ_L_1 INC\n";
         private const string DME_MAIN1_KHZ_PRESET_COMMAND_DEC = "PLT_ARC_FREQ_L_1 DEC\n";
-        private int _dmePresetDial1Skipper;
+        private readonly ClickSkipper _dmePresetDial1Skipper = new(2);
 
         /*Mi-24P ARK-15 1KHz DME BACKUP*/
         private readonly object _lockDMEBackupDialObject1 = new();
@@ -158,7 +158,7 @@ namespace NonVisuals.Radios
         private readonly object _lockSpu8DialObject1 = new();
         private DCSBIOSOutput _spu8DcsbiosOutputPresetDial;
         private volatile uint _spu8CockpitDialPos = 0;
-        private int _spu8DialSkipper;
+        private readonly ClickSkipper _spu8DialSkipper = new(2);
         private const string SPU8_COMMAND_INC = "PLT_SPU8_MODE INC\n";
         private const string SPU8_COMMAND_DEC = "PLT_SPU8_MODE DEC\n";
         private const string SPU8_VOLUME_KNOB_COMMAND_INC = "PLT_SPU8_RADIO_VOL +2500\n";
@@ -931,7 +931,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            if (!SkipR863PresetDialChange())
+                                            if (!_r863PresetDialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(R863_PRESET_COMMAND_INC);
                                             }
@@ -944,7 +944,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            if (!SkipR828PresetDialChange())
+                                            if (!_r828PresetDialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(R828_PRESET_COMMAND_INC);
                                             }
@@ -952,7 +952,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            if (!SkipADFPresetDial1Change())
+                                            if (!_adfPresetDial1Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                             }
@@ -960,7 +960,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
                                         {
-                                            if (!SkipDMEPresetDial1Change())
+                                            if (!_dmePresetDial1Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_INC : DME_BACKUP1_KHZ_PRESET_COMMAND_INC);
                                             }
@@ -968,7 +968,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            if (!SkipSpu8PresetDialChange())
+                                            if (!_spu8DialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(SPU8_COMMAND_INC);
                                             }
@@ -991,7 +991,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            if (!SkipR863PresetDialChange())
+                                            if (!_r863PresetDialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
                                             }
@@ -1004,7 +1004,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            if (!SkipR828PresetDialChange())
+                                            if (!_r828PresetDialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
                                             }
@@ -1012,7 +1012,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            if (!SkipADFPresetDial1Change())
+                                            if (!_adfPresetDial1Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                             }
@@ -1020,7 +1020,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
                                         {
-                                            if (!SkipDMEPresetDial1Change())
+                                            if (!_dmePresetDial1Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_DEC : DME_BACKUP1_KHZ_PRESET_COMMAND_DEC);
                                             }
@@ -1028,7 +1028,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            if (!SkipSpu8PresetDialChange())
+                                            if (!_spu8DialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(SPU8_COMMAND_DEC);
                                             }
@@ -1066,7 +1066,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            if (!SkipADFPresetDial2Change())
+                                            if (!_adfPresetDial2Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                             }
@@ -1113,7 +1113,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            if (!SkipADFPresetDial2Change())
+                                            if (!_adfPresetDial2Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                             }
@@ -1145,7 +1145,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            if (!SkipR863PresetDialChange())
+                                            if (!_r863PresetDialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(R863_PRESET_COMMAND_INC);
                                             }
@@ -1158,7 +1158,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            if (!SkipR828PresetDialChange())
+                                            if (!_r828PresetDialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(R828_PRESET_COMMAND_INC);
                                             }
@@ -1166,7 +1166,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            if (!SkipADFPresetDial1Change())
+                                            if (!_adfPresetDial1Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                             }
@@ -1174,7 +1174,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
                                         {
-                                            if (!SkipDMEPresetDial1Change())
+                                            if (!_dmePresetDial1Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_INC : DME_BACKUP1_KHZ_PRESET_COMMAND_INC);
                                             }
@@ -1182,7 +1182,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            if (!SkipSpu8PresetDialChange())
+                                            if (!_spu8DialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(SPU8_COMMAND_INC);
                                             }
@@ -1205,7 +1205,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            if (!SkipR863PresetDialChange())
+                                            if (!_r863PresetDialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
                                             }
@@ -1218,7 +1218,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            if (!SkipR828PresetDialChange())
+                                            if (!_r828PresetDialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
                                             }
@@ -1226,7 +1226,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            if (!SkipADFPresetDial1Change())
+                                            if (!_adfPresetDial1Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                             }
@@ -1234,7 +1234,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
                                         {
-                                            if (!SkipDMEPresetDial1Change())
+                                            if (!_dmePresetDial1Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_DEC : DME_BACKUP1_KHZ_PRESET_COMMAND_DEC);
                                             }
@@ -1242,7 +1242,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            if (!SkipSpu8PresetDialChange())
+                                            if (!_spu8DialSkipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(SPU8_COMMAND_DEC);
                                             }
@@ -1280,7 +1280,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            if (!SkipADFPresetDial2Change())
+                                            if (!_adfPresetDial2Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                             }
@@ -1327,7 +1327,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            if (!SkipADFPresetDial2Change())
+                                            if (!_adfPresetDial2Skipper.ShouldSkip())
                                             {
                                                 DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                             }
@@ -1863,144 +1863,13 @@ namespace NonVisuals.Radios
             }
             throw new Exception("Should not reach this code. private String GetCommandDirectionFor0To9Dials(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
         }
-
-        private bool SkipR863PresetDialChange()
-        {
-            try
-            {
-                if (_r863PresetDialSkipper > 2)
-                {
-                    _r863PresetDialSkipper = 0;
-                    return false;
-                }
-                _r863PresetDialSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipR828PresetDialChange()
-        {
-            try
-            {
-                if (_r828PresetDialSkipper > 2)
-                {
-                    _r828PresetDialSkipper = 0;
-                    return false;
-                }
-                _r828PresetDialSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipADFPresetDial1Change()
-        {
-            try
-            {
-                if (_adfPresetDial1Skipper > 2)
-                {
-                    _adfPresetDial1Skipper = 0;
-                    return false;
-                }
-                _adfPresetDial1Skipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipDMEPresetDial1Change()
-        {
-            try
-            {
-                if (_dmePresetDial1Skipper > 2)
-                {
-                    _dmePresetDial1Skipper = 0;
-                    return false;
-                }
-                _dmePresetDial1Skipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipADFPresetDial2Change()
-        {
-            try
-            {
-                if (_adfPresetDial2Skipper > 2)
-                {
-                    _adfPresetDial2Skipper = 0;
-                    return false;
-                }
-                _adfPresetDial2Skipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipSpu8PresetDialChange()
-        {
-            try
-            {
-                if (_spu8DialSkipper > 2)
-                {
-                    _spu8DialSkipper = 0;
-                    return false;
-                }
-                _spu8DialSkipper++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
-        {
-        }
-
-        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
-        {
-        }
-
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
-        {
-        }
-
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
-        {
-        }
-
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
-        {
-        }
-
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
-        {
-        }
+        
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink) { }
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
 
         private string Ark15MergedFrequencies
         {
