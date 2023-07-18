@@ -19,6 +19,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
 
 
@@ -36,7 +37,7 @@ namespace NonVisuals.Radios
             ADF_ARK9,
             ARK_UD,
             SPU7,
-            NOUSE
+            NO_USE
         }
 
         private CurrentMi8RadioMode _currentUpperRadioMode = CurrentMi8RadioMode.R863_MANUAL;
@@ -89,9 +90,7 @@ namespace NonVisuals.Radios
         private volatile uint _r863PresetCockpitDialPos = 1;
         private const string R863_PRESET_COMMAND_INC = "R863_CNL_SEL INC\n";
         private const string R863_PRESET_COMMAND_DEC = "R863_CNL_SEL DEC\n";
-
-        // private int _r863PresetDialSkipper;
-
+        
         private const string R863_PRESET_VOLUME_KNOB_COMMAND_INC = "R863_VOL +2500\n";
         private const string R863_PRESET_VOLUME_KNOB_COMMAND_DEC = "R863_VOL -2500\n";
         private readonly object _lockR863UnitSwitchObject = new();
@@ -143,7 +142,6 @@ namespace NonVisuals.Radios
         private volatile uint _r828PresetCockpitDialPos = 1;
         private const string R828_PRESET_COMMAND_INC = "R828_PRST_CHAN_SEL INC\n";
         private const string R828_PRESET_COMMAND_DEC = "R828_PRST_CHAN_SEL DEC\n";
-        // private int _r828PresetDialSkipper;
 
         private const string R828_PRESET_VOLUME_KNOB_COMMAND_INC = "R828_VOL +2500\n";
         private const string R828_PRESET_VOLUME_KNOB_COMMAND_DEC = "R828_VOL -2500\n";
@@ -199,15 +197,12 @@ namespace NonVisuals.Radios
         private const string ARKUD_PRESET_COMMAND_INC = "ARCUD_CHL INC\n";
         private const string ARKUD_PRESET_COMMAND_DEC = "ARCUD_CHL DEC\n";
 
-        // private int _arkUdPresetDialSkipper;
-
         private readonly object _lockArkudModeDialObject = new();
         private DCSBIOSOutput _arkUdModeDcsbiosOutputDial;
         private volatile uint _arkUdModeCockpitDial1Pos;
         private const string ARKUD_MODE_COMMAND_INC = "ARCUD_MODE INC\n";
         private const string ARKUD_MODE_COMMAND_DEC = "ARCUD_MODE DEC\n";
-
-        // private int _arkUdModeDialSkipper;
+        
         private readonly object _lockArkudVhfUhfModeDialObject = new();
         private DCSBIOSOutput _arkUdVhfUhfModeDcsbiosOutputDial;
         private volatile uint _arkUdVhfUhfModeCockpitDial1Pos;
@@ -223,8 +218,6 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _spu7DcsbiosOutputPresetDial;
         private volatile uint _spu7CockpitDialPos;
 
-        // private int _spu7DialSkipper;
-
         private const string SPU7_COMMAND_INC = "RADIO_SEL_R INC\n";
         private const string SPU7_COMMAND_DEC = "RADIO_SEL_R DEC\n";
         private const string SPU7_VOLUME_KNOB_COMMAND_INC = "LST_VOL_KNOB_L +2500\n";
@@ -235,7 +228,6 @@ namespace NonVisuals.Radios
         private const string SPU7_ICS_SWITCH_TOGGLE_COMMAND = "SPU7_L_ICS TOGGLE\n";
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
-        // private const int SKIP_CONSTANT = 0;
 
         public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
@@ -282,7 +274,7 @@ namespace NonVisuals.Radios
                     // Last digit not used in panel
                     _yadro1ACockpitFrequency = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     Interlocked.Increment(ref _doUpdatePanelLCD);
-                    
+
                     lock (_lockYadro1ADialsObject1)
                     {
                         // "02000.0" - "*17*999.9"
@@ -348,7 +340,7 @@ namespace NonVisuals.Radios
 
                     _r863ManualCockpitFrequency = tmpFreq;
                     Interlocked.Increment(ref _doUpdatePanelLCD);
-                    
+
                     lock (_lockR863ManualDialsObject1)
                     {
                         // "100.000" - "*39*9.975"
@@ -1169,13 +1161,8 @@ namespace NonVisuals.Radios
             }
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -1449,10 +1436,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                if (!SkipR863PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R863_PRESET_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(R863_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1485,41 +1469,29 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                if (!SkipR828PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R828_PRESET_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(R828_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                if (!SkipArkudPresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(ARKUD_PRESET_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(ARKUD_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                if (!SkipSpu7PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(SPU7_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(SPU7_COMMAND_INC);
                                                 break;
                                             }
 
-                                        case CurrentMi8RadioMode.NOUSE:
+                                        case CurrentMi8RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -1565,10 +1537,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                if (!SkipR863PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1601,41 +1570,29 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                if (!SkipR828PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                if (!SkipArkudPresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(ARKUD_PRESET_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(ARKUD_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                if (!SkipSpu7PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(SPU7_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(SPU7_COMMAND_DEC);
                                                 break;
                                             }
 
-                                        case CurrentMi8RadioMode.NOUSE:
+                                        case CurrentMi8RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -1687,19 +1644,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDial2Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                if (!SkipArkudModeDialChange())
-                                                {
-                                                    DCSBIOS.Send(ARKUD_MODE_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(ARKUD_MODE_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1709,7 +1660,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                        case CurrentMi8RadioMode.NOUSE:
+                                        case CurrentMi8RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -1759,19 +1710,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDial2Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                if (!SkipArkudModeDialChange())
-                                                {
-                                                    DCSBIOS.Send(ARKUD_MODE_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(ARKUD_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1781,7 +1726,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                        case CurrentMi8RadioMode.NOUSE:
+                                        case CurrentMi8RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -1827,10 +1772,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                if (!SkipR863PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R863_PRESET_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(R863_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1863,41 +1805,29 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                if (!SkipR828PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R828_PRESET_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(R828_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                if (!SkipArkudPresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(ARKUD_PRESET_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(ARKUD_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                if (!SkipSpu7PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(SPU7_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(SPU7_COMMAND_INC);
                                                 break;
                                             }
 
-                                        case CurrentMi8RadioMode.NOUSE:
+                                        case CurrentMi8RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -1943,10 +1873,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                if (!SkipR863PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(R863_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1979,41 +1906,29 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                if (!SkipR828PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(R828_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDial1Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                if (!SkipArkudPresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(ARKUD_PRESET_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(ARKUD_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                if (!SkipSpu7PresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(SPU7_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(SPU7_COMMAND_DEC);
                                                 break;
                                             }
 
-                                        case CurrentMi8RadioMode.NOUSE:
+                                        case CurrentMi8RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -2065,19 +1980,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDial2Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                if (!SkipArkudModeDialChange())
-                                                {
-                                                    DCSBIOS.Send(ARKUD_MODE_COMMAND_INC);
-                                                }
+                                                DCSBIOS.Send(ARKUD_MODE_COMMAND_INC);
                                                 break;
                                             }
 
@@ -2087,7 +1996,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                        case CurrentMi8RadioMode.NOUSE:
+                                        case CurrentMi8RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -2137,19 +2046,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDial2Change())
-                                                {
-                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                if (!SkipArkudModeDialChange())
-                                                {
-                                                    DCSBIOS.Send(ARKUD_MODE_COMMAND_DEC);
-                                                }
+                                                DCSBIOS.Send(ARKUD_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -2159,7 +2062,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                        case CurrentMi8RadioMode.NOUSE:
+                                        case CurrentMi8RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -2423,7 +2326,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentMi8RadioMode.NOUSE:
+                        case CurrentMi8RadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -2620,7 +2523,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentMi8RadioMode.NOUSE:
+                        case CurrentMi8RadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -2637,11 +2540,6 @@ namespace NonVisuals.Radios
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
-        }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
         }
 
         public sealed override void Startup()
@@ -2721,7 +2619,7 @@ namespace NonVisuals.Radios
             {
                 _currentLowerRadioMode = currentMi8RadioMode;
 
-                // If NOUSE then send next round of data to the panel in order to clear the LCD.
+                // If NO_USE then send next round of data to the panel in order to clear the LCD.
                 // _sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
@@ -2945,229 +2843,11 @@ namespace NonVisuals.Radios
                 $"Should not reach this code. private String GetCommandDirectionFor0To9Dials(uint desiredDialPosition, uint actualDialPosition) -> {desiredDialPosition}   {actualDialPosition}");
         }
 
-        /*
-        private string GetR863ManualDialFrequencyForPosition(uint position)
-        {
-            try
-            {
-                Common.DebugP("Entering Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
-                //        "00"  "25" "50" "75"
-                //          0    2    5    7  
-                switch (position)
-                {
-                    case 0:
-                        {
-                            Common.DebugP("Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
-                            return "0";
-                        }
-                    case 2:
-                        {
-                            Common.DebugP("Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
-                            return "5";
-                        }
-                    case 5:
-                        {
-                            Common.DebugP("Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
-                            return "5";
-                        }
-                    case 7:
-                        {
-                            Common.DebugP("Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
-                            return "0";
-                        }
-                }
-                Common.LogError(1111, "ERROR!!! Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition() Position : [" + position + "]");
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(78019, ex);
-            }
-            return "0";
-        }
-        */
-        private bool SkipR863PresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentMi8RadioMode.R863_PRESET || _currentLowerRadioMode == CurrentMi8RadioMode.R863_PRESET)
-                {
-                    /*if (_r863PresetDialSkipper > SKIP_CONSTANT)
-                    {
-                        _r863PresetDialSkipper = 0;
-                        return false;
-                    }
-
-                    _r863PresetDialSkipper++;
-                    return true;*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipR828PresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentMi8RadioMode.R828_PRESETS || _currentLowerRadioMode == CurrentMi8RadioMode.R828_PRESETS)
-                {
-                    /*if (_r828PresetDialSkipper > SKIP_CONSTANT)
-                    {
-                        _r828PresetDialSkipper = 0;
-                        return false;
-                    }
-
-                    _r828PresetDialSkipper++;
-                    return true;*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipADFPresetDial1Change()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
-                {
-                    /*if (_adfPresetDial1Skipper > SKIP_CONSTANT)
-                    {
-                        _adfPresetDial1Skipper = 0;
-                        return false;
-                    }
-
-                    _adfPresetDial1Skipper++;
-                    return true;*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipADFPresetDial2Change()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
-                {
-                    /*if (_adfPresetDial2Skipper > SKIP_CONSTANT)
-                    {
-                        _adfPresetDial2Skipper = 0;
-                        return false;
-                    }
-
-                    _adfPresetDial2Skipper++;
-                    return true;*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipSpu7PresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentMi8RadioMode.SPU7 || _currentLowerRadioMode == CurrentMi8RadioMode.SPU7)
-                {
-                    /*if (_spu7DialSkipper > SKIP_CONSTANT)
-                    {
-                        _spu7DialSkipper = 0;
-                        return false;
-                    }
-
-                    _spu7DialSkipper++;
-                    return true;*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipArkudPresetDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD || _currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD)
-                {
-                    /*if (_arkUdPresetDialSkipper > SKIP_CONSTANT)
-                    {
-                        _arkUdPresetDialSkipper = 0;
-                        return false;
-                    }
-
-                    _arkUdPresetDialSkipper++;
-                    return true;*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipArkudModeDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD || _currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD)
-                {
-                    /*if (_arkUdModeDialSkipper > SKIP_CONSTANT)
-                    {
-                        _arkUdModeDialSkipper = 0;
-                        return false;
-                    }
-
-                    _arkUdModeDialSkipper++;
-                    return true;*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
-        {
-        }
-
-        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
-        {
-        }
-
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
-        {
-        }
-
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
-        {
-        }
-
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
-        {
-        }
-
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
-        {
-        }
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink) { }
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
     }
 }

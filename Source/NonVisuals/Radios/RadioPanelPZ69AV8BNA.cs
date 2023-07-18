@@ -17,6 +17,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
 
     /// <summary>
@@ -28,7 +29,7 @@ namespace NonVisuals.Radios
         {
             COMM1,
             COMM2,
-            NOUSE
+            NO_USE
         }
 
         private CurrentAV8BNARadioMode _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM1;
@@ -244,7 +245,7 @@ namespace NonVisuals.Radios
                             break;
                         }
 
-                    case CurrentAV8BNARadioMode.NOUSE:
+                    case CurrentAV8BNARadioMode.NO_USE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -277,7 +278,7 @@ namespace NonVisuals.Radios
                             break;
                         }
 
-                    case CurrentAV8BNARadioMode.NOUSE:
+                    case CurrentAV8BNARadioMode.NO_USE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -527,13 +528,8 @@ namespace NonVisuals.Radios
         }
 
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             lock (LockLCDUpdateObject)
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -569,7 +565,7 @@ namespace NonVisuals.Radios
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentAV8BNARadioMode.NOUSE;
+                                    _currentUpperRadioMode = CurrentAV8BNARadioMode.NO_USE;
                                 }
                                 break;
                             }
@@ -600,7 +596,7 @@ namespace NonVisuals.Radios
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentLowerRadioMode = CurrentAV8BNARadioMode.NOUSE;
+                                    _currentLowerRadioMode = CurrentAV8BNARadioMode.NO_USE;
                                 }
                                 break;
                             }
@@ -695,12 +691,7 @@ namespace NonVisuals.Radios
         {
             throw new Exception("Radio Panel does not support color bindings with DCS-BIOS.");
         }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
-
+        
         private void CreateRadioKnobs()
         {
             SaitekPanelKnobs = RadioPanelKnobAV8BNA.GetRadioPanelKnobs();

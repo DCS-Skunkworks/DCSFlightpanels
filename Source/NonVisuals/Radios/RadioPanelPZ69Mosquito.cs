@@ -15,6 +15,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
 
 
@@ -27,7 +28,7 @@ namespace NonVisuals.Radios
         private enum CurrentMosquitoRadioMode
         {
             VHF,
-            NOUSE
+            NO_USE
         }
 
         private bool _upperButtonPressed;
@@ -54,7 +55,7 @@ namespace NonVisuals.Radios
         private readonly object _lockHFRadioModeDialObject1 = new();
         private volatile uint _vhfRadioModeCockpitPosition = 1;
         private DCSBIOSOutput _vhfRadioModeDcsbiosOutput;
-        private int _vhfDialChangeSkipper;
+        private readonly ClickSkipper _vhfDialChangeSkipper = new(2);
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -188,13 +189,8 @@ namespace NonVisuals.Radios
             }
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -224,7 +220,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentMosquitoRadioMode.NOUSE);
+                                        SetUpperRadioMode(CurrentMosquitoRadioMode.NO_USE);
                                     }
                                     break;
                                 }
@@ -247,7 +243,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentMosquitoRadioMode.NOUSE);
+                                        SetLowerRadioMode(CurrentMosquitoRadioMode.NO_USE);
                                     }
                                     break;
                                 }
@@ -339,29 +335,13 @@ namespace NonVisuals.Radios
                         {
                             case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_INC:
                                 {
-                                    // MODE
-                                    if (!SkipDialChange())
-                                    {
-                                        var s = GetHFRadioModeStringCommand(true);
-                                        if (!string.IsNullOrEmpty(s))
-                                        {
-                                            DCSBIOS.Send(s);
-                                        }
-                                    }
+                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(true));
                                     break;
                                 }
 
                             case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
-                                    // MODE
-                                    if (!SkipDialChange())
-                                    {
-                                        var s = GetHFRadioModeStringCommand(false);
-                                        if (!string.IsNullOrEmpty(s))
-                                        {
-                                            DCSBIOS.Send(s);
-                                        }
-                                    }
+                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(false));
                                     break;
                                 }
 
@@ -376,7 +356,7 @@ namespace NonVisuals.Radios
                                                     _upperButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 }
-                                                else if (!SkipDialChange())
+                                                else if (!_vhfDialChangeSkipper.ShouldSkip())
                                                 {
                                                     SendIncVHFPresetCommand();
                                                 }
@@ -397,7 +377,7 @@ namespace NonVisuals.Radios
                                                     _upperButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-                                                else if (!SkipDialChange())
+                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) ;
                                                 {
                                                     SendDecVHFPresetCommand();
                                                 }
@@ -410,28 +390,14 @@ namespace NonVisuals.Radios
                             case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     // MODE
-                                    if (!SkipDialChange())
-                                    {
-                                        var s = GetHFRadioModeStringCommand(true);
-                                        if (!string.IsNullOrEmpty(s))
-                                        {
-                                            DCSBIOS.Send(s);
-                                        }
-                                    }
+                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(true));
                                     break;
                                 }
 
                             case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     // MODE
-                                    if (!SkipDialChange())
-                                    {
-                                        var s = GetHFRadioModeStringCommand(false);
-                                        if (!string.IsNullOrEmpty(s))
-                                        {
-                                            DCSBIOS.Send(s);
-                                        }
-                                    }
+                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(false));
                                     break;
                                 }
 
@@ -446,7 +412,7 @@ namespace NonVisuals.Radios
                                                     _lowerButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 }
-                                                else if (!SkipDialChange())
+                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) ;
                                                 {
                                                     SendIncVHFPresetCommand();
                                                 }
@@ -467,7 +433,7 @@ namespace NonVisuals.Radios
                                                     _lowerButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-                                                else if (!SkipDialChange())
+                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) ;
                                                 {
                                                     SendDecVHFPresetCommand();
                                                 }
@@ -486,29 +452,6 @@ namespace NonVisuals.Radios
             {
                 Logger.Error(ex);
             }
-        }
-
-        private bool SkipDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentMosquitoRadioMode.VHF || _currentLowerRadioMode == CurrentMosquitoRadioMode.VHF)
-                {
-                    if (_vhfDialChangeSkipper > 2)
-                    {
-                        _vhfDialChangeSkipper = 0;
-                        return false;
-                    }
-                    _vhfDialChangeSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-
-            return false;
         }
 
         private void ShowFrequenciesOnPanel()
@@ -555,7 +498,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentMosquitoRadioMode.NOUSE:
+                        case CurrentMosquitoRadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -586,7 +529,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentMosquitoRadioMode.NOUSE:
+                        case CurrentMosquitoRadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -694,11 +637,6 @@ namespace NonVisuals.Radios
             }
         }
 
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
-
         public sealed override void Startup()
         {
             try
@@ -751,7 +689,7 @@ namespace NonVisuals.Radios
             {
                 _currentLowerRadioMode = currentMosquitoRadioMode;
 
-                // If NOUSE then send next round of e.Data to the panel in order to clear the LCD.
+                // If NO_USE then send next round of e.Data to the panel in order to clear the LCD.
                 // _sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
@@ -760,28 +698,11 @@ namespace NonVisuals.Radios
             }
         }
 
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
-        {
-        }
-
-        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
-        {
-        }
-
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
-        {
-        }
-
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
-        {
-        }
-
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
-        {
-        }
-
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
-        {
-        }
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink) { }
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
     }
 }

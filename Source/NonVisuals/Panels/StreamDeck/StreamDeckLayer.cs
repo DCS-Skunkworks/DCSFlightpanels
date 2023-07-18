@@ -12,7 +12,6 @@
     using Interfaces;
     using Events;
     using Panels;
-    using NonVisuals;
 
     public class StreamDeckLayer : IDisposable
     {

@@ -17,6 +17,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
 
     /// <summary>
@@ -29,7 +30,7 @@ namespace NonVisuals.Radios
             FR22,
             FR24,
             TILS,
-            NOUSE
+            NO_USE
         }
 
         private CurrentAJS37RadioMode _currentUpperRadioMode = CurrentAJS37RadioMode.FR22;
@@ -82,8 +83,8 @@ namespace NonVisuals.Radios
         private const string TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE = "TILS_CHANNEL_LAYER TOGGLE\n";
         private const string MASTER_MODE_SELECTOR_COMMAND_INC = "MASTER_MODE_SELECT INC\n";
         private const string MASTER_MODE_SELECTOR_COMMAND_DEC = "MASTER_MODE_SELECT DEC\n";
-        private int _tilsChannelDialSkipper;
-        private int _masterModeSelectorDialSkipper;
+        private readonly ClickSkipper _tilsChannelDialSkipper = new(2);
+        private readonly ClickSkipper _masterModeSelectorDialSkipper = new(2);
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -228,7 +229,7 @@ namespace NonVisuals.Radios
                                         break;
                                     }
 
-                                case CurrentAJS37RadioMode.NOUSE:
+                                case CurrentAJS37RadioMode.NO_USE:
                                     {
                                         break;
                                     }
@@ -256,7 +257,7 @@ namespace NonVisuals.Radios
                                         break;
                                     }
 
-                                case CurrentAJS37RadioMode.NOUSE:
+                                case CurrentAJS37RadioMode.NO_USE:
                                     {
                                         break;
                                     }
@@ -272,13 +273,8 @@ namespace NonVisuals.Radios
         }
 
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -465,14 +461,11 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipTilsChannelDialChange())
-                                                {
-                                                    DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_INC);
-                                                }
+                                                _tilsChannelDialSkipper.Click(TILS_CHANNEL_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
-                                        case CurrentAJS37RadioMode.NOUSE:
+                                        case CurrentAJS37RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -497,14 +490,11 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipTilsChannelDialChange())
-                                                {
-                                                    DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_DEC);
-                                                }
+                                                _tilsChannelDialSkipper.Click(TILS_CHANNEL_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
-                                        case CurrentAJS37RadioMode.NOUSE:
+                                        case CurrentAJS37RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -529,14 +519,11 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipMasterModeSelectorChange())
-                                                {
-                                                    DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_INC);
-                                                }
+                                                _masterModeSelectorDialSkipper.Click(MASTER_MODE_SELECTOR_COMMAND_INC);
                                                 break;
                                             }
 
-                                        case CurrentAJS37RadioMode.NOUSE:
+                                        case CurrentAJS37RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -561,14 +548,11 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipMasterModeSelectorChange())
-                                                {
-                                                    DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_DEC);
-                                                }
+                                                _masterModeSelectorDialSkipper.Click(MASTER_MODE_SELECTOR_COMMAND_DEC);
                                                 break;
                                             }
 
-                                        case CurrentAJS37RadioMode.NOUSE:
+                                        case CurrentAJS37RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -593,14 +577,11 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipTilsChannelDialChange())
-                                                {
-                                                    DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_INC);
-                                                }
+                                                _tilsChannelDialSkipper.Click(TILS_CHANNEL_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
-                                        case CurrentAJS37RadioMode.NOUSE:
+                                        case CurrentAJS37RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -625,14 +606,11 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipTilsChannelDialChange())
-                                                {
-                                                    DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_DEC);
-                                                }
+                                                _tilsChannelDialSkipper.Click(TILS_CHANNEL_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
-                                        case CurrentAJS37RadioMode.NOUSE:
+                                        case CurrentAJS37RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -657,14 +635,11 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipMasterModeSelectorChange())
-                                                {
-                                                    DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_INC);
-                                                }
+                                                _masterModeSelectorDialSkipper.Click(MASTER_MODE_SELECTOR_COMMAND_INC);
                                                 break;
                                             }
 
-                                        case CurrentAJS37RadioMode.NOUSE:
+                                        case CurrentAJS37RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -689,14 +664,11 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipMasterModeSelectorChange())
-                                                {
-                                                    DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_DEC);
-                                                }
+                                                _masterModeSelectorDialSkipper.Click(MASTER_MODE_SELECTOR_COMMAND_DEC);
                                                 break;
                                             }
 
-                                        case CurrentAJS37RadioMode.NOUSE:
+                                        case CurrentAJS37RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -786,7 +758,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentAJS37RadioMode.NOUSE:
+                        case CurrentAJS37RadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -845,7 +817,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentAJS37RadioMode.NOUSE:
+                        case CurrentAJS37RadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -861,11 +833,6 @@ namespace NonVisuals.Radios
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
-        }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
         }
 
         public sealed override void Startup()
@@ -926,60 +893,13 @@ namespace NonVisuals.Radios
             {
                 _currentLowerRadioMode = currentAJS37RadioMode;
 
-                // If NOUSE then send next round of e.Data to the panel in order to clear the LCD.
+                // If NO_USE then send next round of e.Data to the panel in order to clear the LCD.
                 // _sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
             }
-        }
-
-        private bool SkipTilsChannelDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentAJS37RadioMode.TILS || _currentLowerRadioMode == CurrentAJS37RadioMode.TILS)
-                {
-                    if (_tilsChannelDialSkipper > 2)
-                    {
-                        _tilsChannelDialSkipper = 0;
-                        return false;
-                    }
-
-                    _tilsChannelDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-
-            return false;
-        }
-
-        private bool SkipMasterModeSelectorChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentAJS37RadioMode.TILS || _currentLowerRadioMode == CurrentAJS37RadioMode.TILS)
-                {
-                    if (_masterModeSelectorDialSkipper > 2)
-                    {
-                        _masterModeSelectorDialSkipper = 0;
-                        return false;
-                    }
-
-                    _masterModeSelectorDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)

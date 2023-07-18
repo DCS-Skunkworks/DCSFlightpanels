@@ -18,6 +18,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
 
 
@@ -34,7 +35,7 @@ namespace NonVisuals.Radios
             UHF,
             ADF,
             NADIR,
-            NOUSE
+            NO_USE
         }
 
         private CurrentSA342RadioMode _currentUpperRadioMode = CurrentSA342RadioMode.VHFAM;
@@ -89,8 +90,8 @@ namespace NonVisuals.Radios
         private long _vhfAmValue2WaitingForFeedback; // 1s
         private long _vhfAmValue3WaitingForFeedback; // Decimal 10s
         private long _vhfAmValue4WaitingForFeedback; // Decimal 100s
-        private int _vhfAmLeftDialSkipper;
-        private int _vhfAmRightDialSkipper;
+        private readonly ClickSkipper _vhfAmLeftDialSkipper = new(2);
+        private readonly ClickSkipper _vhfAmRightDialSkipper = new(2);
         private volatile bool _shutdownVHFAMThread;
 
         /*COM2 SA342 FM PR4G Radio*/
@@ -133,8 +134,8 @@ namespace NonVisuals.Radios
         private const string UHF_BUTTON9_COMMAND_OFF = "UHF_RADIO_BUTTON_9 0\n";
         private const string UHF_BUTTON_VALIDATE_COMMAND_ON = "UHF_RADIO_BUTTON_VLD 1\n";
         private const string UHF_BUTTON_VALIDATE_COMMAND_OFF = "UHF_RADIO_BUTTON_VLD 0\n";
-        private int _uhfBigFrequencySkipper;
-        private int _uhfSmallFrequencySkipper;
+        private readonly ClickSkipper _uhfBigFrequencySkipper = new(2);
+        private readonly ClickSkipper _uhfSmallFrequencySkipper = new(2);
 
         /*ADF SA342*/
         /*Large dial Counter Clockwise 100s increase*/
@@ -152,9 +153,9 @@ namespace NonVisuals.Radios
         private readonly object _lockAdfUnitObject = new();
         private volatile uint _adfCockpitSelectedUnitValue = 1;
         private DCSBIOSOutput _adfSwitchUnitDcsbiosOutput;
-        private int _adf100SDialSkipper;
-        private int _adf10SDialSkipper;
-        private int _adf1SDialSkipper;
+        private readonly ClickSkipper _adf100SDialSkipper = new(2);
+        private readonly ClickSkipper _adf10SDialSkipper = new(2);
+        private readonly ClickSkipper _adf1SDialSkipper = new(2);
 
         // DME NADIR
         // Large dial Mode selector (VENT, C.M DEC, V.S DER, TPS CAP,P.P, BUT)
@@ -795,7 +796,7 @@ namespace NonVisuals.Radios
                             break;
                         }
 
-                    case CurrentSA342RadioMode.NOUSE:
+                    case CurrentSA342RadioMode.NO_USE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -905,7 +906,7 @@ namespace NonVisuals.Radios
                             break;
                         }
 
-                    case CurrentSA342RadioMode.NOUSE:
+                    case CurrentSA342RadioMode.NO_USE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -939,7 +940,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentSA342RadioMode.VHFAM:
                                         {
-                                            if (!SkipVhfAmLeftDialChange())
+                                            if (!_vhfAmLeftDialSkipper.ShouldSkip())
                                             {
                                                 _vhfAmBigFrequencyStandby++;
                                                 if (_vhfAmBigFrequencyStandby > 143.00)
@@ -972,7 +973,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                if (!SkipUhfBigFrequencyChange())
+                                                if (!_uhfBigFrequencySkipper.ShouldSkip())
                                                 {
                                                     _uhfBigFrequencyStandby++;
                                                 }
@@ -987,11 +988,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf10SDialChange())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digit10S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf10SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit10S, true));
                                             break;
                                         }
 
@@ -1010,7 +1007,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentSA342RadioMode.VHFAM:
                                         {
-                                            if (!SkipVhfAmLeftDialChange())
+                                            if (!_vhfAmLeftDialSkipper.ShouldSkip())
                                             {
                                                 _vhfAmBigFrequencyStandby--;
                                                 if (_vhfAmBigFrequencyStandby < 118.00)
@@ -1043,7 +1040,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                if (!SkipUhfBigFrequencyChange())
+                                                if (!_uhfBigFrequencySkipper.ShouldSkip())
                                                 {
                                                     _uhfBigFrequencyStandby--;
                                                 }
@@ -1058,11 +1055,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf100SDialChange())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digit100S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf100SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit100S, true));
                                             break;
                                         }
 
@@ -1081,7 +1074,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentSA342RadioMode.VHFAM:
                                         {
-                                            if (!SkipVhfAmRightDialChange())
+                                            if (!_vhfAmRightDialSkipper.ShouldSkip())
                                             {
                                                 _vhfAmSmallFrequencyStandby += 0.025;
                                                 if (_vhfAmSmallFrequencyStandby > 0.975)
@@ -1112,7 +1105,7 @@ namespace NonVisuals.Radios
                                             {
                                                 _uhfSmallFrequencyStandby += 5;
                                             }
-                                            else if (!SkipUhfSmallFrequencyChange())
+                                            else if (!_uhfSmallFrequencySkipper.ShouldSkip())
                                             {
                                                 _uhfSmallFrequencyStandby += 1;
                                             }
@@ -1127,11 +1120,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf1SDialChange())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digits1S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, true));
                                             break;
                                         }
 
@@ -1150,7 +1139,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentSA342RadioMode.VHFAM:
                                         {
-                                            if (!SkipVhfAmRightDialChange())
+                                            if (!_vhfAmRightDialSkipper.ShouldSkip())
                                             {
                                                 _vhfAmSmallFrequencyStandby -= 0.025;
                                                 if (_vhfAmSmallFrequencyStandby < 0.00)
@@ -1181,7 +1170,7 @@ namespace NonVisuals.Radios
                                             {
                                                 _uhfSmallFrequencyStandby -= 5;
                                             }
-                                            else if (!SkipUhfSmallFrequencyChange())
+                                            else if (!_uhfSmallFrequencySkipper.ShouldSkip())
                                             {
                                                 _uhfSmallFrequencyStandby--;
                                             }
@@ -1196,11 +1185,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf1SDialChange())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digits1S, false);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, false));
                                             break;
                                         }
 
@@ -1219,7 +1204,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentSA342RadioMode.VHFAM:
                                         {
-                                            if (!SkipVhfAmLeftDialChange())
+                                            if (!_vhfAmLeftDialSkipper.ShouldSkip())
                                             {
                                                 _vhfAmBigFrequencyStandby++;
                                                 if (_vhfAmBigFrequencyStandby > 143.00)
@@ -1257,7 +1242,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                if (!SkipUhfBigFrequencyChange())
+                                                if (!_uhfBigFrequencySkipper.ShouldSkip())
                                                 {
                                                     _uhfBigFrequencyStandby++;
                                                 }
@@ -1272,11 +1257,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf10SDialChange())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digit10S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf10SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit10S, true));
                                             break;
                                         }
 
@@ -1295,7 +1276,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentSA342RadioMode.VHFAM:
                                         {
-                                            if (!SkipVhfAmLeftDialChange())
+                                            if (!_vhfAmLeftDialSkipper.ShouldSkip())
                                             {
                                                 _vhfAmBigFrequencyStandby--;
                                                 if (_vhfAmBigFrequencyStandby < 118.00)
@@ -1328,7 +1309,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                if (!SkipUhfBigFrequencyChange())
+                                                if (!_uhfBigFrequencySkipper.ShouldSkip())
                                                 {
                                                     _uhfBigFrequencyStandby--;
                                                 }
@@ -1343,11 +1324,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf100SDialChange())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digit100S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf100SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit100S, true));
                                             break;
                                         }
 
@@ -1366,7 +1343,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentSA342RadioMode.VHFAM:
                                         {
-                                            if (!SkipVhfAmRightDialChange())
+                                            if (!_vhfAmRightDialSkipper.ShouldSkip())
                                             {
                                                 _vhfAmSmallFrequencyStandby += 0.025;
                                                 if (_vhfAmSmallFrequencyStandby > 0.975)
@@ -1397,7 +1374,7 @@ namespace NonVisuals.Radios
                                             {
                                                 _uhfSmallFrequencyStandby += 5;
                                             }
-                                            else if (!SkipUhfSmallFrequencyChange())
+                                            else if (!_uhfSmallFrequencySkipper.ShouldSkip())
                                             {
                                                 _uhfSmallFrequencyStandby++;
                                             }
@@ -1412,11 +1389,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf1SDialChange())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digits1S, true);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, true));
                                             break;
                                         }
 
@@ -1435,7 +1408,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentSA342RadioMode.VHFAM:
                                         {
-                                            if (!SkipVhfAmRightDialChange())
+                                            if (!_vhfAmRightDialSkipper.ShouldSkip())
                                             {
                                                 _vhfAmSmallFrequencyStandby -= 0.025;
                                                 if (_vhfAmSmallFrequencyStandby < 0.00)
@@ -1466,7 +1439,7 @@ namespace NonVisuals.Radios
                                             {
                                                 _uhfSmallFrequencyStandby -= 5;
                                             }
-                                            else if (!SkipUhfSmallFrequencyChange())
+                                            else if (!_uhfSmallFrequencySkipper.ShouldSkip())
                                             {
                                                 _uhfSmallFrequencyStandby--;
                                             }
@@ -1481,11 +1454,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf1SDialChange())
-                                            {
-                                                var command = GetAdfCommand(AdfDigit.Digits1S, false);
-                                                DCSBIOS.Send(command);
-                                            }
+                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, false));
                                             break;
                                         }
 
@@ -1518,13 +1487,8 @@ namespace NonVisuals.Radios
             }
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             lock (LockLCDUpdateObject)
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -1584,7 +1548,7 @@ namespace NonVisuals.Radios
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentSA342RadioMode.NOUSE;
+                                    _currentUpperRadioMode = CurrentSA342RadioMode.NO_USE;
                                 }
                                 break;
                             }
@@ -1639,7 +1603,7 @@ namespace NonVisuals.Radios
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentLowerRadioMode = CurrentSA342RadioMode.NOUSE;
+                                    _currentLowerRadioMode = CurrentSA342RadioMode.NO_USE;
                                 }
                                 break;
                             }
@@ -1755,11 +1719,6 @@ namespace NonVisuals.Radios
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
             throw new Exception("Radio Panel does not support color bindings with DCS-BIOS.");
-        }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
         }
 
         private void CreateRadioKnobs()
@@ -1951,94 +1910,6 @@ namespace NonVisuals.Radios
             return false;
         }
 
-        private bool SkipVhfAmLeftDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSA342RadioMode.VHFAM || _currentLowerRadioMode == CurrentSA342RadioMode.VHFAM)
-                {
-                    if (_vhfAmLeftDialSkipper > 2)
-                    {
-                        _vhfAmLeftDialSkipper = 0;
-                        return false;
-                    }
-                    _vhfAmLeftDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipVhfAmRightDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSA342RadioMode.VHFAM || _currentLowerRadioMode == CurrentSA342RadioMode.VHFAM)
-                {
-                    if (_vhfAmRightDialSkipper > 4)
-                    {
-                        _vhfAmRightDialSkipper = 0;
-                        return false;
-                    }
-                    _vhfAmRightDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipUhfBigFrequencyChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSA342RadioMode.UHF || _currentLowerRadioMode == CurrentSA342RadioMode.UHF)
-                {
-                    if (_uhfBigFrequencySkipper > 2)
-                    {
-                        _uhfBigFrequencySkipper = 0;
-                        return false;
-                    }
-                    _uhfBigFrequencySkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipUhfSmallFrequencyChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSA342RadioMode.UHF || _currentLowerRadioMode == CurrentSA342RadioMode.UHF)
-                {
-                    if (_uhfSmallFrequencySkipper > 1)
-                    {
-                        _uhfSmallFrequencySkipper = 0;
-                        return false;
-                    }
-                    _uhfSmallFrequencySkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
         private string GetAdfCommand(AdfDigit adfDigit, bool increase)
         {
             lock (_lockAdfUnitObject)
@@ -2084,94 +1955,11 @@ namespace NonVisuals.Radios
             return string.Empty;
         }
 
-        private bool SkipAdf100SDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSA342RadioMode.ADF || _currentLowerRadioMode == CurrentSA342RadioMode.ADF)
-                {
-                    if (_adf100SDialSkipper > 2)
-                    {
-                        _adf100SDialSkipper = 0;
-                        return false;
-                    }
-                    _adf100SDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipAdf10SDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSA342RadioMode.ADF || _currentLowerRadioMode == CurrentSA342RadioMode.ADF)
-                {
-                    if (_adf10SDialSkipper > 2)
-                    {
-                        _adf10SDialSkipper = 0;
-                        return false;
-                    }
-                    _adf10SDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        private bool SkipAdf1SDialChange()
-        {
-            try
-            {
-                if (_currentUpperRadioMode == CurrentSA342RadioMode.ADF || _currentLowerRadioMode == CurrentSA342RadioMode.ADF)
-                {
-                    if (_adf1SDialSkipper > 2)
-                    {
-                        _adf1SDialSkipper = 0;
-                        return false;
-                    }
-                    _adf1SDialSkipper++;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-            return false;
-        }
-
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
-        {
-        }
-
-        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
-        {
-        }
-
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
-        {
-        }
-
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
-        {
-        }
-
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
-        {
-        }
-
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
-        {
-        }
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink) { }
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
     }
 }

@@ -76,6 +76,8 @@
         PZ69RadioPanel_PreProg_Mosquito,
         [Description("Saitek PZ69 Radio PreProg Panel T45C")]
         PZ69RadioPanel_PreProg_T45C,
+        [Description("Saitek PZ69 Radio PreProg Panel Yak-52")]
+        PZ69RadioPanel_PreProg_Yak52,
     }
 
     /*

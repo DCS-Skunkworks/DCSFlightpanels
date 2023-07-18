@@ -6,9 +6,6 @@ namespace NonVisuals.Radios
     using System.Collections.Generic;
     using System.Globalization;
     using System.Threading;
-
-    using System.Diagnostics;
-
     using ClassLibraryCommon;
 
     using DCS_BIOS;
@@ -20,6 +17,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Helpers;
 
 
     /// <summary>
@@ -33,7 +31,7 @@ namespace NonVisuals.Radios
             VUHF2,
             TACAN,
             VOR,
-            NOUSE
+            NO_USE
         }
 
         private CurrentT45RadioMode _currentUpperRadioMode = CurrentT45RadioMode.VUHF1;
@@ -1166,7 +1164,7 @@ namespace NonVisuals.Radios
                             break;
                         }
 
-                    case CurrentT45RadioMode.NOUSE:
+                    case CurrentT45RadioMode.NO_USE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -1222,7 +1220,7 @@ namespace NonVisuals.Radios
                             break;
                         }
 
-                    case CurrentT45RadioMode.NOUSE:
+                    case CurrentT45RadioMode.NO_USE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -1964,13 +1962,8 @@ namespace NonVisuals.Radios
 
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             lock (LockLCDUpdateObject)
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -2022,7 +2015,7 @@ namespace NonVisuals.Radios
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentT45RadioMode.NOUSE;
+                                    _currentUpperRadioMode = CurrentT45RadioMode.NO_USE;
                                 }
                                 break;
                             }
@@ -2069,7 +2062,7 @@ namespace NonVisuals.Radios
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentLowerRadioMode = CurrentT45RadioMode.NOUSE;
+                                    _currentLowerRadioMode = CurrentT45RadioMode.NO_USE;
                                 }
                                 break;
                             }
@@ -2200,12 +2193,7 @@ namespace NonVisuals.Radios
         {
             throw new Exception("Radio Panel does not support color bindings with DCS-BIOS.");
         }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
-
+        
         private void CreateRadioKnobs()
         {
             SaitekPanelKnobs = RadioPanelKnobT45C.GetRadioPanelKnobs();

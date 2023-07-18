@@ -1,9 +1,4 @@
 ﻿using Newtonsoft.Json;
-using static NonVisuals.Radios.SRS.SRSRadioInformation;
-using static System.Data.Odbc.ODBC32;
-using System.Security.Cryptography;
-using System.Threading.Channels;
-using System.Xml.Linq;
 
 namespace NonVisuals.Radios.SRS
 {

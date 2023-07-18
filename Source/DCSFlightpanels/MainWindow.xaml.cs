@@ -1,6 +1,4 @@
-﻿using DCS_BIOS.Json;
-
-namespace DCSFlightpanels
+﻿namespace DCSFlightpanels
 {
     /*
     Custom Resharper Naming abbreviations
@@ -791,6 +789,16 @@ namespace DCSFlightpanels
                             else if (DCSAircraft.IsMosquito(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMosquito(hidSkeleton);
+                                _panelUserControls.Add(radioPanelPZ69UserControl);
+                                tabItem.Content = radioPanelPZ69UserControl;
+                                TabControlPanels.Items.Add(tabItem);
+                                _profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
+
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            }
+                            else if (DCSAircraft.IsYak52(_profileHandler.DCSAircraft) && !_profileHandler.DCSAircraft.UseGenericRadio)
+                            {
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlYak52(hidSkeleton);
                                 _panelUserControls.Add(radioPanelPZ69UserControl);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
