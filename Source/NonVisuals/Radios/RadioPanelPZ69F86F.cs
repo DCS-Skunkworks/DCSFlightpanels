@@ -32,7 +32,7 @@ namespace NonVisuals.Radios
             ARN6,
             ARN6_MODES,
             ADF_APX6,
-            NOUSE
+            NO_USE
         }
 
         private CurrentF86FRadioMode _currentUpperRadioMode = CurrentF86FRadioMode.ARC27_PRESET;
@@ -318,13 +318,8 @@ namespace NonVisuals.Radios
             }
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -386,7 +381,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentF86FRadioMode.NOUSE);
+                                        SetUpperRadioMode(CurrentF86FRadioMode.NO_USE);
                                     }
                                     break;
                                 }
@@ -441,7 +436,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentF86FRadioMode.NOUSE);
+                                        SetLowerRadioMode(CurrentF86FRadioMode.NO_USE);
                                     }
                                     break;
                                 }
@@ -553,7 +548,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                        case CurrentF86FRadioMode.NOUSE:
+                                        case CurrentF86FRadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -599,7 +594,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                        case CurrentF86FRadioMode.NOUSE:
+                                        case CurrentF86FRadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -645,7 +640,7 @@ namespace NonVisuals.Radios
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
-                                        case CurrentF86FRadioMode.NOUSE:
+                                        case CurrentF86FRadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -691,7 +686,7 @@ namespace NonVisuals.Radios
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
-                                        case CurrentF86FRadioMode.NOUSE:
+                                        case CurrentF86FRadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -737,7 +732,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                        case CurrentF86FRadioMode.NOUSE:
+                                        case CurrentF86FRadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -783,7 +778,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                        case CurrentF86FRadioMode.NOUSE:
+                                        case CurrentF86FRadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -829,7 +824,7 @@ namespace NonVisuals.Radios
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
-                                        case CurrentF86FRadioMode.NOUSE:
+                                        case CurrentF86FRadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -875,7 +870,7 @@ namespace NonVisuals.Radios
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
-                                        case CurrentF86FRadioMode.NOUSE:
+                                        case CurrentF86FRadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -1003,7 +998,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentF86FRadioMode.NOUSE:
+                        case CurrentF86FRadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -1100,7 +1095,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentF86FRadioMode.NOUSE:
+                        case CurrentF86FRadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -1117,12 +1112,7 @@ namespace NonVisuals.Radios
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
-
+        
         public sealed override void Startup()
         {
             try

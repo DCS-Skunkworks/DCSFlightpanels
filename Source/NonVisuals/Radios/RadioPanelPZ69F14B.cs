@@ -33,7 +33,7 @@ namespace NonVisuals.Radios
             PLT_TACAN,
             RIO_TACAN,
             LINK4,
-            NOUSE
+            NO_USE
         }
 
         private CurrentF14RadioMode _currentUpperRadioMode = CurrentF14RadioMode.UHF;
@@ -1671,7 +1671,7 @@ namespace NonVisuals.Radios
                             break;
                         }
 
-                    case CurrentF14RadioMode.NOUSE:
+                    case CurrentF14RadioMode.NO_USE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -1815,7 +1815,7 @@ namespace NonVisuals.Radios
                             break;
                         }
 
-                    case CurrentF14RadioMode.NOUSE:
+                    case CurrentF14RadioMode.NO_USE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -2868,13 +2868,8 @@ namespace NonVisuals.Radios
             }
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             lock (LockLCDUpdateObject)
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -2934,7 +2929,7 @@ namespace NonVisuals.Radios
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentF14RadioMode.NOUSE;
+                                    _currentUpperRadioMode = CurrentF14RadioMode.NO_USE;
                                 }
                                 break;
                             }
@@ -2989,7 +2984,7 @@ namespace NonVisuals.Radios
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentLowerRadioMode = CurrentF14RadioMode.NOUSE;
+                                    _currentLowerRadioMode = CurrentF14RadioMode.NO_USE;
                                 }
                                 break;
                             }
@@ -3134,11 +3129,7 @@ namespace NonVisuals.Radios
         {
             throw new Exception("Radio Panel does not support color bindings with DCS-BIOS.");
         }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
+        
 
         private void CreateRadioKnobs()
         {

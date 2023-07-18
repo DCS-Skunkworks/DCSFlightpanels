@@ -129,7 +129,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE2:
+                        case RadioPanelPZ69KnobsYak52.UPPER_GMK:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -139,7 +139,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE3:
+                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE2:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -169,7 +169,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE4:
+                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE3:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -199,7 +199,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE2:
+                        case RadioPanelPZ69KnobsYak52.LOWER_GMK:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -209,7 +209,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE3:
+                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE2:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -239,7 +239,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE4:
+                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE3:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(

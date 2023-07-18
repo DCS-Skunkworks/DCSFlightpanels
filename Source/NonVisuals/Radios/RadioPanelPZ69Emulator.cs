@@ -207,7 +207,7 @@ namespace NonVisuals.Radios
 
         public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet => _displayValues;
 
-        private void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
             if (ForwardPanelEvent)
             {
@@ -258,7 +258,7 @@ namespace NonVisuals.Radios
 
                     // This is needed because there may not be key bindings configured, plugin should get the panel event regardless
                     // Just that we don't send any keypress configs this time.
-                    if (!isFirstReport && !keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
                         PluginManager.DoEvent(
                             DCSAircraft.SelectedAircraft.Description,
@@ -673,11 +673,7 @@ namespace NonVisuals.Radios
             }
             SetIsDirty();
         }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
+        
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {

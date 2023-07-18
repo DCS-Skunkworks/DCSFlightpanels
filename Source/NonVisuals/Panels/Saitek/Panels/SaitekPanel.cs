@@ -19,7 +19,7 @@ namespace NonVisuals.Panels.Saitek.Panels
     using Saitek;
     using NonVisuals.Panels;
     using HID;
-    
+
     /// <summary>
     /// Base class for Saitek Panels. Contains common functions and properties shared between the panels. 
     /// </summary>
@@ -41,17 +41,17 @@ namespace NonVisuals.Panels.Saitek.Panels
 
         protected HashSet<ISaitekPanelKnob> SaitekPanelKnobs = new();
 
-        protected byte[] OldSaitekPanelValue = { 0, 0, 0 };
+        private readonly byte[] _oldSaitekPanelValue = { 0, 0, 0 };
 
-        protected byte[] NewSaitekPanelValue = { 0, 0, 0 };
+        private readonly byte[] _newSaitekPanelValue = { 0, 0, 0 };
 
-        protected byte[] OldSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
+        private readonly byte[] _oldSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
 
-        protected byte[] NewSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
+        private readonly byte[] _newSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
 
-        protected byte[] OldPanelValueFarmingPanel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private readonly byte[] _oldPanelValueFarmingPanel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        protected byte[] NewPanelValueFarmingPanel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private readonly byte[] _newPanelValueFarmingPanel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton) : base(typeOfGamingPanel, hidSkeleton)
         {
@@ -96,9 +96,9 @@ namespace NonVisuals.Panels.Saitek.Panels
         {
             if (TypeOfPanel == GamingPanelEnum.TPM && report.Data.Length == 5)
             {
-                Array.Copy(NewSaitekPanelValueTPM, OldSaitekPanelValueTPM, 5);
-                Array.Copy(report.Data, NewSaitekPanelValueTPM, 5);
-                var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValueTPM, NewSaitekPanelValueTPM);
+                Array.Copy(_newSaitekPanelValueTPM, _oldSaitekPanelValueTPM, 5);
+                Array.Copy(report.Data, _newSaitekPanelValueTPM, 5);
+                var hashSet = GetHashSetOfChangedKnobs(_oldSaitekPanelValueTPM, _newSaitekPanelValueTPM);
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
@@ -109,9 +109,9 @@ namespace NonVisuals.Panels.Saitek.Panels
             }
             else if (report.Data.Length == 3)
             {
-                Array.Copy(NewSaitekPanelValue, OldSaitekPanelValue, 3);
-                Array.Copy(report.Data, NewSaitekPanelValue, 3);
-                var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValue, NewSaitekPanelValue);
+                Array.Copy(_newSaitekPanelValue, _oldSaitekPanelValue, 3);
+                Array.Copy(report.Data, _newSaitekPanelValue, 3);
+                var hashSet = GetHashSetOfChangedKnobs(_oldSaitekPanelValue, _newSaitekPanelValue);
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
@@ -122,9 +122,9 @@ namespace NonVisuals.Panels.Saitek.Panels
             }
             else if (report.Data.Length == 27)
             {
-                Array.Copy(NewPanelValueFarmingPanel, OldPanelValueFarmingPanel, 27);
-                Array.Copy(report.Data, NewPanelValueFarmingPanel, 27);
-                var hashSet = GetHashSetOfChangedKnobs(OldPanelValueFarmingPanel, NewPanelValueFarmingPanel);
+                Array.Copy(_newPanelValueFarmingPanel, _oldPanelValueFarmingPanel, 27);
+                Array.Copy(report.Data, _newPanelValueFarmingPanel, 27);
+                var hashSet = GetHashSetOfChangedKnobs(_oldPanelValueFarmingPanel, _newPanelValueFarmingPanel);
                 if (hashSet.Count > 0)
                 {
                     GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);

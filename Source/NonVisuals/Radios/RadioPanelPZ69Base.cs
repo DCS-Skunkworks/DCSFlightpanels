@@ -1,4 +1,7 @@
-﻿namespace NonVisuals.Radios
+﻿using NonVisuals.Interfaces;
+using Theraot.Collections;
+
+namespace NonVisuals.Radios
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +13,7 @@
     using Misc;
     using HID;
     using NonVisuals.Panels.Saitek.Panels;
+    using System.Linq;
 
     public enum PZ69LCDPosition
     {
@@ -74,6 +78,41 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
+
+
+        protected abstract void PZ69KnobChanged(IEnumerable<object> hashSet);
+
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        {
+            /*
+             * Here we want to remove ACT/STBY info. This way we get what radio mode is chosen.
+             * 
+             * By doing this we can set the radio to correct mode and also avoid accidentally
+             * force a sync that could mess up the freqs.
+             *
+             * ACT/STBY Upper is : 0x40
+             * ACT/STBY Lower is : 0x80
+             */
+            if (isFirstReport)
+            {
+                var result = new HashSet<object>();
+                foreach (var hash in hashSet)
+                {
+                    var knob = (ISaitekPanelKnob)hash;
+                    if (knob.Mask == 0x40 || knob.Mask == 0x80)
+                    {
+                        continue;
+                    }
+
+                    result.Add(hash);
+                }
+                PZ69KnobChanged(result);
+                return;
+            }
+
+            PZ69KnobChanged(hashSet);
+        }
+
 
         /*         
             1 byte (header byte 0x0) [0]

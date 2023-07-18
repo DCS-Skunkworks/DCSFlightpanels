@@ -946,13 +946,8 @@ namespace NonVisuals.Radios
             // 00X/Y - 129X/Y
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             lock (LockLCDUpdateObject)
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -1226,12 +1221,7 @@ namespace NonVisuals.Radios
         {
             throw new Exception("Radio Panel does not support color bindings with DCS-BIOS.");
         }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
-
+        
         private void CreateRadioKnobs()
         {
             SaitekPanelKnobs = RadioPanelKnobFA18C.GetRadioPanelKnobs();

@@ -29,7 +29,7 @@ namespace NonVisuals.Radios
         {
             VHF,
             DETROLA,
-            NOUSE
+            NO_USE
         }
 
         private bool _upperButtonPressed;
@@ -246,13 +246,8 @@ namespace NonVisuals.Radios
             }
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -288,7 +283,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentP51DRadioMode.NOUSE);
+                                        SetUpperRadioMode(CurrentP51DRadioMode.NO_USE);
                                     }
                                     break;
                                 }
@@ -317,7 +312,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentP51DRadioMode.NOUSE);
+                                        SetLowerRadioMode(CurrentP51DRadioMode.NO_USE);
                                     }
                                     break;
                                 }
@@ -732,7 +727,7 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
-                        case CurrentP51DRadioMode.NOUSE:
+                        case CurrentP51DRadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -771,7 +766,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentP51DRadioMode.NOUSE:
+                        case CurrentP51DRadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -943,12 +938,7 @@ namespace NonVisuals.Radios
                 }
             }
         }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
-
+        
         public sealed override void Startup()
         {
             try
@@ -1005,7 +995,7 @@ namespace NonVisuals.Radios
             {
                 _currentLowerRadioMode = currentP51DRadioMode;
 
-                // If NOUSE then send next round of e.Data to the panel in order to clear the LCD.
+                // If NO_USE then send next round of e.Data to the panel in order to clear the LCD.
                 // _sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)

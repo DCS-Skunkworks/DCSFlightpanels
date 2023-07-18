@@ -33,7 +33,7 @@ namespace NonVisuals.Radios
             ADF_ARK15_HIGH,
             DME_ARK15_LOW,
             SPU8,
-            NOUSE
+            NO_USE
         }
 
         private CurrentMi24PRadioMode _currentUpperRadioMode = CurrentMi24PRadioMode.R863_MANUAL;
@@ -705,13 +705,8 @@ namespace NonVisuals.Radios
             }
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -979,7 +974,7 @@ namespace NonVisuals.Radios
                                             }
                                             break;
                                         }
-                                    case CurrentMi24PRadioMode.NOUSE:
+                                    case CurrentMi24PRadioMode.NO_USE:
                                         {
                                             break;
                                         }
@@ -1039,7 +1034,7 @@ namespace NonVisuals.Radios
                                             }
                                             break;
                                         }
-                                    case CurrentMi24PRadioMode.NOUSE:
+                                    case CurrentMi24PRadioMode.NO_USE:
                                         {
                                             break;
                                         }
@@ -1086,7 +1081,7 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
-                                    case CurrentMi24PRadioMode.NOUSE:
+                                    case CurrentMi24PRadioMode.NO_USE:
                                         {
                                             break;
                                         }
@@ -1133,7 +1128,7 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
-                                    case CurrentMi24PRadioMode.NOUSE:
+                                    case CurrentMi24PRadioMode.NO_USE:
                                         {
                                             break;
                                         }
@@ -1193,7 +1188,7 @@ namespace NonVisuals.Radios
                                             }
                                             break;
                                         }
-                                    case CurrentMi24PRadioMode.NOUSE:
+                                    case CurrentMi24PRadioMode.NO_USE:
                                         {
                                             break;
                                         }
@@ -1253,7 +1248,7 @@ namespace NonVisuals.Radios
                                             }
                                             break;
                                         }
-                                    case CurrentMi24PRadioMode.NOUSE:
+                                    case CurrentMi24PRadioMode.NO_USE:
                                         {
                                             break;
                                         }
@@ -1300,7 +1295,7 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
-                                    case CurrentMi24PRadioMode.NOUSE:
+                                    case CurrentMi24PRadioMode.NO_USE:
                                         {
                                             break;
                                         }
@@ -1347,7 +1342,7 @@ namespace NonVisuals.Radios
                                             DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
-                                    case CurrentMi24PRadioMode.NOUSE:
+                                    case CurrentMi24PRadioMode.NO_USE:
                                         {
                                             break;
                                         }
@@ -1528,7 +1523,7 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, spuICSSwitch, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
-                        case CurrentMi24PRadioMode.NOUSE:
+                        case CurrentMi24PRadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -1670,7 +1665,7 @@ namespace NonVisuals.Radios
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, spuICSSwitch, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
-                        case CurrentMi24PRadioMode.NOUSE:
+                        case CurrentMi24PRadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -1692,12 +1687,7 @@ namespace NonVisuals.Radios
             double frequencyAsDouble = (double)position / 2;
             return frequencyAsDouble.ToString("0.0", CultureInfo.InvariantCulture);
         }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
-
+        
         public sealed override void Startup()
         {
             try

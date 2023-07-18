@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Diagnostics;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.Helpers;
 
 namespace NonVisuals.Radios
@@ -18,6 +19,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Panels.Saitek.Panels;
 
 
 
@@ -32,7 +34,8 @@ namespace NonVisuals.Radios
             VHF,
             ADF_FRONT,
             ADF_REAR,
-            NOUSE
+            GMK,
+            NO_USE
         }
 
         private bool _upperButtonPressed;
@@ -90,8 +93,49 @@ namespace NonVisuals.Radios
         private const string ADF_REAR_CHANNEL_DEC = "REAR_RDF_CHANNEL DEC\n";
         private const string ADF_REAR_VOLUME_INC = "REAR_RDF_VOLUME +5000\n";
         private const string ADF_REAR_VOLUME_DEC = "REAR_RDF_VOLUME -5000\n";
-        private ClickSkipper _adfFrontClickSkipper = new ClickSkipper(2);
-        private ClickSkipper _adfRearClickSkipper = new ClickSkipper(2);
+        private readonly ClickSkipper _adfFrontClickSkipper = new ClickSkipper(2);
+        private readonly ClickSkipper _adfRearClickSkipper = new ClickSkipper(2);
+
+        /*
+         * GMK-1А directional heading system
+         * NAV1 Large : Heading/Course Selector Switch
+         * NAV1 Small : Latitude Selector Knob
+         * NAV1 ACT/STBY + Large : Hemisphere Selector Switch
+         * NAV1 ACT/STBY + Small : Mode Switch
+         * 
+         */
+        private readonly object _lockGMKLatitudeObject1 = new();
+        private DCSBIOSOutput _gmkLatitudeDialDcsbiosOutput;
+        private volatile uint _gmkLatitudeCockpitPosition;
+        private const string GMK_LATITUDE_SELECTOR = "FRONT_SDG_LAT";
+        private const string GMK_LATITUDE_SELECTOR_INC = "FRONT_SDG_LAT +2000\n";
+        private const string GMK_LATITUDE_SELECTOR_DEC = "FRONT_SDG_LAT -2000\n";
+        private readonly object _lockGMKHeadingSelectorObject1 = new();
+        private DCSBIOSOutput _gmkHeadingSelectorDialDcsbiosOutput;
+        private volatile uint _gmkHeadingSelectorCockpitPosition;
+        private const string GMK_HEADING_SELECTOR = "FRONT_SDG_COURSE";
+        private const string GMK_HEADING_SELECTOR_CCW = "FRONT_SDG_COURSE 0\n";
+        private const string GMK_HEADING_SELECTOR_OFF = "FRONT_SDG_COURSE 1\n";
+        private const string GMK_HEADING_SELECTOR_CC = "FRONT_SDG_COURSE 2\n";
+        private readonly object _lockGMKHemisphereSelectorObject1 = new();
+        private DCSBIOSOutput _gmkHemisphereSelectorDialDcsbiosOutput;
+        private volatile uint _gmkHemisphereSelectorCockpitPosition;
+        private const string GMK_HEMISPHERE_SELECTOR = "FRONT_SDG_HEMI";
+        private const string GMK_HEMISPHERE_SELECTOR_INC = "FRONT_SDG_HEMI INC\n";
+        private const string GMK_HEMISPHERE_SELECTOR_DEC = "FRONT_SDG_HEMI DEC\n";
+        private readonly object _lockGMKModeSelectorObject1 = new();
+        private DCSBIOSOutput _gmkModeSelectorDialDcsbiosOutput;
+        private volatile uint _gmkModeSelectorCockpitPosition;
+        private const string GMK_MODE_SELECTOR = "FRONT_SDG_MODE";
+        private const string GMK_MODE_SELECTOR_INC = "FRONT_SDG_MODE INC\n";
+        private const string GMK_MODE_SELECTOR_DEC = "FRONT_SDG_MODE DEC\n";
+
+
+        private readonly ClickSkipper _gmkClickSkipper = new ClickSkipper(2);
+
+
+
+
 
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -191,18 +235,45 @@ namespace NonVisuals.Radios
                     }
                 }
 
-                // ADF
-                /*
-                if (_vhfRadioChannelAPresetDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
+                // GMK Latitude
+                if (_gmkLatitudeDialDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
-                    lock (_lockVHFRadioPresetDialObject1)
+                    lock (_lockGMKLatitudeObject1)
                     {
-                        _vhfRadioChannelACockpitButton = _vhfRadioChannelAPresetDcsbiosOutput.LastUIntValue;
+                        _gmkLatitudeCockpitPosition = _gmkLatitudeDialDcsbiosOutput.LastUIntValue;
                         Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
-                */
 
+                // GMK Mode
+                if (_gmkModeSelectorDialDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
+                {
+                    lock (_lockGMKModeSelectorObject1)
+                    {
+                        _gmkModeSelectorCockpitPosition = _gmkModeSelectorDialDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                    }
+                }
+
+                // GMK Hemisphere
+                if (_gmkHemisphereSelectorDialDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
+                {
+                    lock (_lockGMKHemisphereSelectorObject1)
+                    {
+                        _gmkHemisphereSelectorCockpitPosition = _gmkHemisphereSelectorDialDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                    }
+                }
+
+                // GMK Heading Selector
+                if (_gmkHeadingSelectorDialDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
+                {
+                    lock (_lockGMKHeadingSelectorObject1)
+                    {
+                        _gmkHeadingSelectorCockpitPosition = _gmkHeadingSelectorDialDcsbiosOutput.LastUIntValue;
+                        Interlocked.Increment(ref _doUpdatePanelLCD);
+                    }
+                }
 
                 // Set once
                 DataHasBeenReceivedFromDCSBIOS = true;
@@ -214,13 +285,8 @@ namespace NonVisuals.Radios
             }
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -259,14 +325,22 @@ namespace NonVisuals.Radios
 
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE1:
-                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE2:
-                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE3:
-                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE4:
+                            case RadioPanelPZ69KnobsYak52.UPPER_GMK:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentYak52RadioMode.NOUSE);
+                                        SetUpperRadioMode(CurrentYak52RadioMode.GMK);
+                                    }
+
+                                    break;
+                                }
+                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE1:
+                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE2:
+                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE3:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetUpperRadioMode(CurrentYak52RadioMode.NO_USE);
                                     }
                                     break;
                                 }
@@ -295,14 +369,22 @@ namespace NonVisuals.Radios
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE1:
-                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE2:
-                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE3:
-                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE4:
+                            case RadioPanelPZ69KnobsYak52.LOWER_GMK:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentYak52RadioMode.NOUSE);
+                                        SetLowerRadioMode(CurrentYak52RadioMode.GMK);
+                                    }
+
+                                    break;
+                                }
+                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE1:
+                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE2:
+                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE3:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentYak52RadioMode.NO_USE);
                                     }
                                     break;
                                 }
@@ -322,42 +404,42 @@ namespace NonVisuals.Radios
 
                             case RadioPanelPZ69KnobsYak52.UPPER_FREQ_SWITCH:
                                 {
-                                    if (_currentUpperRadioMode != CurrentYak52RadioMode.VHF)
-                                    {
-                                        break;
-                                    }
                                     _upperButtonPressed = radioPanelKnob.IsOn;
-                                    if (!radioPanelKnob.IsOn)
-                                    {
-                                        if (!_upperButtonPressedAndDialRotated)
-                                        {
-                                            // Do not synch if user has pressed the button to configure the radio
-                                            // Do when user releases button
-                                            DCSBIOS.Send(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
-                                        }
 
-                                        _upperButtonPressedAndDialRotated = false;
+                                    if (_currentUpperRadioMode == CurrentYak52RadioMode.VHF)
+                                    {
+                                        if (!radioPanelKnob.IsOn)
+                                        {
+                                            if (!_upperButtonPressedAndDialRotated)
+                                            {
+                                                // Do not synch if user has pressed the button to configure the radio
+                                                // Do when user releases button
+                                                DCSBIOS.Send(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
+                                            }
+
+                                            _upperButtonPressedAndDialRotated = false;
+                                        }
                                     }
+
                                     break;
                                 }
-
                             case RadioPanelPZ69KnobsYak52.LOWER_FREQ_SWITCH:
                                 {
-                                    if (_currentLowerRadioMode != CurrentYak52RadioMode.VHF)
-                                    {
-                                        break;
-                                    }
                                     _lowerButtonPressed = radioPanelKnob.IsOn;
-                                    if (!radioPanelKnob.IsOn)
-                                    {
-                                        if (!_lowerButtonPressedAndDialRotated)
-                                        {
-                                            // Do not synch if user has pressed the button to configure the radio
-                                            // Do when user releases button
-                                            DCSBIOS.Send(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
-                                        }
 
-                                        _lowerButtonPressedAndDialRotated = false;
+                                    if (_currentLowerRadioMode == CurrentYak52RadioMode.VHF)
+                                    {
+                                        if (!radioPanelKnob.IsOn)
+                                        {
+                                            if (!_lowerButtonPressedAndDialRotated)
+                                            {
+                                                // Do not synch if user has pressed the button to configure the radio
+                                                // Do when user releases button
+                                                DCSBIOS.Send(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
+                                            }
+
+                                            _lowerButtonPressedAndDialRotated = false;
+                                        }
                                     }
                                     break;
                                 }
@@ -418,7 +500,12 @@ namespace NonVisuals.Radios
                                                 DCSBIOS.Send(ADF_REAR_VOLUME_INC);
                                                 break;
                                             }
-                                        case CurrentYak52RadioMode.NOUSE:
+                                        case CurrentYak52RadioMode.GMK:
+                                        {
+                                            DCSBIOS.Send(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(true));
+                                            break;
+                                        }
+                                        case CurrentYak52RadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -443,6 +530,11 @@ namespace NonVisuals.Radios
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
                                                 DCSBIOS.Send(ADF_REAR_VOLUME_DEC);
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.GMK:
+                                            {
+                                                DCSBIOS.Send(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(false));
                                                 break;
                                             }
                                     }
@@ -479,6 +571,18 @@ namespace NonVisuals.Radios
                                                 if (_adfRearClickSkipper.ClickAndCheck())
                                                 {
                                                     DCSBIOS.Send(ADF_REAR_CHANNEL_INC);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.GMK:
+                                            {
+                                                if (_upperButtonPressed)
+                                                {
+                                                    DCSBIOS.Send(GMK_MODE_SELECTOR_INC);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(GMK_LATITUDE_SELECTOR_INC);
                                                 }
                                                 break;
                                             }
@@ -519,6 +623,18 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
+                                        case CurrentYak52RadioMode.GMK:
+                                            {
+                                                if (_upperButtonPressed)
+                                                {
+                                                    DCSBIOS.Send(GMK_MODE_SELECTOR_DEC);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(GMK_LATITUDE_SELECTOR_DEC);
+                                                }
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -542,6 +658,11 @@ namespace NonVisuals.Radios
                                                 DCSBIOS.Send(ADF_REAR_VOLUME_INC);
                                                 break;
                                             }
+                                        case CurrentYak52RadioMode.GMK:
+                                            {
+                                                DCSBIOS.Send(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(true));
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -563,6 +684,11 @@ namespace NonVisuals.Radios
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
                                                 DCSBIOS.Send(ADF_REAR_VOLUME_DEC);
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.GMK:
+                                            {
+                                                DCSBIOS.Send(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(false));
                                                 break;
                                             }
                                     }
@@ -602,6 +728,18 @@ namespace NonVisuals.Radios
                                                 }
                                                 break;
                                             }
+                                        case CurrentYak52RadioMode.GMK:
+                                            {
+                                                if (_lowerButtonPressed)
+                                                {
+                                                    DCSBIOS.Send(GMK_MODE_SELECTOR_INC);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(GMK_LATITUDE_SELECTOR_INC);
+                                                }
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -638,6 +776,18 @@ namespace NonVisuals.Radios
                                                     DCSBIOS.Send(ADF_REAR_CHANNEL_DEC);
                                                 }
 
+                                                break;
+                                            }
+                                        case CurrentYak52RadioMode.GMK:
+                                            {
+                                                if (_lowerButtonPressed)
+                                                {
+                                                    DCSBIOS.Send(GMK_MODE_SELECTOR_INC);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(GMK_LATITUDE_SELECTOR_INC);
+                                                }
                                                 break;
                                             }
                                     }
@@ -712,7 +862,25 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
-                        case CurrentYak52RadioMode.NOUSE:
+                        case CurrentYak52RadioMode.GMK:
+                            {
+                                lock (_lockGMKHeadingSelectorObject1)
+                                {
+                                    lock (_lockGMKHemisphereSelectorObject1)
+                                    {
+                                        lock (_lockGMKLatitudeObject1)
+                                        {
+                                            lock (_lockGMKModeSelectorObject1)
+                                            {
+                                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _upperButtonPressed ? _gmkHemisphereSelectorCockpitPosition : _gmkHeadingSelectorCockpitPosition, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _upperButtonPressed ? _gmkModeSelectorCockpitPosition : _gmkLatitudeCockpitPosition, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        case CurrentYak52RadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -759,7 +927,25 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
-                        case CurrentYak52RadioMode.NOUSE:
+                        case CurrentYak52RadioMode.GMK:
+                            {
+                                lock (_lockGMKHeadingSelectorObject1)
+                                {
+                                    lock (_lockGMKHemisphereSelectorObject1)
+                                    {
+                                        lock (_lockGMKLatitudeObject1)
+                                        {
+                                            lock (_lockGMKModeSelectorObject1)
+                                            {
+                                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _lowerButtonPressed ? _gmkHemisphereSelectorCockpitPosition : _gmkHeadingSelectorCockpitPosition, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _lowerButtonPressed ? _gmkModeSelectorCockpitPosition : _gmkLatitudeCockpitPosition, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        case CurrentYak52RadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -778,10 +964,6 @@ namespace NonVisuals.Radios
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
 
         public sealed override void Startup()
         {
@@ -795,6 +977,12 @@ namespace NonVisuals.Radios
                 // ADF
                 _adfFrontChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(ADF_FRONT_CHANNEL);
                 _adfRearChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(ADF_REAR_CHANNEL);
+
+                // GMK
+                _gmkHeadingSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(GMK_HEADING_SELECTOR);
+                _gmkHemisphereSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(GMK_HEMISPHERE_SELECTOR);
+                _gmkModeSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(GMK_MODE_SELECTOR);
+                _gmkLatitudeDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(GMK_LATITUDE_SELECTOR);
 
                 StartListeningForHidPanelChanges();
             }
@@ -835,7 +1023,7 @@ namespace NonVisuals.Radios
             try
             {
                 _currentLowerRadioMode = currentYak52RadioMode;
-                // If NOUSE then send next round of data to the panel in order to clear the LCD.
+                // If NO_USE then send next round of data to the panel in order to clear the LCD.
                 // _sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
@@ -903,26 +1091,38 @@ namespace NonVisuals.Radios
             return $"{VHF_RADIO_VOLUME_DIAL} -{_vhfRadioVolumeDialChangeValue} \n";
         }
 
+        private string GetGMKHeadingSelectorCommand(bool moveUp)
+        {
+            /*
+             * Self returning toggle in cockpit
+             * 0 => 1 <= 2
+             * Must emulate same here
+             */
+            if (moveUp)
+            {
+                return _gmkHeadingSelectorCockpitPosition switch
+                {
+                    0 => GMK_HEADING_SELECTOR_OFF,
+                    1 => GMK_HEADING_SELECTOR_CC,
+                    2 => GMK_HEADING_SELECTOR_CC,
+                    _ => ""
+                };
+            }
+
+            return _gmkHeadingSelectorCockpitPosition switch
+            {
+                2 => GMK_HEADING_SELECTOR_OFF,
+                1 => GMK_HEADING_SELECTOR_CCW,
+                0 => GMK_HEADING_SELECTOR_CCW,
+                _ => ""
+            };
+        }
+
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
-
-        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
-        {
-        }
-
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
-        {
-        }
-
-        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced)
-        {
-        }
-
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink)
-        {
-        }
-
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
-        {
-        }
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLinkBase bipLink) { }
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand) { }
     }
 }

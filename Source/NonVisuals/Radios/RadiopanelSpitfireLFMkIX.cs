@@ -31,7 +31,7 @@ namespace NonVisuals.Radios
             HFRADIO,
             HFRADIO2,
             IFF,
-            NOUSE
+            NO_USE
         }
 
         private CurrentSpitfireLFMkIXRadioMode _currentUpperRadioMode = CurrentSpitfireLFMkIXRadioMode.HFRADIO;
@@ -231,13 +231,8 @@ namespace NonVisuals.Radios
             }
         }
 
-        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (isFirstReport)
-            {
-                return;
-            }
-
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -275,7 +270,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentSpitfireLFMkIXRadioMode.NOUSE);
+                                        SetUpperRadioMode(CurrentSpitfireLFMkIXRadioMode.NO_USE);
                                     }
                                     break;
                                 }
@@ -306,7 +301,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentSpitfireLFMkIXRadioMode.NOUSE);
+                                        SetLowerRadioMode(CurrentSpitfireLFMkIXRadioMode.NO_USE);
                                     }
                                     break;
                                 }
@@ -413,7 +408,7 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
 
-                                        case CurrentSpitfireLFMkIXRadioMode.NOUSE:
+                                        case CurrentSpitfireLFMkIXRadioMode.NO_USE:
                                             {
                                                 break;
                                             }
@@ -713,7 +708,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentSpitfireLFMkIXRadioMode.NOUSE:
+                        case CurrentSpitfireLFMkIXRadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -773,7 +768,7 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case CurrentSpitfireLFMkIXRadioMode.NOUSE:
+                        case CurrentSpitfireLFMkIXRadioMode.NO_USE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -790,12 +785,7 @@ namespace NonVisuals.Radios
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
-        {
-            PZ69KnobChanged(isFirstReport, hashSet);
-        }
-
+        
         public sealed override void Startup()
         {
             try
@@ -851,7 +841,7 @@ namespace NonVisuals.Radios
             try
             {
                 _currentLowerRadioMode = currentSpitfireLFMkIXRadioMode;
-                // If NOUSE then send next round of data to the panel in order to clear the LCD.
+                // If NO_USE then send next round of data to the panel in order to clear the LCD.
                 // _sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
