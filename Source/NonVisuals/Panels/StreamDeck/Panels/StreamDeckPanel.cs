@@ -98,6 +98,7 @@ namespace NonVisuals.Panels.StreamDeck.Panels
             _buttonCount = panelType switch
             {
                 GamingPanelEnum.StreamDeckMini => 6,
+                GamingPanelEnum.StreamDeckMiniV2 => 6,
 
                 GamingPanelEnum.StreamDeck or
                 GamingPanelEnum.StreamDeckV2 or

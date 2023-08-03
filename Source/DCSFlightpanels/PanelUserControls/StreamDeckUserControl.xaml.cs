@@ -43,6 +43,7 @@
             switch (panelType)
             {
                 case GamingPanelEnum.StreamDeckMini:
+                case GamingPanelEnum.StreamDeckMiniV2:
                     {
                         var child = new UserControlStreamDeckUIMini(_streamDeckPanel);
                         _uiButtonGrid = child;

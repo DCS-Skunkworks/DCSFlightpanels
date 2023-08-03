@@ -511,6 +511,7 @@
                         }
 
                     case GamingPanelEnum.StreamDeckMini:
+                    case GamingPanelEnum.StreamDeckMiniV2:
                     case GamingPanelEnum.StreamDeck:
                     case GamingPanelEnum.StreamDeckV2:
                     case GamingPanelEnum.StreamDeckMK2:
@@ -852,6 +853,7 @@
                                          GamingPanelEnum.StreamDeckV2,
                                          GamingPanelEnum.StreamDeckMK2,
                                          GamingPanelEnum.StreamDeckMini,
+                                         GamingPanelEnum.StreamDeckMiniV2,
                                          GamingPanelEnum.BackLitPanel,
                                          GamingPanelEnum.PZ69RadioPanel,
                                          GamingPanelEnum.TPM,
