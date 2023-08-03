@@ -64,6 +64,8 @@ namespace ClassLibraryCommon
         TPM = 0xB4D,
         [Description("StreamDeck Mini")]
         StreamDeckMini = 0x0063,
+        [Description("StreamDeck Mini V2")]
+        StreamDeckMiniV2 = 0x0090,
         [Description("StreamDeck")]
         StreamDeck = 0x0060,
         [Description("StreamDeck V2")]

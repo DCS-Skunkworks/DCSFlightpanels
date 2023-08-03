@@ -128,6 +128,7 @@
         public bool IsJSON()
         {
             return PanelType == GamingPanelEnum.StreamDeckMini ||
+                   PanelType == GamingPanelEnum.StreamDeckMiniV2 ||
                     PanelType == GamingPanelEnum.StreamDeck ||
                     PanelType == GamingPanelEnum.StreamDeckV2 ||
                     PanelType == GamingPanelEnum.StreamDeckMK2 ||

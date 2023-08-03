@@ -14,6 +14,7 @@
             return gamingPanel switch
             {
                 GamingPanelEnum.StreamDeckMini => PluginGamingPanelEnum.StreamDeckMini,
+                GamingPanelEnum.StreamDeckMiniV2 => PluginGamingPanelEnum.StreamDeckMini,
                 GamingPanelEnum.StreamDeck => PluginGamingPanelEnum.StreamDeck,
                 GamingPanelEnum.StreamDeckV2 => PluginGamingPanelEnum.StreamDeckV2,
                 GamingPanelEnum.StreamDeckMK2 => PluginGamingPanelEnum.StreamDeckMK2,
