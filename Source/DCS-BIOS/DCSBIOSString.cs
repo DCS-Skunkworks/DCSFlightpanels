@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 
 namespace DCS_BIOS
 {
@@ -20,7 +21,8 @@ namespace DCS_BIOS
         private readonly string[] _internalBuffer;
         private readonly int _length;
         private readonly uint _address;
-        
+
+        private readonly uint _debugAddress = 10244; //->10251 Mi-8MT R863, Frequency
         public bool IsComplete  => _receivedAddresses.Count == 0;
 
         public string StringValue => string.Join(string.Empty, _internalBuffer);
@@ -68,7 +70,7 @@ namespace DCS_BIOS
             {
                 return;
             }
-
+            
             _receivedAddresses.Remove(address);
 
             var offset = address - _address;
