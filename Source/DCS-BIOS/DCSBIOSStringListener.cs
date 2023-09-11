@@ -1,4 +1,6 @@
-﻿namespace DCS_BIOS
+﻿using System.Diagnostics;
+
+namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +23,7 @@
         private readonly List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new();
         private readonly object _lockObject = new();
         private readonly Encoding _iso88591 = Encoding.GetEncoding("ISO-8859-1");
-
+        private readonly uint _debugAddress = 10244; //->10251 Mi-8MT R863, Frequency
 
         public DCSBIOSStringListener()
         {
@@ -71,7 +73,7 @@
                 _dcsBiosStrings.Remove(dcsBiosStringToRemove);
             }
         }
-
+        
         private void UpdateStrings(uint address, uint data)
         {
             lock (_lockObject)
@@ -81,6 +83,7 @@
                     //start of update cycle
                     return;
                 }
+                
                 if (address == 0xfffe)
                 {
                     //end of update cycle, clear all existing values.
@@ -134,8 +137,7 @@
                                         {
                                             secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
                                             secondChar = _iso88591.GetString(secondByte);
-                                            //Adding space to have SOMETHING for the first char.
-                                            firstChar = _iso88591.GetString(new byte[]{32});
+                                            firstChar = "";
                                             break;
                                         }
                                     case 3:
