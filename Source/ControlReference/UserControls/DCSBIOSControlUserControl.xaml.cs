@@ -6,6 +6,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using ControlReference.Events;
+using ControlReference.Windows;
 using DCS_BIOS;
 using DCS_BIOS.EventArgs;
 using DCS_BIOS.Interfaces;
@@ -350,6 +351,44 @@ namespace ControlReference.UserControls
             try
             {
                 REFEventHandler.ChangeCategory(this, LabelCategory.Content.ToString());
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+        
+        private void LabelArduinoInformation_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Hand;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelArduinoInformation_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelArduinoInformation_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var window = new ArduinoWindow(_dcsbiosControl);
+                window.Topmost = true;
+                window.ShowDialog();
             }
             catch (Exception ex)
             {
