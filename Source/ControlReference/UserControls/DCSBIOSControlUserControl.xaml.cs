@@ -32,7 +32,7 @@ namespace ControlReference.UserControls
             {
                 DCSBIOSStringManager.AddListeningAddress(_dcsbiosOutput);
             }
-            
+
             BIOSEventHandler.AttachDataListener(this);
             BIOSEventHandler.AttachStringListener(this);
         }
@@ -51,7 +51,7 @@ namespace ControlReference.UserControls
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
+
         private void DCSBIOSControlUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
@@ -81,7 +81,7 @@ namespace ControlReference.UserControls
         {
             try
             {
-                LabelControlId.Content = _dcsbiosControl.Identifier.Replace("_","__");
+                LabelControlId.Content = _dcsbiosControl.Identifier.Replace("_", "__");
                 LabelCategory.Content = _dcsbiosControl.Category;
                 LabelDescription.Content = _dcsbiosControl.Description;
 
@@ -357,7 +357,7 @@ namespace ControlReference.UserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void LabelArduinoInformation_OnMouseEnter(object sender, MouseEventArgs e)
         {
             try
@@ -387,6 +387,10 @@ namespace ControlReference.UserControls
             try
             {
                 var window = new ArduinoWindow(_dcsbiosControl);
+                var pos = GetPosition();
+                window.WindowStartupLocation = WindowStartupLocation.Manual;
+                window.Top = pos.Y;
+                window.Left = pos.X;
                 window.Topmost = true;
                 window.ShowDialog();
             }
@@ -395,5 +399,18 @@ namespace ControlReference.UserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+        private Point GetPosition()
+        {
+            // Get absolute location on screen of upper left corner of the UserControl
+            var locationFromScreen = PointToScreen(new Point(0, 0));
+
+            // Transform screen point to WPF device independent point
+            var source = PresentationSource.FromVisual(this);
+            if (source == null || source.CompositionTarget == null) return new Point(0, 0);
+            var targetPoints = source.CompositionTarget.TransformFromDevice.Transform(locationFromScreen);
+            return targetPoints;
+        }
+
     }
 }

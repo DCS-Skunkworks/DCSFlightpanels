@@ -17,6 +17,9 @@ using DCS_BIOS.Json;
 using Cursors = System.Windows.Input.Cursors;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Drawing;
+using System.Windows.Media.TextFormatting;
 
 namespace ControlReference.Windows
 {
@@ -46,17 +49,23 @@ namespace ControlReference.Windows
                 {
                     return;
                 }
+
+                var arduinoStrings = DCSBIOSArduinoInformation.GetInformation(_dcsbiosControl);
                 
-                var textBlock = new TextBlockSelectable("const byte aapCdupwrPins[2] = {PIN_0, PIN_1};\nDcsBios::SwitchMultiPos aapCdupwr(\"AAP_CDUPWR\", aapCdupwrPins, 2);");
-                var border = new Border();
-                border.Child = textBlock;
-                StackPanelArduinoInfo.Children.Add(border);
-                StackPanelArduinoInfo.Children.Add(new Line());
-                
-                var textBlock2 = new TextBlockSelectable("ASDB ASD#rtälakemfå23potjk'åq3omjtgfföslakmf2ol3pkmfr");
-                var border2 = new Border();
-                border2.Child = textBlock2;
-                StackPanelArduinoInfo.Children.Add(border2);
+                foreach (var str in arduinoStrings)
+                {
+                    
+                    var textBlock = new TextBlockSelectable(str);
+                    textBlock.FontFamily = new System.Windows.Media.FontFamily("Consolas");
+                    if (str == "Input" || str == "Output")
+                    {
+                        textBlock.FontWeight = FontWeights.Bold;
+                    }
+                    var border = new Border();
+                    border.Child = textBlock;
+                    StackPanelArduinoInfo.Children.Add(border);
+                    StackPanelArduinoInfo.Children.Add(new Line());
+                }
                 
                 StackPanelArduinoInfo.UpdateLayout();
 
@@ -72,12 +81,6 @@ namespace ControlReference.Windows
         private void ArduinoWindow_OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             
-        }
-
-
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }

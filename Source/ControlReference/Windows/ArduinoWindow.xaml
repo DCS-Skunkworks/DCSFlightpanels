@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:customControls="clr-namespace:ControlReference.CustomControls"
         mc:Ignorable="d"
-        Title="" Height="450" Width="600"
+        Title="" Height="400" Width="700"
         Loaded="ArduinoWindow_OnLoaded"
         WindowStartupLocation="CenterScreen" 
         KeyDown="ArduinoWindow_OnKeyDown" Icon="/Images/FlightPanels01.png">
@@ -21,26 +21,27 @@
 
 
         <DockPanel Grid.Row="0" Grid.Column="0" Background="#7ebbfc">
-            <Label Name="LabelControl" Width="Auto" Content="" DockPanel.Dock="Left"/>
+            <Label Name="LabelControl" Width="Auto" Content="" Margin="10,0,0,0" DockPanel.Dock="Left"/>
         </DockPanel>
 
-        <StackPanel Name="StackPanelArduinoInfo" Height="Auto" Width="Auto" Grid.Row="1" Grid.Column="0" Margin="10,5,10,5">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="Margin" Value="0,10,0,0" />
-                    <Setter Property="Background" Value="WhiteSmoke" />
-                    <Setter Property="BorderBrush" Value="Black" />
-                    <Setter Property="BorderThickness" Value="2" />
-                    <Setter Property="CornerRadius" Value="5" />
-                </Style>
-                <Style TargetType="{x:Type customControls:TextBlockSelectable}">
-                    <Setter Property="Margin" Value="5,5,5,5" />
-                    <Setter Property="Background" Value="WhiteSmoke" />
-                </Style>
-            </StackPanel.Resources>
-            <Button Click="ButtonBase_OnClick"></Button>
+        <ScrollViewer Grid.Row="1" Grid.Column="0">
+            <StackPanel Name="StackPanelArduinoInfo" Height="Auto" Width="Auto" Grid.Row="1" Grid.Column="0" Margin="10,5,10,5">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="Margin" Value="0,10,0,0" />
+                        <Setter Property="Background" Value="WhiteSmoke" />
+                        <Setter Property="BorderBrush" Value="Black" />
+                        <Setter Property="BorderThickness" Value="2" />
+                        <Setter Property="CornerRadius" Value="5" />
+                    </Style>
+                    <Style TargetType="{x:Type customControls:TextBlockSelectable}">
+                        <Setter Property="Margin" Value="5,5,5,5" />
+                        <Setter Property="Background" Value="WhiteSmoke" />
+                    </Style>
+                </StackPanel.Resources>
 
-        </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
         <DockPanel Grid.Row="2" Grid.Column="0" Background="White">
         </DockPanel>
     </Grid>

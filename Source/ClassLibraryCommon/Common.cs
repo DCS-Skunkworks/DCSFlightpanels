@@ -18,7 +18,7 @@
         SRSEnabled = 8,
         NS430Enabled = 16
     }
-    
+
     /// <summary>
     /// Common functions used by multiple projects. 
     /// </summary>
@@ -50,6 +50,24 @@
                     ShowErrorMessageBox(ex);
                 }
             }
+        }
+
+        public static string GetHex(uint i, bool includePrefix = true, bool lowercase = true, bool padLengthTo4 = true)
+        {
+            return GetHex((int)i, includePrefix, lowercase, padLengthTo4);
+        }
+
+        public static string GetHex(int i, bool includePrefix = true, bool lowercase = true, bool padLengthTo4 = true)
+        {
+            var formatter = lowercase ? "x" : "X";
+            var s = i.ToString(formatter);
+            if (padLengthTo4)
+            {
+                s = s.PadLeft(4, '0');
+            }
+            if (includePrefix) s = s.Insert(0, "0x");
+
+            return s;
         }
 
         public static string RemoveCurlyBrackets(string s)

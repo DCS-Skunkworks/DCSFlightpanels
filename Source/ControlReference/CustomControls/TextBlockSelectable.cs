@@ -19,7 +19,7 @@ namespace ControlReference.CustomControls
         public event TextSelectedHandler TextSelected;
         private TextRange _selectedTextRange;
 
-        private ContextMenu _contextMenu = new ContextMenu();
+        private readonly ContextMenu _contextMenu = new();
 
         public static Color SelectedBackgroundColor { get; set; } = Color.FromRgb(187, 191, 189);
         public static Color TextBackgroundColor { get; set; } = Colors.WhiteSmoke;
@@ -121,6 +121,21 @@ namespace ControlReference.CustomControls
             }
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            try
+            {
+                if (e.SystemKey == Key.LeftCtrl && e.Key == Key.C)
+                {
+                    CopyToClipboard();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void SelectAll()
         {
             try
@@ -189,17 +204,22 @@ namespace ControlReference.CustomControls
         {
             try
             {
-                if (string.IsNullOrEmpty(_selectedText))
-                {
-                    SelectAll();
-                }
-                Clipboard.SetText(_selectedText ?? "");
-                SystemSounds.Asterisk.Play();
+                CopyToClipboard();
             }
             catch (Exception exception)
             {
                 Common.ShowMessageBox(exception.Message + Environment.NewLine + exception.StackTrace);
             }
+        }
+
+        private void CopyToClipboard()
+        {
+            if (string.IsNullOrEmpty(_selectedText))
+            {
+                SelectAll();
+            }
+            Clipboard.SetText(_selectedText ?? "");
+            SystemSounds.Asterisk.Play();
         }
     }
 }

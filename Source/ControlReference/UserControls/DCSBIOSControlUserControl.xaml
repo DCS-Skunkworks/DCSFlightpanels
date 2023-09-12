@@ -21,7 +21,7 @@
             <Label Name="LabelDescription" Content="" DockPanel.Dock="Left"/>
             <Label Name="LabelControlId" FontStyle="Italic" Content="" DockPanel.Dock="Left" ToolTip="Show Arduino data" MouseEnter="LabelControlId_OnMouseEnter" MouseLeave="LabelControlId_OnMouseLeave" MouseDown="LabelControlId_OnMouseDown"/>
             <Label Name="LabelCategory" FontStyle="Italic" DockPanel.Dock="Right" Content="" Margin="0,0,10,0"  MouseEnter="LabelCategory_OnMouseEnter" MouseLeave="LabelCategory_OnMouseLeave" MouseDown="LabelCategory_OnMouseDown"/>
-            <Label Name="LabelArduinoInformation"  Content="Arduino" DockPanel.Dock="Right" HorizontalAlignment="Right" MouseEnter="LabelArduinoInformation_OnMouseEnter" MouseLeave="LabelArduinoInformation_OnMouseLeave" MouseDown="LabelArduinoInformation_OnMouseDown"/>
+            <Label Name="LabelArduinoInformation"  Content="Interface" Margin="0,0,10,0" DockPanel.Dock="Right" HorizontalAlignment="Right" MouseEnter="LabelArduinoInformation_OnMouseEnter" MouseLeave="LabelArduinoInformation_OnMouseLeave" MouseDown="LabelArduinoInformation_OnMouseDown"/>
         </DockPanel>
         <StackPanel Name="StackPanelInputInterfaces" Grid.Row="1" Grid.Column="0" >
             <StackPanel Name="StackPanelFixedStep" Orientation="Horizontal" >
