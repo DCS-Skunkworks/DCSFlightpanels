@@ -14,7 +14,9 @@ namespace DCS_BIOS
             var result = new List<string>();
 
             if(dcsbiosControl.Inputs.Count > 0) { result.Add("Input"); }
-            
+
+            var fixedStepInputInfo = new List<string>();
+            var integerOutputInfo = new List<string>();
 
             if (dcsbiosControl == null) return result;
 
@@ -32,37 +34,39 @@ namespace DCS_BIOS
                         }
                     case DCSBIOSInputType.SET_STATE:
                         {
+                            if(fixedStepInputInfo.Count == 0) fixedStepInputInfo.Add(CommonInputData(dcsbiosControl, interfaceType));
+
                             if (interfaceType.MaxValue < 33)
                             {
                                 //SwitchMultiPos PIN0 Template
-                                result.Add(SwitchMultiPos(dcsbiosControl, interfaceType));
+                                fixedStepInputInfo.Add(SwitchMultiPos(dcsbiosControl, interfaceType));
                             }
 
                             if (interfaceType.MaxValue == 1)
                             {
-                                result.Add(Switch2Pos(dcsbiosControl, interfaceType));
-                                result.Add(Matrix2Pos(dcsbiosControl, interfaceType));
+                                fixedStepInputInfo.Add(Switch2Pos(dcsbiosControl, interfaceType));
+                                fixedStepInputInfo.Add(Matrix2Pos(dcsbiosControl, interfaceType));
                                 //Switch2Pos
                                 //Matrix2Pos
                             }
 
                             if (interfaceType.MaxValue == 2)
                             {
-                                result.Add(Switch3Pos(dcsbiosControl, interfaceType));
-                                result.Add(Matrix3Pos(dcsbiosControl, interfaceType));
+                                fixedStepInputInfo.Add(Switch3Pos(dcsbiosControl, interfaceType));
+                                fixedStepInputInfo.Add(Matrix3Pos(dcsbiosControl, interfaceType));
                                 //Switch3Pos
                                 //Matrix3Pos
                             }
 
                             if (interfaceType.MaxValue < 20)
                             {
-                                result.Add(AnalogMultiPos(dcsbiosControl, interfaceType));
+                                fixedStepInputInfo.Add(AnalogMultiPos(dcsbiosControl, interfaceType));
                                 //AnalogMultiPos
                             }
 
                             if (interfaceType.MaxValue == DCSBIOSConstants.MAX_VALUE)
                             {
-                                result.Add(Potentiometer(dcsbiosControl, interfaceType));
+                                fixedStepInputInfo.Add(Potentiometer(dcsbiosControl, interfaceType));
                                 //Potentiometer
                             }
 
@@ -83,6 +87,19 @@ namespace DCS_BIOS
                 }
             }
 
+
+            if (fixedStepInputInfo.Count > 0)
+            {
+                //Can have many so coalesce them with one banner. Banner is in [0].
+                for (var i = 0; i < fixedStepInputInfo.Count; i++)
+                {
+                    if (i == 0) continue;
+                    fixedStepInputInfo[0] += "\n\n" + fixedStepInputInfo[i];
+                }
+
+                result.Add( fixedStepInputInfo[0]);
+            }
+
             if (dcsbiosControl.Outputs.Count > 0) { result.Add("Output"); }
             
 
@@ -93,14 +110,17 @@ namespace DCS_BIOS
                 {
                     case DCSBiosOutputType.IntegerType:
                         {
-                            result.Add(IntegerOutput(dcsbiosControl, output));
+                            if (integerOutputInfo.Count == 0) integerOutputInfo.Add(CommonOutputData(dcsbiosControl, output));
+
+                            integerOutputInfo.Add(IntegerOutput(dcsbiosControl, output));
+
                             if (output.MaxValue == 1)
                             {
-                                result.Add(LEDOutput(dcsbiosControl, output));
+                                integerOutputInfo.Add(LEDOutput(dcsbiosControl, output, false));
                             }
                             if (output.MaxValue == DCSBIOSConstants.MAX_VALUE)
                             {
-                                result.Add(ServoOutput(dcsbiosControl, output));
+                                integerOutputInfo.Add(ServoOutput(dcsbiosControl, output));
                             }
                             break;
                         }
@@ -111,7 +131,7 @@ namespace DCS_BIOS
                         }
                     case DCSBiosOutputType.LED:
                         {
-                            result.Add(LEDOutput(dcsbiosControl, output));
+                            result.Add(LEDOutput(dcsbiosControl, output, true));
                             break;
                         }
                     case DCSBiosOutputType.FloatBuffer:
@@ -127,6 +147,17 @@ namespace DCS_BIOS
                 }
             }
 
+            if (integerOutputInfo.Count > 0)
+            {
+                //Can have many so coalesce them with one banner. Banner is in [0].
+                for (var i = 0; i < integerOutputInfo.Count; i++)
+                {
+                    if (i == 0) continue;
+                    integerOutputInfo[0] += "\n\n" + integerOutputInfo[i];
+                }
+
+                result.Add(integerOutputInfo[0]);
+            }
 
             return result;
 
@@ -185,8 +216,8 @@ namespace DCS_BIOS
                 if (i > 0) pins += ", ";
                 pins += $"PIN_{i}";
             }
-            var str = CommonInputData(dcsbiosControl, inputInterface);
-            str += $"const byte {MakeCamelCase(dcsbiosControl.Identifier)}Pins[{valuePossibilities}] = {{{pins}}};\n";
+            
+            var str = $"const byte {MakeCamelCase(dcsbiosControl.Identifier)}Pins[{valuePossibilities}] = {{{pins}}};\n";
             str += $"DcsBios::SwitchMultiPos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", {MakeCamelCase(dcsbiosControl.Identifier)}Pins, {valuePossibilities});";
             return str;
         }
@@ -194,32 +225,48 @@ namespace DCS_BIOS
         private static string Switch2Pos(DCSBIOSControl dcsbiosControl, DCSBIOSInputInterface inputInterface)
         {
             //code.append($("<span>").text('DcsBios::Switch2Pos '+idCamelCase(cid)+'("'+cid+'", '));
-            var str = CommonInputData(dcsbiosControl, inputInterface);
-            str += $"DcsBios::Switch2Pos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", PIN);";
+            
+            var str = $"DcsBios::Switch2Pos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", PIN);";
             return str;
         }
 
         private static string Switch3Pos(DCSBIOSControl dcsbiosControl, DCSBIOSInputInterface inputInterface)
         {
             //code.append($("<span>").text('DcsBios::Switch3Pos '+idCamelCase(cid)+'("'+cid+'", '));
-            var str = CommonInputData(dcsbiosControl, inputInterface);
-            str += $"DcsBios::Switch3Pos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", PIN_A, PIN_B);";
+            
+            var str = $"DcsBios::Switch3Pos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", PIN_A, PIN_B);";
             return str;
         }
 
         private static string Matrix2Pos(DCSBIOSControl dcsbiosControl, DCSBIOSInputInterface inputInterface)
         {
             //code.append($("<span>").text('DcsBios::Matrix2Pos '+idCamelCase(cid)+'("'+cid+'", '));
-            var str = CommonInputData(dcsbiosControl, inputInterface);
-            str += $"DcsBios::Matrix2Pos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", ROW, COL);";
+            
+            var str = $"DcsBios::Matrix2Pos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", ROW, COL);";
             return str;
         }
 
         private static string Matrix3Pos(DCSBIOSControl dcsbiosControl, DCSBIOSInputInterface inputInterface)
         {
             //code.append($("<span>").text('DcsBios::Matrix3Pos '+idCamelCase(cid)+'("'+cid+'", '));
-            var str = CommonInputData(dcsbiosControl, inputInterface);
-            str += $"DcsBios::Matrix3Pos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", ROW_A, COL_A, ROW_B, COL_B);";
+            
+            var str = $"DcsBios::Matrix3Pos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", ROW_A, COL_A, ROW_B, COL_B);";
+            return str;
+        }
+
+        private static string AnalogMultiPos(DCSBIOSControl dcsbiosControl, DCSBIOSInputInterface inputInterface)
+        {
+            //code.append($("<span>").text('DcsBios::AnalogMultiPos '+idCamelCase(cid)+'("'+cid+'", '));
+            
+            var str = $"DcsBios::AnalogMultiPos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", PIN, STEPS, (RESOLUTION/STEPS));";
+            return str;
+        }
+
+        private static string Potentiometer(DCSBIOSControl dcsbiosControl, DCSBIOSInputInterface inputInterface)
+        {
+            //code.append($("<span>").text('DcsBios::Potentiometer '+idCamelCase(cid)+'("'+cid+'", '));
+            
+            var str = $"DcsBios::Potentiometer {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", PIN);";
             return str;
         }
 
@@ -231,28 +278,12 @@ namespace DCS_BIOS
             return str;
         }
 
-        private static string AnalogMultiPos(DCSBIOSControl dcsbiosControl, DCSBIOSInputInterface inputInterface)
-        {
-            //code.append($("<span>").text('DcsBios::AnalogMultiPos '+idCamelCase(cid)+'("'+cid+'", '));
-            var str = CommonInputData(dcsbiosControl, inputInterface);
-            str += $"DcsBios::AnalogMultiPos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", PIN, STEPS, (RESOLUTION/STEPS));";
-            return str;
-        }
-
-        private static string Potentiometer(DCSBIOSControl dcsbiosControl, DCSBIOSInputInterface inputInterface)
-        {
-            //code.append($("<span>").text('DcsBios::Potentiometer '+idCamelCase(cid)+'("'+cid+'", '));
-            var str = CommonInputData(dcsbiosControl, inputInterface);
-            str += $"DcsBios::Potentiometer {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", PIN);";
-            return str;
-        }
-
         private static string IntegerOutput(DCSBIOSControl dcsbiosControl, DCSBIOSControlOutput output)
         {
             var functionName = MakeCamelCase("ON_" + dcsbiosControl.Identifier + "_CHANGE");
-            var str = CommonOutputData(dcsbiosControl, output);
+            
             //code.append($("<span>").text('void '+idCamelCase("ON_"+cid+"_CHANGE")+'(unsigned int newValue) {'));
-            str += $"void {functionName}(unsigned int newValue) \n{{\n";
+            var str = $"void {functionName}(unsigned int newValue) \n{{\n";
 
             str += $"\t\t/* your code here */\n}}\n";
 
@@ -261,10 +292,11 @@ namespace DCS_BIOS
             return str;
         }
 
-        private static string LEDOutput(DCSBIOSControl dcsbiosControl, DCSBIOSControlOutput output)
+        private static string LEDOutput(DCSBIOSControl dcsbiosControl, DCSBIOSControlOutput output, bool addBanner)
         {
             var functionName = MakeCamelCase(dcsbiosControl.Identifier);
-            var str = CommonOutputData(dcsbiosControl, output);
+            var str = "";
+            if(addBanner) str += CommonOutputData(dcsbiosControl, output);
             //code.append($("<span>").text('DcsBios::LED '+idCamelCase(cid)+'('+io.address_identifier+', '));
             str += $"DcsBios::LED {functionName}({Common.GetHex(output.Address)}, PIN);";
 
@@ -343,13 +375,25 @@ namespace DCS_BIOS
 
         private static string CommonOutputData(DCSBIOSControl dcsbiosControl, DCSBIOSControlOutput output)
         {
-            var str = $"Type :        {output.Type}\n";
-            str +=    $"Address :     {Common.GetHex(output.Address)}\n";
-            str +=    $"Mask :        {Common.GetHex(output.Mask)}\n";
-            str +=    $"ShiftBy :     {output.ShiftBy}\n";
-            str +=    $"Max Value :   {output.MaxValue}\n";
-            str +=    $"Description : {output.Description}\n";
-            str += "\n";
+            var str = "";
+            if (output.OutputDataType != DCSBiosOutputType.StringType)
+            {
+                str =  $"Type :        {output.Type}\n";
+                str += $"Address :     {Common.GetHex(output.Address)}\n";
+                str += $"Mask :        {Common.GetHex(output.Mask)}\n";
+                str += $"ShiftBy :     {output.ShiftBy}\n";
+                str += $"Max Value :   {output.MaxValue}\n";
+                str += $"Description : {output.Description}\n";
+                str += "\n";
+            }
+            else
+            {
+                str =  $"Type :        {output.Type}\n";
+                str += $"Address :     {Common.GetHex(output.Address)}\n";
+                str += $"Max Length :  {output.MaxLength}\n";
+                str += $"Description : {output.Description}\n";
+                str += "\n";
+            }
             return str;
         }
     }

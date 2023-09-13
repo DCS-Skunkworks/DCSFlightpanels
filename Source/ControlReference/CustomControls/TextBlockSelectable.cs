@@ -13,26 +13,19 @@ namespace ControlReference.CustomControls
     {
         TextPointer _startSelectPosition;
         TextPointer _endSelectPosition;
-        private string _selectedText = "";
+        public string SelectedText = "";
 
         public delegate void TextSelectedHandler(string selectedText);
         public event TextSelectedHandler TextSelected;
         private TextRange _selectedTextRange;
-
-        private readonly ContextMenu _contextMenu = new();
-
+        
         public static Color SelectedBackgroundColor { get; set; } = Color.FromRgb(187, 191, 189);
         public static Color TextBackgroundColor { get; set; } = Colors.WhiteSmoke;
-
-        public TextBlockSelectable()
-        {
-            SetContextMenu();
-        }
+        
 
         public TextBlockSelectable(string text)
         {
             Text = text;
-            SetContextMenu();
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -87,8 +80,8 @@ namespace ControlReference.CustomControls
             try
             {
                 if (_selectedTextRange == null) return;
-                _selectedText = _selectedTextRange.Text;
-                TextSelected?.Invoke(_selectedText);
+                SelectedText = _selectedTextRange.Text;
+                TextSelected?.Invoke(SelectedText);
             }
             catch (Exception exception)
             {
@@ -96,47 +89,7 @@ namespace ControlReference.CustomControls
             }
         }
 
-
-        protected override void OnMouseEnter(MouseEventArgs e)
-        {
-            try
-            {
-                Mouse.OverrideCursor = Cursors.IBeam;
-            }
-            catch (Exception exception)
-            {
-                Common.ShowMessageBox(exception.Message + Environment.NewLine + exception.StackTrace);
-            }
-        }
-
-        protected override void OnMouseLeave(MouseEventArgs e)
-        {
-            try
-            {
-                Mouse.OverrideCursor = Cursors.Arrow;
-            }
-            catch (Exception exception)
-            {
-                Common.ShowMessageBox(exception.Message + Environment.NewLine + exception.StackTrace);
-            }
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            try
-            {
-                if (e.SystemKey == Key.LeftCtrl && e.Key == Key.C)
-                {
-                    CopyToClipboard();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void SelectAll()
+        public void SelectAll()
         {
             try
             {
@@ -151,7 +104,7 @@ namespace ControlReference.CustomControls
             }
         }
 
-        private void DeSelectAll()
+        public void DeSelectAll()
         {
             try
             {
@@ -166,60 +119,5 @@ namespace ControlReference.CustomControls
             }
         }
 
-        private void SetContextMenu()
-        {
-            try
-            {
-                //_contextMenu.Opened += TextBlockContextMenuOpened;
-
-                var menuItemCopy = new MenuItem();
-                menuItemCopy.Header = "Copy";
-                menuItemCopy.Click += MenuItemCopy_OnClick;
-                //menuItemCopy.ContextMenuOpening += TextBlockContextMenuOpened;
-                _contextMenu.Items.Add(menuItemCopy);
-                ContextMenu = _contextMenu;
-            }
-            catch (Exception exception)
-            {
-                Common.ShowMessageBox(exception.Message + Environment.NewLine + exception.StackTrace);
-            }
-        }
-        /*
-        
-        public void TextBlockContextMenuOpened(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var menuItemCopy = (MenuItem) sender;
-                menuItemCopy.IsEnabled = !string.IsNullOrEmpty(_selectedText);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-        */
-
-        private void MenuItemCopy_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                CopyToClipboard();
-            }
-            catch (Exception exception)
-            {
-                Common.ShowMessageBox(exception.Message + Environment.NewLine + exception.StackTrace);
-            }
-        }
-
-        private void CopyToClipboard()
-        {
-            if (string.IsNullOrEmpty(_selectedText))
-            {
-                SelectAll();
-            }
-            Clipboard.SetText(_selectedText ?? "");
-            SystemSounds.Asterisk.Play();
-        }
     }
 }

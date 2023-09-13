@@ -387,6 +387,8 @@ namespace ControlReference.UserControls
             try
             {
                 var window = new ArduinoWindow(_dcsbiosControl);
+                window.MaxHeight = 600;
+                window.SizeToContent = SizeToContent.WidthAndHeight;
                 var pos = GetPosition();
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
                 window.Top = pos.Y;

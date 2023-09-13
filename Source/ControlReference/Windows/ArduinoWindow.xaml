@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:customControls="clr-namespace:ControlReference.CustomControls"
         mc:Ignorable="d"
-        Title="" Height="400" Width="700"
+        Title="" Height="400" Width="Auto"
         Loaded="ArduinoWindow_OnLoaded"
         WindowStartupLocation="CenterScreen" 
         KeyDown="ArduinoWindow_OnKeyDown" Icon="/Images/FlightPanels01.png">
