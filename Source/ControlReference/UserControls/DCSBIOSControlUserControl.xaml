@@ -17,21 +17,11 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <Rectangle Grid.Row="0" Grid.Column="0" >
-            <Rectangle.Fill>
-                <SolidColorBrush Color="#FF83F5A0"></SolidColorBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Rectangle Grid.Row="2" Grid.Column="0" >
-            <Rectangle.Fill>
-                <SolidColorBrush Color="White"></SolidColorBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-
-        <DockPanel Grid.Row="0" Grid.Column="0" >
+        <DockPanel Grid.Row="0" Grid.Column="0" Background="#FF83F5A0">
             <Label Name="LabelDescription" Content="" DockPanel.Dock="Left"/>
-            <Label Name="LabelControlId" FontStyle="Italic" Content="" DockPanel.Dock="Left" MouseEnter="LabelControlId_OnMouseEnter" MouseLeave="LabelControlId_OnMouseLeave" MouseDown="LabelControlId_OnMouseDown"/>
-            <Label Name="LabelCategory" FontStyle="Italic" DockPanel.Dock="Right" Content="" HorizontalAlignment="Right" Margin="0,0,10,0"  MouseEnter="LabelCategory_OnMouseEnter" MouseLeave="LabelCategory_OnMouseLeave" MouseDown="LabelCategory_OnMouseDown"/>
+            <Label Name="LabelControlId" FontStyle="Italic" Content="" DockPanel.Dock="Left" ToolTip="Show Arduino data" MouseEnter="LabelControlId_OnMouseEnter" MouseLeave="LabelControlId_OnMouseLeave" MouseDown="LabelControlId_OnMouseDown"/>
+            <Label Name="LabelCategory" FontStyle="Italic" DockPanel.Dock="Right" Content="" Margin="0,0,10,0"  MouseEnter="LabelCategory_OnMouseEnter" MouseLeave="LabelCategory_OnMouseLeave" MouseDown="LabelCategory_OnMouseDown"/>
+            <Label Name="LabelArduinoInformation"  Content="API" Margin="0,0,10,0" DockPanel.Dock="Right" HorizontalAlignment="Right" MouseEnter="LabelArduinoInformation_OnMouseEnter" MouseLeave="LabelArduinoInformation_OnMouseLeave" MouseDown="LabelArduinoInformation_OnMouseDown"/>
         </DockPanel>
         <StackPanel Name="StackPanelInputInterfaces" Grid.Row="1" Grid.Column="0" >
             <StackPanel Name="StackPanelFixedStep" Orientation="Horizontal" >
@@ -72,5 +62,8 @@
                 <Label Name="LabelPercentage" Foreground="DarkOrange" FontSize="11" VerticalAlignment="Center" Content="" />
             </StackPanel>
         </StackPanel>
+
+        <DockPanel Grid.Row="2" Grid.Column="0" Background="White" />
+
     </Grid>
 </UserControl>

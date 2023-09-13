@@ -18,6 +18,9 @@ namespace DCS_BIOS.Json
         [JsonProperty("max_value", Required = Required.Default)]
         public int? MaxValue { get; set; }
 
+        [JsonProperty("suggested_step", Required = Required.Default)]
+        public int? SuggestedStep { get; set; }
+
         [JsonProperty("argument", Required = Required.Default)]
         public string Argument { get; set; }
     }

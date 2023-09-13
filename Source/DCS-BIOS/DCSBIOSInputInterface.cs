@@ -31,6 +31,7 @@ namespace DCS_BIOS
                 _ => throw new SystemException($"Unexpected ControlInterface value [{dcsbiosControlInput.ControlInterface}]")
             };
             MaxValue = dcsbiosControlInput.MaxValue.GetValueOrDefault();
+            SuggestedStep = dcsbiosControlInput.SuggestedStep.GetValueOrDefault();
             SpecifiedActionArgument = dcsbiosControlInput.Argument;
         }
 
@@ -75,6 +76,11 @@ namespace DCS_BIOS
         /// Relevant when _interface = set_state
         /// </summary>
         public int MaxValue { get; set; }
+
+        /// <summary>
+        /// Relevant when _interface = variable_step
+        /// </summary>
+        public int SuggestedStep { get; set; }
 
         /// <summary>
         /// e.g. TOGGLE

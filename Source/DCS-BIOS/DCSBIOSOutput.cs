@@ -10,7 +10,10 @@ namespace DCS_BIOS
     public enum DCSBiosOutputType
     {
         StringType,
-        IntegerType
+        IntegerType,
+        LED,
+        ServoOutput,
+        FloatBuffer
     }
 
     public enum DCSBiosOutputComparison

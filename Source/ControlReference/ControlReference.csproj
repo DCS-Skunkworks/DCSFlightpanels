@@ -18,6 +18,7 @@
   <ItemGroup>
     <None Remove="gear-image.png" />
     <None Remove="Images\112_RefreshArrow_Green_32x32_72.png" />
+    <None Remove="Images\arduino_logo_simple.png" />
     <None Remove="Images\FlightPanels01.png" />
     <None Remove="Images\FlightPanels01_128.png" />
     <None Remove="Images\flightpanels02_8Rc_icon.ico" />
