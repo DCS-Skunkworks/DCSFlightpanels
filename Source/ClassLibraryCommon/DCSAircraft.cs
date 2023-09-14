@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Holds information about currently selected aircraft / module (DCS aircraft/helicopter).
@@ -105,13 +106,13 @@
 
         public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder, bool loadMetaFiles = false, bool loadInternalModules = true)
         {
-            var biosLua = Path.Combine(dcsbiosJsonFolder, "..\\..\\", "BIOS.lua");
-
-            if (!File.Exists(biosLua))
+            var dcsbiosConfigFile = $"{AppDomain.CurrentDomain.BaseDirectory}dcs-bios_modules.txt";
+            if (!File.Exists(dcsbiosConfigFile))
             {
+                LogErrorAndThrowException($"Failed to find {dcsbiosConfigFile}");
                 return;
             }
-
+            
             lock (Lock)
             {
                 ModulesList.Clear();
@@ -121,48 +122,32 @@
                 }
             }
 
-            var stringArray = File.ReadAllLines(biosLua);
+            var stringArray = File.ReadAllLines(dcsbiosConfigFile);
 
-            var searchFilterList = new List<string>()
+            //Inject these static DCS-BIOS modules
+
+            lock (Lock)
             {
-                "MetadataEnd",
-                "MetadataStart",
-                "CommonData"
-            };
+                ModulesList.Add(new DCSAircraft(500, "MetadataEnd", "MetadataEnd.json"));
+                ModulesList.Add(new DCSAircraft(501, "MetadataStart", "MetadataStart.json"));
+                ModulesList.Add(new DCSAircraft(502, "CommonData", "CommonData.json"));
+            }
 
-            var metaFileId = 500;
-
-            // dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]]) -- ID = 5, ProperName = A-10C Thunderbolt II
+            // A-10C|5|A-10C Thunderbolt/II
             foreach (var s in stringArray)
             {
-                if (!s.StartsWith("--") && s.ToLower().Contains(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower()) && s.Contains("ProperName"))
+                if (!s.StartsWith("--") && s.Contains('|'))
                 {
-                    var parts = s.Split(new string[] { "--" }, StringSplitOptions.RemoveEmptyEntries);
+                    var parts = s.Split(new [] { "|" }, StringSplitOptions.RemoveEmptyEntries);
 
-                    // dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]])
-                    var json = parts[0].ToLower().Replace(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower(), string.Empty).Replace(".lua]])", string.Empty).Trim() + ".json";
 
-                    // ID = 5, ProperName = A-10C Thunderbolt II
-                    var info = parts[1].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-
-                    // ID = 5
-                    var id = int.Parse(info[0].Split(new[] { "=" }, StringSplitOptions.None)[1]);
-
-                    // ProperName = A-10C Thunderbolt II
-                    var properName = info[1].Split(new[] { "=" }, StringSplitOptions.None)[1].Trim();
+                    var json = parts[0]+ ".json";
+                    var id = int.Parse(parts[1]);
+                    var properName = parts[2];
 
                     lock (Lock)
                     {
                         ModulesList.Add(new DCSAircraft(id, properName, json));
-                    }
-                }
-                else if (loadMetaFiles && searchFilterList.Any(o => s.Contains(o)))
-                {
-                    var json = s.ToLower().Replace(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower(), string.Empty).Replace(".lua]])", string.Empty).Trim() + ".json";
-                    var properName = json.Replace(".json", "");
-                    lock (Lock)
-                    {
-                        ModulesList.Add(new DCSAircraft(metaFileId++, properName, json));
                     }
                 }
             }

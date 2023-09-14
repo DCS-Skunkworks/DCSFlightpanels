@@ -1,7 +1,8 @@
 ﻿namespace DCS_BIOS
 {
-    internal class DCSBIOSConstants
+    public static class DCSBIOSConstants
     {
-        internal const int MAX_VALUE = 65535;
+        public const int MAX_VALUE = 65535;
+        public const int META_MODULE_START_RANGE = 500;
     }
 }
