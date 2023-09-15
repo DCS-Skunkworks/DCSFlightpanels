@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -66,12 +67,12 @@ namespace DCSFlightpanels.Windows
             ComboBoxAirframe.Items.Clear();
             foreach (var module in DCSAircraft.Modules)
             {
-                if (!DCSAircraft.IsNoFrameLoadedYet(module)) //!DCSAircraft.IsNS430(module) &&  
+                if (!DCSAircraft.IsNoFrameLoadedYet(module) && module.ID < DCSBIOSConstants.META_MODULE_START_RANGE) //!DCSAircraft.IsNS430(module) &&  
                 {
                     itemsSource.Add(module);
                 }
             }
-
+            itemsSource = itemsSource.OrderBy(o => o.Description).ToList();
             ComboBoxAirframe.DisplayMemberPath = "Description";
             ComboBoxAirframe.ItemsSource = itemsSource;
             ComboBoxAirframe.SelectedIndex = 0;
