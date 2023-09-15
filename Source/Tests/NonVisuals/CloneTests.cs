@@ -9,6 +9,7 @@ using NonVisuals.HID;
 using Xunit;
 using NonVisuals.Panels.StreamDeck.Panels;
 using NonVisuals.Panels.StreamDeck;
+using NonVisuals.KeyEmulation;
 
 namespace Tests.NonVisuals
 {

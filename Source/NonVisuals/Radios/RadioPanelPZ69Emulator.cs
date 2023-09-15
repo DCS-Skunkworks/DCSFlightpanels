@@ -1,6 +1,7 @@
 ﻿using NonVisuals.BindingClasses.BIP;
 using NonVisuals.BindingClasses.Key;
 using NonVisuals.BindingClasses.OSCommand;
+using NonVisuals.KeyEmulation;
 
 namespace NonVisuals.Radios
 {

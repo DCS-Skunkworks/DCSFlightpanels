@@ -15,6 +15,11 @@
              */
             json = json.Replace("NonVisuals.VirtualKeyCode, NonVisuals", "MEF.VirtualKeyCode, MEF");
 
+            /*
+             * 15.09.2023, moved key emulation classes to NonVisuals.KeyEmulation
+             */
+            json = json.Replace("NonVisuals.KeyPress, NonVisuals", "NonVisuals.KeyEmulation.KeyPress, NonVisuals");
+            json = json.Replace("NonVisuals.KeyPressInfo, NonVisuals", "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals");
             return json;
         }
 

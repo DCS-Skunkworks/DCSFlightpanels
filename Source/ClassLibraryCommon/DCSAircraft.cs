@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
 
     /// <summary>
     /// Holds information about currently selected aircraft / module (DCS aircraft/helicopter).

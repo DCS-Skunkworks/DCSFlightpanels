@@ -2,6 +2,7 @@
 using MEF;
 using NonVisuals;
 using System.Collections.Generic;
+using NonVisuals.KeyEmulation;
 using Xunit;
 
 namespace Tests.NonVisuals

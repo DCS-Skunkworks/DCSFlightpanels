@@ -8,8 +8,8 @@
     using System.Windows.Input;
     using ClassLibraryCommon;
     using MEF;
-    using NonVisuals;
     using NonVisuals.Interfaces;
+    using NonVisuals.KeyEmulation;
 
     /// <summary>
     /// Interaction logic for SequenceWindow.xaml

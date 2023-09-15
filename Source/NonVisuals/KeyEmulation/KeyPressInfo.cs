@@ -1,4 +1,4 @@
-﻿namespace NonVisuals
+﻿namespace NonVisuals.KeyEmulation
 {
     using System;
     using System.Collections.Generic;
@@ -30,11 +30,11 @@
                 var result = 0;
                 foreach (var virtualKeyCode in _virtualKeyCodes)
                 {
-                    result = (result * 397) ^ virtualKeyCode.GetHashCode();
+                    result = result * 397 ^ virtualKeyCode.GetHashCode();
                 }
 
-                result = (result * 397) ^ _lengthOfBreak.GetHashCode();
-                result = (result * 397) ^ _lengthOfKeyPress.GetHashCode();
+                result = result * 397 ^ _lengthOfBreak.GetHashCode();
+                result = result * 397 ^ _lengthOfKeyPress.GetHashCode();
                 return result;
             }
         }

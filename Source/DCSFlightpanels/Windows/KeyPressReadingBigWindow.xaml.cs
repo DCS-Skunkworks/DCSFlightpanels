@@ -12,6 +12,7 @@ namespace DCSFlightpanels.Windows
     using MEF;
     using NonVisuals;
     using NonVisuals.Interfaces;
+    using NonVisuals.KeyEmulation;
 
     /// <summary>
     /// Interaction logic for KeyPressWindow.xaml
