@@ -20,6 +20,14 @@
     </AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="dcs-bios_modules.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="dcs-bios_modules.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>

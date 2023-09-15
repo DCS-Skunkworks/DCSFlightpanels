@@ -89,9 +89,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="dcs-bios_modules.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <Resource Include="flightpanels02_8Rc_icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -113,7 +110,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
-    <None Remove="dcs-bios_modules.txt" />
     <None Remove="Images\cdu737.png" />
     <None Remove="Images\rio-cap-f14.png" />
     <None Remove="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
