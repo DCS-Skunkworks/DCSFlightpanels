@@ -1,4 +1,4 @@
-﻿using NonVisuals;
+﻿using NonVisuals.KeyEmulation;
 using Xunit;
 
 namespace Tests.NonVisuals

@@ -10,7 +10,7 @@ namespace DCSFlightpanels.Windows
     using System.Windows.Input;
     using ClassLibraryCommon;
     using MEF;
-    using NonVisuals;
+    using NonVisuals.KeyEmulation;
 
     /// <summary>
     /// Interaction logic for KeyPressReadingWindow.xaml
