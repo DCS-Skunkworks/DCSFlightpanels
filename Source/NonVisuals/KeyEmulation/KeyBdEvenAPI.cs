@@ -33,9 +33,8 @@ namespace NonVisuals.KeyEmulation
             {
                 // Debug.WriteLine("VK = " + virtualKeyCodes[1] + " length = " + keyPressLength);
                 // Press modifiers
-                for (var i = 0; i < virtualKeyCodes.Length; i++)
+                foreach (var virtualKeyCode in virtualKeyCodes)
                 {
-                    var virtualKeyCode = virtualKeyCodes[i];
                     if (CommonVirtualKey.IsModifierKey(virtualKeyCode))
                     {
                         if (CommonVirtualKey.IsExtendedKey(virtualKeyCode))
@@ -98,9 +97,8 @@ namespace NonVisuals.KeyEmulation
         private static void ReleaseKeys(VirtualKeyCode[] virtualKeyCodes)
         {
             // Release normal keys
-            for (var i = 0; i < virtualKeyCodes.Length; i++)
+            foreach (var virtualKeyCode in virtualKeyCodes)
             {
-                var virtualKeyCode = virtualKeyCodes[i];
                 if (!CommonVirtualKey.IsModifierKey(virtualKeyCode))
                 {
                     NativeMethods.keybd_event((byte)virtualKeyCode,
@@ -110,9 +108,8 @@ namespace NonVisuals.KeyEmulation
             }
 
             // Release modifiers
-            for (var i = 0; i < virtualKeyCodes.Length; i++)
+            foreach (var virtualKeyCode in virtualKeyCodes)
             {
-                var virtualKeyCode = virtualKeyCodes[i];
                 if (CommonVirtualKey.IsModifierKey(virtualKeyCode))
                 {
                     if (CommonVirtualKey.IsExtendedKey(virtualKeyCode))
