@@ -1,5 +1,4 @@
 ﻿using NonVisuals.Interfaces;
-using Theraot.Collections;
 
 namespace NonVisuals.Radios
 {
@@ -13,7 +12,6 @@ namespace NonVisuals.Radios
     using Misc;
     using HID;
     using NonVisuals.Panels.Saitek.Panels;
-    using System.Linq;
 
     public enum PZ69LCDPosition
     {

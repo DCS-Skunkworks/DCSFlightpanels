@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.PanelUserControls.StreamDeck
+﻿using NonVisuals.KeyEmulation;
+
+namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     using System;
     using System.Collections.Generic;

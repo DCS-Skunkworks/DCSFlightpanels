@@ -19,6 +19,7 @@ namespace DCSFlightpanels.Bills
 
     using NonVisuals;
     using NonVisuals.Panels.Saitek.Panels;
+    using NonVisuals.KeyEmulation;
 
 
 

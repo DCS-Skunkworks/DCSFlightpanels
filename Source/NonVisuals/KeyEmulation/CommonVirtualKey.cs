@@ -1,4 +1,4 @@
-﻿namespace NonVisuals
+﻿namespace NonVisuals.KeyEmulation
 {
     using System.Collections.Generic;
     using System.Windows.Input;
@@ -6,7 +6,7 @@
 
     public static class CommonVirtualKey
     {
-        private static readonly HashSet<VirtualKeyCode> _modifiers = new()
+        private static readonly HashSet<VirtualKeyCode> Modifiers = new()
         {
             VirtualKeyCode.LSHIFT,
             VirtualKeyCode.RSHIFT,
@@ -32,7 +32,7 @@
             VirtualKeyCode.RMENU,
         };
 
-        private static readonly HashSet<VirtualKeyCode> _extended = new()
+        private static readonly HashSet<VirtualKeyCode> ExtendedKeys = new()
         {
             VirtualKeyCode.RCONTROL,
             VirtualKeyCode.END,
@@ -52,12 +52,12 @@
 
         public static bool IsModifierKey(VirtualKeyCode virtualKeyCode)
         {
-            return _modifiers.Contains(virtualKeyCode);
+            return Modifiers.Contains(virtualKeyCode);
         }
 
         public static bool IsExtendedKey(VirtualKeyCode virtualKeyCode)
         {
-            return _extended.Contains(virtualKeyCode);
+            return ExtendedKeys.Contains(virtualKeyCode);
 
             /*Extended-Key Flag
                 The extended-key flag indicates whether the keystroke message originated from one of the additional keys on the 
@@ -91,7 +91,7 @@
         public static HashSet<VirtualKeyCode> GetPressedVirtualKeyCodesThatAreModifiers()
         {
             var virtualKeyCodeHolders = new HashSet<VirtualKeyCode>();
-
+            
             if (Keyboard.IsKeyDown(KeyInterop.KeyFromVirtualKey((int)VirtualKeyCode.LSHIFT)))
             {
                 virtualKeyCodeHolders.Add(VirtualKeyCode.LSHIFT);

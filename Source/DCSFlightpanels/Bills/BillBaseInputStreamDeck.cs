@@ -9,8 +9,9 @@
     using MEF;
 
     using NonVisuals;
+    using NonVisuals.KeyEmulation;
 
-    
+
     /// <summary>
     /// BillBaseInputStreamDeck is used by descendants and added to a TextBox.
     /// </summary>

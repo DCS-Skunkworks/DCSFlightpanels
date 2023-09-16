@@ -1,7 +1,4 @@
-﻿using System.CodeDom;
-using System.Collections.Generic;
-using System.Drawing.Text;
-using System.Security.Cryptography;
+﻿using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS.Json;
 

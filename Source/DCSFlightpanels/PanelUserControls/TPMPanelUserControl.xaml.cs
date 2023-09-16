@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.PanelUserControls
+﻿using NonVisuals.KeyEmulation;
+
+namespace DCSFlightpanels.PanelUserControls
 {
     using System;
     using System.Collections.Generic;
@@ -14,8 +16,6 @@
     using Windows;
 
     using MEF;
-
-    using NonVisuals;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
     using NonVisuals.Panels.Saitek.Panels;
