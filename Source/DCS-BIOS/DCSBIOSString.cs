@@ -38,7 +38,6 @@ namespace DCS_BIOS
                 DCSBIOSProtocolParser.RegisterAddressToBroadCast(i);
                 _receivedAddresses.Add(i);
             }
-            Debug.WriteLine($"************");
             _length = length;
             _internalBuffer = new string[_length];
         }
