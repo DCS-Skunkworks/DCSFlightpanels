@@ -79,6 +79,47 @@ namespace ControlReference.UserControls
             }
         }
 
+        private void SetUintValue(uint value)
+        {
+            try
+            {
+                Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = value));
+                Dispatcher?.BeginInvoke((Action)(() => SetSliderValue(value)));
+
+                if (_dcsbiosOutput.MaxValue == 0)
+                {
+                    return;
+                }
+                var percentage = (value * 100) / _dcsbiosOutput.MaxValue;
+                Dispatcher?.BeginInvoke((Action)(() => LabelPercentage.Content = $"({percentage}%)"));
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void SetSliderValue(uint value)
+        {
+            try
+            {
+                if (SliderSetState.Visibility != Visibility.Visible) return;
+
+                if (Math.Abs(SliderSetState.Value - Convert.ToDouble(value)) > 0.5)
+                {
+                    SliderSetState.ValueChanged -= SliderSetState_OnValueChanged;
+                    SliderSetState.Value = value;
+                    SliderSetState.ValueChanged += SliderSetState_OnValueChanged;
+
+                    ButtonSetState.Content = value;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void ShowControl()
         {
             try
@@ -203,14 +244,7 @@ namespace ControlReference.UserControls
                 if (e.Address == _dcsbiosOutput.Address)
                 {
                     var value = _dcsbiosOutput.GetUIntValue(e.Data);
-                    Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = value));
-
-                    if (_dcsbiosOutput.MaxValue == 0)
-                    {
-                        return;
-                    }
-                    var percentage = (value * 100) / _dcsbiosOutput.MaxValue;
-                    Dispatcher?.BeginInvoke((Action)(() => LabelPercentage.Content = $"({percentage}%)"));
+                    SetUintValue(value);
                 }
             }
             catch (Exception ex)
