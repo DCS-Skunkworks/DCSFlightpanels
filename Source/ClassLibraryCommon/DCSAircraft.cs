@@ -16,7 +16,7 @@
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly object Lock = new();
-        private static readonly List<DCSAircraft> ModulesList = new();
+        private static List<DCSAircraft> ModulesList = new();
 
         public static DCSAircraft SelectedAircraft { get; set; }
 
@@ -149,6 +149,11 @@
                         ModulesList.Add(new DCSAircraft(id, properName, json));
                     }
                 }
+            }
+
+            lock (Lock)
+            {
+                ModulesList = ModulesList.OrderBy(o => o.Description).ToList();
             }
         }
 

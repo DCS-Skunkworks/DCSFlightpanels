@@ -338,21 +338,21 @@ namespace ControlReference
 
                     Mouse.OverrideCursor = Cursors.Wait;
                     _dcsbiosUIControlPanels.Clear();
-
+                    var searchText = string.IsNullOrEmpty(TextBoxSearchControl.Text) ? "" : TextBoxSearchControl.Text.Trim();
                     var filteredControls = _loadedControls;
 
                     /*
                      * Limit only on category if user is not searching
                      */
-                    if (string.IsNullOrEmpty(TextBoxSearchControl.Text) && ComboBoxCategory.SelectedValue != null && ComboBoxCategory.SelectedValue.ToString() != "All")
+                    if (string.IsNullOrEmpty(searchText) && ComboBoxCategory.SelectedValue != null && ComboBoxCategory.SelectedValue.ToString() != "All")
                     {
                         filteredControls = _loadedControls.Where(o => o.Category == ComboBoxCategory.SelectedValue.ToString())
                             .ToList();
                     }
 
-                    if (!string.IsNullOrEmpty(TextBoxSearchControl.Text))
+                    if (!string.IsNullOrEmpty(searchText))
                     {
-                        var searchWord = TextBoxSearchControl.Text.ToLower();
+                        var searchWord = searchText.ToLower();
                         filteredControls = _loadedControls.Where(o => o.Description.ToLower().Contains(searchWord) || o.Identifier.ToLower().Contains(searchWord))
                             .ToList();
                     }

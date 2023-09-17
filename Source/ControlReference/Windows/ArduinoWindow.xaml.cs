@@ -24,7 +24,7 @@ namespace ControlReference.Windows
         {
             InitializeComponent();
             _dcsbiosControl = dcsbiosControl;
-            LabelControl.Content = _dcsbiosControl.Identifier;
+            LabelControl.Content = _dcsbiosControl.Identifier.Replace("_", "__");
         }
 
         private void SetFormState()
