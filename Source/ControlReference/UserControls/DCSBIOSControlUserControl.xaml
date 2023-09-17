@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ControlReference"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="400"
+             d:DesignHeight="250" d:DesignWidth="600"
              Loaded="DCSBIOSControlUserControl_OnLoaded">
     <Grid>
         <Grid.RowDefinitions>
@@ -40,8 +40,10 @@
             <StackPanel Name="StackPanelVariableStep" Orientation="Horizontal">
                 <Label Content="Input Interface: " FontWeight="Bold"/>
                 <Label Content="variable__step  +/-" />
-                <TextBox Name="TextBoxVariableStepValue" Width="60" Height="22" KeyDown="TextBoxVariableStepValue_OnKeyDown"  />
+                <TextBox Name="TextBoxVariableStepValue" Width="60" Height="22" KeyDown="TextBoxVariableStepValue_OnKeyDown" KeyUp="TextBoxVariableStepValue_OnKeyUp" />
                 <Button Name="ButtonSetVariableStep" Height="22" Margin="20,0,0,0" Content="CHANGE" Click="ButtonSetVariableStep_OnClick"/>
+                <Button Name="ButtonSetVariableDecrease" Height="22" Width="22" Margin="10,0,0,0" Content="-" Click="ButtonSetVariableDecrease_OnClick"/>
+                <Button Name="ButtonSetVariableIncrease" Height="22" Width="22" Margin="3,0,0,0" Content="+" Click="ButtonSetVariableIncrease_OnClick"/>
             </StackPanel>
             <StackPanel Name="StackPanelAction" Orientation="Horizontal">
                 <Label Content="Input Interface: " FontWeight="Bold"/>

@@ -56,8 +56,8 @@ namespace ControlReference.UserControls
         {
             try
             {
-                SetFormState();
                 ShowControl();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -69,7 +69,9 @@ namespace ControlReference.UserControls
         {
             try
             {
-                ButtonSetVariableStep.IsEnabled = !string.IsNullOrEmpty(TextBoxVariableStepValue.Text);
+                ButtonSetVariableStep.IsEnabled = !string.IsNullOrEmpty(TextBoxVariableStepValue.Text) && int.TryParse(TextBoxVariableStepValue.Text, out _);
+                ButtonSetVariableIncrease.IsEnabled = ButtonSetVariableStep.IsEnabled;
+                ButtonSetVariableDecrease.IsEnabled = ButtonSetVariableStep.IsEnabled;
             }
             catch (Exception ex)
             {
@@ -102,6 +104,7 @@ namespace ControlReference.UserControls
                         case "variable_step":
                             {
                                 StackPanelVariableStep.Visibility = Visibility.Visible;
+                                TextBoxVariableStepValue.Text = dcsbiosControlInput.SuggestedStep.ToString();
                                 break;
                             }
                         case "set_state":
@@ -236,6 +239,7 @@ namespace ControlReference.UserControls
         {
             try
             {
+                DCSBIOS.Send($"{_dcsbiosControl.Identifier} {e.NewValue}\n");
                 ButtonSetState.Content = e.NewValue;
             }
             catch (Exception ex)
@@ -292,6 +296,38 @@ namespace ControlReference.UserControls
             }
         }
 
+        private void ButtonSetVariableIncrease_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!int.TryParse(TextBoxVariableStepValue.Text, out var changeValue))
+                {
+                    return;
+                }
+                DCSBIOS.Send($"{_dcsbiosControl.Identifier} +{Math.Abs(changeValue)}\n");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonSetVariableDecrease_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!int.TryParse(TextBoxVariableStepValue.Text, out var changeValue))
+                {
+                    return;
+                }
+                DCSBIOS.Send($"{_dcsbiosControl.Identifier} -{Math.Abs(changeValue)}\n");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void TextBoxVariableStepValue_OnKeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -302,6 +338,18 @@ namespace ControlReference.UserControls
                     e.Handled = true;
                     return;
                 }
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxVariableStepValue_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
                 SetFormState();
             }
             catch (Exception ex)
