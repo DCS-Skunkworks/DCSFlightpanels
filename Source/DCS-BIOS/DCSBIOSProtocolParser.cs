@@ -63,6 +63,10 @@ namespace DCS_BIOS
             _syncByteCount = 0;
             DCSBIOSProtocolParserSO = this;
             _shutdown = false;
+
+            // Add addresses that are specifix to the send cycle
+            _listOfAddressesToBroascast.Add(0x0000); // MetadataStart
+            _listOfAddressesToBroascast.Add(0xfffe); // MetadataEnd
         }
         
         protected virtual void Dispose(bool disposing)
