@@ -48,7 +48,7 @@ namespace ControlReference
             /*
              * Correct JSON folder path, move away from $USERDIRECTORY$.
              */
-            Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ?
+            Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ? 
                 Settings.Default.DCSBiosJSONLocation.Replace("$USERDIRECTORY$", "%userprofile%") : Settings.Default.DCSBiosJSONLocation);
             Settings.Default.Save();
         }
@@ -99,6 +99,12 @@ namespace ControlReference
                     return;
                 }
 
+                var result = Common.CheckJSONDirectory(Settings.Default.DCSBiosJSONLocation);
+                if (result.Item1 == false && result.Item2 == false)
+                {
+                    MessageBox.Show(this, "Cannot continue, DCS-BIOS not found. Check DCS-BIOS path under Options.", "DCS-BIOS Not Found", MessageBoxButton.OK);
+                    return;
+                }
                 SetTopMost();
                 DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
                 DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, true, false);

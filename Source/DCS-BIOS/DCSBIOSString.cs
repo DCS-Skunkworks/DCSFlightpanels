@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace DCS_BIOS
+﻿namespace DCS_BIOS
 {
     using System.Collections.Generic;
 

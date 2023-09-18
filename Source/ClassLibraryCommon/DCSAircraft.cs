@@ -8,7 +8,7 @@
 
     /// <summary>
     /// Holds information about currently selected aircraft / module (DCS aircraft/helicopter).
-    /// This class reads all modules from BIOS.lua and the user can then select between these
+    /// This class reads all modules from dcs-bios_modules.txt and the user can then select between these
     /// when creating a new DCSFP profile.
     /// </summary>
     public class DCSAircraft
@@ -105,13 +105,6 @@
 
         public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder, bool loadMetaFiles = false, bool loadInternalModules = true)
         {
-            var dcsbiosConfigFile = $"{AppDomain.CurrentDomain.BaseDirectory}dcs-bios_modules.txt";
-            if (!File.Exists(dcsbiosConfigFile))
-            {
-                LogErrorAndThrowException($"Failed to find {dcsbiosConfigFile}");
-                return;
-            }
-            
             lock (Lock)
             {
                 ModulesList.Clear();
@@ -119,6 +112,20 @@
                 {
                     AddInternalModules();
                 }
+            }
+
+            var dcsbiosConfigFile = $"{AppDomain.CurrentDomain.BaseDirectory}dcs-bios_modules.txt";
+            if (!File.Exists(dcsbiosConfigFile))
+            {
+                LogErrorAndThrowException($"Failed to find {dcsbiosConfigFile}");
+                return;
+            }
+            
+            var result = Common.CheckJSONDirectory(dcsbiosJsonFolder);
+            if (result.Item1 == false && result.Item2 == false)
+            {
+                Logger.Error("Failed to find DCS-BIOS JSON location.");
+                return;
             }
 
             var stringArray = File.ReadAllLines(dcsbiosConfigFile);
