@@ -67,7 +67,7 @@ namespace DCSFlightpanels.Windows
             ComboBoxAirframe.Items.Clear();
             foreach (var module in DCSAircraft.Modules)
             {
-                if (!DCSAircraft.IsNoFrameLoadedYet(module) && module.ID < DCSBIOSConstants.META_MODULE_START_RANGE) //!DCSAircraft.IsNS430(module) &&  
+                if (!DCSAircraft.IsNoFrameLoadedYet(module) && module.ID < DCSBIOSConstants.META_MODULE_ID_START_RANGE) //!DCSAircraft.IsNS430(module) &&  
                 {
                     itemsSource.Add(module);
                 }

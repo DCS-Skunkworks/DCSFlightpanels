@@ -65,8 +65,8 @@ namespace DCS_BIOS
             _shutdown = false;
 
             // Add addresses that are specifix to the send cycle
-            _listOfAddressesToBroascast.Add(0x0000); // MetadataStart
-            _listOfAddressesToBroascast.Add(0xfffe); // MetadataEnd
+            _listOfAddressesToBroascast.Add(DCSBIOSConstants.META_MODULE_START_ADDRESS); // MetadataStart
+            _listOfAddressesToBroascast.Add(DCSBIOSConstants.META_MODULE_END_ADDRESS); // MetadataEnd
         }
         
         protected virtual void Dispose(bool disposing)

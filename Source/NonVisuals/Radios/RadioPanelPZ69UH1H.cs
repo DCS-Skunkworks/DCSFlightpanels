@@ -439,7 +439,7 @@ namespace NonVisuals.Radios
                 {
                     _adfSignalStrengthRaw = _adfDcsbiosOutputSignalStrength.LastUIntValue;
                     Interlocked.Increment(ref _doUpdatePanelLCD);
-                    const float maxValue = 65535;
+                    const float maxValue = DCSBIOSConstants.MAX_VALUE;
                     _adfSignalStrength = ((_adfSignalStrengthRaw / maxValue) * 100);
                 }
             }
@@ -466,7 +466,7 @@ namespace NonVisuals.Radios
                 if (adfCockpitFrequencyRaw != _adfCockpitFrequencyRaw)
                 {
                     // Update only if data has changed. Max 65535 
-                    const float maxValue = 65535;
+                    const float maxValue = DCSBIOSConstants.MAX_VALUE;
                     switch (_adfCockpitFrequencyBand)
                     {
                         case 0:
@@ -515,7 +515,7 @@ namespace NonVisuals.Radios
         {
             lock (_lockAdfCockpitFrequencyObject)
             {
-                const float maxValue = 65535;
+                const float maxValue = DCSBIOSConstants.MAX_VALUE;
                 switch (_adfCockpitFrequencyBand)
                 {
                     case 0: //190-400 kHz (~210kHz)

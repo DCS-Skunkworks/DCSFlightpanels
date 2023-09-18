@@ -206,7 +206,7 @@ namespace NonVisuals.Radios
                     {
                         _lfRadioFrequencyDCSBIOSValue = _lfRadioFrequencyDcsbiosOutput.LastUIntValue;
                         //Range is 200 - 400kHz (DCS-BIOS value 0 - 65535)
-                        _lfRadioFrequencyCockpitValue = Convert.ToUInt32(Convert.ToDouble(_lfRadioFrequencyDCSBIOSValue) / 65535 * 200 + 200);
+                        _lfRadioFrequencyCockpitValue = Convert.ToUInt32(Convert.ToDouble(_lfRadioFrequencyDCSBIOSValue) / DCSBIOSConstants.MAX_VALUE * 200 + 200);
                         Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
@@ -218,7 +218,7 @@ namespace NonVisuals.Radios
                     {
                         _lfRadioVolumeDCSBIOSValue = _lfRadioVolumeDcsbiosOutput.LastUIntValue;
                         //0 - 100
-                        _lfRadioVolumeCockpitValue = Convert.ToUInt32(Convert.ToDouble(_lfRadioVolumeDCSBIOSValue) / 65535 * 100);
+                        _lfRadioVolumeCockpitValue = Convert.ToUInt32(Convert.ToDouble(_lfRadioVolumeDCSBIOSValue) / DCSBIOSConstants.MAX_VALUE * 100);
                         Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
