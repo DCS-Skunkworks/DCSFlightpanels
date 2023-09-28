@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Panels.StreamDeck
+﻿using System.Diagnostics;
+
+namespace NonVisuals.Panels.StreamDeck
 {
     using System;
     using System.Collections.Generic;
@@ -176,10 +178,11 @@
             return result;
         }
 
-        public bool CriteriaFulfilled(double dcsbiosValue)
+        public bool IsCriteriaFulfilled(double dcsbiosValue)
         {
             _dcsbiosValue = dcsbiosValue;
 
+            Debug.WriteLine(dcsbiosValue);
             if (_comparator1 == EnumComparator.Always)
             {
                 _criteria1IsOk = true;
@@ -904,7 +907,6 @@
                 }
             }
         }
-        denna fixar inte string => number comparison
         [JsonIgnore]
         public bool FaceConfigurationIsOK
         {

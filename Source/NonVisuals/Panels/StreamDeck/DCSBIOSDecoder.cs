@@ -322,7 +322,17 @@ namespace NonVisuals.Panels.StreamDeck
                 {
                     foreach (var dcsbiosConverter in _dcsbiosConverters)
                     {
-                        if (dcsbiosConverter.CriteriaFulfilled(UseFormula ? FormulaResult : UIntDcsBiosValue))
+                        double stringAsDouble = 0;
+                        if (_treatStringAsNumber)
+                        {
+                            if (!double.TryParse(StringDcsBiosValue, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var result))
+                            {
+                                return;
+                            }
+
+                            stringAsDouble = result;
+                        }
+                        if (dcsbiosConverter.IsCriteriaFulfilled(UseFormula ? FormulaResult : _treatStringAsNumber ? stringAsDouble : UIntDcsBiosValue))
                         {
                             _converterBitmap = dcsbiosConverter.Get(_useFormula && _limitDecimalPlaces ? _numberFormatInfoFormula : null);
                             break;
