@@ -9,6 +9,8 @@ namespace NonVisuals
     using Panels.StreamDeck;
     using SixLabors.ImageSharp;
     using System.IO;
+    using Newtonsoft.Json.Linq;
+    using static System.Net.Mime.MediaTypeNames;
 
     public static class Extensions
     {
@@ -35,7 +37,7 @@ namespace NonVisuals
             var jsonString = JsonConvert.SerializeObject(source, settings);
             return JsonConvert.DeserializeObject<T>(jsonString, settings);
         }
-        
+
         /// <summary>
         /// US Culture used. Decimal separator is '.'
         /// </summary>
@@ -46,12 +48,7 @@ namespace NonVisuals
                 return true;
             }
             
-            if (!double.TryParse(textBox.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out _))
-            {
-                return false;
-            }
-
-            return true;
+            return double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
         }
 
         /// <summary>
@@ -74,14 +71,14 @@ namespace NonVisuals
         /// <summary>
         /// Creates a <see cref="Image"/> from a given <see cref="System.Drawing.Bitmap"/>.
         /// </summary>
-        public static Image ToImageSharpImage(this System.Drawing.Bitmap bitmap)
+        public static SixLabors.ImageSharp.Image ToImageSharpImage(this System.Drawing.Bitmap bitmap)
         {
             using var memoryStream = new MemoryStream();
             bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
 
             memoryStream.Seek(0, SeekOrigin.Begin);
 
-            return Image.Load(memoryStream);
+            return SixLabors.ImageSharp.Image.Load(memoryStream);
         }
     }
 }

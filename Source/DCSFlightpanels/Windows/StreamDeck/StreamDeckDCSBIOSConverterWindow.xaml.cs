@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Windows.StreamDeck
+﻿using Octokit;
+
+namespace DCSFlightpanels.Windows.StreamDeck
 {
     using System;
     using System.Drawing;
@@ -14,6 +16,8 @@
     using NonVisuals.Interfaces;
     using NonVisuals.Panels.StreamDeck.Panels;
     using NonVisuals.Panels.StreamDeck;
+    using Newtonsoft.Json.Linq;
+    using static System.Net.Mime.MediaTypeNames;
 
     public partial class StreamDeckDCSBIOSConverterWindow : IIsDirty
     {
@@ -82,15 +86,18 @@
                 }
                 ButtonAddSecondCriteria.IsEnabled = ComboBoxComparisonType1.SelectedItem.Equals(ComboBoxItemAlways1) == false;
 
-                var criteria1DataOK = !string.IsNullOrEmpty(TextBoxReferenceValue1.Text) && SelectedComparator1 != EnumComparator.NotSet;
-                var criteria2DataOK = !string.IsNullOrEmpty(TextBoxReferenceValue2.Text) && SelectedComparator2 != EnumComparator.NotSet;
+                var criteria2DataOK = true;
 
-                var referenceValuesOK = Use2Criteria ? double.TryParse(TextBoxReferenceValue1.Text, out var result1) && double.TryParse(TextBoxReferenceValue2.Text, out var result2) : double.TryParse(TextBoxReferenceValue1.Text, out var result3);
+                var criteria1DataOK = !string.IsNullOrEmpty(TextBoxReferenceValue1.Text) && SelectedComparator1 != EnumComparator.NotSet &&
+                                      TextBoxReferenceValue1.ValidateDouble();
+                if (Use2Criteria)
+                {
+                    criteria2DataOK = !string.IsNullOrEmpty(TextBoxReferenceValue2.Text) && SelectedComparator2 != EnumComparator.NotSet &&
+                                      TextBoxReferenceValue1.ValidateDouble();
+                }
 
-                var criteriaOK = (!Use2Criteria || criteria2DataOK) && criteria1DataOK && referenceValuesOK;
+                ButtonOk.IsEnabled = criteria1DataOK && criteria2DataOK && _dcsbiosConverter.FaceConfigurationIsOK && IsDirty;
 
-                ButtonOk.IsEnabled = criteriaOK && _dcsbiosConverter.FaceConfigurationIsOK && IsDirty;
-                
                 DisplayImagePreview();
             }
             catch (Exception ex)
@@ -111,7 +118,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void CancelWindow()
         {
             if (CommonUI.DoDiscardAfterMessage(_isDirty))
@@ -134,15 +141,12 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         public DCSBIOSConverter DCSBIOSConverter
         {
             get => _dcsbiosConverter;
             set => _dcsbiosConverter = value;
         }
-
-        private string _lastChecked1 = string.Empty;
-        private string _lastChecked2 = string.Empty;
 
         private void IssueInvalidDoubleTextBoxWarning(TextBox textBox)
         {
@@ -154,41 +158,30 @@
         {
             try
             {
-                if (!_isLoaded)
+                var textBox = (TextBox)sender;
+                var isTextBox1 = textBox.Name == "TextBoxReferenceValue1";
+
+                textBox.Text = textBox.Text.Replace(",", ".");
+
+                if (!textBox.ValidateDouble())
                 {
+                    IssueInvalidDoubleTextBoxWarning(textBox);
                     return;
                 }
 
-                if (sender.Equals(TextBoxReferenceValue1))
+                if (double.TryParse(textBox.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var result))
                 {
-                    if (_lastChecked1 != TextBoxReferenceValue1.Text && !TextBoxReferenceValue1.ValidateDouble())
-                    {
-                        IssueInvalidDoubleTextBoxWarning(TextBoxReferenceValue1);
-                        _lastChecked1 = TextBoxReferenceValue1.Text;
-                        return;
-                    }
-
-                    if (double.TryParse(TextBoxReferenceValue1.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var result))
+                    if (isTextBox1)
                     {
                         _dcsbiosConverter.ReferenceValue1 = result;
-                        SetIsDirty();
                     }
-                }
-                if (sender.Equals(TextBoxReferenceValue2))
-                {
-                    if (_lastChecked2 != TextBoxReferenceValue2.Text && !TextBoxReferenceValue2.ValidateDouble())
-                    {
-                        IssueInvalidDoubleTextBoxWarning(TextBoxReferenceValue2);
-                        _lastChecked2 = TextBoxReferenceValue2.Text;
-                        return;
-                    }
-
-                    if (double.TryParse(TextBoxReferenceValue2.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var result))
+                    else
                     {
                         _dcsbiosConverter.ReferenceValue2 = result;
-                        SetIsDirty();
                     }
+                    SetIsDirty();
                 }
+
                 SetFormState();
             }
             catch (Exception ex)
@@ -250,7 +243,7 @@
                 {
                     textBox.Text = string.IsNullOrEmpty(textBox.Text) ? StreamDeckConstants.DCSBIOSValuePlaceHolder : StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + textBox.Text;
                     textBox.CaretIndex = textBox.Text.Length;
-                    
+
                     _dcsbiosConverter.ButtonTextTemplate = textBox.Text;
                     SetIsDirty();
                     SetFormState();
@@ -512,7 +505,7 @@
         {
             try
             {
-                _dcsbiosConverter.ButtonTextTemplate = ((TextBox) sender).Text;
+                _dcsbiosConverter.ButtonTextTemplate = ((TextBox)sender).Text;
                 SetIsDirty();
                 SetFormState();
             }
