@@ -384,12 +384,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
      
 
-        private void TextBoxFormula_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            SetIsDirty();
-            SetFormState();
-        }
-
         private void ButtonFormulaHelp_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -658,6 +652,20 @@ namespace DCSFlightpanels.Windows.StreamDeck
             {
                 var bitmapText = BitMapCreator.CreateStreamDeckBitmap(_dcsbiosDecoder.ButtonTextTemplate, _dcsbiosDecoder.TextFont, _dcsbiosDecoder.FontColor, _dcsbiosDecoder.OffsetX, _dcsbiosDecoder.OffsetY, _dcsbiosDecoder.BackgroundColor);
                 ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmapText);
+            }
+        }
+        
+        private void TextBoxFormula_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                _dcsbiosDecoder.SetFormula(TextBoxFormula.Text.Replace(Environment.NewLine, string.Empty));
+                SetIsDirty();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

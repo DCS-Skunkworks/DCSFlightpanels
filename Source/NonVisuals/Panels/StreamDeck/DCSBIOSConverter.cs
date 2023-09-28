@@ -904,7 +904,7 @@
                 }
             }
         }
-
+        denna fixar inte string => number comparison
         [JsonIgnore]
         public bool FaceConfigurationIsOK
         {

@@ -607,10 +607,13 @@ namespace NonVisuals.Panels.StreamDeck
          */
         public bool DecoderConfigurationOK()
         {
-            var formulaIsOK = !_useFormula || _dcsbiosOutputFormula != null;
-            var sourceIsOK = _dcsbiosOutput != null;
-            var convertersOK = _dcsbiosConverters.FindAll(o => o.FaceConfigurationIsOK == false).Count == 0;
+            var formulaStatus = !_useFormula || _dcsbiosOutputFormula != null;
+            var sourceStatus = _dcsbiosOutput != null;
+            var convertersStatus = _dcsbiosConverters.FindAll(o => o.FaceConfigurationIsOK == false).Count == 0;
 
+            Debug.WriteLine("formulaStatus : " + formulaStatus);
+            Debug.WriteLine("sourceStatus : " + sourceStatus);
+            Debug.WriteLine("convertersStatus : " + convertersStatus);
 
             switch (DecoderOutputType)
             {
@@ -618,20 +621,20 @@ namespace NonVisuals.Panels.StreamDeck
                     {
                         if (_useFormula)
                         {
-                            return formulaIsOK;
+                            return formulaStatus;
                         }
 
-                        return sourceIsOK;
+                        return sourceStatus;
                     }
 
                 case EnumDCSBIOSDecoderOutputType.Converter:
                     {
                         if (_useFormula)
                         {
-                            return formulaIsOK && convertersOK;
+                            return formulaStatus && convertersStatus;
                         }
 
-                        return sourceIsOK && convertersOK;
+                        return sourceStatus && convertersStatus;
                     }
 
                 default:
