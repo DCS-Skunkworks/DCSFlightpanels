@@ -182,7 +182,6 @@ namespace NonVisuals.Panels.StreamDeck
         {
             _dcsbiosValue = dcsbiosValue;
 
-            Debug.WriteLine(dcsbiosValue);
             if (_comparator1 == EnumComparator.Always)
             {
                 _criteria1IsOk = true;
