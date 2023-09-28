@@ -182,7 +182,6 @@ namespace NonVisuals.Panels.StreamDeck
         {
             _dcsbiosValue = dcsbiosValue;
 
-            Debug.WriteLine(dcsbiosValue);
             if (_comparator1 == EnumComparator.Always)
             {
                 _criteria1IsOk = true;
@@ -199,6 +198,7 @@ namespace NonVisuals.Panels.StreamDeck
                 {StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, dcsbiosValue},
                 {"reference", _referenceValue1}
             };
+            Debug.WriteLine($"DCS-BIOS : {dcsbiosValue}    Reference: {_referenceValue1}");
             var result1 = jaceExtended.CalculationEngine.Calculate(formula, variables);
             _criteria1IsOk = Math.Abs(result1 - 1.0) < 0.0001;
 

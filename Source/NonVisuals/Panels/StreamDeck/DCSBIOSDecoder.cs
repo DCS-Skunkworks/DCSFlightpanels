@@ -325,7 +325,7 @@ namespace NonVisuals.Panels.StreamDeck
                         double stringAsDouble = 0;
                         if (_treatStringAsNumber)
                         {
-                            if (!double.TryParse(StringDcsBiosValue, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var result))
+                            if (!double.TryParse(StringDcsBiosValue, NumberStyles.Any,CultureInfo.InvariantCulture, out var result))
                             {
                                 return;
                             }
