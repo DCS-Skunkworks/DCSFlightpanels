@@ -42,7 +42,7 @@
             <ComboBox Name="ComboBoxCategory" Width="200" SelectionChanged="ComboBoxCategory_OnSelectionChanged"></ComboBox>
             <TextBox Name="TextBoxSearchControl" TextWrapping="NoWrap"  IsReadOnly="False" Width="150"  KeyDown="TextBoxSearchControl_OnKeyDown"/>
             <Button>
-                <Image Source="/Images/search_controls.png" Name="ButtonSearchControls" MouseDown="ButtonSearchControls_OnMouseDown" ToolTip="Search for DCS-BIOS Control"/>
+                <Image Source="/Images/search_controls.png" Name="ButtonSearchControls" Tag="Search" MouseDown="ButtonSearchControls_OnMouseDown" ToolTip="Search for DCS-BIOS Control"/>
             </Button>
             <Image Name="ImageDcsBiosConnected"  Margin="10,0,0,0" Source="/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
                 <Image.RenderTransform>
