@@ -18,6 +18,7 @@ using ControlReference.Interfaces;
 using NLog;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Media.Imaging;
 using NLog.Targets.Wrappers;
 using NLog.Targets;
 
@@ -48,7 +49,7 @@ namespace ControlReference
             /*
              * Correct JSON folder path, move away from $USERDIRECTORY$.
              */
-            Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ? 
+            Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ?
                 Settings.Default.DCSBiosJSONLocation.Replace("$USERDIRECTORY$", "%userprofile%") : Settings.Default.DCSBiosJSONLocation);
             Settings.Default.Save();
         }
@@ -331,7 +332,7 @@ namespace ControlReference
             }
         }
 
-        private void ShowControls()
+        private void ShowControls(bool searching = false)
         {
             try
             {
@@ -383,6 +384,13 @@ namespace ControlReference
                     if (filteredControls.Any())
                     {
                         ItemsControlControls.Focus();
+                    }
+
+                    UpdateSearchButton();
+
+                    if (searching)
+                    {
+                        TextBoxSearchControl.Focus();
                     }
                 }
                 finally
@@ -468,11 +476,39 @@ namespace ControlReference
             }
         }
 
+        private void UpdateSearchButton()
+        {
+
+            if (!string.IsNullOrEmpty(TextBoxSearchControl.Text))
+            {
+                ButtonSearchControls.Source = new BitmapImage(new Uri(@"/ctrlref;component/Images/clear_search_result.png", UriKind.Relative));
+                ButtonSearchControls.Tag = "Clear";
+            }
+            else
+            {
+                ButtonSearchControls.Source = new BitmapImage(new Uri(@"/ctrlref;component/Images/search_controls.png", UriKind.Relative));
+                ButtonSearchControls.Tag = "Search";
+            }
+        }
+
         private void ButtonSearchControls_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             try
             {
-                ShowControls();
+                var mode = (string)ButtonSearchControls.Tag;
+                if (mode == "Search")
+                {
+                    ButtonSearchControls.Source = new BitmapImage(new Uri(@"/ctrlref;component/Images/clear_search_result.png", UriKind.Relative));
+                    ButtonSearchControls.Tag = "Clear";
+                }
+                else
+                {
+                    ButtonSearchControls.Source = new BitmapImage(new Uri(@"/ctrlref;component/Images/search_controls.png", UriKind.Relative));
+                    ButtonSearchControls.Tag = "Search";
+                    TextBoxSearchControl.Text = "";
+                }
+
+                ShowControls(true);
             }
             catch (Exception ex)
             {
@@ -542,7 +578,7 @@ namespace ControlReference
             {
                 if (e.Key == Key.Enter)
                 {
-                    ShowControls();
+                    ShowControls(true);
                 }
             }
             catch (Exception ex)
