@@ -691,12 +691,19 @@ namespace ControlReference
         {
             try
             {
+                var maxIdentifierLength = _dcsbiosUIControlPanels.Max(o => o.Identifier.Length);
                 var result = new StringBuilder();
+                var format = "{0,-" + (maxIdentifierLength + 5) + "}->{1}<-";
                 foreach (var dcsbiosControlUserControl in _dcsbiosUIControlPanels.Where(o => o.HasValue == true))
                 {
-                    result.AppendLine($"{dcsbiosControlUserControl.Identifier,-30}{dcsbiosControlUserControl.CurrentValue,-30}");
+                    result.AppendLine(string.Format(format, dcsbiosControlUserControl.Identifier, dcsbiosControlUserControl.CurrentValue));
                 }
 
+                if (result.Length == 0)
+                {
+                    MessageBox.Show("No values found, is DCS running, right module selected?", "No values", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 Clipboard.SetText(result.ToString());
                 SystemSounds.Exclamation.Play();
             }
