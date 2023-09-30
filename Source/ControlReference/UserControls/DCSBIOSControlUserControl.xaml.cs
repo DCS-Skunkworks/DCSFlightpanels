@@ -83,7 +83,7 @@ namespace ControlReference.UserControls
         {
             get
             {
-                return (string)LabelControlId.Content;
+                return _dcsbiosControl.Identifier;
             }
         }
 
