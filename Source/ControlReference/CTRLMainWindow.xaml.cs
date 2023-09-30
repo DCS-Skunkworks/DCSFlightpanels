@@ -18,6 +18,8 @@ using ControlReference.Interfaces;
 using NLog;
 using System.Diagnostics;
 using System.IO;
+using System.Media;
+using System.Text;
 using System.Windows.Media.Imaging;
 using NLog.Targets.Wrappers;
 using NLog.Targets;
@@ -126,7 +128,7 @@ namespace ControlReference
 
         private void SetFormState()
         {
-
+            MenuItemExportValues.IsEnabled = _dcsbiosUIControlPanels.Count > 0;
         }
 
         private void FindDCSBIOSControls()
@@ -396,6 +398,7 @@ namespace ControlReference
                 finally
                 {
                     Mouse.OverrideCursor = Cursors.Arrow;
+                    SetFormState();
                 }
             }
             catch (Exception ex)
@@ -682,6 +685,25 @@ namespace ControlReference
                 throw new Exception("LogManager contains no configuration or there are no named targets. See NLog.config file to configure the logs.");
             }
             return fileName;
+        }
+
+        private void MenuItemExportValues_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var result = new StringBuilder();
+                foreach (var dcsbiosControlUserControl in _dcsbiosUIControlPanels.Where(o => o.HasValue == true))
+                {
+                    result.AppendLine($"{dcsbiosControlUserControl.Identifier,-30}{dcsbiosControlUserControl.CurrentValue,-30}");
+                }
+
+                Clipboard.SetText(result.ToString());
+                SystemSounds.Exclamation.Play();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
 
     }

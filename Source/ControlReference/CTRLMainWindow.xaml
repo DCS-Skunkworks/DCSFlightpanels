@@ -33,6 +33,9 @@
                 <MenuItem Name ="MenuSetDCSBIOSPath" Header="Set DCS-BIOS Path" Click="MenuSetDCSBIOSPath_OnClick" />
                 <MenuItem Name ="MenuSetAlwaysOnTop" Header="Always On Top" Click="MenuSetAlwaysOnTop_OnClick" />
             </MenuItem>
+            <MenuItem Header="Export">
+                <MenuItem Name ="MenuItemExportValues" Header="Copy values to Clipboard" Click="MenuItemExportValues_OnClick" />
+            </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Name="MenuItemDiscord" Header="Discord Server" Click="MenuItemDiscord_OnClick" />
             </MenuItem>
