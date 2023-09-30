@@ -79,11 +79,25 @@ namespace ControlReference.UserControls
             }
         }
 
+        public string Identifier
+        {
+            get
+            {
+                return (string)LabelControlId.Content;
+            }
+        }
+
+        public string CurrentValue { get; private set; } = "";
+
+        public bool HasValue { get; private set; } = false;
+
         private void SetUintValue(uint value)
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = value));
+                CurrentValue = Convert.ToString(value);
+                HasValue = true;
+                Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = Convert.ToString(value)));
                 Dispatcher?.BeginInvoke((Action)(() => SetSliderValue(value)));
 
                 if (_dcsbiosOutput.MaxValue == 0)
@@ -92,6 +106,20 @@ namespace ControlReference.UserControls
                 }
                 var percentage = (value * 100) / _dcsbiosOutput.MaxValue;
                 Dispatcher?.BeginInvoke((Action)(() => LabelPercentage.Content = $"({percentage}%)"));
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void SetStringValue(string value)
+        {
+            try
+            {
+                CurrentValue = value;
+                HasValue = true;
+                Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = $"->{value}<-"));
             }
             catch (Exception ex)
             {
@@ -259,7 +287,7 @@ namespace ControlReference.UserControls
             {
                 if (e.Address == _dcsbiosOutput.Address)
                 {
-                    Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = $"->{e.StringData}<-"));
+                    SetStringValue(e.StringData);
                 }
             }
             catch (Exception ex)
