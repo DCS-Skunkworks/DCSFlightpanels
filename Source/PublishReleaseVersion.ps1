@@ -1,12 +1,12 @@
 #Declaring & setting some variables
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
-$publishPath = $scriptPath+"\_PublishTemp_\"
+$publishPath = $scriptPath + "\_PublishTemp_\"
 
 #---------------------------------
 # Pre-checks
 #---------------------------------
 #Checking destination folder first
-if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env:dcsfpReleaseDestinationFolderPath))){
+if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env:dcsfpReleaseDestinationFolderPath))) {
 	Write-Host "Fatal error. Destination folder does not exists. Please set environment variable 'dcsfpReleaseDestinationFolderPath' to a valid value" -foregroundcolor "Red"
 	exit
 }
@@ -15,15 +15,14 @@ if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env
 # Tests execution
 #---------------------------------
 Write-Host "Starting test execution" -foregroundcolor "Green"
-$testPath = $scriptPath+"\Tests"
+$testPath = $scriptPath + "\Tests"
 Set-Location -Path $testPath
 dotnet test
 $testsLastExitCode = $LastExitCode
 Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
-if ( 0 -ne $testsLastExitCode )
-{
-  Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
-  exit
+if ( 0 -ne $testsLastExitCode ) {
+	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
+	exit
 }
 Write-Host "Finished test execution" -foregroundcolor "Green"
 
@@ -32,8 +31,8 @@ Write-Host "Finished test execution" -foregroundcolor "Green"
 #---------------------------------
 Write-Host "Starting release version management" -foregroundcolor "Green"
 #Get Path to csproj
-$projectFilePath = $scriptPath+"\DCSFlightpanels\DCSFlightpanels.csproj"
-If(-not(Test-Path $projectFilePath)){
+$projectFilePath = $scriptPath + "\DCSFlightpanels\DCSFlightpanels.csproj"
+If (-not(Test-Path $projectFilePath)) {
 	Write-Host "Fatal error. Project path not found: $projectPath" -foregroundcolor "Red"
 	exit
 }
@@ -43,32 +42,15 @@ $xml = [xml](Get-Content $projectFilePath)
 [string]$assemblyVersion = $xml.Project.PropertyGroup.AssemblyVersion
 
 #Split the Version Numbers
-$avMajor, $avMinor, $avBuild, $avRevision   = $assemblyVersion.Split('.')
+$avMajor, $avMinor, $avPatch = $assemblyVersion.Split('.')
 
 Write-Host "Current assembly version is: $assemblyVersion" -foregroundcolor "Green"
-Write-Host "Current Build is: $avBuild" -foregroundcolor "Green"
-
-#Determining new build version based on the number of days since 1/1/2000
-$startDate=[datetime] '01/01/2000 00:00'
-$endDate= Get-Date
-$ts = New-TimeSpan -Start $startDate -End $endDate
-$calculatedBuild = $ts.Days
-Write-Host "Calculated build is: $calculatedBuild" -foregroundcolor "Green"
-
-#Eventual increase of revision number
-if ($calculatedBuild -eq $avBuild) {
-	Write-Host "Increasing revision" -foregroundcolor "Green"
-	Write-Host "   From: $avRevision" -foregroundcolor "Green"
-	$avRevision = [Convert]::ToInt32($avRevision.Trim(),10)+1
-	Write-Host "   To:   $avRevision" -foregroundcolor "Green"
-} else {    
-	$avRevision = "1"
-	Write-Host "Revision reset to $avRevision" -foregroundcolor "Green"
-}
+Write-Host "Current Minor version is: $avMinor" -foregroundcolor "Green"
 
 #Sets new version into Project 
 #Warning: for this to work, since the PropertyGroup is indexed, AssemblyVersion must be in the FIRST Propertygroup (or else, change the index).
-$xml.Project.PropertyGroup[0].AssemblyVersion = "$avMajor.$avMinor.$calculatedBuild.$avRevision".Trim()
+$avMinor = $avMinor + 1
+$xml.Project.PropertyGroup[0].AssemblyVersion = "$avMajor.$avMinor.$avPatch".Trim()
 [string]$assemblyVersion = $xml.Project.PropertyGroup.AssemblyVersion
 Write-Host "New assembly version is $assemblyVersion" -foregroundcolor "Green"
 
@@ -101,10 +83,9 @@ $buildLastExitCode = $LastExitCode
 
 Write-Host "Build ControlRef LastExitCode: $buildLastExitCode" -foregroundcolor "Green"
 
-if ( 0 -ne $buildLastExitCode )
-{
-  Write-Host "Fatal error. Build seems to have failed on ControlReference. No Zip & copy will be done." -foregroundcolor "Red"
-  exit
+if ( 0 -ne $buildLastExitCode ) {
+	Write-Host "Fatal error. Build seems to have failed on ControlReference. No Zip & copy will be done." -foregroundcolor "Red"
+	exit
 }
 
 Write-Host "Starting Publish DCSFP" -foregroundcolor "Green"
@@ -113,10 +94,9 @@ $buildLastExitCode = $LastExitCode
 
 Write-Host "Build DCSFP LastExitCode: $buildLastExitCode" -foregroundcolor "Green"
 
-if ( 0 -ne $buildLastExitCode )
-{
-  Write-Host "Fatal error. Build seems to have failed on DCSFP. No Zip & copy will be done." -foregroundcolor "Red"
-  exit
+if ( 0 -ne $buildLastExitCode ) {
+	Write-Host "Fatal error. Build seems to have failed on DCSFP. No Zip & copy will be done." -foregroundcolor "Red"
+	exit
 }
 
 # Copy SamplePanelEventPluginxxx.dll(s) to Extensions folder
