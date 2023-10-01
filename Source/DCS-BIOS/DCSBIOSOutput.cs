@@ -220,7 +220,8 @@ namespace DCS_BIOS
 
             lock (_lockObject)
             {
-                return (data & Mask) >> ShiftValue;
+                _lastUIntValue = (data & Mask) >> ShiftValue;
+                return _lastUIntValue;
             }
         }
 
