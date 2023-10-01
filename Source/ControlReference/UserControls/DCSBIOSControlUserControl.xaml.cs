@@ -6,6 +6,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using ControlReference.Events;
+using ControlReference.Interfaces;
 using ControlReference.Windows;
 using DCS_BIOS;
 using DCS_BIOS.EventArgs;
@@ -17,7 +18,7 @@ namespace ControlReference.UserControls
     /// <summary>
     /// Interaction logic for DCSBIOSControlUserControl.xaml
     /// </summary>
-    public partial class DCSBIOSControlUserControl : UserControl, IDisposable, IDcsBiosDataListener, IDCSBIOSStringListener
+    public partial class DCSBIOSControlUserControl : UserControl, IDisposable, INewDCSBIOSData
     {
         private readonly DCSBIOSControl _dcsbiosControl;
         private ToolTip _copyToolTip = null;
@@ -33,16 +34,14 @@ namespace ControlReference.UserControls
                 DCSBIOSStringManager.AddListeningAddress(_dcsbiosOutput);
             }
 
-            BIOSEventHandler.AttachDataListener(this);
-            BIOSEventHandler.AttachStringListener(this);
+            REFEventHandler.AttachDCSBIOSDataListener(this);
         }
 
         private void Dispose(bool disposing)
         {
             if (disposing)
             {
-                BIOSEventHandler.DetachDataListener(this);
-                BIOSEventHandler.DetachStringListener(this);
+                REFEventHandler.DetachDCSBIOSDataListener(this);
             }
         }
 
@@ -79,24 +78,24 @@ namespace ControlReference.UserControls
             }
         }
 
-        public string Identifier
+        public void NewDCSBIOSData(object sender, DCSBIOSDataCombinedEventArgs args)
         {
-            get
+            if (_dcsbiosOutput.Address == args.Address && args.IsUIntValue)
             {
-                return _dcsbiosControl.Identifier;
+                SetUintValue(args.UIntValue);
+                return;
+            }
+
+            if (_dcsbiosOutput.Address == args.Address && !args.IsUIntValue)
+            {
+                SetStringValue(args.StringValue);
             }
         }
-
-        public string CurrentValue { get; private set; } = "";
-
-        public bool HasValue { get; private set; } = false;
 
         private void SetUintValue(uint value)
         {
             try
             {
-                CurrentValue = Convert.ToString(value);
-                HasValue = true;
                 Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = Convert.ToString(value)));
                 Dispatcher?.BeginInvoke((Action)(() => SetSliderValue(value)));
 
@@ -117,8 +116,6 @@ namespace ControlReference.UserControls
         {
             try
             {
-                CurrentValue = value;
-                HasValue = true;
                 Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = $"->{value}<-"));
             }
             catch (Exception ex)
@@ -264,39 +261,7 @@ namespace ControlReference.UserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
-        {
-            try
-            {
-                if (e.Address == _dcsbiosOutput.Address)
-                {
-                    var value = _dcsbiosOutput.GetUIntValue(e.Data);
-                    SetUintValue(value);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
-        {
-            try
-            {
-                if (e.Address == _dcsbiosOutput.Address)
-                {
-                    SetStringValue(e.StringData);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
+        
         private void SliderSetState_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             try
@@ -523,6 +488,5 @@ namespace ControlReference.UserControls
             var targetPoints = source.CompositionTarget.TransformFromDevice.Transform(locationFromScreen);
             return targetPoints;
         }
-
     }
 }

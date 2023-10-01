@@ -6,4 +6,8 @@ namespace ControlReference.Interfaces
     {
         void ChangeCategory(object sender, CategoryEventArgs args);
     }
+    internal interface INewDCSBIOSData
+    {
+        void NewDCSBIOSData(object sender, DCSBIOSDataCombinedEventArgs args);
+    }
 }

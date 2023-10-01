@@ -6,20 +6,48 @@ namespace ControlReference.Events
     {
         public delegate void SetCategoryEventHandler(object sender, CategoryEventArgs e);
         public static event SetCategoryEventHandler OnChangeCategory;
-        
-        public static void AttachDataListener(ICategoryChange categoryChange)
+
+        public static void AttachCategoryListener(ICategoryChange categoryChange)
         {
             OnChangeCategory += categoryChange.ChangeCategory;
         }
-        
-        public static void DetachDataListener(ICategoryChange categoryChange)
+
+        public static void DetachCategoryListener(ICategoryChange categoryChange)
         {
             OnChangeCategory -= categoryChange.ChangeCategory;
         }
 
         public static void ChangeCategory(object sender, string category)
         {
-            OnChangeCategory?.Invoke(sender, new CategoryEventArgs {Sender  = sender, Category = category});
+            OnChangeCategory?.Invoke(sender, new CategoryEventArgs { Sender = sender, Category = category });
+        }
+
+
+
+
+
+
+        public delegate void SetNewDCSBIOSDataEventHandler(object sender, DCSBIOSDataCombinedEventArgs e);
+        public static event SetNewDCSBIOSDataEventHandler OnNewDCSBIOSData;
+
+        public static void AttachDCSBIOSDataListener(INewDCSBIOSData newDCSBIOSData)
+        {
+            OnNewDCSBIOSData += newDCSBIOSData.NewDCSBIOSData;
+        }
+
+        public static void DetachDCSBIOSDataListener(INewDCSBIOSData newDCSBIOSData)
+        {
+            OnNewDCSBIOSData -= newDCSBIOSData.NewDCSBIOSData;
+        }
+
+        public static void NewDCSBIOSUIntData(object sender, uint address, uint uintValue)
+        {
+            OnNewDCSBIOSData?.Invoke(sender, new DCSBIOSDataCombinedEventArgs { Sender = sender, Address = address, IsUIntValue = true, UIntValue = uintValue});
+        }
+
+        public static void NewDCSBIOSStringData(object sender, uint address, string stringValue)
+        {
+            OnNewDCSBIOSData?.Invoke(sender, new DCSBIOSDataCombinedEventArgs { Sender = sender, Address = address, IsUIntValue = false, StringValue = stringValue });
         }
     }
 }

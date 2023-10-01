@@ -29,10 +29,11 @@ namespace ControlReference
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IDisposable, IDcsBiosConnectionListener, ICategoryChange, IDCSBIOSStringListener
+    public partial class MainWindow : Window, IDisposable, IDcsBiosConnectionListener, ICategoryChange, IDcsBiosDataListener, IDCSBIOSStringListener
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private IEnumerable<DCSBIOSControl> _loadedControls = null;
+        private List<DCSBIOSOutput> _loadedDCSBIOSOutputs = new();
         private readonly List<DCSBIOSControlUserControl> _dcsbiosUIControlPanels = new();
         private readonly Timer _dcsStopGearTimer = new(5000);
         private DCSBIOS _dcsBios;
@@ -45,7 +46,8 @@ namespace ControlReference
         public MainWindow()
         {
             InitializeComponent();
-            REFEventHandler.AttachDataListener(this);
+            REFEventHandler.AttachCategoryListener(this);
+            BIOSEventHandler.AttachDataListener(this);
             BIOSEventHandler.AttachStringListener(this);
 
             /*
@@ -70,7 +72,8 @@ namespace ControlReference
                     _dcsBios?.Shutdown();
                     _dcsBios?.Dispose();
                     BIOSEventHandler.DetachConnectionListener(this);
-                    REFEventHandler.DetachDataListener(this);
+                    REFEventHandler.DetachCategoryListener(this);
+                    BIOSEventHandler.DetachDataListener(this);
                     BIOSEventHandler.DetachStringListener(this);
                 }
 
@@ -143,27 +146,52 @@ namespace ControlReference
             DCSBIOSStringManager.AddListeningAddress(_dcsbiosVersionOutput);
         }
 
+        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
+        {
+            try
+            {
+                foreach (var dcsbiosOutput in _loadedDCSBIOSOutputs)
+                {
+                    if (dcsbiosOutput.Address == e.Address)
+                    {
+                        REFEventHandler.NewDCSBIOSUIntData(this, e.Address, dcsbiosOutput.GetUIntValue(e.Data));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
-                if (_checkDCSBIOSVersionOnce || string.IsNullOrWhiteSpace(e.StringData) || _dcsbiosVersionOutput == null)
+                if (string.IsNullOrWhiteSpace(e.StringData))
                 {
                     return;
                 }
-
-                if (e.Address != _dcsbiosVersionOutput.Address)
+                
+                foreach (var dcsbiosOutput in _loadedDCSBIOSOutputs)
                 {
-                    return;
+                    if (dcsbiosOutput.Address == e.Address)
+                    {
+                        dcsbiosOutput.LastStringValue = e.StringData;
+                        REFEventHandler.NewDCSBIOSStringData(this, e.Address, e.StringData);
+                    }
                 }
 
-                Dispatcher?.Invoke(() =>
+                if (_checkDCSBIOSVersionOnce)
                 {
-                    LabelDCSBIOSVersion.Visibility = Visibility.Visible;
-                    LabelDCSBIOSVersion.Text = "DCS-BIOS Version : " + e.StringData;
-                });
+                    Dispatcher?.Invoke(() =>
+                    {
+                        LabelDCSBIOSVersion.Visibility = Visibility.Visible;
+                        LabelDCSBIOSVersion.Text = "DCS-BIOS Version : " + e.StringData;
+                    });
 
-                _checkDCSBIOSVersionOnce = true;
+                    _checkDCSBIOSVersionOnce = true;
+                }
             }
             catch (Exception ex)
             {
@@ -279,6 +307,17 @@ namespace ControlReference
                 var selectedModule = (DCSAircraft)ComboBoxModules.SelectedItem;
                 DCSBIOSControlLocator.DCSAircraft = selectedModule;
                 _loadedControls = DCSBIOSControlLocator.ReadDataFromJsonFileSimple(selectedModule.JSONFilename);
+                _loadedDCSBIOSOutputs.Clear();
+                foreach (var dcsbiosControl in _loadedControls)
+                {
+                    var dcsbiosOutput = new DCSBIOSOutput();
+                    dcsbiosOutput.Consume(dcsbiosControl);
+                    if (dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
+                    {
+                        DCSBIOSStringManager.AddListeningAddress(dcsbiosOutput);
+                    }
+                    _loadedDCSBIOSOutputs.Add(dcsbiosOutput);
+                }
                 UpdateComboBoxCategories();
                 ShowControls();
             }
@@ -691,12 +730,19 @@ namespace ControlReference
         {
             try
             {
-                var maxIdentifierLength = _dcsbiosUIControlPanels.Max(o => o.Identifier.Length);
+                var maxIdentifierLength = _loadedDCSBIOSOutputs.Max(o => o.ControlId.Length);
                 var result = new StringBuilder();
                 var format = "{0,-" + (maxIdentifierLength + 5) + "}->{1}<-";
-                foreach (var dcsbiosControlUserControl in _dcsbiosUIControlPanels.Where(o => o.HasValue == true))
+                foreach (var dcsbiosOutput in _loadedDCSBIOSOutputs)
                 {
-                    result.AppendLine(string.Format(format, dcsbiosControlUserControl.Identifier, dcsbiosControlUserControl.CurrentValue));
+                    if (dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
+                    {
+                        result.AppendLine(string.Format(format, dcsbiosOutput.ControlId, dcsbiosOutput.LastUIntValue));
+                    }
+                    if (dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
+                    {
+                        result.AppendLine(string.Format(format, dcsbiosOutput.ControlId, dcsbiosOutput.LastStringValue));
+                    }
                 }
 
                 if (result.Length == 0)
