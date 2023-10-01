@@ -3,7 +3,7 @@
 
 
 
-Please visit our [Wiki](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki) for answers to common questions.
+Please visit our [Wiki](https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki) for answers to common questions.
 <br/>
 <br/>
 DCSFlightpanels primary use is for using Saitek/Logitech panels and Stream Deck in DCS World.
@@ -62,9 +62,9 @@ Cockpit Master devices supported:
 Links
 --------------------------------------------
 
-[How to install](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki)
+[How to install](https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki)
 
-[Troubleshooting](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Troubleshooting)
+[Troubleshooting](https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki/Troubleshooting)
 
 [BaDCrC showing his cockpit that uses Helios and DCSFP](https://youtu.be/lgTJa-NUnM8?t=573)
 
@@ -84,4 +84,4 @@ Links
 
 [Farming Panel Overlay for named buttons](https://forums.eagle.ru/topic/115280-dcsflightpanels-dcsfp-thread-saitek-pro-flight-panels-amp-dcs/page/53/?tab=comments#comment-4745816)
 
-Here you find our [DCSFlightpanels Discord Server](https://discord.gg/5svGwKX)
+Here you find our [DCS-Skunkworks Discord Server](https://discord.gg/5svGwKX)
