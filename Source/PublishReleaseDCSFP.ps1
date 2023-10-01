@@ -27,7 +27,7 @@ if ( 0 -ne $testsLastExitCode ) {
 Write-Host "Finished test execution" -foregroundcolor "Green"
 
 #---------------------------------
-# Release version management
+# Release version management DCSFlightpanels
 #---------------------------------
 Write-Host "Starting release version management" -foregroundcolor "Green"
 #Get Path to csproj
@@ -37,7 +37,7 @@ If (-not(Test-Path $projectFilePath)) {
 	exit
 }
 
-#Readind project file
+#Reading DCSFlightpanels project file
 $xml = [xml](Get-Content $projectFilePath)
 [string]$assemblyVersion = $xml.Project.PropertyGroup.AssemblyVersion
 
@@ -49,7 +49,7 @@ Write-Host "Current Minor version is: $avMinor" -foregroundcolor "Green"
 
 #Sets new version into Project 
 #Warning: for this to work, since the PropertyGroup is indexed, AssemblyVersion must be in the FIRST Propertygroup (or else, change the index).
-$avMinor = $avMinor + 1
+[int]$avMinor = [int]$avMinor + 1
 $xml.Project.PropertyGroup[0].AssemblyVersion = "$avMajor.$avMinor.$avPatch".Trim()
 [string]$assemblyVersion = $xml.Project.PropertyGroup.AssemblyVersion
 Write-Host "New assembly version is $assemblyVersion" -foregroundcolor "Green"
