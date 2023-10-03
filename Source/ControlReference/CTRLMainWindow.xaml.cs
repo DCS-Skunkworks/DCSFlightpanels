@@ -42,6 +42,7 @@ namespace ControlReference
         private DCSBIOSOutput _dcsbiosVersionOutput;
         private bool _checkDCSBIOSVersionOnce;
         private List<DCSBIOSControl> _metaControls;
+        private bool _changeOfModuleActive = false;
 
         public MainWindow()
         {
@@ -150,6 +151,8 @@ namespace ControlReference
         {
             try
             {
+                if (_changeOfModuleActive) return;
+
                 foreach (var dcsbiosOutput in _loadedDCSBIOSOutputs)
                 {
                     if (dcsbiosOutput.Address == e.Address)
@@ -168,6 +171,8 @@ namespace ControlReference
         {
             try
             {
+                if (_changeOfModuleActive) return;
+
                 if (string.IsNullOrWhiteSpace(e.StringData))
                 {
                     return;
@@ -304,6 +309,8 @@ namespace ControlReference
                 {
                     return;
                 }
+
+                _changeOfModuleActive = true;
                 var selectedModule = (DCSAircraft)ComboBoxModules.SelectedItem;
                 DCSBIOSControlLocator.DCSAircraft = selectedModule;
                 _loadedControls = DCSBIOSControlLocator.ReadDataFromJsonFileSimple(selectedModule.JSONFilename);
@@ -319,6 +326,7 @@ namespace ControlReference
                     _loadedDCSBIOSOutputs.Add(dcsbiosOutput);
                 }
                 UpdateComboBoxCategories();
+                _changeOfModuleActive = false;
                 ShowControls();
             }
             catch (Exception ex)
