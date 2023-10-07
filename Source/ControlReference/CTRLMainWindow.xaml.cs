@@ -158,6 +158,7 @@ namespace ControlReference
                 {
                     if (dcsbiosOutput.Address == e.Address)
                     {
+                        dcsbiosOutput.GetUIntValue(e.Data); // this is only to save the value inside the output for the export function
                         REFEventHandler.NewDCSBIOSUIntData(this, e.Address, e.Data);
                     }
                 }
