@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/DCSFlightpanels/DCSFlightpanels</PackageProjectUrl>
     <Description>DCS-BIOS Control Reference</Description>
     <Company>DCSFlightpanels (DCSFP)</Company>
-    <AssemblyVersion>1.14.0</AssemblyVersion>
+    <AssemblyVersion>1.15.0</AssemblyVersion>
     <StartupObject>ControlReference.App</StartupObject>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
   </PropertyGroup>
