@@ -49,7 +49,20 @@ Write-Host "Current Minor version is: $avMinor" -foregroundcolor "Green"
 
 #Sets new version into Project 
 #Warning: for this to work, since the PropertyGroup is indexed, AssemblyVersion must be in the FIRST Propertygroup (or else, change the index).
-[int]$avMinor = [int]$avMinor + 1
+$isMinorRelease = Read-Host "Minor release? Y/N"
+$isPatchRelease = Read-Host "Patch release? Y/N"
+
+if($isMinorRelease.Trim().ToLower().Equals("y"))
+{
+    [int]$avMinor = [int]$avMinor + 1
+}
+
+if($isPatchRelease.Trim().ToLower().Equals("y"))
+{
+    [int]$avPatch = [int]$avPatch + 1
+}
+
+
 $xml.Project.PropertyGroup[0].AssemblyVersion = "$avMajor.$avMinor.$avPatch".Trim()
 [string]$assemblyVersion = $xml.Project.PropertyGroup.AssemblyVersion
 Write-Host "New assembly version is $assemblyVersion" -foregroundcolor "Green"
