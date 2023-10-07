@@ -9,7 +9,6 @@ namespace DCS_BIOS.Json
     /// </summary>
     public class DCSBIOSControl
     {
-
         [JsonProperty("category", Required = Required.Default)]
         public string Category { get; set; }
 

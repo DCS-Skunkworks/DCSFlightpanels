@@ -43,6 +43,7 @@ namespace ControlReference
         private bool _checkDCSBIOSVersionOnce;
         private List<DCSBIOSControl> _metaControls;
         private bool _changeOfModuleActive = false;
+        private bool _showLastProfile = true;
 
         public MainWindow()
         {
@@ -276,10 +277,25 @@ namespace ControlReference
             {
                 return;
             }
+
+            var found = false;
             ComboBoxModules.DataContext = DCSAircraft.Modules;
             ComboBoxModules.ItemsSource = DCSAircraft.Modules;
             ComboBoxModules.Items.Refresh();
-            ComboBoxModules.SelectedIndex = 0;
+            if (_showLastProfile)
+            {
+                foreach (var module in DCSAircraft.Modules)
+                {
+                    if (module.ID == Settings.Default.LastProfileID)
+                    {
+                        ComboBoxModules.SelectedIndex = DCSAircraft.Modules.IndexOf(module);
+                        found = true;
+                    }
+                }
+                _showLastProfile = false;
+            }
+            
+            if(!found) ComboBoxModules.SelectedIndex = 0;
             UpdateComboBoxCategories();
         }
 
@@ -312,6 +328,8 @@ namespace ControlReference
 
                 _changeOfModuleActive = true;
                 var selectedModule = (DCSAircraft)ComboBoxModules.SelectedItem;
+                Settings.Default.LastProfileID = selectedModule.ID;
+                Settings.Default.Save();
                 DCSBIOSControlLocator.DCSAircraft = selectedModule;
                 _loadedControls = DCSBIOSControlLocator.ReadDataFromJsonFileSimple(selectedModule.JSONFilename);
                 _loadedDCSBIOSOutputs.Clear();
