@@ -158,7 +158,7 @@ namespace ControlReference
                 {
                     if (dcsbiosOutput.Address == e.Address)
                     {
-                        REFEventHandler.NewDCSBIOSUIntData(this, e.Address, dcsbiosOutput.GetUIntValue(e.Data));
+                        REFEventHandler.NewDCSBIOSUIntData(this, e.Address, e.Data);
                     }
                 }
             }
