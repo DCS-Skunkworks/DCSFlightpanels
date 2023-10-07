@@ -12,6 +12,6 @@
         public uint Address { get; set; }
         public bool IsUIntValue { get; set; }
         public string StringValue { get; set; }
-        public uint UIntValue { get; set; }
+        public uint Data { get; set; }
     }
 }

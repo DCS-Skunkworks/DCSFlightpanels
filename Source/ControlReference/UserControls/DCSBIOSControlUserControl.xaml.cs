@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
@@ -82,7 +83,7 @@ namespace ControlReference.UserControls
         {
             if (_dcsbiosOutput.Address == args.Address && args.IsUIntValue)
             {
-                SetUintValue(args.UIntValue);
+                SetUintValue(_dcsbiosOutput.GetUIntValue(args.Data));
                 return;
             }
 

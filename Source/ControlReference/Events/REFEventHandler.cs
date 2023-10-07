@@ -1,4 +1,5 @@
 ﻿using ControlReference.Interfaces;
+using System.Diagnostics;
 
 namespace ControlReference.Events
 {
@@ -40,9 +41,9 @@ namespace ControlReference.Events
             OnNewDCSBIOSData -= newDCSBIOSData.NewDCSBIOSData;
         }
 
-        public static void NewDCSBIOSUIntData(object sender, uint address, uint uintValue)
+        public static void NewDCSBIOSUIntData(object sender, uint address, uint data)
         {
-            OnNewDCSBIOSData?.Invoke(sender, new DCSBIOSDataCombinedEventArgs { Sender = sender, Address = address, IsUIntValue = true, UIntValue = uintValue});
+            OnNewDCSBIOSData?.Invoke(sender, new DCSBIOSDataCombinedEventArgs { Sender = sender, Address = address, IsUIntValue = true, Data = data});
         }
 
         public static void NewDCSBIOSStringData(object sender, uint address, string stringValue)
