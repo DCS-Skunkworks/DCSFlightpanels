@@ -10,12 +10,12 @@ namespace DCS_BIOS
 
     public enum DCSBiosOutputType
     {
-        None = 0,
         StringType,
         IntegerType,
         LED,
         ServoOutput,
-        FloatBuffer
+        FloatBuffer,
+        None
     }
 
     public enum DCSBiosOutputComparison
@@ -59,7 +59,7 @@ namespace DCS_BIOS
         private string _controlType; // display button toggle etc
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.None;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
-
+        private bool _uintValueHasChanged = false;
 
         [NonSerialized] private object _lockObject = new();
 
@@ -177,9 +177,9 @@ namespace DCS_BIOS
                     _ => throw new Exception("Unexpected DCSBiosOutputComparison value")
                 };
 
-                result = resultComparison && !newValue.Equals(_lastUIntValue);
-                //Debug.WriteLine($"(EvaluateUInt) Result={result} Target={_specifiedValueUInt} Last={_lastUIntValue} New={newValue}");
-                _lastUIntValue = newValue;
+                result = resultComparison && !newValue.Equals(LastUIntValue);
+                //Debug.WriteLine($"(EvaluateUInt) Result={result} Target={_specifiedValueUInt} Last={LastUIntValue} New={newValue}");
+                LastUIntValue = newValue;
             }
 
             return result;
@@ -207,13 +207,13 @@ namespace DCS_BIOS
                     return false;
                 }
 
-                if (GetUIntValue(data) == _lastUIntValue)
+                if (GetUIntValue(data) == LastUIntValue && !_uintValueHasChanged)
                 {
                     // Value hasn't changed
                     return false;
                 }
 
-                _lastUIntValue = GetUIntValue(data);
+                LastUIntValue = GetUIntValue(data);
             }
 
             return true;
@@ -260,8 +260,8 @@ namespace DCS_BIOS
 
             lock (_lockObject)
             {
-                _lastUIntValue = (data & Mask) >> ShiftValue;
-                return _lastUIntValue;
+                LastUIntValue = (data & Mask) >> ShiftValue;
+                return LastUIntValue;
             }
         }
 
@@ -393,7 +393,14 @@ namespace DCS_BIOS
         public uint LastUIntValue
         {
             get => _lastUIntValue;
-            set => _lastUIntValue = value;
+            set
+            {
+                if (value != _lastUIntValue)
+                {
+                    _uintValueHasChanged = true;
+                }
+                _lastUIntValue = value;
+            }
         }
 
         [JsonIgnore]
