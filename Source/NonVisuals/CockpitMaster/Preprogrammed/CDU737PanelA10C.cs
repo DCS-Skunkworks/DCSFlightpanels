@@ -119,6 +119,8 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
+            bool refreshLedOrLight = false;
+
             if (SettingsLoading)
             {
                 return;
@@ -141,6 +143,8 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                             IncreaseBrightness();
                             break;
                     }
+                    refreshLedOrLight = true;
+
 
                 }
 
@@ -156,7 +160,12 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                     {
                         Led_OFF(CDU737Led.FAIL);
                     }
+                    refreshLedOrLight = true;
 
+                }
+
+                if (refreshLedOrLight) {
+                    refreshLedsAndBrightness();
                 }
             }
             catch (Exception)

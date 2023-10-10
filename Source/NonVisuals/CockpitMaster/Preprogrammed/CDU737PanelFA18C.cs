@@ -177,7 +177,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                         {
                             Led_ON(CDU737Led.FAIL);
                         }
-                        displayBufferOnCDU();
+                        refreshLedsAndBrightness();
                     }
 
                 }

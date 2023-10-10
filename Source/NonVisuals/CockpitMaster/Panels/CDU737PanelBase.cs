@@ -28,10 +28,10 @@
         public const int MAX_BRIGHT = 0xff;
         private const int BRIGHTNESS_STEP = 10;
 
-        // refresh the CDU 2 times / sec. 
+        // refresh the CDU 4 times / sec. 
         // ok for most case , except when the master caution is blinking very fast in the A10
 
-        private const int TICK_DISPLAY = 500;
+        private const int TICK_DISPLAY = 250;
 
         private int _screenBrightness = MAX_BRIGHT / 2;
         private int _keyboardBrightness = MAX_BRIGHT / 2;
@@ -413,21 +413,24 @@
                     // Screenbuffers are declared 63 bytes
                     // Doing this here, ensure the Numbering of HidReport is not "broken" 
                     // by mistake, and simplifies "recopy of lines in buffers
-                    
+
                     _hidReport[i].Data[0] = (byte)(i + 1);
                     Array.Copy(ScreenBuffer[i], 0, _hidReport[i].Data, 1, 63);
-                    
                     _ = HIDWriteDevice.WriteReportAsync(_hidReport[i]);
                 }
-
-                // Handles LED 
-                // BrightAndLefbuffer[0] = 9 and should not be modified 
-                
-                BrightAndLedBuffer[3] = _ledStatus;
-                _hidReport[8].Data = BrightAndLedBuffer;
-
-                _ = HIDWriteDevice.WriteReport(_hidReport[8]);
             }
+
+        }
+
+        public void refreshLedsAndBrightness()
+        {
+            // Handles LED 
+            // BrightAndLefbuffer[0] = 9 and should not be modified 
+
+            BrightAndLedBuffer[3] = _ledStatus;
+            _hidReport[8].Data = BrightAndLedBuffer;
+
+            _ = HIDWriteDevice.WriteReportAsync(_hidReport[8]);
 
         }
 
