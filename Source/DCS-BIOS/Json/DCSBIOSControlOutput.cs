@@ -38,7 +38,7 @@ namespace DCS_BIOS.Json
                 {
                     "string" => DCSBiosOutputType.StringType,
                     "integer" => DCSBiosOutputType.IntegerType,
-                    _ => throw new System.Exception($"Unexpected DCSBiosOutputType [{_type}]")
+                    _ => DCSBiosOutputType.None
                 };
             }
         }

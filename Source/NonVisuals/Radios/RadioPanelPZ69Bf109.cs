@@ -820,14 +820,14 @@ namespace NonVisuals.Radios
             try
             {
                 // COM1
-                _fug16ZyPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_MODE");
-                _fug16ZyFineTuneDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("FUG16_TUNING");
+                _fug16ZyPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_MODE");
+                _fug16ZyFineTuneDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FUG16_TUNING");
 
                 // COM2
-                _fug25aIFFDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("FUG25_MODE");
+                _fug25aIFFDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FUG25_MODE");
 
                 // NAV1
-                _homingDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("FT_ZF_SWITCH");
+                _homingDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FT_ZF_SWITCH");
 
                 StartListeningForHidPanelChanges();
 

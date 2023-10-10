@@ -1687,20 +1687,20 @@ namespace NonVisuals.Radios
             try
             {
                 // VHF AM
-                _vhfAmDcsbiosOutputReading10S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_10s");
-                _vhfAmDcsbiosOutputReading1S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_1s");
-                _vhfAmDcsbiosOutputReadingDecimal10S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_TENTHS");
-                _vhfAmDcsbiosOutputReadingDecimal100S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_HUNDREDTHS");
+                _vhfAmDcsbiosOutputReading10S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_10s");
+                _vhfAmDcsbiosOutputReading1S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_1s");
+                _vhfAmDcsbiosOutputReadingDecimal10S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_TENTHS");
+                _vhfAmDcsbiosOutputReadingDecimal100S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_HUNDREDTHS");
 
                 // FM PR4G
-                _fmRadioPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("FM_RADIO_CHANNEL");
+                _fmRadioPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FM_RADIO_CHANNEL");
 
                 // ADF
-                _adfSwitchUnitDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF1_ADF2_SELECT");
+                _adfSwitchUnitDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF1_ADF2_SELECT");
 
                 // DME
-                _nadirModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("NADIR_PARAMETER");
-                _nadirDopplerModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("NADIR_DOPPLER_MODE");
+                _nadirModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("NADIR_PARAMETER");
+                _nadirDopplerModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("NADIR_DOPPLER_MODE");
 
                 StartListeningForHidPanelChanges();
 

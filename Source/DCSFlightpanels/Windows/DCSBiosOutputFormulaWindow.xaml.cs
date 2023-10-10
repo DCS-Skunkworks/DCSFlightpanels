@@ -145,8 +145,8 @@ namespace DCSFlightpanels.Windows
             {
                 TextBoxControlId.Text = _dcsbiosControl.Identifier;
                 TextBoxControlDescription.Text = _dcsbiosControl.Description;
-                TextBoxMaxValue.Text = _dcsbiosControl.Outputs[0].MaxValue.ToString();
-                TextBoxOutputType.Text = _dcsbiosControl.Outputs[0].Type;
+                TextBoxMaxValue.Text = _dcsbiosControl.GetUIntOutput().MaxValue.ToString();
+                TextBoxOutputType.Text = _dcsbiosControl.GetUIntOutput().GetOutputType();
             }
             if (_dcsbiosOutputFormula != null)
             {
@@ -235,7 +235,7 @@ namespace DCSFlightpanels.Windows
                     if (_dcsbiosControl == null && !string.IsNullOrWhiteSpace(TextBoxControlId.Text))
                     {
                         _dcsbiosControl = DCSBIOSControlLocator.GetControl(TextBoxControlId.Text);
-                        _dcsBiosOutput.Consume(_dcsbiosControl);
+                        _dcsBiosOutput.Consume(_dcsbiosControl, DCSBiosOutputType.IntegerType);
                     }
                 }
                 catch (Exception ex)
@@ -321,7 +321,7 @@ namespace DCSFlightpanels.Windows
                 {
                     _dcsbiosControl = (DCSBIOSControl)_dataGridValues.SelectedItem;
                     _dcsBiosOutput = new DCSBIOSOutput();
-                    _dcsBiosOutput.Consume(_dcsbiosControl);
+                    _dcsBiosOutput.Consume(_dcsbiosControl, DCSBiosOutputType.IntegerType);
                     ShowValues2();
                     SetFormState();
                 }
@@ -342,7 +342,7 @@ namespace DCSFlightpanels.Windows
                 {
                     _dcsbiosControl = (DCSBIOSControl)_dataGridValues.SelectedItem;
                     _dcsBiosOutput = new DCSBIOSOutput();
-                    _dcsBiosOutput.Consume(_dcsbiosControl);
+                    _dcsBiosOutput.Consume(_dcsbiosControl, DCSBiosOutputType.IntegerType);
                     ShowValues2();
                 }
                 SetFormState();
@@ -362,7 +362,7 @@ namespace DCSFlightpanels.Windows
                 {
                     _dcsbiosControl = (DCSBIOSControl)_dataGridValues.SelectedItem;
                     _dcsBiosOutput = new DCSBIOSOutput();
-                    _dcsBiosOutput.Consume(_dcsbiosControl);
+                    _dcsBiosOutput.Consume(_dcsbiosControl, DCSBiosOutputType.IntegerType);
                     ShowValues2();
 
                 }

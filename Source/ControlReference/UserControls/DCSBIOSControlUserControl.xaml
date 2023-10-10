@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ControlReference"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="600"
+             Height="auto"
+             d:DesignHeight="500" d:DesignWidth="600"
              Loaded="DCSBIOSControlUserControl_OnLoaded">
     <Grid>
         <Grid.RowDefinitions>
@@ -50,18 +51,34 @@
                 <Label Content="action" />
                 <Button Name="ButtonToggle" Height="22" Margin="20,0,0,0" Content="TOGGLE" Click="ButtonToggle_OnClick"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Output Type: " FontWeight="Bold"/>
-                <Label Name="LabelOutputType" Content="" />
+            <StackPanel Name="StackPanelUInt" >
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Output Type: " FontWeight="Bold"/>
+                    <Label Content="uint" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Name="LabelOutputMaxValueDesc" Content="Max Value: " FontWeight="Bold"/>
+                    <Label Name="LabelOutputMaxValue" Content="" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Current Value: " FontWeight="Bold"/>
+                    <Label Name="LabelCurrentUIntValue" Content="" />
+                    <Label Name="LabelPercentage" Foreground="DarkOrange" FontSize="11" VerticalAlignment="Center" Content="" />
+                </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Name="LabelOutputMaxValueDesc" Content="Max Value: " FontWeight="Bold"/>
-                <Label Name="LabelOutputMaxValue" Content="" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Current Value: " FontWeight="Bold"/>
-                <Label Name="LabelCurrentValue" Content="" />
-                <Label Name="LabelPercentage" Foreground="DarkOrange" FontSize="11" VerticalAlignment="Center" Content="" />
+            <StackPanel Name="StackPanelString" >
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Output Type: " FontWeight="Bold"/>
+                    <Label Content="string" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Max Length: " FontWeight="Bold"/>
+                    <Label Name="LabelOutputMaxLength" Content="" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Current Value: " FontWeight="Bold"/>
+                    <Label Name="LabelCurrentStringValue" Content="" />
+                </StackPanel>
             </StackPanel>
         </StackPanel>
 

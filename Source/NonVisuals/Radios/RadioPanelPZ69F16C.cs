@@ -126,20 +126,15 @@ namespace NonVisuals.Radios
         {
             try
             {
-                _DEDLine1 = DCSBIOSControlLocator.GetDCSBIOSOutput("DED_LINE_1");
-                DCSBIOSStringManager.AddListeningAddress(_DEDLine1);
+                _DEDLine1 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_1");
 
-                _DEDLine2 = DCSBIOSControlLocator.GetDCSBIOSOutput("DED_LINE_2");
-                DCSBIOSStringManager.AddListeningAddress(_DEDLine2);
+                _DEDLine2 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_2");
 
-                _DEDLine3 = DCSBIOSControlLocator.GetDCSBIOSOutput("DED_LINE_3");
-                DCSBIOSStringManager.AddListeningAddress(_DEDLine3);
+                _DEDLine3 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_3");
 
-                _DEDLine4 = DCSBIOSControlLocator.GetDCSBIOSOutput("DED_LINE_4");
-                DCSBIOSStringManager.AddListeningAddress(_DEDLine4);
+                _DEDLine4 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_4");
 
-                _DEDLine5 = DCSBIOSControlLocator.GetDCSBIOSOutput("DED_LINE_5");
-                DCSBIOSStringManager.AddListeningAddress(_DEDLine5);
+                _DEDLine5 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_5");
 
                 StartListeningForHidPanelChanges();
             }

@@ -1623,29 +1623,28 @@ namespace NonVisuals.Radios
                 //COM1
 
                 //COM2
-                _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_R863_CHAN");
+                _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_R863_CHAN");
 
                 //NAV1
-                _yadro1ADcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("JADRO_FREQ");
-                DCSBIOSStringManager.AddListeningAddress(_yadro1ADcsbiosOutputCockpitFrequency);
+                _yadro1ADcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("JADRO_FREQ");
 
                 //NAV2
-                _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_R828_CHAN");
+                _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_R828_CHAN");
 
                 //ADF
-                _adfMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_ARC_FREQ_L_100");
-                _adfMainDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_ARC_FREQ_L_10");
-                _adfBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_ARC_FREQ_R_100");
-                _adfBackupDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_ARC_FREQ_R_10");
-                _adfBackupMainDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_ARC_CHAN");
+                _adfMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_L_100");
+                _adfMainDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_L_10");
+                _adfBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_R_100");
+                _adfBackupDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_R_10");
+                _adfBackupMainDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_CHAN");
 
                 //DME
-                _dmeMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_ARC_FREQ_L_1");
-                _dmeBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_ARC_FREQ_R_1");
+                _dmeMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_L_1");
+                _dmeBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_R_1");
 
                 //XPDR
-                _spu8DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_SPU8_MODE");
-                _spu8ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_SPU8_ICS");
+                _spu8DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_SPU8_MODE");
+                _spu8ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_SPU8_ICS");
 
                 StartListeningForHidPanelChanges();
             }

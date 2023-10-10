@@ -291,10 +291,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
+                var outputType = RadioButtonIntegerSource.IsChecked == true ? DCSBiosOutputType.IntegerType : DCSBiosOutputType.StringType;
                 if (_popupDataGrid.SelectedItems.Count == 1)
                 {
                     _dcsbiosControl = (DCSBIOSControl)_popupDataGrid.SelectedItem;
-                    _dcsbiosDecoder.DCSBIOSOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsbiosControl.Identifier);
+                    _dcsbiosDecoder.DCSBIOSOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsbiosControl.Identifier, outputType);
 
                     TextBoxDCSBIOSId.Text = _dcsbiosControl.Identifier;
                     SetIsDirty();

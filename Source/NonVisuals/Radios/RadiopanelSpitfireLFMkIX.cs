@@ -706,15 +706,15 @@ namespace NonVisuals.Radios
             try
             {
                 // COM1
-                _hfRadioOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_OFF");
-                _hfRadioChannelAPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_A");
-                _hfRadioChannelBPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_B");
-                _hfRadioChannelCPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_C");
-                _hfRadioChannelDPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_D");
-                _hfRadioModeDialPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_T_MODE");
+                _hfRadioOffDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_OFF");
+                _hfRadioChannelAPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_A");
+                _hfRadioChannelBPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_B");
+                _hfRadioChannelCPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_C");
+                _hfRadioChannelDPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_D");
+                _hfRadioModeDialPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_T_MODE");
                 // COM2
-                _iffBiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_B");
-                _iffDiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_D");
+                _iffBiffDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("IFF_B");
+                _iffDiffDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("IFF_D");
 
                 StartListeningForHidPanelChanges();
                 // IsAttached = true;

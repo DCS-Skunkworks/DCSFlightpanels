@@ -59,46 +59,33 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             {
                 // UFC_BRT = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_BRT");
 
-                UFC_OPTION_DISPLAY_1 = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_OPTION_DISPLAY_1");
-                DCSBIOSStringManager.AddListeningAddress(UFC_OPTION_DISPLAY_1);
+                UFC_OPTION_DISPLAY_1 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_DISPLAY_1");
 
-                UFC_OPTION_CUEING_1 = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_OPTION_CUEING_1");
-                DCSBIOSStringManager.AddListeningAddress(UFC_OPTION_CUEING_1);
+                UFC_OPTION_CUEING_1 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_CUEING_1");
 
-                UFC_OPTION_DISPLAY_2 = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_OPTION_DISPLAY_2");
-                DCSBIOSStringManager.AddListeningAddress(UFC_OPTION_DISPLAY_2);
+                UFC_OPTION_DISPLAY_2 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_DISPLAY_2");
 
-                UFC_OPTION_CUEING_2 = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_OPTION_CUEING_2");
-                DCSBIOSStringManager.AddListeningAddress(UFC_OPTION_CUEING_2);
+                UFC_OPTION_CUEING_2 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_CUEING_2");
 
-                UFC_OPTION_DISPLAY_3 = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_OPTION_DISPLAY_3");
-                DCSBIOSStringManager.AddListeningAddress(UFC_OPTION_DISPLAY_3);
+                UFC_OPTION_DISPLAY_3 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_DISPLAY_3");
 
-                UFC_OPTION_CUEING_3 = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_OPTION_CUEING_3");
-                DCSBIOSStringManager.AddListeningAddress(UFC_OPTION_CUEING_3);
+                UFC_OPTION_CUEING_3 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_CUEING_3");
 
-                UFC_OPTION_DISPLAY_4 = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_OPTION_DISPLAY_4");
-                DCSBIOSStringManager.AddListeningAddress(UFC_OPTION_DISPLAY_4);
+                UFC_OPTION_DISPLAY_4 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_DISPLAY_4");
 
-                UFC_OPTION_CUEING_4 = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_OPTION_CUEING_4");
-                DCSBIOSStringManager.AddListeningAddress(UFC_OPTION_CUEING_4);
+                UFC_OPTION_CUEING_4 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_CUEING_4");
 
-                UFC_OPTION_DISPLAY_5 = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_OPTION_DISPLAY_5");
-                DCSBIOSStringManager.AddListeningAddress(UFC_OPTION_DISPLAY_5);
+                UFC_OPTION_DISPLAY_5 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_DISPLAY_5");
 
-                UFC_OPTION_CUEING_5 = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_OPTION_CUEING_5");
-                DCSBIOSStringManager.AddListeningAddress(UFC_OPTION_CUEING_5);
+                UFC_OPTION_CUEING_5 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_CUEING_5");
 
-                UFC_SCRATCHPAD_NUMBER_DISPLAY = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_SCRATCHPAD_NUMBER_DISPLAY");
-                DCSBIOSStringManager.AddListeningAddress(UFC_SCRATCHPAD_NUMBER_DISPLAY);
+                UFC_SCRATCHPAD_NUMBER_DISPLAY = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_SCRATCHPAD_NUMBER_DISPLAY");
 
-                UFC_SCRATCHPAD_STRING_1_DISPLAY = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_SCRATCHPAD_STRING_1_DISPLAY");
-                DCSBIOSStringManager.AddListeningAddress(UFC_SCRATCHPAD_STRING_1_DISPLAY);
+                UFC_SCRATCHPAD_STRING_1_DISPLAY = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_SCRATCHPAD_STRING_1_DISPLAY");
 
-                UFC_SCRATCHPAD_STRING_2_DISPLAY = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_SCRATCHPAD_STRING_2_DISPLAY");
-                DCSBIOSStringManager.AddListeningAddress(UFC_SCRATCHPAD_STRING_2_DISPLAY);
+                UFC_SCRATCHPAD_STRING_2_DISPLAY = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_SCRATCHPAD_STRING_2_DISPLAY");
 
-                MASTER_CAUTION_LT = DCSBIOSControlLocator.GetDCSBIOSOutput("MASTER_CAUTION_LT");
+                MASTER_CAUTION_LT = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("MASTER_CAUTION_LT");
 
                 SetLine(0, string.Format("{0,24}", "F/A-18C profile"));
 

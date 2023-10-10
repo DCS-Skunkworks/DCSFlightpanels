@@ -642,12 +642,12 @@ namespace NonVisuals.Radios
             try
             {
                 // VHF
-                _vhf1DcsbiosOutputPresetButton0 = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_OFF");
-                _vhf1DcsbiosOutputPresetButton1 = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_A");
-                _vhf1DcsbiosOutputPresetButton2 = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_B");
-                _vhf1DcsbiosOutputPresetButton3 = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_C");
-                _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_D");
-                _vhfRadioModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_T_MODE");
+                _vhf1DcsbiosOutputPresetButton0 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_OFF");
+                _vhf1DcsbiosOutputPresetButton1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_A");
+                _vhf1DcsbiosOutputPresetButton2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_B");
+                _vhf1DcsbiosOutputPresetButton3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_C");
+                _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_D");
+                _vhfRadioModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_T_MODE");
 
                 StartListeningForHidPanelChanges();
 
