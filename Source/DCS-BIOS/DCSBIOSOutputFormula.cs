@@ -55,7 +55,7 @@ namespace DCS_BIOS
                     {
                         // Console.WriteLine("Variable " + dcsbiosControl.identifier + " set to 0");
                         _variables.Add(dcsbiosControl.Identifier, 0);
-                        var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControl.Identifier);
+                        var dcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(dcsbiosControl.Identifier);
                         _dcsbiosOutputs.Add(dcsbiosOutput);
                         DCSBIOSProtocolParser.RegisterAddressToBroadCast(dcsbiosOutput.Address);
                     }

@@ -128,23 +128,17 @@ namespace NonVisuals.Radios
         {
             try
             {
-                _pltEUFDLine8 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE8");
-                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine8);
+                _pltEUFDLine8 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE8");
 
-                _pltEUFDLine9 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE9");
-                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine9);
+                _pltEUFDLine9 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE9");
 
-                _pltEUFDLine10 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE10");
-                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine10);
+                _pltEUFDLine10 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE10");
 
-                _pltEUFDLine11 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE11");
-                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine11);
+                _pltEUFDLine11 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE11");
 
-                _pltEUFDLine12 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE12");
-                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine12);
+                _pltEUFDLine12 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE12");
 
-                _pltEUFDLine14 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE14");
-                DCSBIOSStringManager.AddListeningAddress(_pltEUFDLine14);
+                _pltEUFDLine14 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE14");
 
                 StartListeningForHidPanelChanges();
             }

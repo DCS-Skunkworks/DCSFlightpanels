@@ -1,4 +1,5 @@
-﻿using DCS_BIOS.Json;
+﻿using System.Diagnostics;
+using DCS_BIOS.Json;
 
 namespace DCS_BIOS
 {
@@ -13,7 +14,8 @@ namespace DCS_BIOS
         IntegerType,
         LED,
         ServoOutput,
-        FloatBuffer
+        FloatBuffer,
+        None
     }
 
     public enum DCSBiosOutputComparison
@@ -55,9 +57,9 @@ namespace DCS_BIOS
         private volatile uint _lastUIntValue = uint.MaxValue;
         private volatile string _lastStringValue = "";
         private string _controlType; // display button toggle etc
-        private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
+        private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.None;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
-
+        private bool _uintValueHasChanged = false;
 
         [NonSerialized] private object _lockObject = new();
 
@@ -104,6 +106,44 @@ namespace DCS_BIOS
                 SpecifiedValueUInt = dcsbiosOutput.SpecifiedValueUInt;
             }
         }
+        public void Consume(DCSBIOSControl dcsbiosControl, DCSBiosOutputType dcsBiosOutputType)
+        {
+            _controlId = dcsbiosControl.Identifier;
+            _controlDescription = dcsbiosControl.Description;
+            _controlType = dcsbiosControl.PhysicalVariant;
+            try
+            {
+                if (!dcsbiosControl.HasOutput())
+                {
+                    _dcsBiosOutputType = DCSBiosOutputType.None;
+                    return;
+                }
+
+                foreach (var dcsbiosControlOutput in dcsbiosControl.Outputs)
+                {
+                    if (dcsbiosControlOutput.OutputDataType == dcsBiosOutputType)
+                    {
+                        _dcsBiosOutputType = dcsbiosControlOutput.OutputDataType;
+                        _address = dcsbiosControlOutput.Address;
+                        _mask = dcsbiosControlOutput.Mask;
+                        _maxValue = dcsbiosControlOutput.MaxValue;
+                        _maxLength = dcsbiosControlOutput.MaxLength;
+                        _shiftValue = dcsbiosControlOutput.ShiftBy;
+
+                        if (dcsBiosOutputType == DCSBiosOutputType.StringType)
+                        {
+                            DCSBIOSStringManager.AddListeningAddress(this);
+                        }
+
+                        DCSBIOSProtocolParser.RegisterAddressToBroadCast(_address);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception($"Failed to copy control {_controlId}. Control output is missing.{Environment.NewLine}");
+            }
+        }
 
         /// <summary>
         /// Checks :
@@ -137,9 +177,9 @@ namespace DCS_BIOS
                     _ => throw new Exception("Unexpected DCSBiosOutputComparison value")
                 };
 
-                result = resultComparison && !newValue.Equals(_lastUIntValue);
-                //Debug.WriteLine($"(EvaluateUInt) Result={result} Target={_specifiedValueUInt} Last={_lastUIntValue} New={newValue}");
-                _lastUIntValue = newValue;
+                result = resultComparison && !newValue.Equals(LastUIntValue);
+                //Debug.WriteLine($"(EvaluateUInt) Result={result} Target={_specifiedValueUInt} Last={LastUIntValue} New={newValue}");
+                LastUIntValue = newValue;
             }
 
             return result;
@@ -167,13 +207,13 @@ namespace DCS_BIOS
                     return false;
                 }
 
-                if (GetUIntValue(data) == _lastUIntValue)
+                if (GetUIntValue(data) == LastUIntValue && !_uintValueHasChanged)
                 {
                     // Value hasn't changed
                     return false;
                 }
 
-                _lastUIntValue = GetUIntValue(data);
+                LastUIntValue = GetUIntValue(data);
             }
 
             return true;
@@ -220,37 +260,8 @@ namespace DCS_BIOS
 
             lock (_lockObject)
             {
-                _lastUIntValue = (data & Mask) >> ShiftValue;
-                return _lastUIntValue;
-            }
-        }
-
-        public void Consume(DCSBIOSControl dcsbiosControl)
-        {
-            _controlId = dcsbiosControl.Identifier;
-            _controlDescription = dcsbiosControl.Description;
-            _controlType = dcsbiosControl.PhysicalVariant;
-            try
-            {
-                _address = dcsbiosControl.Outputs[0].Address;
-                _mask = dcsbiosControl.Outputs[0].Mask;
-                _maxValue = dcsbiosControl.Outputs[0].MaxValue;
-                _maxLength = dcsbiosControl.Outputs[0].MaxLength;
-                _shiftValue = dcsbiosControl.Outputs[0].ShiftBy;
-                if (dcsbiosControl.Outputs[0].Type.Equals("string"))
-                {
-                    _dcsBiosOutputType = DCSBiosOutputType.StringType;
-                }
-                else if (dcsbiosControl.Outputs[0].Type.Equals("integer"))
-                {
-                    _dcsBiosOutputType = DCSBiosOutputType.IntegerType;
-                }
-
-                DCSBIOSProtocolParser.RegisterAddressToBroadCast(_address);
-            }
-            catch (Exception)
-            {
-                throw new Exception($"Failed to copy control {_controlId}. Control output is missing.{Environment.NewLine}");
+                LastUIntValue = (data & Mask) >> ShiftValue;
+                return LastUIntValue;
             }
         }
 
@@ -284,7 +295,7 @@ namespace DCS_BIOS
             var entries = value.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
             _controlId = entries[0];
             var dcsBIOSControl = DCSBIOSControlLocator.GetControl(_controlId);
-            Consume(dcsBIOSControl);
+            Consume(dcsBIOSControl, DCSBiosOutputType.IntegerType);
             _dcsBiosOutputComparison = (DCSBiosOutputComparison)Enum.Parse(typeof(DCSBiosOutputComparison), entries[1]);
             _specifiedValueUInt = (uint)int.Parse(entries[2]);
         }
@@ -382,7 +393,14 @@ namespace DCS_BIOS
         public uint LastUIntValue
         {
             get => _lastUIntValue;
-            set => _lastUIntValue = value;
+            set
+            {
+                if (value != _lastUIntValue)
+                {
+                    _uintValueHasChanged = true;
+                }
+                _lastUIntValue = value;
+            }
         }
 
         [JsonIgnore]
@@ -394,8 +412,22 @@ namespace DCS_BIOS
 
         public static DCSBIOSOutput GetUpdateCounter()
         {
-            var counter = DCSBIOSControlLocator.GetDCSBIOSOutput("_UPDATE_COUNTER");
+            var counter = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("_UPDATE_COUNTER");
             return counter;
+        }
+        
+        public string GetOutputType()
+        {
+            return DCSBiosOutputType switch
+            {
+                DCSBiosOutputType.IntegerType => "integer",
+                DCSBiosOutputType.StringType => "string",
+                DCSBiosOutputType.None => "none",
+                DCSBiosOutputType.FloatBuffer => "float buffer",
+                DCSBiosOutputType.LED => "led",
+                DCSBiosOutputType.ServoOutput => "servo output",
+                _ => throw new Exception($"GetOutputType() : Failed to identify {DCSBiosOutputType} output type.")
+            };
         }
     }
 }

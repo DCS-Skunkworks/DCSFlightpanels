@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Navigation;
 using Newtonsoft.Json;
 
 namespace DCS_BIOS.Json
@@ -32,5 +34,40 @@ namespace DCS_BIOS.Json
 
         [JsonProperty("physical_variant", Required = Required.Default)]
         public string PhysicalVariant { get; set; }
+
+        public bool HasOutput()
+        {
+            return Outputs.Count > 0;
+        }
+
+        public DCSBIOSOutput GetUIntOutput()
+        {
+            foreach (var dcsbiosControlOutput in Outputs)
+            {
+                if (dcsbiosControlOutput.OutputDataType == DCSBiosOutputType.IntegerType)
+                {
+                    var dcsbiosOutput = new DCSBIOSOutput();
+                    dcsbiosOutput.Consume(this, DCSBiosOutputType.IntegerType);
+                    return dcsbiosOutput;
+                }
+            }
+
+            throw new Exception($"Control {Identifier} did not have uint output.");
+        }
+
+        public DCSBIOSOutput GetStringOutput()
+        {
+            foreach (var dcsbiosControlOutput in Outputs)
+            {
+                if (dcsbiosControlOutput.OutputDataType == DCSBiosOutputType.StringType)
+                {
+                    var dcsbiosOutput = new DCSBIOSOutput();
+                    dcsbiosOutput.Consume(this, DCSBiosOutputType.StringType);
+                    return dcsbiosOutput;
+                }
+            }
+
+            throw new Exception($"Control {Identifier} did not have string output.");
+        }
     }
 }

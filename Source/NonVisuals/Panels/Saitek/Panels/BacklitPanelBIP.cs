@@ -732,7 +732,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 return;
             }
 
-            _dcsbiosBrightnessControl = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsBiosBrightnessBinding.ControlId);
+            _dcsbiosBrightnessControl = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(_dcsBiosBrightnessBinding.ControlId);
         }
 
         public static BIPLedPositionEnum GetLedPosition(string imageName)

@@ -1184,15 +1184,15 @@ namespace NonVisuals.Radios
             try
             {
                 // COMM 1
-                _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_FREQ");
-                _comm1DcsbiosOutputChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_CHANNEL_NUMERIC");
+                _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM1_FREQ");
+                _comm1DcsbiosOutputChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM1_CHANNEL_NUMERIC");
 
                 // _comm1DcsbiosOutputPull = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_COMM1_PULL");
                 // _comm1DcsbiosOutputVol = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_COMM1_VOL");
 
                 // COMM 2
-                _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM2_FREQ");
-                _comm2DcsbiosOutputChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM2_CHANNEL_NUMERIC");
+                _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM2_FREQ");
+                _comm2DcsbiosOutputChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM2_CHANNEL_NUMERIC");
 
                 // _comm1DcsbiosOutputPull = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_COMM1_PULL");
                 // _comm1DcsbiosOutputVol = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_COMM1_VOL");
@@ -1200,7 +1200,7 @@ namespace NonVisuals.Radios
                 // VHF FM
 
                 // ILS
-                _ilsDcsbiosOutputChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("COM_ILS_CHANNEL_SW");
+                _ilsDcsbiosOutputChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COM_ILS_CHANNEL_SW");
 
                 // TACAN
                 StartListeningForHidPanelChanges();

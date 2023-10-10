@@ -2772,31 +2772,28 @@ namespace NonVisuals.Radios
             try
             {
                 // VHF COMM
-                _vhfCommDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFCOMM_FREQ");
-                DCSBIOSStringManager.AddListeningAddress(_vhfCommDcsbiosOutputCockpitFrequency);
+                _vhfCommDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VHFCOMM_FREQ");
 
                 // UHF
-                _uhfDcsbiosOutputCockpitPresetChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET");
-                _uhfDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FREQ");
-                DCSBIOSStringManager.AddListeningAddress(_uhfDcsbiosOutputCockpitFrequency);
+                _uhfDcsbiosOutputCockpitPresetChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_PRESET");
+                _uhfDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_FREQ");
 
                 // VHF NAV
-                _vhfNavDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFNAV_FREQ");
-                DCSBIOSStringManager.AddListeningAddress(_vhfNavDcsbiosOutputCockpitFrequency);
+                _vhfNavDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VHFNAV_FREQ");
 
                 // INTERCOMM
-                _interCommDcsbiosOutputCockpitPos = DCSBIOSControlLocator.GetDCSBIOSOutput("INT_MODE");
+                _interCommDcsbiosOutputCockpitPos = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("INT_MODE");
 
                 // VHF FM
-                _vhfFmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQ1");
-                _vhfFmDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQ2");
-                _vhfFmDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQ3");
-                _vhfFmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQ4");
+                _vhfFmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ1");
+                _vhfFmDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ2");
+                _vhfFmDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ3");
+                _vhfFmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ4");
 
                 // ADF (0-2)
-                _adfDcsbiosOutputCockpitFrequencyBand = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_BAND");
-                _adfDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_FREQ");
-                _adfDcsbiosOutputSignalStrength = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_SIGNAL");
+                _adfDcsbiosOutputCockpitFrequencyBand = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF_BAND");
+                _adfDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF_FREQ");
+                _adfDcsbiosOutputSignalStrength = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF_SIGNAL");
 
                 StartListeningForHidPanelChanges();
             }

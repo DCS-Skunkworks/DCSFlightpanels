@@ -1046,20 +1046,20 @@ namespace NonVisuals.Radios
             try
             {
                 // COM1
-                _arc27PresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC27_CHAN_SEL");
-                _arc27ModeDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC27_PWR_SEL");
+                _arc27PresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC27_CHAN_SEL");
+                _arc27ModeDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC27_PWR_SEL");
 
                 // COM2
 
                 // NAV1
-                _arn6ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("ARN6_FREQUENCY");
-                _arn6BandDcsbiosOutputCockpit = DCSBIOSControlLocator.GetDCSBIOSOutput("ARN6_CHAN_SEL");
+                _arn6ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARN6_FREQUENCY");
+                _arn6BandDcsbiosOutputCockpit = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARN6_CHAN_SEL");
 
                 // NAV2
-                _arn6ModeDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARN6_FUNC_SEL");
+                _arn6ModeDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARN6_FUNC_SEL");
 
                 // ADF
-                _apx6ModeDcsbiosOutputCockpit = DCSBIOSControlLocator.GetDCSBIOSOutput("APX6_MASTER");
+                _apx6ModeDcsbiosOutputCockpit = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("APX6_MASTER");
 
                 StartListeningForHidPanelChanges();
 

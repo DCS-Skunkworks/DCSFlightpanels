@@ -2156,26 +2156,22 @@ namespace NonVisuals.Radios
             try
             {
                 // COMM 1 VUHF1
-                _vuhf1DcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM_1_HIGH_FREQ");
-                _vuhf1DcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM_1_DIAL3_FREQ");
-                _vuhf1DcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM_1_DIAL4_FREQ");
+                _vuhf1DcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_1_HIGH_FREQ");
+                _vuhf1DcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_1_DIAL3_FREQ");
+                _vuhf1DcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_1_DIAL4_FREQ");
 
                 // COMM 2 VUHF2
-                _vuhf2DcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM_2_HIGH_FREQ");
-                _vuhf2DcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM_2_DIAL3_FREQ");
-                _vuhf2DcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM_2_DIAL4_FREQ");
+                _vuhf2DcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_2_HIGH_FREQ");
+                _vuhf2DcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_2_DIAL3_FREQ");
+                _vuhf2DcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_2_DIAL4_FREQ");
 
                 // NAV 1 TACAN
-                _tacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHAN_10");
-                DCSBIOSStringManager.AddListeningAddress(_tacanDcsbiosOutputTensDial);
-                _tacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHAN_1");
-                DCSBIOSStringManager.AddListeningAddress(_tacanDcsbiosOutputOnesDial);
+                _tacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHAN_10");
+                _tacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHAN_1");
 
                 // NAV 2 VOR
-                _vorDcsbiosOutputMhzDial = DCSBIOSControlLocator.GetDCSBIOSOutput("VOR_ILS_FREQ_1");
-                DCSBIOSStringManager.AddListeningAddress(_vorDcsbiosOutputMhzDial);
-                _vorDcsbiosOutputKhzDial = DCSBIOSControlLocator.GetDCSBIOSOutput("VOR_ILS_FREQ_50");
-                DCSBIOSStringManager.AddListeningAddress(_vorDcsbiosOutputKhzDial);
+                _vorDcsbiosOutputMhzDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VOR_ILS_FREQ_1");
+                _vorDcsbiosOutputKhzDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VOR_ILS_FREQ_50");
 
                 StartListeningForHidPanelChanges();
 

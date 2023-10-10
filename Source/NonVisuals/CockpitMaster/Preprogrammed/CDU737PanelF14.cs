@@ -90,20 +90,20 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             {
                 BaseColor = CDUColor.WHITE;
 
-                _RIO_CAP_CATEGORY = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_CAP_CATRGORY");
+                _RIO_CAP_CATEGORY = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_CAP_CATRGORY");
 
-                _RIO_HCU_TID  = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_HCU_TID");
-                _RIO_HCU_TCS = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_HCU_TCS");
-                _RIO_HCU_RADAR = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_HCU_RADAR");
-                _RIO_HCU_DDD = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_HCU_DDD");
+                _RIO_HCU_TID  = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_HCU_TID");
+                _RIO_HCU_TCS = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_HCU_TCS");
+                _RIO_HCU_RADAR = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_HCU_RADAR");
+                _RIO_HCU_DDD = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_HCU_DDD");
 
-                _RIO_RADAR_TWSAUTO = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_RADAR_TWSAUTO");
-                _RIO_RADAR_PULSESEARCH = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_RADAR_PULSE");
-                _RIO_RADAR_TWSMAN = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_RADAR_TWSMAN");
-                _RIO_RADAR_PDSRCH = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_RADAR_PDSRCH");
-                _RIO_RADAR_RWS = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_RADAR_RWS");
-                _RIO_RADAR_PDSTT = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_RADAR_PDSTT");
-                _RIO_RADAR_PSTT = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_RADAR_PSTT");
+                _RIO_RADAR_TWSAUTO = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_RADAR_TWSAUTO");
+                _RIO_RADAR_PULSESEARCH = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_RADAR_PULSE");
+                _RIO_RADAR_TWSMAN = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_RADAR_TWSMAN");
+                _RIO_RADAR_PDSRCH = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_RADAR_PDSRCH");
+                _RIO_RADAR_RWS = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_RADAR_RWS");
+                _RIO_RADAR_PDSTT = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_RADAR_PDSTT");
+                _RIO_RADAR_PSTT = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_RADAR_PSTT");
 
                 SetLine(0, string.Format("{0,24}","F14 RIO profile"));
 

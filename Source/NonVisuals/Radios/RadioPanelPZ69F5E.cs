@@ -1864,18 +1864,17 @@ namespace NonVisuals.Radios
             try
             {
                 // UHF
-                _uhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_100MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_10MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_1MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_01MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_0025MHZ_SEL");
-                _uhfDcsbiosOutputFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FREQ");
-                _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET_SEL");
-                _uhfDcsbiosOutputFunction = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FUNC");
+                _uhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_100MHZ_SEL");
+                _uhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_10MHZ_SEL");
+                _uhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_1MHZ_SEL");
+                _uhfDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_01MHZ_SEL");
+                _uhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_0025MHZ_SEL");
+                _uhfDcsbiosOutputFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_FREQ");
+                _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_PRESET_SEL");
+                _uhfDcsbiosOutputFunction = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_FUNC");
 
                 // TACAN
-                _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
-                DCSBIOSStringManager.AddListeningAddress(_tacanDcsbiosOutputFreqChannel); // _tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
+                _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHANNEL");
 
                 StartListeningForHidPanelChanges();
 

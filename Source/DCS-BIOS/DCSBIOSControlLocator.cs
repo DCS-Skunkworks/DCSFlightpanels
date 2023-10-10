@@ -80,7 +80,12 @@ namespace DCS_BIOS
             }
         }
 
-        public static DCSBIOSOutput GetDCSBIOSOutput(string controlId)
+        public static DCSBIOSOutput GetDCSBIOSOutput(string controlId, DCSBiosOutputType dcsBiosOutputType)
+        {
+            return dcsBiosOutputType == DCSBiosOutputType.IntegerType ? GetUIntDCSBIOSOutput(controlId) : GetStringDCSBIOSOutput(controlId);
+        }
+
+        public static DCSBIOSOutput GetUIntDCSBIOSOutput(string controlId)
         {
             lock (LockObject)
             {
@@ -93,7 +98,31 @@ namespace DCS_BIOS
                 {
                     var control = GetControl(controlId);
                     var dcsBIOSOutput = new DCSBIOSOutput();
-                    dcsBIOSOutput.Consume(control);
+                    dcsBIOSOutput.Consume(control, DCSBiosOutputType.IntegerType);
+                    return dcsBIOSOutput;
+                }
+                catch (InvalidOperationException ioe)
+                {
+                    throw new Exception($"Check DCS-BIOS version. Failed to create DCSBIOSOutput based on control {controlId} for profile {DCSAircraft.JSONFilename}{Environment.NewLine}{ioe.Message}");
+                }
+            }
+        }
+
+        public static DCSBIOSOutput GetStringDCSBIOSOutput(string controlId)
+        {
+            lock (LockObject)
+            {
+                if (Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
+                {
+                    throw new Exception("DCSBIOSControlLocator.GetDCSBIOSOutput() Should not be called when only key emulator is active");
+                }
+
+                try
+                {
+                    var control = GetControl(controlId);
+                    var dcsBIOSOutput = new DCSBIOSOutput();
+                    dcsBIOSOutput.Consume(control, DCSBiosOutputType.StringType);
+                    DCSBIOSStringManager.AddListeningAddress(dcsBIOSOutput);
                     return dcsBIOSOutput;
                 }
                 catch (InvalidOperationException ioe)
@@ -404,7 +433,7 @@ namespace DCS_BIOS
             }
 
             LoadControls();
-            return DCSBIOSControls.Where(controlObject => controlObject.Outputs.Count > 0 && controlObject.Outputs[0].OutputDataType == DCSBiosOutputType.StringType);
+            return DCSBIOSControls.Where(o => o.Outputs.Count > 0 && o.Outputs.Any(x => x.OutputDataType == DCSBiosOutputType.StringType));
         }
 
         public static IEnumerable<DCSBIOSControl> GetIntegerOutputControls()
@@ -415,7 +444,7 @@ namespace DCS_BIOS
             }
 
             LoadControls();
-            return DCSBIOSControls.Where(controlObject => controlObject.Outputs.Count > 0 && controlObject.Outputs[0].OutputDataType == DCSBiosOutputType.IntegerType);
+            return DCSBIOSControls.Where(o => o.Outputs.Count > 0 && o.Outputs.Any(x => x.OutputDataType == DCSBiosOutputType.IntegerType));
         }
 
         public static IEnumerable<DCSBIOSControl> GetInputControls()

@@ -668,12 +668,10 @@ namespace NonVisuals.Radios
             try
             {
                 // V/UHF COMM1
-                _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_STRING_FREQ");
-                DCSBIOSStringManager.AddListeningAddress(_comm1DcsbiosOutputFreq);
+                _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM1_STRING_FREQ");
 
                 // V/UHF COMM2
-                _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM2_STRING_FREQ");
-                DCSBIOSStringManager.AddListeningAddress(_comm2DcsbiosOutputFreq);
+                _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM2_STRING_FREQ");
 
                 StartListeningForHidPanelChanges();
 

@@ -3078,40 +3078,38 @@ namespace NonVisuals.Radios
             try
             {
                 // UHF
-                _uhfDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF1_FREQ_MODE");
-                _uhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_HIGH_FREQ");
-                _uhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_DIAL3_FREQ");
-                _uhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_DIAL4_FREQ");
-                _uhfDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF1_FUNCTION");
-                _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_REMOTE_DISP");
-                DCSBIOSStringManager.AddListeningAddress(_uhfDcsbiosOutputSelectedChannel);
+                _uhfDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_UHF1_FREQ_MODE");
+                _uhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_UHF_HIGH_FREQ");
+                _uhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_UHF_DIAL3_FREQ");
+                _uhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_UHF_DIAL4_FREQ");
+                _uhfDcsbiosOutputMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_UHF1_FUNCTION");
+                _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_UHF_REMOTE_DISP");
 
                 // VUHF
-                _vuhfDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_FREQ_MODE");
-                _vuhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_HIGH_FREQ");
-                _vuhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL3_FREQ");
-                _vuhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL4_FREQ");
-                _vuhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_VUHF_REMOTE_DISP");
-                DCSBIOSStringManager.AddListeningAddress(_vuhfDcsbiosOutputSelectedChannel);
+                _vuhfDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_VUHF_FREQ_MODE");
+                _vuhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_VUHF_HIGH_FREQ");
+                _vuhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_VUHF_DIAL3_FREQ");
+                _vuhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_VUHF_DIAL4_FREQ");
+                _vuhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_VUHF_REMOTE_DISP");
 
-                _vuhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_HIGH_FREQ");
-                _vuhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL3_FREQ");
-                _vuhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL4_FREQ");
-                _vuhfDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_MODE");
+                _vuhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_VUHF_HIGH_FREQ");
+                _vuhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_VUHF_DIAL3_FREQ");
+                _vuhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_VUHF_DIAL4_FREQ");
+                _vuhfDcsbiosOutputMode = DCSBIOSControlLocator.GetStringDCSBIOSOutput("RIO_VUHF_MODE");
 
                 // Pilot & RIO TACAN
-                _pilotTacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_DIAL_TENS");
-                _pilotTacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_DIAL_ONES");
-                _pilotTacanDcsbiosOutputXYDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_CHANNEL");
-                _rioTacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_TACAN_DIAL_TENS");
-                _rioTacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_TACAN_DIAL_ONES");
-                _rioTacanDcsbiosOutputXYDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_TACAN_CHANNEL");
+                _pilotTacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_TACAN_DIAL_TENS");
+                _pilotTacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_TACAN_DIAL_ONES");
+                _pilotTacanDcsbiosOutputXYDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_TACAN_CHANNEL");
+                _rioTacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_TACAN_DIAL_TENS");
+                _rioTacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_TACAN_DIAL_ONES");
+                _rioTacanDcsbiosOutputXYDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_TACAN_CHANNEL");
 
                 // RIO Link 4
-                _rioLink4DcsbiosOutputHundredsDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_DATALINK_FREQ_10");
-                _rioLink4DcsbiosOutputTensDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_DATALINK_FREQ_1");
-                _rioLink4DcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_DATALINK_FREQ_100");
-                _rioLink4DcsbiosOutputPowerSwitch = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_DATALINK_PW");
+                _rioLink4DcsbiosOutputHundredsDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_DATALINK_FREQ_10");
+                _rioLink4DcsbiosOutputTensDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_DATALINK_FREQ_1");
+                _rioLink4DcsbiosOutputOnesDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_DATALINK_FREQ_100");
+                _rioLink4DcsbiosOutputPowerSwitch = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_DATALINK_PW");
 
                 StartListeningForHidPanelChanges();
 

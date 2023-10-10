@@ -3701,56 +3701,55 @@ namespace NonVisuals.Radios
             try
             {
                 // VHF AM
-                _vhfAmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ1");
+                _vhfAmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFAM_FREQ1");
 
                 // _vhfAmDcsbiosOutputFreqDial1.Debug = true;
-                _vhfAmDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ2");
+                _vhfAmDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFAM_FREQ2");
 
                 // _vhfAmDcsbiosOutputFreqDial2.Debug = true;
-                _vhfAmDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ3");
+                _vhfAmDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFAM_FREQ3");
 
                 // _vhfAmDcsbiosOutputFreqDial3.Debug = true;
-                _vhfAmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQ4");
+                _vhfAmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFAM_FREQ4");
 
                 // _vhfAmDcsbiosOutputFreqDial4.Debug = true;
-                _vhfAmDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQEMER");
-                _vhfAmDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_PRESET");
-                _vhfAmDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_MODE");
+                _vhfAmDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFAM_FREQEMER");
+                _vhfAmDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFAM_PRESET");
+                _vhfAmDcsbiosOutputMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFAM_MODE");
 
                 // UHF
-                _uhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_100MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_10MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_1MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_POINT1MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_POINT25_SEL");
-                _uhfDcsbiosOutputFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_MODE");
-                _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET_SEL");
-                _uhfDcsbiosOutputFunction = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FUNCTION");
+                _uhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_100MHZ_SEL");
+                _uhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_10MHZ_SEL");
+                _uhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_1MHZ_SEL");
+                _uhfDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_POINT1MHZ_SEL");
+                _uhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_POINT25_SEL");
+                _uhfDcsbiosOutputFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_MODE");
+                _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_PRESET_SEL");
+                _uhfDcsbiosOutputFunction = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_FUNCTION");
 
                 // VHF FM
-                _vhfFmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQ1");
+                _vhfFmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ1");
 
                 // _vhfFmDcsbiosOutputFreqDial1.Debug = true;
-                _vhfFmDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQ2");
+                _vhfFmDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ2");
 
                 // _vhfFmDcsbiosOutputFreqDial2.Debug = true;
-                _vhfFmDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQ3");
+                _vhfFmDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ3");
 
                 // _vhfFmDcsbiosOutputFreqDial3.Debug = true;
-                _vhfFmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQ4");
+                _vhfFmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ4");
 
                 // _vhfFmDcsbiosOutputFreqDial4.Debug = true;
-                _vhfFmDcsbiosOutputFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQEMER");
-                _vhfFmDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_PRESET");
-                _vhfFmDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_MODE");
+                _vhfFmDcsbiosOutputFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQEMER");
+                _vhfFmDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_PRESET");
+                _vhfFmDcsbiosOutputMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_MODE");
 
                 // ILS
-                _ilsDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("ILS_MHZ");
-                _ilsDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("ILS_KHZ");
+                _ilsDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ILS_MHZ");
+                _ilsDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ILS_KHZ");
 
                 // TACAN
-                _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
-                DCSBIOSStringManager.AddListeningAddress(_tacanDcsbiosOutputFreqChannel); // _tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
+                _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHANNEL");
 
                 StartListeningForHidPanelChanges();
 

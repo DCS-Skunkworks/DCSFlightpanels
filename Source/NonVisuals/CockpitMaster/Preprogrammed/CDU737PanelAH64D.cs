@@ -52,45 +52,33 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
 
                 // PLT Keyboard display
 
-                _PLT_KU_DISPLAY = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_KU_DISPLAY");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_KU_DISPLAY);
+                _PLT_KU_DISPLAY = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_KU_DISPLAY");
 
-                _PLT_MASTER_IGN_SW = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_MASTER_IGN_SW");
-                _PLT_EUFD_BRT = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_BRT");
+                _PLT_MASTER_IGN_SW = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_MASTER_IGN_SW");
+                _PLT_EUFD_BRT = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_BRT");
 
                 // UFD Upper status 
 
-                _PLT_EUFD_LINE1 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE1");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE1);
-                _PLT_EUFD_LINE2 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE2");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE2);
-                _PLT_EUFD_LINE3 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE3");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE3);
-                _PLT_EUFD_LINE4 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE4");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE4);
-                _PLT_EUFD_LINE5 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE5");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE5);
+                _PLT_EUFD_LINE1 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE1");
+                _PLT_EUFD_LINE2 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE2");
+                _PLT_EUFD_LINE3 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE3");
+                _PLT_EUFD_LINE4 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE4");
+                _PLT_EUFD_LINE5 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE5");
 
                 // UFD Frequency
-                _PLT_EUFD_LINE8 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE8");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE8);
+                _PLT_EUFD_LINE8 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE8");
 
-                _PLT_EUFD_LINE9 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE9");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE9);
+                _PLT_EUFD_LINE9 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE9");
 
-                _PLT_EUFD_LINE10 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE10");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE10);
+                _PLT_EUFD_LINE10 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE10");
 
-                _PLT_EUFD_LINE11 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE11");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE11);
+                _PLT_EUFD_LINE11 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE11");
 
-                _PLT_EUFD_LINE12 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE12");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE12);
+                _PLT_EUFD_LINE12 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE12");
 
-                _PLT_EUFD_LINE14 = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_EUFD_LINE14");
-                DCSBIOSStringManager.AddListeningAddress(_PLT_EUFD_LINE14);
+                _PLT_EUFD_LINE14 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE14");
 
-                _PLT_MASTER_WARNING_L = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_MASTER_WARNING_L");
+                _PLT_MASTER_WARNING_L = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_MASTER_WARNING_L");
 
                 SetLine(0, string.Format("{0,24}", "AH64D profile"));
 
