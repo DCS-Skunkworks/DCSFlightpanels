@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using ClassLibraryCommon;
 using ControlReference.Events;
 using ControlReference.Interfaces;
@@ -23,17 +26,21 @@ namespace ControlReference.UserControls
     {
         private readonly DCSBIOSControl _dcsbiosControl;
         private ToolTip _copyToolTip = null;
-        private readonly DCSBIOSOutput _dcsbiosOutput = null;
+        private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new();
+        private bool _hasLoaded = false;
 
         public DCSBIOSControlUserControl(DCSBIOSControl dcsbiosControl)
         {
             InitializeComponent();
+
             _dcsbiosControl = dcsbiosControl;
-            _dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsbiosControl.Identifier);
-            if (_dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
+            foreach (var dcsbiosControlOutput in dcsbiosControl.Outputs)
             {
-                DCSBIOSStringManager.AddListeningAddress(_dcsbiosOutput);
+                _dcsbiosOutputs.Add(DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsbiosControl.Identifier, dcsbiosControlOutput.OutputDataType));
             }
+
+
+
 
             REFEventHandler.AttachDCSBIOSDataListener(this);
         }
@@ -56,6 +63,9 @@ namespace ControlReference.UserControls
         {
             try
             {
+                if (_hasLoaded) return;
+                _hasLoaded = true;
+
                 ShowControl();
                 SetFormState();
             }
@@ -81,15 +91,21 @@ namespace ControlReference.UserControls
 
         public void NewDCSBIOSData(object sender, DCSBIOSDataCombinedEventArgs args)
         {
-            if (_dcsbiosOutput.Address == args.Address && args.IsUIntValue)
-            {
-                SetUintValue(_dcsbiosOutput.GetUIntValue(args.Data));
-                return;
-            }
 
-            if (_dcsbiosOutput.Address == args.Address && !args.IsUIntValue)
+            if (_dcsbiosOutputs.Any(o => o.Address == args.Address) == false) return;
+
+            foreach (var dcsbiosOutput in _dcsbiosOutputs)
             {
-                SetStringValue(args.StringValue);
+                if (dcsbiosOutput.Address == args.Address && args.IsUIntValue)
+                {
+                    SetUintValue(dcsbiosOutput.GetUIntValue(args.Data));
+                    break;
+                }
+
+                if (dcsbiosOutput.Address == args.Address && !args.IsUIntValue)
+                {
+                    SetStringValue(args.StringValue);
+                }
             }
         }
 
@@ -97,14 +113,20 @@ namespace ControlReference.UserControls
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = Convert.ToString(value)));
+                Dispatcher?.BeginInvoke((Action)(() => LabelCurrentUIntValue.Content = Convert.ToString(value)));
                 Dispatcher?.BeginInvoke((Action)(() => SetSliderValue(value)));
 
-                if (_dcsbiosOutput.MaxValue == 0)
+                if (_dcsbiosOutputs.Any(o => o.DCSBiosOutputType == DCSBiosOutputType.IntegerType) == false)
                 {
                     return;
                 }
-                var percentage = (value * 100) / _dcsbiosOutput.MaxValue;
+
+                var dcsbiosOutput = _dcsbiosOutputs.First(o => o.DCSBiosOutputType == DCSBiosOutputType.IntegerType);
+                if (dcsbiosOutput.MaxValue == 0)
+                {
+                    return;
+                }
+                var percentage = (value * 100) / dcsbiosOutput.MaxValue;
                 Dispatcher?.BeginInvoke((Action)(() => LabelPercentage.Content = $"({percentage}%)"));
             }
             catch (Exception ex)
@@ -117,7 +139,7 @@ namespace ControlReference.UserControls
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(() => LabelCurrentValue.Content = $"->{value}<-"));
+                Dispatcher?.BeginInvoke((Action)(() => LabelCurrentStringValue.Content = $"->{value}<-"));
             }
             catch (Exception ex)
             {
@@ -196,18 +218,27 @@ namespace ControlReference.UserControls
                     }
                 }
 
-                if (_dcsbiosControl.Outputs[0].OutputDataType == DCSBiosOutputType.IntegerType)
+                StackPanelUInt.Visibility = Visibility.Collapsed;
+                StackPanelString.Visibility = Visibility.Collapsed;
+
+                foreach (var dcsbiosOutput in _dcsbiosOutputs)
                 {
-                    LabelOutputType.Content = "integer";
-                    LabelOutputMaxValue.Content = _dcsbiosControl.Outputs[0].MaxValue;
-                }
-                if (_dcsbiosControl.Outputs[0].OutputDataType == DCSBiosOutputType.StringType)
-                {
-                    LabelOutputMaxValueDesc.Content = "Max Length: ";
-                    LabelOutputType.Content = "string";
-                    LabelOutputMaxValue.Content = _dcsbiosControl.Outputs[0].MaxLength;
+                    if (dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
+                    {
+                        StackPanelUInt.Visibility = Visibility.Visible;
+                        LabelOutputMaxValue.Content = dcsbiosOutput.MaxValue;
+                    }
+                    else if (dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
+                    {
+                        StackPanelString.Visibility = Visibility.Visible;
+                        LabelOutputMaxLength.Content = dcsbiosOutput.MaxLength;
+                    }
                 }
 
+                if (_dcsbiosOutputs.Count > 1)
+                {
+                    StackPanelUInt.Background = new SolidColorBrush(Colors.WhiteSmoke);
+                }
             }
             catch (Exception ex)
             {
@@ -262,7 +293,7 @@ namespace ControlReference.UserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void SliderSetState_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             try

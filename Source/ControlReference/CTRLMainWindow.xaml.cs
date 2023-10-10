@@ -144,8 +144,7 @@ namespace ControlReference
             }
             _metaControls = DCSBIOSControlLocator.LoadMetaControls();
             _dcsbiosVersionOutput = new DCSBIOSOutput();
-            _dcsbiosVersionOutput.Consume(_metaControls.Find(o => o.Identifier == "DCS_BIOS"));
-            DCSBIOSStringManager.AddListeningAddress(_dcsbiosVersionOutput);
+            _dcsbiosVersionOutput.Consume(_metaControls.Find(o => o.Identifier == "DCS_BIOS"), DCSBiosOutputType.StringType);
         }
 
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -156,7 +155,7 @@ namespace ControlReference
 
                 foreach (var dcsbiosOutput in _loadedDCSBIOSOutputs)
                 {
-                    if (dcsbiosOutput.Address == e.Address)
+                    if (dcsbiosOutput.Address == e.Address && dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
                     {
                         dcsbiosOutput.GetUIntValue(e.Data); // this is only to save the value inside the output for the export function
                         REFEventHandler.NewDCSBIOSUIntData(this, e.Address, e.Data);
@@ -175,21 +174,21 @@ namespace ControlReference
             {
                 if (_changeOfModuleActive) return;
 
-                if (string.IsNullOrWhiteSpace(e.StringData))
+                if (string.IsNullOrEmpty(e.StringData))
                 {
                     return;
                 }
-                
+
                 foreach (var dcsbiosOutput in _loadedDCSBIOSOutputs)
                 {
-                    if (dcsbiosOutput.Address == e.Address)
+                    if (dcsbiosOutput.Address == e.Address && dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
                     {
                         dcsbiosOutput.LastStringValue = e.StringData;
                         REFEventHandler.NewDCSBIOSStringData(this, e.Address, e.StringData);
                     }
                 }
 
-                if (_checkDCSBIOSVersionOnce)
+                if (_checkDCSBIOSVersionOnce && _dcsbiosVersionOutput.Address == e.Address)
                 {
                     Dispatcher?.Invoke(() =>
                     {
@@ -295,8 +294,8 @@ namespace ControlReference
                 }
                 _showLastProfile = false;
             }
-            
-            if(!found) ComboBoxModules.SelectedIndex = 0;
+
+            if (!found) ComboBoxModules.SelectedIndex = 0;
             UpdateComboBoxCategories();
         }
 
@@ -322,35 +321,43 @@ namespace ControlReference
         {
             try
             {
-                if (ComboBoxModules.SelectedValue == null)
+                _changeOfModuleActive = true;
+
+                try
                 {
-                    return;
+                    if (ComboBoxModules.SelectedValue == null)
+                    {
+                        return;
+                    }
+
+                    var selectedModule = (DCSAircraft)ComboBoxModules.SelectedItem;
+                    Settings.Default.LastProfileID = selectedModule.ID;
+                    Settings.Default.Save();
+                    DCSBIOSControlLocator.DCSAircraft = selectedModule;
+                    _loadedControls = DCSBIOSControlLocator.ReadDataFromJsonFileSimple(selectedModule.JSONFilename);
+                    _loadedDCSBIOSOutputs.Clear();
+                    foreach (var dcsbiosControl in _loadedControls)
+                    {
+                        foreach (var dcsbiosControlOutput in dcsbiosControl.Outputs)
+                        {
+                            var dcsbiosOutput = new DCSBIOSOutput();
+                            dcsbiosOutput.Consume(dcsbiosControl, dcsbiosControlOutput.OutputDataType);
+                            _loadedDCSBIOSOutputs.Add(dcsbiosOutput);
+                        }
+                    }
+                    UpdateComboBoxCategories();
+                    _changeOfModuleActive = false;
+                    ShowControls();
+                }
+                catch (Exception ex)
+                {
+                    Common.ShowErrorMessageBox(ex);
                 }
 
-                _changeOfModuleActive = true;
-                var selectedModule = (DCSAircraft)ComboBoxModules.SelectedItem;
-                Settings.Default.LastProfileID = selectedModule.ID;
-                Settings.Default.Save();
-                DCSBIOSControlLocator.DCSAircraft = selectedModule;
-                _loadedControls = DCSBIOSControlLocator.ReadDataFromJsonFileSimple(selectedModule.JSONFilename);
-                _loadedDCSBIOSOutputs.Clear();
-                foreach (var dcsbiosControl in _loadedControls)
-                {
-                    var dcsbiosOutput = new DCSBIOSOutput();
-                    dcsbiosOutput.Consume(dcsbiosControl);
-                    if (dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
-                    {
-                        DCSBIOSStringManager.AddListeningAddress(dcsbiosOutput);
-                    }
-                    _loadedDCSBIOSOutputs.Add(dcsbiosOutput);
-                }
-                UpdateComboBoxCategories();
-                _changeOfModuleActive = false;
-                ShowControls();
             }
-            catch (Exception ex)
+            finally
             {
-                Common.ShowErrorMessageBox(ex);
+                _changeOfModuleActive = false;
             }
         }
 

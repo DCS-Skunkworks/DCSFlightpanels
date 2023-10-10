@@ -856,16 +856,16 @@ namespace NonVisuals.Radios
             try
             {
                 // VHF
-                _vhf1DcsbiosOutputPresetButton0 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_RADIO_ON_OFF");
-                _vhf1DcsbiosOutputPresetButton1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_RADIO_CHAN_A");
-                _vhf1DcsbiosOutputPresetButton2 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_RADIO_CHAN_B");
-                _vhf1DcsbiosOutputPresetButton3 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_RADIO_CHAN_C");
-                _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_RADIO_CHAN_D");
-                _vhf1RadioModeDial1PresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_MODE2");
-                _vhf1RadioModeDial2PresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_MODE3");
+                _vhf1DcsbiosOutputPresetButton0 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_ON_OFF");
+                _vhf1DcsbiosOutputPresetButton1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_A");
+                _vhf1DcsbiosOutputPresetButton2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_B");
+                _vhf1DcsbiosOutputPresetButton3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_C");
+                _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_D");
+                _vhf1RadioModeDial1PresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_MODE2");
+                _vhf1RadioModeDial2PresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_MODE3");
                 // LF DETROLA
-                _lfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DETROLA_FREQUENCY");
-                _lfRadioVolumeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DETROLA_VOLUME");
+                _lfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_FREQUENCY");
+                _lfRadioVolumeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_VOLUME");
 
                 StartListeningForHidPanelChanges();
 

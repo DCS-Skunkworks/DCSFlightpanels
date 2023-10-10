@@ -844,9 +844,9 @@ namespace NonVisuals.Radios
                 // COM2
 
                 // NAV1
-                _tilsChannelSelectorDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("TILS_CHANNEL_SELECT");
-                _tilsChannelLayerSelectorDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("TILS_CHANNEL_LAYER");
-                _masterModeSelectorDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("MASTER_MODE_SELECT");
+                _tilsChannelSelectorDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TILS_CHANNEL_SELECT");
+                _tilsChannelLayerSelectorDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TILS_CHANNEL_LAYER");
+                _masterModeSelectorDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("MASTER_MODE_SELECT");
 
                 // NAV2
 

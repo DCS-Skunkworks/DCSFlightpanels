@@ -202,7 +202,7 @@ namespace DCSFlightpanels.Windows
                 if (_dataGridValues.SelectedItems.Count == 1)
                 {
                     var dcsbiosControl = (DCSBIOSControl)_dataGridValues.SelectedItem;
-                    var dcsBiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControl.Identifier);
+                    var dcsBiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(dcsbiosControl.Identifier);
                     var textBox = (TextBox)_dataGridValues.Tag;
                     if (Equals(textBox, TextBoxSearch1))
                     {

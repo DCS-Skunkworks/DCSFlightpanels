@@ -941,19 +941,18 @@ namespace NonVisuals.Radios
             try
             {
                 // VHF
-                _vhfRadioSquelchSwitchDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(VHF_RADIO_SQUELCH_TOGGLE);
-                _vhfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(VHF_RADIO_FREQUENCY);
-                DCSBIOSStringManager.AddListeningAddress(_vhfRadioFrequencyDcsbiosOutput);
+                _vhfRadioSquelchSwitchDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(VHF_RADIO_SQUELCH_TOGGLE);
+                _vhfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetStringDCSBIOSOutput(VHF_RADIO_FREQUENCY);
 
                 // ADF
-                _adfFrontChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(ADF_FRONT_CHANNEL);
-                _adfRearChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(ADF_REAR_CHANNEL);
+                _adfFrontChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(ADF_FRONT_CHANNEL);
+                _adfRearChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(ADF_REAR_CHANNEL);
 
                 // GMK
-                _gmkHeadingSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(GMK_HEADING_SELECTOR);
-                _gmkHemisphereSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(GMK_HEMISPHERE_SELECTOR);
-                _gmkModeSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(GMK_MODE_SELECTOR);
-                _gmkLatitudeDialDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(GMK_LATITUDE_SELECTOR);
+                _gmkHeadingSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_HEADING_SELECTOR);
+                _gmkHemisphereSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_HEMISPHERE_SELECTOR);
+                _gmkModeSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_MODE_SELECTOR);
+                _gmkLatitudeDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_LATITUDE_SELECTOR);
 
                 StartListeningForHidPanelChanges();
             }

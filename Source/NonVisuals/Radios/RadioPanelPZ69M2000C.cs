@@ -984,26 +984,24 @@ namespace NonVisuals.Radios
             try
             {
                 // COM1
-                _vhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_FREQUENCY");
-                DCSBIOSStringManager.AddListeningAddress(_vhfDcsbiosOutputPresetFreqString);
-                _vhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_CH_SEL");
+                _vhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VHF_FREQUENCY");
+                _vhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_CH_SEL");
 
                 // COM2
-                _uhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FREQUENCY");
-                DCSBIOSStringManager.AddListeningAddress(_uhfDcsbiosOutputPresetFreqString);
-                _uhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET_KNOB");
+                _uhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_FREQUENCY");
+                _uhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_PRESET_KNOB");
 
                 // NAV1
-                _tacanDcsbiosOutputDialTens = DCSBIOSControlLocator.GetDCSBIOSOutput("TAC_CH_10_SEL");
-                _tacanDcsbiosOutputDialOnes = DCSBIOSControlLocator.GetDCSBIOSOutput("TAC_CH_1_SEL");
-                _tacanDcsbiosOutputDialModeSelect = DCSBIOSControlLocator.GetDCSBIOSOutput("TAC_MODE_SEL");
-                _tacanDcsbiosOutputDialXYSelect = DCSBIOSControlLocator.GetDCSBIOSOutput("TAC_X_Y_SEL");
+                _tacanDcsbiosOutputDialTens = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_CH_10_SEL");
+                _tacanDcsbiosOutputDialOnes = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_CH_1_SEL");
+                _tacanDcsbiosOutputDialModeSelect = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_MODE_SEL");
+                _tacanDcsbiosOutputDialXYSelect = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_X_Y_SEL");
 
                 // NAV2
-                _vorDcsbiosOutputDialDecimals = DCSBIOSControlLocator.GetDCSBIOSOutput("VORILS_FREQ_DECIMAL");
-                _vorDcsbiosOutputDialOnes = DCSBIOSControlLocator.GetDCSBIOSOutput("VORILS_FREQ_WHOLE");
-                _vorDcsbiosOutputDialPower = DCSBIOSControlLocator.GetDCSBIOSOutput("VORILS_PWR_DIAL");
-                _vorDcsbiosOutputDialTest = DCSBIOSControlLocator.GetDCSBIOSOutput("VORILS_TEST_DIAL");
+                _vorDcsbiosOutputDialDecimals = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_FREQ_DECIMAL");
+                _vorDcsbiosOutputDialOnes = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_FREQ_WHOLE");
+                _vorDcsbiosOutputDialPower = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_PWR_DIAL");
+                _vorDcsbiosOutputDialTest = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_TEST_DIAL");
 
                 StartListeningForHidPanelChanges();
 

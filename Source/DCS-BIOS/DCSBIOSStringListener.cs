@@ -71,7 +71,7 @@
                 _dcsBiosStrings.Remove(dcsBiosStringToRemove);
             }
         }
-        
+
         private void UpdateStrings(uint address, uint data)
         {
             lock (_lockObject)
@@ -81,7 +81,7 @@
                     //start of update cycle
                     return;
                 }
-                
+
                 if (address == 0xfffe)
                 {
                     //end of update cycle, clear all existing values.
@@ -113,7 +113,7 @@
                                 //Debug.WriteLine(hex);
                                 //See comment below.
                                 if (hex.Length < 2)
-                                { 
+                                {
                                     /*
                                      * Remove address as it doesn't contain data. Maybe a dynamic string and right now the string is shorter
                                      * than the memory space reserved.
@@ -128,7 +128,7 @@
                                 byte[] firstByte;
                                 var secondChar = string.Empty;
                                 var firstChar = string.Empty;
-                                
+
                                 switch (hex.Length)
                                 {
                                     case 2:
@@ -158,7 +158,7 @@
                                             break;
                                         }
                                 }
-                                
+
 
                                 if (!string.IsNullOrEmpty(firstChar))
                                 {

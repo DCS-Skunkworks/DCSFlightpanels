@@ -207,8 +207,7 @@
                 return;
             }
 
-            _dcsbiosVersionOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DCS_BIOS");
-            DCSBIOSStringManager.AddListeningAddress(_dcsbiosVersionOutput);
+            _dcsbiosVersionOutput = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DCS_BIOS");
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)

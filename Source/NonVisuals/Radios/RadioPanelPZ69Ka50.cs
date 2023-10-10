@@ -1696,22 +1696,22 @@ namespace NonVisuals.Radios
             try
             {
                 // VHF1
-                _vhf1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R828_CHANNEL");
+                _vhf1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R828_CHANNEL");
 
                 // VHF2
-                _r800L1DcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ1");
-                _r800L1DcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ2");
-                _r800L1DcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ3");
-                _r800L1DcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ4");
+                _r800L1DcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ1");
+                _r800L1DcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ2");
+                _r800L1DcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ3");
+                _r800L1DcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ4");
 
                 // ADF
-                _adfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_CHANNEL");
-                _adfModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_NDB_MODE");
+                _adfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF_CHANNEL");
+                _adfModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF_NDB_MODE");
 
                 // NAV2 Datalink
-                _datalinkMasterModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DLNK_MASTER_MODE");
-                _datalinkSelfIdDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DLNK_SELF_ID");
-                _datalinkPowerOnOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PVI_POWER");
+                _datalinkMasterModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DLNK_MASTER_MODE");
+                _datalinkSelfIdDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DLNK_SELF_ID");
+                _datalinkPowerOnOffDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PVI_POWER");
 
                 StartListeningForHidPanelChanges();
 

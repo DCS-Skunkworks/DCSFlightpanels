@@ -42,29 +42,19 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
             {
                 // CDU Lines & BRT
 
-                _CDU_LINE_0 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE0");
-                DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_0);
-                _CDU_LINE_1 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE1");
-                DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_1);
-                _CDU_LINE_2 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE2");
-                DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_2);
-                _CDU_LINE_3 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE3");
-                DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_3);
-                _CDU_LINE_4 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE4");
-                DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_4);
-                _CDU_LINE_5 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE5");
-                DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_5);
-                _CDU_LINE_6 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE6");
-                DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_6);
-                _CDU_LINE_7 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE7");
-                DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_7);
-                _CDU_LINE_8 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE8");
-                DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_8);
-                _CDU_LINE_9 = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_LINE9");
-                DCSBIOSStringManager.AddListeningAddress(_CDU_LINE_9);
+                _CDU_LINE_0 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE0");
+                _CDU_LINE_1 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE1");
+                _CDU_LINE_2 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE2");
+                _CDU_LINE_3 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE3");
+                _CDU_LINE_4 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE4");
+                _CDU_LINE_5 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE5");
+                _CDU_LINE_6 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE6");
+                _CDU_LINE_7 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE7");
+                _CDU_LINE_8 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE8");
+                _CDU_LINE_9 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE9");
 
-                _CDU_BRT = DCSBIOSControlLocator.GetDCSBIOSOutput("CDU_BRT");
-                _MASTER_CAUTION = DCSBIOSControlLocator.GetDCSBIOSOutput("MASTER_CAUTION");
+                _CDU_BRT = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("CDU_BRT");
+                _MASTER_CAUTION = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("MASTER_CAUTION");
 
                 SetLine(0, string.Format("{0,24}","A10-C profile"));
 

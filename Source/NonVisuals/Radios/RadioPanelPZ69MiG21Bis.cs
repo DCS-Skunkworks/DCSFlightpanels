@@ -749,15 +749,15 @@ namespace NonVisuals.Radios
             try
             {
                 // Radio
-                _radioDcsbiosOutputFreqSelectorPosition = DCSBIOSControlLocator.GetDCSBIOSOutput("RAD_CHAN");
+                _radioDcsbiosOutputFreqSelectorPosition = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RAD_CHAN");
 
                 // RSBN
-                _rsbnNavChannelCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RSBN_CHAN");
-                _rsbnILSChannelCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PRMG_CHAN");
+                _rsbnNavChannelCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RSBN_CHAN");
+                _rsbnILSChannelCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PRMG_CHAN");
 
                 // ARC
-                _arcSectorCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_ZONE");
-                _arcPresetChannelCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_CHAN");
+                _arcSectorCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_ZONE");
+                _arcPresetChannelCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_CHAN");
 
                 StartListeningForHidPanelChanges();
 
