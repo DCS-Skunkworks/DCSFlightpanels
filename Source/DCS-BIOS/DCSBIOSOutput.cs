@@ -213,6 +213,7 @@ namespace DCS_BIOS
                     return false;
                 }
 
+                _uintValueHasChanged = false;
                 LastUIntValue = GetUIntValue(data);
             }
 
