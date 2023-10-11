@@ -51,6 +51,12 @@
                 <Label Content="action" />
                 <Button Name="ButtonToggle" Height="22" Margin="20,0,0,0" Content="TOGGLE" Click="ButtonToggle_OnClick"/>
             </StackPanel>
+            <StackPanel Name="StackPanelSetString" Orientation="Horizontal">
+                <Label Content="Input Interface: " FontWeight="Bold"/>
+                <Label Content="set__string" />
+                <TextBox Name="TextBoxSetStringValue" Width="60" Height="22" HorizontalContentAlignment="Right" KeyDown="TextBoxVariableStepValue_OnKeyDown" KeyUp="TextBoxVariableStepValue_OnKeyUp" />
+                <Button Name="ButtonSetString" Height="22" Width="40" Margin="20,0,0,0" Content="Set" Click="ButtonSetString_OnClick"/>
+            </StackPanel>
             <StackPanel Name="StackPanelUInt" >
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Output Type: " FontWeight="Bold"/>

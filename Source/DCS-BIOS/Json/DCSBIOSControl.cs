@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Navigation;
 using Newtonsoft.Json;
 
@@ -38,6 +39,13 @@ namespace DCS_BIOS.Json
         public bool HasOutput()
         {
             return Outputs.Count > 0;
+        }
+
+        public bool HasStringInput()
+        {
+            var dcsbiosInput = new DCSBIOSInput();
+            dcsbiosInput.Consume(this);
+            return dcsbiosInput.DCSBIOSInputInterfaces.Any(o => o.Interface == DCSBIOSInputType.SET_STRING);
         }
 
         public DCSBIOSOutput GetUIntOutput()

@@ -13,7 +13,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for DCSBiosInputWindow.xaml
     /// </summary>
-    public partial class DCSBiosInputWindow 
+    public partial class DCSBiosInputWindow
     {
         private DCSBIOSInput _dcsBiosInput;
         private readonly string _description;
@@ -61,8 +61,8 @@ namespace DCSFlightpanels.Windows
                 _popupSearch.Height = 400;
                 _dataGridValues = (DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues");
                 LabelDescription.Content = _description;
-                ShowValues1();
-                ShowValues2();
+                ShowRightSideValues();
+                ShowValuesLeftSideValues();
                 _formLoaded = true;
                 SetFormState();
                 TextBoxSearchWord.Focus();
@@ -84,10 +84,9 @@ namespace DCSFlightpanels.Windows
                         //INC / DEC
                         ComboBoxInputValueFixedStep.Visibility = Visibility.Visible;
                         ComboBoxInputValueAction.Visibility = Visibility.Collapsed;
-                        TextBoxInputValueSetState.Visibility = Visibility.Collapsed;
+                        TextBoxInputValue.Visibility = Visibility.Collapsed;
 
-                        LabelMaxValue.Visibility = Visibility.Collapsed;
-                        TextBoxMaxValue.Visibility = Visibility.Collapsed;
+                        StackPanelMaxValue.Visibility = Visibility.Collapsed;
                         break;
                     }
                 case DCSBIOSInputType.ACTION:
@@ -95,10 +94,9 @@ namespace DCSFlightpanels.Windows
                         //TOGGLE
                         ComboBoxInputValueFixedStep.Visibility = Visibility.Collapsed;
                         ComboBoxInputValueAction.Visibility = Visibility.Visible;
-                        TextBoxInputValueSetState.Visibility = Visibility.Collapsed;
+                        TextBoxInputValue.Visibility = Visibility.Collapsed;
 
-                        LabelMaxValue.Visibility = Visibility.Collapsed;
-                        TextBoxMaxValue.Visibility = Visibility.Collapsed;
+                        StackPanelMaxValue.Visibility = Visibility.Collapsed;
                         break;
                     }
                 case DCSBIOSInputType.SET_STATE:
@@ -106,10 +104,9 @@ namespace DCSFlightpanels.Windows
                         //INTEGER
                         ComboBoxInputValueFixedStep.Visibility = Visibility.Collapsed;
                         ComboBoxInputValueAction.Visibility = Visibility.Collapsed;
-                        TextBoxInputValueSetState.Visibility = Visibility.Visible;
+                        TextBoxInputValue.Visibility = Visibility.Visible;
 
-                        LabelMaxValue.Visibility = Visibility.Visible;
-                        TextBoxMaxValue.Visibility = Visibility.Visible;
+                        StackPanelMaxValue.Visibility = Visibility.Visible;
                         break;
                     }
                 case DCSBIOSInputType.VARIABLE_STEP:
@@ -117,16 +114,25 @@ namespace DCSFlightpanels.Windows
                         //INTEGER
                         ComboBoxInputValueFixedStep.Visibility = Visibility.Collapsed;
                         ComboBoxInputValueAction.Visibility = Visibility.Collapsed;
-                        TextBoxInputValueSetState.Visibility = Visibility.Visible;
+                        TextBoxInputValue.Visibility = Visibility.Visible;
 
-                        LabelMaxValue.Visibility = Visibility.Visible;
-                        TextBoxMaxValue.Visibility = Visibility.Visible;
+                        StackPanelMaxValue.Visibility = Visibility.Visible;
+                        break;
+                    }
+                case DCSBIOSInputType.SET_STRING:
+                    {
+                        //STRING
+                        ComboBoxInputValueFixedStep.Visibility = Visibility.Collapsed;
+                        ComboBoxInputValueAction.Visibility = Visibility.Collapsed;
+                        TextBoxInputValue.Visibility = Visibility.Visible;
+
+                        StackPanelMaxValue.Visibility = Visibility.Collapsed;
                         break;
                     }
             }
         }
 
-        private void ShowValues1()
+        private void ShowRightSideValues()
         {
             if (_dcsBiosInput == null)
             {
@@ -152,25 +158,32 @@ namespace DCSFlightpanels.Windows
                 case DCSBIOSInputType.SET_STATE:
                     {
                         //INTEGER
-                        TextBoxInputValueSetState.Text = _dcsBiosInput.SelectedDCSBIOSInterface.SpecifiedSetStateArgument.ToString();
+                        TextBoxInputValue.Text = _dcsBiosInput.SelectedDCSBIOSInterface.SpecifiedSetStateArgument.ToString();
                         break;
                     }
                 case DCSBIOSInputType.VARIABLE_STEP:
                     {
                         //INTEGER
-                        TextBoxInputValueSetState.Text = _dcsBiosInput.SelectedDCSBIOSInterface.SpecifiedVariableStepArgument.ToString();
+                        TextBoxInputValue.Text = _dcsBiosInput.SelectedDCSBIOSInterface.SpecifiedVariableStepArgument.ToString();
+                        break;
+                    }
+                case DCSBIOSInputType.SET_STRING:
+                    {
+                        //STRING
+                        TextBoxInputValue.Text = _dcsBiosInput.SelectedDCSBIOSInterface.SpecifiedSetStringArgument;
                         break;
                     }
             }
         }
 
-        private void ShowValues2()
+        private void ShowValuesLeftSideValues()
         {
             if (_dcsbiosControl != null)
             {
                 TextBoxControlId.Text = _dcsbiosControl.Identifier;
                 TextBoxControlDescription.Text = _dcsbiosControl.Description;
             }
+
             if (_dcsBiosInput?.SelectedDCSBIOSInterface != null)
             {
                 TextBoxInputTypeDescription.Text = _dcsBiosInput.SelectedDCSBIOSInterface.Description;
@@ -199,15 +212,14 @@ namespace DCSFlightpanels.Windows
                 LabelInputValue.Visibility = Visibility.Collapsed;
                 ComboBoxInputValueAction.Visibility = Visibility.Collapsed;
                 ComboBoxInputValueFixedStep.Visibility = Visibility.Collapsed;
-                TextBoxInputValueSetState.Visibility = Visibility.Collapsed;
-                LabelMaxValue.Visibility = Visibility.Collapsed;
-                TextBoxMaxValue.Visibility = Visibility.Collapsed;
+                TextBoxInputValue.Visibility = Visibility.Collapsed;
+                StackPanelMaxValue.Visibility = Visibility.Collapsed;
             }
-            else if (_dcsBiosInput != null && _dcsBiosInput.SelectedDCSBIOSInterface == null)
+            else if (_dcsBiosInput is { SelectedDCSBIOSInterface: null })
             {
                 LabelInterfaceType.Visibility = Visibility.Visible;
                 ComboBoxInterfaceType.Visibility = Visibility.Visible;
-                SetVisibility((DCSBIOSInputType)Enum.Parse(typeof(DCSBIOSInputType), ComboBoxInterfaceType.SelectedValue.ToString()));
+                SetVisibility((DCSBIOSInputType)Enum.Parse(typeof(DCSBIOSInputType), GetComboBoxSelectedInterface()));
             }
             else if (_dcsBiosInput?.SelectedDCSBIOSInterface != null)
             {
@@ -243,7 +255,7 @@ namespace DCSFlightpanels.Windows
                             uint tmp;
                             try
                             {
-                                tmp = uint.Parse(TextBoxInputValueSetState.Text);
+                                tmp = uint.Parse(TextBoxInputValue.Text);
                             }
                             catch (Exception)
                             {
@@ -252,7 +264,7 @@ namespace DCSFlightpanels.Windows
                                 {
                                     dcsbiosInputString = _dcsBiosInput.ControlId + " / " + _dcsBiosInput.SelectedDCSBIOSInterface.Interface;
                                 }
-                                throw new Exception("Please enter a valid value (positive whole number). Value found : [" + TextBoxInputValueSetState.Text + "]" + Environment.NewLine + " DCS-BIOS Input is " + dcsbiosInputString);
+                                throw new Exception("Please enter a valid value (positive whole number). Value found : [" + TextBoxInputValue.Text + "]" + Environment.NewLine + " DCS-BIOS Input is " + dcsbiosInputString);
                             }
                             if (tmp > _dcsBiosInput.SelectedDCSBIOSInterface.MaxValue)
                             {
@@ -267,7 +279,7 @@ namespace DCSFlightpanels.Windows
                             int tmp;
                             try
                             {
-                                tmp = int.Parse(TextBoxInputValueSetState.Text);
+                                tmp = int.Parse(TextBoxInputValue.Text);
                             }
                             catch (Exception)
                             {
@@ -276,7 +288,7 @@ namespace DCSFlightpanels.Windows
                                 {
                                     dcsbiosInputString = _dcsBiosInput.ControlId + " / " + _dcsBiosInput.SelectedDCSBIOSInterface.Interface;
                                 }
-                                throw new Exception("Please enter a valid value (whole number). Value found : [" + TextBoxInputValueSetState.Text + "]" + Environment.NewLine + " DCS-BIOS Input is " + dcsbiosInputString);
+                                throw new Exception("Please enter a valid value (whole number). Value found : [" + TextBoxInputValue.Text + "]" + Environment.NewLine + " DCS-BIOS Input is " + dcsbiosInputString);
                             }
                             if (tmp > _dcsBiosInput.SelectedDCSBIOSInterface.MaxValue)
                             {
@@ -288,6 +300,21 @@ namespace DCSFlightpanels.Windows
                     case DCSBIOSInputType.FIXED_STEP:
                         {
                             _dcsBiosInput.SelectedDCSBIOSInterface.SpecifiedFixedStepArgument = (DCSBIOSFixedStepInput)Enum.Parse(typeof(DCSBIOSFixedStepInput), ComboBoxInputValueFixedStep.SelectedValue.ToString());
+                            break;
+                        }
+                    case DCSBIOSInputType.SET_STRING:
+                        {
+                            if (string.IsNullOrEmpty(TextBoxInputValue.Text))
+                            {
+                                var dcsbiosInputString = string.Empty;
+                                if (_dcsBiosInput != null)
+                                {
+                                    dcsbiosInputString = _dcsBiosInput.ControlId + " / " + _dcsBiosInput.SelectedDCSBIOSInterface.Interface;
+                                }
+                                throw new Exception("Please enter a string value. DCS-BIOS Input is " + dcsbiosInputString);
+                            }
+                            _dcsBiosInput.SelectedDCSBIOSInterface.SpecifiedSetStringArgument = TextBoxInputValue.Text;
+
                             break;
                         }
                 }
@@ -353,80 +380,46 @@ namespace DCSFlightpanels.Windows
 
         private void TextBoxSearchWord_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBoxSearchCommon.SetBackgroundSearchBanner(TextBoxSearchWord);           
+            TextBoxSearchCommon.SetBackgroundSearchBanner(TextBoxSearchWord);
+        }
+
+        private void DCSBIOSInputSelected(bool keepSearchOpen)
+        {
+            try
+            {
+                if (_dataGridValues.SelectedItems.Count == 1)
+                {
+                    _dcsbiosControl = (DCSBIOSControl)_dataGridValues.SelectedItem;
+                    _dcsBiosInput = new DCSBIOSInput();
+                    _dcsBiosInput.Consume(_dcsbiosControl);
+                    PopulateComboBoxInterfaceType(_dcsBiosInput);
+                    //_dcsBiosInput.SetSelectedInterface(GetChosenInterfaceType());
+                    ShowValuesLeftSideValues();
+                    SetFormState();
+                }
+                _popupSearch.IsOpen = keepSearchOpen;
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
 
         private void DataGridValues_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            try
-            {
-                if (_dataGridValues.SelectedItems.Count == 1)
-                {
-                    _dcsbiosControl = (DCSBIOSControl)_dataGridValues.SelectedItem;
-                    _dcsBiosInput = new DCSBIOSInput();
-                    _dcsBiosInput.Consume(_dcsbiosControl);
-                    _dcsBiosInput.SetSelectedInterface(GetChosenInterfaceType());
-                    PopulateComboBoxInterfaceType(_dcsBiosInput);
-                    //TextBoxInputTypeDescription.Text = _dcsBiosInput.GetDescriptionForInterface(GetChosenInterfaceType());
-                    //TextBoxMaxValue.Text = _dcsBiosInput.GetMaxValueForInterface(GetChosenInterfaceType()).ToString();
-                    ShowValues2();
-                    SetFormState();
-                }
-                _popupSearch.IsOpen = false;
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            DCSBIOSInputSelected(true);
         }
 
         private void DataGridValues_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
-            {
-                if (_dataGridValues.SelectedItems.Count == 1)
-                {
-                    _dcsbiosControl = (DCSBIOSControl)_dataGridValues.SelectedItem;
-                    _dcsBiosInput = new DCSBIOSInput();
-                    _dcsBiosInput.Consume(_dcsbiosControl);
-                    _dcsBiosInput.SetSelectedInterface(GetChosenInterfaceType());
-                    PopulateComboBoxInterfaceType(_dcsBiosInput);
-                    //TextBoxInputTypeDescription.Text = _dcsBiosInput.GetDescriptionForInterface(GetChosenInterfaceType());
-                    //TextBoxMaxValue.Text = _dcsBiosInput.GetMaxValueForInterface(GetChosenInterfaceType()).ToString();
-                    ShowValues2();
-                }
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            DCSBIOSInputSelected(true);
         }
 
 
         private void DataGridValues_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            try
-            {
-                if (_dataGridValues.SelectedItems.Count == 1)
-                {
-                    _dcsbiosControl = (DCSBIOSControl)_dataGridValues.SelectedItem;
-                    _dcsBiosInput = new DCSBIOSInput();
-                    _dcsBiosInput.Consume(_dcsbiosControl);
-                    _dcsBiosInput.SetSelectedInterface(GetChosenInterfaceType());
-                    PopulateComboBoxInterfaceType(_dcsBiosInput);
-                    //TextBoxInputTypeDescription.Text = _dcsBiosInput.GetDescriptionForInterface(GetChosenInterfaceType());
-                    //TextBoxMaxValue.Text = _dcsBiosInput.GetMaxValueForInterface(GetChosenInterfaceType()).ToString();
-                    ShowValues2();
-                }
-                _popupSearch.IsOpen = false;
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            DCSBIOSInputSelected(false);
         }
 
         private void PopulateComboBoxInterfaceType(DCSBIOSInput dcsbiosInput)
@@ -458,13 +451,14 @@ namespace DCSFlightpanels.Windows
             }
         }
 
+        private string GetComboBoxSelectedInterface()
+        {
+            return ComboBoxInterfaceType.SelectedValue.ToString();
+        }
+
         private DCSBIOSInputType GetChosenInterfaceType()
         {
-            if (ComboBoxInterfaceType.SelectedValue == null)
-            {
-                return DCSBIOSInputType.SET_STATE;
-            }
-            var result = (DCSBIOSInputType)Enum.Parse(typeof(DCSBIOSInputType), ComboBoxInterfaceType.SelectedValue.ToString());
+            var result = (DCSBIOSInputType)Enum.Parse(typeof(DCSBIOSInputType), GetComboBoxSelectedInterface());
             return result;
         }
 
@@ -476,17 +470,20 @@ namespace DCSFlightpanels.Windows
                 {
                     return;
                 }
-                if (_dcsBiosInput != null)
+
+                if (_dcsBiosInput == null)
                 {
-                    var inputType = (DCSBIOSInputType)Enum.Parse(typeof(DCSBIOSInputType), ComboBoxInterfaceType.SelectedValue.ToString());
-                    _dcsBiosInput.SetSelectedInterface(inputType);
-                    TextBoxInputTypeDescription.Text = _dcsBiosInput.SelectedDCSBIOSInterface.Description;
-                    if (_dcsBiosInput.SelectedDCSBIOSInterface.Interface == DCSBIOSInputType.SET_STATE || _dcsBiosInput.SelectedDCSBIOSInterface.Interface == DCSBIOSInputType.VARIABLE_STEP)
-                    {
-                        TextBoxMaxValue.Text = _dcsBiosInput.SelectedDCSBIOSInterface.MaxValue.ToString();
-                    }
-                    SetFormState();
+                    return;
                 }
+
+                var inputType = (DCSBIOSInputType)Enum.Parse(typeof(DCSBIOSInputType), GetComboBoxSelectedInterface());
+                _dcsBiosInput.SetSelectedInterface(inputType);
+                TextBoxInputTypeDescription.Text = _dcsBiosInput.SelectedDCSBIOSInterface.Description;
+                if (_dcsBiosInput.SelectedDCSBIOSInterface.Interface == DCSBIOSInputType.SET_STATE || _dcsBiosInput.SelectedDCSBIOSInterface.Interface == DCSBIOSInputType.VARIABLE_STEP)
+                {
+                    TextBoxMaxValue.Text = _dcsBiosInput.SelectedDCSBIOSInterface.MaxValue.ToString();
+                }
+                SetFormState();
             }
             catch (Exception ex)
             {

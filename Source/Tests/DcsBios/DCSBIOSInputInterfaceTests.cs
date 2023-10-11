@@ -12,6 +12,7 @@ namespace Tests.DcsBios
         [InlineData("set_state", DCSBIOSInputType.SET_STATE)]
         [InlineData("action", DCSBIOSInputType.ACTION)]
         [InlineData("variable_step", DCSBIOSInputType.VARIABLE_STEP)]
+        [InlineData("set_string", DCSBIOSInputType.SET_STRING)]
         public void Consume_ShouldSet_4_Properties(string givenControlInterface, DCSBIOSInputType expectedDCSBIOSInputType)
         {
             string controlId = "ThisIsAControlId";
@@ -137,6 +138,26 @@ namespace Tests.DcsBios
                 inputInterface.Interface = DCSBIOSInputType.ACTION;
             }
             Assert.Throws<Exception>(() => inputInterface.GetDCSBIOSCommand());
+        }
+
+        [Theory]
+        [InlineData("ThisIsAControlId", "1", "ThisIsAControlId 1\n")]
+        [InlineData("ThisIsAControlId", "0", "ThisIsAControlId 0\n")]
+        [InlineData("ThisIsAControlId", "-1", "ThisIsAControlId -1\n")]
+        [InlineData("ThisIsAControlId", "123", "ThisIsAControlId 123\n")]
+        [InlineData("ThisIsAControlId", "456", "ThisIsAControlId 456\n")]
+        [InlineData("ThisIsAControlId", "-123", "ThisIsAControlId -123\n")]
+        [InlineData("ThisIsAControlId", "null", "ThisIsAControlId null\n")]
+        public void GetDCSBIOSCommand_Set_String_ShouldReturn_ExpectedResult(string controlId, string? specifiedStringArgument, string expectedResult)
+        {
+            DCSBIOSInputInterface inputInterface = new()
+            {
+                ControlId = controlId,
+                Interface = DCSBIOSInputType.SET_STRING,
+                SpecifiedSetStringArgument = specifiedStringArgument
+            };
+
+            Assert.Equal(expectedResult, inputInterface.GetDCSBIOSCommand());
         }
     }
 }
