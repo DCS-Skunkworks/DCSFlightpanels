@@ -40,8 +40,10 @@
             <Label Content="Input description" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="False"  />
             <TextBox Name="TextBoxInputTypeDescription" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,0,0" IsEnabled="true" IsReadOnly="True"  />
 
-            <Label Name="LabelMaxValue" Content="Max value" HorizontalAlignment="Stretch" Margin="10,0,0,0"  IsEnabled="False" />
-            <TextBox Name="TextBoxMaxValue" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,0,0" IsEnabled="true" IsReadOnly="True"  />
+            <StackPanel Name="StackPanelMaxValue">
+                <Label Name="LabelMaxValue" Content="Max value" HorizontalAlignment="Stretch" Margin="10,0,0,0"  IsEnabled="False" />
+                <TextBox Name="TextBoxMaxValue" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,0,0" IsEnabled="true" IsReadOnly="True"  />
+            </StackPanel>
         </StackPanel>
         <!-- <Label Name="ColorLabel"  VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="GREEN" Visibility="Hidden" Grid.Column="1" Grid.Row="0" FontSize="20"/> -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2" Grid.Row="3">
@@ -59,13 +61,9 @@
             </TextBox>
 
             <Label Name="LabelInterfaceType" Content="Choose input type" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
-            <ComboBox x:Name="ComboBoxInterfaceType" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0" >
-                <!--<ComboBoxItem Content="SET_STATE" />
-                <ComboBoxItem Content="ACTION" />
-                <ComboBoxItem Content="FIXED_STEP" />-->
-            </ComboBox>
+            <ComboBox x:Name="ComboBoxInterfaceType" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0" />
             <Label Name="LabelInputValue" Content="Enter value sent to DCS-BIOS:" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
-            <TextBox Name="TextBoxInputValueSetState" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" />
+            <TextBox Name="TextBoxInputValue" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" />
 
             <ComboBox x:Name="ComboBoxInputValueFixedStep" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0">
                 <ComboBoxItem Content="INC" />

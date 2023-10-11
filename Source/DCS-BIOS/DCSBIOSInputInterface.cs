@@ -16,6 +16,7 @@ namespace DCS_BIOS
         private uint _specifiedSetStateArgument;
         private int _specifiedVariableStepArgument;
         private DCSBIOSFixedStepInput _specifiedFixedStepArgument;
+        private string _specifiedSetStringArgument;
 
         public void Consume(string controlId, DCSBIOSControlInput dcsbiosControlInput)
         {
@@ -28,6 +29,7 @@ namespace DCS_BIOS
                 "set_state" => DCSBIOSInputType.SET_STATE,
                 "action" => DCSBIOSInputType.ACTION,
                 "variable_step" => DCSBIOSInputType.VARIABLE_STEP,
+                "set_string" => DCSBIOSInputType.SET_STRING,
                 _ => throw new SystemException($"Unexpected ControlInterface value [{dcsbiosControlInput.ControlInterface}]")
             };
             MaxValue = dcsbiosControlInput.MaxValue.GetValueOrDefault();
@@ -46,6 +48,7 @@ namespace DCS_BIOS
                     SpecifiedVariableStepArgument > 0 ?
                       $"{ControlId} +{SpecifiedVariableStepArgument}\n"
                     : $"{ControlId} {SpecifiedVariableStepArgument}\n",
+                DCSBIOSInputType.SET_STRING => $"{ControlId} {SpecifiedSetStringArgument}\n",
                 _ => throw new Exception("Unexpected DCSBIOSInputType value")
             };
 
@@ -135,8 +138,21 @@ namespace DCS_BIOS
         }
 
         /// <summary>
+        /// set_string = some string
+        /// </summary>
+        public string SpecifiedSetStringArgument
+        {
+            get => _specifiedSetStringArgument;
+            set
+            {
+                SelectedArgumentValue = value;
+                _specifiedSetStringArgument = value;
+            }
+        }
+
+        /// <summary>
         /// Shows selected argument regardless which interface was chosen.
         /// </summary>
-        public string SelectedArgumentValue { get; set; }
+        public string SelectedArgumentValue { get; private set; }
     }
 }
