@@ -167,7 +167,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                     // MAX_BRIGHT is 256 , so 655356 / 256 is 256 , we need to divide by 2^8
                     ScreenBrightness = eufdBright >> 8;
                     KeyboardBrightness= eufdBright >>8;
-                    displayBufferOnCDU();
+                    refreshLedsAndBrightness();
                 }
 
                 // AH - 64D / PLT_MASTER_WARNING_L
@@ -182,7 +182,7 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
                     {
                         Led_OFF(CDU737Led.FAIL);
                     }
-                    displayBufferOnCDU();
+                    refreshLedsAndBrightness();
 
                 }
             }
