@@ -53,21 +53,19 @@ namespace DCSFlightpanels.Windows
                 {
                     popupSearch.IsOpen = true;
                 }
-                if (dataGridValues != null)
+
+                if (string.IsNullOrEmpty(textBoxSearch.Text))
                 {
-                    if (string.IsNullOrEmpty(textBoxSearch.Text))
-                    {
-                        dataGridValues.DataContext = dcsbiosControls;
-                        dataGridValues.ItemsSource = dcsbiosControls;
-                        dataGridValues.Items.Refresh();
-                        return;
-                    }
-                    var subList = dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.Identifier) && controlObject.Identifier.ToUpper().Contains(textBoxSearch.Text.ToUpper()))
-                                                                          || (!string.IsNullOrWhiteSpace(controlObject.Description) && controlObject.Description.ToUpper().Contains(textBoxSearch.Text.ToUpper())));
-                    dataGridValues.DataContext = subList;
-                    dataGridValues.ItemsSource = subList;
+                    dataGridValues.DataContext = dcsbiosControls;
+                    dataGridValues.ItemsSource = dcsbiosControls;
                     dataGridValues.Items.Refresh();
+                    return;
                 }
+                var subList = dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.Identifier) && controlObject.Identifier.ToUpper().Contains(textBoxSearch.Text.ToUpper()))
+                                                                      || (!string.IsNullOrWhiteSpace(controlObject.Description) && controlObject.Description.ToUpper().Contains(textBoxSearch.Text.ToUpper())));
+                dataGridValues.DataContext = subList;
+                dataGridValues.ItemsSource = subList;
+                dataGridValues.Items.Refresh();
             }
             catch (Exception ex)
             {

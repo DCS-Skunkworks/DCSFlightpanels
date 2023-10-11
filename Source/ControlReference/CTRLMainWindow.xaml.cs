@@ -648,7 +648,7 @@ namespace ControlReference
             }
         }
 
-        private void TextBoxSearchControl_OnKeyDown(object sender, KeyEventArgs e)
+        private void TextBoxSearchControl_OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             try
             {
@@ -792,6 +792,5 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
     }
 }

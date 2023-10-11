@@ -80,6 +80,7 @@ namespace ControlReference.UserControls
             try
             {
                 ButtonSetVariableStep.IsEnabled = !string.IsNullOrEmpty(TextBoxVariableStepValue.Text) && int.TryParse(TextBoxVariableStepValue.Text, out _);
+                ButtonSetString.IsEnabled = !string.IsNullOrEmpty(TextBoxSetStringValue.Text);
                 ButtonSetVariableIncrease.IsEnabled = ButtonSetVariableStep.IsEnabled;
                 ButtonSetVariableDecrease.IsEnabled = ButtonSetVariableStep.IsEnabled;
             }
@@ -180,6 +181,7 @@ namespace ControlReference.UserControls
                 StackPanelVariableStep.Visibility = Visibility.Collapsed;
                 StackPanelSetState.Visibility = Visibility.Collapsed;
                 StackPanelAction.Visibility = Visibility.Collapsed;
+                StackPanelSetString.Visibility = Visibility.Collapsed;
 
                 foreach (var dcsbiosControlInput in _dcsbiosControl.Inputs)
                 {
@@ -210,10 +212,15 @@ namespace ControlReference.UserControls
                                 StackPanelAction.Visibility = Visibility.Visible;
                                 break;
                             }
+                        case "set_string":
+                        {
+                            StackPanelSetString.Visibility = Visibility.Visible;
+                            break;
+                        }
                         default:
                             {
                                 throw new Exception(
-                                    $"Failed to identify Input Interface {dcsbiosControlInput.ControlInterface}.");
+                                    $"Failed to identify Input Interface ->{dcsbiosControlInput.ControlInterface}<-.");
                             }
                     }
                 }
@@ -355,6 +362,18 @@ namespace ControlReference.UserControls
             }
         }
 
+        private void ButtonSetString_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DCSBIOS.Send($"{_dcsbiosControl.Identifier} {TextBoxSetStringValue.Text}\n");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void ButtonSetVariableIncrease_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -391,12 +410,12 @@ namespace ControlReference.UserControls
         {
             try
             {
-                if (e.Key is not (>= Key.D0 and <= Key.D9 or >= Key.NumPad0 and <= Key.NumPad9) && e.Key != Key.OemMinus && e.Key != Key.OemPlus
+                /*if (e.Key is not (>= Key.D0 and <= Key.D9 or >= Key.NumPad0 and <= Key.NumPad9) && e.Key != Key.OemMinus && e.Key != Key.OemPlus
                     && e.Key != Key.Add && e.Key != Key.Subtract)
                 {
                     e.Handled = true;
                     return;
-                }
+                }*/
                 SetFormState();
             }
             catch (Exception ex)
