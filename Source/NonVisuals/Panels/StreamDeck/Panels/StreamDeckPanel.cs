@@ -1,4 +1,5 @@
-﻿using NonVisuals.Images;
+﻿using System.Speech.Synthesis;
+using NonVisuals.Images;
 
 namespace NonVisuals.Panels.StreamDeck.Panels
 {
@@ -40,6 +41,7 @@ namespace NonVisuals.Panels.StreamDeck.Panels
 
         private readonly IMacroBoard _streamDeckBoard;
         private readonly IKeyBitmapFactory _keyBitmapFactory = new KeyBitmapFactory();
+        private bool _layerSwitched = false; // Must ignore the release of the button used to switch layer
 
         public IMacroBoard StreamDeckBoard => _streamDeckBoard;
         public int ButtonCount => _buttonCount;
@@ -253,6 +255,14 @@ namespace NonVisuals.Panels.StreamDeck.Panels
             }
             else
             {
+                if (_layerSwitched)
+                {
+                    // When pressing the button to switch to a new layer we must ignore the next
+                    // button release as it would execute on the next layer. Releasing the button
+                    // when switching layers should do nothing. 12.10.2023 JDA
+                    _layerSwitched = false;
+                    return;
+                }
                 streamDeckButton.DoRelease();
             }
         }
@@ -436,6 +446,7 @@ namespace NonVisuals.Panels.StreamDeck.Panels
         {
             try
             {
+                _layerSwitched = true;
                 if (BindingHash == e.BindingHash)
                 { }
             }
