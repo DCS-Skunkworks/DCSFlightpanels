@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Media;
 using System.Windows;
@@ -13,8 +12,6 @@ using ControlReference.Events;
 using ControlReference.Interfaces;
 using ControlReference.Windows;
 using DCS_BIOS;
-using DCS_BIOS.EventArgs;
-using DCS_BIOS.Interfaces;
 using DCS_BIOS.Json;
 
 namespace ControlReference.UserControls

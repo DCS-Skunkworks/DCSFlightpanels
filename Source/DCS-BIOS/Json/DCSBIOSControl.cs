@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Navigation;
 using Newtonsoft.Json;
 
 namespace DCS_BIOS.Json

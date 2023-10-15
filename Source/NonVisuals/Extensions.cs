@@ -6,11 +6,7 @@ namespace NonVisuals
     using System.Globalization;
     using TextBox = System.Windows.Controls.TextBox;
     using Newtonsoft.Json;
-    using Panels.StreamDeck;
-    using SixLabors.ImageSharp;
     using System.IO;
-    using Newtonsoft.Json.Linq;
-    using static System.Net.Mime.MediaTypeNames;
 
     public static class Extensions
     {

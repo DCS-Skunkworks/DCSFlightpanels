@@ -182,7 +182,7 @@
 
         public static void SetNoFrameLoadedYetAsProfile()
         {
-            var module = Modules.FirstOrDefault(x => IsNoFrameLoadedYet(x));
+            var module = Modules.FirstOrDefault(IsNoFrameLoadedYet);
             if (module == null)
             {
                 LogErrorAndThrowException($"DCSAircraft : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
@@ -194,7 +194,7 @@
 
         public static DCSAircraft GetNoFrameLoadedYet()
         {
-            var module = Modules.FirstOrDefault(x => IsNoFrameLoadedYet(x));
+            var module = Modules.FirstOrDefault(IsNoFrameLoadedYet);
             if (module == null)
             {
                 LogErrorAndThrowException($"DCSAircraft : Failed to find internal module NoFrameLoadedYet. Modules loaded : {Modules.Count}");
@@ -204,7 +204,7 @@
 
         public static DCSAircraft GetKeyEmulator()
         {
-            var module = Modules.FirstOrDefault(x => IsKeyEmulator(x));
+            var module = Modules.FirstOrDefault(IsKeyEmulator);
             if (module == null)
             {
                 LogErrorAndThrowException($"DCSAircraft : Failed to find internal module KeyEmulator. Modules loaded : {Modules.Count}");
@@ -214,7 +214,7 @@
 
         public static DCSAircraft GetKeyEmulatorSRS()
         {
-            var module = Modules.FirstOrDefault(x => IsKeyEmulatorSRS(x));
+            var module = Modules.FirstOrDefault(IsKeyEmulatorSRS);
             if (module == null)
             {
                 LogErrorAndThrowException($"DCSFPProfile : Failed to find internal module KeyEmulatorSRS. Modules loaded : {Modules.Count}");
@@ -224,12 +224,12 @@
 
         public static bool HasNS430()
         {
-            return Modules.Exists(x => IsNS430(x));
+            return Modules.Exists(IsNS430);
         }
 
         public static DCSAircraft GetNS430()
         {
-            return Modules.FirstOrDefault(x => IsNS430(x));
+            return Modules.FirstOrDefault(IsNS430);
         }
 
 
