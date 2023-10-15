@@ -1,5 +1,4 @@
-﻿using System.Speech.Synthesis;
-using NonVisuals.Images;
+﻿using NonVisuals.Images;
 
 namespace NonVisuals.Panels.StreamDeck.Panels
 {

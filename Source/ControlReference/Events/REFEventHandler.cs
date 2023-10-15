@@ -1,7 +1,4 @@
 ﻿using ControlReference.Interfaces;
-using DCS_BIOS.Json;
-using DCS_BIOS;
-using System.Diagnostics;
 
 namespace ControlReference.Events
 {

@@ -48,3 +48,4 @@ F-15E|44|F-15E Strike Eagle
 Mosquito|45|Mosquito FB Mk. VI
 AH-64D|46|AH-64D Apache
 MH-60R|47|MH-60R SeaHawk
+NS-430|48|NS-430 Navigation System

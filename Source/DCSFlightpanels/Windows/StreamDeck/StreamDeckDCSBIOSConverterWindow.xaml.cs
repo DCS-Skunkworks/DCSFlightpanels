@@ -1,6 +1,4 @@
-﻿using Octokit;
-
-namespace DCSFlightpanels.Windows.StreamDeck
+﻿namespace DCSFlightpanels.Windows.StreamDeck
 {
     using System;
     using System.Drawing;
@@ -16,8 +14,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using NonVisuals.Interfaces;
     using NonVisuals.Panels.StreamDeck.Panels;
     using NonVisuals.Panels.StreamDeck;
-    using Newtonsoft.Json.Linq;
-    using static System.Net.Mime.MediaTypeNames;
 
     public partial class StreamDeckDCSBIOSConverterWindow : IIsDirty
     {
