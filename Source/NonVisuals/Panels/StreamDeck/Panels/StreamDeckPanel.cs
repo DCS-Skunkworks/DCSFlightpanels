@@ -445,9 +445,10 @@ namespace NonVisuals.Panels.StreamDeck.Panels
         {
             try
             {
-                _layerSwitched = true;
                 if (BindingHash == e.BindingHash)
-                { }
+                {
+                    _layerSwitched = true;
+                }
             }
             catch (Exception ex)
             {
