@@ -268,7 +268,7 @@
                 {
                     return;
                 }
-                _streamDeckPanel.SelectedLayerName = ComboBoxLayers.Text;
+                _streamDeckPanel.SwitchToLayer(ComboBoxLayers.Text, true, false);
             }
             catch (Exception ex)
             {

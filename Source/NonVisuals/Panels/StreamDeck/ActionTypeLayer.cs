@@ -144,7 +144,7 @@
 
                 case LayerNavType.SwitchToSpecificLayer:
                     {
-                        _streamDeckPanel.SelectedLayerName = TargetLayer;
+                        _streamDeckPanel.SwitchToLayer(TargetLayer, true, false);
                         break;
                     }
             }
