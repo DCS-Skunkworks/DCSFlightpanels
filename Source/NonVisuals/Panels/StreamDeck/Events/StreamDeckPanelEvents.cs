@@ -40,6 +40,8 @@ namespace NonVisuals.Panels.StreamDeck.Events
          */
         public string BindingHash { get; init; }
         public string SelectedLayerName { get; init; }
+        public bool SwitchedByUser { get; init; }
+        public bool RemotelySwitched { get; init; }
     }
 
     public class RemoteStreamDeckShowNewLayerArgs : EventArgs

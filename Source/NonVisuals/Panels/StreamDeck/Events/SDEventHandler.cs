@@ -155,9 +155,9 @@
             return OnStreamDeckShowNewLayerEventHandler != null && OnStreamDeckShowNewLayerEventHandler.GetInvocationList().Length > 0;
         }
 
-        public static void LayerSwitched(object sender, string bindingHash, string layerName)
+        public static void LayerSwitched(object sender, string bindingHash, string layerName, bool switchedByUser, bool remotelySwitched)
         {
-            var eventArgs = new StreamDeckShowNewLayerArgs { SelectedLayerName = layerName, BindingHash = bindingHash };
+            var eventArgs = new StreamDeckShowNewLayerArgs { SelectedLayerName = layerName, BindingHash = bindingHash, SwitchedByUser = switchedByUser, RemotelySwitched = remotelySwitched};
             OnStreamDeckShowNewLayerEventHandler?.Invoke(sender, eventArgs);
         }
 
