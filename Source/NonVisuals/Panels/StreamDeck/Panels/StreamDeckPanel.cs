@@ -48,7 +48,11 @@ namespace NonVisuals.Panels.StreamDeck.Panels
         public string SelectedLayerName
         {
             get => _streamDeckLayerHandler.SelectedLayerName;
-            set => _streamDeckLayerHandler.SelectedLayerName = value;
+        }
+
+        public void SwitchToLayer(string layerName, bool switchedByUser, bool remotelySwitched)
+        {
+            _streamDeckLayerHandler.SwitchToLayer(layerName, switchedByUser, remotelySwitched);
         }
 
         public List<string> LayerNameList
@@ -69,7 +73,6 @@ namespace NonVisuals.Panels.StreamDeck.Panels
         public StreamDeckLayer SelectedLayer
         {
             get => _streamDeckLayerHandler.SelectedLayer;
-            set => _streamDeckLayerHandler.SelectedLayer = value;
         }
 
         public bool HasLayers
@@ -445,7 +448,7 @@ namespace NonVisuals.Panels.StreamDeck.Panels
         {
             try
             {
-                if (BindingHash == e.BindingHash)
+                if (BindingHash == e.BindingHash && !e.RemotelySwitched && e.SwitchedByUser)
                 {
                     _layerSwitched = true;
                 }
@@ -462,7 +465,7 @@ namespace NonVisuals.Panels.StreamDeck.Panels
             {
                 if (e.RemoteBindingHash == BindingHash && _streamDeckLayerHandler.LayerExists(e.SelectedLayerName))
                 {
-                    _streamDeckLayerHandler.SelectedLayerName = e.SelectedLayerName;
+                    _streamDeckLayerHandler.SwitchToLayer(e.SelectedLayerName, true, true);
                 }
             }
             catch (Exception ex)

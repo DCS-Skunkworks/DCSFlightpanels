@@ -16,6 +16,7 @@ namespace NonVisuals.Panels.StreamDeck
     using Events;
     
     using Panels;
+    using Newtonsoft.Json.Linq;
 
     public class StreamDeckLayerHandler : IDisposable
     {
@@ -84,8 +85,6 @@ namespace NonVisuals.Panels.StreamDeck
                 CheckHomeLayerExists();
                 return GetLayer(_selectedLayerName);
             }
-
-            set => SetSelectedLayer(value.Name);
         }
 
 
@@ -174,15 +173,15 @@ namespace NonVisuals.Panels.StreamDeck
             CheckSelectedLayer();
         }
 
-        public void CheckSelectedLayer()
+        private void CheckSelectedLayer()
         {
             if (!string.IsNullOrEmpty(_selectedLayerName) && _layerList.FindAll(o => o.Name == _selectedLayerName).Count == 1)
             {
-                SetSelectedLayer(_selectedLayerName);
+                SetSelectedLayer(_selectedLayerName, false, false);
             }
             else
             {
-                SetSelectedLayer(StreamDeckConstants.HOME_LAYER_NAME);
+                SetSelectedLayer(StreamDeckConstants.HOME_LAYER_NAME, false, false);
             }
         }
 
@@ -198,7 +197,7 @@ namespace NonVisuals.Panels.StreamDeck
                 LayerList.Add(streamDeckLayer);
             }
 
-            SetSelectedLayer(streamDeckLayer.Name);
+            SetSelectedLayer(streamDeckLayer.Name, true, false);
             return true;
         }
 
@@ -225,11 +224,11 @@ namespace NonVisuals.Panels.StreamDeck
             }
             else if (_layerList.Count > 0)
             {
-                SetSelectedLayer(_layerList[0].Name);
+                SetSelectedLayer(_layerList[0].Name, true, false);
             }
             else
             {
-                SetSelectedLayer(null);
+                SetSelectedLayer(null, false, false);
             }
         }
 
@@ -261,28 +260,6 @@ namespace NonVisuals.Panels.StreamDeck
             {
                 CheckHomeLayerExists();
                 return _selectedLayerName;
-            }
-
-            set
-            {
-                if (LayerList.Count == 0)
-                {
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(value))
-                {
-                    return;
-                }
-
-                bool found = _layerList.Exists(x => x.Name == value);
-
-                if (!found)
-                {
-                    throw new Exception($"StreamDeckLayerHandler : Failed to find layer with name {value} in order to mark it selected.");
-                }
-
-                SetSelectedLayer(value);
             }
         }
 
@@ -332,13 +309,13 @@ namespace NonVisuals.Panels.StreamDeck
             {
                 var tmpLayer = _layerHistory.Last();
                 _layerHistory.RemoveAt(_layerHistory.Count - 1);
-                SetSelectedLayer(tmpLayer);
+                SetSelectedLayer(tmpLayer, true, false);
             }
         }
 
         public void ShowHomeLayer()
         {
-            SetSelectedLayer(StreamDeckConstants.HOME_LAYER_NAME);
+            SetSelectedLayer(StreamDeckConstants.HOME_LAYER_NAME, true, false);
         }
 
         private void MarkAllButtonsHiddenAndClearFaces()
@@ -350,7 +327,29 @@ namespace NonVisuals.Panels.StreamDeck
             }
         }
 
-        private void SetSelectedLayer(string layerName)
+        public void SwitchToLayer(string layerName, bool switchedByUser, bool remotelySwitched)
+        {
+            if (LayerList.Count == 0)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(layerName))
+            {
+                return;
+            }
+
+            var found = _layerList.Exists(x => x.Name == layerName);
+
+            if (!found)
+            {
+                throw new Exception($"StreamDeckLayerHandler : Failed to find layer with name {layerName} in order to mark it selected.");
+            }
+
+            SetSelectedLayer(layerName, switchedByUser, remotelySwitched);
+        }
+
+        private void SetSelectedLayer(string layerName, bool switchedByUser, bool remotelySwitched)
         {
             if (layerName == _selectedLayerName && _jsonImported == false)
             {
@@ -384,7 +383,7 @@ namespace NonVisuals.Panels.StreamDeck
 
             selectedLayer.IsVisible = true;
 
-            SDEventHandler.LayerSwitched(this, _streamDeckPanel.BindingHash, _selectedLayerName);
+            SDEventHandler.LayerSwitched(this, _streamDeckPanel.BindingHash, _selectedLayerName, switchedByUser, remotelySwitched);
         }
 
         public int SelectedButtonNumber
