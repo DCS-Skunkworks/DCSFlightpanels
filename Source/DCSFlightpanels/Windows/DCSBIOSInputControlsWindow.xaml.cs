@@ -21,6 +21,7 @@
         private bool _isDirty;
         private readonly bool _showSequenced;
         private bool _isSequenced;
+        private readonly string _dcsbiosString = "DCS-BIOS";
 
         public DCSBIOSInputControlsWindow(string header, string description, bool isSequenced, bool showSequenced)
         {
@@ -66,6 +67,7 @@
             UpButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null && DataGridValues.SelectedIndex > 0;
             DownButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null && DataGridValues.SelectedIndex < DataGridValues.Items.Count - 1;
             ButtonOk.IsEnabled = _isDirty;
+            SetDescription();
         }
 
         private void ShowItems()
@@ -224,6 +226,26 @@
         {
             SetIsDirty();
             SetFormState();
+        }
+
+        private void SetDescription()
+        {
+            if (_dcsbiosInputs.Count == 1)
+            {
+                TextBoxDescription.Text = _dcsbiosInputs[0].ControlId;
+                return;
+            }
+
+            if (_dcsbiosInputs.Count > 1 && TextBoxDescription.Text == _dcsbiosInputs[0].ControlId)
+            {
+                TextBoxDescription.Text = _dcsbiosString;
+                return;
+            }
+
+            if (string.IsNullOrEmpty(TextBoxDescription.Text))
+            {
+                TextBoxDescription.Text = _dcsbiosString;
+            }
         }
 
         public void SetIsDirty()
