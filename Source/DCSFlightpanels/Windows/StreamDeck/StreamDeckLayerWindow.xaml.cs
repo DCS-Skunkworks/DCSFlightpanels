@@ -34,7 +34,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void StreamDeckLayerWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
                 if (_loaded)

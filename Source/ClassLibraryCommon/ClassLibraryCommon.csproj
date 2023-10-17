@@ -21,6 +21,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="dcs-bios_modules.txt" />
+    <None Remove="gear-image-darkmode.png" />
+    <None Remove="gear-image.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="dcs-bios_modules.txt">
@@ -37,12 +39,18 @@
     <PackageReference Include="NLog" Version="5.2.1" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.ServiceModel.Federation" Version="6.0.0" />
+    <PackageReference Include="Theraot.Core" Version="3.2.11" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\gear-image-darkmode.png" />
+    <Resource Include="Images\gear-image.png" />
+  </ItemGroup>
   <PropertyGroup>
     <AssemblyVersion>1.0.478.6527</AssemblyVersion>
     <FileVersion>1.0.478.6527</FileVersion>
+    <AssemblyName>ClassLibraryCommon</AssemblyName>
   </PropertyGroup>
 </Project>

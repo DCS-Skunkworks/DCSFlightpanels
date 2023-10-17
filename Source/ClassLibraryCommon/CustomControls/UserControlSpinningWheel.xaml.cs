@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
-namespace DCSFlightpanels.CustomControls
+namespace ClassLibraryCommon.CustomControls
 {
     /// <summary>
     /// Interaction logic for UserControlSpinningWheel.xaml
@@ -31,7 +31,7 @@ namespace DCSFlightpanels.CustomControls
 
             if (DarkMode.DarkModeEnabled)
             {
-                ImageConnected.Source = new BitmapImage(new Uri(@"/dcsfp;component/Images/gear-image-darkmode.png", UriKind.Relative));
+                ImageConnected.Source = new BitmapImage(new Uri(@"/ClassLibraryCommon;component/Images/gear-image-darkmode.png", UriKind.Relative));
             }
             _stopGearTimer.Elapsed += TimerStopRotation;
         }

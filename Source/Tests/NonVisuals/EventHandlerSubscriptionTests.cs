@@ -7,7 +7,7 @@ using NonVisuals.Panels.StreamDeck.Events;
 using NonVisuals.Panels.StreamDeck.Panels;
 using Xunit;
 
-namespace Tests.NonVisuals
+namespace DCSFPTests.NonVisuals
 {
     [Collection("Sequential")]
     public class EventHandlerSubscriptionTests

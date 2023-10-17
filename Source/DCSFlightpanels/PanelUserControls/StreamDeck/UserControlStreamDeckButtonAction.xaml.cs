@@ -67,7 +67,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         private void UserControlStreamDeckButtonAction_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             if (_isLoaded)
             {
                 return;

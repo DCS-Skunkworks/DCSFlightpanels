@@ -1,9 +1,9 @@
-﻿using DCS_BIOS;
+﻿using System;
+using DCS_BIOS;
 using DCS_BIOS.Json;
-using System;
 using Xunit;
 
-namespace Tests.DcsBios
+namespace DCSFPTests.DcsBios
 {
     public class DCSBIOSInputInterfaceTests
     {

@@ -1,13 +1,12 @@
-﻿<UserControl x:Class="DCSFlightpanels.CustomControls.UserControlSpinningWheel"
+﻿<UserControl x:Class="ClassLibraryCommon.CustomControls.UserControlSpinningWheel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DCSFlightpanels.CustomControls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50">
     <Grid>
-        <Image Name="ImageConnected"  Source="/dcsfp;component/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
+        <Image Name="ImageConnected"  Source="/ClassLibraryCommon;component/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
             <Image.RenderTransform>
                 <RotateTransform CenterX="9" CenterY="9" />
             </Image.RenderTransform>

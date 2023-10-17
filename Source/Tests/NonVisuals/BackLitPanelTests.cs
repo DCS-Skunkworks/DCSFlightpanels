@@ -1,8 +1,8 @@
-using NonVisuals.Panels.Saitek.Panels;
 using System;
+using NonVisuals.Panels.Saitek.Panels;
 using Xunit;
 
-namespace Tests.NonVisuals
+namespace DCSFPTests.NonVisuals
 {
     public class BackLitPanelTests
     {

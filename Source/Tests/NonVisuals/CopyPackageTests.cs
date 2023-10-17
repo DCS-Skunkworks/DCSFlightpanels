@@ -1,11 +1,11 @@
-﻿using ClassLibraryCommon;
+﻿using System.Collections.Generic;
+using ClassLibraryCommon;
 using MEF;
 using NonVisuals;
-using System.Collections.Generic;
 using NonVisuals.KeyEmulation;
 using Xunit;
 
-namespace Tests.NonVisuals
+namespace DCSFPTests.NonVisuals
 {
     public class CopyPackageTests
     {

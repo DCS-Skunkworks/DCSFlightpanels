@@ -7,6 +7,7 @@
         Title="DCS-BIOS Control Reference" 
         Height="600" Width="700"
         xmlns:controls="clr-namespace:ControlReference.UserControls"
+        xmlns:customControls="clr-namespace:ClassLibraryCommon.CustomControls;assembly=ClassLibraryCommon"
         Loaded="MainWindow_OnLoaded" 
         Closed="MainWindow_OnClosed" 
         LocationChanged="MainWindow_OnLocationChanged" 
@@ -47,32 +48,9 @@
             <Button>
                 <Image Source="/Images/search_controls.png" Name="ButtonSearchControls" Tag="Search" MouseDown="ButtonSearchControls_OnMouseDown" ToolTip="Search for DCS-BIOS Control"/>
             </Button>
-            <Image Name="ImageDcsBiosConnected"  Margin="10,0,0,0" Source="/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
-                <Image.RenderTransform>
-                    <RotateTransform CenterX="9" CenterY="9" />
-                </Image.RenderTransform>
-                <Image.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <Trigger Property="Image.IsEnabled" Value="True">
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard Name="GearStoryboard">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle" From="0" To="360" Duration="0:0:1" RepeatBehavior="Forever" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                            </Trigger>
-                            <Trigger Property="Image.IsEnabled" Value="False">
-                                <Trigger.EnterActions>
-                                    <PauseStoryboard BeginStoryboardName="GearStoryboard">
-                                    </PauseStoryboard>
-                                </Trigger.EnterActions>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Image.Style>
-            </Image>
+
+            <customControls:UserControlSpinningWheel Margin="10,0,0,0" x:Name="ControlSpinningWheel"/>
+
             <Button>
                 <Image Source="/Images/112_RefreshArrow_Green_32x32_72.png" Name="ButtonReloadJSON" Margin="10,0,0,0" MouseDown="ButtonReloadJSON_OnMouseDown" ToolTip="Reload JSON File"/>
             </Button>

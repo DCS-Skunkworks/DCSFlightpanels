@@ -16,7 +16,6 @@ namespace NonVisuals.Panels.StreamDeck
     using Events;
     
     using Panels;
-    using Newtonsoft.Json.Linq;
 
     public class StreamDeckLayerHandler : IDisposable
     {

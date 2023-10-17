@@ -360,7 +360,7 @@
 
         private void RadioPanelPZ69UserControlMosquito_OnLoaded(object sender, RoutedEventArgs e)
         {
-			DarkMode.SetFrameworkElemenDarkMode(this);
+			DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;

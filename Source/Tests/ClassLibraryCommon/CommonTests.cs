@@ -1,9 +1,9 @@
-﻿using ClassLibraryCommon;
-using System;
+﻿using System;
 using System.Linq;
+using ClassLibraryCommon;
 using Xunit;
 
-namespace Tests.ClassLibraryCommon
+namespace DCSFPTests.ClassLibraryCommon
 {
     public class CommonTests
     {

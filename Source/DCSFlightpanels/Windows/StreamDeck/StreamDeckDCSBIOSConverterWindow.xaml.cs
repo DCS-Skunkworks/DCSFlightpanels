@@ -1,6 +1,4 @@
-﻿using System.Windows.Media;
-
-namespace DCSFlightpanels.Windows.StreamDeck
+﻿namespace DCSFlightpanels.Windows.StreamDeck
 {
     using System;
     using System.Drawing;
@@ -43,7 +41,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void StreamDeckDCSBIOSConverterWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
                 if (_isLoaded)

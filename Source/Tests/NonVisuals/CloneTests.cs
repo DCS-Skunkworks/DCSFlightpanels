@@ -1,17 +1,17 @@
-﻿using ClassLibraryCommon;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using MEF;
 using NonVisuals;
-using System.Collections.Generic;
-using System.Drawing;
 using NonVisuals.BindingClasses.BIP;
 using NonVisuals.HID;
-using Xunit;
-using NonVisuals.Panels.StreamDeck.Panels;
-using NonVisuals.Panels.StreamDeck;
 using NonVisuals.KeyEmulation;
+using NonVisuals.Panels.StreamDeck;
+using NonVisuals.Panels.StreamDeck.Panels;
+using Xunit;
 
-namespace Tests.NonVisuals
+namespace DCSFPTests.NonVisuals
 {
     public class CloneTests {
         

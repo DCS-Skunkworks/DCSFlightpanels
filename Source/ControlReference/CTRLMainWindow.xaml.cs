@@ -35,7 +35,6 @@ namespace ControlReference
         private IEnumerable<DCSBIOSControl> _loadedControls = null;
         private List<DCSBIOSOutput> _loadedDCSBIOSOutputs = new();
         private readonly List<DCSBIOSControlUserControl> _dcsbiosUIControlPanels = new();
-        private readonly Timer _dcsStopGearTimer = new(5000);
         private DCSBIOS _dcsBios;
         private bool _formLoaded = false;
         private const int MAX_CONTROLS_ON_PAGE = 70;
@@ -70,7 +69,6 @@ namespace ControlReference
                 if (disposing)
                 {
                     //  dispose managed state (managed objects).
-                    _dcsStopGearTimer.Dispose();
                     _dcsBios?.Shutdown();
                     _dcsBios?.Dispose();
                     BIOSEventHandler.DetachConnectionListener(this);
@@ -120,8 +118,6 @@ namespace ControlReference
                 CreateDCSBIOS();
                 StartupDCSBIOS();
                 BIOSEventHandler.AttachConnectionListener(this);
-                _dcsStopGearTimer.Elapsed += TimerStopRotation;
-                _dcsStopGearTimer.Start();
                 FindDCSBIOSControls();
                 _formLoaded = true;
             }
@@ -215,10 +211,10 @@ namespace ControlReference
             _dcsBios = new DCSBIOS(Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
             if (!_dcsBios.HasLastException())
             {
-                RotateGear(2000);
+                ControlSpinningWheel.RotateGear(2000);
             }
 
-            ImageDcsBiosConnected.Visibility = Visibility.Visible;
+            ControlSpinningWheel.Visibility = Visibility.Visible;
         }
 
         private void StartupDCSBIOS()
@@ -229,7 +225,7 @@ namespace ControlReference
             }
 
             _dcsBios?.Startup();
-            _dcsStopGearTimer.Start();
+            ControlSpinningWheel.RotateGear();
         }
 
         private void MenuSetDCSBIOSPath_OnClick(object sender, RoutedEventArgs e)
@@ -484,48 +480,11 @@ namespace ControlReference
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(() => RotateGear()));
+                Dispatcher?.BeginInvoke((Action)(() => ControlSpinningWheel.RotateGear()));
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TimerStopRotation(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-                Dispatcher?.BeginInvoke((Action)(() => ImageDcsBiosConnected.IsEnabled = false));
-                _dcsStopGearTimer.Stop();
-            }
-            catch (Exception)
-            {
-                // ignore
-            }
-        }
-
-        private void RotateGear(int howLong = 5000)
-        {
-            try
-            {
-                if (ImageDcsBiosConnected.IsEnabled)
-                {
-                    return;
-                }
-
-                ImageDcsBiosConnected.IsEnabled = true;
-                if (_dcsStopGearTimer.Enabled)
-                {
-                    _dcsStopGearTimer.Stop();
-                }
-
-                _dcsStopGearTimer.Interval = howLong;
-                _dcsStopGearTimer.Start();
-            }
-            catch (Exception)
-            {
-                // ignore
             }
         }
 

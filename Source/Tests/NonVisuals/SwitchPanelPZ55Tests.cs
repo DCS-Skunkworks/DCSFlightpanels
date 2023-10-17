@@ -3,7 +3,7 @@ using NonVisuals.Panels.Saitek.Panels;
 using NonVisuals.Panels.Saitek.Switches;
 using Xunit;
 
-namespace Tests.NonVisuals
+namespace DCSFPTests.NonVisuals
 {
     public class SwitchPanelPZ55Tests
     {
