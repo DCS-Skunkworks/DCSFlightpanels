@@ -161,8 +161,8 @@
                 <TextBlock Name="LabelVersionInformation" HorizontalAlignment="Right" Margin="10,0,10,0"/>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
-                <TextBlock Name="LabelDownloadNewVersion" HorizontalAlignment="Right" Margin="0,0,10,0" Visibility="Hidden">
-                    <Hyperlink NavigateUri="https://github.com/jdahlblom/DCSFlightpanels/releases" RequestNavigate="Hyperlink_OnRequestNavigate">
+                <TextBlock Name="LabelDownloadNewVersion" HorizontalAlignment="Right" Margin="0,0,10,0" Visibility="Hidden" MouseEnter="LabelDownloadNewVersion_OnMouseEnter" MouseLeave="LabelDownloadNewVersion_OnMouseLeave">
+                    <Hyperlink NavigateUri="https://github.com/DCS-Skunkworks/DCSFlightpanels/releases" RequestNavigate="Hyperlink_OnRequestNavigate">
                         Download New Version!
                     </Hyperlink>
                 </TextBlock>

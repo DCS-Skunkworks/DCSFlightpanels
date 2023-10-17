@@ -473,6 +473,10 @@
             // #if !DEBUG
             var assembly = Assembly.GetExecutingAssembly();
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            if (string.IsNullOrEmpty(fileVersionInfo.FileVersion)) return;
+
+            var thisVersion = new Version(fileVersionInfo.FileVersion);
+
             try
             {
                 var dateTime = Settings.Default.LastGitHubCheck;
@@ -483,33 +487,9 @@
                 {
                     Settings.Default.LastGitHubCheck = DateTime.Now;
                     Settings.Default.Save();
-                    var lastRelease = await client.Repository.Release.GetLatest("DCSFlightpanels", "DCSFlightpanels");
-                    var thisReleaseArray = fileVersionInfo.FileVersion.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                    var gitHubReleaseArray = lastRelease.TagName.Replace("v.", string.Empty).Replace("v", string.Empty).Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                    var newerAvailable = false;
-                    if (int.Parse(gitHubReleaseArray[0]) > int.Parse(thisReleaseArray[0]))
-                    {
-                        newerAvailable = true;
-                    }
-                    else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
-                    {
-                        if (int.Parse(gitHubReleaseArray[1]) > int.Parse(thisReleaseArray[1]))
-                        {
-                            newerAvailable = true;
-                        }
-                    }
-                    else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
-                    {
-                        if (int.Parse(gitHubReleaseArray[1]) >= int.Parse(thisReleaseArray[1]))
-                        {
-                            if (int.Parse(gitHubReleaseArray[1]) > int.Parse(thisReleaseArray[1]))
-                            {
-                                newerAvailable = true;
-                            }
-                        }
-                    }
-
-                    if (newerAvailable)
+                    var lastRelease = await client.Repository.Release.GetLatest("DCS-Skunkworks", "DCSFlightpanels");
+                    var githubVersion = new Version(lastRelease.TagName.Replace("v", ""));
+                    if (githubVersion.CompareTo(thisVersion) > 0)
                     {
                         Dispatcher?.Invoke(() =>
                         {
@@ -1416,6 +1396,16 @@
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void LabelDownloadNewVersion_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void LabelDownloadNewVersion_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
     }
 }
