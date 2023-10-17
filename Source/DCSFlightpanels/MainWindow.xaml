@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
-        xmlns:customControls1="clr-namespace:DCSFlightpanels.CustomControls;assembly=ClassLibraryCommon"
         xmlns:customControls2="clr-namespace:ClassLibraryCommon.CustomControls;assembly=ClassLibraryCommon"
         Title="DCSFlightpanels" 
         Height="800" 

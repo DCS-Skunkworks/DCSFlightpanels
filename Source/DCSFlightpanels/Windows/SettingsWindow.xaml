@@ -37,7 +37,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox Content="Disable DCSFP keyboard API" Name="CheckBoxDisableKeyboardAPI"  Margin="0,5,10,0" Checked="CheckBoxDisableKeyboardAPI_OnChecked" Unchecked="CheckBoxDisableKeyboardAPI_OnUnchecked" IsChecked="False"  />
                                 <TextBlock VerticalAlignment="Bottom">
-                                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Plugin-Support">
+                                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki/Plugin-Support">
                                     <Bold>Wiki</Bold>
                                 </Hyperlink>
                                 </TextBlock>
@@ -95,13 +95,13 @@
                         </Italic>
                         <LineBreak/>
                         <LineBreak/>
-                        <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Troubleshooting">
+                        <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki/Troubleshooting">
                             <Bold>
                                 <Run FontSize="16">Wiki : Troubleshooting</Run>
                             </Bold>
                         </Hyperlink>
                         <LineBreak/>
-                        <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Installation">
+                        <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki/Installation">
                             <Bold>
                                 <Run FontSize="16">Wiki : Installation</Run>
                             </Bold>

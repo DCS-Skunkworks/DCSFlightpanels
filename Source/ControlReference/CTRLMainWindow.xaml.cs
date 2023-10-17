@@ -33,7 +33,7 @@ namespace ControlReference
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private IEnumerable<DCSBIOSControl> _loadedControls = null;
-        private List<DCSBIOSOutput> _loadedDCSBIOSOutputs = new();
+        private readonly List<DCSBIOSOutput> _loadedDCSBIOSOutputs = new();
         private readonly List<DCSBIOSControlUserControl> _dcsbiosUIControlPanels = new();
         private DCSBIOS _dcsBios;
         private bool _formLoaded = false;
