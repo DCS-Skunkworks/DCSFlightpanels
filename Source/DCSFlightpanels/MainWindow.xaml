@@ -153,9 +153,9 @@
                 </Label>
             </Canvas>
         </ToolBar>
-        <TabControl Name="TabControlPanels" Grid.Row="2" SelectedIndex="3" >
 
-        </TabControl>
+        <customControls:UserControlTabControlCockpitPanels x:Name="TabControlPanels" Grid.Row="2" SelectedIndex="3" />
+
         <StatusBar Name="StatusBarMainWindow" HorizontalAlignment="Stretch" Height="26" Grid.Row="3" VerticalAlignment="Top" >
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                 <TextBlock Name="LabelVersionInformation" HorizontalAlignment="Right" Margin="10,0,10,0"/>
