@@ -1,6 +1,7 @@
 ﻿<Window x:Class="DCSFlightpanels.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
         Title="DCSFlightpanels" 
         Height="800" 
         Width="1300" 
@@ -118,33 +119,8 @@
                 </Image>
             </Button>
 
-            <Image Name="ImageDcsBiosConnected"  Source="/dcsfp;component/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
-                <Image.RenderTransform>
-                    <RotateTransform CenterX="9" CenterY="9" />
-                </Image.RenderTransform>
-                <Image.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <Trigger Property="Image.IsEnabled" Value="True">
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard Name="GearStoryboard">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle" From="0" To="360" Duration="0:0:1" RepeatBehavior="Forever" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                            </Trigger>
-                            <Trigger Property="Image.IsEnabled" Value="False">
-                                <Trigger.EnterActions>
-                                    <PauseStoryboard BeginStoryboardName="GearStoryboard">
-                                    </PauseStoryboard>
-                                </Trigger.EnterActions>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Image.Style>
-            </Image>
-            
+            <customControls:UserControlSpinningWheel Margin="10,0,0,0" x:Name="ControlSpinningWheel"/>
+
             <Button Name="ButtonDisablePanelEventsFromBeingRouted" Content="Enabled!" Height="35" Width="75"  FontWeight="Bold" Margin="10,0,0,0" ToolTip="Panel events are routed" MouseLeave="ButtonDisablePanelEventsFromBeingRouted_OnMouseLeave" MouseEnter="ButtonDisablePanelEventsFromBeingRouted_OnMouseEnter" Click="ButtonDisableAllPanelInteractions_OnClick"/>
 
             <Label Margin="200,0,0,0" Name="LabelAirframe" FontWeight="Bold" HorizontalAlignment="Stretch" Content="None"/>
@@ -177,16 +153,16 @@
                 </Label>
             </Canvas>
         </ToolBar>
-        <TabControl Name="TabControlPanels" Grid.Row="2" SelectedIndex="3" >
 
-        </TabControl>
+        <customControls:UserControlTabControlCockpitPanels x:Name="TabControlPanels" Grid.Row="2" SelectedIndex="3" />
+
         <StatusBar Name="StatusBarMainWindow" HorizontalAlignment="Stretch" Height="26" Grid.Row="3" VerticalAlignment="Top" >
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                 <TextBlock Name="LabelVersionInformation" HorizontalAlignment="Right" Margin="10,0,10,0"/>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
-                <TextBlock Name="LabelDownloadNewVersion" HorizontalAlignment="Right" Margin="0,0,10,0" Visibility="Hidden">
-                    <Hyperlink NavigateUri="https://github.com/jdahlblom/DCSFlightpanels/releases" RequestNavigate="Hyperlink_OnRequestNavigate">
+                <TextBlock Name="LabelDownloadNewVersion" HorizontalAlignment="Right" Margin="0,0,10,0" Visibility="Hidden" MouseEnter="LabelDownloadNewVersion_OnMouseEnter" MouseLeave="LabelDownloadNewVersion_OnMouseLeave">
+                    <Hyperlink NavigateUri="https://github.com/DCS-Skunkworks/DCSFlightpanels/releases" RequestNavigate="Hyperlink_OnRequestNavigate">
                         Download New Version!
                     </Hyperlink>
                 </TextBlock>

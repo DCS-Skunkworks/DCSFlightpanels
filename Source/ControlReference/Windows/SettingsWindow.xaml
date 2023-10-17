@@ -37,15 +37,9 @@
 
                     <TextBlock FontSize="25" HorizontalAlignment="Center" Margin="5,15,5,0" >Problems?</TextBlock>
                     <TextBlock x:Name="ProblemsTextBlock" TextWrapping="Wrap" Margin="5,5,5,0" FontSize="14" Background="AliceBlue" HorizontalAlignment="Center">
-                        <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Troubleshooting">
+                        <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki">
                             <Bold>
-                                <Run FontSize="16">Wiki : Troubleshooting</Run>
-                            </Bold>
-                        </Hyperlink>
-                        <LineBreak/>
-                        <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Installation">
-                            <Bold>
-                                <Run FontSize="16">Wiki : Installation</Run>
+                                <Run FontSize="16">DCSFP Wiki</Run>
                             </Bold>
                         </Hyperlink>
                     </TextBlock>

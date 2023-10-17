@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Windows.StreamDeck
+﻿using System.Windows.Media;
+
+namespace DCSFlightpanels.Windows.StreamDeck
 {
     using System;
     using System.Drawing;

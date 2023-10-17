@@ -152,7 +152,7 @@
     <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
     <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
     <Nullable>disable</Nullable>
-    <PackageProjectUrl>https://github.com/DCSFlightpanels/DCSFlightpanels</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/DCS-Skunkworks/DCSFlightpanels</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
