@@ -34,7 +34,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
     <PackageReference Include="NLog">
-      <Version>5.2.1</Version>
+      <Version>5.2.5</Version>
     </PackageReference>
   </ItemGroup>
 
@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.4" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 

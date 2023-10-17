@@ -103,7 +103,7 @@
                         </Hyperlink>
                         </TextBlock>
                         <TextBlock Margin="10,10,10,10">
-                        <Hyperlink NavigateUri="https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Formulas" RequestNavigate="Hyperlink_OnRequestNavigate">
+                        <Hyperlink NavigateUri="https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki/Formulas" RequestNavigate="Hyperlink_OnRequestNavigate">
                             Click here for sample formulas
                         </Hyperlink>
                         </TextBlock>

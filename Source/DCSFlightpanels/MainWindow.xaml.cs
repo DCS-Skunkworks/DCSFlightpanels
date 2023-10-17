@@ -773,7 +773,7 @@
             {
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = "https://github.com/DCSFlightpanels/DCSFlightpanels/wiki",
+                    FileName = "https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki",
                     UseShellExecute = true
                 });
             }

@@ -39,6 +39,7 @@ namespace ClassLibraryCommon.CustomControls
         public void Dispose()
         {
             _stopGearTimer?.Dispose();
+            GC.SuppressFinalize(this);
         }
         
         private void TimerStopRotation(object sender, ElapsedEventArgs e)

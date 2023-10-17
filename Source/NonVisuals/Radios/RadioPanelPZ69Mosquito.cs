@@ -377,7 +377,7 @@ namespace NonVisuals.Radios
                                                     _upperButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) ;
+                                                else if (!_vhfDialChangeSkipper.ShouldSkip())
                                                 {
                                                     SendDecVHFPresetCommand();
                                                 }
@@ -412,7 +412,7 @@ namespace NonVisuals.Radios
                                                     _lowerButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 }
-                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) ;
+                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) 
                                                 {
                                                     SendIncVHFPresetCommand();
                                                 }
@@ -433,7 +433,7 @@ namespace NonVisuals.Radios
                                                     _lowerButtonPressedAndDialRotated = true;
                                                     DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 }
-                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) ;
+                                                else if (!_vhfDialChangeSkipper.ShouldSkip()) 
                                                 {
                                                     SendDecVHFPresetCommand();
                                                 }

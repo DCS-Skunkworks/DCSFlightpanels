@@ -185,7 +185,7 @@ namespace DCSFlightpanels.Windows
         {
             Process.Start(new ProcessStartInfo
             {
-                FileName = "https://github.com/DCSFlightpanels/DCSFlightpanels/wiki/Open-Recording-for-Key-Presses",
+                FileName = "https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki/Open-Recording-for-Key-Presses",
                 UseShellExecute = true
             });
         }
