@@ -50,7 +50,7 @@ namespace DCSFlightpanels.Windows
 
         private void SettingsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             
             Brush textBlockBackgroundBrush = DarkMode.DarkModeEnabled ? new SolidColorBrush(Colors.SlateGray) : new SolidColorBrush(Colors.AliceBlue);
             ImportantTextBlock.Background = textBlockBackgroundBrush;

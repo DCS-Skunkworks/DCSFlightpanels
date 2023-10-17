@@ -52,7 +52,7 @@
 
         private void DCSBIOSInputControlsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             TextBoxHeader.Text = _header + Environment.NewLine + ProfileHandler.ActiveDCSAircraft.Description;
             SetFormState();
         }

@@ -321,7 +321,7 @@ namespace DCSFlightpanels.Windows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
         }
     }
 }

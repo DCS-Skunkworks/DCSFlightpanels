@@ -24,7 +24,7 @@ namespace DCSFlightpanels.Windows
         private void ChooseProfileModuleWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             PopulateAirframeCombobox();
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
         }
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)

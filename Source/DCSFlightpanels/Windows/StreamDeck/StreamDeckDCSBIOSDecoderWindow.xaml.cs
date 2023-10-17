@@ -88,7 +88,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void StreamDeckDCSBIOSDecoderWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
                 if (_formLoaded)

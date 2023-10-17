@@ -22,12 +22,7 @@
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
-
-    using Interfaces;
-    using PanelUserControls;
     using Properties;
-    using Radios.Emulators;
-    using Radios.PreProgrammed;
     using Shared;
     using Windows;
     using NLog;
@@ -42,7 +37,6 @@
     using Octokit;
     using NonVisuals.Panels;
     using NonVisuals.HID;
-    using System.Windows.Media.Imaging;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener, IDCSBIOSStringListener
     {
@@ -137,7 +131,7 @@
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
                 if (_isLoaded)

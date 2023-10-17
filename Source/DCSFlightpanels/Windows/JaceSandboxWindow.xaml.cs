@@ -412,7 +412,7 @@ namespace DCSFlightpanels.Windows
 
         private void JaceSandboxWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");

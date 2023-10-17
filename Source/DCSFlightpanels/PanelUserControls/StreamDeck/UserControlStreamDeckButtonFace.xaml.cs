@@ -67,7 +67,7 @@
 
         private void UserControlStreamDeckButtonFace_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
                 if (_isLoaded)

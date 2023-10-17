@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Windows
+﻿using ClassLibraryCommon;
+
+namespace DCSFlightpanels.Windows
 {
     using System;
     using System.Diagnostics;
@@ -40,7 +42,7 @@
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
         }
     }
 }

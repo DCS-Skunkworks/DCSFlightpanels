@@ -1,4 +1,6 @@
-﻿namespace DCSFlightpanels.Bills
+﻿using ClassLibraryCommon;
+
+namespace DCSFlightpanels.Bills
 {
     using System;
     using System.Collections.Generic;

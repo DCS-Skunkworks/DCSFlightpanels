@@ -1,7 +1,7 @@
 ﻿using DCS_BIOS;
 using Xunit;
 
-namespace Tests.DcsBios
+namespace DCSFPTests.DcsBios
 {
     public class DCSBIOSOutputTests
     {

@@ -1,12 +1,11 @@
-﻿namespace SamplePanelEventPlugin2
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Linq;
+using System.Windows.Forms;
+using MEF;
+
+namespace DCSFPTests
 {
-    using System.Collections.Generic;
-    using System.ComponentModel.Composition;
-    using System.Linq;
-    using System.Windows.Forms;
-
-    using MEF;
-
     /*
      * Use this class as a template for your plugin.
      * Reference the MEF project where the interface and necessary files are located.

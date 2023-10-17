@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using ClassLibraryCommon;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.BindingClasses.DCSBIOSBindings;
 
 namespace DCSFlightpanels.Bills

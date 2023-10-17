@@ -119,7 +119,7 @@
 
         private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             if (!UserControlLoaded)
             {
                 UCStreamDeckButtonAction.Update();

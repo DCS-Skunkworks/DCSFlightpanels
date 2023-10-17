@@ -42,7 +42,7 @@ namespace DCSFlightpanels.Windows
 
         private void KeyPressReadingWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
                 if (_loaded)

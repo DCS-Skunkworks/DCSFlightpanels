@@ -66,7 +66,7 @@ namespace DCSFlightpanels.PanelUserControls
         
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElemenDarkMode(this);
+            DarkMode.SetFrameworkElementDarkMode(this);
             if (!_once)
             {
                 HidePositionIndicators();

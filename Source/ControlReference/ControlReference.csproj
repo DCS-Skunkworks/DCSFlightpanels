@@ -16,7 +16,6 @@
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="gear-image.png" />
     <None Remove="Images\112_RefreshArrow_Green_32x32_72.png" />
     <None Remove="Images\arduino_logo_simple.png" />
     <None Remove="Images\clear_search_result.png" />
@@ -39,7 +38,6 @@
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="gear-image.png" />
     <Resource Include="Images\112_RefreshArrow_Green_32x32_72.png" />
     <Resource Include="Images\clear_search_result.png" />
     <Resource Include="Images\FlightPanels01.png">

@@ -1,7 +1,7 @@
 ﻿using NonVisuals.KeyEmulation;
 using Xunit;
 
-namespace Tests.NonVisuals
+namespace DCSFPTests.NonVisuals
 {
     public class CommonVirtualKeyTests
     {
