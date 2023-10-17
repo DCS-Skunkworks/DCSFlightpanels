@@ -50,9 +50,7 @@
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileHIDInstances = new();
         private readonly string _windowName = "DCSFlightpanels ";
-        private readonly Timer _exceptionTimer = new(1000);
         private readonly Timer _statusMessagesTimer = new(1000);
-        private readonly Timer _dcsStopGearTimer = new(5000);
         private readonly List<string> _statusMessages = new();
         private readonly object _lockObjectStatusMessages = new();
         private readonly List<UserControl> _panelUserControls = new();
@@ -68,11 +66,6 @@
         {
             DarkModePrepare();
             InitializeComponent();
-
-            if (DarkMode.DarkModeEnabled)
-            {
-                ImageDcsBiosConnected.Source = new BitmapImage(new Uri(@"/dcsfp;component/Images/gear-image-darkmode.png", UriKind.Relative));
-            }
 
             DCSAircraft.Init();
 
@@ -108,10 +101,7 @@
                 if (disposing)
                 {
                     //  dispose managed state (managed objects).
-                    _dcsStopGearTimer.Dispose();
-                    _exceptionTimer.Dispose();
                     _statusMessagesTimer.Dispose();
-                    _exceptionTimer.Dispose();
                     _dcsBios?.Dispose();
                     AppEventHandler.DetachPanelEventListener(this);
                     AppEventHandler.DetachSettingsMonitoringListener(this);
@@ -240,9 +230,6 @@
 
         private void StartTimers()
         {
-            _exceptionTimer.Elapsed += TimerCheckExceptions;
-            _exceptionTimer.Start();
-            _dcsStopGearTimer.Elapsed += TimerStopRotation;
             _statusMessagesTimer.Elapsed += TimerStatusMessagesTimer;
             _statusMessagesTimer.Start();
         }
@@ -374,10 +361,8 @@
             _dcsBios = new DCSBIOS(Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
             if (!_dcsBios.HasLastException())
             {
-                RotateGear(2000);
+                ControlSpinningWheel.RotateGear(2000);
             }
-
-            ImageDcsBiosConnected.Visibility = Visibility.Visible;
         }
 
         private void StartupDCSBIOS()
@@ -388,8 +373,6 @@
             }
 
             _dcsBios?.Startup();
-
-            _dcsStopGearTimer.Start();
         }
 
         private void ShutdownDCSBIOS()
@@ -398,8 +381,8 @@
             _dcsBios = null;
 
             DCSBIOSControlLocator.DCSAircraft = _profileHandler.DCSAircraft;
-            _dcsStopGearTimer.Stop();
-            ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
+            ControlSpinningWheel.Stop();
+            ControlSpinningWheel.Visibility = Visibility.Collapsed;
         }
 
         private void DisposePanel(HIDSkeleton hidSkeleton)
@@ -1062,24 +1045,6 @@
             // #endif
         }
 
-        private void TimerCheckExceptions(object sender, ElapsedEventArgs e)
-        {
-            // ignored
-        }
-
-        private void TimerStopRotation(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-                Dispatcher?.BeginInvoke((Action)(() => ImageDcsBiosConnected.IsEnabled = false));
-                _dcsStopGearTimer.Stop();
-            }
-            catch (Exception)
-            {
-                // ignore
-            }
-        }
-
         private void SetWindowTitle()
         {
             if (DCSAircraft.IsNoFrameLoadedYet(_profileHandler.DCSAircraft))
@@ -1162,8 +1127,7 @@
         {
             try
             {
-                _exceptionTimer.Stop();
-                _dcsStopGearTimer.Stop();
+                ControlSpinningWheel.Stop();
                 _statusMessagesTimer.Stop();
             }
             catch (Exception ex)
@@ -1452,35 +1416,11 @@
             SetWindowTitle();
         }
 
-        private void RotateGear(int howLong = 5000)
-        {
-            try
-            {
-                if (ImageDcsBiosConnected.IsEnabled)
-                {
-                    return;
-                }
-
-                ImageDcsBiosConnected.IsEnabled = true;
-                if (_dcsStopGearTimer.Enabled)
-                {
-                    _dcsStopGearTimer.Stop();
-                }
-
-                _dcsStopGearTimer.Interval = howLong;
-                _dcsStopGearTimer.Start();
-            }
-            catch (Exception)
-            {
-                // ignore
-            }
-        }
-
         public void DcsBiosConnectionActive(object sender, DCSBIOSConnectionEventArgs e)
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(() => RotateGear()));
+                Dispatcher?.BeginInvoke((Action)(() => ControlSpinningWheel.RotateGear()));
             }
             catch (Exception ex)
             {
