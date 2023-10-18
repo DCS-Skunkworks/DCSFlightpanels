@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
-Flightpanels License
+DCSFlightpanels License
 -----------------------------------------------------------------------
 
 The Simple Public License 2.0 (SimPL 2.0 for short) is a plain
@@ -7,7 +7,7 @@ language implementation of GPL 2.0. The words are different, but the
 goal is the same - to guarantee for all users the freedom to share and
 change software. If anyone wonders about the meaning of the SimPL,
 they should interpret it as consistent with GPL 2.0.
-The Flightpanels License:
+The DCSFlightpanels License:
 
 This license applies to the software's source and object code and comes
 with any rights that I have in it (other than trademarks). You agree
@@ -39,7 +39,7 @@ called "consequential damages." (The state or country where you live
 may not allow you to limit your liability in this way, so this may not
 apply to you);
 
-The Flightpanels license continues perpetually, except that your license
+The DCSFlightpanels license continues perpetually, except that your license
 rights end automatically if:
 * You do not abide by the "give back to the community" terms (your
 licensees get to keep their rights if they abide);
