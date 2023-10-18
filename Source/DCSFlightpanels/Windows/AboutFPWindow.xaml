@@ -18,7 +18,7 @@
             <!--GroupBox only here for correct DarkMode TextBlock management-->
             <StackPanel VerticalAlignment="Top" Width="860" Height="800">
             <controls:TextBlock Height="357" HorizontalAlignment="Left" Margin="12,12,0,0" Name="TextBlockInformation" Text="" VerticalAlignment="Top" Width="819" TextWrapping="Wrap" FontSize="14" >
-                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/jdahlblom/DCSFlightpanels/releases">
+                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCS-Skunkworks/DCSFlightpanels/releases">
                     <Bold>
                         <Run FontSize="16">DCSFlightpanels</Run>
                     </Bold>
@@ -83,9 +83,6 @@
                 DCSFlightpanels is released under
                 <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="http://opensource.org/licenses/Simple-2.0">
                     <Bold>Simple Public License 2.0.</Bold>
-                </Hyperlink>
-                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="http://forums.eagle.ru/showthread.php?p=2293326">
-                    <Bold>Support Thread</Bold>
                 </Hyperlink>
             </controls:TextBlock>
             <Canvas>

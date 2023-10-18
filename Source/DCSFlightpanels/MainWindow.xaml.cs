@@ -620,16 +620,6 @@
 
             try
             {
-                // THIS CAUSES HANGING WHEN CLOSING THE APPLICATION!?!?
-                // _hidHandler.Shutdown();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-
-            try
-            {
                 ShutdownDCSBIOS();
             }
             catch (Exception ex)
@@ -699,13 +689,6 @@
         {
             try
             {
-                /*_profileHandler.NewProfile();
-                var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
-                chooseProfileModuleWindow.ShowDialog();
-                Common.UseGenericRadio = chooseProfileModuleWindow.UseGenericRadio;
-                _profileHandler.Profile = chooseProfileModuleWindow.DCSAirframe;
-                SetWindowState();*/
-                //NewProfile();
                 _profileHandler.CreateNewProfile();
             }
             catch (Exception ex)
