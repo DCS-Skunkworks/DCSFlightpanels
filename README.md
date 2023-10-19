@@ -1,6 +1,6 @@
 # DCSFlightpanels (DCSFP)
 
-[![license](https://img.shields.io/github/license/DCS-Skunkworks/DCSFlightpanels.svg)](https://github.com/DCS-Skunkworks/DCSFlightpanels/blob/main/LICENSE)
+![GitHub License](https://img.shields.io/github/license/DCS-Skunkworks/DCSFlightpanels)
 [![GitHub release](https://img.shields.io/github/release/DCS-Skunkworks/DCSFlightpanels.svg)](https://github.com/DCS-Skunkworks/DCSFlightpanels/releases)
 [![Discord](https://img.shields.io/discord/533342958712258572)](https://discord.gg/5svGwKX)
 
