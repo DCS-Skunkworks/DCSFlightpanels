@@ -2,6 +2,7 @@
 
 ![GitHub License](https://img.shields.io/github/license/DCS-Skunkworks/DCSFlightpanels)
 [![GitHub release](https://img.shields.io/github/release/DCS-Skunkworks/DCSFlightpanels.svg)](https://github.com/DCS-Skunkworks/DCSFlightpanels/releases)
+[![Discord](https://img.shields.io/discord/533342958712258572)](https://discord.gg/5svGwKX)
 
 Please visit our [Wiki](https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki) for answers to common questions.
 <br/>
