@@ -159,7 +159,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 CheckBoxUseFormula.IsChecked = false;
             }
 
-            ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && (!string.IsNullOrEmpty(TextBoxDCSBIOSId.Text) || !string.IsNullOrEmpty(TextBoxFormula.Text));
+            ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && (!string.IsNullOrEmpty(TextBoxDCSBIOSId.Text) || !string.IsNullOrEmpty(TextBoxFormula.Text)) &&
+                                 (_dcsbiosDecoder.DCSBIOSConverters.Count != 0  || !string.IsNullOrEmpty(TextBoxOutputTextRaw.Text));
 
             ComboBoxDecimals.IsEnabled = CheckBoxLimitDecimals.IsChecked == true;
             DisplayImagePreview();
