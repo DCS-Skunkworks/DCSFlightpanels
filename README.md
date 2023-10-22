@@ -56,33 +56,23 @@ Cockpit Master devices supported:
 * SA342 Nadir Keyboard preprogrammed
 * F14 RIO Cap Panel preprogrammed
 
-[Demo of the CDU with A-10C](https://www.youtube.com/watch?v=kSMwf8sg_Ro)
-
-[Demo of the CDU with Apache AH-64D](https://www.youtube.com/watch?v=fd0thX4ZApE)
+Demo
+* [Demo of the CDU with A-10C](https://www.youtube.com/watch?v=kSMwf8sg_Ro)
+* [Demo of the CDU with Apache AH-64D](https://www.youtube.com/watch?v=fd0thX4ZApE)
 
 Links
 --------------------------------------------
 
-[How to install](https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki)
-
-[Troubleshooting](https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki/Troubleshooting)
-
-[BaDCrC showing his cockpit that uses Helios and DCSFP](https://youtu.be/lgTJa-NUnM8?t=573)
-
-[Tutorial #1 (Key emulation)](https://youtu.be/mgm0JfldgYs)
-
-[Tutorial #2 (DCS-BIOS)](https://youtu.be/1CnmIdzqOJs): 
-
-[Tutorial #3 (Formulas & DCS-BIOS)](https://youtu.be/ajvZLgPzD0M)
-
-[Support thread](https://forums.eagle.ru/showthread.php?t=137670)
-
-[Demo video key emulation](https://www.youtube.com/watch?v=_TurR-WTgkY)
-
-[Demo video A-10C](https://www.youtube.com/watch?v=adaLWO-nTwU)
-
-[Demo video UH-1H](https://www.youtube.com/watch?v=jQxLX7UHMR8)
-
-[Farming Panel Overlay for named buttons](https://forums.eagle.ru/topic/115280-dcsflightpanels-dcsfp-thread-saitek-pro-flight-panels-amp-dcs/page/53/?tab=comments#comment-4745816)
-
-Here you find our [DCS-Skunkworks Discord Server](https://discord.gg/5svGwKX)
+* [How to install](https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki)
+* [Troubleshooting](https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki/Troubleshooting)
+* Ready made DCSFlightpanels [Profiles](https://github.com/DCS-Skunkworks/DCS-Flightpanels-Profiles)
+* [BaDCrC showing his cockpit that uses Helios and DCSFP](https://youtu.be/lgTJa-NUnM8?t=573)
+* [Tutorial #1 (Key emulation)](https://youtu.be/mgm0JfldgYs)
+* [Tutorial #2 (DCS-BIOS)](https://youtu.be/1CnmIdzqOJs): 
+* [Tutorial #3 (Formulas & DCS-BIOS)](https://youtu.be/ajvZLgPzD0M)
+* [Support thread](https://forums.eagle.ru/showthread.php?t=137670)
+* [Demo video key emulation](https://www.youtube.com/watch?v=_TurR-WTgkY)
+* [Demo video A-10C](https://www.youtube.com/watch?v=adaLWO-nTwU)
+* [Demo video UH-1H](https://www.youtube.com/watch?v=jQxLX7UHMR8)
+* [Farming Panel Overlay for named buttons](https://forums.eagle.ru/topic/115280-dcsflightpanels-dcsfp-thread-saitek-pro-flight-panels-amp-dcs/page/53/?tab=comments#comment-4745816)
+* Here you find our [DCS-Skunkworks Discord Server](https://discord.gg/5svGwKX)
