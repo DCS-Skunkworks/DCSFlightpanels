@@ -30,8 +30,6 @@
             <Setter Property="VerticalAlignment" Value="Stretch"/>
             <EventSetter Event="MouseUp" Handler="ButtonImage_OnMouseUp"/>
             <EventSetter Event="PreviewMouseDown" Handler="ButtonImage_PreviewMouseDown"/>
-            <!--<EventSetter Event="KeyDown" Handler="ButtonImage_OnKeyDown"/>
-            <EventSetter Event="PreviewKeyDown" Handler="ButtonImage_OnPreviewKeyDown"/>-->
         </Style>
 
     </UserControl.Resources>

@@ -33,41 +33,41 @@
             <ColumnDefinition Width="316*"/>
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" Margin="0,0,0.333,0">
-            <Image Height="226" Name="ImagePZ69RadioPanel" Stretch="None" Source="/dcsfp;component/Images/PZ69_Radiopanel_Transp.png" />
+            <Image Height="226" Name="ImagePZ69RadioPanel" Stretch="None" Source="/Images/Radiopanel/PZ69_Radiopanel_Transp.png" />
 
             <!-- UPPER LEFT SELECTOR -->
-            <Image Height="76" Name="TopLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="34" />
-            <Image Height="76" Name="TopLeftCom2" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="54" Canvas.Top="36" />
-            <Image Height="76" Name="TopLeftNav1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="45" />
-            <Image Height="76" Name="TopLeftNav2" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="43" Canvas.Top="57" />
-            <Image Height="76" Name="TopLeftADF" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="69"  />
-            <Image Height="76" Name="TopLeftDME" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="77" />
-            <Image Height="76" Name="TopLeftXPDR" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="66" Canvas.Top="81" />
+            <Image Height="76" Name="TopLeftCom1" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="34" />
+            <Image Height="76" Name="TopLeftCom2" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="54" Canvas.Top="36" />
+            <Image Height="76" Name="TopLeftNav1" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="45" />
+            <Image Height="76" Name="TopLeftNav2" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="43" Canvas.Top="57" />
+            <Image Height="76" Name="TopLeftADF" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="69"  />
+            <Image Height="76" Name="TopLeftDME" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="77" />
+            <Image Height="76" Name="TopLeftXPDR" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="66" Canvas.Top="81" />
 
             <!-- LOWER LEFT SELECTOR -->
-            <Image Height="76" Name="LowerLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="112" />
-            <Image Height="76" Name="LowerLeftCom2" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="54" Canvas.Top="114" />
-            <Image Height="76" Name="LowerLeftNav1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="45" Canvas.Top="122" />
-            <Image Height="76" Name="LowerLeftNav2" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="43" Canvas.Top="134" />
-            <Image Height="76" Name="LowerLeftADF" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="147"  />
-            <Image Height="76" Name="LowerLeftDME" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="156" />
-            <Image Height="76" Name="LowerLeftXPDR" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="66" Canvas.Top="159" />
+            <Image Height="76" Name="LowerLeftCom1" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="112" />
+            <Image Height="76" Name="LowerLeftCom2" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="54" Canvas.Top="114" />
+            <Image Height="76" Name="LowerLeftNav1" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="45" Canvas.Top="122" />
+            <Image Height="76" Name="LowerLeftNav2" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="43" Canvas.Top="134" />
+            <Image Height="76" Name="LowerLeftADF" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="147"  />
+            <Image Height="76" Name="LowerLeftDME" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="156" />
+            <Image Height="76" Name="LowerLeftXPDR" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="66" Canvas.Top="159" />
 
             <!-- UPPER LCD KNOB -->
-            <Image Height="76" Name="UpperSmallerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="484" Canvas.Top="60" />
-            <Image Height="76" Name="UpperSmallerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="469" Canvas.Top="60" />
-            <Image Height="76" Name="UpperLargerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="498" Canvas.Top="60" />
-            <Image Height="76" Name="UpperLargerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="447" Canvas.Top="60" />
+            <Image Height="76" Name="UpperSmallerLCDKnobInc" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="484" Canvas.Top="60" />
+            <Image Height="76" Name="UpperSmallerLCDKnobDec" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="469" Canvas.Top="60" />
+            <Image Height="76" Name="UpperLargerLCDKnobInc" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="498" Canvas.Top="60" />
+            <Image Height="76" Name="UpperLargerLCDKnobDec" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="447" Canvas.Top="60" />
 
             <!-- LOWER LCD KNOB -->
-            <Image Height="76" Name="LowerSmallerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="484" Canvas.Top="136" />
-            <Image Height="76" Name="LowerSmallerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="469" Canvas.Top="136" />
-            <Image Height="76" Name="LowerLargerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="498" Canvas.Top="136" />
-            <Image Height="76" Name="LowerLargerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="447" Canvas.Top="136" />
+            <Image Height="76" Name="LowerSmallerLCDKnobInc" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="484" Canvas.Top="136" />
+            <Image Height="76" Name="LowerSmallerLCDKnobDec" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="469" Canvas.Top="136" />
+            <Image Height="76" Name="LowerLargerLCDKnobInc" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="498" Canvas.Top="136" />
+            <Image Height="76" Name="LowerLargerLCDKnobDec" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="447" Canvas.Top="136" />
 
             <!-- Right Switches -->
-            <Image Height="76" Name="UpperRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="58" />
-            <Image Height="76" Name="LowerRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="131" />
+            <Image Height="76" Name="UpperRightSwitch" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="58" />
+            <Image Height="76" Name="LowerRightSwitch" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="131" />
 
             <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="430" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
@@ -80,13 +80,13 @@
 
         <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="7"  Grid.ColumnSpan="3" Grid.RowSpan="7" Margin="0,36.263,0,-0.929" >
             <StackPanel >
-                <Label Content="Frequency Knobs sensitivity"></Label>
+                <Label Content="Frequency Knobs sensitivity" />
                 <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChanged">
                     <ComboBoxItem >0</ComboBoxItem>
                     <ComboBoxItem >-1</ComboBoxItem>
                     <ComboBoxItem >-2</ComboBoxItem>
                 </ComboBox>
-                <Label Content="ACT to STBY transfer of freq. delay (ms)"></Label>
+                <Label Content="ACT to STBY transfer of freq. delay (ms)" />
                 <ComboBox Name="ComboBoxSyncOKDelayTimeout" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxSyncOKDelayTimeout_OnSelectionChanged">
                     <ComboBoxItem >1000</ComboBoxItem>
                     <ComboBoxItem >1500</ComboBoxItem>
@@ -106,16 +106,16 @@
 
         <StackPanel Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="14" Margin="9,234,10.333,0">
             <Label Content="Yadro-1I" FontWeight="Bold" Margin="0,0,-0.333,0"/>
-            <Image Height="130" Source="/dcsfp;component/Images/Mi24P_Yadro.png" Margin="0" UseLayoutRounding="False" />
+            <Image Height="130" Source="/Images/Mi-24P/Mi24P_Yadro.png" Margin="0" UseLayoutRounding="False" />
             <Label Content="Eucalypt-M24 (R-828)" FontWeight="Bold" HorizontalAlignment="Left" Width="224"/>
-            <Image Height="160" Source="/dcsfp;component/Images/Mi24P_R828.png" Margin="0" />
+            <Image Height="160" Source="/Images/Mi-24P/Mi24P_R828.png" Margin="0" />
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="8" Margin="0,0,0.667,0.071">
             <Label Name="LabelAirframe" Content="Mi-24P" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
             <Label Content="ARC-15" FontWeight="Bold"/>
-            <Image Height="204" Source="/dcsfp;component/Images/Mi24P_ARC15.png" />
+            <Image Height="204" Source="/Images/Mi-24P/Mi24P_ARC15.png" />
             <Label Content="SPU-8" FontWeight="Bold" Margin="0,0,0.333,0" Height="26"/>
-            <Image Height="204" Source="/dcsfp;component/Images/Mi24P_SPU8.png" Margin="0" />
+            <Image Height="204" Source="/Images/Mi-24P/Mi24P_SPU8.png" Margin="0" />
         </StackPanel>
         <DockPanel Grid.Column="6" Grid.Row="7" Grid.RowSpan="7" Grid.ColumnSpan="2" Margin="0,36.263,0.667,-0.929" >
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0.333,-1" Height="236">
@@ -124,7 +124,7 @@
         </DockPanel>
         <StackPanel Grid.Column="5" Grid.RowSpan="14" Margin="0,232,0.333,0.333" MinWidth="123">
             <Label Content="R863" FontWeight="Bold" Height="27" Margin="0,0,-0.333,0"/>
-            <Image Height="192" Source="/dcsfp;component/Images/Mi24P_R863.png" />
+            <Image Height="192" Source="/Images/Mi-24P/Mi24P_R863.png" />
         </StackPanel>
     </Grid>
 </panelUserControls:UserControlBase>

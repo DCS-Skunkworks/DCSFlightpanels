@@ -737,9 +737,9 @@ namespace NonVisuals.Panels.Saitek.Panels
 
         public static BIPLedPositionEnum GetLedPosition(string imageName)
         {
-            //ImagePosition_3_4
-            var row = int.Parse(imageName.Substring(14, 1));
-            var index = int.Parse(imageName.Substring(16, 1));
+            //ImagePosition34
+            var row = int.Parse(imageName.Substring(13, 1));
+            var index = int.Parse(imageName.Substring(14, 1));
             return row switch
             {
                 1 => index switch

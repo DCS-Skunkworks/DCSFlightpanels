@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="DCS-BIOS Input Controls Configuration" Height="400" Width="800" Loaded="DCSBIOSInputControlsWindow_OnLoaded"  
-        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="DCSBIOSInputControlsWindow_OnKeyDown">
+        Icon="/Images/UI/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="DCSBIOSInputControlsWindow_OnKeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
@@ -67,14 +67,12 @@
                         <Button Name="UpButton" Content="Up" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="45" Grid.Row="4" Click="UpButton_OnClick" />
                         <Button Name="DownButton" Content="Down" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="45" Grid.Row="4" Click="DownButton_OnClick" />
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        
-                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" />
                     <Label Content="Description" Grid.Row="6" Grid.ColumnSpan="3"/>
                     <TextBox Name="TextBoxDescription" Margin="5,0,5,0" MaxLength="20" VerticalContentAlignment="Center" FontStyle="Italic" TextWrapping="Wrap"  FontSize="14" MaxLines="1" Grid.ColumnSpan="3" Grid.RowSpan="1" Grid.Row="7" KeyDown="TextBoxDescription_OnKeyDown"/>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Name="CheckBoxIsSequenced" Margin="10,5,0,0" Content="Sequenced Commands" IsChecked="False" Click="CheckBoxIsSequenced_OnClick"/>
-                        <Label Name="LabelSequencedInfo" Content=" ? " FontWeight="Bold" Foreground="DodgerBlue" MouseDown="LabelSequencedInfo_OnMouseDown" MouseEnter="LabelSequencedInfo_OnMouseEnter" MouseLeave="LabelSequencedInfo_OnMouseLeave"></Label>
+                        <Label Name="LabelSequencedInfo" Content=" ? " FontWeight="Bold" Foreground="DodgerBlue" MouseDown="LabelSequencedInfo_OnMouseDown" MouseEnter="LabelSequencedInfo_OnMouseEnter" MouseLeave="LabelSequencedInfo_OnMouseLeave" />
                     </StackPanel>
                 </StackPanel>
 

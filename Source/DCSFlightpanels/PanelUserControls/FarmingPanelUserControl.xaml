@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
+             xmlns:local="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
              xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
              mc:Ignorable="d" 
@@ -27,45 +27,45 @@
             <ColumnDefinition Width="301*" />
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="1" Grid.RowSpan="5">
-            <Image Height="600" Name="ImageFarmingPanel" Stretch="Uniform" Source="/dcsfp;component/Images/sidepanel.png"  MouseDown="MouseDownFocusLogTextBox" />
+            <Image Height="600" Name="ImageFarmingPanel" Stretch="Uniform" Source="/Images/Sidepanel/sidepanel.png"  MouseDown="MouseDownFocusLogTextBox" />
 
-            <Image Height="76" x:Name="ImageButton1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="55" Canvas.Top="20" />
-            <Image Height="76" x:Name="ImageButton2" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="119" Canvas.Top="20" />
-            <Image Height="76" x:Name="ImageButton3" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="183" Canvas.Top="20" />
-            <Image Height="76" x:Name="ImageButton4" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="247" Canvas.Top="20" />
-            <Image Height="76" x:Name="ImageButton5" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="311" Canvas.Top="20" />
+            <Image Height="76" x:Name="ImageButton1" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="55" Canvas.Top="20" />
+            <Image Height="76" x:Name="ImageButton2" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="119" Canvas.Top="20" />
+            <Image Height="76" x:Name="ImageButton3" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="183" Canvas.Top="20" />
+            <Image Height="76" x:Name="ImageButton4" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="247" Canvas.Top="20" />
+            <Image Height="76" x:Name="ImageButton5" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="311" Canvas.Top="20" />
 
-            <Image Height="76" x:Name="ImageButton6" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="55" Canvas.Top="73" />
-            <Image Height="76" x:Name="ImageButton7" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="119" Canvas.Top="73" />
-            <Image Height="76" x:Name="ImageButton8" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="183" Canvas.Top="73" />
-            <Image Height="76" x:Name="ImageButton9" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="247" Canvas.Top="73" />
-            <Image Height="76" x:Name="ImageButton10" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="311" Canvas.Top="73" />
+            <Image Height="76" x:Name="ImageButton6" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="55" Canvas.Top="73" />
+            <Image Height="76" x:Name="ImageButton7" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="119" Canvas.Top="73" />
+            <Image Height="76" x:Name="ImageButton8" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="183" Canvas.Top="73" />
+            <Image Height="76" x:Name="ImageButton9" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="247" Canvas.Top="73" />
+            <Image Height="76" x:Name="ImageButton10" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="311" Canvas.Top="73" />
 
-            <Image Height="76" x:Name="ImageButton11" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="165" />
-            <Image Height="76" x:Name="ImageButton13" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="106" Canvas.Top="165" />
-            <Image Height="76" x:Name="ImageButton15" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="157" Canvas.Top="165" />
-            <Image Height="76" x:Name="ImageButton17" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="239" Canvas.Top="165" />
-            <Image Height="76" x:Name="ImageButton18" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="302" Canvas.Top="165" />
+            <Image Height="76" x:Name="ImageButton11" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="165" />
+            <Image Height="76" x:Name="ImageButton13" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="106" Canvas.Top="165" />
+            <Image Height="76" x:Name="ImageButton15" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="157" Canvas.Top="165" />
+            <Image Height="76" x:Name="ImageButton17" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="239" Canvas.Top="165" />
+            <Image Height="76" x:Name="ImageButton18" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="302" Canvas.Top="165" />
 
-            <Image Height="76" x:Name="ImageButton12" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="228" />
-            <Image Height="76" x:Name="ImageButton14" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="106" Canvas.Top="228" />
-            <Image Height="76" x:Name="ImageButton16" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="157" Canvas.Top="228" />
-            <Image Height="76" x:Name="ImageButton19" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="239" Canvas.Top="228" />
-            <Image Height="76" x:Name="ImageButton20" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="302" Canvas.Top="228" />
+            <Image Height="76" x:Name="ImageButton12" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="228" />
+            <Image Height="76" x:Name="ImageButton14" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="106" Canvas.Top="228" />
+            <Image Height="76" x:Name="ImageButton16" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="157" Canvas.Top="228" />
+            <Image Height="76" x:Name="ImageButton19" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="239" Canvas.Top="228" />
+            <Image Height="76" x:Name="ImageButton20" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="302" Canvas.Top="228" />
 
-            <Image Height="76" x:Name="ImageButton21" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="130" Canvas.Top="300" />
+            <Image Height="76" x:Name="ImageButton21" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="130" Canvas.Top="300" />
 
-            <Image Height="76" x:Name="ImageButton22" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="295" Canvas.Top="366" />
-            <Image Height="76" x:Name="ImageButton23" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="295" Canvas.Top="388" />
-            <Image Height="76" x:Name="ImageButton24" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="295" Canvas.Top="411" />
+            <Image Height="76" x:Name="ImageButton22" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="295" Canvas.Top="366" />
+            <Image Height="76" x:Name="ImageButton23" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="295" Canvas.Top="388" />
+            <Image Height="76" x:Name="ImageButton24" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="295" Canvas.Top="411" />
 
 
-            <Image Height="76" x:Name="ImageButton25" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="398" />
-            <Image Height="76" x:Name="ImageButton26" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="366" />
-            <Image Height="76" x:Name="ImageButton27" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="431" />
+            <Image Height="76" x:Name="ImageButton25" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="398" />
+            <Image Height="76" x:Name="ImageButton26" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="366" />
+            <Image Height="76" x:Name="ImageButton27" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="431" />
 
-            <Image Height="76" x:Name="ImageButtonJoyLeft" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="173" Canvas.Top="322" />
-            <Image Height="76" x:Name="ImageButtonJoyRight" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="195" Canvas.Top="322" />
+            <Image Height="76" x:Name="ImageButtonJoyLeft" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="173" Canvas.Top="322" />
+            <Image Height="76" x:Name="ImageButtonJoyRight" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="195" Canvas.Top="322" />
 
             <Button Name="ButtonClearSettings" Content="Clear Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="80" Canvas.Top="12" Click="ButtonClearSettings_OnClick"/>            
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="170" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
@@ -122,7 +122,7 @@
         <GroupBox FontSize="10" Grid.Column="3" Grid.Row="2" Margin="0,0,0,137" Grid.RowSpan="4">
             <StackPanel>
 
-                <TextBlock HorizontalAlignment="Stretch"  Text="Double-click in the key command boxes to erase them. Right-click to set timings." TextWrapping="Wrap" Background="#FFF5ECEC"></TextBlock>
+                <TextBlock HorizontalAlignment="Stretch"  Text="Double-click in the key command boxes to erase them. Right-click to set timings." TextWrapping="Wrap" Background="#FFF5ECEC" />
                 <Button Content="Clear all" Height="23" HorizontalAlignment="Center" x:Name="ButtonClearAll" Width="75" Click="ButtonClearAllClick" Margin="0,20,0,0" />
                 <Button Content="DEV" Height="25" HorizontalAlignment="Center" Name="ButtonDEV" Width="75" Visibility="Collapsed" Click="ButtonDEV_OnClick" Margin="5,0" />
             </StackPanel>

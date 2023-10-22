@@ -2,9 +2,8 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
-        xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
         
         xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
         mc:Ignorable="d" 
@@ -19,16 +18,16 @@
         
             <Label Content="RIO CAP Mappings" FontSize="24" FontWeight="Bold" />
             
-            <Image Height="380" Width="273" Source="/Images/rio-cap-f14.png"/>
+            <Image Height="380" Width="273" Source="/Images/F-14/rio-cap-f14.png"/>
             
-            <Label Content="PREV PAGE and NEXT PAGE move the Rotrary" FontSize="10" FontWeight="Bold" />
+            <Label Content="PREV PAGE and NEXT PAGE move the Rotary" FontSize="10" FontWeight="Bold" />
             <Label Content="LSK means Left Shift Key, key on the left, numbered from top to bottom" FontSize="10" FontWeight="Bold" />
             <Label Content="CDU EXEC is mapped to Enter, CDU CLR to Clear" FontSize="10" FontWeight="Bold" />
             <Label Content="E and N are both mapped to NE Key , same for S and W mapped to SW Key" FontSize="10" FontWeight="Bold" />
             
             <Label Content="HCU Mode Switching" FontSize="12" FontWeight="Bold" />
 
-            <Image Height="80" Width="300" Source="/PanelUserControls/PreProgrammed/hcu-modes-mapping.png"/>
+            <Image Height="80" Width="300" Source="/Images/CDU737/hcu-modes-mapping.png"/>
 
         </StackPanel>
     </StackPanel>

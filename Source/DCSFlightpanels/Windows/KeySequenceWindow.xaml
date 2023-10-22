@@ -9,7 +9,7 @@
         Width="787" 
         Loaded="WindowLoaded" 
         WindowStartupLocation="CenterScreen"  
-        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" 
+        Icon="/Images/UI/flightpanels02_8Rc_icon.ico" 
         KeyDown="SequenceWindow_OnKeyDown">
     <controls:Grid>
         <controls:Grid.RowDefinitions>

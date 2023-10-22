@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
              xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
              mc:Ignorable="d" 
@@ -36,40 +35,40 @@
                 <ColumnDefinition Width="301*" />
             </Grid.ColumnDefinitions>
             <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
-                <Image Height="226" x:Name="ImagePZ70MultiPanel" Stretch="None" Source="/dcsfp;component/Images/pz70multipanel_Transp.png"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="13" Grid.RowSpan="4"  />
+                <Image Height="226" x:Name="ImagePZ70MultiPanel" Stretch="None" Source="/Images/Multipanel/pz70multipanel_Transp.png"    />
 
                 <!-- LEFT KNOB -->
-                <Image Height="76" x:Name="ImageLeftKnobAlt" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="62" Canvas.Top="61" />
-                <Image Height="76" x:Name="ImageLeftKnobVs" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="51" Canvas.Top="64" />
-                <Image Height="76" x:Name="ImageLeftKnobIas" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="42" Canvas.Top="73" />
-                <Image Height="76" x:Name="ImageLeftKnobHdg" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="40" Canvas.Top="85" />
-                <Image Height="76" x:Name="ImageLeftKnobCrs" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="44" Canvas.Top="98" />
+                <Image Height="76" x:Name="ImageLeftKnobAlt" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="62" Canvas.Top="61" />
+                <Image Height="76" x:Name="ImageLeftKnobVs" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="51" Canvas.Top="64" />
+                <Image Height="76" x:Name="ImageLeftKnobIas" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="42" Canvas.Top="73" />
+                <Image Height="76" x:Name="ImageLeftKnobHdg" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="40" Canvas.Top="85" />
+                <Image Height="76" x:Name="ImageLeftKnobCrs" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="44" Canvas.Top="98" />
 
                 <!-- LCD Buttons -->
-                <Image Height="76" x:Name="ImageLcdButtonAp" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="108" Canvas.Top="152" />
-                <Image Height="76" x:Name="ImageLcdButtonHdg" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="147" Canvas.Top="142" />
-                <Image Height="76" x:Name="ImageLcdButtonNav" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="188" Canvas.Top="142" />
-                <Image Height="76" x:Name="ImageLcdButtonIas" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="229" Canvas.Top="142" />
-                <Image Height="76" x:Name="ImageLcdButtonAlt" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="270" Canvas.Top="142" />
-                <Image Height="76" x:Name="ImageLcdButtonVs" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="311" Canvas.Top="142" />
-                <Image Height="76" x:Name="ImageLcdButtonApr" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="147" Canvas.Top="165" />
-                <Image Height="76" x:Name="ImageLcdButtonRev" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="188" Canvas.Top="165" />
+                <Image Height="76" x:Name="ImageLcdButtonAp" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="108" Canvas.Top="152" />
+                <Image Height="76" x:Name="ImageLcdButtonHdg" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="147" Canvas.Top="142" />
+                <Image Height="76" x:Name="ImageLcdButtonNav" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="188" Canvas.Top="142" />
+                <Image Height="76" x:Name="ImageLcdButtonIas" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="229" Canvas.Top="142" />
+                <Image Height="76" x:Name="ImageLcdButtonAlt" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="270" Canvas.Top="142" />
+                <Image Height="76" x:Name="ImageLcdButtonVs" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="311" Canvas.Top="142" />
+                <Image Height="76" x:Name="ImageLcdButtonApr" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="147" Canvas.Top="165" />
+                <Image Height="76" x:Name="ImageLcdButtonRev" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="188" Canvas.Top="165" />
 
                 <!-- LCD Knob -->
-                <Image Height="76" x:Name="ImageLcdKnobDec" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="370" Canvas.Top="87" />
-                <Image Height="76" x:Name="ImageLcdKnobInc" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="400" Canvas.Top="87" />
+                <Image Height="76" x:Name="ImageLcdKnobDec" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="370" Canvas.Top="87" />
+                <Image Height="76" x:Name="ImageLcdKnobInc" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="400" Canvas.Top="87" />
 
                 <!-- Auto Throttle -->
-                <Image Height="76" x:Name="ImageLcdAutoThrottleOff" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="440" Canvas.Top="67" />
-                <Image Height="76" x:Name="ImageLcdAutoThrottleArm" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="490" Canvas.Top="67" />
+                <Image Height="76" x:Name="ImageLcdAutoThrottleOff" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="440" Canvas.Top="67" />
+                <Image Height="76" x:Name="ImageLcdAutoThrottleArm" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="490" Canvas.Top="67" />
 
                 <!-- Flaps -->
-                <Image Height="76" x:Name="ImageFlapsUp" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="440" Canvas.Top="117" />
-                <Image Height="76" x:Name="ImageFlapsDown" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="440" Canvas.Top="167" />
+                <Image Height="76" x:Name="ImageFlapsUp" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="440" Canvas.Top="117" />
+                <Image Height="76" x:Name="ImageFlapsDown" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="440" Canvas.Top="167" />
 
                 <!-- Pitch -->
-                <Image Height="76" x:Name="ImagePitchUp" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="565" Canvas.Top="52" />
-                <Image Height="76" x:Name="ImagePitchDown" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="565" Canvas.Top="155" />
+                <Image Height="76" x:Name="ImagePitchUp" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="565" Canvas.Top="52" />
+                <Image Height="76" x:Name="ImagePitchDown" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="565" Canvas.Top="155" />
 
                 <Button Name="ButtonClearSettings" Content="Clear Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="340" Canvas.Top="12" Click="ButtonClearSettings_OnClick"/>
                 <Button x:Name="ButtonIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="430" Canvas.Top="12" Click="ButtonIdentify_OnClick"/>
@@ -79,8 +78,8 @@
                 <Button x:Name="ButtonLcdUpper" Content="Upper LCD Data" Canvas.Left="165" Canvas.Top="87" Width="120" Click="ButtonLcd_OnClick"/>
                 <Button x:Name="ButtonLcdLower" Content="Lower LCD Data" Canvas.Left="165" Canvas.Top="124" Width="120" Click="ButtonLcd_OnClick"/>
 
-                <Image Height="76" x:Name="ImageLcdUpperRow" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="225" Canvas.Top="45" />
-                <Image Height="76" x:Name="ImageLcdLowerRow" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="225" Canvas.Top="112" />
+                <Image Height="76" x:Name="ImageLcdUpperRow" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="225" Canvas.Top="45" />
+                <Image Height="76" x:Name="ImageLcdLowerRow" Source="/Images/UI/dot.jpg" Stretch="None" Canvas.Left="225" Canvas.Top="112" />
             </Canvas>
             <GroupBox Header="Buttons"  FontSize="10" Grid.Column="3" Grid.Row="1" Grid.RowSpan="8">
                 <Grid>
@@ -127,8 +126,8 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Information"  FontSize="10"  Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Grid.ColumnSpan="1" Margin="0,0,0,0">
-                <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+            <GroupBox Header="Information"  FontSize="10"  Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Margin="0,0,0,0">
+                <StackPanel >
                     <TextBlock TextWrapping="Wrap" FontSize="10" FontWeight="Bold">
                         Dial = IAS/HDG/CRS : Only upper LCD row used<LineBreak/>
                         Right click buttons to delete any bindings.<LineBreak/>
@@ -138,7 +137,7 @@
             </GroupBox>
             <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="6"   Grid.RowSpan="3" >
                 <StackPanel >
-                    <Label Content="LCD Knob sensitivity"></Label>
+                    <Label Content="LCD Knob sensitivity" />
                     <ComboBox x:Name="ComboBoxLcdKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxLcdKnobSensitivity_OnSelectionChanged">
                         <ComboBoxItem >0</ComboBoxItem>
                         <ComboBoxItem >-1</ComboBoxItem>

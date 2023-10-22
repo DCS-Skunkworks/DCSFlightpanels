@@ -5,7 +5,7 @@
         Loaded="ChooseProfileModuleWindow_OnLoaded" 
         WindowStartupLocation="CenterScreen"  
         KeyDown="ChooseProfileModuleWindow_OnKeyDown"
-        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
+        Icon="/Images/UI/flightpanels02_8Rc_icon.ico">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -33,7 +33,7 @@
             </Label>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0" >
-            <Button Name="ButtonOk" Content="Ok" Click="ButtonOk_OnClick" Width="75" Height="25" Margin="0,0,5,0"></Button>
+            <Button Name="ButtonOk" Content="Ok" Click="ButtonOk_OnClick" Width="75" Height="25" Margin="0,0,5,0" />
             <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Width="75" Height="25" HorizontalAlignment="Right" />
         </StackPanel>
     </Grid>

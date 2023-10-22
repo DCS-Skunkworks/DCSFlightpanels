@@ -37,10 +37,10 @@ namespace DCSFlightpanels.PanelUserControls
 
         private bool _textBoxBillsSet;
 
-        private readonly BitmapImage _darkImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/black.png"));
-        private readonly BitmapImage _redImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/red.png"));
-        private readonly BitmapImage _greenImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
-        private readonly BitmapImage _yellowImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
+        private readonly BitmapImage _darkImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/Switchpanel/black.png"));
+        private readonly BitmapImage _redImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/Switchpanel/red.png"));
+        private readonly BitmapImage _greenImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/Switchpanel/green.png"));
+        private readonly BitmapImage _yellowImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/Switchpanel/yellow1.png"));
 
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton)
         {

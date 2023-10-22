@@ -2,9 +2,8 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
-        xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
         
         xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
         mc:Ignorable="d" 
@@ -21,7 +20,7 @@
             <Label Content="Menu buttons are mapped in the same order, as shown on the picture below" FontSize="12" FontWeight="Bold" />
             <Label Content="BRT -/+ are operative - but a bug in DCSBios ATM prevent a correct usage" FontSize="12" FontWeight="Bold" />
 
-            <Image Height="181" Width="372" Source="/PanelUserControls/PreProgrammed/mappingmenukey.jpg"/>
+            <Image Height="181" Width="372" Source="/Images/CDU737/mappingmenukey.jpg"/>
             <Label Content="LSK means Left Shift Key, key on the left, numbered from top to bottom" FontSize="12" FontWeight="Bold" />
             <Label Content="LSK 5 and LSK 6 are mapped to P/G" FontSize="12" FontWeight="Bold" />
             <Label Content="Prev Page, Next Page are mapped to P/G" FontSize="12" FontWeight="Bold" />

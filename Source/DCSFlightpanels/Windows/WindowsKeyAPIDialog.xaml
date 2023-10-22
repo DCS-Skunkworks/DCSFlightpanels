@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DCSFlightpanels.Windows"
         mc:Ignorable="d"
         Title="Windows Key API" Height="190" Width="550" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
@@ -29,8 +28,8 @@
         </GroupBox>
         <DockPanel Grid.Row="1">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <CheckBox Name="CheckBoxShowAgain" IsChecked="True" VerticalAlignment="Bottom" Margin="10,10,10,10" HorizontalAlignment="Right" Content="Show at startup?"></CheckBox>
-                <Button Name="ButtonClose" Content="Close" VerticalAlignment="Bottom" Margin="10,10,10,10" HorizontalAlignment="Right" Click="ButtonClose_OnClick"></Button>
+                <CheckBox Name="CheckBoxShowAgain" IsChecked="True" VerticalAlignment="Bottom" Margin="10,10,10,10" HorizontalAlignment="Right" Content="Show at startup?" />
+                <Button Name="ButtonClose" Content="Close" VerticalAlignment="Bottom" Margin="10,10,10,10" HorizontalAlignment="Right" Click="ButtonClose_OnClick" />
             </StackPanel>
         </DockPanel>
     </Grid>

@@ -3,10 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
              xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
-             xmlns:panelUserControls1="clr-namespace:DCSFlightpanels.PanelUserControls"
              mc:Ignorable="d" 
              d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlGeneric_OnLoaded">
     <UserControl.Resources>
@@ -36,41 +34,41 @@
             <ColumnDefinition Width="80*"/>
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5">
-            <Image Height="226" Name="ImagePZ69RadioPanel" Stretch="None" Source="/dcsfp;component/Images/PZ69_Radiopanel_Transp.png" />
+            <Image Height="226" Name="ImagePZ69RadioPanel" Stretch="None" Source="/Images/Radiopanel/PZ69_Radiopanel_Transp.png" />
 
             <!-- UPPER LEFT SELECTOR -->
-            <Image Name="TopLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="65" Canvas.Top="34" />
-            <Image Name="TopLeftCom2" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="54" Canvas.Top="36" />
-            <Image Name="TopLeftNav1" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="46" Canvas.Top="45" />
-            <Image Name="TopLeftNav2" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="43" Canvas.Top="57" />
-            <Image Name="TopLeftADF" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="46" Canvas.Top="69"  />
-            <Image Name="TopLeftDME" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="56" Canvas.Top="77" />
-            <Image Name="TopLeftXPDR" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="66" Canvas.Top="81" />
+            <Image Name="TopLeftCom1" Source="/Images/UI/dot.jpg" Canvas.Left="65" Canvas.Top="34" />
+            <Image Name="TopLeftCom2" Source="/Images/UI/dot.jpg" Canvas.Left="54" Canvas.Top="36" />
+            <Image Name="TopLeftNav1" Source="/Images/UI/dot.jpg" Canvas.Left="46" Canvas.Top="45" />
+            <Image Name="TopLeftNav2" Source="/Images/UI/dot.jpg" Canvas.Left="43" Canvas.Top="57" />
+            <Image Name="TopLeftADF" Source="/Images/UI/dot.jpg" Canvas.Left="46" Canvas.Top="69"  />
+            <Image Name="TopLeftDME" Source="/Images/UI/dot.jpg" Canvas.Left="56" Canvas.Top="77" />
+            <Image Name="TopLeftXPDR" Source="/Images/UI/dot.jpg" Canvas.Left="66" Canvas.Top="81" />
 
             <!-- LOWER LEFT SELECTOR -->
-            <Image Name="LowerLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="65" Canvas.Top="112" />
-            <Image Name="LowerLeftCom2" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="54" Canvas.Top="114" />
-            <Image Name="LowerLeftNav1" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="45" Canvas.Top="122" />
-            <Image Name="LowerLeftNav2" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="43" Canvas.Top="134" />
-            <Image Name="LowerLeftADF" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="46" Canvas.Top="147"  />
-            <Image Name="LowerLeftDME" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="56" Canvas.Top="156" />
-            <Image Name="LowerLeftXPDR" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="66" Canvas.Top="159" />
+            <Image Name="LowerLeftCom1" Source="/Images/UI/dot.jpg" Canvas.Left="65" Canvas.Top="112" />
+            <Image Name="LowerLeftCom2" Source="/Images/UI/dot.jpg" Canvas.Left="54" Canvas.Top="114" />
+            <Image Name="LowerLeftNav1" Source="/Images/UI/dot.jpg" Canvas.Left="45" Canvas.Top="122" />
+            <Image Name="LowerLeftNav2" Source="/Images/UI/dot.jpg" Canvas.Left="43" Canvas.Top="134" />
+            <Image Name="LowerLeftADF" Source="/Images/UI/dot.jpg" Canvas.Left="46" Canvas.Top="147"  />
+            <Image Name="LowerLeftDME" Source="/Images/UI/dot.jpg" Canvas.Left="56" Canvas.Top="156" />
+            <Image Name="LowerLeftXPDR" Source="/Images/UI/dot.jpg" Canvas.Left="66" Canvas.Top="159" />
 
             <!-- UPPER LCD KNOB -->
-            <Image Name="UpperSmallerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="484" Canvas.Top="60" />
-            <Image Name="UpperSmallerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="469" Canvas.Top="60" />
-            <Image Name="UpperLargerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="498" Canvas.Top="60" />
-            <Image Name="UpperLargerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="447" Canvas.Top="60" />
+            <Image Name="UpperSmallerLCDKnobInc" Source="/Images/UI/dot.jpg" Canvas.Left="484" Canvas.Top="60" />
+            <Image Name="UpperSmallerLCDKnobDec" Source="/Images/UI/dot.jpg" Canvas.Left="469" Canvas.Top="60" />
+            <Image Name="UpperLargerLCDKnobInc" Source="/Images/UI/dot.jpg" Canvas.Left="498" Canvas.Top="60" />
+            <Image Name="UpperLargerLCDKnobDec" Source="/Images/UI/dot.jpg" Canvas.Left="447" Canvas.Top="60" />
 
             <!-- LOWER LCD KNOB -->
-            <Image Name="LowerSmallerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="484" Canvas.Top="136" />
-            <Image Name="LowerSmallerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="469" Canvas.Top="136" />
-            <Image Name="LowerLargerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="498" Canvas.Top="136" />
-            <Image Name="LowerLargerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="447" Canvas.Top="136" />
+            <Image Name="LowerSmallerLCDKnobInc" Source="/Images/UI/dot.jpg" Canvas.Left="484" Canvas.Top="136" />
+            <Image Name="LowerSmallerLCDKnobDec" Source="/Images/UI/dot.jpg" Canvas.Left="469" Canvas.Top="136" />
+            <Image Name="LowerLargerLCDKnobInc" Source="/Images/UI/dot.jpg" Canvas.Left="498" Canvas.Top="136" />
+            <Image Name="LowerLargerLCDKnobDec" Source="/Images/UI/dot.jpg" Canvas.Left="447" Canvas.Top="136" />
 
             <!-- Right Switches -->
-            <Image Name="UpperRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="562" Canvas.Top="58" />
-            <Image Name="LowerRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="562" Canvas.Top="131" />
+            <Image Name="UpperRightSwitch" Source="/Images/UI/dot.jpg" Canvas.Left="562" Canvas.Top="58" />
+            <Image Name="LowerRightSwitch" Source="/Images/UI/dot.jpg" Canvas.Left="562" Canvas.Top="131" />
 
             <Button Name="ButtonClearSettings" Content="Clear Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="340" Canvas.Top="12" Click="ButtonClearSettings_OnClick"/>
             <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="430" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>
@@ -81,10 +79,10 @@
             <customControls:PZ69Button x:Name="ButtonLowerLeftLcd" Content="LCD Data" Canvas.Left="132" Canvas.Top="156" Width="100" Click="ButtonLcd_OnClick"/>
             <customControls:PZ69Button x:Name="ButtonUpperRightLcd" Content="LCD Data" Canvas.Left="295" Canvas.Top="83" Width="100" Click="ButtonLcd_OnClick"/>
             <customControls:PZ69Button x:Name="ButtonLowerRightLcd" Content="LCD Data" Canvas.Left="295" Canvas.Top="156" Width="100" Click="ButtonLcd_OnClick"/>
-            <Image Name="DotTopLeftLcd" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="178" Canvas.Top="69" />
-            <Image Name="DotBottomLeftLcd" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="178" Canvas.Top="143" />
-            <Image Name="DotTopRightLcd" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="341" Canvas.Top="69" />
-            <Image Name="DotBottomRightLcd" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="341" Canvas.Top="143" />
+            <Image Name="DotTopLeftLcd" Source="/Images/UI/dot.jpg" Canvas.Left="178" Canvas.Top="69" />
+            <Image Name="DotBottomLeftLcd" Source="/Images/UI/dot.jpg" Canvas.Left="178" Canvas.Top="143" />
+            <Image Name="DotTopRightLcd" Source="/Images/UI/dot.jpg" Canvas.Left="341" Canvas.Top="69" />
+            <Image Name="DotBottomRightLcd" Source="/Images/UI/dot.jpg" Canvas.Left="341" Canvas.Top="143" />
         </Canvas>
 
 
@@ -249,7 +247,7 @@
             <Label Name="LabelDialPosLower" Content="Lower Dial Profile : COM1" FontSize="20" FontWeight="Bold" Margin="10,0,0,0"/>
             <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Margin="10,0,0,0">
                 <StackPanel Margin="10,0,0,0">
-                    <Label Content="Frequency Knobs sensitivity"></Label>
+                    <Label Content="Frequency Knobs sensitivity" />
                     <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChanged">
                         <ComboBoxItem >0</ComboBoxItem>
                         <ComboBoxItem >-1</ComboBoxItem>

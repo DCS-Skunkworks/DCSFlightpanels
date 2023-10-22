@@ -3,27 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DCSFlightpanels"
         xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
-        xmlns:commonCodeUI="clr-namespace:DCSFlightpanels.Shared"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         KeyDown="StreamDeckDCSBIOSConverterWindow_OnKeyDown"
-        Title="Converter" Height="450" Width="800"  Loaded="StreamDeckDCSBIOSConverterWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
+        Title="Converter" Height="450" Width="800"  Loaded="StreamDeckDCSBIOSConverterWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/Images/UI/flightpanels02_8Rc_icon.ico">
     <Window.Resources>
-        <Image x:Key="UpArrow" Source="/dcsfp;component/Images/up_arrow.png"/>
-        <Image x:Key="DownArrow" Source="/dcsfp;component/Images/down_arrow.png"/>
-        <Image x:Key="LeftArrow" Source="/dcsfp;component/Images/left_arrow.png"/>
-        <Image x:Key="RightArrow" Source="/dcsfp;component/Images/right_arrow.png"/>
+        <Image x:Key="UpArrow" Source="/Images/Streamdeck/up_arrow.png"/>
+        <Image x:Key="DownArrow" Source="/Images/Streamdeck/down_arrow.png"/>
+        <Image x:Key="LeftArrow" Source="/Images/Streamdeck/left_arrow.png"/>
+        <Image x:Key="RightArrow" Source="/Images/Streamdeck/right_arrow.png"/>
 
-        <Image x:Key="UpArrow2" Source="/dcsfp;component/Images/up_arrow.png"/>
-        <Image x:Key="DownArrow2" Source="/dcsfp;component/Images/down_arrow.png"/>
-        <Image x:Key="LeftArrow2" Source="/dcsfp;component/Images/left_arrow.png"/>
-        <Image x:Key="RightArrow2" Source="/dcsfp;component/Images/right_arrow.png"/>
+        <Image x:Key="UpArrow2" Source="/Images/Streamdeck/up_arrow.png"/>
+        <Image x:Key="DownArrow2" Source="/Images/Streamdeck/down_arrow.png"/>
+        <Image x:Key="LeftArrow2" Source="/Images/Streamdeck/left_arrow.png"/>
+        <Image x:Key="RightArrow2" Source="/Images/Streamdeck/right_arrow.png"/>
 
         <system:Double x:Key="ArrowHeight">18</system:Double>
-        <SolidColorBrush x:Key="CommonColorSides"  Color="WhiteSmoke"></SolidColorBrush>
-        <SolidColorBrush x:Key="CommonColorValues"  Color=" WhiteSmoke"></SolidColorBrush>
+        <SolidColorBrush x:Key="CommonColorSides"  Color="WhiteSmoke" />
+        <SolidColorBrush x:Key="CommonColorValues"  Color=" WhiteSmoke" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -73,9 +71,9 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Criteria"  FontSize="20" HorizontalContentAlignment="Center" ></Label>
-                <Image Grid.Column="1"  Height="30" Name="ImagePZ55Panel" Source="/dcsfp;component/Images/white-arrow-35.png"></Image>
-                <Label Grid.Column="2" Content="Output"  FontSize="20" HorizontalContentAlignment="Center"></Label>
+                <Label Grid.Column="0" Content="Criteria"  FontSize="20" HorizontalContentAlignment="Center" />
+                <Image Grid.Column="1"  Height="30" Name="ImagePZ55Panel" Source="/Images/Streamdeck/white-arrow-35.png" />
+                <Label Grid.Column="2" Content="Output"  FontSize="20" HorizontalContentAlignment="Center" />
             </Grid>
         </DockPanel>
 
@@ -219,15 +217,15 @@
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <customControls:FontInfoTextBox x:Name="TextBoxFontInfo"></customControls:FontInfoTextBox>
-                <customControls:OffsetInfoTextBox x:Name="TextBoxOffsetInfo"></customControls:OffsetInfoTextBox>
+                <customControls:FontInfoTextBox x:Name="TextBoxFontInfo" />
+                <customControls:OffsetInfoTextBox x:Name="TextBoxOffsetInfo" />
             </StackPanel>
         </StackPanel>
 
 
         <StackPanel Grid.Row="2" Grid.Column="2" Margin="5,5,5,0" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="ButtonHelp" Content="Help" Click="ButtonHelp_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
-            <Button Name="ButtonOk" Content="Ok" Click="ButtonOk_OnClick" Grid.Row="3" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,10,0"></Button>
+            <Button Name="ButtonOk" Content="Ok" Click="ButtonOk_OnClick" Grid.Row="3" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,10,0" />
             <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
         </StackPanel>
     </Grid>

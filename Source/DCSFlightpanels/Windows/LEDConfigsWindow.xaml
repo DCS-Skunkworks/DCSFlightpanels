@@ -1,7 +1,7 @@
 ﻿<Window x:Class="DCSFlightpanels.Windows.LEDConfigsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="LED configurations" Height="400" Width="800" Loaded="LEDConfigsWindow_OnLoaded"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="LEDConfigsWindow_OnKeyDown">
+        Title="LED configurations" Height="400" Width="800" Loaded="LEDConfigsWindow_OnLoaded"  Icon="/Images/UI/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="LEDConfigsWindow_OnKeyDown">
     <Window.Resources>
     </Window.Resources>
     <Grid Name="Grid">

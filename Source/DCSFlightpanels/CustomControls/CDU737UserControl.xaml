@@ -2,15 +2,14 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DCSFlightpanels.CustomControls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              >
     
         <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
             <Label Content="CockpitMaster CDU 737" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
             <Grid Height="500">
-            <Image HorizontalAlignment="Left" Height="512"  Margin="5,0,0,0" VerticalAlignment="Top" Width="311" Source="/Images/cdu737.png"/>
+            <Image HorizontalAlignment="Left" Height="512"  Margin="5,0,0,0" VerticalAlignment="Top" Width="311" Source="/Images/CDU737/cdu737.png"/>
 
                 <TextBlock x:Name="CDULines" Foreground="#FF47D800" Background="Black" Margin="59,35,55,285" Height="180" Width="202" FontFamily="Consolas" FontSize="14" />
             </Grid>
