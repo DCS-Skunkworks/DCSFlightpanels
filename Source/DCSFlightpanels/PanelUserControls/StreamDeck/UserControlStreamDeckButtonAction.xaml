@@ -2,9 +2,7 @@
                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                            xmlns:local="clr-namespace:DCSFlightpanels"
-                            xmlns:streamDeck="clr-namespace:DCSFlightpanels.PanelUserControls.StreamDeck"
+                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                             xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
                             xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
                             mc:Ignorable="d" 
@@ -86,34 +84,34 @@
 
                 <StackPanel Name="StackPanelButtonLayerNavigationSettings"  Visibility="Visible"  Margin="0,5,0,0">
                     <Label Content="Local Layer to switch to" FontSize="10" Height="23"   />
-                    <customControl:StreamDeckActionTextBox x:Name="TextBoxLayerNavButton" Visibility="Collapsed"></customControl:StreamDeckActionTextBox>
+                    <customControl:StreamDeckActionTextBox x:Name="TextBoxLayerNavButton" Visibility="Collapsed" />
                     <ComboBox Name="ComboBoxLayerNavigationButton" SelectedValuePath="Content" DropDownClosed="ComboBoxLayerNavigationButton_OnDropDownClosed"/>
 
                     <StackPanel Margin="0,5,0,0">
-                        <CheckBox Name="CheckBoxControlRemoteStreamdeck" Content="Control remote Streamdeck" Checked="CheckBoxControlRemoteStreamdeck_CheckedChange" Unchecked="CheckBoxControlRemoteStreamdeck_CheckedChange"></CheckBox>
+                        <CheckBox Name="CheckBoxControlRemoteStreamdeck" Content="Control remote Streamdeck" Checked="CheckBoxControlRemoteStreamdeck_CheckedChange" Unchecked="CheckBoxControlRemoteStreamdeck_CheckedChange" />
                         <StackPanel Name="StackPanelControlRemoteStreamdeck">
                             <Label Content="Stream Deck" FontSize="10" Height="23"/>
                             <StackPanel Orientation="Horizontal">
                                 <ComboBox Name="ComboBoxRemoteStreamDecks" DisplayMemberPath="TypeOfPanel" DropDownClosed="ComboBoxRemoteStreamDecks_OnDropDownClosed"/>
-                                <Button Name="ButtonIdentifyStreamdeck" Content="Identify" Margin="5,0,0,0" Click="ButtonIdentifyStreamdeck_OnClick"></Button>
+                                <Button Name="ButtonIdentifyStreamdeck" Content="Identify" Margin="5,0,0,0" Click="ButtonIdentifyStreamdeck_OnClick" />
                             </StackPanel>
                             <Label Content="Remote layer to switch to" FontSize="10" Height="23"   />
-                            <customControl:StreamDeckActionTextBox x:Name="TextBoxRemoteLayerNavButton" Visibility="Collapsed"></customControl:StreamDeckActionTextBox>
+                            <customControl:StreamDeckActionTextBox x:Name="TextBoxRemoteLayerNavButton" Visibility="Collapsed" />
                             <ComboBox Name="ComboBoxRemoteLayers" DisplayMemberPath="Name" DropDownClosed="ComboBoxRemoteLayers_OnDropDownClosed"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
                 <StackPanel Name="StackPanelPlaySoundFile" Margin="0,10,0,0">
-                    <CheckBox Name="CheckBoxPlaySoundFile" Content="Play Sound when pressing key" Checked="CheckBoxPlaySoundFile_OnChecked" Unchecked="CheckBoxPlaySoundFile_OnUnchecked"></CheckBox>
+                    <CheckBox Name="CheckBoxPlaySoundFile" Content="Play Sound when pressing key" Checked="CheckBoxPlaySoundFile_OnChecked" Unchecked="CheckBoxPlaySoundFile_OnUnchecked" />
                     <StackPanel Name="StackPanelSoundDetails">
                     <Label Content="Sound File" FontSize="10" Height="23"/>
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Name="TextBoxSoundFile" IsReadOnly="True" Width="170"></TextBox>
-                            <Button Name="ButtonSelectSoundFile" Content="..." Width="40" Margin="5,0,0,0" Click="ButtonSelectSoundFile_OnClick"></Button>
-                            <Button Name="ButtonPlaySoundFile" Content="Play" Width="40" Margin="5,0,0,0" Click="ButtonPlaySoundFile_OnClick"></Button>
+                            <TextBox Name="TextBoxSoundFile" IsReadOnly="True" Width="170" />
+                            <Button Name="ButtonSelectSoundFile" Content="..." Width="40" Margin="5,0,0,0" Click="ButtonSelectSoundFile_OnClick" />
+                            <Button Name="ButtonPlaySoundFile" Content="Play" Width="40" Margin="5,0,0,0" Click="ButtonPlaySoundFile_OnClick" />
                         </StackPanel>
-                        <Slider Name="SliderVolume" Maximum="100" Value="30" ToolTip="Volume" Margin="0,5,0,0"></Slider>
+                        <Slider Name="SliderVolume" Maximum="100" Value="30" ToolTip="Volume" Margin="0,5,0,0" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

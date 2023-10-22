@@ -23,7 +23,7 @@ namespace DCSFlightpanels.Windows
                     var textImageBrush = new ImageBrush
                     {
                         ImageSource = new BitmapImage(
-                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)),
+                            new Uri("pack://application:,,,/dcsfp;component/Images/UI/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)),
                         AlignmentX = AlignmentX.Left,
                         Stretch = Stretch.Uniform
                     };

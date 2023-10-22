@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="Settings" Height="600" Width="800"
         Loaded="SettingsWindow_OnLoaded"
-        WindowStartupLocation="CenterScreen" KeyDown="SettingsWindow_OnKeyDown" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
+        WindowStartupLocation="CenterScreen" KeyDown="SettingsWindow_OnKeyDown" Icon="/Images/UI/flightpanels02_8Rc_icon.ico">
     <Grid Margin="-4,0,4,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"/>

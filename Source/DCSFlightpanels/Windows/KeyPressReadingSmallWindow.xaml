@@ -3,12 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DCSFlightpanels.Windows"
-        xmlns:common="clr-namespace:ClassLibraryCommon;assembly=ClassLibraryCommon"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:mef="clr-namespace:MEF;assembly=MEF"
         mc:Ignorable="d"
-        Title="" Height="240" Width="250" WindowStartupLocation="CenterScreen" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
+        Title="" Height="240" Width="250" WindowStartupLocation="CenterScreen" Icon="/Images/UI/flightpanels02_8Rc_icon.ico"
         ResizeMode="NoResize"
         Loaded="KeyPressReadingWindow_OnLoaded"
         KeyDown="KeyPressReadingWindow_OnKeyDown">
@@ -32,12 +30,12 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,0,5,0">
-            <Label Content="Key press"></Label>
-            <TextBox Name="TextBoxKeyPress" IsReadOnly="True"  Margin="0,5,0,0" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="12" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" ></TextBox>
+            <Label Content="Key press" />
+            <TextBox Name="TextBoxKeyPress" IsReadOnly="True"  Margin="0,5,0,0" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="12" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
         </StackPanel>
 
         <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,0,5,0">
-            <Label Content="Press time"></Label>
+            <Label Content="Press time" />
             <ComboBox Name="ComboBoxPressTimes" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource DataFromEnum}}" SelectionChanged="ComboBoxPressTimes_OnSelectionChanged"/>
         </StackPanel>
 
@@ -45,7 +43,7 @@
             <CheckBox Name="CheckBoxOpenRecording" VerticalContentAlignment="Center" Checked="CheckBoxOpenRecording_OnChecked" Unchecked="CheckBoxOpenRecording_OnUnchecked">
                 <TextBlock Text="Open Recording" VerticalAlignment="Center" />
             </CheckBox>
-            <Label Name="LabelOpenRecording" Content="(Wiki)" Foreground="DodgerBlue" FontWeight="DemiBold" VerticalAlignment="Center" MouseEnter="LabelOpenRecording_OnMouseEnter" MouseLeave="LabelOpenRecording_OnMouseLeave" MouseDown="LabelOpenRecording_OnMouseDown"></Label>
+            <Label Name="LabelOpenRecording" Content="(Wiki)" Foreground="DodgerBlue" FontWeight="DemiBold" VerticalAlignment="Center" MouseEnter="LabelOpenRecording_OnMouseEnter" MouseLeave="LabelOpenRecording_OnMouseLeave" MouseDown="LabelOpenRecording_OnMouseDown" />
         </StackPanel>
 
         <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left"  Margin="5,0,5,0">

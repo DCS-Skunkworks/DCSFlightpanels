@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
+             xmlns:local="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
              xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
              mc:Ignorable="d" 
@@ -32,39 +32,39 @@
             <ColumnDefinition Width="301*" />
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4">
-            <Image Height="226" Name="ImagePZ55Panel" Stretch="None" Source="/dcsfp;component/Images/PZ55_Switchpanel1_Transp.png"  MouseDown="MouseDownFocusLogTextBox" />
+            <Image Height="226" Name="ImagePZ55Panel" Stretch="None" Source="/Images/Switchpanel/PZ55_Switchpanel1_Transp.png"  MouseDown="MouseDownFocusLogTextBox" />
             <!-- LEFT KNOB -->
-            <Image Height="128" Margin="32,11,0,0" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ImageKnobR" Stretch="None" Width="125" Source="/dcsfp;component/Images/knob_R.png" Canvas.Left="-16" Canvas.Top="34" />
-            <Image Height="128" Margin="42,11,0,0" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ImageKnobL" Stretch="None" Width="115" Source="/dcsfp;component/Images/knob_L.png" Canvas.Left="-16" Canvas.Top="33" />
-            <Image Height="138" Margin="34,9,0,0" Visibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ImageKnobAll" Stretch="None" Width="120" Source="/dcsfp;component/Images/knob_ALL.png" Canvas.Left="-15" Canvas.Top="33" />
-            <Image Height="127" Margin="42,9,0,0" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ImageKnobStart" Stretch="None" Width="117" Source="/dcsfp;component/Images/knob_start.png" Canvas.Left="-16" Canvas.Top="33" />
+            <Image Height="128" Margin="32,11,0,0" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ImageKnobR" Stretch="None" Width="125" Source="/Images/Switchpanel/knob_R.png" Canvas.Left="-16" Canvas.Top="34" />
+            <Image Height="128" Margin="42,11,0,0" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ImageKnobL" Stretch="None" Width="115" Source="/Images/Switchpanel/knob_L.png" Canvas.Left="-16" Canvas.Top="33" />
+            <Image Height="138" Margin="34,9,0,0" Visibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ImageKnobAll" Stretch="None" Width="120" Source="/Images/Switchpanel/knob_ALL.png" Canvas.Left="-15" Canvas.Top="33" />
+            <Image Height="127" Margin="42,9,0,0" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ImageKnobStart" Stretch="None" Width="117" Source="/Images/Switchpanel/knob_start.png" Canvas.Left="-16" Canvas.Top="33" />
 
             <!-- UPPER ROW -->
-            <Image Height="75" Margin="3,3,0,0" Name="ImageMasterBatOn" Source="/dcsfp;component/Images/red_master_on.png" Stretch="None" Canvas.Left="197" Canvas.Top="38" />
-            <Image Height="75" Margin="-10,2,0,0" Name="ImageMasterAltOn" Stretch="None" Width="36" Source="/dcsfp;component/Images/red_master_on.png" Canvas.Left="242" Canvas.Top="39" />
-            <Image Height="70" Margin="0,2,0,0" Name="ImageAvMasterOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="286" Canvas.Top="42" />
-            <Image Height="70" Margin="0,2,0,0" Name="ImageFuelPumpOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="324" Canvas.Top="42" />
-            <Image Height="70" Margin="0,2,0,0" Name="ImageDeIceOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="361" Canvas.Top="42" />
-            <Image Height="70" Margin="0,2,0,0" Name="ImagePitotHeatOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="401" Canvas.Top="41" />
-            <Image Height="128" Margin="-4,10,0,0" Name="ImageGearUp" Stretch="None" Width="60" Source="/dcsfp;component/Images/gear_up.png" Canvas.Left="532" Canvas.Top="55" />
+            <Image Height="75" Margin="3,3,0,0" Name="ImageMasterBatOn" Source="/Images/Switchpanel/red_master_on.png" Stretch="None" Canvas.Left="197" Canvas.Top="38" />
+            <Image Height="75" Margin="-10,2,0,0" Name="ImageMasterAltOn" Stretch="None" Width="36" Source="/Images/Switchpanel/red_master_on.png" Canvas.Left="242" Canvas.Top="39" />
+            <Image Height="70" Margin="0,2,0,0" Name="ImageAvMasterOn" Source="/Images/Switchpanel/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="286" Canvas.Top="42" />
+            <Image Height="70" Margin="0,2,0,0" Name="ImageFuelPumpOn" Source="/Images/Switchpanel/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="324" Canvas.Top="42" />
+            <Image Height="70" Margin="0,2,0,0" Name="ImageDeIceOn" Source="/Images/Switchpanel/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="361" Canvas.Top="42" />
+            <Image Height="70" Margin="0,2,0,0" Name="ImagePitotHeatOn" Source="/Images/Switchpanel/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="401" Canvas.Top="41" />
+            <Image Height="128" Margin="-4,10,0,0" Name="ImageGearUp" Stretch="None" Width="60" Source="/Images/Switchpanel/gear_up.png" Canvas.Left="532" Canvas.Top="55" />
 
             <!-- LOWER ROW -->
-            <Image Height="70" Margin="0,8,0,0" Name="ImageCowlClosed" Stretch="None" Width="29" Source="/dcsfp;component/Images/black_switch_on.png" Canvas.Left="144" Canvas.Top="131" />
-            <Image Height="70" Margin="8,8,0,0" Name="ImagePanelOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29"  Canvas.Left="198" Canvas.Top="131" />
-            <Image Height="70" Margin="0,8,0,0" Name="ImageBeaconOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="243" Canvas.Top="131" />
-            <Image Height="70" Margin="0,8,0,0" Name="ImageNavOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29"  Canvas.Left="286" Canvas.Top="131" />
-            <Image Height="70" Margin="0,8,0,0" Name="ImageStrobeOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="324" Canvas.Top="131" />
-            <Image Height="70" Margin="0,8,0,0" Name="ImageTaxiOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="360" Canvas.Top="131" />
-            <Image Height="70" Margin="0,8,0,0" Name="ImageLandingOn" Source="/dcsfp;component/Images/black_switch_on.png" Stretch="None" Width="29"  Canvas.Left="401" Canvas.Top="130" />
+            <Image Height="70" Margin="0,8,0,0" Name="ImageCowlClosed" Stretch="None" Width="29" Source="/Images/Switchpanel/black_switch_on.png" Canvas.Left="144" Canvas.Top="131" />
+            <Image Height="70" Margin="8,8,0,0" Name="ImagePanelOn" Source="/Images/Switchpanel/black_switch_on.png" Stretch="None" Width="29"  Canvas.Left="198" Canvas.Top="131" />
+            <Image Height="70" Margin="0,8,0,0" Name="ImageBeaconOn" Source="/Images/Switchpanel/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="243" Canvas.Top="131" />
+            <Image Height="70" Margin="0,8,0,0" Name="ImageNavOn" Source="/Images/Switchpanel/black_switch_on.png" Stretch="None" Width="29"  Canvas.Left="286" Canvas.Top="131" />
+            <Image Height="70" Margin="0,8,0,0" Name="ImageStrobeOn" Source="/Images/Switchpanel/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="324" Canvas.Top="131" />
+            <Image Height="70" Margin="0,8,0,0" Name="ImageTaxiOn" Source="/Images/Switchpanel/black_switch_on.png" Stretch="None" Width="29" Canvas.Left="360" Canvas.Top="131" />
+            <Image Height="70" Margin="0,8,0,0" Name="ImageLandingOn" Source="/Images/Switchpanel/black_switch_on.png" Stretch="None" Width="29"  Canvas.Left="401" Canvas.Top="130" />
 
             <!-- LEDS -->
-            <Image Height="15" Name="ImagePZ55LEDUpper" Tag="DARK" Source="/dcsfp;component/Images/dark.png" Stretch="Fill" Width="19"  Canvas.Left="466" Canvas.Top="99" MouseLeave="LandingLight_OnMouseLeave" MouseEnter="LandingLight_OnMouseEnter" MouseDown="ImageLEDClick" Visibility="Visible"/>
-            <Image Height="15" Name="ImagePZ55LEDLeft" Tag="DARK" Source="/dcsfp;component/Images/dark.png" Stretch="Fill" Width="19"  Canvas.Left="446" Canvas.Top="134"  MouseLeave="LandingLight_OnMouseLeave" MouseEnter="LandingLight_OnMouseEnter" MouseDown="ImageLEDClick" Visibility="Visible" />
-            <Image Height="15" Name="ImagePZ55LEDRight" Tag="DARK" Source="/dcsfp;component/Images/dark.png" Stretch="Fill" Width="19"  Canvas.Left="488" Canvas.Top="134" MouseLeave="LandingLight_OnMouseLeave" MouseEnter="LandingLight_OnMouseEnter" MouseDown="ImageLEDClick" Visibility="Visible"/>
+            <Image Height="15" Name="ImagePZ55LEDUpper" Tag="DARK" Source="/Images/BIP/dark.png" Stretch="Fill" Width="19"  Canvas.Left="466" Canvas.Top="99" MouseLeave="LandingLight_OnMouseLeave" MouseEnter="LandingLight_OnMouseEnter" MouseDown="ImageLEDClick" Visibility="Visible"/>
+            <Image Height="15" Name="ImagePZ55LEDLeft" Tag="DARK" Source="/Images/BIP/dark.png" Stretch="Fill" Width="19"  Canvas.Left="446" Canvas.Top="134"  MouseLeave="LandingLight_OnMouseLeave" MouseEnter="LandingLight_OnMouseEnter" MouseDown="ImageLEDClick" Visibility="Visible" />
+            <Image Height="15" Name="ImagePZ55LEDRight" Tag="DARK" Source="/Images/BIP/dark.png" Stretch="Fill" Width="19"  Canvas.Left="488" Canvas.Top="134" MouseLeave="LandingLight_OnMouseLeave" MouseEnter="LandingLight_OnMouseEnter" MouseDown="ImageLEDClick" Visibility="Visible"/>
 
-            <Image Height="5" Width="5" x:Name="ImageConfigFoundUpper" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="470" Canvas.Top="85" Visibility="Visible"/>
-            <Image Height="5" Width="5" x:Name="ImageConfigFoundLeft" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="437" Canvas.Top="140" Visibility="Visible"/>
-            <Image Height="5" Width="5" x:Name="ImageConfigFoundRight" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="510" Canvas.Top="140" Visibility="Visible"/>
+            <Image Height="5" Width="5" x:Name="ImageConfigFoundUpper" Stretch="Fill" Source="/Images/UI/dot.jpg" Canvas.Left="470" Canvas.Top="85" Visibility="Visible"/>
+            <Image Height="5" Width="5" x:Name="ImageConfigFoundLeft" Stretch="Fill" Source="/Images/UI/dot.jpg" Canvas.Left="437" Canvas.Top="140" Visibility="Visible"/>
+            <Image Height="5" Width="5" x:Name="ImageConfigFoundRight" Stretch="Fill" Source="/Images/UI/dot.jpg" Canvas.Left="510" Canvas.Top="140" Visibility="Visible"/>
 
             <Button Name="ButtonClearSettings" Content="Clear Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="380" Canvas.Top="12" Click="ButtonClearSettings_OnClick"/>
             <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="470" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>

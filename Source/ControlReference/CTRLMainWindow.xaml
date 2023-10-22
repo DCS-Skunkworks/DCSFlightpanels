@@ -6,7 +6,6 @@
         mc:Ignorable="d"
         Title="DCS-BIOS Control Reference" 
         Height="600" Width="700"
-        xmlns:controls="clr-namespace:ControlReference.UserControls"
         xmlns:customControls="clr-namespace:ClassLibraryCommon.CustomControls;assembly=ClassLibraryCommon"
         Loaded="MainWindow_OnLoaded" 
         Closed="MainWindow_OnClosed" 
@@ -42,8 +41,8 @@
             </MenuItem>
         </Menu>
         <ToolBar Height="35" HorizontalAlignment="Stretch" Name="ToolBarMain" VerticalAlignment="Top" Grid.Column="0" Grid.Row="1" >
-            <ComboBox Name="ComboBoxModules" DisplayMemberPath="Description" Width="200" SelectionChanged="ComboBoxModules_OnSelectionChanged"></ComboBox>
-            <ComboBox Name="ComboBoxCategory" Width="200" SelectionChanged="ComboBoxCategory_OnSelectionChanged"></ComboBox>
+            <ComboBox Name="ComboBoxModules" DisplayMemberPath="Description" Width="200" SelectionChanged="ComboBoxModules_OnSelectionChanged" />
+            <ComboBox Name="ComboBoxCategory" Width="200" SelectionChanged="ComboBoxCategory_OnSelectionChanged" />
             <TextBox Name="TextBoxSearchControl" TextWrapping="NoWrap"  IsReadOnly="False" Width="150"  KeyDown="TextBoxSearchControl_OnKeyDown"/>
             <Button>
                 <Image Source="/Images/search_controls.png" Name="ButtonSearchControls" Tag="Search" MouseDown="ButtonSearchControls_OnMouseDown" ToolTip="Search for DCS-BIOS Control"/>
@@ -57,9 +56,7 @@
         </ToolBar>
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <ItemsControl Name="ItemsControlControls"  >
-
-            </ItemsControl>
+            <ItemsControl Name="ItemsControlControls" />
         </ScrollViewer>
 
         <StatusBar Name="StatusBarMainWindow" HorizontalAlignment="Stretch" Height="26" Grid.Row="3" VerticalAlignment="Top" >

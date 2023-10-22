@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DCSFlightpanels"
         mc:Ignorable="d"
         xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
@@ -12,17 +11,17 @@
         Height="550" Width="1200" 
         WindowStartupLocation="CenterScreen" 
         Loaded="StreamDeckDCSBIOSDecoderWindow_OnLoaded" 
-        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
+        Icon="/Images/UI/flightpanels02_8Rc_icon.ico"
         d:DataContext="{d:DesignInstance streamDeck:DCSBIOSDecoder}"
         KeyDown="StreamDeckDCSBIOSDecoderWindow_OnKeyDown"
         Closing="StreamDeckDCSBIOSDecoderWindow_OnClosing">
 
 
     <Window.Resources>
-        <Image x:Key="UpArrow" Source="/dcsfp;component/Images/up_arrow.png"/>
-        <Image x:Key="DownArrow" Source="/dcsfp;component/Images/down_arrow.png"/>
-        <Image x:Key="LeftArrow" Source="/dcsfp;component/Images/left_arrow.png"/>
-        <Image x:Key="RightArrow" Source="/dcsfp;component/Images/right_arrow.png"/>
+        <Image x:Key="UpArrow" Source="/Images/Streamdeck/up_arrow.png"/>
+        <Image x:Key="DownArrow" Source="/Images/Streamdeck/down_arrow.png"/>
+        <Image x:Key="LeftArrow" Source="/Images/Streamdeck/left_arrow.png"/>
+        <Image x:Key="RightArrow" Source="/Images/Streamdeck/right_arrow.png"/>
 
 
         <ToolTip x:Key="DecodeToolTip" >
@@ -84,7 +83,7 @@
                         <Button Content="Clear" Height="23" VerticalAlignment="Bottom" Margin="10,10,10,10"  x:Name="ButtonClear1" Width="75" Click="ButtonClear_OnClick"/>
                         <TextBox Name="TextBoxSearchWord"  Margin="0,10,10,10"  Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus" TextChanged="TextBoxSearch_OnTextChanged" PreviewKeyDown="TextBoxSearchWord_PreviewKeyDown">
                             <TextBox.Background>
-                                <ImageBrush ImageSource="/Images/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Fill" />
+                                <ImageBrush ImageSource="/Images/UI/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Fill" />
                             </TextBox.Background>
                         </TextBox>
                         <TextBox FontSize="10" Height="18" Width="150" Foreground="DeepSkyBlue" Margin="10,10,10,10"   IsReadOnly="True" Name="TextBoxDCSBIOSId" />
@@ -118,7 +117,7 @@
                     <StackPanel Orientation="Horizontal">
                         <DockPanel>
                             <Label Content="Decimals to show :"  Margin="10,0,10,0" />
-                            <CheckBox Name="CheckBoxLimitDecimals" VerticalAlignment="Center" Content="Limit decimals"   Margin="0,0,10,0" Checked="CheckBoxLimitDecimals_CheckedChanged" Unchecked="CheckBoxLimitDecimals_CheckedChanged"></CheckBox>
+                            <CheckBox Name="CheckBoxLimitDecimals" VerticalAlignment="Center" Content="Limit decimals"   Margin="0,0,10,0" Checked="CheckBoxLimitDecimals_CheckedChanged" Unchecked="CheckBoxLimitDecimals_CheckedChanged" />
                             <ComboBox Name="ComboBoxDecimals" Width="50" SelectedIndex="0" SelectedValuePath="Content"  SelectionChanged="ComboBoxDecimals_OnSelectionChanged">
                                 <ComboBoxItem>0</ComboBoxItem>
                                 <ComboBoxItem>1</ComboBoxItem>
@@ -159,8 +158,8 @@
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <GroupBox Header="Show as :">
                             <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-                                <RadioButton Name="RadioButtonProcessToRaw" GroupName="OutputType" Content="Raw" IsChecked="True" Click="RadioButtonOutput_OnClick"></RadioButton>
-                                <RadioButton Name="RadioButtonProcessToConverter" GroupName="OutputType" Content="Rule Formatting" Margin="10,0,0,0" Click="RadioButtonOutput_OnClick"></RadioButton>
+                                <RadioButton Name="RadioButtonProcessToRaw" GroupName="OutputType" Content="Raw" IsChecked="True" Click="RadioButtonOutput_OnClick" />
+                                <RadioButton Name="RadioButtonProcessToConverter" GroupName="OutputType" Content="Rule Formatting" Margin="10,0,0,0" Click="RadioButtonOutput_OnClick" />
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
@@ -184,9 +183,9 @@
                             </DataGrid.Columns>
                         </DataGrid>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button Name="ButtonAddConverter" Width="60"  Margin="0,0,5,0" Content="Add" Click="ButtonAddConverter_OnClick"></Button>
-                            <Button Name="ButtonEditConverter" Width="60"  Margin="0,0,5,0" Content="Edit" Click="ButtonEditConverter_OnClick"></Button>
-                            <Button Name="ButtonDeleteConverter" Width="60"  Margin="0,0,5,0" Content="Delete" Click="ButtonDeleteConverter_OnClick"></Button>
+                            <Button Name="ButtonAddConverter" Width="60"  Margin="0,0,5,0" Content="Add" Click="ButtonAddConverter_OnClick" />
+                            <Button Name="ButtonEditConverter" Width="60"  Margin="0,0,5,0" Content="Edit" Click="ButtonEditConverter_OnClick" />
+                            <Button Name="ButtonDeleteConverter" Width="60"  Margin="0,0,5,0" Content="Delete" Click="ButtonDeleteConverter_OnClick" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -221,8 +220,8 @@
                         </StackPanel>
                         <Label Name="LabelInsertRaw" FontSize="9" Foreground="DodgerBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsertRaw_OnMouseDown"/>
                         <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                            <customControl:FontInfoTextBox x:Name="TextBoxFontInfo"></customControl:FontInfoTextBox>
-                            <customControl:OffsetInfoTextBox x:Name="TextBoxOffsetInfo"></customControl:OffsetInfoTextBox>
+                            <customControl:FontInfoTextBox x:Name="TextBoxFontInfo" />
+                            <customControl:OffsetInfoTextBox x:Name="TextBoxOffsetInfo" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

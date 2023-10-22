@@ -24,8 +24,7 @@
                         </Trigger>
                         <Trigger Property="Image.IsEnabled" Value="False">
                             <Trigger.EnterActions>
-                                <PauseStoryboard BeginStoryboardName="GearStoryboard">
-                                </PauseStoryboard>
+                                <PauseStoryboard BeginStoryboardName="GearStoryboard" />
                             </Trigger.EnterActions>
                         </Trigger>
                     </Style.Triggers>

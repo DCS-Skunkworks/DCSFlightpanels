@@ -1065,7 +1065,18 @@
 
         private void MenuItemBugReport_OnClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Please file an \"Issue\" on GitHub. This makes tracking and managing bugs easier and will speed up the fix.", "Use GitHub for Bug Reporting", MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "https://github.com/DCS-Skunkworks/DCSFlightpanels/issues",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
 
         protected override void OnStateChanged(EventArgs e)

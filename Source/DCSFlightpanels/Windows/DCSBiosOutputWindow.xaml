@@ -1,7 +1,7 @@
 ﻿<Window x:Class="DCSFlightpanels.Windows.DCSBiosOutputWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Select DCS-BIOS Output" Height="300" Width="800" Loaded="WindowLoaded" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="DCSBiosOutputWindow_OnKeyDown" >
+        Title="Select DCS-BIOS Output" Height="300" Width="800" Loaded="WindowLoaded" Icon="/Images/UI/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="DCSBiosOutputWindow_OnKeyDown" >
     <Window.Resources>
         <Popup x:Key="PopUpSearchResults" Width="600" Height="150" PlacementTarget="{Binding ElementName=text}" StaysOpen="False">
             <Grid HorizontalAlignment="Stretch">
@@ -46,12 +46,12 @@
         <StackPanel Grid.Column="1">
             <StackPanel Grid.Column="2" Grid.RowSpan="6">
                 <Label Name="LabelDescription" Content="Description here" HorizontalAlignment="Stretch" Margin="10,0,0,10" FontWeight="Bold" FontSize="12"/>
-                <Label Name="LabelUserDescription" Content="Description"></Label>
+                <Label Name="LabelUserDescription" Content="Description" />
                 <TextBox Name="TextBoxUserDescription" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" IsEnabled="true"/>
                 <Label Content="Search Box : Type aircraft control search words:" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="True"/>
                 <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" TextChanged="TextBoxSearchWord_OnTextChanged" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true" PreviewKeyDown="TextBoxSearchWord_PreviewKeyDown">
                     <TextBox.Background>
-                        <ImageBrush ImageSource="/Images/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Uniform" />
+                        <ImageBrush ImageSource="/Images/UI/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Uniform" />
                     </TextBox.Background>
                 </TextBox>
                 

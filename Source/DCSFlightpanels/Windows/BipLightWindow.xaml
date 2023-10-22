@@ -1,7 +1,7 @@
 ﻿<Window x:Class="DCSFlightpanels.Windows.BipLightWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="BIP Light" Height="400" Width="300"  Loaded="WindowLoaded" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen"  KeyDown="BipLightWindow_OnKeyDown">
+        Title="BIP Light" Height="400" Width="300"  Loaded="WindowLoaded" Icon="/Images/UI/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen"  KeyDown="BipLightWindow_OnKeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="91*" />
@@ -20,11 +20,9 @@
         <StackPanel Grid.Column="0" Grid.RowSpan="3" Grid.Row="0">
             <Label Name="LabelDescription" Content="Description here" HorizontalAlignment="Stretch" Margin="10,0,0,10" FontWeight="Bold" FontSize="12"/>
             <Label Name="LabelPosition" Content="Position" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
-            <ComboBox x:Name="ComboBoxPosition" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0" >
-            </ComboBox>
+            <ComboBox x:Name="ComboBoxPosition" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0" />
             <Label Name="LabelColor" Content="Color" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
-            <ComboBox x:Name="ComboBoxColor" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0">
-            </ComboBox>
+            <ComboBox x:Name="ComboBoxColor" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0" />
             <Label Name="LabelDelay" Content="Enter delay in milliseconds:" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
             <ComboBox x:Name="ComboBoxDelay" SelectedIndex="0" SelectedValuePath="Content"  IsReadOnly="True"  Margin="10,0,10,0">
                 <ComboBoxItem Content="0" />

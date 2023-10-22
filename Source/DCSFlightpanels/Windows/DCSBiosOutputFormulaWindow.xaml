@@ -5,7 +5,7 @@
         Height="600" 
         Width="800" 
         Loaded="WindowLoaded" 
-        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" 
+        Icon="/Images/UI/flightpanels02_8Rc_icon.ico" 
         WindowStartupLocation="CenterScreen" 
         KeyDown="DCSBiosOutputFormulaWindow_OnKeyDown"
         Closing="DCSBiosOutputFormulaWindow_OnClosing">
@@ -49,19 +49,19 @@
             <TextBlock Name="TextBlockFormulaErrors" TextWrapping="Wrap" Margin="10,10,0,0"/>
 
             <Button x:Name="ButtonFormulaHelp" Click="ButtonFormulaHelp_OnClick" Margin="5,20,5,0" Width="100" >
-                <Image Margin="0,8,0,0" Source="/dcsfp;component/Images/info.png" Stretch="Uniform" VerticalAlignment="Center" Width="40"  RenderOptions.BitmapScalingMode="Fant" />
+                <Image Margin="0,8,0,0" Source="/Images/UI/info.png" Stretch="Uniform" VerticalAlignment="Center" Width="40"  RenderOptions.BitmapScalingMode="Fant" />
             </Button>
         </StackPanel>
 
         <StackPanel Grid.Column="1">
             <StackPanel Grid.Column="2" Grid.RowSpan="6">
                 <Label Name="LabelDescription" Content="Description here" HorizontalAlignment="Stretch" Margin="10,0,0,10" FontWeight="Bold" FontSize="12"/>
-                <Label Name="LabelUserDescription" Content="Description"></Label>
+                <Label Name="LabelUserDescription" Content="Description" />
                 <TextBox Name="TextBoxUserDescription" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" IsEnabled="true"/>
                 <Label Content="Search Box : Type aircraft control search words:" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="True"/>
                 <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" TextChanged="TextBoxSearchWord_OnTextChanged" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true" PreviewKeyDown="TextBoxSearchWord_PreviewKeyDown">
                     <TextBox.Background>
-                        <ImageBrush ImageSource="/Images/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Uniform" />
+                        <ImageBrush ImageSource="/Images/UI/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Uniform" />
                     </TextBox.Background>
                 </TextBox>
 
@@ -69,7 +69,7 @@
                     <StackPanel Orientation="Horizontal">
                         <DockPanel>
                             <Label Content="Decimals to show :"  Margin="10,0,10,0" />
-                            <CheckBox Name="CheckBoxLimitDecimals" VerticalAlignment="Center" Content="Limit decimals"   Margin="0,0,10,0" Checked="CheckBoxLimitDecimals_CheckedChanged" Unchecked="CheckBoxLimitDecimals_CheckedChanged"></CheckBox>
+                            <CheckBox Name="CheckBoxLimitDecimals" VerticalAlignment="Center" Content="Limit decimals"   Margin="0,0,10,0" Checked="CheckBoxLimitDecimals_CheckedChanged" Unchecked="CheckBoxLimitDecimals_CheckedChanged" />
                             <ComboBox Name="ComboBoxDecimals" Width="50" SelectedIndex="0" SelectedValuePath="Content"  SelectionChanged="ComboBoxDecimals_OnSelectionChanged">
                                 <ComboBoxItem>0</ComboBoxItem>
                                 <ComboBoxItem>1</ComboBoxItem>

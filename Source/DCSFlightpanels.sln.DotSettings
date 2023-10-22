@@ -83,6 +83,7 @@
 	<s:String x:Key="/Default/CodeStyle/Naming/XamlNaming/Abbreviations/=BIP/@EntryIndexedValue">BIP</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/XamlNaming/Abbreviations/=BIPLED/@EntryIndexedValue">BIPLED</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/XamlNaming/Abbreviations/=CDU/@EntryIndexedValue">CDU</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/XamlNaming/Abbreviations/=CTRL/@EntryIndexedValue">CTRL</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/XamlNaming/Abbreviations/=DCS/@EntryIndexedValue">DCS</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/XamlNaming/Abbreviations/=DCSBIOS/@EntryIndexedValue">DCSBIOS</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/XamlNaming/Abbreviations/=DME/@EntryIndexedValue">DME</s:String>

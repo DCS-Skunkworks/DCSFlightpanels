@@ -11,7 +11,7 @@
 
         <customControls:CDU737UserControl x:Name="CDU737UserControl" />
         <StackPanel Orientation="Vertical">
-            <Image Height="250" Width="399" Source="/PanelUserControls/PreProgrammed/SA342_NADIR.png"/>
+            <Image Height="250" Width="399" Source="/Images/CDU737/SA342_NADIR.png"/>
 
             <Label Content="Display" FontSize="24" FontWeight="Bold" />
             <Label Content="None ATM." FontSize="12" FontWeight="Bold" />

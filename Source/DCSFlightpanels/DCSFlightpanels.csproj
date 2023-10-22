@@ -31,7 +31,7 @@
     <AssemblyVersion>4.10.4</AssemblyVersion>
     <FileVersion>
     </FileVersion>
-    <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
+    <ApplicationIcon>Images\UI\flightpanels02_8Rc_icon.ico</ApplicationIcon>
     <StartupObject>DCSFlightpanels.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
@@ -90,15 +90,127 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="flightpanels02_8Rc_icon.ico" />
+    <Resource Include="Images\A-10C\A-10C_an_arc_164_UHF_radio2.png" />
+    <Resource Include="Images\A-10C\A-10C_an_arc_186_vhf_am_radio1.png" />
+    <Resource Include="Images\A-10C\A-10C_ILS.png" />
+    <Resource Include="Images\A-10C\A-10C_TACAN.png" />
+    <Resource Include="Images\A-10C\A10C_an_arc_186_VHF_FM_radio2.png" />
+    <Resource Include="Images\A-10C\A10C_arc210_vhf.jpg" />
+    <Resource Include="Images\AH-64D\AH64D_EUFD.png" />
+    <Resource Include="Images\AJS37\AJS37_.png" />
+    <Resource Include="Images\AJS37\AJS37_FR22.png" />
+    <Resource Include="Images\AJS37\AJS37_FR24.png" />
+    <Resource Include="Images\AV8BNA\av8bna_comm1_comm2.png" />
+    <Resource Include="Images\Bf-109\Bf109_FUG 16ZY.png" />
+    <Resource Include="Images\BIP\BIP Saitek2.jpg" />
+    <Resource Include="Images\BIP\black.png" />
+    <Resource Include="Images\BIP\dark.png" />
+    <Resource Include="Images\BIP\green.png" />
+    <Resource Include="Images\BIP\red.png" />
+    <Resource Include="Images\BIP\yellow1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
-    <Resource Include="PanelUserControls\PreProgrammed\cdu737.png" />
-    <Resource Include="PanelUserControls\PreProgrammed\FA18CUFC.jpg" />
-    <Resource Include="PanelUserControls\PreProgrammed\mapping02.jpg" />
-    <Resource Include="PanelUserControls\PreProgrammed\mappingmenukey.jpg" />
-    <Resource Include="PanelUserControls\PreProgrammed\pcn-mapping.png" />
-    <Resource Include="PanelUserControls\PreProgrammed\SA342_NADIR.png" />
+    <Resource Include="Images\CDU737\Apache_1_0001.jpg" />
+    <Resource Include="Images\CDU737\cdu737.png" />
+    <Resource Include="Images\CDU737\FA18CUFC.jpg" />
+    <Resource Include="Images\CDU737\mapping02.jpg" />
+    <Resource Include="Images\CDU737\mappingmenukey.jpg" />
+    <Resource Include="Images\CDU737\pcn-mapping.png" />
+    <Resource Include="Images\CDU737\SA342_NADIR.png" />
+    <Resource Include="Images\F-14\F-14 ANARC-159 Pilot.png" />
+    <Resource Include="Images\F-14\F-14 ANARC-182 RIO.png" />
+    <Resource Include="Images\F-14\F-14 RIO Datalink.png" />
+    <Resource Include="Images\F-14\F-14 TACAN.png" />
+    <Resource Include="Images\F-14\rio-cap-f14.png" />
+    <Resource Include="Images\F-16C\F-16C_50_COM-1-2-VOL.png" />
+    <Resource Include="Images\F-16C\F-16C_50_DED.png" />
+    <Resource Include="Images\F-16C\F-16C_50_EHSI.png" />
+    <Resource Include="Images\F-5\F-5E_an_arc_164_radio.png" />
+    <Resource Include="Images\F-5\F-5E_TACAN.png" />
+    <Resource Include="Images\F-86\F86_.png" />
+    <Resource Include="Images\FA-18C\FA18CUFC.jpg" />
+    <Resource Include="Images\FA-18C\fa18C_comms.jpg" />
+    <Resource Include="Images\FA-18C\fa18C_ils_manual.jpg" />
+    <Resource Include="Images\FW-190\FW190_FUG_16zy.png" />
+    <Resource Include="Images\Ka-50\Ka50_abck.jpg" />
+    <Resource Include="Images\Ka-50\Ka50_ARK-22 ADF.jpg" />
+    <Resource Include="Images\Ka-50\Ka50_intercom_radio_control.jpg" />
+    <Resource Include="Images\Ka-50\Ka50_R-800L1_VHF.jpg" />
+    <Resource Include="Images\Ka-50\Ka50_R-828_radio.jpg" />
+    <Resource Include="Images\M-2000C\M2000C_new.png" />
+    <Resource Include="Images\M-2000C\M2000c_tacan.png" />
+    <Resource Include="Images\Mi-24P\Mi24P_ARC15.png" />
+    <Resource Include="Images\Mi-24P\Mi24P_R828.png" />
+    <Resource Include="Images\Mi-24P\Mi24P_R863.png" />
+    <Resource Include="Images\Mi-24P\Mi24P_SPU8.png" />
+    <Resource Include="Images\Mi-24P\Mi24P_Yadro.png" />
+    <Resource Include="Images\Mi8-MT\Mi8_R828.png" />
+    <Resource Include="Images\Mi8-MT\mi8_r863_freq_panel.png" />
+    <Resource Include="Images\Mi8-MT\Mi8_Yadro.png" />
+    <Resource Include="Images\MiG-21bis\ARC frequency range selector.jpg" />
+    <Resource Include="Images\MiG-21bis\ARC-main-control-panel.png" />
+    <Resource Include="Images\MiG-21bis\RSBN-control-panel.png" />
+    <Resource Include="Images\Mosquito\mosquito_radio.png" />
+    <Resource Include="Images\Multipanel\pz70multipanel.jpg" />
+    <Resource Include="Images\Multipanel\pz70multipanel_Transp.png" />
+    <Resource Include="Images\P-47D\P47_radio.png" />
+    <Resource Include="Images\P-51D\Radio TF51_P51_preview.jpeg" />
+    <Resource Include="Images\Radiopanel\PZ69_Radiopanel.jpg" />
+    <Resource Include="Images\Radiopanel\PZ69_Radiopanel_Transp.png" />
+    <Resource Include="Images\SA342\SA342_ADF.png" />
+    <Resource Include="Images\SA342\SA342_NADIR.png" />
+    <Resource Include="Images\SA342\SA342_UHF.png" />
+    <Resource Include="Images\SA342\SA342_VHF AM.png" />
+    <Resource Include="Images\SA342\SA342_VHF FM.png" />
+    <Resource Include="Images\Sidepanel\sidepanel.png" />
+    <Resource Include="Images\Spitfire\Spitfire_ARI1063.png" />
+    <Resource Include="Images\Streamdeck\down_arrow.png" />
+    <Resource Include="Images\Streamdeck\filenotfound.png" />
+    <Resource Include="Images\Streamdeck\left_arrow.png" />
+    <Resource Include="Images\Streamdeck\right_arrow.png" />
+    <Resource Include="Images\Streamdeck\up_arrow.png" />
+    <Resource Include="Images\Streamdeck\white-arrow-35.png" />
+    <Resource Include="Images\Switchpanel\black.png" />
+    <Resource Include="Images\Switchpanel\black_switch_on.png" />
+    <Resource Include="Images\Switchpanel\gear_up.png" />
+    <Resource Include="Images\Switchpanel\green.png" />
+    <Resource Include="Images\Switchpanel\knob_ALL.png" />
+    <Resource Include="Images\Switchpanel\knob_L.png" />
+    <Resource Include="Images\Switchpanel\knob_R.png" />
+    <Resource Include="Images\Switchpanel\knob_start.png" />
+    <Resource Include="Images\Switchpanel\PZ55_Switchpanel1.png" />
+    <Resource Include="Images\Switchpanel\PZ55_Switchpanel1_Transp.png" />
+    <Resource Include="Images\Switchpanel\red.png" />
+    <Resource Include="Images\Switchpanel\red_master_on.png" />
+    <Resource Include="Images\Switchpanel\yellow1.png" />
+    <Resource Include="Images\T-45C\T45C_ANARC182_1.png" />
+    <Resource Include="Images\T-45C\T45C_ANARC182_2.png" />
+    <Resource Include="Images\T-45C\T45C_ANARN144.png" />
+    <Resource Include="Images\T-45C\T45C_TACAN.png" />
+    <Resource Include="Images\Toolbar\112_RefreshArrow_Green_32x32_72.png" />
+    <Resource Include="Images\Toolbar\NewDocument_32x32.png" />
+    <Resource Include="Images\Toolbar\Notepad_32x32.png" />
+    <Resource Include="Images\Toolbar\OpenPL.bmp" />
+    <Resource Include="Images\Toolbar\OpenPL_Transp.bmp" />
+    <Resource Include="Images\Toolbar\SaveHL.bmp" />
+    <Resource Include="Images\TPM\TPM.jpg" />
+    <Resource Include="Images\UH-1H\UH-1H_AN_ARC-134_VHF.png" />
+    <Resource Include="Images\UH-1H\UH-1H_AN_ARC-51BX_UHF.png" />
+    <Resource Include="Images\UH-1H\UH-1H_AN_ARC_131_FM.png" />
+    <Resource Include="Images\UH-1H\UH-1H_AN_ARN-82_VHF_NAV.png" />
+    <Resource Include="Images\UH-1H\UH-1H_AN_ARN-83_ADF.png" />
+    <Resource Include="Images\UH-1H\UH-1H_INTERCOMM.png" />
+    <Resource Include="Images\UI\about_image.jpg" />
+    <Resource Include="Images\UI\cue_banner_search_dcsbios.png" />
+    <Resource Include="Images\UI\dot.jpg" />
+    <Resource Include="Images\UI\FlightPanels01.png" />
+    <Resource Include="Images\UI\flightpanels02_8Rc_icon.ico" />
+    <Resource Include="Images\UI\info.png" />
+    <Resource Include="Images\UI\resharper_ultimate.jpg" />
+    <Resource Include="Images\UI\search_panels3.png" />
+    <Resource Include="Images\Yak-52\YAK52_ADF.jpg" />
+    <Resource Include="Images\Yak-52\YAK52_GMK.jpg" />
+    <Resource Include="Images\Yak-52\YAK52_VHF.jpg" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -110,15 +222,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
-    <None Remove="Images\cdu737.png" />
     <None Remove="Images\rio-cap-f14.png" />
-    <None Remove="PanelUserControls\PreProgrammed\Apache_1_0001.jpg" />
-    <None Remove="PanelUserControls\PreProgrammed\cdu737.png" />
-    <None Remove="PanelUserControls\PreProgrammed\FA18CUFC.jpg" />
-    <None Remove="PanelUserControls\PreProgrammed\mapping02.jpg" />
-    <None Remove="PanelUserControls\PreProgrammed\mappingmenukey.jpg" />
-    <None Remove="PanelUserControls\PreProgrammed\pcn-mapping.png" />
-    <None Remove="PanelUserControls\PreProgrammed\SA342_NADIR.png" />
+    <None Remove="Images\Switchpanel\black.png" />
+    <None Remove="Images\Switchpanel\green.png" />
+    <None Remove="Images\Switchpanel\red.png" />
+    <None Remove="Images\Switchpanel\yellow1.png" />
+    <None Remove="PanelUserControls\CDU737\Apache_1_0001.jpg" />
+    <None Remove="PanelUserControls\CDU737\cdu737.png" />
+    <None Remove="PanelUserControls\CDU737\FA18CUFC.jpg" />
+    <None Remove="PanelUserControls\CDU737\mapping02.jpg" />
+    <None Remove="PanelUserControls\CDU737\mappingmenukey.jpg" />
+    <None Remove="PanelUserControls\CDU737\pcn-mapping.png" />
+    <None Remove="PanelUserControls\CDU737\SA342_NADIR.png" />
     <Page Remove="AboutWindow.xaml" />
     <Page Remove="PreferencesWindow.xaml" />
     <Page Remove="Windows\LinkMappingWindow.xaml" />
@@ -131,17 +246,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="PanelUserControls\PreProgrammed\Cdu737UserControlM2000C.xaml">
+    <Page Update="PanelUserControls\CDU737\Cdu737UserControlM2000C.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="PanelUserControls\PreProgrammed\Cdu737UserControlF14.xaml">
+    <Page Update="PanelUserControls\CDU737\Cdu737UserControlF14.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="PanelUserControls\PreProgrammed\Cdu737UserControlSA342.xaml">
+    <Page Update="PanelUserControls\CDU737\Cdu737UserControlSA342.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="PanelUserControls\PreProgrammed\Cdu737UserControlFA18C.xaml">
+    <Page Update="PanelUserControls\CDU737\Cdu737UserControlFA18C.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>

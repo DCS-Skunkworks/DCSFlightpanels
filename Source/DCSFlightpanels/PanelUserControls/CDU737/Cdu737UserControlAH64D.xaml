@@ -11,7 +11,7 @@
 
         <customControls:CDU737UserControl x:Name="CDU737UserControl" />
         <StackPanel Orientation="Vertical">
-            <Image Height="138" Width="359" Source="/PanelUserControls/PreProgrammed/Apache_1_0001.jpg"/>
+            <Image Height="138" Width="359" Source="/Images/CDU737/Apache_1_0001.jpg"/>
 
             <Label Content="Display" FontSize="24" FontWeight="Bold" />
             <Label Content="Display uses the Last line to manager Keyboard" FontSize="12" FontWeight="Bold" />
