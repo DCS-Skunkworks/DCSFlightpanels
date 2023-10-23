@@ -6,6 +6,17 @@
                  xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
                  mc:Ignorable="d" 
                  d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlAH64D_OnLoaded">
+    <UserControl.Resources>
+        <Style x:Key="GreenLCD" TargetType="Label">
+            <Setter Property="Foreground" Value="#5DFF00" />
+            <Setter Property="Background" Value="#10710C" />
+            <Setter Property="FontStyle" Value="Normal" />
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="Padding" Value="8,3" />
+            <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+        </Style>
+
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="240" />
@@ -68,19 +79,35 @@
             <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="430" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
         </Canvas>
-        <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="3" >
+        <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" >
             <StackPanel >
-                <TextBlock FontSize="10" FontWeight="Bold" Height="138">
-                    COM 1 = VHF<LineBreak/>
-                    COM 2 = UHF<LineBreak/>
-                    NAV 1 = FM1<LineBreak/>
-                    NAV 2 = FM2<LineBreak/>
-                    ADF = HF<LineBreak/> 
-                </TextBlock>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" Content="[COM 1]" Grid.Row="0" Style="{StaticResource GreenLCD}"/>
+                    <Label Grid.Column="0" Content="[COM 2]" Grid.Row="1" Style="{StaticResource GreenLCD}"/>
+                    <Label Grid.Column="0" Content="[NAV 1]" Grid.Row="2" Style="{StaticResource GreenLCD}"/>
+                    <Label Grid.Column="0" Content="[NAV 2]" Grid.Row="3" Style="{StaticResource GreenLCD}"/>
+                    <Label Grid.Column="0" Content="[ADF]" Grid.Row="4" Style="{StaticResource GreenLCD}"/>
+                    <Label Grid.Column="1" Content="VHF AM" Grid.Row="0" Style="{StaticResource GreenLCD}"/>
+                    <Label Grid.Column="1" Content="UHF" Grid.Row="1" Style="{StaticResource GreenLCD}"/>
+                    <Label Grid.Column="1" Content="FM1" Grid.Row="2" Style="{StaticResource GreenLCD}"/>
+                    <Label Grid.Column="1" Content="FM2" Grid.Row="3" Style="{StaticResource GreenLCD}"/>
+                    <Label Grid.Column="1" Content="HF" Grid.Row="4" Style="{StaticResource GreenLCD}"/>
+                </Grid>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="4"  Grid.ColumnSpan="3" Grid.RowSpan="4" >
+        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="6"  Grid.ColumnSpan="3" Grid.RowSpan="4" >
             <StackPanel >
                 <Label Content="Frequency Knobs sensitivity" />
                 <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChanged">
