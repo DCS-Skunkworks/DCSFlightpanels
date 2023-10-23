@@ -87,6 +87,7 @@ namespace NonVisuals.Radios
 
         private long _doUpdatePanelLCD;
         private readonly object _lockShowFrequenciesOnPanelObject = new();
+        private const uint QUART_FREQ_CHANGE_VALUE = 25;
 
         public RadioPanelPZ69AH64D(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
@@ -530,7 +531,7 @@ namespace NonVisuals.Radios
                                     case CurrentAH64DRadioMode.VHF:
                                         {
                                             /* 108.000 - 151.975 MHz */
-                                            if (_vhfBigFrequencyStandby > 151)
+                                            if (_vhfBigFrequencyStandby >= 151)
                                             {
                                                 // @ max value
                                                 _vhfBigFrequencyStandby = 151;
@@ -542,7 +543,7 @@ namespace NonVisuals.Radios
                                     case CurrentAH64DRadioMode.UHF:
                                         {
                                             /* 225.000 - 399.975 MHz */
-                                            if (_uhfBigFrequencyStandby > 399)
+                                            if (_uhfBigFrequencyStandby >= 399)
                                             {
                                                 _uhfBigFrequencyStandby = 399;
                                                 // @ max value
@@ -554,7 +555,7 @@ namespace NonVisuals.Radios
                                     case CurrentAH64DRadioMode.FM1:
                                         {
                                             /* 30.000 - 87.975 MHz */
-                                            if (_fm1BigFrequencyStandby > 87)
+                                            if (_fm1BigFrequencyStandby >= 87)
                                             {
                                                 _fm1BigFrequencyStandby = 87;
                                                 // @ max value
@@ -566,7 +567,7 @@ namespace NonVisuals.Radios
                                     case CurrentAH64DRadioMode.FM2:
                                         {
                                             /* 30.000 - 87.975 MHz */
-                                            if (_fm2BigFrequencyStandby > 87)
+                                            if (_fm2BigFrequencyStandby >= 87)
                                             {
                                                 _fm2BigFrequencyStandby = 87;
                                                 // @ max value
@@ -578,7 +579,7 @@ namespace NonVisuals.Radios
                                     case CurrentAH64DRadioMode.HF:
                                         {
                                             /* 2.0000 - 29.9999 MHz */
-                                            if (_hfBigFrequencyStandby > 29)
+                                            if (_hfBigFrequencyStandby >= 29)
                                             {
                                                 _hfBigFrequencyStandby = 29;
                                                 // @ max value
@@ -666,50 +667,50 @@ namespace NonVisuals.Radios
                                     case CurrentAH64DRadioMode.VHF:
                                         {
                                             /* 108.000 - 151.975 MHz */
-                                            if (_vhfSmallFrequencyStandby > 975)
+                                            if (_vhfSmallFrequencyStandby >= 975)
                                             {
                                                 _vhfSmallFrequencyStandby = 0;
                                                 // @ max value
                                                 break;
                                             }
 
-                                            _vhfSmallFrequencyStandby += 25;
+                                            _vhfSmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.UHF:
                                         {
                                             /* 225.000 - 399.975 MHz */
-                                            if (_uhfSmallFrequencyStandby > 975)
+                                            if (_uhfSmallFrequencyStandby >= 975)
                                             {
                                                 _uhfSmallFrequencyStandby = 0;
                                                 // @ max value
                                                 break;
                                             }
-                                            _uhfSmallFrequencyStandby += 25;
+                                            _uhfSmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.FM1:
                                         {
                                             /* 30.000 - 87.975 MHz */
-                                            if (_fm1SmallFrequencyStandby > 975)
+                                            if (_fm1SmallFrequencyStandby >= 975)
                                             {
                                                 _fm1SmallFrequencyStandby = 0;
                                                 // @ max value
                                                 break;
                                             }
-                                            _fm1SmallFrequencyStandby += 25;
+                                            _fm1SmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.FM2:
                                         {
                                             /* 30.000 - 87.975 MHz */
-                                            if (_fm2SmallFrequencyStandby > 975)
+                                            if (_fm2SmallFrequencyStandby >= 975)
                                             {
                                                 _fm2SmallFrequencyStandby = 0;
                                                 // @ max value
                                                 break;
                                             }
-                                            _fm2SmallFrequencyStandby += 25;
+                                            _fm2SmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.HF:
@@ -720,7 +721,7 @@ namespace NonVisuals.Radios
                                                 changeValue = HF_ELEVATED_CHANGE_RATE;
                                             }
                                             /* 2.0000 - 29.9999 MHz */
-                                            if (_hfSmallFrequencyStandby > 9999)
+                                            if (_hfSmallFrequencyStandby >= 9999)
                                             {
                                                 _hfSmallFrequencyStandby = 0;
                                                 // @ max value
@@ -740,45 +741,45 @@ namespace NonVisuals.Radios
                                     case CurrentAH64DRadioMode.VHF:
                                         {
                                             /* 108.000 - 151.975 MHz */
-                                            if (_vhfSmallFrequencyStandby.Equals(0))
+                                            if (_vhfSmallFrequencyStandby == 0)
                                             {
-                                                // @ min value
+                                                _vhfSmallFrequencyStandby = 975;
                                                 break;
                                             }
-                                            _vhfSmallFrequencyStandby -= 25;
+                                            _vhfSmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.UHF:
                                         {
                                             /* 225.000 - 399.975 MHz */
-                                            if (_uhfSmallFrequencyStandby.Equals(0))
+                                            if (_uhfSmallFrequencyStandby == 0)
                                             {
-                                                // @ min value
+                                                _uhfSmallFrequencyStandby = 975;
                                                 break;
                                             }
-                                            _uhfSmallFrequencyStandby -= 25;
+                                            _uhfSmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.FM1:
                                         {
                                             /* 30.000 - 87.975 MHz */
-                                            if (_fm1SmallFrequencyStandby.Equals(0))
+                                            if (_fm1SmallFrequencyStandby == 0)
                                             {
-                                                // @ min value
+                                                _fm1SmallFrequencyStandby = 975;
                                                 break;
                                             }
-                                            _fm1SmallFrequencyStandby -= 25;
+                                            _fm1SmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.FM2:
                                         {
                                             /* 30.000 - 87.975 MHz */
-                                            if (_fm2SmallFrequencyStandby.Equals(0))
+                                            if (_fm2SmallFrequencyStandby == 0)
                                             {
-                                                // @ min value
+                                                _fm2SmallFrequencyStandby = 975;
                                                 break;
                                             }
-                                            _fm2SmallFrequencyStandby -= 25;
+                                            _fm2SmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.HF:
@@ -792,7 +793,6 @@ namespace NonVisuals.Radios
                                             if (_hfSmallFrequencyStandby < changeValue)
                                             {
                                                 _hfSmallFrequencyStandby = 9999;
-                                                // @ min value
                                                 break;
                                             }
                                             _hfSmallFrequencyStandby -= changeValue;
@@ -945,50 +945,50 @@ namespace NonVisuals.Radios
                                     case CurrentAH64DRadioMode.VHF:
                                         {
                                             /* 108.000 - 151.975 MHz */
-                                            if (_vhfSmallFrequencyStandby > 975)
+                                            if (_vhfSmallFrequencyStandby >= 975)
                                             {
                                                 _vhfSmallFrequencyStandby = 0;
                                                 // @ max value
                                                 break;
                                             }
 
-                                            _vhfSmallFrequencyStandby += 25;
+                                            _vhfSmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.UHF:
                                         {
                                             /* 225.000 - 399.975 MHz */
-                                            if (_uhfSmallFrequencyStandby > 975)
+                                            if (_uhfSmallFrequencyStandby >= 975)
                                             {
                                                 _uhfSmallFrequencyStandby = 0;
                                                 // @ max value
                                                 break;
                                             }
-                                            _uhfSmallFrequencyStandby += 25;
+                                            _uhfSmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.FM1:
                                         {
                                             /* 30.000 - 87.975 MHz */
-                                            if (_fm1SmallFrequencyStandby > 975)
+                                            if (_fm1SmallFrequencyStandby >= 975)
                                             {
                                                 _fm1SmallFrequencyStandby = 0;
                                                 // @ max value
                                                 break;
                                             }
-                                            _fm1SmallFrequencyStandby += 25;
+                                            _fm1SmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.FM2:
                                         {
                                             /* 30.000 - 87.975 MHz */
-                                            if (_fm2SmallFrequencyStandby > 975)
+                                            if (_fm2SmallFrequencyStandby >= 975)
                                             {
                                                 _fm2SmallFrequencyStandby = 0;
                                                 // @ max value
                                                 break;
                                             }
-                                            _fm2SmallFrequencyStandby += 25;
+                                            _fm2SmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.HF:
@@ -999,7 +999,7 @@ namespace NonVisuals.Radios
                                                 changeValue = HF_ELEVATED_CHANGE_RATE;
                                             }
                                             /* 2.0000 - 29.9999 MHz */
-                                            if (_hfSmallFrequencyStandby > 9999)
+                                            if (_hfSmallFrequencyStandby >= 9999)
                                             {
                                                 _hfSmallFrequencyStandby = 0;
                                                 // @ max value
@@ -1019,45 +1019,45 @@ namespace NonVisuals.Radios
                                     case CurrentAH64DRadioMode.VHF:
                                         {
                                             /* 108.000 - 151.975 MHz */
-                                            if (_vhfSmallFrequencyStandby.Equals(0))
+                                            if (_vhfSmallFrequencyStandby == 0)
                                             {
-                                                // @ min value
+                                                _vhfSmallFrequencyStandby = 975;
                                                 break;
                                             }
-                                            _vhfSmallFrequencyStandby -= 25;
+                                            _vhfSmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.UHF:
                                         {
                                             /* 225.000 - 399.975 MHz */
-                                            if (_uhfSmallFrequencyStandby.Equals(0))
+                                            if (_uhfSmallFrequencyStandby == 0)
                                             {
-                                                // @ min value
+                                                _uhfSmallFrequencyStandby = 975;
                                                 break;
                                             }
-                                            _uhfSmallFrequencyStandby -= 25;
+                                            _uhfSmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.FM1:
                                         {
                                             /* 30.000 - 87.975 MHz */
-                                            if (_fm1SmallFrequencyStandby.Equals(0))
+                                            if (_fm1SmallFrequencyStandby == 0)
                                             {
-                                                // @ min value
+                                                _fm1SmallFrequencyStandby = 975;
                                                 break;
                                             }
-                                            _fm1SmallFrequencyStandby -= 25;
+                                            _fm1SmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.FM2:
                                         {
                                             /* 30.000 - 87.975 MHz */
-                                            if (_fm2SmallFrequencyStandby.Equals(0))
+                                            if (_fm2SmallFrequencyStandby == 0)
                                             {
-                                                // @ min value
+                                                _fm2SmallFrequencyStandby = 975;
                                                 break;
                                             }
-                                            _fm2SmallFrequencyStandby -= 25;
+                                            _fm2SmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
                                     case CurrentAH64DRadioMode.HF:
@@ -1071,7 +1071,6 @@ namespace NonVisuals.Radios
                                             if (_hfSmallFrequencyStandby < changeValue)
                                             {
                                                 _hfSmallFrequencyStandby = 9999;
-                                                // @ min value
                                                 break;
                                             }
                                             _hfSmallFrequencyStandby -= changeValue;
