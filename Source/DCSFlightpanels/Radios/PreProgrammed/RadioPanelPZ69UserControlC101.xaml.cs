@@ -100,13 +100,7 @@
                 foreach (var radioKnobO in knobs)
                 {
                     var radioKnob = (RadioPanelKnobC101)radioKnobO;
-                    Dispatcher?.BeginInvoke((Action)delegate
-                   {
-                        /*if (radioKnob.IsOn)
-                        {
-                            SetGroupboxVisibility(radioKnob.RadioPanelPZ69Knob);
-                        }*/
-                   });
+
                     switch (radioKnob.RadioPanelPZ69Knob)
                     {
                         case RadioPanelKnobsC101.UPPER_VHF:
@@ -408,14 +402,13 @@
         {
             try
             {
-                if (UserControlLoaded)
-                {
-                    var sensitivity = ComboBoxFreqKnobSensitivity.SelectedValue.ToString();
-                    if (sensitivity == null) return;
-                    Settings.Default.RadioFrequencyKnobSensitivity = int.Parse(sensitivity);
-                    _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(sensitivity);
-                    Settings.Default.Save();
-                }
+                if (!UserControlLoaded) return;
+
+                var sensitivity = ComboBoxFreqKnobSensitivity.SelectedValue.ToString();
+                if (sensitivity == null) return;
+                Settings.Default.RadioFrequencyKnobSensitivity = int.Parse(sensitivity);
+                _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(sensitivity);
+                Settings.Default.Save();
             }
             catch (Exception ex)
             {

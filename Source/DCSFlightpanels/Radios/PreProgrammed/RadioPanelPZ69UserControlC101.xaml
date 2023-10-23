@@ -68,17 +68,8 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.RowSpan="5" Grid.ColumnSpan="3" Margin="0,223,0,153" >
             <StackPanel Margin="0,0,0,-17" >
                 <TextBlock FontSize="10" FontWeight="Bold" Height="213">
-                    COM 1 = COMM 1 *<LineBreak/>
-                    COM 2 = COMM 2 * <LineBreak/>
-                    NAV 1 = <LineBreak/>
-                    NAV 2 = ILS**<LineBreak/>
-                    ADF   = <LineBreak/>
-                       <LineBreak/>
-                    * Radio channels from 1 to 20 and<LineBreak/>
-                    G=21,  M=22,  C=23,  S=24<LineBreak/>
-                       <LineBreak/>
-                    ** ILS mode only in manual mode, so you need<LineBreak/>
-                      to set the cockpit ILS switch to manual.<LineBreak/>
+                    COM 1 = COMM 1 / VHF<LineBreak/>
+                    COM 2 = UHF <LineBreak/>
                 </TextBlock>
             </StackPanel>
         </GroupBox>

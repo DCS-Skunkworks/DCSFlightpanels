@@ -124,6 +124,8 @@ namespace NonVisuals.Radios
                         Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
+
+                ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
             {
@@ -713,7 +715,7 @@ namespace NonVisuals.Radios
 
         private void CreateRadioKnobs()
         {
-            SaitekPanelKnobs = RadioPanelKnobFA18C.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobC101.GetRadioPanelKnobs();
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
