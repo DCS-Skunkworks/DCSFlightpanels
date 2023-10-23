@@ -108,6 +108,8 @@
     <Resource Include="Images\BIP\green.png" />
     <Resource Include="Images\BIP\red.png" />
     <Resource Include="Images\BIP\yellow1.png" />
+    <Resource Include="Images\C-101\C-101_UHF_COMM.png" />
+    <Resource Include="Images\C-101\C-101_VHF_COMM.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\CDU737\Apache_1_0001.jpg" />
@@ -222,6 +224,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
+    <None Remove="Images\C-101\C-101_UHF_COMM.png" />
+    <None Remove="Images\C-101\C-101_VHF_COMM.png" />
     <None Remove="Images\rio-cap-f14.png" />
     <None Remove="Images\Switchpanel\black.png" />
     <None Remove="Images\Switchpanel\green.png" />
