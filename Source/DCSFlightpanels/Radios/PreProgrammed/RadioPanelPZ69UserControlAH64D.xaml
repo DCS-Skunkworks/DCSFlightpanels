@@ -71,16 +71,11 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold" Height="138">
-                    COM 1 = VHF / Standby display<LineBreak/>
-                    COM 2 = UHF / Standby display<LineBreak/>
-                    NAV 1 = FM1 / Standby display<LineBreak/>
-                    NAV 2 = FM2 / Standby display<LineBreak/>
-                    ADF = HF / Standby display<LineBreak/> 
-                    ACT/STBY : Pilot EUFD Swap button<LineBreak/>
-                    Large Upper Freq rotary knob : Pilot EUFD IDM Inc/Dec<LineBreak/>
-                    Small Upper Freq rotary knob : (No use)<LineBreak/>
-                    Large Lower Freq rotary knob : Pilot EUFD WCA Inc/Dec<LineBreak/>
-                    Small Lower Freq rotary knob : Pilot EUFD RTS Inc/Dec<LineBreak/>                    
+                    COM 1 = VHF<LineBreak/>
+                    COM 2 = UHF<LineBreak/>
+                    NAV 1 = FM1<LineBreak/>
+                    NAV 2 = FM2<LineBreak/>
+                    ADF = HF<LineBreak/> 
                 </TextBlock>
             </StackPanel>
         </GroupBox>
