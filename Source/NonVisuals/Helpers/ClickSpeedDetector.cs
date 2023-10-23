@@ -11,13 +11,14 @@
     public class ClickSpeedDetector
     {
         private readonly List<long> _clicksTimeTicksList = new();
-        private readonly int _maxClicksToKeep = 200;
-        private readonly int _defaultPeriod = 2000;
+        private readonly int _maxClicksToKeep = 400;
+        private readonly int _timeSpanMs;
         private readonly int _clickCountThreshold;
 
-        public ClickSpeedDetector(int upperClickThreshold)
+        public ClickSpeedDetector(int upperClickThreshold, int timePeriodMs = 2000)
         {
             _clickCountThreshold = upperClickThreshold;
+            _timeSpanMs = timePeriodMs;
         }
 
         public int ClicksWithinLastPeriod(int millisecondPeriod)
@@ -41,7 +42,7 @@
             var millisecNow = DateTime.Now.Ticks / 10000;
             foreach (var l in _clicksTimeTicksList)
             {
-                if (l / 10000 > millisecNow - _defaultPeriod)
+                if (l / 10000 > millisecNow - _timeSpanMs)
                 {
                     // we are within period
                     result++;
