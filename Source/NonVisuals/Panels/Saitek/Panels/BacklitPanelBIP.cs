@@ -403,9 +403,9 @@ namespace NonVisuals.Panels.Saitek.Panels
         public string GetPosString(BIPLedPositionEnum bipLedPositionEnum)
         {
             // Position_1_1
-            return bipLedPositionEnum.ToString().Replace("Position_", string.Empty);
+            return bipLedPositionEnum.ToString().Replace("Position_", string.Empty).Replace("_", string.Empty);
 
-            // 1_1
+            // 11
         }
 
         public int GetIndex(BIPLedPositionEnum bipLedPositionEnum)
@@ -737,6 +737,11 @@ namespace NonVisuals.Panels.Saitek.Panels
 
         public static BIPLedPositionEnum GetLedPosition(string imageName)
         {
+            if (string.IsNullOrEmpty(imageName) || imageName.Length != 15)
+            {
+                throw new ArgumentOutOfRangeException(imageName, "Must be 15 chars long.");
+            }
+
             //ImagePosition34
             var row = int.Parse(imageName.Substring(13, 1));
             var index = int.Parse(imageName.Substring(14, 1));
