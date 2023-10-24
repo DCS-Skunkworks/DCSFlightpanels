@@ -6,40 +6,37 @@ namespace DCSFPTests.NonVisuals
 {
     public class BackLitPanelTests
     {
+        /*ImagePosition21*/
+        [Theory]//             ImagePosition21
+        [InlineData("1234567890123a1")]
+        [InlineData("_______________")]
 
-        [Theory]
-        [InlineData("")]
-        [InlineData("a2")]
-        [InlineData("a23")]
-        [InlineData("a234")]
-        [InlineData("a2345")]
-        [InlineData("a23456")]
-        [InlineData("a234567")]
-        [InlineData("a2345678")]
-        [InlineData("a23456789")]
-        [InlineData("a234567890")]
-        [InlineData("a2345678901")]
-        [InlineData("a23456789012")]
-        [InlineData("a234567890123")]
-        [InlineData("12345678901234")]
-        [InlineData("abcdefghijklmn")]
+        public void GetLedPosition_Throws_FormatException_If13thCharIsNotInt(string inputString)
+        {
+            Assert.Throws<FormatException>(() => BacklitPanelBIP.GetLedPosition(inputString));
+        }
+
+        [Theory]//             ImagePosition21
+        [InlineData("12345678901232a")]
+        [InlineData("_______________")]
+
+        public void GetLedPosition_Throws_FormatException_If14thCharIsNotInt(string inputString)
+        {
+            Assert.Throws<FormatException>(() => BacklitPanelBIP.GetLedPosition(inputString));
+        }
+
+        [Theory]//             ImagePosition21
+        [InlineData("_____________1")]
+        [InlineData("____________12")]
+        [InlineData("___________1a")]
         public void GetLedPosition_Throws_ArgumentOutOfRange_IfStringSmallerThan15CharsLong(string inputString)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => BacklitPanelBIP.GetLedPosition(inputString));
         }
 
-        [Theory]
-        [InlineData("12345678901234a")]
-        [InlineData("12345678901234_")]
-        [InlineData("_______________")]
 
-        public void GetLedPosition_Throws_FormatException_If15thCharIsNotInt(string inputString)
-        {
-            Assert.Throws<FormatException>(() => BacklitPanelBIP.GetLedPosition(inputString));
-        }
-
-        [Theory]
-        [InlineData("____________1aa")]
+        [Theory]//             ImagePosition21
+		[InlineData("____________1aa")]
         [InlineData("____________1_a")]
         [InlineData("____________1_b")]
         [InlineData("____________0_b")]
@@ -49,7 +46,7 @@ namespace DCSFPTests.NonVisuals
             Assert.Throws<FormatException>(() => BacklitPanelBIP.GetLedPosition(inputString));
         }
 
-        [Theory]
+        [Theory]//             ImagePosition21
         [InlineData("_____________11", BIPLedPositionEnum.Position_1_1)]
         [InlineData("aaaaaaaaaaaaa11", BIPLedPositionEnum.Position_1_1)]
         [InlineData("aaaaaaaaaaaaa12", BIPLedPositionEnum.Position_1_2)]
@@ -65,7 +62,7 @@ namespace DCSFPTests.NonVisuals
             Assert.Equal(bipLedPositionEnum, BacklitPanelBIP.GetLedPosition(inputString));
         }
 
-        [Theory]
+        [Theory]//             ImagePosition21
         [InlineData("_____________19", BIPLedPositionEnum.Position_1_1)]
         [InlineData("_____________10", BIPLedPositionEnum.Position_1_1)]
         [InlineData("_____________20", BIPLedPositionEnum.Position_1_1)]
