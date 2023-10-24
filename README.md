@@ -65,7 +65,7 @@ Links
 
 * [How to install](https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki)
 * [Troubleshooting](https://github.com/DCS-Skunkworks/DCSFlightpanels/wiki/Troubleshooting)
-* Ready made DCSFlightpanels [Profiles](https://github.com/DCS-Skunkworks/DCS-Flightpanels-Profiles)
+* [Ready made DCSFlightpanels Profiles](https://github.com/DCS-Skunkworks/DCSFlightpanels-Profiles)
 * [BaDCrC showing his cockpit that uses Helios and DCSFP](https://youtu.be/lgTJa-NUnM8?t=573)
 * [Tutorial #1 (Key emulation)](https://youtu.be/mgm0JfldgYs)
 * [Tutorial #2 (DCS-BIOS)](https://youtu.be/1CnmIdzqOJs): 
