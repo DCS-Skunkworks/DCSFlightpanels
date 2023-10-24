@@ -108,6 +108,8 @@
     <Resource Include="Images\BIP\green.png" />
     <Resource Include="Images\BIP\red.png" />
     <Resource Include="Images\BIP\yellow1.png" />
+    <Resource Include="Images\C-101\C-101_UHF_COMM.png" />
+    <Resource Include="Images\C-101\C-101_VHF_COMM.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\CDU737\Apache_1_0001.jpg" />
@@ -122,7 +124,6 @@
     <Resource Include="Images\F-14\F-14 RIO Datalink.png" />
     <Resource Include="Images\F-14\F-14 TACAN.png" />
     <Resource Include="Images\F-14\rio-cap-f14.png" />
-    <Resource Include="Images\F-15E\F15E_radio_screen.png" />
     <Resource Include="Images\F-16C\F-16C_50_COM-1-2-VOL.png" />
     <Resource Include="Images\F-16C\F-16C_50_DED.png" />
     <Resource Include="Images\F-16C\F-16C_50_EHSI.png" />
@@ -223,7 +224,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
-    <None Remove="Images\F-15E\F15E_radio_screen.png" />
+    <None Remove="Images\C-101\C-101_UHF_COMM.png" />
+    <None Remove="Images\C-101\C-101_VHF_COMM.png" />
     <None Remove="Images\rio-cap-f14.png" />
     <None Remove="Images\Switchpanel\black.png" />
     <None Remove="Images\Switchpanel\green.png" />
