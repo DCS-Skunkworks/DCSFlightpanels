@@ -6,7 +6,7 @@
 
     public enum RadioPanelKnobsF15E
     {
-        UPPER_VHF,
+        UPPER_ARC210,
         UPPER_UHF,
         UPPER_NAV1,
         UPPER_NAV2,
@@ -18,7 +18,7 @@
         UPPER_LARGE_FREQ_WHEEL_INC,
         UPPER_LARGE_FREQ_WHEEL_DEC,
         UPPER_FREQ_SWITCH,
-        LOWER_VHF,
+        LOWER_ARC210,
         LOWER_UHF,
         LOWER_NAV1,
         LOWER_NAV2,
@@ -78,14 +78,14 @@
                 new RadioPanelKnobF15E(1, 1 << 6, true, RadioPanelKnobsF15E.UPPER_FREQ_SWITCH),
                 new RadioPanelKnobF15E(1, 1 << 7, true, RadioPanelKnobsF15E.LOWER_FREQ_SWITCH),
                 // Group 2
-                new RadioPanelKnobF15E(0, 1 << 0, true, RadioPanelKnobsF15E.UPPER_VHF), // UPPER COM 1
+                new RadioPanelKnobF15E(0, 1 << 0, true, RadioPanelKnobsF15E.UPPER_ARC210), // UPPER COM 1
                 new RadioPanelKnobF15E(0, 1 << 1, true, RadioPanelKnobsF15E.UPPER_UHF), // UPPER COM 2
                 new RadioPanelKnobF15E(0, 1 << 2, true, RadioPanelKnobsF15E.UPPER_NAV1), // UPPER NAV 1
                 new RadioPanelKnobF15E(0, 1 << 3, true, RadioPanelKnobsF15E.UPPER_NAV2), // UPPER NAV 2
                 new RadioPanelKnobF15E(0, 1 << 4, true, RadioPanelKnobsF15E.UPPER_ADF), // UPPER ADF
                 new RadioPanelKnobF15E(0, 1 << 5, true, RadioPanelKnobsF15E.UPPER_DME), // UPPER DME
                 new RadioPanelKnobF15E(0, 1 << 6, true, RadioPanelKnobsF15E.UPPER_XPDR), // UPPER XPDR
-                new RadioPanelKnobF15E(0, 1 << 7, true, RadioPanelKnobsF15E.LOWER_VHF) // LOWER COM 1 
+                new RadioPanelKnobF15E(0, 1 << 7, true, RadioPanelKnobsF15E.LOWER_ARC210) // LOWER COM 1 
             };
 
             return result;

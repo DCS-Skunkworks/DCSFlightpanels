@@ -9,12 +9,10 @@
     <Grid Margin="3,0,0,5" >
         <Grid.RowDefinitions>
             <RowDefinition Height="228" />
-            <RowDefinition Height="96*" />
-            <RowDefinition Height="84*" />
-            <RowDefinition Height="27*" />
-            <RowDefinition Height="309*" />
-            <RowDefinition />
-            <RowDefinition Height="0*" />
+            <RowDefinition Height="50*" />
+            <RowDefinition Height="50*" />
+            <RowDefinition Height="50*" />
+            <RowDefinition Height="50*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80*" />
@@ -65,16 +63,18 @@
             <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="430" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
         </Canvas>
-        <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.RowSpan="5" Grid.ColumnSpan="3" Margin="0,223,0,153" >
+        <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="3" Margin="0,223,0,153" >
             <StackPanel Margin="0,0,0,-17" >
                 <TextBlock FontSize="10" FontWeight="Bold" Height="213">
-                    COM 1 = COMM 1 / VHF<LineBreak/>
-                    COM 2 = UHF <LineBreak/>
+                    <Run Text="COM 1 = ARC-210 *"/><LineBreak/>
+                    <Run Text="COM 2 = UHF"/><LineBreak/><LineBreak/>
+                    <Run Text="* Press ACT/STBY + Large Dial"/><LineBreak/>
+                    <Run Text="To Change Frequency Band"/><LineBreak/>
                 </TextBlock>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="4"  Grid.ColumnSpan="3" Height="147" VerticalAlignment="Bottom" Margin="0,0,0,0" >
+        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="3" Height="147" VerticalAlignment="Bottom" Margin="0,0,0,0" >
             <StackPanel Margin="0,13,0,-2" >
                 <Label Content="Frequency Knobs sensitivity" />
                 <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChanged">
@@ -102,15 +102,13 @@
 
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="3
                     " Grid.RowSpan="4">
-            <Image Height="187" Source="/Images/C-101/C-101_VHF_COMM.png" Margin="0,0,10,0" />
-            <Label Content="    " FontWeight="Bold" Height="6"/>
-            <Image Height="187" Source="/Images/C-101/C-101_UHF_COMM.png" Margin="0,0,10,0" />
+            <Image Height="187" Source="/Images/F-15E/F15E_radio_screen.png" Margin="0,0,10,0" />
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="3" Margin="0,0,0,1">
-            <Label Name="LabelAirframe" Content="C-101" FontSize="30" FontWeight="Bold" Height="43" Margin="0,0,257,0"/>
+            <Label Name="LabelAirframe" Content="F-15E" FontSize="30" FontWeight="Bold" Height="43" Margin="0,0,257,0"/>
         </StackPanel>
-        <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="3" LastChildFill="False">
-            <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">
+        <DockPanel Grid.Column="6" Grid.Row="3" Grid.RowSpan="2" LastChildFill="True">
+            <GroupBox DockPanel.Dock="Top" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">
                 <TextBox DockPanel.Dock="Bottom" x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="120"/>
             </GroupBox>
         </DockPanel>

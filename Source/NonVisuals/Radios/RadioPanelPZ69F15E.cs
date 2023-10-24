@@ -1,4 +1,6 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Diagnostics;
+using NonVisuals.BindingClasses.BIP;
+using NonVisuals.Radios.RadioControls;
 
 namespace NonVisuals.Radios
 {
@@ -26,26 +28,26 @@ namespace NonVisuals.Radios
     {
         private enum CurrentF15ERadioMode
         {
-            VHF,
+            ARC210,
             UHF,
             NO_USE,
         }
 
-        private CurrentF15ERadioMode _currentUpperRadioMode = CurrentF15ERadioMode.VHF;
-        private CurrentF15ERadioMode _currentLowerRadioMode = CurrentF15ERadioMode.VHF;
+        private CurrentF15ERadioMode _currentUpperRadioMode = CurrentF15ERadioMode.ARC210;
+        private CurrentF15ERadioMode _currentLowerRadioMode = CurrentF15ERadioMode.ARC210;
         private bool _upperButtonPressed;
         private bool _lowerButtonPressed;
         private bool _upperButtonPressedAndDialRotated;
         private bool _lowerButtonPressedAndDialRotated;
 
-        /*VHF*/
-        /* 116.000 to 149.975 */
-        private readonly object _lockVHFObject = new();
-        private uint _vhfBigFrequencyStandby = 108;
-        private uint _vhfSmallFrequencyStandby;
-        private string _vhfCockpitFrequency = "108.000";
-        private DCSBIOSOutput _vhfRadioControl;
-        private const string VHF_RADIO_COMMAND = "COMM_RADIO ";
+        /*ARC210*/
+        /* (FM) 30.000 to 87.975 MHz */
+        /* VHF AM 108.000 to 115.975 MHz */
+        /* VHF AM 118.000 to 173.975 MHz */
+        /* UHF AM 225.000 to 399.975 MHz */
+        private readonly object _lockARC210Object = new();
+        private readonly ARC210 _arc210Radio = new ("ARC_210_RADIO", "108.00", 25, 5);
+        private DCSBIOSOutput _arc210RadioControl;
 
         /*UHF*/
         /* 225.000 to 339.975 */
@@ -54,7 +56,7 @@ namespace NonVisuals.Radios
         private uint _uhfSmallFrequencyStandby;
         private string _uhfCockpitFrequency = "225.000";
         private DCSBIOSOutput _uhfRadioControl;
-        private const string UHF_RADIO_COMMAND = "VUHF_RADIO ";
+        private const string UHF_RADIO_COMMAND = "UHF_RADIO ";
 
         private long _doUpdatePanelLCD;
         private readonly object _lockShowFrequenciesOnPanelObject = new();
@@ -107,11 +109,12 @@ namespace NonVisuals.Radios
                     return;
                 }
 
-                if (_vhfRadioControl.StringValueHasChanged(e.Address, e.StringData))
+                if (_arc210RadioControl.StringValueHasChanged(e.Address, e.StringData))
                 {
-                    lock (_lockVHFObject)
+                    lock (_lockARC210Object)
                     {
-                        _vhfCockpitFrequency = e.StringData;
+                        Debug.WriteLine($"Received {e.StringData}");
+                        _arc210Radio.SetCockpitFrequency(e.StringData);
                         Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
@@ -155,9 +158,10 @@ namespace NonVisuals.Radios
                     {
                         switch (_currentUpperRadioMode)
                         {
-                            case CurrentF15ERadioMode.VHF:
+                            case CurrentF15ERadioMode.ARC210:
                                 {
-                                    SendVHFToDCSBIOS();
+                                    DCSBIOS.Send(_arc210Radio.GetDCSBIOSCommand());
+                                    Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
                             case CurrentF15ERadioMode.UHF:
@@ -174,9 +178,10 @@ namespace NonVisuals.Radios
                         switch (_currentLowerRadioMode)
                         {
 
-                            case CurrentF15ERadioMode.VHF:
+                            case CurrentF15ERadioMode.ARC210:
                                 {
-                                    SendVHFToDCSBIOS();
+                                    DCSBIOS.Send(_arc210Radio.GetDCSBIOSCommand());
+                                    Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
                             case CurrentF15ERadioMode.UHF:
@@ -189,24 +194,7 @@ namespace NonVisuals.Radios
                     }
             }
         }
-
-        private void SendVHFToDCSBIOS()
-        {
-            try
-            {
-                var newStandbyFrequency = _vhfCockpitFrequency;
-                DCSBIOS.Send($"{VHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentF15ERadioMode.VHF)}\n");
-                var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
-                _vhfBigFrequencyStandby = uint.Parse(array[0]);
-                _vhfSmallFrequencyStandby = uint.Parse(array[1]);
-                Interlocked.Increment(ref _doUpdatePanelLCD);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
+        
         private void SendUHFToDCSBIOS()
         {
             try
@@ -228,9 +216,8 @@ namespace NonVisuals.Radios
         {
             return radio switch
             {
-                CurrentF15ERadioMode.VHF => _vhfBigFrequencyStandby + "." + _vhfSmallFrequencyStandby.ToString().PadLeft(3, '0'),
                 CurrentF15ERadioMode.UHF => _uhfBigFrequencyStandby + "." + _uhfSmallFrequencyStandby.ToString().PadLeft(3, '0'),
-                _ => throw new ArgumentOutOfRangeException(nameof(radio), radio, "C-101.GetFrequencyString()")
+                _ => throw new ArgumentOutOfRangeException(nameof(radio), radio, "F-15E.GetFrequencyString()")
             };
         }
 
@@ -259,12 +246,19 @@ namespace NonVisuals.Radios
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             break;
                         }
-                    case CurrentF15ERadioMode.VHF:
+                    case CurrentF15ERadioMode.ARC210:
                         {
-                            lock (_lockVHFObject)
+                            lock (_lockARC210Object)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentF15ERadioMode.VHF), PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                SetPZ69DisplayBytesDefault(ref bytes, _vhfCockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                if (_upperButtonPressed || _lowerButtonPressed)
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetTemporaryFrequencyBandId(), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                }
+                                else
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetStandbyFrequency(), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                }
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetCockpitFrequency(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             break;
                         }
@@ -287,12 +281,19 @@ namespace NonVisuals.Radios
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             break;
                         }
-                    case CurrentF15ERadioMode.VHF:
+                    case CurrentF15ERadioMode.ARC210:
                         {
-                            lock (_lockVHFObject)
+                            lock (_lockARC210Object)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentF15ERadioMode.VHF), PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                SetPZ69DisplayBytesDefault(ref bytes, _vhfCockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                if (_upperButtonPressed || _lowerButtonPressed)
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetTemporaryFrequencyBandId(), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                }
+                                else
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetStandbyFrequency(), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                }
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetCockpitFrequency(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);//
                             }
                             break;
                         }
@@ -330,16 +331,18 @@ namespace NonVisuals.Radios
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentF15ERadioMode.VHF:
+                                    case CurrentF15ERadioMode.ARC210:
                                         {
-                                            /* 108.000 - 151.975 MHz */
-                                            if (_vhfBigFrequencyStandby >= 151)
+                                            if (_upperButtonPressed)
                                             {
-                                                // @ max value
-                                                _vhfBigFrequencyStandby = 151;
-                                                break;
+                                                _upperButtonPressedAndDialRotated = true;
+                                                _arc210Radio.TemporaryFrequencyBandUp();
                                             }
-                                            _vhfBigFrequencyStandby++;
+                                            else
+                                            {
+                                                _arc210Radio.BigFrequencyUp();
+                                            }
+
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -362,16 +365,17 @@ namespace NonVisuals.Radios
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentF15ERadioMode.VHF:
+                                    case CurrentF15ERadioMode.ARC210:
                                         {
-                                            /* 108.000 - 151.975 MHz */
-                                            if (_vhfBigFrequencyStandby <= 108)
+                                            if (_upperButtonPressed)
                                             {
-                                                _vhfBigFrequencyStandby = 108;
-                                                // @ min value
-                                                break;
+                                                _upperButtonPressedAndDialRotated = true;
+                                                _arc210Radio.TemporaryFrequencyBandDown();
                                             }
-                                            _vhfBigFrequencyStandby--;
+                                            else
+                                            {
+                                                _arc210Radio.BigFrequencyDown();
+                                            }
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -394,17 +398,9 @@ namespace NonVisuals.Radios
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentF15ERadioMode.VHF:
+                                    case CurrentF15ERadioMode.ARC210:
                                         {
-                                            /* 108.000 - 151.975 MHz */
-                                            if (_vhfSmallFrequencyStandby >= 975)
-                                            {
-                                                _vhfSmallFrequencyStandby = 0;
-                                                // @ max value
-                                                break;
-                                            }
-
-                                            _vhfSmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
+                                            _arc210Radio.SmallFrequencyUp();
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -427,15 +423,9 @@ namespace NonVisuals.Radios
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentF15ERadioMode.VHF:
+                                    case CurrentF15ERadioMode.ARC210:
                                         {
-                                            /* 108.000 - 151.975 MHz */
-                                            if (_vhfSmallFrequencyStandby == 0)
-                                            {
-                                                _vhfSmallFrequencyStandby = 975;
-                                                break;
-                                            }
-                                            _vhfSmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
+                                            _arc210Radio.SmallFrequencyDown();
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -457,16 +447,17 @@ namespace NonVisuals.Radios
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentF15ERadioMode.VHF:
+                                    case CurrentF15ERadioMode.ARC210:
                                         {
-                                            /* 108.000 - 151.975 MHz */
-                                            if (_vhfBigFrequencyStandby > 151)
+                                            if (_lowerButtonPressed)
                                             {
-                                                // @ max value
-                                                _vhfBigFrequencyStandby = 151;
-                                                break;
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                _arc210Radio.TemporaryFrequencyBandUp();
                                             }
-                                            _vhfBigFrequencyStandby++;
+                                            else
+                                            {
+                                                _arc210Radio.BigFrequencyUp();
+                                            }
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -489,16 +480,17 @@ namespace NonVisuals.Radios
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentF15ERadioMode.VHF:
+                                    case CurrentF15ERadioMode.ARC210:
                                         {
-                                            /* 108.000 - 151.975 MHz */
-                                            if (_vhfBigFrequencyStandby <= 108)
+                                            if (_lowerButtonPressed)
                                             {
-                                                _vhfBigFrequencyStandby = 108;
-                                                // @ min value
-                                                break;
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                _arc210Radio.TemporaryFrequencyBandDown();
                                             }
-                                            _vhfBigFrequencyStandby--;
+                                            else
+                                            {
+                                                _arc210Radio.BigFrequencyDown();
+                                            }
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -521,17 +513,9 @@ namespace NonVisuals.Radios
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentF15ERadioMode.VHF:
+                                    case CurrentF15ERadioMode.ARC210:
                                         {
-                                            /* 108.000 - 151.975 MHz */
-                                            if (_vhfSmallFrequencyStandby >= 975)
-                                            {
-                                                _vhfSmallFrequencyStandby = 0;
-                                                // @ max value
-                                                break;
-                                            }
-
-                                            _vhfSmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
+                                            _arc210Radio.SmallFrequencyUp();
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -554,15 +538,9 @@ namespace NonVisuals.Radios
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentF15ERadioMode.VHF:
+                                    case CurrentF15ERadioMode.ARC210:
                                         {
-                                            /* 108.000 - 151.975 MHz */
-                                            if (_vhfSmallFrequencyStandby == 0)
-                                            {
-                                                _vhfSmallFrequencyStandby = 975;
-                                                break;
-                                            }
-                                            _vhfSmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
+                                            _arc210Radio.SmallFrequencyDown();
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -583,6 +561,7 @@ namespace NonVisuals.Radios
                 }
             }
 
+            Interlocked.Increment(ref _doUpdatePanelLCD);
             ShowFrequenciesOnPanel();
         }
 
@@ -597,11 +576,11 @@ namespace NonVisuals.Radios
 
                     switch (radioPanelKnob.RadioPanelPZ69Knob)
                     {
-                        case RadioPanelKnobsF15E.UPPER_VHF:
+                        case RadioPanelKnobsF15E.UPPER_ARC210:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentF15ERadioMode.VHF;
+                                    _currentUpperRadioMode = CurrentF15ERadioMode.ARC210;
                                 }
                                 break;
                             }
@@ -625,11 +604,11 @@ namespace NonVisuals.Radios
                                 }
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_VHF:
+                        case RadioPanelKnobsF15E.LOWER_ARC210:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentLowerRadioMode = CurrentF15ERadioMode.VHF;
+                                    _currentLowerRadioMode = CurrentF15ERadioMode.ARC210;
                                 }
                                 break;
                             }
@@ -655,17 +634,38 @@ namespace NonVisuals.Radios
                             }
                         case RadioPanelKnobsF15E.UPPER_FREQ_SWITCH:
                             {
-                                if (radioPanelKnob.IsOn)
+                                _upperButtonPressed = radioPanelKnob.IsOn;
+                                if (!radioPanelKnob.IsOn)
                                 {
-                                    SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.UPPER_FREQ_SWITCH);
+                                    if (!_upperButtonPressedAndDialRotated)
+                                    {
+                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Sync when user releases button
+                                        SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.UPPER_FREQ_SWITCH);
+                                    }
+                                    else
+                                    {
+                                        /* We must say that the user now has stopped rotating */
+                                        _arc210Radio.SwitchFrequencyBand();
+                                    }
+
+                                    _upperButtonPressedAndDialRotated = false;
                                 }
                                 break;
                             }
                         case RadioPanelKnobsF15E.LOWER_FREQ_SWITCH:
                             {
-                                if (radioPanelKnob.IsOn)
+                                _lowerButtonPressed = radioPanelKnob.IsOn;
+                                if (!radioPanelKnob.IsOn)
                                 {
-                                    SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.LOWER_FREQ_SWITCH);
+                                    if (!_lowerButtonPressedAndDialRotated)
+                                    {
+                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Sync when user releases button
+                                        SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.LOWER_FREQ_SWITCH);
+                                    }
+
+                                    _lowerButtonPressedAndDialRotated = false;
                                 }
                                 break;
                             }
@@ -691,10 +691,10 @@ namespace NonVisuals.Radios
             try
             {
                 // VHF
-                _vhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM_RADIO");
+                _arc210RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("ARC_210_RADIO");
 
                 // UHF
-                _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VUHF_RADIO");
+                _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_RADIO");
 
                 StartListeningForHidPanelChanges();
             }

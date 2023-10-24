@@ -103,7 +103,7 @@
 
                     switch (radioKnob.RadioPanelPZ69Knob)
                     {
-                        case RadioPanelKnobsF15E.UPPER_VHF:
+                        case RadioPanelKnobsF15E.UPPER_ARC210:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -173,7 +173,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_VHF:
+                        case RadioPanelKnobsF15E.LOWER_ARC210:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
