@@ -317,6 +317,11 @@
             return dcsfpModule.ID == 16;
         }
 
+        public static bool IsF15E(DCSAircraft dcsfpModule)
+        {
+            return dcsfpModule.ID == 44;
+        }
+
         public static bool IsF16C(DCSAircraft dcsfpModule)
         {
             return dcsfpModule.ID == 17;
