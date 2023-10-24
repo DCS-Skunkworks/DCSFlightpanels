@@ -22,17 +22,17 @@ namespace NonVisuals.Radios
     /// <summary>
     /// Pre-programmed radio panel for the F-15E. 
     /// </summary>
-    public class RadioPanelPZ69J17 : RadioPanelPZ69Base, IDCSBIOSStringListener
+    public class RadioPanelPZ69JF17 : RadioPanelPZ69Base, IDCSBIOSStringListener
     {
-        private enum CurrentJ17RadioMode
+        private enum CurrentJF17RadioMode
         {
             COM1,
             COM2,
             NO_USE,
         }
 
-        private CurrentJ17RadioMode _currentUpperRadioMode = CurrentJ17RadioMode.COM1;
-        private CurrentJ17RadioMode _currentLowerRadioMode = CurrentJ17RadioMode.COM1;
+        private CurrentJF17RadioMode _currentUpperRadioMode = CurrentJF17RadioMode.COM1;
+        private CurrentJF17RadioMode _currentLowerRadioMode = CurrentJF17RadioMode.COM1;
         private bool _upperButtonPressed;
         private bool _lowerButtonPressed;
         private bool _upperButtonPressedAndDialRotated;
@@ -60,7 +60,7 @@ namespace NonVisuals.Radios
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private const uint QUART_FREQ_CHANGE_VALUE = 25;
 
-        public RadioPanelPZ69J17(HIDSkeleton hidSkeleton)
+        public RadioPanelPZ69JF17(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
         {
             CreateRadioKnobs();
@@ -133,9 +133,9 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendFrequencyToDCSBIOS(RadioPanelKnobsJ17 knob)
+        private void SendFrequencyToDCSBIOS(RadioPanelKnobsJF17 knob)
         {
-            if (IgnoreSwitchButtonOnce() && (knob == RadioPanelKnobsJ17.UPPER_FREQ_SWITCH || knob == RadioPanelKnobsJ17.LOWER_FREQ_SWITCH))
+            if (IgnoreSwitchButtonOnce() && (knob == RadioPanelKnobsJF17.UPPER_FREQ_SWITCH || knob == RadioPanelKnobsJF17.LOWER_FREQ_SWITCH))
             {
                 // Don't do anything on the very first button press as the panel sends ALL
                 // switches when it is manipulated the first time
@@ -151,16 +151,16 @@ namespace NonVisuals.Radios
 
             switch (knob)
             {
-                case RadioPanelKnobsJ17.UPPER_FREQ_SWITCH:
+                case RadioPanelKnobsJF17.UPPER_FREQ_SWITCH:
                     {
                         switch (_currentUpperRadioMode)
                         {
-                            case CurrentJ17RadioMode.COM1:
+                            case CurrentJF17RadioMode.COM1:
                                 {
                                     SendCOMM1ToDCSBIOS();
                                     break;
                                 }
-                            case CurrentJ17RadioMode.COM2:
+                            case CurrentJF17RadioMode.COM2:
                                 {
                                     SendCOMM2ToDCSBIOS();
                                     break;
@@ -169,17 +169,17 @@ namespace NonVisuals.Radios
                         break;
                     }
 
-                case RadioPanelKnobsJ17.LOWER_FREQ_SWITCH:
+                case RadioPanelKnobsJF17.LOWER_FREQ_SWITCH:
                     {
                         switch (_currentLowerRadioMode)
                         {
 
-                            case CurrentJ17RadioMode.COM1:
+                            case CurrentJF17RadioMode.COM1:
                                 {
                                     SendCOMM1ToDCSBIOS();
                                     break;
                                 }
-                            case CurrentJ17RadioMode.COM2:
+                            case CurrentJF17RadioMode.COM2:
                                 {
                                     SendCOMM2ToDCSBIOS();
                                     break;
@@ -195,7 +195,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _comm1CockpitFrequency;
-                DCSBIOS.Send($"{COMM1_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentJ17RadioMode.COM1)}\n");
+                DCSBIOS.Send($"{COMM1_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentJF17RadioMode.COM1)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _comm1BigFrequencyStandby = uint.Parse(array[0]);
                 _comm1SmallFrequencyStandby = uint.Parse(array[1]);
@@ -212,7 +212,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _comm2CockpitFrequency;
-                DCSBIOS.Send($"{COMM2_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentJ17RadioMode.COM2)}\n");
+                DCSBIOS.Send($"{COMM2_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentJF17RadioMode.COM2)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _comm2BigFrequencyStandby = uint.Parse(array[0]);
                 _comm2SmallFrequencyStandby = uint.Parse(array[1]);
@@ -224,12 +224,12 @@ namespace NonVisuals.Radios
             }
         }
 
-        private string GetStandbyFrequencyString(CurrentJ17RadioMode radio)
+        private string GetStandbyFrequencyString(CurrentJF17RadioMode radio)
         {
             return radio switch
             {
-                CurrentJ17RadioMode.COM1 => _comm1BigFrequencyStandby + "." + _comm1SmallFrequencyStandby.ToString().PadLeft(3, '0'),
-                CurrentJ17RadioMode.COM2 => _comm2BigFrequencyStandby + "." + _comm2SmallFrequencyStandby.ToString().PadLeft(3, '0'),
+                CurrentJF17RadioMode.COM1 => _comm1BigFrequencyStandby + "." + _comm1SmallFrequencyStandby.ToString().PadLeft(3, '0'),
+                CurrentJF17RadioMode.COM2 => _comm2BigFrequencyStandby + "." + _comm2SmallFrequencyStandby.ToString().PadLeft(3, '0'),
                 _ => throw new ArgumentOutOfRangeException(nameof(radio), radio, "JF-17.GetFrequencyString()")
             };
         }
@@ -253,26 +253,26 @@ namespace NonVisuals.Radios
 
                 switch (_currentUpperRadioMode)
                 {
-                    case CurrentJ17RadioMode.NO_USE:
+                    case CurrentJF17RadioMode.NO_USE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             break;
                         }
-                    case CurrentJ17RadioMode.COM1:
+                    case CurrentJF17RadioMode.COM1:
                         {
                             lock (_lockCOMM1Object)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJ17RadioMode.COM1), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJF17RadioMode.COM1), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBytesDefault(ref bytes, _comm1CockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             break;
                         }
-                    case CurrentJ17RadioMode.COM2:
+                    case CurrentJF17RadioMode.COM2:
                         {
                             lock (_lockCOMM2Object)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJ17RadioMode.COM2), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJF17RadioMode.COM2), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBytesDefault(ref bytes, _comm2CockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             break;
@@ -281,26 +281,26 @@ namespace NonVisuals.Radios
 
                 switch (_currentLowerRadioMode)
                 {
-                    case CurrentJ17RadioMode.NO_USE:
+                    case CurrentJF17RadioMode.NO_USE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             break;
                         }
-                    case CurrentJ17RadioMode.COM1:
+                    case CurrentJF17RadioMode.COM1:
                         {
                             lock (_lockCOMM1Object)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJ17RadioMode.COM1), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJF17RadioMode.COM1), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBytesDefault(ref bytes, _comm1CockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             break;
                         }
-                    case CurrentJ17RadioMode.COM2:
+                    case CurrentJF17RadioMode.COM2:
                         {
                             lock (_lockCOMM2Object)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJ17RadioMode.COM2), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJF17RadioMode.COM2), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBytesDefault(ref bytes, _comm2CockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             break;
@@ -321,16 +321,16 @@ namespace NonVisuals.Radios
 
             foreach (var o in hashSet)
             {
-                var radioPanelKnobC101 = (RadioPanelKnobJ17)o;
+                var radioPanelKnobC101 = (RadioPanelKnobJF17)o;
                 if (radioPanelKnobC101.IsOn)
                 {
                     switch (radioPanelKnobC101.RadioPanelPZ69Knob)
                     {
-                        case RadioPanelKnobsJ17.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsJF17.UPPER_LARGE_FREQ_WHEEL_INC:
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentJ17RadioMode.COM1:
+                                    case CurrentJF17RadioMode.COM1:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm1BigFrequencyStandby >= 173)
@@ -342,7 +342,7 @@ namespace NonVisuals.Radios
                                             _comm1BigFrequencyStandby++;
                                             break;
                                         }
-                                    case CurrentJ17RadioMode.COM2:
+                                    case CurrentJF17RadioMode.COM2:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm2BigFrequencyStandby >= 173)
@@ -358,11 +358,11 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelKnobsJ17.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsJF17.UPPER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentJ17RadioMode.COM1:
+                                    case CurrentJF17RadioMode.COM1:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm1BigFrequencyStandby <= 225 && _comm1BigFrequencyStandby > 173)
@@ -380,7 +380,7 @@ namespace NonVisuals.Radios
                                             _comm1BigFrequencyStandby--;
                                             break;
                                         }
-                                    case CurrentJ17RadioMode.COM2:
+                                    case CurrentJF17RadioMode.COM2:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm2BigFrequencyStandby <= 225 && _comm2BigFrequencyStandby > 173)
@@ -402,11 +402,11 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelKnobsJ17.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsJF17.UPPER_SMALL_FREQ_WHEEL_INC:
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentJ17RadioMode.COM1:
+                                    case CurrentJF17RadioMode.COM1:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm1SmallFrequencyStandby >= 975)
@@ -419,7 +419,7 @@ namespace NonVisuals.Radios
                                             _comm1SmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
-                                    case CurrentJ17RadioMode.COM2:
+                                    case CurrentJF17RadioMode.COM2:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm2SmallFrequencyStandby >= 975)
@@ -435,11 +435,11 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelKnobsJ17.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsJF17.UPPER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentUpperRadioMode)
                                 {
-                                    case CurrentJ17RadioMode.COM1:
+                                    case CurrentJF17RadioMode.COM1:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm1SmallFrequencyStandby == 0)
@@ -450,7 +450,7 @@ namespace NonVisuals.Radios
                                             _comm1SmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
-                                    case CurrentJ17RadioMode.COM2:
+                                    case CurrentJF17RadioMode.COM2:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm2SmallFrequencyStandby == 0)
@@ -465,11 +465,11 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelKnobsJ17.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsJF17.LOWER_LARGE_FREQ_WHEEL_INC:
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentJ17RadioMode.COM1:
+                                    case CurrentJF17RadioMode.COM1:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm1BigFrequencyStandby >= 173)
@@ -481,7 +481,7 @@ namespace NonVisuals.Radios
                                             _comm1BigFrequencyStandby++;
                                             break;
                                         }
-                                    case CurrentJ17RadioMode.COM2:
+                                    case CurrentJF17RadioMode.COM2:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm2BigFrequencyStandby >= 173)
@@ -497,11 +497,11 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelKnobsJ17.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsJF17.LOWER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentJ17RadioMode.COM1:
+                                    case CurrentJF17RadioMode.COM1:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm1BigFrequencyStandby <= 225 && _comm1BigFrequencyStandby > 173)
@@ -519,7 +519,7 @@ namespace NonVisuals.Radios
                                             _comm1BigFrequencyStandby--;
                                             break;
                                         }
-                                    case CurrentJ17RadioMode.COM2:
+                                    case CurrentJF17RadioMode.COM2:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm2BigFrequencyStandby <= 225 && _comm2BigFrequencyStandby > 173)
@@ -541,11 +541,11 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelKnobsJ17.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsJF17.LOWER_SMALL_FREQ_WHEEL_INC:
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentJ17RadioMode.COM1:
+                                    case CurrentJF17RadioMode.COM1:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm1SmallFrequencyStandby >= 975)
@@ -558,7 +558,7 @@ namespace NonVisuals.Radios
                                             _comm1SmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
-                                    case CurrentJ17RadioMode.COM2:
+                                    case CurrentJF17RadioMode.COM2:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm2SmallFrequencyStandby >= 975)
@@ -574,11 +574,11 @@ namespace NonVisuals.Radios
                                 break;
                             }
 
-                        case RadioPanelKnobsJ17.LOWER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsJF17.LOWER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 switch (_currentLowerRadioMode)
                                 {
-                                    case CurrentJ17RadioMode.COM1:
+                                    case CurrentJF17RadioMode.COM1:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm1SmallFrequencyStandby == 0)
@@ -589,7 +589,7 @@ namespace NonVisuals.Radios
                                             _comm1SmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
                                             break;
                                         }
-                                    case CurrentJ17RadioMode.COM2:
+                                    case CurrentJF17RadioMode.COM2:
                                         {
                                             /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
                                             if (_comm2SmallFrequencyStandby == 0)
@@ -617,79 +617,79 @@ namespace NonVisuals.Radios
             {
                 foreach (var radioPanelKnobObject in hashSet)
                 {
-                    var radioPanelKnob = (RadioPanelKnobJ17)radioPanelKnobObject;
+                    var radioPanelKnob = (RadioPanelKnobJF17)radioPanelKnobObject;
 
                     switch (radioPanelKnob.RadioPanelPZ69Knob)
                     {
-                        case RadioPanelKnobsJ17.UPPER_COM1:
+                        case RadioPanelKnobsJF17.UPPER_COM1:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentJ17RadioMode.COM1;
+                                    _currentUpperRadioMode = CurrentJF17RadioMode.COM1;
                                 }
                                 break;
                             }
-                        case RadioPanelKnobsJ17.UPPER_COM2:
+                        case RadioPanelKnobsJF17.UPPER_COM2:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentJ17RadioMode.COM2;
+                                    _currentUpperRadioMode = CurrentJF17RadioMode.COM2;
                                 }
                                 break;
                             }
-                        case RadioPanelKnobsJ17.UPPER_NAV1:
-                        case RadioPanelKnobsJ17.UPPER_NAV2:
-                        case RadioPanelKnobsJ17.UPPER_ADF:
-                        case RadioPanelKnobsJ17.UPPER_DME:
-                        case RadioPanelKnobsJ17.UPPER_XPDR:
+                        case RadioPanelKnobsJF17.UPPER_NAV1:
+                        case RadioPanelKnobsJF17.UPPER_NAV2:
+                        case RadioPanelKnobsJF17.UPPER_ADF:
+                        case RadioPanelKnobsJF17.UPPER_DME:
+                        case RadioPanelKnobsJF17.UPPER_XPDR:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentJ17RadioMode.NO_USE;
+                                    _currentUpperRadioMode = CurrentJF17RadioMode.NO_USE;
                                 }
                                 break;
                             }
-                        case RadioPanelKnobsJ17.LOWER_COM1:
+                        case RadioPanelKnobsJF17.LOWER_COM1:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentLowerRadioMode = CurrentJ17RadioMode.COM1;
+                                    _currentLowerRadioMode = CurrentJF17RadioMode.COM1;
                                 }
                                 break;
                             }
-                        case RadioPanelKnobsJ17.LOWER_COM2:
+                        case RadioPanelKnobsJF17.LOWER_COM2:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentLowerRadioMode = CurrentJ17RadioMode.COM2;
+                                    _currentLowerRadioMode = CurrentJF17RadioMode.COM2;
                                 }
                                 break;
                             }
-                        case RadioPanelKnobsJ17.LOWER_NAV1:
-                        case RadioPanelKnobsJ17.LOWER_NAV2:
-                        case RadioPanelKnobsJ17.LOWER_ADF:
-                        case RadioPanelKnobsJ17.LOWER_DME:
-                        case RadioPanelKnobsJ17.LOWER_XPDR:
+                        case RadioPanelKnobsJF17.LOWER_NAV1:
+                        case RadioPanelKnobsJF17.LOWER_NAV2:
+                        case RadioPanelKnobsJF17.LOWER_ADF:
+                        case RadioPanelKnobsJF17.LOWER_DME:
+                        case RadioPanelKnobsJF17.LOWER_XPDR:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentLowerRadioMode = CurrentJ17RadioMode.NO_USE;
+                                    _currentLowerRadioMode = CurrentJF17RadioMode.NO_USE;
                                 }
                                 break;
                             }
-                        case RadioPanelKnobsJ17.UPPER_FREQ_SWITCH:
+                        case RadioPanelKnobsJF17.UPPER_FREQ_SWITCH:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    SendFrequencyToDCSBIOS(RadioPanelKnobsJ17.UPPER_FREQ_SWITCH);
+                                    SendFrequencyToDCSBIOS(RadioPanelKnobsJF17.UPPER_FREQ_SWITCH);
                                 }
                                 break;
                             }
-                        case RadioPanelKnobsJ17.LOWER_FREQ_SWITCH:
+                        case RadioPanelKnobsJF17.LOWER_FREQ_SWITCH:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    SendFrequencyToDCSBIOS(RadioPanelKnobsJ17.LOWER_FREQ_SWITCH);
+                                    SendFrequencyToDCSBIOS(RadioPanelKnobsJF17.LOWER_FREQ_SWITCH);
                                 }
                                 break;
                             }
@@ -739,7 +739,7 @@ namespace NonVisuals.Radios
 
         private void CreateRadioKnobs()
         {
-            SaitekPanelKnobs = RadioPanelKnobJ17.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobJF17.GetRadioPanelKnobs();
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }

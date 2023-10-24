@@ -21,14 +21,14 @@
     /// </summary>
     public partial class RadioPanelPZ69UserControlJF17 : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
-        private readonly RadioPanelPZ69F15E _radioPanelPZ69;
+        private readonly RadioPanelPZ69JF17 _radioPanelPZ69;
 
         public RadioPanelPZ69UserControlJF17(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
             
             HideAllImages();
-            _radioPanelPZ69 = new RadioPanelPZ69F15E(hidSkeleton)
+            _radioPanelPZ69 = new RadioPanelPZ69JF17(hidSkeleton)
             {
                 FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
             };
@@ -99,11 +99,11 @@
             {
                 foreach (var radioKnobO in knobs)
                 {
-                    var radioKnob = (RadioPanelKnobF15E)radioKnobO;
+                    var radioKnob = (RadioPanelKnobJF17)radioKnobO;
 
                     switch (radioKnob.RadioPanelPZ69Knob)
                     {
-                        case RadioPanelKnobsF15E.UPPER_VHF:
+                        case RadioPanelKnobsJF17.UPPER_COM1:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -113,7 +113,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_UHF:
+                        case RadioPanelKnobsJF17.UPPER_COM2:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -123,7 +123,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_NAV1:
+                        case RadioPanelKnobsJF17.UPPER_NAV1:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -133,7 +133,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_NAV2:
+                        case RadioPanelKnobsJF17.UPPER_NAV2:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -143,7 +143,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_ADF:
+                        case RadioPanelKnobsJF17.UPPER_ADF:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -153,7 +153,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_DME:
+                        case RadioPanelKnobsJF17.UPPER_DME:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -163,7 +163,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_XPDR:
+                        case RadioPanelKnobsJF17.UPPER_XPDR:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -173,7 +173,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_VHF:
+                        case RadioPanelKnobsJF17.LOWER_COM1:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -183,7 +183,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_UHF:
+                        case RadioPanelKnobsJF17.LOWER_COM2:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -193,7 +193,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_NAV1:
+                        case RadioPanelKnobsJF17.LOWER_NAV1:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -203,7 +203,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_NAV2:
+                        case RadioPanelKnobsJF17.LOWER_NAV2:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -213,7 +213,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_ADF:
+                        case RadioPanelKnobsJF17.LOWER_ADF:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -223,7 +223,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_DME:
+                        case RadioPanelKnobsJF17.LOWER_DME:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -233,7 +233,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_XPDR:
+                        case RadioPanelKnobsJF17.LOWER_XPDR:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -243,7 +243,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsJF17.UPPER_SMALL_FREQ_WHEEL_INC:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -253,7 +253,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsJF17.UPPER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -263,7 +263,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsJF17.UPPER_LARGE_FREQ_WHEEL_INC:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -273,7 +273,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsJF17.UPPER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -283,7 +283,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsJF17.LOWER_SMALL_FREQ_WHEEL_INC:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -293,7 +293,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsJF17.LOWER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -303,7 +303,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsJF17.LOWER_LARGE_FREQ_WHEEL_INC:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -313,7 +313,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsJF17.LOWER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -323,7 +323,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.UPPER_FREQ_SWITCH:
+                        case RadioPanelKnobsJF17.UPPER_FREQ_SWITCH:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -333,7 +333,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelKnobsF15E.LOWER_FREQ_SWITCH:
+                        case RadioPanelKnobsJF17.LOWER_FREQ_SWITCH:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
