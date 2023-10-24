@@ -28,7 +28,7 @@
     </Authors>
     <PackageId>DCSFlightpanels (DCSFP)</PackageId>
     <Version>1.0.0</Version>
-    <AssemblyVersion>4.10.4</AssemblyVersion>
+    <AssemblyVersion>4.10.5</AssemblyVersion>
     <FileVersion>
     </FileVersion>
     <ApplicationIcon>Images\UI\flightpanels02_8Rc_icon.ico</ApplicationIcon>
@@ -122,6 +122,7 @@
     <Resource Include="Images\F-14\F-14 RIO Datalink.png" />
     <Resource Include="Images\F-14\F-14 TACAN.png" />
     <Resource Include="Images\F-14\rio-cap-f14.png" />
+    <Resource Include="Images\F-15E\F15E_radio_screen.png" />
     <Resource Include="Images\F-16C\F-16C_50_COM-1-2-VOL.png" />
     <Resource Include="Images\F-16C\F-16C_50_DED.png" />
     <Resource Include="Images\F-16C\F-16C_50_EHSI.png" />
@@ -222,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Windows\LinkMappingWindow.xaml.cs" />
+    <None Remove="Images\F-15E\F15E_radio_screen.png" />
     <None Remove="Images\rio-cap-f14.png" />
     <None Remove="Images\Switchpanel\black.png" />
     <None Remove="Images\Switchpanel\green.png" />
