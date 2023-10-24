@@ -34,12 +34,13 @@ namespace DCSFPTests.NonVisuals
             Assert.Throws<ArgumentOutOfRangeException>(() => BacklitPanelBIP.GetLedPosition(inputString));
         }
 
+
         [Theory]//             ImagePosition21
-        [InlineData("______________1aa")]
-        [InlineData("______________1_a")]
-        [InlineData("______________1_b")]
-        [InlineData("______________0_b")]
-        [InlineData("______________9_x")]
+		[InlineData("____________1aa")]
+        [InlineData("____________1_a")]
+        [InlineData("____________1_b")]
+        [InlineData("____________0_b")]
+        [InlineData("____________9_x")]
         public void GetLedPosition_Throws_FormatException_If17thCharIsNotInt(string inputString)
         {
             Assert.Throws<FormatException>(() => BacklitPanelBIP.GetLedPosition(inputString));
