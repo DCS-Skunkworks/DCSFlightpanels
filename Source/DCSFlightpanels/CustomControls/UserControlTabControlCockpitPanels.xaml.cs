@@ -18,8 +18,8 @@ namespace DCSFlightpanels.CustomControls
     {
         public int SelectedIndex
         {
-            get { return TabControlPanels.SelectedIndex;}
-            set { TabControlPanels.SelectedIndex = value;}
+            get { return TabControlPanels.SelectedIndex; }
+            set { TabControlPanels.SelectedIndex = value; }
         }
 
         public UserControlTabControlCockpitPanels()
@@ -37,7 +37,7 @@ namespace DCSFlightpanels.CustomControls
                     return;
                 }
 
-                
+
                 switch (hidSkeleton.GamingPanelType)
                 {
                     case GamingPanelEnum.CDU737:
@@ -45,8 +45,8 @@ namespace DCSFlightpanels.CustomControls
                             var tabItem = new TabItem { Header = "CDU 737" };
 
                             IGamingPanelUserControl panel = UserControlBaseFactoryHelpers.GetUSerControl(GamingPanelEnum.CDU737,
-                                                dcsAircraft,
-                                                hidSkeleton, tabItem);
+                                dcsAircraft,
+                                hidSkeleton, tabItem);
                             if (panel != null)
                             {
                                 tabItem.Content = panel;
@@ -146,7 +146,7 @@ namespace DCSFlightpanels.CustomControls
                             if (DCSAircraft.IsKeyEmulator(dcsAircraft))
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton);
-                                    tabItem.Content = radioPanelPZ69UserControl;
+                                tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
 
@@ -377,9 +377,27 @@ namespace DCSFlightpanels.CustomControls
 
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
+                            else if (DCSAircraft.IsC101(dcsAircraft) && !dcsAircraft.UseGenericRadio)
+                            {
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlC101(hidSkeleton);
+                                tabItem.Content = radioPanelPZ69UserControl;
+                                TabControlPanels.Items.Add(tabItem);
+                                profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
+
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            }
                             else if (DCSAircraft.IsF15E(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF15E(hidSkeleton);
+                                tabItem.Content = radioPanelPZ69UserControl;
+                                TabControlPanels.Items.Add(tabItem);
+                                profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
+
+                                AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
+                            }
+                            else if (DCSAircraft.IsJF17(dcsAircraft) && !dcsAircraft.UseGenericRadio)
+                            {
+                                var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlJF17(hidSkeleton);
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -407,6 +425,7 @@ namespace DCSFlightpanels.CustomControls
                             break;
                         }
                 }
+
 
                 SortTabs();
 
@@ -458,7 +477,7 @@ namespace DCSFlightpanels.CustomControls
 
             TabControlPanels.SelectedIndex = 0;
         }
-        
+
         public void DisposePanel(HIDSkeleton hidSkeleton)
         {
             void Action()
