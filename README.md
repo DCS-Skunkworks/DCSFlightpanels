@@ -70,7 +70,6 @@ Links
 * [Tutorial #1 (Key emulation)](https://youtu.be/mgm0JfldgYs)
 * [Tutorial #2 (DCS-BIOS)](https://youtu.be/1CnmIdzqOJs): 
 * [Tutorial #3 (Formulas & DCS-BIOS)](https://youtu.be/ajvZLgPzD0M)
-* [Support thread](https://forums.eagle.ru/showthread.php?t=137670)
 * [Demo video key emulation](https://www.youtube.com/watch?v=_TurR-WTgkY)
 * [Demo video A-10C](https://www.youtube.com/watch?v=adaLWO-nTwU)
 * [Demo video UH-1H](https://www.youtube.com/watch?v=jQxLX7UHMR8)
