@@ -380,23 +380,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        /*
-        private void SetGroupboxVisibility(RadioPanelPZ69KnobsUH1H panelPZ69KnobsUH1H)
-        {
-            try
-            {
-                GroupLowerSelectorKnobUHF.Visibility = panelPZ69KnobsUH1H == RadioPanelPZ69KnobsUH1H.UPPER_UHF ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobVHFFM.Visibility = panelPZ69KnobsUH1H == RadioPanelPZ69KnobsUH1H.UPPER_VHFFM ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobVHFAM.Visibility = panelPZ69KnobsUH1H == RadioPanelPZ69KnobsUH1H.UPPER_VHFAM ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobTACAN.Visibility = panelPZ69KnobsUH1H == RadioPanelPZ69KnobsUH1H.UPPER_TACAN ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobILS.Visibility = panelPZ69KnobsUH1H == RadioPanelPZ69KnobsUH1H.UPPER_ILS ? Visibility.Visible : Visibility.Hidden;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(129814, ex);
-            }
-        }
-        */
+
         private void HideAllImages()
         {
             TopLeftCom1.Visibility = Visibility.Collapsed;
