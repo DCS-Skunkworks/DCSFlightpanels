@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Diagnostics;
 
 namespace NonVisuals.Radios.RadioControls
 {
@@ -44,14 +45,18 @@ namespace NonVisuals.Radios.RadioControls
         private string _cockpitFrequency = "108.000";
         private readonly int _frequencyBandSkipCount; // must skip, otherwise it is difficult getting correct band
         private int _frequencyBandSkipCounter;
+        private ARC210FrequencyBand[] _supportedFrequencyBands;
 
-        public ARC210(string dcsbiosIdentifier, string frequency, uint higherChangeRate, int frequencyBandSkipCount)
+        public ARC210(string dcsbiosIdentifier, ARC210FrequencyBand initialFrequencyBand, uint higherChangeRate, int frequencyBandSkipCount, ARC210FrequencyBand[] supportedFrequencyBands)
         {
             _dcsbiosIdentifier = dcsbiosIdentifier.Trim();
-            SetStandbyFrequency(frequency);
             _higherChangeRate = higherChangeRate;
             _frequencyBandSkipCount = frequencyBandSkipCount;
-            SetFrequencyBand(GetFrequencyBand(GetStandbyFrequency()));
+            _supportedFrequencyBands = supportedFrequencyBands;
+            SetFrequencyBand(initialFrequencyBand);
+            SetDefaultStandbyFromFrequencyBand(initialFrequencyBand);
+
+            if(supportedFrequencyBands.i)
         }
 
         /* (FM) 30.000 to 87.975 MHz */
@@ -341,14 +346,14 @@ namespace NonVisuals.Radios.RadioControls
             _currentARC210FrequencyBand = _newARC210FrequencyBand;
         }
 
-        private bool SwitchFrequencyBands(ARC210FrequencyBand newBand, ARC210FrequencyBand oldBand)
+        private bool SwitchFrequencyBands(ARC210FrequencyBand newFrequencyBandBand, ARC210FrequencyBand oldFrequencyBandBand)
         {
-            if (newBand == oldBand)
+            if (newFrequencyBandBand == oldFrequencyBandBand)
             {
                 return false;
             }
 
-            switch (oldBand)
+            switch (oldFrequencyBandBand)
             {
                 case ARC210FrequencyBand.FM:
                     {
@@ -376,7 +381,40 @@ namespace NonVisuals.Radios.RadioControls
                     }
             }
 
-            switch (newBand)
+            switch (newFrequencyBandBand)
+            {
+                case ARC210FrequencyBand.FM:
+                    {
+                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[FM]);
+                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[FM]);
+                        break;
+                    }
+                case ARC210FrequencyBand.VHF1:
+                    {
+                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[VHF1]);
+                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[VHF1]);
+                        break;
+                    }
+                case ARC210FrequencyBand.VHF2:
+                    {
+                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[VHF2]);
+                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[VHF2]);
+                        break;
+                    }
+                case ARC210FrequencyBand.UHF:
+                    {
+                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[UHF]);
+                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[UHF]);
+                        break;
+                    }
+            }
+
+            return true;
+        }
+
+        private bool SetDefaultStandbyFromFrequencyBand(ARC210FrequencyBand frequencyBand)
+        {
+            switch (frequencyBand)
             {
                 case ARC210FrequencyBand.FM:
                     {
@@ -455,6 +493,16 @@ namespace NonVisuals.Radios.RadioControls
         private uint GetSmallFrequencyStandby()
         {
             return _arc210SmallFrequencyStandby;
+        }
+
+        private bool IsFrequencyBandSupported(ARC210FrequencyBand frequencyBand)
+        {
+            foreach (var supportedBand in _supportedFrequencyBands)
+            {
+                if (frequencyBand == supportedBand) return true;
+            }
+
+            return false;
         }
     }
 }

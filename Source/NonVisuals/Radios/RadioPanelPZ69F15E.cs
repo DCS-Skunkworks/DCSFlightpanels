@@ -46,7 +46,11 @@ namespace NonVisuals.Radios
         /* VHF AM 118.000 to 173.975 MHz */
         /* UHF AM 225.000 to 399.975 MHz */
         private readonly object _lockARC210Object = new();
-        private readonly ARC210 _arc210Radio = new ("ARC_210_RADIO", "108.00", 25, 5);
+        private readonly ARC210 _arc210Radio = new ("ARC_210_RADIO", 
+            ARC210FrequencyBand.VHF2, 
+            25, 
+            5, 
+            new ARC210FrequencyBand[] { ARC210FrequencyBand.FM ,ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF});
         private DCSBIOSOutput _arc210RadioControl;
 
         /*UHF*/
