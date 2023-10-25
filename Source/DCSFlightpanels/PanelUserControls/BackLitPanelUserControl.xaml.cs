@@ -38,7 +38,7 @@
         {
             InitializeComponent();
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
-            
+            _backlitPanelBIP.InitPanel();
             AppEventHandler.AttachGamingPanelListener(this);
             AppEventHandler.AttachLEDLightListener(this);
         }
@@ -68,7 +68,6 @@
         {
             if (UserControlLoaded) return;
 
-            _backlitPanelBIP.InitPanel();
             DarkMode.SetFrameworkElementDarkMode(this);
             Init();
             SetContextMenuClickHandlers();

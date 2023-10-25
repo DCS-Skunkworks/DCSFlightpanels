@@ -40,6 +40,7 @@ namespace DCSFlightpanels.PanelUserControls
             InitializeComponent();
             
             _tpmPanel = new TPMPanel(hidSkeleton);
+            _tpmPanel.InitPanel();
 
             AppEventHandler.AttachGamingPanelListener(this);
         }
@@ -68,7 +69,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             if (UserControlLoaded) return;
 
-            _tpmPanel.InitPanel();
             DarkMode.SetFrameworkElementDarkMode(this);
             if (!_once)
             {

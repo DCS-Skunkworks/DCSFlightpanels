@@ -35,7 +35,8 @@
             InitializeComponent();
             
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
-            
+            _streamDeckPanel.InitPanel();
+
             UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
             UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
 
@@ -122,7 +123,6 @@
             DarkMode.SetFrameworkElementDarkMode(this);
             if (!UserControlLoaded)
             {
-                _streamDeckPanel.InitPanel();
                 UCStreamDeckButtonAction.Update();
                 UserControlLoaded = true;
             }

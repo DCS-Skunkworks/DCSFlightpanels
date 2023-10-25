@@ -49,7 +49,8 @@
             {
                 FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
             };
-            
+            _radioPanelPZ69.InitPanel();
+
             AppEventHandler.AttachGamingPanelListener(this);
         }
 
@@ -83,7 +84,6 @@
             DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
-                _radioPanelPZ69.InitPanel();
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
                 SetTextBoxBills();
                 SetButtonBills();

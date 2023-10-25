@@ -124,21 +124,20 @@ namespace NonVisuals.Panels.StreamDeck.Panels
         {
             try
             {
-
                 if (!_unitTesting)
                 {
                     _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(HIDSkeletonBase.HIDInstance, false);
                     _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
                 }
-                SDEventHandler.AttachStreamDeckListener(this);
-                SDEventHandler.AttachStreamDeckConfigListener(this);
 
                 _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
                 lock (LockObjectStreamDeckPanels)
                 {
                     StreamDeckPanels.Add(this);
                 }
-
+                
+                SDEventHandler.AttachStreamDeckListener(this);
+                SDEventHandler.AttachStreamDeckConfigListener(this);
                 StartListeningForHidPanelChanges();
             }
             catch (Exception ex)

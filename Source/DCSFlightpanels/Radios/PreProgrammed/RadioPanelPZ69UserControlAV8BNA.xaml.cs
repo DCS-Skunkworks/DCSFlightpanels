@@ -32,7 +32,8 @@
             {
                 FrequencyKnobSensitivity = -1//doesn't work with 0 value Settings.Default.RadioFrequencyKnobSensitivity;
             };
-            
+            _radioPanelPZ69.InitPanel();
+
             AppEventHandler.AttachGamingPanelListener(this);
         }
 
@@ -61,7 +62,6 @@
             DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
-                _radioPanelPZ69.InitPanel();
                 UserControlLoaded = true;
             }
             catch (Exception ex)

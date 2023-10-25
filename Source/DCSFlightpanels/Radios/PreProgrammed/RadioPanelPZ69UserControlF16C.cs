@@ -32,7 +32,8 @@
             {
                 FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
             };
-            
+            _radioPanelPZ69.InitPanel();
+
             AppEventHandler.AttachGamingPanelListener(this);
 
             //LoadConfiguration();
@@ -63,7 +64,6 @@
             DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
-                _radioPanelPZ69.InitPanel();
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
                 ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
                 _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());

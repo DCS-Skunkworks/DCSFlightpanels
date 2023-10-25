@@ -41,6 +41,7 @@ namespace DCSFlightpanels.PanelUserControls
             InitializeComponent();
             
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
+            _multiPanelPZ70.InitPanel();
             AppEventHandler.AttachGamingPanelListener(this); 
 
             HideAllImages();
@@ -69,7 +70,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             if (UserControlLoaded) return;
 
-            _multiPanelPZ70.InitPanel();
             DarkMode.SetFrameworkElementDarkMode(this);
             ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
             SetTextBoxBills();

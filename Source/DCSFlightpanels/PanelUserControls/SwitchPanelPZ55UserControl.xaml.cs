@@ -46,6 +46,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             InitializeComponent();
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
+            _switchPanelPZ55.InitPanel();
 
             AppEventHandler.AttachGamingPanelListener(this);
             AppEventHandler.AttachLEDLightListener(this);
@@ -76,7 +77,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             if (UserControlLoaded) return;
 
-            _switchPanelPZ55.InitPanel();
             DarkMode.SetFrameworkElementDarkMode(this);
             SetTextBoxBills();
             LoadComboBoxesManualLeds();

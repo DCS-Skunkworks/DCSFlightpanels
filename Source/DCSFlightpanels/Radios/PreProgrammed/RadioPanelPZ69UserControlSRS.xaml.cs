@@ -37,6 +37,7 @@
                 FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity,
                 SmallFreqStepping = Settings.Default.SRSSmallFreqStepping
             };
+            _radioPanelPZ69SRS.InitPanel();
 
             AppEventHandler.AttachGamingPanelListener(this);
         }
@@ -66,7 +67,6 @@
             DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
-                _radioPanelPZ69SRS.InitPanel();
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
                 ComboBoxSmallFreqStepping.SelectedValue = Settings.Default.SRSSmallFreqStepping;
                 UserControlLoaded = true;

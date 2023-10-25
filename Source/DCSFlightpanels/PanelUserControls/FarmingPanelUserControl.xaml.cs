@@ -38,7 +38,7 @@
             InitializeComponent();
             
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);
-
+            _farmingSidePanel.InitPanel();
             AppEventHandler.AttachGamingPanelListener(this);
             HideAllImages();
         }
@@ -67,7 +67,6 @@
         {
             if (UserControlLoaded) return;
 
-            _farmingSidePanel.InitPanel();
             DarkMode.SetFrameworkElementDarkMode(this);
             SetTextBoxBills();
             ShowGraphicConfiguration();
