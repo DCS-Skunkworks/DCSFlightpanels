@@ -382,23 +382,7 @@
                 Common.ShowErrorMessageBox( ex);
             }
         }
-        /*
-        private void SetGroupboxVisibility(RadioPanelPZ69KnobsFA18C panelPZ69KnobsFA18C)
-        {
-            try
-            {
-                GroupLowerSelectorKnobUHF.Visibility = panelPZ69KnobsFA18C == RadioPanelPZ69KnobsFA18C.UPPER_UHF ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobVHFFM.Visibility = panelPZ69KnobsFA18C == RadioPanelPZ69KnobsFA18C.UPPER_VHFFM ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobVHFAM.Visibility = panelPZ69KnobsFA18C == RadioPanelPZ69KnobsFA18C.UPPER_VHFAM ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobTACAN.Visibility = panelPZ69KnobsFA18C == RadioPanelPZ69KnobsFA18C.UPPER_TACAN ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobILS.Visibility = panelPZ69KnobsFA18C == RadioPanelPZ69KnobsFA18C.UPPER_ILS ? Visibility.Visible : Visibility.Hidden;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(129814, ex);
-            }
-        }
-        */
+
         private void HideAllImages()
         {
             TopLeftCom1.Visibility = Visibility.Collapsed;
@@ -454,40 +438,6 @@
                     Settings.Default.RadioFrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
                     _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
                     Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void ComboBoxSynchSleepTime_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (UserControlLoaded)
-                {
-                    /*Settings.Default.BAKDialSynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
-                    _radioPanelPZ69.SynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
-                    Settings.Default.Save();*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void ComboBoxSynchResetTimeout_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (UserControlLoaded)
-                {
-                    /*Settings.Default.BAKDialResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
-                    _radioPanelPZ69.ResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
-                    Settings.Default.Save();*/
                 }
             }
             catch (Exception ex)
