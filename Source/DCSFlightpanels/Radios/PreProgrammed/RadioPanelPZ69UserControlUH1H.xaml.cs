@@ -26,7 +26,7 @@
         public RadioPanelPZ69UserControlUH1H(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            
+
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69UH1H(hidSkeleton)
             {
@@ -53,7 +53,31 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
+        public override void Init()
+        {
+            try
+            {
+                _radioPanelPZ69.InitPanel();
+                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
+                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
+                _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void RadioPanelPZ69UserControlUH1H_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!UserControlLoaded)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+            }
+            UserControlLoaded = true;
+        }
+
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
@@ -70,7 +94,7 @@
         }
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
-        
+
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
@@ -82,16 +106,16 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
-        public void ProfileEvent(object sender, ProfileEventArgs e){}
-        
+        public void ProfileEvent(object sender, ProfileEventArgs e) { }
+
         public void SettingsApplied(object sender, PanelInfoArgs e) { }
 
         public void SettingsModified(object sender, PanelInfoArgs e) { }
-        
+
         private void SetGraphicsState(HashSet<object> knobs)
         {
             try
@@ -353,7 +377,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
         /*
@@ -415,7 +439,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -432,23 +456,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void RadioPanelPZ69UserControlUH1H_OnLoaded(object sender, RoutedEventArgs e)
-        {
-			DarkMode.SetFrameworkElementDarkMode(this);
-            try
-            {
-                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
-                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
-                _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                UserControlLoaded = true;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -465,7 +473,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 

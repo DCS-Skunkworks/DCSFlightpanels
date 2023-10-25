@@ -26,16 +26,14 @@ namespace DCSFlightpanels.PanelUserControls
     using NonVisuals.Panels.Saitek;
     using NonVisuals.Panels;
     using NonVisuals.HID;
+    using DCSFlightpanels.Properties;
 
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
     public partial class SwitchPanelPZ55UserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI, ILedLightPanelListener
     {
-
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
-
-        private bool _textBoxBillsSet;
 
         private readonly BitmapImage _darkImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/Switchpanel/black.png"));
         private readonly BitmapImage _redImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/Switchpanel/red.png"));
@@ -71,19 +69,26 @@ namespace DCSFlightpanels.PanelUserControls
             base.Dispose(disposing);
         }
 
-        private bool _once = true;
+        public override void Init()
+        {
+            try
+            {
+                _switchPanelPZ55.InitPanel();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElementDarkMode(this);
-            SetTextBoxBills();
-            LoadComboBoxesManualLeds();
-            SetContextMenuClickHandlers();
-            UserControlLoaded = true;
-            ShowGraphicConfiguration();
-
-            if (_once)
+            if (!UserControlLoaded || !TextBoxBillsSet)
             {
-                _once = false;
+                DarkMode.SetFrameworkElementDarkMode(this);
+                SetTextBoxBills(); 
+                LoadComboBoxesManualLeds();
+                SetContextMenuClickHandlers();
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
                     if (image.Name.StartsWith("ImagePZ55LED") && Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
@@ -101,6 +106,8 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
             }
+            UserControlLoaded = true;
+            ShowGraphicConfiguration();
         }
 
         private void LoadComboBoxesManualLeds()
@@ -339,7 +346,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetTextBoxBills()
         {
-            if (_textBoxBillsSet || !Common.FindVisualChildren<PZ55TextBox>(this).Any())
+            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ55TextBox>(this).Any())
             {
                 return;
             }
@@ -352,7 +359,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 textBox.Bill = new BillPZ55(this, _switchPanelPZ55, textBox);
             }
-            _textBoxBillsSet = true;
+            TextBoxBillsSet = true;
         }
 
         private void SetContextMenuClickHandlers()
@@ -706,7 +713,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!UserControlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxBillsSet)
                 {
                     return;
                 }
@@ -749,7 +756,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
 
-                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
+                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor); //Maybe we can remove this function and only retain the TextBoxBillsSet = true; ?
                 foreach (var bipLinkPZ55 in _switchPanelPZ55.BIPLinkHashSet)
                 {
                     var textBox = (PZ55TextBox)GetTextBox(bipLinkPZ55.SwitchPanelPZ55Key, bipLinkPZ55.WhenTurnedOn);
@@ -782,7 +789,7 @@ namespace DCSFlightpanels.PanelUserControls
             //        textBox.Background = brush;
             //    }
             //}
-            _textBoxBillsSet = true;
+            TextBoxBillsSet = true;
         }
 
         private void SetConfigExistsImageVisibility()

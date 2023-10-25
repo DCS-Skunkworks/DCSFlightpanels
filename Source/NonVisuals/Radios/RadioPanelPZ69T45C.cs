@@ -199,12 +199,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69T45C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -227,6 +222,33 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void InitPanel()
+        {
+            CreateRadioKnobs();
+
+            // COMM 1 VUHF1
+            _vuhf1DcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_1_HIGH_FREQ");
+            _vuhf1DcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_1_DIAL3_FREQ");
+            _vuhf1DcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_1_DIAL4_FREQ");
+
+            // COMM 2 VUHF2
+            _vuhf2DcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_2_HIGH_FREQ");
+            _vuhf2DcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_2_DIAL3_FREQ");
+            _vuhf2DcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_2_DIAL4_FREQ");
+
+            // NAV 1 TACAN
+            _tacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHAN_10");
+            _tacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHAN_1");
+
+            // NAV 2 VOR
+            _vorDcsbiosOutputMhzDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VOR_ILS_FREQ_1");
+            _vorDcsbiosOutputKhzDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VOR_ILS_FREQ_50");
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -2148,38 +2170,6 @@ namespace NonVisuals.Radios
                     }
                 }
                 AdjustFrequency(hashSet);
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // COMM 1 VUHF1
-                _vuhf1DcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_1_HIGH_FREQ");
-                _vuhf1DcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_1_DIAL3_FREQ");
-                _vuhf1DcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_1_DIAL4_FREQ");
-
-                // COMM 2 VUHF2
-                _vuhf2DcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_2_HIGH_FREQ");
-                _vuhf2DcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_2_DIAL3_FREQ");
-                _vuhf2DcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM_2_DIAL4_FREQ");
-
-                // NAV 1 TACAN
-                _tacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHAN_10");
-                _tacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHAN_1");
-
-                // NAV 2 VOR
-                _vorDcsbiosOutputMhzDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VOR_ILS_FREQ_1");
-                _vorDcsbiosOutputKhzDial = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VOR_ILS_FREQ_50");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
             }
         }
 

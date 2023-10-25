@@ -68,12 +68,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69F15E(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -94,7 +89,22 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
+        public override void InitPanel()
+        {
+            CreateRadioKnobs();
 
+            // VHF
+            _arc210RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("ARC_210_RADIO");
+
+            // UHF
+            _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_RADIO");
+
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
+        }
+        
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             UpdateCounter(e.Address, e.Data);
@@ -689,25 +699,7 @@ namespace NonVisuals.Radios
                 AdjustFrequency(hashSet);
             }
         }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // VHF
-                _arc210RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("ARC_210_RADIO");
-
-                // UHF
-                _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_RADIO");
-
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false)
         {
         }

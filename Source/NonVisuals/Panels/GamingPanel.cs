@@ -16,8 +16,8 @@
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty, IDisposable
     {
         internal static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
-        public abstract void Startup();
+        
+        public abstract void InitPanel();
         public abstract void Identify();
         public abstract void ClearSettings(bool setIsDirty = false);
         public abstract void ImportSettings(GenericPanelBinding genericPanelBinding);

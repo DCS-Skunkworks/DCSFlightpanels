@@ -54,7 +54,32 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
+        public override void Init()
+        {
+            try
+            {
+                _radioPanelPZ69.InitPanel();
+                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
+                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
+                _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
+                UserControlLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void RadioPanelPZ69UserControlP51D_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!UserControlLoaded)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+            }
+            UserControlLoaded = true;
+        }
+
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
@@ -351,22 +376,6 @@
                             }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void RadioPanelPZ69UserControlP51D_OnLoaded(object sender, RoutedEventArgs e)
-        {
-			DarkMode.SetFrameworkElementDarkMode(this);
-            try
-            {
-                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
-                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
-                _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                UserControlLoaded = true;
             }
             catch (Exception ex)
             {

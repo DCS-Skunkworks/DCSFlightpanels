@@ -22,7 +22,6 @@
     public partial class RadioPanelPZ69UserControlAV8BNA : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69AV8BNA _radioPanelPZ69;
-        private bool _userControlLoaded;
 
         public RadioPanelPZ69UserControlAV8BNA(HIDSkeleton hidSkeleton)
         {
@@ -33,7 +32,7 @@
             {
                 FrequencyKnobSensitivity = -1//doesn't work with 0 value Settings.Default.RadioFrequencyKnobSensitivity;
             };
-            
+
             AppEventHandler.AttachGamingPanelListener(this);
         }
 
@@ -55,7 +54,32 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
+        public override void Init()
+        {
+            try
+            {
+                _radioPanelPZ69.InitPanel();
+                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
+                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
+                _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
+                UserControlLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void RadioPanelPZ69UserControlAV8BNA_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!UserControlLoaded)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+            }
+            UserControlLoaded = true;
+        }
+
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
@@ -409,7 +433,7 @@
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     Settings.Default.RadioFrequencyKnobSensitivity = -1;//doesn't work properly with 0 value int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
                     _radioPanelPZ69.FrequencyKnobSensitivity = -1;//int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
@@ -422,31 +446,11 @@
             }
         }
 
-        private void RadioPanelPZ69UserControlAV8BNA_OnLoaded(object sender, RoutedEventArgs e)
-        {
-			DarkMode.SetFrameworkElementDarkMode(this);
-            try
-            {
-                //ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
-
-                //ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
-                /*ComboBoxSynchSleepTime.SelectedValue = Settings.Default.BAKDialSynchSleepTime;
-                ComboBoxSynchResetTimeout.SelectedValue = Settings.Default.BAKDialResetSyncTimeout;
-                _radioPanelPZ69.ResetSyncTimeout = Settings.Default.BAKDialResetSyncTimeout;
-                _radioPanelPZ69.SynchSleepTime = Settings.Default.BAKDialSynchSleepTime;*/
-                _userControlLoaded = true;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
         private void ComboBoxSynchSleepTime_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     /*Settings.Default.BAKDialSynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
                     _radioPanelPZ69.SynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
@@ -463,7 +467,7 @@
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     /*Settings.Default.BAKDialResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
                     _radioPanelPZ69.ResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
@@ -480,7 +484,7 @@
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     Settings.Default.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
                     _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());

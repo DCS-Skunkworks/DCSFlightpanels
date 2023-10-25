@@ -1,6 +1,7 @@
 ﻿using ClassLibraryCommon;
 using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
+using DCSFlightpanels.PanelUserControls.CDU737;
 using DCSFlightpanels.Radios.Emulators;
 using DCSFlightpanels.Radios.PreProgrammed;
 using NonVisuals.EventArgs;
@@ -44,7 +45,7 @@ namespace DCSFlightpanels.CustomControls
                         {
                             var tabItem = new TabItem { Header = "CDU 737" };
 
-                            IGamingPanelUserControl panel = UserControlBaseFactoryHelpers.GetUSerControl(GamingPanelEnum.CDU737,
+                            var panel = UserControlBaseFactoryHelpers.GetUSerControl(GamingPanelEnum.CDU737,
                                 dcsAircraft,
                                 hidSkeleton, tabItem);
                             if (panel != null)
@@ -64,6 +65,7 @@ namespace DCSFlightpanels.CustomControls
                         {
                             var tabItem = new TabItem { Header = "PZ55" };
                             var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton);
+                            switchPanelPZ55UserControl.Init();
                             tabItem.Content = switchPanelPZ55UserControl;
                             TabControlPanels.Items.Add(tabItem);
                             profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -76,6 +78,7 @@ namespace DCSFlightpanels.CustomControls
                         {
                             var tabItem = new TabItem { Header = "PZ70" };
                             var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton);
+                            multiPanelUserControl.Init();
                             tabItem.Content = multiPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
                             profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -88,6 +91,7 @@ namespace DCSFlightpanels.CustomControls
                         {
                             var tabItem = new TabItem { Header = "B.I.P." };
                             var backLitPanelUserControl = new BackLitPanelUserControl(hidSkeleton);
+                            backLitPanelUserControl.Init();
                             tabItem.Content = backLitPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
                             profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -100,6 +104,7 @@ namespace DCSFlightpanels.CustomControls
                         {
                             var tabItem = new TabItem { Header = "TPM" };
                             var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton);
+                            tpmPanelUserControl.Init();
                             tabItem.Content = tpmPanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
                             profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -119,6 +124,7 @@ namespace DCSFlightpanels.CustomControls
                         {
                             var tabItemStreamDeck = new TabItem { Header = hidSkeleton.GamingPanelType.GetEnumDescriptionField() };
                             var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.GamingPanelType, hidSkeleton);
+                                streamDeckUserControl.Init();
                             tabItemStreamDeck.Content = streamDeckUserControl;
                             TabControlPanels.Items.Add(tabItemStreamDeck);
                             profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -132,6 +138,7 @@ namespace DCSFlightpanels.CustomControls
                         {
                             var tabItem = new TabItem { Header = "Side Panel" };
                             var farmingSidePanelUserControl = new FarmingPanelUserControl(hidSkeleton);
+                            farmingSidePanelUserControl.Init();
                             tabItem.Content = farmingSidePanelUserControl;
                             TabControlPanels.Items.Add(tabItem);
                             profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -146,6 +153,7 @@ namespace DCSFlightpanels.CustomControls
                             if (DCSAircraft.IsKeyEmulator(dcsAircraft))
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -155,6 +163,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled) || DCSAircraft.IsFlamingCliff(dcsAircraft))
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
@@ -164,6 +173,7 @@ namespace DCSFlightpanels.CustomControls
                             {
                                 // True means A-10C II
                                 UserControlBase radioPanelPZ69UserControl = dcsAircraft.Option1 ? new RadioPanelPZ69UserControlA10CII(hidSkeleton) : new RadioPanelPZ69UserControlA10C(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -173,6 +183,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsUH1H(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlUH1H(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -182,6 +193,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsMiG21Bis(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMiG21Bis(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -191,6 +203,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsKa50(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlKa50(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -200,6 +213,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsMi8MT(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi8(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -209,6 +223,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsBf109K4(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlBf109(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -218,6 +233,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsFW190D9(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFw190(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -227,6 +243,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsP51D(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP51D(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -236,6 +253,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsF86F(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF86F(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -245,6 +263,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsSpitfireLFMkIX(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSpitfireLFMkIX(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -254,6 +273,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsAJS37(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAJS37(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -263,6 +283,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsSA342(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSA342(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -272,6 +293,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsFA18C(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFA18C(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -281,6 +303,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsM2000C(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlM2000C(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -290,6 +313,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsF5E(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF5E(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -299,6 +323,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsF14B(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF14B(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -308,6 +333,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsAV8B(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAV8BNA(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -317,6 +343,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsP47D(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP47D(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -326,6 +353,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsT45C(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlT45C(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -335,6 +363,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsMi24P(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi24P(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -344,6 +373,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsAH64D(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAH64D(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -353,6 +383,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsF16C(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF16C(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -362,6 +393,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsMosquito(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMosquito(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -371,6 +403,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsYak52(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlYak52(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -380,6 +413,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsC101(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlC101(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -389,6 +423,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsF15E(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF15E(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -398,6 +433,7 @@ namespace DCSFlightpanels.CustomControls
                             else if (DCSAircraft.IsJF17(dcsAircraft) && !dcsAircraft.UseGenericRadio)
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlJF17(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));
@@ -407,6 +443,7 @@ namespace DCSFlightpanels.CustomControls
                             else
                             {
                                 var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlGeneric(hidSkeleton);
+                                radioPanelPZ69UserControl.Init();
                                 tabItem.Content = radioPanelPZ69UserControl;
                                 TabControlPanels.Items.Add(tabItem);
                                 profileFileHIDInstances.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDInstance, hidSkeleton.GamingPanelType));

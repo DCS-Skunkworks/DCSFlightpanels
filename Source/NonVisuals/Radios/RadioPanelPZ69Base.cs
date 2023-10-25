@@ -77,7 +77,6 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
-
         protected abstract void PZ69KnobChanged(IEnumerable<object> hashSet);
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)

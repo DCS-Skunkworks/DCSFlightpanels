@@ -45,10 +45,7 @@ namespace NonVisuals.Radios
         private double _lowerStandby = -1;
 
         public RadioPanelPZ69Emulator(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateSwitchKeys();
-            Startup();
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -67,18 +64,12 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
-        public sealed override void Startup()
+        public override void InitPanel()
         {
-            try
-            {
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
+            CreateSwitchKeys();
+            StartListeningForHidPanelChanges();
         }
-
+        
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
             ClearSettings();

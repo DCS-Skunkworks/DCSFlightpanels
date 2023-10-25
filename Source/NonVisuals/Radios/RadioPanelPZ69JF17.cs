@@ -62,12 +62,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69JF17(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -88,7 +83,21 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
+        public override void InitPanel()
+        {
+            CreateRadioKnobs();
 
+            // COMM1
+            _comm1RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM1");
+
+            // COMM2
+            _comm2RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM2");
+            
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
+        }
+        
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             UpdateCounter(e.Address, e.Data);
@@ -707,24 +716,6 @@ namespace NonVisuals.Radios
                     }
                 }
                 AdjustFrequency(hashSet);
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // COMM1
-                _comm1RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM1");
-
-                // COMM2
-                _comm2RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM2");
-
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
             }
         }
 

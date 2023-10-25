@@ -1,7 +1,7 @@
-﻿using NonVisuals.CockpitMaster.Switches;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using NonVisuals.CockpitMaster.Switches;
 
-namespace NonVisuals.CockpitMaster.Preprogrammed
+namespace NonVisuals.CockpitMaster.PreProgrammed
 {
     public class CDUMappedCommandKeyFA18C : CDUMappedCommandKey
     {

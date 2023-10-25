@@ -35,17 +35,9 @@ namespace NonVisuals.Panels.Saitek.Panels
 
         public FarmingSidePanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.FarmingPanel, hidSkeleton)
         {
-            if (hidSkeleton.GamingPanelType != GamingPanelEnum.FarmingPanel)
-            {
-                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.FarmingPanel} expected");
-            }
-
             // Fixed values
             VendorId = 0x0738;
             ProductId = 0x2218;
-            CreateKeys();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -67,10 +59,16 @@ namespace NonVisuals.Panels.Saitek.Panels
             base.Dispose(disposing);
         }
 
-        public sealed override void Startup()
+        public override void InitPanel()
         {
             try
             {
+                if (HIDSkeletonBase.GamingPanelType != GamingPanelEnum.FarmingPanel)
+                {
+                    throw new ArgumentException($"GamingPanelType {GamingPanelEnum.FarmingPanel} expected");
+                }
+                CreateKeys();
+                BIOSEventHandler.AttachDataListener(this);
                 StartListeningForHidPanelChanges();
             }
             catch (Exception ex)

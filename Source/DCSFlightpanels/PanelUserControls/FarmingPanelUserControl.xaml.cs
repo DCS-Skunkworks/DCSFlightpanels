@@ -24,26 +24,20 @@
     using NonVisuals.Panels.Saitek;
     using NonVisuals.Panels;
     using NonVisuals.HID;
+    using DCSFlightpanels.Properties;
 
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
     public partial class FarmingPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
-
         private readonly FarmingSidePanel _farmingSidePanel;
-
-        private bool _textBoxBillsSet;
-
-
-
 
         public FarmingPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
             
             _farmingSidePanel = new FarmingSidePanel(hidSkeleton);
-
             AppEventHandler.AttachGamingPanelListener(this);
             HideAllImages();
         }
@@ -66,12 +60,26 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
 
+        public override void Init()
+        {
+            try
+            {
+                _farmingSidePanel.InitPanel();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+        
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElementDarkMode(this);
-            SetTextBoxBills();
+            if (!UserControlLoaded || !TextBoxBillsSet)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+                SetTextBoxBills();
+            }
             UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
@@ -197,7 +205,7 @@
 
         private void SetTextBoxBills()
         {
-            if (_textBoxBillsSet || !Common.FindVisualChildren<FarmingPanelTextBox>(this).Any())
+            if (TextBoxBillsSet || !Common.FindVisualChildren<FarmingPanelTextBox>(this).Any())
             {
                 return;
             }
@@ -210,7 +218,7 @@
 
                 textBox.Bill = new BillPFarmingPanel(this, _farmingSidePanel, textBox);
             }
-            _textBoxBillsSet = true;
+            TextBoxBillsSet = true;
         }
         
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
@@ -583,7 +591,7 @@
         {
             try
             {
-                if (!UserControlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxBillsSet)
                 {
                     return;
                 }
@@ -626,7 +634,7 @@
                     }
                 }
 
-                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor); //Maybe we can remove this function and only retain the _textBoxBillsSet = true; ?
+                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor); //Maybe we can remove this function and only retain the TextBoxBillsSet = true; ?
                 foreach (var bipLink in _farmingSidePanel.BIPLinkHashSet)
                 {
                     var textBox = (FarmingPanelTextBox)GetTextBox(bipLink.FarmingPanelKey, bipLink.WhenTurnedOn);
@@ -655,7 +663,7 @@
                     textBox.Background = brush;
                 }
             }
-            _textBoxBillsSet = true;
+            TextBoxBillsSet = true;
         }
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)

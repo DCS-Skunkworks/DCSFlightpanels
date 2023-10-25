@@ -23,6 +23,7 @@ namespace DCSFlightpanels.PanelUserControls
     using NonVisuals.Panels.Saitek;
     using NonVisuals.Panels;
     using NonVisuals.HID;
+    using DCSFlightpanels.Properties;
 
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml
@@ -30,10 +31,6 @@ namespace DCSFlightpanels.PanelUserControls
     public partial class TPMPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly TPMPanel _tpmPanel;
-        private bool _once;
-        private bool _textBoxBillsSet;
-
-
 
         public TPMPanelUserControl(HIDSkeleton hidSkeleton)
         {
@@ -63,17 +60,27 @@ namespace DCSFlightpanels.PanelUserControls
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
+        public override void Init()
+        {
+            try
+            {
+                _tpmPanel.InitPanel();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElementDarkMode(this);
-            if (!_once)
+            if (!UserControlLoaded || !TextBoxBillsSet)
             {
+                DarkMode.SetFrameworkElementDarkMode(this);
                 HidePositionIndicators();
-                _once = true;
+                SetTextBoxBills();
             }
-            
-            SetTextBoxBills();
             UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
@@ -211,7 +218,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetTextBoxBills()
         {
-            if (_textBoxBillsSet || !Common.FindVisualChildren<TPMTextBox>(this).Any())
+            if (TextBoxBillsSet || !Common.FindVisualChildren<TPMTextBox>(this).Any())
             {
                 return;
             }
@@ -225,7 +232,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 textBox.Bill = new BillTPM(this, _tpmPanel, textBox);
             }
-            _textBoxBillsSet = true;
+            TextBoxBillsSet = true;
         }
 
         private TPMTextBox GetTextBoxInFocus()
@@ -454,7 +461,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!UserControlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxBillsSet)
                 {
                     return;
                 }

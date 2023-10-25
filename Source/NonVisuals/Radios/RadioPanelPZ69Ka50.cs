@@ -164,11 +164,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69Ka50(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -187,6 +183,32 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void InitPanel()
+        {
+            CreateRadioKnobs();
+
+            // VHF1
+            _vhf1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R828_CHANNEL");
+
+            // VHF2
+            _r800L1DcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ1");
+            _r800L1DcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ2");
+            _r800L1DcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ3");
+            _r800L1DcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ4");
+
+            // ADF
+            _adfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF_CHANNEL");
+            _adfModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF_NDB_MODE");
+
+            // NAV2 Datalink
+            _datalinkMasterModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DLNK_MASTER_MODE");
+            _datalinkSelfIdDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DLNK_SELF_ID");
+            _datalinkPowerOnOffDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PVI_POWER");
+            
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -1690,39 +1712,7 @@ namespace NonVisuals.Radios
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // VHF1
-                _vhf1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R828_CHANNEL");
-
-                // VHF2
-                _r800L1DcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ1");
-                _r800L1DcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ2");
-                _r800L1DcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ3");
-                _r800L1DcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R800_FREQ4");
-
-                // ADF
-                _adfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF_CHANNEL");
-                _adfModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF_NDB_MODE");
-
-                // NAV2 Datalink
-                _datalinkMasterModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DLNK_MASTER_MODE");
-                _datalinkSelfIdDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DLNK_SELF_ID");
-                _datalinkPowerOnOffDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PVI_POWER");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false)
         {
         }

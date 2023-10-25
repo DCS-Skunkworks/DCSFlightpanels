@@ -25,6 +25,8 @@ namespace NonVisuals.Panels.StreamDeck.Panels
 
     public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
+        private readonly bool _unitTesting;
+
         private readonly Color[] _colors =
             {
                 Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
@@ -32,54 +34,26 @@ namespace NonVisuals.Panels.StreamDeck.Panels
             };
 
         private readonly object _updateStreamDeckOledLockObject = new();
-        private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
+        private StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly int _buttonCount;
 
         private static readonly object LockObjectStreamDeckPanels = new();
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new();
 
-        private readonly IMacroBoard _streamDeckBoard;
+        private IMacroBoard _streamDeckBoard;
         private readonly IKeyBitmapFactory _keyBitmapFactory = new KeyBitmapFactory();
         private bool _layerSwitched = false; // Must ignore the release of the button used to switch layer
 
         public IMacroBoard StreamDeckBoard => _streamDeckBoard;
         public int ButtonCount => _buttonCount;
 
-        public string SelectedLayerName
-        {
-            get => _streamDeckLayerHandler.SelectedLayerName;
-        }
-
-        public void SwitchToLayer(string layerName, bool switchedByUser, bool remotelySwitched)
-        {
-            _streamDeckLayerHandler.SwitchToLayer(layerName, switchedByUser, remotelySwitched);
-        }
-
-        public List<string> LayerNameList
-        {
-            get => _streamDeckLayerHandler.GetLayerNameList();
-        }
-
-        public List<StreamDeckLayer> LayerList
-        {
-            get => _streamDeckLayerHandler.LayerList;
-        }
-
-        public StreamDeckLayer HomeLayer
-        {
-            get => _streamDeckLayerHandler.HomeLayer;
-        }
-
-        public StreamDeckLayer SelectedLayer
-        {
-            get => _streamDeckLayerHandler.SelectedLayer;
-        }
-
-        public bool HasLayers
-        {
-            get { return _streamDeckLayerHandler.HasLayers; }
-        }
-
+        public string SelectedLayerName { get => _streamDeckLayerHandler.SelectedLayerName; }
+        public void SwitchToLayer(string layerName, bool switchedByUser, bool remotelySwitched) { _streamDeckLayerHandler.SwitchToLayer(layerName, switchedByUser, remotelySwitched); }
+        public List<string> LayerNameList { get => _streamDeckLayerHandler.GetLayerNameList(); }
+        public List<StreamDeckLayer> LayerList { get => _streamDeckLayerHandler.LayerList; }
+        public StreamDeckLayer HomeLayer { get => _streamDeckLayerHandler.HomeLayer; }
+        public StreamDeckLayer SelectedLayer { get => _streamDeckLayerHandler.SelectedLayer; }
+        public bool HasLayers { get { return _streamDeckLayerHandler.HasLayers; } }
         public int SelectedButtonNumber
         {
             get => _streamDeckLayerHandler.SelectedButtonNumber;
@@ -99,14 +73,15 @@ namespace NonVisuals.Panels.StreamDeck.Panels
 
         public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, bool unitTesting = false) : base(panelType, hidSkeleton)
         {
+            _unitTesting = unitTesting;
             _buttonCount = panelType switch
             {
                 GamingPanelEnum.StreamDeckMini => 6,
                 GamingPanelEnum.StreamDeckMiniV2 => 6,
 
                 GamingPanelEnum.StreamDeck or
-                GamingPanelEnum.StreamDeckV2 or
-                GamingPanelEnum.StreamDeckMK2 => 15,
+                    GamingPanelEnum.StreamDeckV2 or
+                    GamingPanelEnum.StreamDeckMK2 => 15,
 
                 GamingPanelEnum.StreamDeckXL or GamingPanelEnum.StreamDeckXLRev2 => 32,
 
@@ -114,22 +89,6 @@ namespace NonVisuals.Panels.StreamDeck.Panels
 
                 _ => throw new Exception("Failed to determine Stream Deck model")
             };
-
-            Startup();
-
-            if (!unitTesting)
-            {
-                _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.HIDInstance, false);
-                _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
-            }
-            SDEventHandler.AttachStreamDeckListener(this);
-            SDEventHandler.AttachStreamDeckConfigListener(this);
-
-            _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
-            lock (LockObjectStreamDeckPanels)
-            {
-                StreamDeckPanels.Add(this);
-            }
         }
 
         private bool _disposed;
@@ -159,6 +118,32 @@ namespace NonVisuals.Panels.StreamDeck.Panels
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void InitPanel()
+        {
+            try
+            {
+                if (!_unitTesting)
+                {
+                    _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(HIDSkeletonBase.HIDInstance, false);
+                    _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
+                }
+
+                _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
+                lock (LockObjectStreamDeckPanels)
+                {
+                    StreamDeckPanels.Add(this);
+                }
+                
+                SDEventHandler.AttachStreamDeckListener(this);
+                SDEventHandler.AttachStreamDeckConfigListener(this);
+                StartListeningForHidPanelChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
         }
 
         public static StreamDeckPanel GetInstance(string bindingHash)
@@ -222,18 +207,6 @@ namespace NonVisuals.Panels.StreamDeck.Panels
             lock (LockObjectStreamDeckPanels)
             {
                 return StreamDeckPanels;
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
             }
         }
 

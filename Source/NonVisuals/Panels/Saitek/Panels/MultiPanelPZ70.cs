@@ -70,16 +70,8 @@ namespace NonVisuals.Panels.Saitek.Panels
 
         public MultiPanelPZ70(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ70MultiPanel, hidSkeleton)
         {
-            if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ70MultiPanel)
-            {
-                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.PZ70MultiPanel} expected");
-            }
-
             VendorId = 0x6A3;
             ProductId = 0xD06;
-            CreateMultiKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -100,10 +92,16 @@ namespace NonVisuals.Panels.Saitek.Panels
             base.Dispose(disposing);
         }
 
-        public sealed override void Startup()
+        public override void InitPanel()
         {
             try
             {
+                if (HIDSkeletonBase.GamingPanelType != GamingPanelEnum.PZ70MultiPanel)
+                {
+                    throw new ArgumentException($"GamingPanelType {GamingPanelEnum.PZ70MultiPanel} expected");
+                }
+                CreateMultiKnobs();
+                BIOSEventHandler.AttachDataListener(this);
                 StartListeningForHidPanelChanges();
             }
             catch (Exception ex)

@@ -7,7 +7,7 @@ using NonVisuals.CockpitMaster.Switches;
 using System.Collections.Generic;
 using NonVisuals.HID;
 
-namespace NonVisuals.CockpitMaster.Preprogrammed
+namespace NonVisuals.CockpitMaster.PreProgrammed
 {
     public class CDU737PanelA10C : CDU737PanelBase , IDCSBIOSStringListener
     {
@@ -29,17 +29,16 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         private DCSBIOSOutput _MASTER_CAUTION;
 
         public CDU737PanelA10C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CDUPanelKeys = CDUMappedCommandKeyA10C.GetMappedPanelKeys();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-            Startup();
-        }
+        {}
 
-        public sealed override void Startup()
+        public override void InitPanel()
         {
             try
             {
+                CDUPanelKeys = CDUMappedCommandKeyA10C.GetMappedPanelKeys();
+                BIOSEventHandler.AttachStringListener(this);
+                BIOSEventHandler.AttachDataListener(this);
+
                 // CDU Lines & BRT
 
                 _CDU_LINE_0 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE0");

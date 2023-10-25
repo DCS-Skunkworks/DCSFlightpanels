@@ -10,8 +10,6 @@ namespace NonVisuals.Radios
 
     using DCS_BIOS;
     using DCS_BIOS.EventArgs;
-    using DCS_BIOS.Interfaces;
-
     using MEF;
     using Plugin;
     using Knobs;
@@ -25,7 +23,7 @@ namespace NonVisuals.Radios
     /// <summary>
     /// Pre-programmed radio panel for the P-47D. 
     /// </summary>
-    public class RadioPanelPZ69P47D : RadioPanelPZ69Base, IDCSBIOSStringListener
+    public class RadioPanelPZ69P47D : RadioPanelPZ69Base
     {
         private enum CurrentP47DRadioMode
         {
@@ -91,11 +89,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69P47D(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -115,15 +109,23 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
-        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
+        public override void InitPanel()
         {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
-            }
+            CreateRadioKnobs();
+
+            // VHF
+            _vhfRadioOffDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_OFF");
+            _vhfRadioChannelAPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_A");
+            _vhfRadioChannelBPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_B");
+            _vhfRadioChannelCPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_C");
+            _vhfRadioChannelDPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_D");
+            _vhfRadioModeDialPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_T_MODE");
+            // LF DETROLA
+            _lfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_FREQU_SEL");
+            _lfRadioVolumeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_VOL");
+
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -733,29 +735,6 @@ namespace NonVisuals.Radios
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
-        }
-        
-        public sealed override void Startup()
-        {
-            try
-            {
-                // VHF
-                _vhfRadioOffDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_OFF");
-                _vhfRadioChannelAPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_A");
-                _vhfRadioChannelBPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_B");
-                _vhfRadioChannelCPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_C");
-                _vhfRadioChannelDPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_D");
-                _vhfRadioModeDialPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_T_MODE");
-                // LF DETROLA
-                _lfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_FREQU_SEL");
-                _lfRadioVolumeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_VOL");
-
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
         }
 
         public override void ClearSettings(bool setIsDirty = false)

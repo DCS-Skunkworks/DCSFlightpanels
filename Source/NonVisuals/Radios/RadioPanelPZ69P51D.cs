@@ -82,11 +82,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69P51D(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -104,6 +100,26 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void InitPanel()
+        {
+            CreateRadioKnobs();
+
+            // VHF
+            _vhf1DcsbiosOutputPresetButton0 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_ON_OFF");
+            _vhf1DcsbiosOutputPresetButton1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_A");
+            _vhf1DcsbiosOutputPresetButton2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_B");
+            _vhf1DcsbiosOutputPresetButton3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_C");
+            _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_D");
+            _vhf1RadioModeDial1PresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_MODE2");
+            _vhf1RadioModeDial2PresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_MODE3");
+            // LF DETROLA
+            _lfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_FREQUENCY");
+            _lfRadioVolumeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_VOLUME");
+
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -848,32 +864,6 @@ namespace NonVisuals.Radios
                             break;
                         }
                 }
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // VHF
-                _vhf1DcsbiosOutputPresetButton0 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_ON_OFF");
-                _vhf1DcsbiosOutputPresetButton1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_A");
-                _vhf1DcsbiosOutputPresetButton2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_B");
-                _vhf1DcsbiosOutputPresetButton3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_C");
-                _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_RADIO_CHAN_D");
-                _vhf1RadioModeDial1PresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_MODE2");
-                _vhf1RadioModeDial2PresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_MODE3");
-                // LF DETROLA
-                _lfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_FREQUENCY");
-                _lfRadioVolumeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_VOLUME");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
             }
         }
 
