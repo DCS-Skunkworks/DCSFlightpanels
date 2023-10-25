@@ -37,16 +37,9 @@ namespace NonVisuals.Panels.Saitek.Panels
 
         public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)
         {
-            if (hidSkeleton.GamingPanelType != GamingPanelEnum.TPM)
-            {
-                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.TPM} expected");
-            }
-
             // Fixed values
             VendorId = 0x6A3;
             ProductId = 0xB4D;
-            CreateSwitchKeys();
-            Startup();
         }
 
         private bool _disposed;
@@ -67,10 +60,16 @@ namespace NonVisuals.Panels.Saitek.Panels
         }
 
 
-        public sealed override void Startup()
+        public override void Init()
         {
             try
             {
+                if (HIDSkeletonBase.GamingPanelType != GamingPanelEnum.TPM)
+                {
+                    throw new ArgumentException($"GamingPanelType {GamingPanelEnum.TPM} expected");
+                }
+
+                CreateSwitchKeys();
                 StartListeningForHidPanelChanges();
             }
             catch (Exception ex)

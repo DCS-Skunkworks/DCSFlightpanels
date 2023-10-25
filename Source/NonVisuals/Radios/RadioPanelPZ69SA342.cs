@@ -177,11 +177,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69SA342(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -202,7 +198,30 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
+        public override void Init()
+        {
+            CreateRadioKnobs();
 
+            // VHF AM
+            _vhfAmDcsbiosOutputReading10S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_10s");
+            _vhfAmDcsbiosOutputReading1S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_1s");
+            _vhfAmDcsbiosOutputReadingDecimal10S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_TENTHS");
+            _vhfAmDcsbiosOutputReadingDecimal100S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_HUNDREDTHS");
+
+            // FM PR4G
+            _fmRadioPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FM_RADIO_CHANNEL");
+
+            // ADF
+            _adfSwitchUnitDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF1_ADF2_SELECT");
+
+            // DME
+            _nadirModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("NADIR_PARAMETER");
+            _nadirDopplerModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("NADIR_DOPPLER_MODE");
+
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
+        }
+        
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             UpdateCounter(e.Address, e.Data);
@@ -1679,36 +1698,6 @@ namespace NonVisuals.Radios
                     }
                 }
                 AdjustFrequency(hashSet);
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // VHF AM
-                _vhfAmDcsbiosOutputReading10S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_10s");
-                _vhfAmDcsbiosOutputReading1S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_1s");
-                _vhfAmDcsbiosOutputReadingDecimal10S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_TENTHS");
-                _vhfAmDcsbiosOutputReadingDecimal100S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_HUNDREDTHS");
-
-                // FM PR4G
-                _fmRadioPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FM_RADIO_CHANNEL");
-
-                // ADF
-                _adfSwitchUnitDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF1_ADF2_SELECT");
-
-                // DME
-                _nadirModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("NADIR_PARAMETER");
-                _nadirDopplerModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("NADIR_DOPPLER_MODE");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
             }
         }
 

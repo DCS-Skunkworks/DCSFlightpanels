@@ -97,12 +97,7 @@ namespace NonVisuals.Radios
         private readonly Dictionary<FrequencyType, string> _dedFrequencies = new();
 
         public RadioPanelPZ69F16C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -122,27 +117,24 @@ namespace NonVisuals.Radios
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        public sealed override void Startup()
+
+        public override void Init()
         {
-            try
-            {
-                _DEDLine1 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_1");
+            CreateRadioKnobs();
 
-                _DEDLine2 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_2");
+            _DEDLine1 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_1");
 
-                _DEDLine3 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_3");
+            _DEDLine2 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_2");
 
-                _DEDLine4 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_4");
+            _DEDLine3 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_3");
 
-                _DEDLine5 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_5");
+            _DEDLine4 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_4");
 
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                throw new ArgumentOutOfRangeException($"Critical error during PZ69 panel Startup [{ex.Message}]");
-            }
+            _DEDLine5 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("DED_LINE_5");
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         private bool DedFrequencyHasChanged(FrequencyType frequencyType, string rawFrequencyString)

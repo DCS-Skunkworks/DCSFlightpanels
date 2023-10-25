@@ -1,17 +1,15 @@
 ﻿
-namespace DCSFlightpanels.PanelUserControls.PreProgrammed
+using System;
+using System.Windows;
+using DCSFlightpanels.Interfaces;
+using NonVisuals.CockpitMaster.PreProgrammed;
+using NonVisuals.EventArgs;
+using NonVisuals.HID;
+using NonVisuals.Interfaces;
+using NonVisuals.Panels;
+
+namespace DCSFlightpanels.PanelUserControls.CDU737
 {
-
-    using System.Windows;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
-
-    using NonVisuals.CockpitMaster.Preprogrammed;
-    using Interfaces;
-    using System;
-    using NonVisuals.Panels;
-    using NonVisuals.HID;
-
     /// <summary>
     /// Logique d'interaction pour Cdu737UserControlAH64D.xaml
     /// </summary>
@@ -25,7 +23,7 @@ namespace DCSFlightpanels.PanelUserControls.PreProgrammed
             InitializeComponent();
 
             _cdu737PanelAH64D = new CDU737PanelAH64D(hidSkeleton);
-            
+            _cdu737PanelAH64D.Init();
             AppEventHandler.AttachGamingPanelListener(this);
 
             HideAllImages();

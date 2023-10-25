@@ -91,11 +91,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69FA18C(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -116,7 +112,25 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
+        public override void Init()
+        {
+            CreateRadioKnobs();
 
+            // COMM 1
+            _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM1_FREQ");
+            _comm1DcsbiosOutputChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM1_CHANNEL_NUMERIC");
+
+            // COMM 2
+            _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM2_FREQ");
+            _comm2DcsbiosOutputChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM2_CHANNEL_NUMERIC");
+
+            // ILS
+            _ilsDcsbiosOutputChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COM_ILS_CHANNEL_SW");
+
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
+        }
+        
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             // -------------------------   Get the data from DCSbios
@@ -1176,40 +1190,6 @@ namespace NonVisuals.Radios
                     }
                 }
                 AdjustFrequency(hashSet);
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // COMM 1
-                _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM1_FREQ");
-                _comm1DcsbiosOutputChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM1_CHANNEL_NUMERIC");
-
-                // _comm1DcsbiosOutputPull = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_COMM1_PULL");
-                // _comm1DcsbiosOutputVol = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_COMM1_VOL");
-
-                // COMM 2
-                _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM2_FREQ");
-                _comm2DcsbiosOutputChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COMM2_CHANNEL_NUMERIC");
-
-                // _comm1DcsbiosOutputPull = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_COMM1_PULL");
-                // _comm1DcsbiosOutputVol = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_COMM1_VOL");
-
-                // VHF FM
-
-                // ILS
-                _ilsDcsbiosOutputChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("COM_ILS_CHANNEL_SW");
-
-                // TACAN
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
             }
         }
 

@@ -245,12 +245,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD = 1;
 
         public RadioPanelPZ69A10CII(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-            BIOSEventHandler.AttachStringListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -274,6 +269,64 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void Init()
+        {
+            CreateRadioKnobs();
+
+            // ARC-210 VHF
+            _arc210VhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_100MHZ_SEL");
+
+            _arc210VhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_10MHZ_SEL");
+
+            _arc210VhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_1MHZ_SEL");
+
+            _arc210VhfDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_100KHZ_SEL");
+
+            _arc210VhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_25KHZ_SEL");
+
+            _arc210VhfDcsbiosOutputRadioMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_MASTER");
+
+            _arc210VhfDcsbiosOutputCockpitFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_SEC_SW");
+
+            _arc210VhfDcsbiosOutputPresetChannel = DCSBIOSControlLocator.GetStringDCSBIOSOutput("ARC210_ACTIVE_CHANNEL");
+
+            _arc210VhfDcsbiosOutputPresetChannelFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("ARC210_FREQUENCY");
+
+            // UHF
+            _uhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_100MHZ_SEL");
+            _uhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_10MHZ_SEL");
+            _uhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_1MHZ_SEL");
+            _uhfDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_POINT1MHZ_SEL");
+            _uhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_POINT25_SEL");
+            _uhfDcsbiosOutputFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_MODE");
+            _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_PRESET_SEL");
+            _uhfDcsbiosOutputFunction = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_FUNCTION");
+
+            // VHF FM
+            _vhfFmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ1");
+
+            _vhfFmDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ2");
+
+            _vhfFmDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ3");
+
+            _vhfFmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ4");
+
+            _vhfFmDcsbiosOutputFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQEMER");
+            _vhfFmDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_PRESET");
+            _vhfFmDcsbiosOutputMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_MODE");
+
+            // ILS
+            _ilsDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ILS_MHZ");
+            _ilsDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ILS_KHZ");
+
+            // TACAN
+            _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHANNEL");
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -3752,78 +3805,7 @@ namespace NonVisuals.Radios
                 AdjustFrequency(hashSet);
             }
         }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // ARC-210 VHF
-                _arc210VhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_100MHZ_SEL");
-
-                _arc210VhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_10MHZ_SEL");
-
-                _arc210VhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_1MHZ_SEL");
-
-                _arc210VhfDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_100KHZ_SEL");
-
-                _arc210VhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_25KHZ_SEL");
-
-                _arc210VhfDcsbiosOutputRadioMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_MASTER");
-
-                _arc210VhfDcsbiosOutputCockpitFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC210_SEC_SW");
-
-                _arc210VhfDcsbiosOutputPresetChannel = DCSBIOSControlLocator.GetStringDCSBIOSOutput("ARC210_ACTIVE_CHANNEL");
-
-                _arc210VhfDcsbiosOutputPresetChannelFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("ARC210_FREQUENCY");
-
-                /*_vhfAmDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_FREQEMER");
-                _vhfAmDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_PRESET");
-                _vhfAmDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFAM_MODE");*/
-
-                // UHF
-                _uhfDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_100MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_10MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_1MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_POINT1MHZ_SEL");
-                _uhfDcsbiosOutputFreqDial5 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_POINT25_SEL");
-                _uhfDcsbiosOutputFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_MODE");
-                _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_PRESET_SEL");
-                _uhfDcsbiosOutputFunction = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_FUNCTION");
-
-                // VHF FM
-                _vhfFmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ1");
-
-                // _vhfFmDcsbiosOutputFreqDial1.Debug = true;
-                _vhfFmDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ2");
-
-                // _vhfFmDcsbiosOutputFreqDial2.Debug = true;
-                _vhfFmDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ3");
-
-                // _vhfFmDcsbiosOutputFreqDial3.Debug = true;
-                _vhfFmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQ4");
-
-                // _vhfFmDcsbiosOutputFreqDial4.Debug = true;
-                _vhfFmDcsbiosOutputFreqMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_FREQEMER");
-                _vhfFmDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_PRESET");
-                _vhfFmDcsbiosOutputMode = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHFFM_MODE");
-
-                // ILS
-                _ilsDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ILS_MHZ");
-                _ilsDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ILS_KHZ");
-
-                // TACAN
-                _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHANNEL");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false)
         {
             // ignore

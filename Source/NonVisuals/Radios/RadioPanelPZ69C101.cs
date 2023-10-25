@@ -62,12 +62,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69C101(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -88,7 +83,21 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
+        public override void Init()
+        {
+            CreateRadioKnobs();
 
+            // VHF
+            _vhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM_RADIO");
+
+            // UHF
+            _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VUHF_RADIO");
+            
+            BIOSEventHandler.AttachDataListener(this);
+            BIOSEventHandler.AttachStringListener(this);
+            StartListeningForHidPanelChanges();
+        }
+        
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             UpdateCounter(e.Address, e.Data);
@@ -683,24 +692,6 @@ namespace NonVisuals.Radios
                     }
                 }
                 AdjustFrequency(hashSet);
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // VHF
-                _vhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM_RADIO");
-
-                // UHF
-                _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VUHF_RADIO");
-
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
             }
         }
 

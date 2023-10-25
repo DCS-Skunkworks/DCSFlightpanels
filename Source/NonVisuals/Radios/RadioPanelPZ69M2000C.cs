@@ -115,12 +115,7 @@ namespace NonVisuals.Radios
         private bool _lowerFreqSwitchPressedDown;
 
         public RadioPanelPZ69M2000C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -139,6 +134,35 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void Init()
+        {
+            CreateRadioKnobs();
+
+            // COM1
+            _vhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VHF_FREQUENCY");
+            _vhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_CH_SEL");
+
+            // COM2
+            _uhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_FREQUENCY");
+            _uhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_PRESET_KNOB");
+
+            // NAV1
+            _tacanDcsbiosOutputDialTens = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_CH_10_SEL");
+            _tacanDcsbiosOutputDialOnes = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_CH_1_SEL");
+            _tacanDcsbiosOutputDialModeSelect = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_MODE_SEL");
+            _tacanDcsbiosOutputDialXYSelect = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_X_Y_SEL");
+
+            // NAV2
+            _vorDcsbiosOutputDialDecimals = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_FREQ_DECIMAL");
+            _vorDcsbiosOutputDialOnes = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_FREQ_WHOLE");
+            _vorDcsbiosOutputDialPower = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_PWR_DIAL");
+            _vorDcsbiosOutputDialTest = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_TEST_DIAL");
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -976,41 +1000,6 @@ namespace NonVisuals.Radios
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
-        }
-        
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // COM1
-                _vhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VHF_FREQUENCY");
-                _vhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VHF_CH_SEL");
-
-                // COM2
-                _uhfDcsbiosOutputPresetFreqString = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_FREQUENCY");
-                _uhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("UHF_PRESET_KNOB");
-
-                // NAV1
-                _tacanDcsbiosOutputDialTens = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_CH_10_SEL");
-                _tacanDcsbiosOutputDialOnes = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_CH_1_SEL");
-                _tacanDcsbiosOutputDialModeSelect = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_MODE_SEL");
-                _tacanDcsbiosOutputDialXYSelect = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TAC_X_Y_SEL");
-
-                // NAV2
-                _vorDcsbiosOutputDialDecimals = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_FREQ_DECIMAL");
-                _vorDcsbiosOutputDialOnes = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_FREQ_WHOLE");
-                _vorDcsbiosOutputDialPower = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_PWR_DIAL");
-                _vorDcsbiosOutputDialTest = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("VORILS_TEST_DIAL");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
         }
 
         public override void ClearSettings(bool setIsDirty = false) { }

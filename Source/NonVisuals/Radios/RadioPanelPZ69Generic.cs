@@ -67,11 +67,7 @@ namespace NonVisuals.Radios
         private bool _settingsAreBeingImported;
 
         public RadioPanelPZ69Generic(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateSwitchKeys();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -91,16 +87,11 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
-        public sealed override void Startup()
+        public override void Init()
         {
-            try
-            {
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
+            CreateSwitchKeys();
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
         
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)

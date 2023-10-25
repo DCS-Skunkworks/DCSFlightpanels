@@ -54,7 +54,24 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+        private void RadioPanelPZ69UserControlJF17_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (UserControlLoaded) return;
+            DarkMode.SetFrameworkElementDarkMode(this);
+            try
+            {
+                _radioPanelPZ69.Init();
+                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
+                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
+                _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
+                UserControlLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
@@ -409,23 +426,6 @@
                 Settings.Default.RadioFrequencyKnobSensitivity = int.Parse(sensitivity);
                 _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(sensitivity);
                 Settings.Default.Save();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void RadioPanelPZ69UserControlJF17_OnLoaded(object sender, RoutedEventArgs e)
-        {
-			DarkMode.SetFrameworkElementDarkMode(this);
-            try
-            {
-                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
-                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
-                _radioPanelPZ69.SyncOKDelayTimeout = Settings.Default.SyncOKDelayTimeout;
-                _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity; 
-                UserControlLoaded = true;
             }
             catch (Exception ex)
             {

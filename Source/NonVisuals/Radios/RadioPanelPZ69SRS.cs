@@ -18,6 +18,8 @@
     using NonVisuals.HID;
     using NonVisuals.BindingClasses.BIP;
     using NonVisuals.Helpers;
+    using System.Net;
+    using System.Web.Services.Description;
 
     public struct SRSRadioSmallFreqStepping
     {
@@ -29,6 +31,9 @@
 
     public class RadioPanelPZ69SRS : RadioPanelPZ69Base, ISRSDataListener
     {
+        private readonly int _portFrom;
+        private readonly string _ipAddressTo;
+        private readonly int _portTo;
         private CurrentSRSRadioMode _currentUpperRadioMode = CurrentSRSRadioMode.COM1;
         private CurrentSRSRadioMode _currentLowerRadioMode = CurrentSRSRadioMode.COM1;
 
@@ -66,10 +71,9 @@
 
         public RadioPanelPZ69SRS(int portFrom, string ipAddressTo, int portTo, HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
-            SRSRadioFactory.SetParams(portFrom, ipAddressTo, portTo);
-            SRSRadioFactory.GetSRSRadio().Attach(this);
-            CreateRadioKnobs();
-            Startup();
+            _portFrom = portFrom;
+            _ipAddressTo = ipAddressTo;
+            _portTo = portTo;
         }
 
         private bool _disposed;
@@ -91,16 +95,12 @@
             base.Dispose(disposing);
         }
 
-        public sealed override void Startup()
+        public override void Init()
         {
-            try
-            {
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
+            SRSRadioFactory.SetParams(_portFrom, _ipAddressTo, _portTo);
+            SRSRadioFactory.GetSRSRadio().Attach(this);
+            CreateRadioKnobs();
+            StartListeningForHidPanelChanges();
         }
         
         public double SmallFreqStepping

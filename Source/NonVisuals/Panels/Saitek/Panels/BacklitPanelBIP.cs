@@ -72,30 +72,9 @@ namespace NonVisuals.Panels.Saitek.Panels
         public BacklitPanelBIP(uint ledBrightness, HIDSkeleton hidSkeleton)
             : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
         {
-            if (hidSkeleton.GamingPanelType != GamingPanelEnum.BackLitPanel)
-            {
-                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.BackLitPanel} expected");
-            }
-
+            _ledBrightness = ledBrightness;
             VendorId = 0x6A3;
             ProductId = 0xB4E;
-            _ledBrightness = ledBrightness;
-            BipFactory.RegisterBip(this);
-            Startup();
-
-            BIOSEventHandler.AttachDataListener(this);
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                SetLedStrength();
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-            }
         }
 
         private bool _disposed;
@@ -115,6 +94,26 @@ namespace NonVisuals.Panels.Saitek.Panels
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void Init()
+        {
+            try
+            {
+                if (HIDSkeletonBase.GamingPanelType != GamingPanelEnum.BackLitPanel)
+                {
+                    throw new ArgumentException($"GamingPanelType {GamingPanelEnum.BackLitPanel} expected");
+                }
+
+                BipFactory.RegisterBip(this);
+
+                BIOSEventHandler.AttachDataListener(this);
+                SetLedStrength();
+            }
+            catch (Exception ex)
+            {
+                SetLastException(ex);
+            }
         }
 
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)

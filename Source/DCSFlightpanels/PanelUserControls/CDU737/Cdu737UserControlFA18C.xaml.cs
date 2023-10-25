@@ -1,15 +1,14 @@
-﻿namespace DCSFlightpanels.PanelUserControls.PreProgrammed
+﻿using System;
+using System.Windows;
+using DCSFlightpanels.Interfaces;
+using NonVisuals.CockpitMaster.PreProgrammed;
+using NonVisuals.EventArgs;
+using NonVisuals.HID;
+using NonVisuals.Interfaces;
+using NonVisuals.Panels;
+
+namespace DCSFlightpanels.PanelUserControls.CDU737
 {
-    using System.Windows;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
-
-    using NonVisuals.CockpitMaster.Preprogrammed;
-    using Interfaces;
-    using System;
-    using NonVisuals.Panels;
-    using NonVisuals.HID;
-
     /// <summary>
     /// Interaction logic for Cdu737UserControlA10C.xaml
     /// </summary>
@@ -23,6 +22,7 @@
             InitializeComponent();
 
             _cdu737PanelFA18C = new CDU737PanelFA18C(hidSkeleton);
+            _cdu737PanelFA18C.Init();
             //_HIDSkeleton = hidSkeleton;
             AppEventHandler.AttachGamingPanelListener(this);
 

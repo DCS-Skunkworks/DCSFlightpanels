@@ -22,7 +22,6 @@
     public partial class RadioPanelPZ69UserControlBf109 : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69Bf109 _radioPanelPZ69;
-        private bool _userControlLoaded;
 
         public RadioPanelPZ69UserControlBf109(HIDSkeleton hidSkeleton)
         {
@@ -55,7 +54,25 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
+        private void RadioPanelPZ69UserControlBf109_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (UserControlLoaded) return;
+            DarkMode.SetFrameworkElementDarkMode(this);
+            try
+            {
+                _radioPanelPZ69.Init();
+                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
+                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
+                _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
+                UserControlLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
@@ -359,26 +376,6 @@
             }
         }
 
-        private void RadioPanelPZ69UserControlBf109_OnLoaded(object sender, RoutedEventArgs e)
-        {
-			DarkMode.SetFrameworkElementDarkMode(this);
-            try
-            {
-                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
-                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
-                _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                /*ComboBoxSynchSleepTime.SelectedValue = Settings.Default.BAKDialSynchSleepTime;
-                ComboBoxSynchResetTimeout.SelectedValue = Settings.Default.BAKDialResetSyncTimeout;
-                _radioPanelPZ69.ResetSyncTimeout = Settings.Default.BAKDialResetSyncTimeout;
-                _radioPanelPZ69.SynchSleepTime = Settings.Default.BAKDialSynchSleepTime;*/
-                _userControlLoaded = true;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -401,7 +398,7 @@
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     Settings.Default.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
                     _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
@@ -418,7 +415,7 @@
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     Settings.Default.RadioFrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
                     _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
@@ -435,7 +432,7 @@
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     /*Settings.Default.BAKDialSynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
                     _radioPanelPZ69.SynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
@@ -452,7 +449,7 @@
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     /*Settings.Default.BAKDialResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
                     _radioPanelPZ69.ResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());

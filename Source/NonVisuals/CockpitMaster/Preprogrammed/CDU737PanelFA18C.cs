@@ -7,7 +7,7 @@ using NonVisuals.CockpitMaster.Switches;
 using System.Collections.Generic;
 using NonVisuals.HID;
 
-namespace NonVisuals.CockpitMaster.Preprogrammed
+namespace NonVisuals.CockpitMaster.PreProgrammed
 {
 
     public class CDU737PanelFA18C : CDU737PanelBase , IDCSBIOSStringListener
@@ -45,18 +45,17 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         uint _masterCaution = 0;
 
         public CDU737PanelFA18C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            ConvertTable = CDUTextLineHelpers.AH64ConvertTable;
-            CDUPanelKeys = CDUMappedCommandKeyFA18C.GetMappedPanelKeys();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-            Startup();
-        }
+        {}
 
-        public sealed override void Startup()
+        public override void Init()
         {
             try
             {
+                ConvertTable = CDUTextLineHelpers.AH64ConvertTable;
+                CDUPanelKeys = CDUMappedCommandKeyFA18C.GetMappedPanelKeys();
+                BIOSEventHandler.AttachStringListener(this);
+                BIOSEventHandler.AttachDataListener(this);
+
                 // UFC_BRT = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_BRT");
 
                 UFC_OPTION_DISPLAY_1 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_OPTION_DISPLAY_1");

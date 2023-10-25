@@ -108,16 +108,8 @@
 
         public CDU737PanelBase(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.CDU737, hidSkeleton)
         {
-            if (hidSkeleton.GamingPanelType != GamingPanelEnum.CDU737)
-            {
-                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.CDU737} expected");
-            }
-
-            InitCDU();
-
             VendorId = (int)GamingPanelVendorEnum.CockpitMaster;
             ProductId = (int)GamingPanelEnum.CDU737;
-
         }
 
         private void StartTimers()
@@ -141,10 +133,14 @@
                 }
             }
         }
-
-
-        private void InitCDU()
+        
+        public override void Init()
         {
+            if (HIDSkeletonBase.GamingPanelType != GamingPanelEnum.CDU737)
+            {
+                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.CDU737} expected");
+            }
+
             // Init ScreenBuffer ( HidReport Representation of the CDU ) 
             // The screen on the physical device is refreshed by sending 
             // 9 HidReport of 64 bytes. 
@@ -433,12 +429,7 @@
             _ = HIDWriteDevice.WriteReportAsync(_hidReport[8]);
 
         }
-
-        public override void Startup()
-        {
-            
-        }
-
+        
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
 

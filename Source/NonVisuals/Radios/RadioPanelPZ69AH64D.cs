@@ -91,12 +91,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69AH64D(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -115,6 +110,28 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void Init()
+        {
+            CreateRadioKnobs();
+
+            // VHF
+            _vhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VHF_AM_RADIO");
+
+            // UHF
+            _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_RADIO");
+
+            // FM1 FM2
+            _fm1RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("FM1_RADIO");
+            _fm2RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("FM2_RADIO");
+
+            // HF
+            _hfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("HF_RADIO");
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -1225,31 +1242,6 @@ namespace NonVisuals.Radios
                     }
                 }
                 AdjustFrequency(hashSet);
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // VHF
-                _vhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("VHF_AM_RADIO");
-
-                // UHF
-                _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_RADIO");
-
-                // FM1 FM2
-                _fm1RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("FM1_RADIO");
-                _fm2RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("FM2_RADIO");
-
-                // HF
-                _hfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("HF_RADIO");
-
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
             }
         }
 

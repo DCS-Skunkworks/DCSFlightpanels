@@ -23,7 +23,7 @@ namespace NonVisuals.Radios
     /// <summary>
     /// Pre-programmed radio panel for the AJS37.
     /// </summary>
-    public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IDCSBIOSStringListener
+    public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base
     {
         private enum CurrentAJS37RadioMode
         {
@@ -90,11 +90,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69AJS37(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -114,26 +110,18 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
-        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
+        public override void Init()
         {
-            try
-            {
-                /*
-                if (string.IsNullOrWhiteSpace(e.StringData))
-                {
-                    Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
-                    return;
-                }
-                */
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
-            }
+            CreateRadioKnobs();
 
-            ShowFrequenciesOnPanel();
+            // NAV1
+            _tilsChannelSelectorDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TILS_CHANNEL_SELECT");
+            _tilsChannelLayerSelectorDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TILS_CHANNEL_LAYER");
+            _masterModeSelectorDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("MASTER_MODE_SELECT");
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
-
+        
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
@@ -833,34 +821,6 @@ namespace NonVisuals.Radios
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // COM1
-
-                // COM2
-
-                // NAV1
-                _tilsChannelSelectorDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TILS_CHANNEL_SELECT");
-                _tilsChannelLayerSelectorDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("TILS_CHANNEL_LAYER");
-                _masterModeSelectorDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("MASTER_MODE_SELECT");
-
-                // NAV2
-
-                // ADF
-
-                // XPDR
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
         }
 
         public override void ClearSettings(bool setIsDirty = false) { }

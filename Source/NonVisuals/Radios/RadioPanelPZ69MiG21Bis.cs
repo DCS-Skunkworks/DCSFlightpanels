@@ -83,11 +83,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69MiG21Bis(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -105,6 +101,25 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void Init()
+        {
+            CreateRadioKnobs();
+
+            // Radio
+            _radioDcsbiosOutputFreqSelectorPosition = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RAD_CHAN");
+
+            // RSBN
+            _rsbnNavChannelCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RSBN_CHAN");
+            _rsbnILSChannelCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PRMG_CHAN");
+
+            // ARC
+            _arcSectorCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_ZONE");
+            _arcPresetChannelCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_CHAN");
+
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -741,31 +756,6 @@ namespace NonVisuals.Radios
                     }
                 }
                 AdjustFrequency(hashSet);
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // Radio
-                _radioDcsbiosOutputFreqSelectorPosition = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RAD_CHAN");
-
-                // RSBN
-                _rsbnNavChannelCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RSBN_CHAN");
-                _rsbnILSChannelCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PRMG_CHAN");
-
-                // ARC
-                _arcSectorCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_ZONE");
-                _arcPresetChannelCockpitOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_CHAN");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
             }
         }
 

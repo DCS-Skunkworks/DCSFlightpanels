@@ -1,15 +1,14 @@
-﻿namespace DCSFlightpanels.PanelUserControls.PreProgrammed
+﻿using System;
+using System.Windows;
+using DCSFlightpanels.Interfaces;
+using NonVisuals.CockpitMaster.PreProgrammed;
+using NonVisuals.EventArgs;
+using NonVisuals.HID;
+using NonVisuals.Interfaces;
+using NonVisuals.Panels;
+
+namespace DCSFlightpanels.PanelUserControls.CDU737
 {
-    using System.Windows;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
-
-    using NonVisuals.CockpitMaster.Preprogrammed;
-    using Interfaces;
-    using System;
-    using NonVisuals.Panels;
-    using NonVisuals.HID;
-
     /// <summary>
     /// Interaction logic for Cdu737UserControlM2000C.xaml
     /// </summary>
@@ -23,6 +22,7 @@
             InitializeComponent();
 
             _cdu737PanelM2000C = new CDU737PanelM2000C(hidSkeleton);
+            _cdu737PanelM2000C.Init();
             AppEventHandler.AttachGamingPanelListener(this);
 
             HideAllImages();

@@ -74,11 +74,13 @@ namespace DCSFlightpanels.PanelUserControls
         private bool _once = true;
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (UserControlLoaded) return;
+
+            _switchPanelPZ55.Init();
             DarkMode.SetFrameworkElementDarkMode(this);
             SetTextBoxBills();
             LoadComboBoxesManualLeds();
             SetContextMenuClickHandlers();
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
 
             if (_once)
@@ -101,6 +103,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
             }
+            UserControlLoaded = true;
         }
 
         private void LoadComboBoxesManualLeds()

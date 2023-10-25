@@ -122,6 +122,7 @@
             DarkMode.SetFrameworkElementDarkMode(this);
             if (!UserControlLoaded)
             {
+                _streamDeckPanel.Init();
                 UCStreamDeckButtonAction.Update();
                 UserControlLoaded = true;
             }

@@ -34,9 +34,7 @@ namespace DCSFlightpanels.PanelUserControls
     public partial class MultiPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
-
         private bool _textBoxBillsSet;
-
 
         public MultiPanelUserControl(HIDSkeleton hidSkeleton)
         {
@@ -69,11 +67,14 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void MultiPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (UserControlLoaded) return;
+
+            _multiPanelPZ70.Init();
             DarkMode.SetFrameworkElementDarkMode(this);
             ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
             SetTextBoxBills();
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
+            UserControlLoaded = true;
         }
         
 

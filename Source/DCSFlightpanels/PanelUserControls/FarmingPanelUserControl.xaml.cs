@@ -30,13 +30,8 @@
     /// </summary>
     public partial class FarmingPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
-
         private readonly FarmingSidePanel _farmingSidePanel;
-
         private bool _textBoxBillsSet;
-
-
-
 
         public FarmingPanelUserControl(HIDSkeleton hidSkeleton)
         {
@@ -70,10 +65,13 @@
 
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (UserControlLoaded) return;
+
+            _farmingSidePanel.Init();
             DarkMode.SetFrameworkElementDarkMode(this);
             SetTextBoxBills();
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
+            UserControlLoaded = true;
         }
         
 

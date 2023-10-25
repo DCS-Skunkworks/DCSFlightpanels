@@ -1,8 +1,8 @@
 ﻿using ClassLibraryCommon;
 using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.PanelUserControls.PreProgrammed;
 using NonVisuals.HID;
 using System.Windows.Controls;
+using DCSFlightpanels.PanelUserControls.CDU737;
 
 namespace DCSFlightpanels
 {

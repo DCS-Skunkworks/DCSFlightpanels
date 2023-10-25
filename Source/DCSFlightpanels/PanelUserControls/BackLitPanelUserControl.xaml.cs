@@ -34,7 +34,6 @@
         private readonly BitmapImage _yellowImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/BIP/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
 
-
         public BackLitPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
@@ -67,12 +66,15 @@
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (UserControlLoaded) return;
+
+            _backlitPanelBIP.Init();
             DarkMode.SetFrameworkElementDarkMode(this);
             Init();
-            UserControlLoaded = true;
             SetContextMenuClickHandlers();
             SetAllBlack();
             ShowGraphicConfiguration();
+            UserControlLoaded = true;
         }
         
         public override GamingPanel GetGamingPanel()

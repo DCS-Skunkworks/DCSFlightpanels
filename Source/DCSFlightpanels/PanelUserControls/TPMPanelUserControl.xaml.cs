@@ -66,6 +66,9 @@ namespace DCSFlightpanels.PanelUserControls
         
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (UserControlLoaded) return;
+
+            _tpmPanel.Init();
             DarkMode.SetFrameworkElementDarkMode(this);
             if (!_once)
             {
@@ -74,8 +77,8 @@ namespace DCSFlightpanels.PanelUserControls
             }
             
             SetTextBoxBills();
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
+            UserControlLoaded = true;
         }
 
         private void HidePositionIndicators()

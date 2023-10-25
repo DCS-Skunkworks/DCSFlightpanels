@@ -1,4 +1,4 @@
-﻿<panelUserControls:UserControlBase xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"  x:Class="DCSFlightpanels.PanelUserControls.PreProgrammed.Cdu737UserControlAH64D"
+﻿<panelUserControls:UserControlBase xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"  x:Class="DCSFlightpanels.PanelUserControls.CDU737.Cdu737UserControlAH64D"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

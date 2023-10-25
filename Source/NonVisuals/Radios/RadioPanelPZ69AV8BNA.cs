@@ -68,12 +68,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69AV8BNA(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -92,6 +87,21 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void Init()
+        {
+            CreateRadioKnobs();
+
+            // V/UHF COMM1
+            _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM1_STRING_FREQ");
+
+            // V/UHF COMM2
+            _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM2_STRING_FREQ");
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -660,26 +670,6 @@ namespace NonVisuals.Radios
                     }
                 }
                 AdjustFrequency(hashSet);
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // V/UHF COMM1
-                _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM1_STRING_FREQ");
-
-                // V/UHF COMM2
-                _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM2_STRING_FREQ");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
             }
         }
 

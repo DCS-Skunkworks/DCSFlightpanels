@@ -7,7 +7,7 @@ using NonVisuals.CockpitMaster.Switches;
 using System.Collections.Generic;
 using NonVisuals.HID;
 
-namespace NonVisuals.CockpitMaster.Preprogrammed
+namespace NonVisuals.CockpitMaster.PreProgrammed
 {
 
     public class CDU737PanelAH64D : CDU737PanelBase , IDCSBIOSStringListener
@@ -37,18 +37,16 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         private DCSBIOSOutput _PLT_MASTER_WARNING_L;
 
         public CDU737PanelAH64D(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            ConvertTable = CDUTextLineHelpers.AH64ConvertTable;
-            CDUPanelKeys = CDUMappedCommandKeyAH64D.GetMappedPanelKeys();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-            Startup();
-        }
+        {}
 
-        public sealed override void Startup()
+        public override void Init()
         {
             try
             {
+                ConvertTable = CDUTextLineHelpers.AH64ConvertTable;
+                CDUPanelKeys = CDUMappedCommandKeyAH64D.GetMappedPanelKeys();
+                BIOSEventHandler.AttachStringListener(this);
+                BIOSEventHandler.AttachDataListener(this);
 
                 // PLT Keyboard display
 

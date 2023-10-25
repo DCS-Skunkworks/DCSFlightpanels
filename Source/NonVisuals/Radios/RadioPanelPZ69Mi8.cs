@@ -230,12 +230,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -258,6 +253,43 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
+        public override void Init()
+        {
+            CreateRadioKnobs();
+
+            // COM1
+            _r863ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("R863_FREQ");
+
+            // COM2
+            _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R863_CNL_SEL");
+            _r863UnitSwitchDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R863_UNIT_SWITCH");
+
+            // NAV1
+            _yadro1ADcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("YADRO1A_FREQ");
+
+            // NAV2
+            _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R828_PRST_CHAN_SEL");
+
+            // ADF
+            _adfMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_MAIN_100KHZ");
+            _adfMainDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_MAIN_10KHZ");
+            _adfBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_BCK_100KHZ");
+            _adfBackupDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_BCK_10KHZ");
+            _adfBackupMainDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC9_MAIN_BACKUP");
+
+            // DME
+            _arkUdPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARCUD_CHL");
+            _arkUdModeDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARCUD_MODE");
+            _arkUdVhfUhfModeDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARCUD_WAVE");
+
+            // XPDR
+            _spu7DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_SEL_L");
+            _spu7ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("SPU7_L_ICS");
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
+        }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
@@ -2540,49 +2572,6 @@ namespace NonVisuals.Radios
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // COM1
-                _r863ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("R863_FREQ");
-
-                // COM2
-                _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R863_CNL_SEL");
-                _r863UnitSwitchDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R863_UNIT_SWITCH");
-
-                // NAV1
-                _yadro1ADcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("YADRO1A_FREQ");
-
-                // NAV2
-                _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("R828_PRST_CHAN_SEL");
-
-                // ADF
-                _adfMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_MAIN_100KHZ");
-                _adfMainDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_MAIN_10KHZ");
-                _adfBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_BCK_100KHZ");
-                _adfBackupDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC_BCK_10KHZ");
-                _adfBackupMainDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC9_MAIN_BACKUP");
-
-                // DME
-                _arkUdPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARCUD_CHL");
-                _arkUdModeDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARCUD_MODE");
-                _arkUdVhfUhfModeDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARCUD_WAVE");
-
-                // XPDR
-                _spu7DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_SEL_L");
-                _spu7ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("SPU7_L_ICS");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
         }
 
         public override void ClearSettings(bool setIsDirty = false)

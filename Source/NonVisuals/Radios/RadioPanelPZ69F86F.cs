@@ -106,11 +106,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69F86F(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -128,6 +124,30 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void Init()
+        {
+            CreateRadioKnobs();
+
+            // COM1
+            _arc27PresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC27_CHAN_SEL");
+            _arc27ModeDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC27_PWR_SEL");
+
+            // COM2
+
+            // NAV1
+            _arn6ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARN6_FREQUENCY");
+            _arn6BandDcsbiosOutputCockpit = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARN6_CHAN_SEL");
+
+            // NAV2
+            _arn6ModeDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARN6_FUNC_SEL");
+
+            // ADF
+            _apx6ModeDcsbiosOutputCockpit = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("APX6_MASTER");
+            
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -1040,37 +1060,7 @@ namespace NonVisuals.Radios
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // COM1
-                _arc27PresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC27_CHAN_SEL");
-                _arc27ModeDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARC27_PWR_SEL");
-
-                // COM2
-
-                // NAV1
-                _arn6ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARN6_FREQUENCY");
-                _arn6BandDcsbiosOutputCockpit = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARN6_CHAN_SEL");
-
-                // NAV2
-                _arn6ModeDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ARN6_FUNC_SEL");
-
-                // ADF
-                _apx6ModeDcsbiosOutputCockpit = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("APX6_MASTER");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
+        
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

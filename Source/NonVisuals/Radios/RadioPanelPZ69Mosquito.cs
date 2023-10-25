@@ -61,11 +61,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Mosquito(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -83,6 +79,22 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void Init()
+        {
+            CreateRadioKnobs();
+
+            // VHF
+            _vhf1DcsbiosOutputPresetButton0 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_OFF");
+            _vhf1DcsbiosOutputPresetButton1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_A");
+            _vhf1DcsbiosOutputPresetButton2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_B");
+            _vhf1DcsbiosOutputPresetButton3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_C");
+            _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_D");
+            _vhfRadioModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_T_MODE");
+            
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -634,28 +646,6 @@ namespace NonVisuals.Radios
                             break;
                         }
                 }
-            }
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // VHF
-                _vhf1DcsbiosOutputPresetButton0 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_OFF");
-                _vhf1DcsbiosOutputPresetButton1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_A");
-                _vhf1DcsbiosOutputPresetButton2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_B");
-                _vhf1DcsbiosOutputPresetButton3 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_C");
-                _vhf1DcsbiosOutputPresetButton4 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_D");
-                _vhfRadioModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_T_MODE");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
             }
         }
 

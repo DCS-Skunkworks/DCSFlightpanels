@@ -7,7 +7,7 @@ using NonVisuals.CockpitMaster.Switches;
 using System.Collections.Generic;
 using NonVisuals.HID;
 
-namespace NonVisuals.CockpitMaster.Preprogrammed
+namespace NonVisuals.CockpitMaster.PreProgrammed
 {
     public class CDU737PanelM2000C : CDU737PanelBase, IDCSBIOSStringListener
     {
@@ -15,20 +15,17 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         private bool _disposed;
 
         public CDU737PanelM2000C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CDUPanelKeys = CDUMappedCommandKeyM2000C.GetMappedPanelKeys();
+        {}
 
-            Startup();
-
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-
-        }
-
-        public sealed override void Startup()
+        public override void Init()
         {
             try
             {
+                CDUPanelKeys = CDUMappedCommandKeyM2000C.GetMappedPanelKeys();
+                
+                BIOSEventHandler.AttachStringListener(this);
+                BIOSEventHandler.AttachDataListener(this);
+
                 SetColorForLine(0, CDUColor.WHITE);
                 SetLine(0, string.Format("{0,24}", "M2000C profile"));
                 SetColorForLine(5, CDUColor.BLUE);
