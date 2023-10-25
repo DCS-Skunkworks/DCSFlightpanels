@@ -68,7 +68,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             if (UserControlLoaded) return;
 
-            _tpmPanel.Init();
+            _tpmPanel.InitPanel();
             DarkMode.SetFrameworkElementDarkMode(this);
             if (!_once)
             {

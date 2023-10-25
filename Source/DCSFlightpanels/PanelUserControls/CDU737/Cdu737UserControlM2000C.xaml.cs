@@ -22,7 +22,7 @@ namespace DCSFlightpanels.PanelUserControls.CDU737
             InitializeComponent();
 
             _cdu737PanelM2000C = new CDU737PanelM2000C(hidSkeleton);
-            _cdu737PanelM2000C.Init();
+            _cdu737PanelM2000C.InitPanel();
             AppEventHandler.AttachGamingPanelListener(this);
 
             HideAllImages();

@@ -67,7 +67,7 @@
         {
             if (UserControlLoaded) return;
 
-            _farmingSidePanel.Init();
+            _farmingSidePanel.InitPanel();
             DarkMode.SetFrameworkElementDarkMode(this);
             SetTextBoxBills();
             ShowGraphicConfiguration();

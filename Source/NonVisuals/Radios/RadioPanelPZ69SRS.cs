@@ -95,7 +95,7 @@
             base.Dispose(disposing);
         }
 
-        public override void Init()
+        public override void InitPanel()
         {
             SRSRadioFactory.SetParams(_portFrom, _ipAddressTo, _portTo);
             SRSRadioFactory.GetSRSRadio().Attach(this);

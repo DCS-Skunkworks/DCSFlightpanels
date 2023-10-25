@@ -134,7 +134,7 @@
             }
         }
         
-        public override void Init()
+        public override void InitPanel()
         {
             if (HIDSkeletonBase.GamingPanelType != GamingPanelEnum.CDU737)
             {

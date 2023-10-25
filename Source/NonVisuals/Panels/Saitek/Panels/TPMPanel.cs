@@ -60,7 +60,7 @@ namespace NonVisuals.Panels.Saitek.Panels
         }
 
 
-        public override void Init()
+        public override void InitPanel()
         {
             try
             {

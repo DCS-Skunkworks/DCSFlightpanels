@@ -61,7 +61,7 @@
             DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
-                _radioPanelPZ69.Init();
+                _radioPanelPZ69.InitPanel();
                 UserControlLoaded = true;
             }
             catch (Exception ex)

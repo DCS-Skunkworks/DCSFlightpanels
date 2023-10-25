@@ -87,7 +87,7 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
-        public override void Init()
+        public override void InitPanel()
         {
             CreateSwitchKeys();
             BIOSEventHandler.AttachDataListener(this);

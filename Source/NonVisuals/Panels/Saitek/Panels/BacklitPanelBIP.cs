@@ -96,7 +96,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             base.Dispose(disposing);
         }
 
-        public override void Init()
+        public override void InitPanel()
         {
             try
             {

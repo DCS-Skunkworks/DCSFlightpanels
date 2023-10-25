@@ -15,7 +15,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
         public CDU737PanelSA342(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {}
 
-        public override void Init()
+        public override void InitPanel()
         {
             try
             {

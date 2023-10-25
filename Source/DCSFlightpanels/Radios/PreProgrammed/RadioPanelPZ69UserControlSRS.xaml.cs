@@ -66,7 +66,7 @@
             DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
-                _radioPanelPZ69SRS.Init();
+                _radioPanelPZ69SRS.InitPanel();
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
                 ComboBoxSmallFreqStepping.SelectedValue = Settings.Default.SRSSmallFreqStepping;
                 UserControlLoaded = true;

@@ -76,7 +76,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             if (UserControlLoaded) return;
 
-            _switchPanelPZ55.Init();
+            _switchPanelPZ55.InitPanel();
             DarkMode.SetFrameworkElementDarkMode(this);
             SetTextBoxBills();
             LoadComboBoxesManualLeds();

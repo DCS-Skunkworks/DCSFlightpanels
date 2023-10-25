@@ -22,7 +22,7 @@ namespace DCSFlightpanels.PanelUserControls.CDU737
             InitializeComponent();
 
             _cdu737PanelFA18C = new CDU737PanelFA18C(hidSkeleton);
-            _cdu737PanelFA18C.Init();
+            _cdu737PanelFA18C.InitPanel();
             //_HIDSkeleton = hidSkeleton;
             AppEventHandler.AttachGamingPanelListener(this);
 

@@ -68,7 +68,7 @@
         {
             if (UserControlLoaded) return;
 
-            _backlitPanelBIP.Init();
+            _backlitPanelBIP.InitPanel();
             DarkMode.SetFrameworkElementDarkMode(this);
             Init();
             SetContextMenuClickHandlers();

@@ -23,7 +23,7 @@ namespace DCSFlightpanels.PanelUserControls.CDU737
             InitializeComponent();
 
             _cdu737PanelF14 = new CDU737PanelF14(hidSkeleton);
-            _cdu737PanelF14.Init();
+            _cdu737PanelF14.InitPanel();
             //_HIDSkeleton = hidSkeleton;
             AppEventHandler.AttachGamingPanelListener(this);
 
