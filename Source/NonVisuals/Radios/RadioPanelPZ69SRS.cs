@@ -18,8 +18,6 @@
     using NonVisuals.HID;
     using NonVisuals.BindingClasses.BIP;
     using NonVisuals.Helpers;
-    using System.Net;
-    using System.Web.Services.Description;
 
     public struct SRSRadioSmallFreqStepping
     {

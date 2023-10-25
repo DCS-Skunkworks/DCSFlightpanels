@@ -38,7 +38,6 @@
         {
             InitializeComponent();
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
-            _backlitPanelBIP.InitPanel();
             AppEventHandler.AttachGamingPanelListener(this);
             AppEventHandler.AttachLEDLightListener(this);
         }
@@ -62,18 +61,36 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
+        public override void Init()
+        {
+            _backlitPanelBIP.InitPanel();
+        }
+
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (UserControlLoaded) return;
+            if (!UserControlLoaded || !TextBoxBillsSet)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this); 
+                var imageList = Common.FindVisualChildren<Image>(this);
+                foreach (var image in imageList)
+                {
+                    if (image.Name.StartsWith("ImagePosition"))
+                    {
+                        _colorImages.Add(image);
+                    }
+                    if (image.Name.StartsWith("ImageConfigFound"))
+                    {
+                        _configurationIndicatorImages.Add(image);
+                    }
+                }
 
-            DarkMode.SetFrameworkElementDarkMode(this);
-            Init();
-            SetContextMenuClickHandlers();
-            SetAllBlack();
-            ShowGraphicConfiguration();
+                SetContextMenuClickHandlers();
+                SetAllBlack();
+            }
             UserControlLoaded = true;
+            ShowGraphicConfiguration();
         }
         
         public override GamingPanel GetGamingPanel()
@@ -152,22 +169,6 @@
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
-            }
-        }
-        
-        private void Init()
-        {
-            var imageList = Common.FindVisualChildren<Image>(this);
-            foreach (var image in imageList)
-            {
-                if (image.Name.StartsWith("ImagePosition"))
-                {
-                    _colorImages.Add(image);
-                }
-                if (image.Name.StartsWith("ImageConfigFound"))
-                {
-                    _configurationIndicatorImages.Add(image);
-                }
             }
         }
 

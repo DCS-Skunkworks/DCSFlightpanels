@@ -32,7 +32,6 @@
             {
                 FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
             };
-            _radioPanelPZ69.InitPanel();
 
             AppEventHandler.AttachGamingPanelListener(this);
 
@@ -58,12 +57,11 @@
             base.Dispose(disposing);
         }
 
-        private void RadioPanelPZ69UserControlKa50_OnLoaded(object sender, RoutedEventArgs e)
+        public override void Init()
         {
-            if (UserControlLoaded) return;
-            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
+                _radioPanelPZ69.InitPanel();
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
                 ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
                 _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
@@ -73,6 +71,15 @@
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void RadioPanelPZ69UserControlKa50_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!UserControlLoaded)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+            }
+            UserControlLoaded = true;
         }
 
         public override GamingPanel GetGamingPanel()

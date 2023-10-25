@@ -1,10 +1,11 @@
 ﻿using ClassLibraryCommon;
 using DCSFlightpanels.Interfaces;
+using Microsoft.VisualStudio.OLE.Interop;
 using NonVisuals.HID;
 using System.Windows.Controls;
-using DCSFlightpanels.PanelUserControls.CDU737;
+using System.Windows.Forms;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.PanelUserControls.CDU737
 {
     internal static class UserControlBaseFactoryHelpers
     {
@@ -17,27 +18,39 @@ namespace DCSFlightpanels
             {
                 if (DCSAircraft.IsA10C(profile))
                 {
-                    return new Cdu737UserControlA10C(hidSkeleton);
+                    var control = new Cdu737UserControlA10C(hidSkeleton);
+                    control.Init();
+                    return control;
                 }
                 if (DCSAircraft.IsAH64D(profile))
                 {
-                    return new Cdu737UserControlAH64D(hidSkeleton);
+                    var control = new Cdu737UserControlAH64D(hidSkeleton);
+                    control.Init();
+                    return control;
                 }
                 if (DCSAircraft.IsFA18C(profile))
                 {
-                    return new Cdu737UserControlFA18C(hidSkeleton);
+                    var control = new Cdu737UserControlFA18C(hidSkeleton);
+                    control.Init();
+                    return control;
                 }
                 if (DCSAircraft.IsSA342(profile))
                 {
-                    return new Cdu737UserControlSA342(hidSkeleton);
+                    var control = new Cdu737UserControlSA342(hidSkeleton);
+                    control.Init();
+                    return control;
                 }
                 if (DCSAircraft.IsF14B(profile))
                 {
-                    return new Cdu737UserControlF14(hidSkeleton);
+                    var control = new Cdu737UserControlF14(hidSkeleton);
+                    control.Init();
+                    return control;
                 }
                 if (DCSAircraft.IsM2000C(profile))
                 {
-                    return new Cdu737UserControlM2000C(hidSkeleton);
+                    var control = new Cdu737UserControlM2000C(hidSkeleton);
+                    control.Init();
+                    return control;
                 }
             }
 

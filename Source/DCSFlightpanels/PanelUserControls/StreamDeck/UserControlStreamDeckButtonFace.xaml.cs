@@ -33,7 +33,6 @@
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly List<StreamDeckFaceTextBox> _textBoxList = new();
         private readonly List<RadioButton> _radioButtonList = new();
-        private bool _isLoaded;
         private EnumStreamDeckButtonNames _streamDeckButton;
         private StreamDeckPanel _streamDeckPanel;
         public bool IsDirty { get; set; }
@@ -60,6 +59,24 @@
             base.Dispose(disposing);
         }
 
+        public override void Init()
+        {
+            try
+            {
+                if (Common.KeyEmulationOnly())
+                {
+                    RadioButtonDCSBIOSFace.Visibility = Visibility.Collapsed;
+                }
+                FillControlLists();
+                SetBills();
+                LoadFontSettings();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         internal void SetStreamDeckPanel(StreamDeckPanel streamDeckPanel)
         {
             _streamDeckPanel = streamDeckPanel;
@@ -68,39 +85,15 @@
         private void UserControlStreamDeckButtonFace_OnLoaded(object sender, RoutedEventArgs e)
         {
             DarkMode.SetFrameworkElementDarkMode(this);
-            try
-            {
-                if (_isLoaded)
-                {
-                    return;
-                }
-
-                if (Common.KeyEmulationOnly())
-                {
-                    RadioButtonDCSBIOSFace.Visibility = Visibility.Collapsed;
-                }
-                FillControlLists();
-                SetBills();
-                LoadFontSettings();
-                SetFormState();
-                _isLoaded = true;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            SetFormState();
+            UserControlLoaded = true;
         }
-
-        /*public void SetButton(EnumStreamDeckButtonNames streamDeckButton)
-        {
-            _streamDeckButton = streamDeckButton;a
-        }*/
 
         private void SetFormState()
         {
             try
             {
-                if (!_isLoaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }

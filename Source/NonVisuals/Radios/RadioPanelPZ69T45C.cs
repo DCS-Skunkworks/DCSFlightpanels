@@ -18,7 +18,6 @@ namespace NonVisuals.Radios
     using Panels.Saitek;
     using HID;
     using NonVisuals.Helpers;
-    using NonVisuals.Radios.SRS;
 
 
     /// <summary>

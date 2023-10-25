@@ -55,10 +55,8 @@
             base.Dispose(disposing);
         }
 
-        private void RadioPanelPZ69UserControlP51D_OnLoaded(object sender, RoutedEventArgs e)
+        public override void Init()
         {
-            if (UserControlLoaded) return;
-            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
                 _radioPanelPZ69.InitPanel();
@@ -71,6 +69,15 @@
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void RadioPanelPZ69UserControlP51D_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!UserControlLoaded)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+            }
+            UserControlLoaded = true;
         }
 
         public override GamingPanel GetGamingPanel()

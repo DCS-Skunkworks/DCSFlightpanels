@@ -22,17 +22,17 @@
     public partial class RadioPanelPZ69UserControlT45C : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69T45C _radioPanelPZ69;
-        
+
         public RadioPanelPZ69UserControlT45C(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            
+
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69T45C(hidSkeleton)
             {
                 FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
             };
-            
+
             AppEventHandler.AttachGamingPanelListener(this);
         }
 
@@ -55,22 +55,28 @@
             base.Dispose(disposing);
         }
 
-        private void RadioPanelPZ69UserControlT45C_OnLoaded(object sender, RoutedEventArgs e)
+        public override void Init()
         {
-            if (UserControlLoaded) return;
-            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
                 _radioPanelPZ69.InitPanel();
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
                 ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
                 _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                UserControlLoaded = true;
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void RadioPanelPZ69UserControlT45C_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!UserControlLoaded)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+            }
+            UserControlLoaded = true;
         }
 
         public override GamingPanel GetGamingPanel()
@@ -89,7 +95,7 @@
         }
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
-        
+
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
@@ -101,16 +107,16 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
-        public void ProfileEvent(object sender, ProfileEventArgs e){}
-        
+        public void ProfileEvent(object sender, ProfileEventArgs e) { }
+
         public void SettingsApplied(object sender, PanelInfoArgs e) { }
 
         public void SettingsModified(object sender, PanelInfoArgs e) { }
-        
+
         private void SetGraphicsState(HashSet<object> knobs)
         {
             try
@@ -314,10 +320,10 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void HideAllImages()
         {
             TopLeftCom1.Visibility = Visibility.Collapsed;
@@ -360,7 +366,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -377,7 +383,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -394,7 +400,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -411,7 +417,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -428,7 +434,7 @@
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 

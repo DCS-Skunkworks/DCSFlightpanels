@@ -34,14 +34,12 @@ namespace DCSFlightpanels.PanelUserControls
     public partial class MultiPanelUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
-        private bool _textBoxBillsSet;
 
         public MultiPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
             
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
-            _multiPanelPZ70.InitPanel();
             AppEventHandler.AttachGamingPanelListener(this); 
 
             HideAllImages();
@@ -66,18 +64,30 @@ namespace DCSFlightpanels.PanelUserControls
             base.Dispose(disposing);
         }
 
+        public override void Init()
+        {
+            try
+            {
+                _multiPanelPZ70.InitPanel();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void MultiPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (UserControlLoaded) return;
-
-            DarkMode.SetFrameworkElementDarkMode(this);
-            ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
-            SetTextBoxBills();
-            ShowGraphicConfiguration();
+            if (!UserControlLoaded || !TextBoxBillsSet)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+                ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
+                SetTextBoxBills();
+            }
             UserControlLoaded = true;
+            ShowGraphicConfiguration();
         }
         
-
         public override GamingPanel GetGamingPanel()
         {
             return _multiPanelPZ70;
@@ -141,7 +151,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ClearAll(bool clearAlsoProfile)
         {
-            if (_textBoxBillsSet)
+            if (TextBoxBillsSet)
             {
                 foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
                 {
@@ -163,7 +173,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetTextBoxBills()
         {
-            if (_textBoxBillsSet || !Common.FindVisualChildren<PZ70TextBox>(this).Any())
+            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ70TextBox>(this).Any())
             {
                 return;
             }
@@ -174,9 +184,9 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     textBox.Bill = new BillPZ70(this, _multiPanelPZ70, textBox);
                 }
-                _textBoxBillsSet = true;
+                TextBoxBillsSet = true;
             }
-            _textBoxBillsSet = true;
+            TextBoxBillsSet = true;
             
         }
         
@@ -576,7 +586,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!UserControlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxBillsSet)
                 {
                     return;
                 }

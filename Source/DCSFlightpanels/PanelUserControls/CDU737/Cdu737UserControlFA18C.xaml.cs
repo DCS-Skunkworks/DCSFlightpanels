@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using ClassLibraryCommon;
 using DCSFlightpanels.Interfaces;
 using NonVisuals.CockpitMaster.PreProgrammed;
 using NonVisuals.EventArgs;
@@ -22,7 +23,6 @@ namespace DCSFlightpanels.PanelUserControls.CDU737
             InitializeComponent();
 
             _cdu737PanelFA18C = new CDU737PanelFA18C(hidSkeleton);
-            _cdu737PanelFA18C.InitPanel();
             //_HIDSkeleton = hidSkeleton;
             AppEventHandler.AttachGamingPanelListener(this);
 
@@ -47,17 +47,21 @@ namespace DCSFlightpanels.PanelUserControls.CDU737
             // Call base class implementation.
             base.Dispose(disposing);
         }
-
-        private bool _once = true;
+        public override void Init()
+        {
+            try
+            {
+                _cdu737PanelFA18C.InitPanel();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
 
         private void CDU737UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             UserControlLoaded = true;
-
-            if (_once)
-            {
-                _once = false;
-            }
         }
 
         public override GamingPanel GetGamingPanel()
