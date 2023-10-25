@@ -21,6 +21,7 @@ namespace DCSFPTests.NonVisuals
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel);
             var switchPanel = new SwitchPanelPZ55(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+            switchPanel.InitPanel();
 
             //SwitchPanel
             Assert.True(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
@@ -61,6 +62,7 @@ namespace DCSFPTests.NonVisuals
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
             var multiPanelPZ70 = new MultiPanelPZ70(new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+            multiPanelPZ70.InitPanel();
 
             //MultiPanel
             Assert.True(BIOSEventHandler.OnDcsDataAddressValueEventSubscribed());
@@ -101,7 +103,8 @@ namespace DCSFPTests.NonVisuals
             var gamingPanelSkeleton =
                 new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel);
             var streamDeckPanel = new StreamDeckPanel(GamingPanelEnum.StreamDeck, new HIDSkeleton(gamingPanelSkeleton, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), true);
-            
+            streamDeckPanel.InitPanel();
+
             //GamingPanel
             Assert.True(AppEventHandler.OnProfileEventSubscribed());
             Assert.True(AppEventHandler.OnSavePanelSettingsSubscribed());
