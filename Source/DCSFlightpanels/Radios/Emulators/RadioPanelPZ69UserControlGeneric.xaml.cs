@@ -36,9 +36,6 @@
         private const string LOWER_TEXT = "Lower Dial Profile : ";
         private readonly List<Key> _allowedKeys = new() { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
         private readonly RadioPanelPZ69Generic _radioPanelPZ69;
-        private bool _userControlLoaded;
-        private bool _textBoxBillsSet;
-        private bool _buttonBillsSet;
 
         public RadioPanelPZ69UserControlGeneric(HIDSkeleton hidSkeleton)
         {
@@ -50,7 +47,7 @@
             {
                 FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
             };
-            
+
             AppEventHandler.AttachGamingPanelListener(this);
         }
 
@@ -78,24 +75,31 @@
             base.Dispose(disposing);
         }
 
-        private void RadioPanelPZ69UserControlGeneric_OnLoaded(object sender, RoutedEventArgs e)
+        public override void Init()
         {
-            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
-                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
-                SetTextBoxBills();
-                SetButtonBills();
-                _userControlLoaded = true;
-                ShowGraphicConfiguration();
+                _radioPanelPZ69.InitPanel();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
 
+        private void RadioPanelPZ69UserControlGeneric_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!UserControlLoaded)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
+                SetTextBoxBills();
+                SetButtonBills();
+            }
+            UserControlLoaded = true;
+            ShowGraphicConfiguration();
+        }
+        
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
@@ -175,7 +179,7 @@
 
         private void SetTextBoxBills()
         {
-            if (_textBoxBillsSet || !Common.FindVisualChildren<PZ69GenericTextBox>(this).Any())
+            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ69GenericTextBox>(this).Any())
             {
                 return;
             }
@@ -187,12 +191,12 @@
                 }
                 textBox.Bill = new BillPZ69Generic(this, _radioPanelPZ69, textBox);
             }
-            _textBoxBillsSet = true;
+            TextBoxBillsSet = true;
         }
 
         private void SetButtonBills()
         {
-            if (_buttonBillsSet)
+            if (ButtonBillsSet)
             {
                 return;
             }
@@ -200,7 +204,7 @@
             ButtonLowerLeftLcd.Bill = new BillPZ69LCDButton(ButtonLowerLeftLcd);
             ButtonUpperRightLcd.Bill = new BillPZ69LCDButton(ButtonUpperRightLcd);
             ButtonLowerRightLcd.Bill = new BillPZ69LCDButton(ButtonLowerRightLcd);
-            _buttonBillsSet = true;
+            ButtonBillsSet = true;
         }
         
         private void UpdateDisplayValues(TextBox textBox)
@@ -464,7 +468,7 @@
         {
             try
             {
-                if (!_userControlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxBillsSet)
                 {
                     return;
                 }
@@ -1163,7 +1167,7 @@
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     Settings.Default.RadioFrequencyKnobSensitivityEmulator = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
                     _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());

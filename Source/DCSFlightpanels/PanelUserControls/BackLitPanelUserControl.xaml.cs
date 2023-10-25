@@ -34,12 +34,10 @@
         private readonly BitmapImage _yellowImage = new(new Uri("pack://application:,,,/dcsfp;component/Images/BIP/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
 
-
         public BackLitPanelUserControl(HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
-            
             AppEventHandler.AttachGamingPanelListener(this);
             AppEventHandler.AttachLEDLightListener(this);
         }
@@ -63,15 +61,35 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
+        public override void Init()
+        {
+            _backlitPanelBIP.InitPanel();
+        }
+
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            DarkMode.SetFrameworkElementDarkMode(this);
-            Init();
+            if (!UserControlLoaded || !TextBoxBillsSet)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this); 
+                var imageList = Common.FindVisualChildren<Image>(this);
+                foreach (var image in imageList)
+                {
+                    if (image.Name.StartsWith("ImagePosition"))
+                    {
+                        _colorImages.Add(image);
+                    }
+                    if (image.Name.StartsWith("ImageConfigFound"))
+                    {
+                        _configurationIndicatorImages.Add(image);
+                    }
+                }
+
+                SetContextMenuClickHandlers();
+                SetAllBlack();
+            }
             UserControlLoaded = true;
-            SetContextMenuClickHandlers();
-            SetAllBlack();
             ShowGraphicConfiguration();
         }
         
@@ -151,22 +169,6 @@
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
-            }
-        }
-        
-        private void Init()
-        {
-            var imageList = Common.FindVisualChildren<Image>(this);
-            foreach (var image in imageList)
-            {
-                if (image.Name.StartsWith("ImagePosition"))
-                {
-                    _colorImages.Add(image);
-                }
-                if (image.Name.StartsWith("ImageConfigFound"))
-                {
-                    _configurationIndicatorImages.Add(image);
-                }
             }
         }
 

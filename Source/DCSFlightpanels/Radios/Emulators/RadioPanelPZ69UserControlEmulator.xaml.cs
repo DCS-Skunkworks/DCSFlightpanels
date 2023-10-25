@@ -27,8 +27,6 @@
     {
         private readonly List<Key> _allowedKeys = new(){ Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
         private readonly RadioPanelPZ69Emulator _radioPanelPZ69;
-        private bool _userControlLoaded;
-        private bool _textBoxBillsSet;
 
         public RadioPanelPZ69UserControlEmulator(HIDSkeleton hidSkeleton)
         {
@@ -40,7 +38,7 @@
             {
                 FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity
             };
-            
+
             AppEventHandler.AttachGamingPanelListener(this);
         }
 
@@ -68,20 +66,28 @@
             base.Dispose(disposing);
         }
 
-        private void RadioPanelPZ69UserControlEmulator_OnLoaded(object sender, RoutedEventArgs e)
+        public override void Init()
         {
-            DarkMode.SetFrameworkElementDarkMode(this);
             try
             {
-                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
-                SetTextBoxBills();
-                _userControlLoaded = true;
-                ShowGraphicConfiguration();
+                _radioPanelPZ69.InitPanel();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void RadioPanelPZ69UserControlEmulator_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!UserControlLoaded)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
+                SetTextBoxBills();
+            }
+            UserControlLoaded = true;
+            ShowGraphicConfiguration();
         }
         
         public override GamingPanel GetGamingPanel()
@@ -163,7 +169,7 @@
 
         private void SetTextBoxBills()
         {
-            if (_textBoxBillsSet || !Common.FindVisualChildren<PZ69TextBox>(this).Any())
+            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ69TextBox>(this).Any())
             {
                 return;
             }
@@ -175,7 +181,7 @@
                 }
                 textBox.Bill = new BillPZ69Emulator(this, _radioPanelPZ69, textBox);
             }
-            _textBoxBillsSet = true;
+            TextBoxBillsSet = true;
         }
 
         private void UpdateKeyBindingProfileSimpleKeyStrokes(PZ69TextBox textBox)
@@ -500,7 +506,7 @@
         {
             try
             {
-                if (!_userControlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxBillsSet)
                 {
                     return;
                 }
@@ -1003,7 +1009,7 @@
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     Settings.Default.RadioFrequencyKnobSensitivityEmulator = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
                     _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());

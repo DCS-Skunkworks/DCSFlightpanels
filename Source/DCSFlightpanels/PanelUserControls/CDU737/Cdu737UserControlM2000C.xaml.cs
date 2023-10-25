@@ -1,15 +1,15 @@
-﻿namespace DCSFlightpanels.PanelUserControls.PreProgrammed
+﻿using System;
+using System.Windows;
+using ClassLibraryCommon;
+using DCSFlightpanels.Interfaces;
+using NonVisuals.CockpitMaster.PreProgrammed;
+using NonVisuals.EventArgs;
+using NonVisuals.HID;
+using NonVisuals.Interfaces;
+using NonVisuals.Panels;
+
+namespace DCSFlightpanels.PanelUserControls.CDU737
 {
-    using System.Windows;
-    using NonVisuals.EventArgs;
-    using NonVisuals.Interfaces;
-
-    using NonVisuals.CockpitMaster.Preprogrammed;
-    using Interfaces;
-    using System;
-    using NonVisuals.Panels;
-    using NonVisuals.HID;
-
     /// <summary>
     /// Interaction logic for Cdu737UserControlM2000C.xaml
     /// </summary>
@@ -46,17 +46,21 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-
-        private bool _once = true;
+        public override void Init()
+        {
+            try
+            {
+                _cdu737PanelM2000C.InitPanel();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
 
         private void CDU737UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             UserControlLoaded = true;
-
-            if (_once)
-            {
-                _once = false;
-            }
         }
 
         public override GamingPanel GetGamingPanel()

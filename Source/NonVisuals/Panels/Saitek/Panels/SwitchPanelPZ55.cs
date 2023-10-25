@@ -63,17 +63,9 @@ namespace NonVisuals.Panels.Saitek.Panels
 
         public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton)
         {
-            if (hidSkeleton.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
-            {
-                throw new ArgumentException($"GamingPanelType {GamingPanelEnum.PZ55SwitchPanel} expected");
-            }
-
             // Fixed values
             VendorId = 0x6A3;
             ProductId = 0xD67;
-            CreateSwitchKeys();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
         }
 
         private bool _disposed;
@@ -94,10 +86,16 @@ namespace NonVisuals.Panels.Saitek.Panels
             base.Dispose(disposing);
         }
 
-        public override sealed void Startup()
+        public override void InitPanel()
         {
             try
             {
+                if (HIDSkeletonBase.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
+                {
+                    throw new ArgumentException($"GamingPanelType {GamingPanelEnum.PZ55SwitchPanel} expected");
+                }
+                CreateSwitchKeys();
+                BIOSEventHandler.AttachDataListener(this);
                 StartListeningForHidPanelChanges();
             }
             catch (Exception ex)

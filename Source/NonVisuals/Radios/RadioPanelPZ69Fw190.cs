@@ -113,11 +113,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Fw190(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -135,6 +131,24 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void InitPanel()
+        {
+            CreateRadioKnobs();
+
+            // COM1
+            _fug16ZyPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_MODE");
+            _fug16ZyFineTuneDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FUG16_TUNING");
+
+            // COM2
+            _fug25AIFFDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FUG25_MODE");
+
+            // NAV1
+            _homingDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FT_ZF_SWITCH");
+            
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -785,31 +799,6 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
             Interlocked.Decrement(ref _doUpdatePanelLCD);
-        }
-
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // COM1
-                _fug16ZyPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RADIO_MODE");
-                _fug16ZyFineTuneDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FUG16_TUNING");
-
-                // COM2
-                _fug25AIFFDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FUG25_MODE");
-
-                // NAV1
-                _homingDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FT_ZF_SWITCH");
-
-                StartListeningForHidPanelChanges();
-
-                // IsAttached = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
         }
 
         public override void ClearSettings(bool setIsDirty = false) { }

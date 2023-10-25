@@ -59,7 +59,31 @@
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        
+
+        public override void Init()
+        {
+            try
+            {
+                _radioPanelPZ69SRS.InitPanel();
+                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
+                ComboBoxSmallFreqStepping.SelectedValue = Settings.Default.SRSSmallFreqStepping;
+                UserControlLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void RadioPanelPZ69UserControlSRS_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!UserControlLoaded)
+            {
+                DarkMode.SetFrameworkElementDarkMode(this);
+            }
+            UserControlLoaded = true;
+        }
+
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69SRS;
@@ -453,21 +477,6 @@
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
-        private void RadioPanelPZ69UserControlSRS_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
-                ComboBoxSmallFreqStepping.SelectedValue = Settings.Default.SRSSmallFreqStepping;
-                UserControlLoaded = true;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
 
         private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
         {

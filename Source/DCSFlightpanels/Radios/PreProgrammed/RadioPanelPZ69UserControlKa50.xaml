@@ -5,7 +5,7 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
                  mc:Ignorable="d" 
-                 d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlKa50_OnLoadedRadioPanelPZ69UserControlKa50_OnLoaded">
+                 d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlKa50_OnLoaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="240" />

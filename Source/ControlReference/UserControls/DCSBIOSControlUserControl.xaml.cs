@@ -24,7 +24,7 @@ namespace ControlReference.UserControls
         private readonly DCSBIOSControl _dcsbiosControl;
         private ToolTip _copyToolTip = null;
         private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new();
-        private bool _hasLoaded = false;
+        private bool _isLoaded = false;
 
         public DCSBIOSControlUserControl(DCSBIOSControl dcsbiosControl)
         {
@@ -60,8 +60,8 @@ namespace ControlReference.UserControls
         {
             try
             {
-                if (_hasLoaded) return;
-                _hasLoaded = true;
+                if (_isLoaded) return;
+                _isLoaded = true;
 
                 ShowControl();
                 SetFormState();

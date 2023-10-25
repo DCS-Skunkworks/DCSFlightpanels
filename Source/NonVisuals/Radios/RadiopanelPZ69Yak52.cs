@@ -127,23 +127,12 @@ namespace NonVisuals.Radios
         private const string GMK_MODE_SELECTOR_DEC = "FRONT_SDG_MODE DEC\n";
 
 
-        private readonly ClickSkipper _gmkClickSkipper = new ClickSkipper(2);
-
-
-
-
-
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Yak52(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachDataListener(this);
-            BIOSEventHandler.AttachStringListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -162,6 +151,29 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void InitPanel()
+        {
+            CreateRadioKnobs();
+
+            // VHF
+            _vhfRadioSquelchSwitchDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(VHF_RADIO_SQUELCH_TOGGLE);
+            _vhfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetStringDCSBIOSOutput(VHF_RADIO_FREQUENCY);
+
+            // ADF
+            _adfFrontChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(ADF_FRONT_CHANNEL);
+            _adfRearChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(ADF_REAR_CHANNEL);
+
+            // GMK
+            _gmkHeadingSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_HEADING_SELECTOR);
+            _gmkHemisphereSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_HEMISPHERE_SELECTOR);
+            _gmkModeSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_MODE_SELECTOR);
+            _gmkLatitudeDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_LATITUDE_SELECTOR);
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -933,33 +945,6 @@ namespace NonVisuals.Radios
             }
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
-        }
-
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                // VHF
-                _vhfRadioSquelchSwitchDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(VHF_RADIO_SQUELCH_TOGGLE);
-                _vhfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetStringDCSBIOSOutput(VHF_RADIO_FREQUENCY);
-
-                // ADF
-                _adfFrontChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(ADF_FRONT_CHANNEL);
-                _adfRearChannelDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(ADF_REAR_CHANNEL);
-
-                // GMK
-                _gmkHeadingSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_HEADING_SELECTOR);
-                _gmkHemisphereSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_HEMISPHERE_SELECTOR);
-                _gmkModeSelectorDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_MODE_SELECTOR);
-                _gmkLatitudeDialDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(GMK_LATITUDE_SELECTOR);
-
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
         }
 
         public override void ClearSettings(bool setIsDirty = false)

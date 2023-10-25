@@ -33,7 +33,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private readonly List<StreamDeckActionTextBox> _textBoxes = new();
 
         private StreamDeckButton _streamDeckButton;
-        private bool _isLoaded;
         private StreamDeckPanel _streamDeckPanel;
 
         public bool IsDirty { get; set; }
@@ -65,21 +64,28 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             _streamDeckPanel = streamDeckPanel;
         }
 
+        public override void Init()
+        {
+            try
+            {
+                if (Common.KeyEmulationOnly() || !Common.FullDCSBIOSEnabled())
+                {
+                    RadioButtonDCSBIOS.Visibility = Visibility.Collapsed;
+                }
+                FillTextBoxList();
+                SetTextBoxBills();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void UserControlStreamDeckButtonAction_OnLoaded(object sender, RoutedEventArgs e)
         {
             DarkMode.SetFrameworkElementDarkMode(this);
-            if (_isLoaded)
-            {
-                return;
-            }
-
-            if (Common.KeyEmulationOnly() || !Common.FullDCSBIOSEnabled())
-            {
-                RadioButtonDCSBIOS.Visibility = Visibility.Collapsed;
-            }
-            FillTextBoxList();
-            SetTextBoxBills();
-            _isLoaded = true;
+            Update();
+            UserControlLoaded = true;
         }
 
         private void FillTextBoxList()
@@ -124,7 +130,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                if (!_isLoaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }

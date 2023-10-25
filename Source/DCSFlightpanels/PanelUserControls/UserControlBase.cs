@@ -5,12 +5,16 @@ using NonVisuals.Panels;
 
 namespace DCSFlightpanels.PanelUserControls
 {
-    public class UserControlBase : UserControl, IDisposable
+    public abstract class UserControlBase : UserControl, IDisposable
     {
         private bool _disposed;
-        
-        public bool UserControlLoaded { get; set; }
-        
+
+        protected bool UserControlLoaded { get; set; }
+        protected bool TextBoxBillsSet { get; set; }
+        protected bool ButtonBillsSet { get; set; }
+
+        public abstract void Init();
+
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)

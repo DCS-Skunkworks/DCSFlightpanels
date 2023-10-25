@@ -7,32 +7,29 @@ using NonVisuals.CockpitMaster.Switches;
 using System.Collections.Generic;
 using NonVisuals.HID;
 
-namespace NonVisuals.CockpitMaster.Preprogrammed
+namespace NonVisuals.CockpitMaster.PreProgrammed
 {
 
     public class CDU737PanelSA342 : CDU737PanelBase , IDCSBIOSStringListener
     {
         public CDU737PanelSA342(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CDUPanelKeys = CDUMappedCommandKeySA342.GetMappedPanelKeys();
-            
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-            for(int i=0;i<LINES_ON_CDU;i++)
-            {
-                SetColorForLine(i, CDUColor.RED);
-            }
-            Startup();
-        }
+        {}
 
-        public sealed override void Startup()
+        public override void InitPanel()
         {
             try
             {
+                CDUPanelKeys = CDUMappedCommandKeySA342.GetMappedPanelKeys();
+
+                BIOSEventHandler.AttachStringListener(this);
+                BIOSEventHandler.AttachDataListener(this);
+                for (int i = 0; i < LINES_ON_CDU; i++)
+                {
+                    SetColorForLine(i, CDUColor.RED);
+                }
 
                 // PLT Keyboard display
-
-
+                
                 SetLine(0, string.Format("{0,24}", "SA342 profile"));
 
                 StartListeningForHidPanelChanges();

@@ -7,7 +7,7 @@ using NonVisuals.CockpitMaster.Switches;
 using System.Collections.Generic;
 using NonVisuals.HID;
 
-namespace NonVisuals.CockpitMaster.Preprogrammed
+namespace NonVisuals.CockpitMaster.PreProgrammed
 {
     public class CDU737PanelF14 : CDU737PanelBase, IDCSBIOSStringListener
     {
@@ -74,20 +74,17 @@ namespace NonVisuals.CockpitMaster.Preprogrammed
         };
 
         public CDU737PanelF14(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CDUPanelKeys = CDUMappedCommandKeyF14.GetMappedPanelKeys();
+        {}
 
-            Startup();
-
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-            
-        }
-
-        public sealed override void Startup()
+        public override void InitPanel()
         {
             try
             {
+                CDUPanelKeys = CDUMappedCommandKeyF14.GetMappedPanelKeys();
+                
+                BIOSEventHandler.AttachStringListener(this);
+                BIOSEventHandler.AttachDataListener(this);
+
                 BaseColor = CDUColor.WHITE;
 
                 _RIO_CAP_CATEGORY = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_CAP_CATRGORY");

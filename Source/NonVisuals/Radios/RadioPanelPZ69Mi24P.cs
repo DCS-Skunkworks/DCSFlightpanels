@@ -172,12 +172,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Mi24P(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {
-            CreateRadioKnobs();
-            Startup();
-            BIOSEventHandler.AttachStringListener(this);
-            BIOSEventHandler.AttachDataListener(this);
-        }
+        {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -196,6 +191,39 @@ namespace NonVisuals.Radios
 
             // Call base class implementation.
             base.Dispose(disposing);
+        }
+
+        public override void InitPanel()
+        {
+            CreateRadioKnobs();
+
+            //COM2
+            _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_R863_CHAN");
+
+            //NAV1
+            _yadro1ADcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("JADRO_FREQ");
+
+            //NAV2
+            _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_R828_CHAN");
+
+            //ADF
+            _adfMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_L_100");
+            _adfMainDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_L_10");
+            _adfBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_R_100");
+            _adfBackupDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_R_10");
+            _adfBackupMainDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_CHAN");
+
+            //DME
+            _dmeMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_L_1");
+            _dmeBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_R_1");
+
+            //XPDR
+            _spu8DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_SPU8_MODE");
+            _spu8ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_SPU8_ICS");
+
+            BIOSEventHandler.AttachStringListener(this);
+            BIOSEventHandler.AttachDataListener(this);
+            StartListeningForHidPanelChanges();
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -1614,44 +1642,6 @@ namespace NonVisuals.Radios
         {
             double frequencyAsDouble = (double)position / 2;
             return frequencyAsDouble.ToString("0.0", CultureInfo.InvariantCulture);
-        }
-
-        public sealed override void Startup()
-        {
-            try
-            {
-                //COM1
-
-                //COM2
-                _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_R863_CHAN");
-
-                //NAV1
-                _yadro1ADcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetStringDCSBIOSOutput("JADRO_FREQ");
-
-                //NAV2
-                _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_R828_CHAN");
-
-                //ADF
-                _adfMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_L_100");
-                _adfMainDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_L_10");
-                _adfBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_R_100");
-                _adfBackupDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_R_10");
-                _adfBackupMainDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_CHAN");
-
-                //DME
-                _dmeMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_L_1");
-                _dmeBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_ARC_FREQ_R_1");
-
-                //XPDR
-                _spu8DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_SPU8_MODE");
-                _spu8ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_SPU8_ICS");
-
-                StartListeningForHidPanelChanges();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
         }
 
         public override void ClearSettings(bool setIsDirty = false) { }

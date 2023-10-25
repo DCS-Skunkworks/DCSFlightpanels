@@ -25,70 +25,18 @@
     /// </summary>
     public partial class StreamDeckUserControl : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, INvStreamDeckListener
     {
+        private readonly GamingPanelEnum _panelType;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly StreamDeckPanel _streamDeckPanel;
-        private readonly UserControlStreamDeckUIBase _uiButtonGrid;
+        private  UserControlStreamDeckUIBase _uiButtonGrid;
         private string _comboBoxLayerTextComparison;
 
         public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton)
         {
+            _panelType = panelType;
             InitializeComponent();
-            
+
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
-            
-            UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
-            UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
-
-            StackPanelButtonUI.Children.Clear();
-            switch (panelType)
-            {
-                case GamingPanelEnum.StreamDeckMini:
-                case GamingPanelEnum.StreamDeckMiniV2:
-                    {
-                        var child = new UserControlStreamDeckUIMini(_streamDeckPanel);
-                        _uiButtonGrid = child;
-                        StackPanelButtonUI.Children.Add(child);
-
-                        break;
-                    }
-                case GamingPanelEnum.StreamDeck:
-                case GamingPanelEnum.StreamDeckV2:
-                case GamingPanelEnum.StreamDeckMK2:
-                    {
-                        var child = new UserControlStreamDeckUINormal(_streamDeckPanel);
-                        _uiButtonGrid = child;
-                        StackPanelButtonUI.Children.Add(child);
-
-                        break;
-                    }
-                case GamingPanelEnum.StreamDeckXL:
-                case GamingPanelEnum.StreamDeckXLRev2:
-                    {
-                        var child = new UserControlStreamDeckUIXL(_streamDeckPanel);
-                        _uiButtonGrid = child;
-                        StackPanelButtonUI.Children.Add(child);
-                        break;
-                    }
-                case GamingPanelEnum.StreamDeckPlus:
-                    {
-                        var child = new UserControlStreamDeckUIPlus(_streamDeckPanel);
-                        _uiButtonGrid = child;
-                        StackPanelButtonUI.Children.Add(child);
-                        break;
-                    }
-            }
-
-
-            SDEventHandler.AttachStreamDeckListener(UCStreamDeckButtonAction);
-            SDEventHandler.AttachStreamDeckListener(UCStreamDeckButtonFace);
-            SDEventHandler.AttachStreamDeckListener(_uiButtonGrid);
-            SDEventHandler.AttachStreamDeckConfigListener(_uiButtonGrid);
-            SDEventHandler.AttachStreamDeckListener(this);
-            SDEventHandler.AttachActionTypeChangedListener(UCStreamDeckButtonFace);
-            AppEventHandler.AttachGamingPanelListener(this);
-            UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
-            UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
-
         }
 
         private bool _disposed;
@@ -117,15 +65,77 @@
             base.Dispose(disposing);
         }
 
+        public override void Init()
+        {
+            try
+            {
+                UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
+                UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
+                _streamDeckPanel.InitPanel();
+                UCStreamDeckButtonAction.Init();
+                UCStreamDeckButtonFace.Init();
+                UCStreamDeckButtonAction.Update();
+
+                StackPanelButtonUI.Children.Clear();
+                switch (_panelType)
+                {
+                    case GamingPanelEnum.StreamDeckMini:
+                    case GamingPanelEnum.StreamDeckMiniV2:
+                        {
+                            var child = new UserControlStreamDeckUIMini(_streamDeckPanel);
+                            _uiButtonGrid = child;
+                            StackPanelButtonUI.Children.Add(child);
+
+                            break;
+                        }
+                    case GamingPanelEnum.StreamDeck:
+                    case GamingPanelEnum.StreamDeckV2:
+                    case GamingPanelEnum.StreamDeckMK2:
+                        {
+                            var child = new UserControlStreamDeckUINormal(_streamDeckPanel);
+                            _uiButtonGrid = child;
+                            StackPanelButtonUI.Children.Add(child);
+
+                            break;
+                        }
+                    case GamingPanelEnum.StreamDeckXL:
+                    case GamingPanelEnum.StreamDeckXLRev2:
+                        {
+                            var child = new UserControlStreamDeckUIXL(_streamDeckPanel);
+                            _uiButtonGrid = child;
+                            StackPanelButtonUI.Children.Add(child);
+                            break;
+                        }
+                    case GamingPanelEnum.StreamDeckPlus:
+                        {
+                            var child = new UserControlStreamDeckUIPlus(_streamDeckPanel);
+                            _uiButtonGrid = child;
+                            StackPanelButtonUI.Children.Add(child);
+                            break;
+                        }
+                }
+
+
+                SDEventHandler.AttachStreamDeckListener(UCStreamDeckButtonAction);
+                SDEventHandler.AttachStreamDeckListener(UCStreamDeckButtonFace);
+                SDEventHandler.AttachStreamDeckListener(_uiButtonGrid);
+                SDEventHandler.AttachStreamDeckConfigListener(_uiButtonGrid);
+                SDEventHandler.AttachStreamDeckListener(this);
+                SDEventHandler.AttachActionTypeChangedListener(UCStreamDeckButtonFace);
+                AppEventHandler.AttachGamingPanelListener(this);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (UserControlLoaded) return;
             DarkMode.SetFrameworkElementDarkMode(this);
-            if (!UserControlLoaded)
-            {
-                UCStreamDeckButtonAction.Update();
-                UserControlLoaded = true;
-            }
             SetFormState();
+            UserControlLoaded = true;
         }
 
         public void SetFormState()
@@ -165,7 +175,7 @@
         {
             return GetType().Name;
         }
-        
+
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
@@ -195,7 +205,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         public void SettingsModified(object sender, PanelInfoArgs e)
         {
             try
@@ -206,7 +216,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         public void SettingsApplied(object sender, PanelInfoArgs e)
         {
             try
@@ -221,7 +231,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -345,7 +355,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void ButtonEraseLayerButtons_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -604,7 +614,7 @@
             Debug.WriteLine(_streamDeckPanel.GetLayerHandlerInformation());
             Debug.WriteLine(SDEventHandler.GetInformation());
         }
-  
+
         public void RemoteLayerSwitch(object sender, RemoteStreamDeckShowNewLayerArgs e)
         {
             try
