@@ -60,6 +60,11 @@ namespace NonVisuals.Radios.RadioControls
 
         internal void InitRadio()
         {
+            if (_supportedFrequencyBands == null || _supportedFrequencyBands.Length == 0)
+            {
+                throw new ArgumentOutOfRangeException($"ARC-210 : No supported frequency bands specified.");
+            }
+
             _supportedFrequencyBands = SortFrequencyBand(_supportedFrequencyBands);
             _currentARC210FrequencyBand = _initialFrequencyBand;
             _tempARC210FrequencyBand = _initialFrequencyBand;
@@ -69,10 +74,6 @@ namespace NonVisuals.Radios.RadioControls
             if (string.IsNullOrEmpty(_dcsbiosIdentifier))
             {
                 throw new ArgumentOutOfRangeException($"ARC-210 : DCS-BIOS identifier is null");
-            }
-            if (_supportedFrequencyBands == null || _supportedFrequencyBands.Length == 0)
-            {
-                throw new ArgumentOutOfRangeException($"ARC-210 : No supported frequency bands specified.");
             }
             if (!IsFrequencyBandSupported(_currentARC210FrequencyBand))
             {
