@@ -46,12 +46,8 @@ namespace NonVisuals.Radios
         /* VHF AM 118.000 to 173.975 MHz */
         /* UHF AM 225.000 to 399.975 MHz */
         private readonly object _lockARC210Object = new();
-        private readonly ARC210 _arc210Radio = new ("ARC_210_RADIO", 
-            ARC210FrequencyBand.VHF2, 
-            25, 
-            5, 
-            new ARC210FrequencyBand[] { ARC210FrequencyBand.FM ,ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF});
-        private DCSBIOSOutput _arc210RadioControl;
+        private ARC210 _arc210Radio;
+        private DCSBIOSOutput _arc210RadioDCSBIOSControl;
 
         /*UHF*/
         /* 225.000 to 339.975 */
@@ -66,14 +62,14 @@ namespace NonVisuals.Radios
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private const uint QUART_FREQ_CHANGE_VALUE = 25;
 
-        public RadioPanelPZ69F15E(HIDSkeleton hidSkeleton)
-            : base(hidSkeleton)
+        public RadioPanelPZ69F15E(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {}
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
         {
+            TurnOffAllDisplays();
             if (!_disposed)
             {
                 if (disposing)
@@ -92,9 +88,16 @@ namespace NonVisuals.Radios
         public override void InitPanel()
         {
             CreateRadioKnobs();
+            lock (_lockARC210Object)
+            {
+                _arc210Radio = new ARC210("ARC_210_RADIO",
+                    ARC210FrequencyBand.UHF,
+                    new [] { ARC210FrequencyBand.FM, ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF });
+                _arc210Radio.InitRadio();
+            }
 
             // VHF
-            _arc210RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("ARC_210_RADIO");
+            _arc210RadioDCSBIOSControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("ARC_210_RADIO");
 
             // UHF
             _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_RADIO");
@@ -104,7 +107,7 @@ namespace NonVisuals.Radios
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
         }
-        
+
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             UpdateCounter(e.Address, e.Data);
@@ -123,7 +126,7 @@ namespace NonVisuals.Radios
                     return;
                 }
 
-                if (_arc210RadioControl.StringValueHasChanged(e.Address, e.StringData))
+                if (_arc210RadioDCSBIOSControl.StringValueHasChanged(e.Address, e.StringData))
                 {
                     lock (_lockARC210Object)
                     {
@@ -208,7 +211,7 @@ namespace NonVisuals.Radios
                     }
             }
         }
-        
+
         private void SendUHFToDCSBIOS()
         {
             try
@@ -243,7 +246,7 @@ namespace NonVisuals.Radios
                 {
                     return;
                 }
-
+                
                 if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                 {
                     return;
@@ -699,7 +702,7 @@ namespace NonVisuals.Radios
                 AdjustFrequency(hashSet);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false)
         {
         }

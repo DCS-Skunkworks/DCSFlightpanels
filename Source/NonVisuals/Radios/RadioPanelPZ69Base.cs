@@ -138,9 +138,7 @@ namespace NonVisuals.Radios
             PZ69DisplayBytes.SetPositionBlank(ref bytes, pz69LCDPosition);
         }
 
-        public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e)
-        {
-        }
+        public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) {}
 
         /// <summary>
         /// Right justify, pad left with blanks.
@@ -204,12 +202,10 @@ namespace NonVisuals.Radios
             try
             {
                 var bytes = new byte[21];
+                bytes[0] = 0x0;
                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                SendLCDData(bytes);
                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                SendLCDData(bytes);
                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
-                SendLCDData(bytes);
                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                 SendLCDData(bytes);
             }

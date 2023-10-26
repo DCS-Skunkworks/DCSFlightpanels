@@ -103,6 +103,7 @@ namespace NonVisuals.Radios
         // Protected implementation of Dispose pattern.
         protected override void Dispose(bool disposing)
         {
+            TurnOffAllDisplays();
             if (!_disposed)
             {
                 if (disposing)

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Diagnostics;
 
 namespace NonVisuals.Radios.RadioControls
 {
-    public enum ARC210FrequencyBand
+    internal enum ARC210FrequencyBand
     {
         FM,
         VHF1,
@@ -13,7 +14,7 @@ namespace NonVisuals.Radios.RadioControls
 
     internal class ARC210
     {
-        /*ARC210*/
+        /* ARC-210 */
         /* FM      30.000 to 87.975 MHz */
         /* VHF AM 108.000 to 115.975 MHz */
         /* VHF AM 118.000 to 173.975 MHz */
@@ -22,8 +23,8 @@ namespace NonVisuals.Radios.RadioControls
         private uint _arc210SmallFrequencyStandby;
         private readonly uint[] _lowerFrequencyBounds = { 30, 108, 118, 225 };
         private readonly uint[] _higherFrequencyBounds = { 87, 115, 173, 399 };
-        private readonly uint[] _lastBigFrequencyPerBand = { 30, 108, 118, 225 };
-        private readonly uint[] _lastSmallFrequencyPerBand = { 0, 0, 0, 0 };
+        private readonly uint[] _savedBigFrequencyPerBand = { 30, 108, 118, 225 };
+        private readonly uint[] _savedSmallFrequencyPerBand = { 0, 0, 0, 0 };
         private const int FM = 0;
         private const int FM_MIN = 30;
         private const int FM_MAX = 87;
@@ -36,34 +37,54 @@ namespace NonVisuals.Radios.RadioControls
         private const int UHF = 3;
         private const int UHF_MIN = 225;
         private const int UHF_MAX = 399;
+        private readonly ARC210FrequencyBand _initialFrequencyBand;
         private readonly uint _higherChangeRate;
         private const uint QUART_FREQ_CHANGE_VALUE = 25;
         private const uint BIG_FREQ_CHANGE_VALUE = 1;
         private ARC210FrequencyBand _currentARC210FrequencyBand;
-        private ARC210FrequencyBand _newARC210FrequencyBand;
+        private ARC210FrequencyBand _tempARC210FrequencyBand;
         private readonly string _dcsbiosIdentifier;
-        private string _cockpitFrequency = "108.000";
+        private string _cockpitFrequency;
         private readonly int _frequencyBandSkipCount; // must skip, otherwise it is difficult getting correct band
         private int _frequencyBandSkipCounter;
         private ARC210FrequencyBand[] _supportedFrequencyBands;
 
-        public ARC210(string dcsbiosIdentifier, ARC210FrequencyBand initialFrequencyBand, uint higherChangeRate, int frequencyBandSkipCount, ARC210FrequencyBand[] supportedFrequencyBands)
+        internal ARC210(string dcsbiosIdentifier, ARC210FrequencyBand initialFrequencyBand, ARC210FrequencyBand[] supportedFrequencyBands, uint higherChangeRate = 25, int frequencyBandSkipCount = 2)
         {
             _dcsbiosIdentifier = dcsbiosIdentifier.Trim();
+            _initialFrequencyBand = initialFrequencyBand;
             _higherChangeRate = higherChangeRate;
             _frequencyBandSkipCount = frequencyBandSkipCount;
             _supportedFrequencyBands = supportedFrequencyBands;
-            SetFrequencyBand(initialFrequencyBand);
-            SetDefaultStandbyFromFrequencyBand(initialFrequencyBand);
+        }
 
-            if(supportedFrequencyBands.i)
+        internal void InitRadio()
+        {
+            _supportedFrequencyBands = SortFrequencyBand(_supportedFrequencyBands);
+            _currentARC210FrequencyBand = _initialFrequencyBand;
+            _tempARC210FrequencyBand = _initialFrequencyBand;
+
+            SetDefaultStandbyFromFrequencyBand(_initialFrequencyBand);
+            SetCockpitFrequencyFromFrequencyBand(_initialFrequencyBand);
+            if (string.IsNullOrEmpty(_dcsbiosIdentifier))
+            {
+                throw new ArgumentOutOfRangeException($"ARC-210 : DCS-BIOS identifier is null");
+            }
+            if (_supportedFrequencyBands == null || _supportedFrequencyBands.Length == 0)
+            {
+                throw new ArgumentOutOfRangeException($"ARC-210 : No supported frequency bands specified.");
+            }
+            if (!IsFrequencyBandSupported(_currentARC210FrequencyBand))
+            {
+                throw new ArgumentOutOfRangeException($"ARC-210 : Frequency band {_currentARC210FrequencyBand} is not supported.");
+            }
         }
 
         /* (FM) 30.000 to 87.975 MHz */
         /* VHF AM 108.000 to 115.975 MHz */
         /* VHF AM 118.000 to 173.975 MHz */
         /* UHF AM 225.000 to 399.975 MHz */
-        public void BigFrequencyUp(bool changeFaster = false)
+        internal void BigFrequencyUp(bool changeFaster = false)
         {
             switch (_currentARC210FrequencyBand)
             {
@@ -114,7 +135,7 @@ namespace NonVisuals.Radios.RadioControls
             }
         }
 
-        public void BigFrequencyDown(bool changeFaster = false)
+        internal void BigFrequencyDown(bool changeFaster = false)
         {
             switch (_currentARC210FrequencyBand)
             {
@@ -122,7 +143,7 @@ namespace NonVisuals.Radios.RadioControls
                     {
                         if (GetBigFrequencyStandby() <= FM_MIN || (changeFaster && GetBigFrequencyStandby() - _higherChangeRate <= FM_MIN))
                         {
-                            SetBigFrequencyStandby(FM_MIN);
+                            SetBigFrequencyStandby(FM_MAX);
                             break;
                         }
 
@@ -133,7 +154,7 @@ namespace NonVisuals.Radios.RadioControls
                     {
                         if (GetBigFrequencyStandby() <= VHF1_MIN || (changeFaster && GetBigFrequencyStandby() - _higherChangeRate <= VHF1_MIN))
                         {
-                            SetBigFrequencyStandby(VHF1_MIN);
+                            SetBigFrequencyStandby(VHF1_MAX);
                             break;
                         }
 
@@ -144,7 +165,7 @@ namespace NonVisuals.Radios.RadioControls
                     {
                         if (GetBigFrequencyStandby() <= VHF2_MIN || (changeFaster && GetBigFrequencyStandby() - _higherChangeRate <= VHF2_MIN))
                         {
-                            SetBigFrequencyStandby(VHF2_MIN);
+                            SetBigFrequencyStandby(VHF2_MAX);
                             break;
                         }
 
@@ -155,7 +176,7 @@ namespace NonVisuals.Radios.RadioControls
                     {
                         if (GetBigFrequencyStandby() <= UHF_MIN || (changeFaster && GetBigFrequencyStandby() - _higherChangeRate <= UHF_MIN))
                         {
-                            SetBigFrequencyStandby(UHF_MIN);
+                            SetBigFrequencyStandby(UHF_MAX);
                             break;
                         }
 
@@ -165,7 +186,7 @@ namespace NonVisuals.Radios.RadioControls
             }
         }
 
-        public void SmallFrequencyUp()
+        internal void SmallFrequencyUp()
         {
             if (GetSmallFrequencyStandby() >= 975)
             {
@@ -176,7 +197,7 @@ namespace NonVisuals.Radios.RadioControls
             AddSmallFrequencyStandby(QUART_FREQ_CHANGE_VALUE);
         }
 
-        public void SmallFrequencyDown()
+        internal void SmallFrequencyDown()
         {
             if (GetSmallFrequencyStandby() == 0)
             {
@@ -186,27 +207,27 @@ namespace NonVisuals.Radios.RadioControls
             SubtractSmallFrequencyStandby(QUART_FREQ_CHANGE_VALUE);
         }
 
-        public string GetStandbyFrequency()
+        internal string GetStandbyFrequency()
         {
             return GetBigFrequencyStandby() + "." + GetSmallFrequencyStandby().ToString().PadLeft(3, '0').Trim();
         }
 
-        public string GetCockpitFrequency()
+        internal string GetCockpitFrequency()
         {
             return _cockpitFrequency.Trim();
         }
 
-        public string GetFrequencyBandId()
+        internal string GetFrequencyBandId()
         {
             return ((int)_currentARC210FrequencyBand).ToString();
         }
 
-        public string GetTemporaryFrequencyBandId()
+        internal string GetTemporaryFrequencyBandId()
         {
-            return ((int)_newARC210FrequencyBand).ToString();
+            return ((int)_tempARC210FrequencyBand).ToString();
         }
 
-        public void SetCockpitFrequency(string frequency)
+        internal void SetCockpitFrequency(string frequency)
         {
             /*
              * A new frequency has been received from DCS-BIOS.
@@ -214,7 +235,8 @@ namespace NonVisuals.Radios.RadioControls
              * a) user has pressed the button to set the frequency
              * b) user has changed the frequency in the cockpit
              */
-            
+
+            if (!IsFrequencyBandSupported(frequency)) return;
 
             SetStandbyFrequency(_cockpitFrequency);
             _cockpitFrequency = frequency;
@@ -224,7 +246,7 @@ namespace NonVisuals.Radios.RadioControls
             if (SwitchFrequencyBands(newBand, oldBand))
             {
                 _currentARC210FrequencyBand = newBand;
-                _newARC210FrequencyBand = newBand;
+                _tempARC210FrequencyBand = newBand;
             }
         }
 
@@ -235,7 +257,7 @@ namespace NonVisuals.Radios.RadioControls
             SetSmallFrequencyStandby(uint.Parse(array[1]));
         }
 
-        public string GetDCSBIOSCommand()
+        internal string GetDCSBIOSCommand()
         {
             return $"{_dcsbiosIdentifier} {GetStandbyFrequency()}\n";
         }
@@ -265,12 +287,7 @@ namespace NonVisuals.Radios.RadioControls
             throw new Exception("ARC210 : Frequency not matching any frequency bands.");
         }
 
-        private void SetFrequencyBand(ARC210FrequencyBand arc210FrequencyBand)
-        {
-            _currentARC210FrequencyBand = arc210FrequencyBand;
-        }
-
-        public void TemporaryFrequencyBandUp()
+        internal void TemporaryFrequencyBandUp()
         {
             _frequencyBandSkipCounter++;
             if (_frequencyBandSkipCounter < _frequencyBandSkipCount)
@@ -280,32 +297,29 @@ namespace NonVisuals.Radios.RadioControls
 
             _frequencyBandSkipCounter = 0;
 
-            switch (_newARC210FrequencyBand)
+            for (var i = 0; i < _supportedFrequencyBands.Length; i++)
             {
-                case ARC210FrequencyBand.FM:
-                    {
-                        _newARC210FrequencyBand = ARC210FrequencyBand.VHF1;
-                        break;
-                    }
-                case ARC210FrequencyBand.VHF1:
-                    {
-                        _newARC210FrequencyBand = ARC210FrequencyBand.VHF2;
-                        break;
-                    }
-                case ARC210FrequencyBand.VHF2:
-                    {
-                        _newARC210FrequencyBand = ARC210FrequencyBand.UHF;
-                        break;
-                    }
-                case ARC210FrequencyBand.UHF:
-                    {
-                        _newARC210FrequencyBand = ARC210FrequencyBand.FM;
-                        break;
-                    }
+                //   E
+                // C E H K     O    X
+                // 0 1 2 3     4    5
+                if (_tempARC210FrequencyBand == _supportedFrequencyBands[i] && i < _supportedFrequencyBands.Length - 1)
+                {
+                    _tempARC210FrequencyBand = _supportedFrequencyBands[i + 1];
+                    break;
+                }
+
+                //       K
+                // C E H K
+                // 0 1 2 3
+                if (_tempARC210FrequencyBand == _supportedFrequencyBands[i] && i >= _supportedFrequencyBands.Length - 1)
+                {
+                    _tempARC210FrequencyBand = _supportedFrequencyBands[0];
+                    break;
+                }
             }
         }
 
-        public void TemporaryFrequencyBandDown()
+        internal void TemporaryFrequencyBandDown()
         {
             _frequencyBandSkipCounter++;
             if (_frequencyBandSkipCounter < _frequencyBandSkipCount)
@@ -315,35 +329,32 @@ namespace NonVisuals.Radios.RadioControls
 
             _frequencyBandSkipCounter = 0;
 
-            switch (_newARC210FrequencyBand)
+            for (var i = 0; i < _supportedFrequencyBands.Length; i++)
             {
-                case ARC210FrequencyBand.FM:
-                    {
-                        _newARC210FrequencyBand = ARC210FrequencyBand.UHF;
-                        break;
-                    }
-                case ARC210FrequencyBand.VHF1:
-                    {
-                        _newARC210FrequencyBand = ARC210FrequencyBand.FM;
-                        break;
-                    }
-                case ARC210FrequencyBand.VHF2:
-                    {
-                        _newARC210FrequencyBand = ARC210FrequencyBand.VHF1;
-                        break;
-                    }
-                case ARC210FrequencyBand.UHF:
-                    {
-                        _newARC210FrequencyBand = ARC210FrequencyBand.VHF2;
-                        break;
-                    }
+                //   E
+                // C E H K     O    X
+                // 0 1 2 3     4    5
+                if (_tempARC210FrequencyBand == _supportedFrequencyBands[i] && i > 0)
+                {
+                    _tempARC210FrequencyBand = _supportedFrequencyBands[i - 1];
+                    break;
+                }
+
+                // C
+                // C E H K
+                // 0 1 2 3
+                if (_tempARC210FrequencyBand == _supportedFrequencyBands[i] && i == 0)
+                {
+                    _tempARC210FrequencyBand = _supportedFrequencyBands[^1];
+                    break;
+                }
             }
         }
 
         public void SwitchFrequencyBand()
         {
-            SwitchFrequencyBands(_newARC210FrequencyBand, _currentARC210FrequencyBand);
-            _currentARC210FrequencyBand = _newARC210FrequencyBand;
+            SwitchFrequencyBands(_tempARC210FrequencyBand, _currentARC210FrequencyBand);
+            _currentARC210FrequencyBand = _tempARC210FrequencyBand;
         }
 
         private bool SwitchFrequencyBands(ARC210FrequencyBand newFrequencyBandBand, ARC210FrequencyBand oldFrequencyBandBand)
@@ -357,26 +368,26 @@ namespace NonVisuals.Radios.RadioControls
             {
                 case ARC210FrequencyBand.FM:
                     {
-                        _lastBigFrequencyPerBand[FM] = GetBigFrequencyStandby();
-                        _lastSmallFrequencyPerBand[FM] = GetSmallFrequencyStandby();
+                        _savedBigFrequencyPerBand[FM] = GetBigFrequencyStandby();
+                        _savedSmallFrequencyPerBand[FM] = GetSmallFrequencyStandby();
                         break;
                     }
                 case ARC210FrequencyBand.VHF1:
                     {
-                        _lastBigFrequencyPerBand[VHF1] = GetBigFrequencyStandby();
-                        _lastSmallFrequencyPerBand[VHF1] = GetSmallFrequencyStandby();
+                        _savedBigFrequencyPerBand[VHF1] = GetBigFrequencyStandby();
+                        _savedSmallFrequencyPerBand[VHF1] = GetSmallFrequencyStandby();
                         break;
                     }
                 case ARC210FrequencyBand.VHF2:
                     {
-                        _lastBigFrequencyPerBand[VHF2] = GetBigFrequencyStandby();
-                        _lastSmallFrequencyPerBand[VHF2] = GetSmallFrequencyStandby();
+                        _savedBigFrequencyPerBand[VHF2] = GetBigFrequencyStandby();
+                        _savedSmallFrequencyPerBand[VHF2] = GetSmallFrequencyStandby();
                         break;
                     }
                 case ARC210FrequencyBand.UHF:
                     {
-                        _lastBigFrequencyPerBand[UHF] = GetBigFrequencyStandby();
-                        _lastSmallFrequencyPerBand[UHF] = GetSmallFrequencyStandby();
+                        _savedBigFrequencyPerBand[UHF] = GetBigFrequencyStandby();
+                        _savedSmallFrequencyPerBand[UHF] = GetSmallFrequencyStandby();
                         break;
                     }
             }
@@ -385,30 +396,31 @@ namespace NonVisuals.Radios.RadioControls
             {
                 case ARC210FrequencyBand.FM:
                     {
-                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[FM]);
-                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[FM]);
+                        SetBigFrequencyStandby(_savedBigFrequencyPerBand[FM]);
+                        SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[FM]);
                         break;
                     }
                 case ARC210FrequencyBand.VHF1:
                     {
-                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[VHF1]);
-                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[VHF1]);
+                        SetBigFrequencyStandby(_savedBigFrequencyPerBand[VHF1]);
+                        SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[VHF1]);
                         break;
                     }
                 case ARC210FrequencyBand.VHF2:
                     {
-                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[VHF2]);
-                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[VHF2]);
+                        SetBigFrequencyStandby(_savedBigFrequencyPerBand[VHF2]);
+                        SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[VHF2]);
                         break;
                     }
                 case ARC210FrequencyBand.UHF:
                     {
-                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[UHF]);
-                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[UHF]);
+                        SetBigFrequencyStandby(_savedBigFrequencyPerBand[UHF]);
+                        SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[UHF]);
                         break;
                     }
             }
 
+            VerifyStandbyFrequencyBand();
             return true;
         }
 
@@ -418,26 +430,26 @@ namespace NonVisuals.Radios.RadioControls
             {
                 case ARC210FrequencyBand.FM:
                     {
-                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[FM]);
-                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[FM]);
+                        SetBigFrequencyStandby(_savedBigFrequencyPerBand[FM]);
+                        SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[FM]);
                         break;
                     }
                 case ARC210FrequencyBand.VHF1:
                     {
-                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[VHF1]);
-                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[VHF1]);
+                        SetBigFrequencyStandby(_savedBigFrequencyPerBand[VHF1]);
+                        SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[VHF1]);
                         break;
                     }
                 case ARC210FrequencyBand.VHF2:
                     {
-                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[VHF2]);
-                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[VHF2]);
+                        SetBigFrequencyStandby(_savedBigFrequencyPerBand[VHF2]);
+                        SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[VHF2]);
                         break;
                     }
                 case ARC210FrequencyBand.UHF:
                     {
-                        SetBigFrequencyStandby(_lastBigFrequencyPerBand[UHF]);
-                        SetSmallFrequencyStandby(_lastSmallFrequencyPerBand[UHF]);
+                        SetBigFrequencyStandby(_savedBigFrequencyPerBand[UHF]);
+                        SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[UHF]);
                         break;
                     }
             }
@@ -445,11 +457,48 @@ namespace NonVisuals.Radios.RadioControls
             return true;
         }
 
+        private bool SetCockpitFrequencyFromFrequencyBand(ARC210FrequencyBand frequencyBand)
+        {
+            switch (frequencyBand)
+            {
+                case ARC210FrequencyBand.FM:
+                    {
+                        _cockpitFrequency = $"{_savedBigFrequencyPerBand[FM]}.{_savedSmallFrequencyPerBand[FM]}".PadRight(7, '0');
+                        break;
+                    }
+                case ARC210FrequencyBand.VHF1:
+                    {
+                        _cockpitFrequency = $"{_savedBigFrequencyPerBand[VHF1]}.{_savedSmallFrequencyPerBand[VHF1]}".PadRight(7, '0');
+                        break;
+                    }
+                case ARC210FrequencyBand.VHF2:
+                    {
+                        _cockpitFrequency = $"{_savedBigFrequencyPerBand[VHF2]}.{_savedSmallFrequencyPerBand[VHF2]}".PadRight(7, '0');
+                        break;
+                    }
+                case ARC210FrequencyBand.UHF:
+                    {
+                        _cockpitFrequency = $"{_savedBigFrequencyPerBand[UHF]}.{_savedSmallFrequencyPerBand[UHF]}".PadRight(7, '0');
+                        break;
+                    }
+            }
+
+            return true;
+        }
+
+        private void VerifyStandbyFrequencyBand()
+        {
+            if (!IsFrequencyBandSupported(GetFrequencyBand(GetStandbyFrequency())))
+            {
+                throw new ArgumentOutOfRangeException($"ARC-210:VerifyFrequencyBand => Frequency band {GetFrequencyBand(GetStandbyFrequency())} (Standby = {GetStandbyFrequency()}) is not supported.");
+            }
+        }
+
         private uint GetBigFrequencyCockpit()
         {
-            return uint.Parse(_cockpitFrequency.Split('.',StringSplitOptions.RemoveEmptyEntries)[0]);
+            return uint.Parse(_cockpitFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries)[0]);
         }
-        
+
         private uint GetSmallFrequencyCockpit()
         {
             return uint.Parse(_cockpitFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries)[1]);
@@ -497,12 +546,42 @@ namespace NonVisuals.Radios.RadioControls
 
         private bool IsFrequencyBandSupported(ARC210FrequencyBand frequencyBand)
         {
-            foreach (var supportedBand in _supportedFrequencyBands)
+            return _supportedFrequencyBands.Any(supportedBand => frequencyBand == supportedBand);
+        }
+
+        private bool IsFrequencyBandSupported(string frequency)
+        {
+            return _supportedFrequencyBands.Any(supportedBand => GetFrequencyBand(frequency) == supportedBand);
+        }
+
+        internal ARC210FrequencyBand[] SupportedFrequencyBands()
+        {
+            return _supportedFrequencyBands;
+        }
+
+        private ARC210FrequencyBand[] SortFrequencyBand(ARC210FrequencyBand[] frequencyBand)
+        {
+            var result = new ARC210FrequencyBand[frequencyBand.Distinct().Count()];
+            var index = 0;
+            if (frequencyBand.Contains(ARC210FrequencyBand.FM))
             {
-                if (frequencyBand == supportedBand) return true;
+                result[index++] = ARC210FrequencyBand.FM;
+            }
+            if (frequencyBand.Contains(ARC210FrequencyBand.VHF1))
+            {
+                result[index++] = ARC210FrequencyBand.VHF1;
+            }
+            if (frequencyBand.Contains(ARC210FrequencyBand.VHF2))
+            {
+                result[index++] = ARC210FrequencyBand.VHF2;
+            }
+            if (frequencyBand.Contains(ARC210FrequencyBand.UHF))
+            {
+                result[index] = ARC210FrequencyBand.UHF;
             }
 
-            return false;
+            return result;
         }
+
     }
 }
