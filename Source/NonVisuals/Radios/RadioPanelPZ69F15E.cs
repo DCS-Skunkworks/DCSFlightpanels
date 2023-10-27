@@ -91,7 +91,7 @@ namespace NonVisuals.Radios
             lock (_lockARC210Object)
             {
                 _arc210Radio = new ARC210("ARC_210_RADIO",
-                    ARC210FrequencyBand.UHF,
+                    ARC210FrequencyBand.VHF2,
                     new [] { ARC210FrequencyBand.FM, ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF });
                 _arc210Radio.InitRadio();
             }
@@ -101,8 +101,7 @@ namespace NonVisuals.Radios
 
             // UHF
             _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_RADIO");
-
-
+            
             BIOSEventHandler.AttachStringListener(this);
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();

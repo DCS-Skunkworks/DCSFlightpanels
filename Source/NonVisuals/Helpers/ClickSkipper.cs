@@ -8,14 +8,15 @@ namespace NonVisuals.Helpers
     /// </summary>
     public class ClickSkipper
     {
-        private readonly int _clicksToSkip;
+        public int ClicksToSkip { get; set; }
         private int _clicksDetected;
 
         public ClickSkipper(int clicksToSkip)
         {
-            _clicksToSkip = clicksToSkip;
+            ClicksToSkip = clicksToSkip;
         }
 
+        
         /// <summary>
         /// Returns true if should skip.
         /// </summary>
@@ -23,7 +24,7 @@ namespace NonVisuals.Helpers
         public bool ShouldSkip()
         {
             _clicksDetected++;
-            if (_clicksDetected <= _clicksToSkip)
+            if (_clicksDetected <= ClicksToSkip)
             {
                 return true; // skip
             }
@@ -40,7 +41,7 @@ namespace NonVisuals.Helpers
         public bool Click(string dcsBIOSCommand)
         {
             _clicksDetected++;
-            if (_clicksDetected <= _clicksToSkip)
+            if (_clicksDetected <= ClicksToSkip)
             {
                 return true; // skip
             }

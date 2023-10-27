@@ -260,16 +260,46 @@ namespace NonVisuals.Tests.ARC210_Radio
         [InlineData("110.050", "118.025",  ARC210FrequencyBand.VHF1, new[] { ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2 })]
         [InlineData("165.075", "225.050",  ARC210FrequencyBand.VHF2, new[] { ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF })]
         [InlineData("310.000", "41.025",  ARC210FrequencyBand.UHF, new[] { ARC210FrequencyBand.FM, ARC210FrequencyBand.UHF })]
-        internal void ARC210_Remember_Last_Frequency_On_Band_Equals(string initialFrequency, string newFrequency, ARC210FrequencyBand initialFrequencyBand, ARC210FrequencyBand[] supportedFrequencyBands)
+        internal void ARC210_Remember_Last_Frequency_On_Band_Up_Equals(string initialFrequency, string newFrequency, ARC210FrequencyBand initialFrequencyBand, ARC210FrequencyBand[] supportedFrequencyBands)
         {
             var arc210 = new ARC210("ARC_210_RADIO", initialFrequencyBand, supportedFrequencyBands, 25, 0);
             arc210.InitRadio();
+
             arc210.SetCockpitFrequency(initialFrequency);
+            arc210.SetCockpitFrequency(newFrequency);
+            arc210.SetCockpitFrequency(initialFrequency);
+
             arc210.TemporaryFrequencyBandUp();
             arc210.SwitchFrequencyBand();
+
+            Assert.Equal(newFrequency, arc210.GetStandbyFrequency());
+        }
+
+        /* ARC-210 */
+        /* FM      30.000 to 87.975 MHz */
+        /* VHF AM 108.000 to 115.975 MHz */
+        /* VHF AM 118.000 to 173.975 MHz */
+        /* UHF AM 225.000 to 399.975 MHz */
+        [Theory]
+        [InlineData("31.025", "113.975", ARC210FrequencyBand.FM, new[] { ARC210FrequencyBand.FM, ARC210FrequencyBand.VHF1 })]
+        [InlineData("110.050", "118.025", ARC210FrequencyBand.VHF1, new[] { ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2 })]
+        [InlineData("165.075", "225.050", ARC210FrequencyBand.VHF2, new[] { ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF })]
+        [InlineData("310.000", "41.025", ARC210FrequencyBand.UHF, new[] { ARC210FrequencyBand.FM, ARC210FrequencyBand.UHF })]
+        internal void ARC210_Remember_Last_Frequency_On_Band_Up_Up_Equals(string initialFrequency, string newFrequency, ARC210FrequencyBand initialFrequencyBand, ARC210FrequencyBand[] supportedFrequencyBands)
+        {
+            var arc210 = new ARC210("ARC_210_RADIO", initialFrequencyBand, supportedFrequencyBands, 25, 0);
+            arc210.InitRadio();
+
+            arc210.SetCockpitFrequency(initialFrequency);
             arc210.SetCockpitFrequency(newFrequency);
-            arc210.TemporaryFrequencyBandDown();
+            arc210.SetCockpitFrequency(initialFrequency);
+
+            arc210.TemporaryFrequencyBandUp();
             arc210.SwitchFrequencyBand();
+            
+            arc210.TemporaryFrequencyBandUp();
+            arc210.SwitchFrequencyBand();
+
             Assert.Equal(initialFrequency, arc210.GetStandbyFrequency());
         }
 
@@ -283,24 +313,47 @@ namespace NonVisuals.Tests.ARC210_Radio
         [InlineData("110.050", "118.025", ARC210FrequencyBand.VHF1, new[] { ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2 })]
         [InlineData("165.075", "225.050", ARC210FrequencyBand.VHF2, new[] { ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF })]
         [InlineData("310.000", "41.025", ARC210FrequencyBand.UHF, new[] { ARC210FrequencyBand.FM, ARC210FrequencyBand.UHF })]
-        internal void ARC210_Remember_Frequency_On_New_Band_Equals(string initialFrequency, string newFrequency, ARC210FrequencyBand initialFrequencyBand, ARC210FrequencyBand[] supportedFrequencyBands)
+        internal void ARC210_Remember_Last_Frequency_On_Band_Down_Equals(string initialFrequency, string newFrequency, ARC210FrequencyBand initialFrequencyBand, ARC210FrequencyBand[] supportedFrequencyBands)
         {
             var arc210 = new ARC210("ARC_210_RADIO", initialFrequencyBand, supportedFrequencyBands, 25, 0);
             arc210.InitRadio();
 
             arc210.SetCockpitFrequency(initialFrequency);
-
-            arc210.TemporaryFrequencyBandUp();
-            arc210.SwitchFrequencyBand();
-
             arc210.SetCockpitFrequency(newFrequency);
+            arc210.SetCockpitFrequency(initialFrequency);
 
             arc210.TemporaryFrequencyBandDown();
             arc210.SwitchFrequencyBand();
 
-            arc210.TemporaryFrequencyBandUp();
-            arc210.SwitchFrequencyBand();här
             Assert.Equal(newFrequency, arc210.GetStandbyFrequency());
+        }        
+        
+        /* ARC-210 */
+        /* FM      30.000 to 87.975 MHz */
+        /* VHF AM 108.000 to 115.975 MHz */
+        /* VHF AM 118.000 to 173.975 MHz */
+        /* UHF AM 225.000 to 399.975 MHz */
+        [Theory]
+        [InlineData("31.025", "113.975", ARC210FrequencyBand.FM, new[] { ARC210FrequencyBand.FM, ARC210FrequencyBand.VHF1 })]
+        [InlineData("110.050", "118.025", ARC210FrequencyBand.VHF1, new[] { ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2 })]
+        [InlineData("165.075", "225.050", ARC210FrequencyBand.VHF2, new[] { ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF })]
+        [InlineData("310.000", "41.025", ARC210FrequencyBand.UHF, new[] { ARC210FrequencyBand.FM, ARC210FrequencyBand.UHF })]
+        internal void ARC210_Remember_Last_Frequency_On_Band_Down_Down_Equals(string initialFrequency, string newFrequency, ARC210FrequencyBand initialFrequencyBand, ARC210FrequencyBand[] supportedFrequencyBands)
+        {
+            var arc210 = new ARC210("ARC_210_RADIO", initialFrequencyBand, supportedFrequencyBands, 25, 0);
+            arc210.InitRadio();
+
+            arc210.SetCockpitFrequency(initialFrequency);
+            arc210.SetCockpitFrequency(newFrequency);
+            arc210.SetCockpitFrequency(initialFrequency);
+
+            arc210.TemporaryFrequencyBandDown();
+            arc210.SwitchFrequencyBand();
+
+            arc210.TemporaryFrequencyBandDown();
+            arc210.SwitchFrequencyBand();
+
+            Assert.Equal(initialFrequency, arc210.GetStandbyFrequency());
         }
     }
 }
