@@ -17,6 +17,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using NonVisuals.Radios.RadioControls;
 
 
     /// <summary>
@@ -38,23 +39,17 @@ namespace NonVisuals.Radios
         private bool _upperButtonPressedAndDialRotated;
         private bool _lowerButtonPressedAndDialRotated;
 
-        /*COMM1*/
+        /*COM1*/
         /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-        private readonly object _lockCOMM1Object = new();
-        private uint _comm1BigFrequencyStandby = 108;
-        private uint _comm1SmallFrequencyStandby;
-        private string _comm1CockpitFrequency = "108.000";
-        private DCSBIOSOutput _comm1RadioControl;
-        private const string COMM1_RADIO_COMMAND = "COMM1 ";
+        private readonly object _lockCOM1Object = new();
+        private ARC210 _com1Radio;
+        private DCSBIOSOutput _com1RadioControl;
 
-        /*COMM2*/
+        /*COM2*/
         /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-        private readonly object _lockCOMM2Object = new();
-        private uint _comm2BigFrequencyStandby = 108;
-        private uint _comm2SmallFrequencyStandby;
-        private string _comm2CockpitFrequency = "108.000";
-        private DCSBIOSOutput _comm2RadioControl;
-        private const string COMM2_RADIO_COMMAND = "COMM2 ";
+        private readonly object _lockCOM2Object = new();
+        private ARC210 _com2Radio;
+        private DCSBIOSOutput _com2RadioControl;
 
         private long _doUpdatePanelLCD;
         private readonly object _lockShowFrequenciesOnPanelObject = new();
@@ -62,7 +57,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69JF17(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -87,18 +82,32 @@ namespace NonVisuals.Radios
         public override void InitPanel()
         {
             CreateRadioKnobs();
+            lock (_lockCOM1Object)
+            {
+                _com1Radio = new ARC210("COMM1",
+                    ARC210FrequencyBand.VHF2,
+                    new[] { ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF });
+                _com1Radio.InitRadio();
+            }
+            lock (_lockCOM2Object)
+            {
+                _com2Radio = new ARC210("COMM2",
+                    ARC210FrequencyBand.VHF2,
+                    new[] { ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF });
+                _com2Radio.InitRadio();
+            }
 
-            // COMM1
-            _comm1RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM1");
+            // COM1
+            _com1RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM1");
 
-            // COMM2
-            _comm2RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM2");
-            
+            // COM2
+            _com2RadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("COMM2");
+
             BIOSEventHandler.AttachStringListener(this);
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
         }
-        
+
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             UpdateCounter(e.Address, e.Data);
@@ -117,20 +126,20 @@ namespace NonVisuals.Radios
                     return;
                 }
 
-                if (_comm1RadioControl.StringValueHasChanged(e.Address, e.StringData))
+                if (_com1RadioControl.StringValueHasChanged(e.Address, e.StringData))
                 {
-                    lock (_lockCOMM1Object)
+                    lock (_lockCOM1Object)
                     {
-                        _comm1CockpitFrequency = e.StringData;
+                        _com1Radio.SetCockpitFrequency(e.StringData);
                         Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
 
-                if (_comm2RadioControl.StringValueHasChanged(e.Address, e.StringData))
+                if (_com2RadioControl.StringValueHasChanged(e.Address, e.StringData))
                 {
-                    lock (_lockCOMM2Object)
+                    lock (_lockCOM2Object)
                     {
-                        _comm2CockpitFrequency = e.StringData;
+                        _com2Radio.SetCockpitFrequency(e.StringData);
                         Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
@@ -167,12 +176,12 @@ namespace NonVisuals.Radios
                         {
                             case CurrentJF17RadioMode.COM1:
                                 {
-                                    SendCOMM1ToDCSBIOS();
+                                    SendCOM1ToDCSBIOS();
                                     break;
                                 }
                             case CurrentJF17RadioMode.COM2:
                                 {
-                                    SendCOMM2ToDCSBIOS();
+                                    SendCOM2ToDCSBIOS();
                                     break;
                                 }
                         }
@@ -186,12 +195,12 @@ namespace NonVisuals.Radios
 
                             case CurrentJF17RadioMode.COM1:
                                 {
-                                    SendCOMM1ToDCSBIOS();
+                                    SendCOM1ToDCSBIOS();
                                     break;
                                 }
                             case CurrentJF17RadioMode.COM2:
                                 {
-                                    SendCOMM2ToDCSBIOS();
+                                    SendCOM2ToDCSBIOS();
                                     break;
                                 }
                         }
@@ -200,15 +209,11 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendCOMM1ToDCSBIOS()
+        private void SendCOM1ToDCSBIOS()
         {
             try
             {
-                var newStandbyFrequency = _comm1CockpitFrequency;
-                DCSBIOS.Send($"{COMM1_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentJF17RadioMode.COM1)}\n");
-                var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
-                _comm1BigFrequencyStandby = uint.Parse(array[0]);
-                _comm1SmallFrequencyStandby = uint.Parse(array[1]);
+                DCSBIOS.Send(_com1Radio.GetDCSBIOSCommand());
                 Interlocked.Increment(ref _doUpdatePanelLCD);
             }
             catch (Exception ex)
@@ -217,31 +222,17 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendCOMM2ToDCSBIOS()
+        private void SendCOM2ToDCSBIOS()
         {
             try
             {
-                var newStandbyFrequency = _comm2CockpitFrequency;
-                DCSBIOS.Send($"{COMM2_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentJF17RadioMode.COM2)}\n");
-                var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
-                _comm2BigFrequencyStandby = uint.Parse(array[0]);
-                _comm2SmallFrequencyStandby = uint.Parse(array[1]);
+                DCSBIOS.Send(_com2Radio.GetDCSBIOSCommand());
                 Interlocked.Increment(ref _doUpdatePanelLCD);
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
             }
-        }
-
-        private string GetStandbyFrequencyString(CurrentJF17RadioMode radio)
-        {
-            return radio switch
-            {
-                CurrentJF17RadioMode.COM1 => _comm1BigFrequencyStandby + "." + _comm1SmallFrequencyStandby.ToString().PadLeft(3, '0'),
-                CurrentJF17RadioMode.COM2 => _comm2BigFrequencyStandby + "." + _comm2SmallFrequencyStandby.ToString().PadLeft(3, '0'),
-                _ => throw new ArgumentOutOfRangeException(nameof(radio), radio, "JF-17.GetFrequencyString()")
-            };
         }
 
         private void ShowFrequenciesOnPanel()
@@ -271,19 +262,33 @@ namespace NonVisuals.Radios
                         }
                     case CurrentJF17RadioMode.COM1:
                         {
-                            lock (_lockCOMM1Object)
+                            lock (_lockCOM1Object)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJF17RadioMode.COM1), PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                SetPZ69DisplayBytesDefault(ref bytes, _comm1CockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                if (_upperButtonPressed || _lowerButtonPressed)
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.GetTemporaryFrequencyBandId(), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                }
+                                else
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.GetStandbyFrequency(), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                }
+                                SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.GetCockpitFrequency(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             break;
                         }
                     case CurrentJF17RadioMode.COM2:
                         {
-                            lock (_lockCOMM2Object)
+                            lock (_lockCOM2Object)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJF17RadioMode.COM2), PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                SetPZ69DisplayBytesDefault(ref bytes, _comm2CockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                if (_upperButtonPressed || _lowerButtonPressed)
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.GetTemporaryFrequencyBandId(), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                }
+                                else
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.GetStandbyFrequency(), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                }
+                                SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.GetCockpitFrequency(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             break;
                         }
@@ -299,19 +304,33 @@ namespace NonVisuals.Radios
                         }
                     case CurrentJF17RadioMode.COM1:
                         {
-                            lock (_lockCOMM1Object)
+                            lock (_lockCOM1Object)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJF17RadioMode.COM1), PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                SetPZ69DisplayBytesDefault(ref bytes, _comm1CockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                if (_upperButtonPressed || _lowerButtonPressed)
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.GetTemporaryFrequencyBandId(), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                }
+                                else
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.GetStandbyFrequency(), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                }
+                                SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.GetCockpitFrequency(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             break;
                         }
                     case CurrentJF17RadioMode.COM2:
                         {
-                            lock (_lockCOMM2Object)
+                            lock (_lockCOM2Object)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, GetStandbyFrequencyString(CurrentJF17RadioMode.COM2), PZ69LCDPosition.LOWER_STBY_RIGHT);
-                                SetPZ69DisplayBytesDefault(ref bytes, _comm2CockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                if (_upperButtonPressed || _lowerButtonPressed)
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.GetTemporaryFrequencyBandId(), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                }
+                                else
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.GetStandbyFrequency(), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                }
+                                SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.GetCockpitFrequency(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             break;
                         }
@@ -342,26 +361,28 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm1BigFrequencyStandby >= 173)
+                                            if (_upperButtonPressed)
                                             {
-                                                // @ max value
-                                                _comm1BigFrequencyStandby = 225;
-                                                break;
+                                                _upperButtonPressedAndDialRotated = true;
+                                                _com1Radio.TemporaryFrequencyBandUp();
                                             }
-                                            _comm1BigFrequencyStandby++;
+                                            else
+                                            {
+                                                _com1Radio.BigFrequencyUp();
+                                            }
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm2BigFrequencyStandby >= 173)
+                                            if (_upperButtonPressed)
                                             {
-                                                _comm2BigFrequencyStandby = 225;
-                                                // @ max value
-                                                break;
+                                                _upperButtonPressedAndDialRotated = true;
+                                                _com2Radio.TemporaryFrequencyBandUp();
                                             }
-                                            _comm2BigFrequencyStandby++;
+                                            else
+                                            {
+                                                _com2Radio.BigFrequencyUp();
+                                            }
                                             break;
                                         }
                                 }
@@ -374,38 +395,28 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm1BigFrequencyStandby <= 225 && _comm1BigFrequencyStandby > 173)
+                                            if (_upperButtonPressed)
                                             {
-                                                _comm1BigFrequencyStandby = 173;
-                                                // @ min value
-                                                break;
+                                                _upperButtonPressedAndDialRotated = true;
+                                                _com1Radio.TemporaryFrequencyBandDown();
                                             }
-                                            if (_comm1BigFrequencyStandby <= 108)
+                                            else
                                             {
-                                                _comm1BigFrequencyStandby = 399;
-                                                // @ min value
-                                                break;
+                                                _com1Radio.BigFrequencyDown();
                                             }
-                                            _comm1BigFrequencyStandby--;
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm2BigFrequencyStandby <= 225 && _comm2BigFrequencyStandby > 173)
+                                            if (_upperButtonPressed)
                                             {
-                                                _comm2BigFrequencyStandby = 173;
-                                                // @ min value
-                                                break;
+                                                _upperButtonPressedAndDialRotated = true;
+                                                _com2Radio.TemporaryFrequencyBandDown();
                                             }
-                                            if (_comm2BigFrequencyStandby <= 108)
+                                            else
                                             {
-                                                _comm2BigFrequencyStandby = 399;
-                                                // @ min value
-                                                break;
+                                                _com2Radio.BigFrequencyDown();
                                             }
-                                            _comm2BigFrequencyStandby--;
                                             break;
                                         }
                                 }
@@ -418,27 +429,12 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm1SmallFrequencyStandby >= 975)
-                                            {
-                                                _comm1SmallFrequencyStandby = 0;
-                                                // @ max value
-                                                break;
-                                            }
-
-                                            _comm1SmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
+                                            _com1Radio.SmallFrequencyUp();
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm2SmallFrequencyStandby >= 975)
-                                            {
-                                                _comm2SmallFrequencyStandby = 0;
-                                                // @ max value
-                                                break;
-                                            }
-                                            _comm2SmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
+                                            _com2Radio.SmallFrequencyUp();
                                             break;
                                         }
                                 }
@@ -451,24 +447,12 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm1SmallFrequencyStandby == 0)
-                                            {
-                                                _comm1SmallFrequencyStandby = 975;
-                                                break;
-                                            }
-                                            _comm1SmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
+                                            _com1Radio.SmallFrequencyDown();
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm2SmallFrequencyStandby == 0)
-                                            {
-                                                _comm2SmallFrequencyStandby = 975;
-                                                break;
-                                            }
-                                            _comm2SmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
+                                            _com2Radio.SmallFrequencyDown();
                                             break;
                                         }
                                 }
@@ -481,26 +465,28 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm1BigFrequencyStandby >= 173)
+                                            if (_lowerButtonPressed)
                                             {
-                                                // @ max value
-                                                _comm1BigFrequencyStandby = 225;
-                                                break;
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                _com1Radio.TemporaryFrequencyBandUp();
                                             }
-                                            _comm1BigFrequencyStandby++;
+                                            else
+                                            {
+                                                _com1Radio.BigFrequencyUp();
+                                            }
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm2BigFrequencyStandby >= 173)
+                                            if (_lowerButtonPressed)
                                             {
-                                                _comm2BigFrequencyStandby = 225;
-                                                // @ max value
-                                                break;
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                _com2Radio.TemporaryFrequencyBandUp();
                                             }
-                                            _comm2BigFrequencyStandby++;
+                                            else
+                                            {
+                                                _com2Radio.BigFrequencyUp();
+                                            }
                                             break;
                                         }
                                 }
@@ -513,38 +499,28 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm1BigFrequencyStandby <= 225 && _comm1BigFrequencyStandby > 173)
+                                            if (_lowerButtonPressed)
                                             {
-                                                _comm1BigFrequencyStandby = 173;
-                                                // @ min value
-                                                break;
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                _com1Radio.TemporaryFrequencyBandDown();
                                             }
-                                            if (_comm1BigFrequencyStandby <= 108)
+                                            else
                                             {
-                                                _comm1BigFrequencyStandby = 399;
-                                                // @ min value
-                                                break;
+                                                _com1Radio.BigFrequencyDown();
                                             }
-                                            _comm1BigFrequencyStandby--;
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm2BigFrequencyStandby <= 225 && _comm2BigFrequencyStandby > 173)
+                                            if (_lowerButtonPressed)
                                             {
-                                                _comm2BigFrequencyStandby = 173;
-                                                // @ min value
-                                                break;
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                _com2Radio.TemporaryFrequencyBandDown();
                                             }
-                                            if (_comm2BigFrequencyStandby <= 108)
+                                            else
                                             {
-                                                _comm2BigFrequencyStandby = 399;
-                                                // @ min value
-                                                break;
+                                                _com2Radio.BigFrequencyDown();
                                             }
-                                            _comm2BigFrequencyStandby--;
                                             break;
                                         }
                                 }
@@ -557,27 +533,12 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm1SmallFrequencyStandby >= 975)
-                                            {
-                                                _comm1SmallFrequencyStandby = 0;
-                                                // @ max value
-                                                break;
-                                            }
-
-                                            _comm1SmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
+                                            _com1Radio.SmallFrequencyUp();
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm2SmallFrequencyStandby >= 975)
-                                            {
-                                                _comm2SmallFrequencyStandby = 0;
-                                                // @ max value
-                                                break;
-                                            }
-                                            _comm2SmallFrequencyStandby += QUART_FREQ_CHANGE_VALUE;
+                                            _com2Radio.SmallFrequencyUp();
                                             break;
                                         }
                                 }
@@ -590,24 +551,12 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm1SmallFrequencyStandby == 0)
-                                            {
-                                                _comm1SmallFrequencyStandby = 975;
-                                                break;
-                                            }
-                                            _comm1SmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
+                                            _com1Radio.SmallFrequencyDown();
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
-                                            if (_comm2SmallFrequencyStandby == 0)
-                                            {
-                                                _comm2SmallFrequencyStandby = 975;
-                                                break;
-                                            }
-                                            _comm2SmallFrequencyStandby -= QUART_FREQ_CHANGE_VALUE;
+                                            _com2Radio.SmallFrequencyDown();
                                             break;
                                         }
                                 }
@@ -689,17 +638,73 @@ namespace NonVisuals.Radios
                             }
                         case RadioPanelKnobsJF17.UPPER_FREQ_SWITCH:
                             {
-                                if (radioPanelKnob.IsOn)
+                                _upperButtonPressed = radioPanelKnob.IsOn;
+                                if (!radioPanelKnob.IsOn)
                                 {
-                                    SendFrequencyToDCSBIOS(RadioPanelKnobsJF17.UPPER_FREQ_SWITCH);
+                                    if (!_upperButtonPressedAndDialRotated)
+                                    {
+                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Sync when user releases button
+                                        SendFrequencyToDCSBIOS(RadioPanelKnobsJF17.UPPER_FREQ_SWITCH);
+                                    }
+                                    else
+                                    {
+                                        /* We must say that the user now has stopped rotating */
+                                        switch (_currentUpperRadioMode)
+                                        {
+                                            case CurrentJF17RadioMode.COM1:
+                                                {
+
+                                                    _com1Radio.SwitchFrequencyBand();
+                                                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                                                    break;
+                                                }
+                                            case CurrentJF17RadioMode.COM2:
+                                                {
+
+                                                    _com2Radio.SwitchFrequencyBand();
+                                                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                                                    break;
+                                                }
+                                        }
+                                    }
+
+                                    _upperButtonPressedAndDialRotated = false;
                                 }
                                 break;
                             }
                         case RadioPanelKnobsJF17.LOWER_FREQ_SWITCH:
                             {
-                                if (radioPanelKnob.IsOn)
+                                _lowerButtonPressed = radioPanelKnob.IsOn;
+                                if (!radioPanelKnob.IsOn)
                                 {
-                                    SendFrequencyToDCSBIOS(RadioPanelKnobsJF17.LOWER_FREQ_SWITCH);
+                                    if (!_lowerButtonPressedAndDialRotated)
+                                    {
+                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Sync when user releases button
+                                        SendFrequencyToDCSBIOS(RadioPanelKnobsJF17.LOWER_FREQ_SWITCH);
+                                    }
+                                    else
+                                    {
+                                        /* We must say that the user now has stopped rotating */
+                                        switch (_currentLowerRadioMode)
+                                        {
+                                            case CurrentJF17RadioMode.COM1:
+                                                {
+
+                                                    _com1Radio.SwitchFrequencyBand();
+                                                    break;
+                                                }
+                                            case CurrentJF17RadioMode.COM2:
+                                                {
+
+                                                    _com2Radio.SwitchFrequencyBand();
+                                                    break;
+                                                }
+                                        }
+                                    }
+
+                                    _lowerButtonPressedAndDialRotated = false;
                                 }
                                 break;
                             }
