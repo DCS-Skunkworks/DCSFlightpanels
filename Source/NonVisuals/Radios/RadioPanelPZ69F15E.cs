@@ -63,7 +63,7 @@ namespace NonVisuals.Radios
         private const uint QUART_FREQ_CHANGE_VALUE = 25;
 
         public RadioPanelPZ69F15E(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -92,7 +92,7 @@ namespace NonVisuals.Radios
             {
                 _arc210Radio = new ARC210("ARC_210_RADIO",
                     ARC210FrequencyBand.VHF2,
-                    new [] { ARC210FrequencyBand.FM, ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF });
+                    new[] { ARC210FrequencyBand.FM, ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF });
                 _arc210Radio.InitRadio();
             }
 
@@ -101,7 +101,7 @@ namespace NonVisuals.Radios
 
             // UHF
             _uhfRadioControl = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UHF_RADIO");
-            
+
             BIOSEventHandler.AttachStringListener(this);
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
@@ -245,7 +245,7 @@ namespace NonVisuals.Radios
                 {
                     return;
                 }
-                
+
                 if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                 {
                     return;
@@ -309,7 +309,7 @@ namespace NonVisuals.Radios
                                 {
                                     SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetStandbyFrequency(), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetCockpitFrequency(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);//
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetCockpitFrequency(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             break;
                         }
@@ -662,7 +662,19 @@ namespace NonVisuals.Radios
                                     else
                                     {
                                         /* We must say that the user now has stopped rotating */
-                                        _arc210Radio.SwitchFrequencyBand();
+                                        switch (_currentUpperRadioMode)
+                                        {
+                                            case CurrentF15ERadioMode.ARC210:
+                                                {
+                                                    _arc210Radio.SwitchFrequencyBand();
+                                                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                                                    break;
+                                                }
+                                            case CurrentF15ERadioMode.UHF:
+                                                {
+                                                    break;
+                                                }
+                                        }
                                     }
 
                                     _upperButtonPressedAndDialRotated = false;
@@ -679,6 +691,23 @@ namespace NonVisuals.Radios
                                         // Do not synch if user has pressed the button to configure the radio
                                         // Sync when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.LOWER_FREQ_SWITCH);
+                                    }
+                                    else
+                                    {
+                                        /* We must say that the user now has stopped rotating */
+                                        switch (_currentLowerRadioMode)
+                                        {
+                                            case CurrentF15ERadioMode.ARC210:
+                                            {
+                                                _arc210Radio.SwitchFrequencyBand();
+                                                Interlocked.Increment(ref _doUpdatePanelLCD);
+                                                break;
+                                            }
+                                            case CurrentF15ERadioMode.UHF:
+                                            {
+                                                break;
+                                            }
+                                        }
                                     }
 
                                     _lowerButtonPressedAndDialRotated = false;

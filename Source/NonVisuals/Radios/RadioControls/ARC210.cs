@@ -26,6 +26,8 @@ namespace NonVisuals.Radios.RadioControls
         private uint _arc210SmallFrequencyStandby;
         private readonly uint[] _lowerFrequencyBounds = { 30, 108, 118, 225 };
         private readonly uint[] _higherFrequencyBounds = { 87, 115, 173, 399 };
+        private readonly uint[] _savedCockpitBigFrequencyPerBand = { 30, 108, 118, 225 };
+        private readonly uint[] _savedCockpitSmallFrequencyPerBand = { 0, 0, 0, 0 };
         private readonly uint[] _savedBigFrequencyPerBand = { 30, 108, 118, 225 };
         private readonly uint[] _savedSmallFrequencyPerBand = { 0, 0, 0, 0 };
         private readonly ARC210FrequencyBand _initialFrequencyBand;
@@ -60,7 +62,7 @@ namespace NonVisuals.Radios.RadioControls
             _tempARC210FrequencyBand = _initialFrequencyBand;
 
             FetchStandbyFrequencyFromArray(_initialFrequencyBand);
-            FetchCockpitFrequencyFromArray(_initialFrequencyBand);
+            _cockpitFrequency = FetchCockpitFrequencyFromArray(_initialFrequencyBand);
             if (string.IsNullOrEmpty(_dcsbiosIdentifier))
             {
                 throw new ArgumentOutOfRangeException($"ARC-210 : DCS-BIOS identifier is null");
@@ -231,23 +233,15 @@ namespace NonVisuals.Radios.RadioControls
             Debug.WriteLine(LastFrequencies());
             if (!IsFrequencyBandSupported(frequency)) return;
             if (frequency == GetCockpitFrequency()) return;
-
-            if (GetFrequencyBand(_cockpitFrequency) != GetFrequencyBand(frequency))
-            {
-                /*
-                 * This is a -very- special case where there hasn't been updates from the cockpit. So _cockpitFrequency
-                 * can be of different frequency band even if new frequency and standby frequency are of the same band.
-                 */
-                SaveStandByFrequencyToArray(_cockpitFrequency); 
-                FetchCockpitFrequencyFromArray(GetFrequencyBand(frequency));
-            }
             
             var oldCockpitFrequency = _cockpitFrequency;
             Debug.WriteLine($"Old cockpit : {oldCockpitFrequency}");
             _cockpitFrequency = frequency;
-            
+
+            SaveCockpitFrequencyToArray();
             SetStandbyFrequency(oldCockpitFrequency);
             SaveStandByFrequencyToArray();
+            
 
             var newBand = GetFrequencyBand(_cockpitFrequency);
             var oldBand = GetFrequencyBand(GetStandbyFrequency());
@@ -263,9 +257,14 @@ namespace NonVisuals.Radios.RadioControls
 
         public void SwitchFrequencyBand()
         {
+            if (_tempARC210FrequencyBand == _currentARC210FrequencyBand) return;
+
             Debug.WriteLine(LastFrequencies());
+            SaveCockpitFrequencyToArray();
             SaveStandByFrequencyToArray();
+            Debug.WriteLine(LastFrequencies());
             FetchStandbyFrequencyFromArray(_tempARC210FrequencyBand);
+            _cockpitFrequency = FetchCockpitFrequencyFromArray(_tempARC210FrequencyBand);
             _currentARC210FrequencyBand = _tempARC210FrequencyBand;
             VerifyStandbyFrequencyBand();
             Debug.WriteLine(LastFrequencies());
@@ -344,6 +343,7 @@ namespace NonVisuals.Radios.RadioControls
                 return;
             }
 
+            Debug.WriteLine($"Temp Band Before : {_tempARC210FrequencyBand}");
             for (var i = 0; i < _supportedFrequencyBands.Length; i++)
             {
                 //   E
@@ -364,6 +364,7 @@ namespace NonVisuals.Radios.RadioControls
                     break;
                 }
             }
+            Debug.WriteLine($"Temp Band After : {_tempARC210FrequencyBand}");
         }
         
         private void FetchStandbyFrequencyFromArray(ARC210FrequencyBand frequencyBand)
@@ -442,34 +443,79 @@ namespace NonVisuals.Radios.RadioControls
                     }
             }
         }
-        
-        private bool FetchCockpitFrequencyFromArray(ARC210FrequencyBand frequencyBand)
+
+        private void SaveCockpitFrequencyToArray()
         {
+            SaveCockpitFrequencyToArray(_cockpitFrequency);
+            VerifyStandbyFrequencyBand();
+        }
+
+        private void SaveCockpitFrequencyToArray(string frequency)
+        {
+            Debug.WriteLine($"Saving : {frequency}");
+            var frequencyBand = GetFrequencyBand(frequency);
+
+            var array = frequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
+            var bigFrequency = uint.Parse(array[0]);
+            var smallFrequency = uint.Parse(array[1]);
+
             switch (frequencyBand)
             {
                 case ARC210FrequencyBand.FM:
                 {
-                    _cockpitFrequency = $"{_savedBigFrequencyPerBand[(int)ARC210FrequencyBand.FM]}.{_savedSmallFrequencyPerBand[(int)ARC210FrequencyBand.FM].ToString().PadLeft(3, '0')}";
-                        break;
-                    }
+                    _savedCockpitBigFrequencyPerBand[(int)ARC210FrequencyBand.FM] = bigFrequency;
+                    _savedCockpitSmallFrequencyPerBand[(int)ARC210FrequencyBand.FM] = smallFrequency;
+                    break;
+                }
                 case ARC210FrequencyBand.VHF1:
-                    {
-                        _cockpitFrequency = $"{_savedBigFrequencyPerBand[(int)ARC210FrequencyBand.VHF1]}.{_savedSmallFrequencyPerBand[(int)ARC210FrequencyBand.VHF1].ToString().PadLeft(3, '0')}";
-                        break;
-                    }
+                {
+                    _savedCockpitBigFrequencyPerBand[(int)ARC210FrequencyBand.VHF1] = bigFrequency;
+                    _savedCockpitSmallFrequencyPerBand[(int)ARC210FrequencyBand.VHF1] = smallFrequency;
+                    break;
+                }
                 case ARC210FrequencyBand.VHF2:
-                    {
-                        _cockpitFrequency = $"{_savedBigFrequencyPerBand[(int)ARC210FrequencyBand.VHF2]}.{_savedSmallFrequencyPerBand[(int)ARC210FrequencyBand.VHF2].ToString().PadLeft(3, '0')}";
-                        break;
-                    }
+                {
+                    _savedCockpitBigFrequencyPerBand[(int)ARC210FrequencyBand.VHF2] = bigFrequency;
+                    _savedCockpitSmallFrequencyPerBand[(int)ARC210FrequencyBand.VHF2] = smallFrequency;
+                    break;
+                }
                 case ARC210FrequencyBand.UHF:
-                    {
-                        _cockpitFrequency = $"{_savedBigFrequencyPerBand[(int)ARC210FrequencyBand.UHF]}.{_savedSmallFrequencyPerBand[(int)ARC210FrequencyBand.UHF].ToString().PadLeft(3, '0')}";
-                        break;
-                    }
+                {
+                    _savedCockpitBigFrequencyPerBand[(int)ARC210FrequencyBand.UHF] = bigFrequency;
+                    _savedCockpitSmallFrequencyPerBand[(int)ARC210FrequencyBand.UHF] = smallFrequency;
+                    break;
+                }
+            }
+        }
+        
+        private string FetchCockpitFrequencyFromArray(ARC210FrequencyBand frequencyBand)
+        {
+            var result = "";
+            switch (frequencyBand)
+            {
+                case ARC210FrequencyBand.FM:
+                {
+                    result = $"{_savedCockpitBigFrequencyPerBand[(int)ARC210FrequencyBand.FM]}.{_savedCockpitSmallFrequencyPerBand[(int)ARC210FrequencyBand.FM].ToString().PadLeft(3, '0')}";
+                    break;
+                }
+                case ARC210FrequencyBand.VHF1:
+                {
+                    result = $"{_savedCockpitBigFrequencyPerBand[(int)ARC210FrequencyBand.VHF1]}.{_savedCockpitSmallFrequencyPerBand[(int)ARC210FrequencyBand.VHF1].ToString().PadLeft(3, '0')}";
+                    break;
+                }
+                case ARC210FrequencyBand.VHF2:
+                {
+                    result = $"{_savedCockpitBigFrequencyPerBand[(int)ARC210FrequencyBand.VHF2]}.{_savedCockpitSmallFrequencyPerBand[(int)ARC210FrequencyBand.VHF2].ToString().PadLeft(3, '0')}";
+                    break;
+                }
+                case ARC210FrequencyBand.UHF:
+                {
+                    result = $"{_savedCockpitBigFrequencyPerBand[(int)ARC210FrequencyBand.UHF]}.{_savedCockpitSmallFrequencyPerBand[(int)ARC210FrequencyBand.UHF].ToString().PadLeft(3, '0')}";
+                    break;
+                }
             }
 
-            return true;
+            return result;
         }
 
         private void VerifyStandbyFrequencyBand()
@@ -579,10 +625,16 @@ namespace NonVisuals.Radios.RadioControls
         internal string LastFrequencies()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("\nFM   : " + GetLastStandbyFrequency(ARC210FrequencyBand.FM));
+            stringBuilder.AppendLine("\nStandby :");
+            stringBuilder.AppendLine("FM   : " + GetLastStandbyFrequency(ARC210FrequencyBand.FM));
             stringBuilder.AppendLine("VHF1 : " + GetLastStandbyFrequency(ARC210FrequencyBand.VHF1));
             stringBuilder.AppendLine("VHF2 : " + GetLastStandbyFrequency(ARC210FrequencyBand.VHF2));
             stringBuilder.AppendLine("UHF  : " + GetLastStandbyFrequency(ARC210FrequencyBand.UHF));
+            stringBuilder.AppendLine("\nCockpit :");
+            stringBuilder.AppendLine("FM   : " + FetchCockpitFrequencyFromArray(ARC210FrequencyBand.FM));
+            stringBuilder.AppendLine("VHF1 : " + FetchCockpitFrequencyFromArray(ARC210FrequencyBand.VHF1));
+            stringBuilder.AppendLine("VHF2 : " + FetchCockpitFrequencyFromArray(ARC210FrequencyBand.VHF2));
+            stringBuilder.AppendLine("UHF  : " + FetchCockpitFrequencyFromArray(ARC210FrequencyBand.UHF));
             return stringBuilder.ToString();
         }
     }
