@@ -55,8 +55,9 @@ namespace NonVisuals.Radios
         private const string INTERCOMM_VOLUME_KNOB_COMMAND_DEC = "INT_VOL -2500\n";
 
         /*UH-1H AN/ARC-134 VHF Comm Radio Set Left side of lower control panel */
+        /* VHF 116.000 to 149.975 MHz */
         // Large dial 116-149 [step of 1]
-        // Small dial 0.00-0.95 [step 0 2 5 7]
+        // Small dial 0.000 - 0.975 [step 0 2 5 7]
         private readonly object _lockVhfCommDialsObject1 = new();
         private readonly object _lockVhfCommDialsObject2 = new();
         private volatile uint _vhfCommBigFrequencyStandby = 116;
@@ -75,6 +76,7 @@ namespace NonVisuals.Radios
         private Thread _vhfCommSyncThread;
 
         /*AN/ARC-51BX UHF radio set*/
+        /* UHF 225.00 to 399.95 MHz */
         // Large dial 200-399 [step of 1]
         // Small dial 0.00-0.95 [step 0.05]
         private bool _uhfIncreasePresetChannel;
@@ -84,9 +86,6 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _uhfDcsbiosOutputCockpitPresetChannel;
         private readonly object _lockUhfPresetChannelObject = new();
 
-        // private Thread _uhfPresetChannelSyncThread;
-        // private long _uhfPresetChannelThreadNowSynching = 0;
-        // private long _uhfPresetChannelWaitingForFeedback = 0;
         private readonly object _lockUhfDialsObject1 = new();
         private readonly object _lockUhfDialsObject2 = new();
         private readonly object _lockUhfDialsObject3 = new();
@@ -109,6 +108,7 @@ namespace NonVisuals.Radios
         private long _uhfDial3WaitingForFeedback;
 
         /*UH-1H AN/ARN-82 VHF Navigation Set*/
+        /* 108.0 and 126.95 MHz */
         // Large dial 107-126 [step of 1]
         // Small dial 0.00-0.95 [step of 0.05]
         private readonly object _lockVhfNavDialsObject1 = new();
@@ -129,6 +129,7 @@ namespace NonVisuals.Radios
         private long _vhfNavDial2WaitingForFeedback;
 
         /*UH-1H ARC-131 VHF FM*/
+        /* 30.00 to 75.95 MHz */
         private uint _vhfFmBigFrequencyStandby = 30;
         private uint _vhfFmSmallFrequencyStandby;
         private uint _vhfFmSavedCockpitBigFrequency = 30;
