@@ -40,7 +40,8 @@ namespace NonVisuals.Radios.RadioSettings
         /// <param name="decimalHigherChangeRates">Higher change rates for decimal frequency per frequency band</param>
         /// <param name="skipCountForFrequencyBandChanges">Click skip count while changing frequency band</param>
         /// <param name="integerFrequencySkippers">ClickSkippers for integer decimal as some are too sensitive</param>
-        public FlightRadioSettings(FlightRadioFrequencyBand[] supportedFrequencyBands, 
+        public FlightRadioSettings(
+            FlightRadioFrequencyBand[] supportedFrequencyBands, 
             string dcsbiosIdentifier, 
             uint[] lowIntegerFrequencyBounds, 
             uint[] highIntegerFrequencyBounds, 
