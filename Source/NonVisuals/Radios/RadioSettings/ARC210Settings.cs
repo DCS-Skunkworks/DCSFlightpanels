@@ -1,4 +1,5 @@
-﻿using NonVisuals.Radios.RadioControls;
+﻿using NonVisuals.Helpers;
+using NonVisuals.Radios.RadioControls;
 
 namespace NonVisuals.Radios.RadioSettings
 {
@@ -12,8 +13,7 @@ namespace NonVisuals.Radios.RadioSettings
         /* UHF AM 225.000 to 399.975 MHz */
         public ARC210Settings(string dcsbiosIdentifier)
         {
-            var supportedFrequencyBands = new FlightRadioFrequencyBand[] 
-                { FlightRadioFrequencyBand.HF, FlightRadioFrequencyBand.VHF1, FlightRadioFrequencyBand.VHF2, FlightRadioFrequencyBand.UHF };
+            var supportedFrequencyBands = new [] { FlightRadioFrequencyBand.HF, FlightRadioFrequencyBand.VHF1, FlightRadioFrequencyBand.VHF2, FlightRadioFrequencyBand.UHF };
             var lowIntegerFrequencyBounds = new uint[] { 30, 108, 118, 225 };
             var highIntegerFrequencyBounds = new uint[] { 87, 115, 173, 399 };
             var lowDecimalFrequencyBounds = new uint[] { 0, 0, 0, 0 };
@@ -23,9 +23,11 @@ namespace NonVisuals.Radios.RadioSettings
             var decimalChangeRates = new uint[] { 25, 25, 25, 25 };
             var decimalHigherChangeRates = new uint[] { 25, 25, 25, 25 };
             var skipCountForFrequencyBand = 2;
-            
+            var integerFrequencySkippers = new[] { new ClickSkipper(1), new ClickSkipper(1), new ClickSkipper(1), new ClickSkipper(1) };
+
             RadioSettings = new FlightRadioSettings(
                 supportedFrequencyBands,
+                dcsbiosIdentifier,
                 lowIntegerFrequencyBounds, 
                 highIntegerFrequencyBounds, 
                 lowDecimalFrequencyBounds, 
@@ -34,8 +36,8 @@ namespace NonVisuals.Radios.RadioSettings
                 integerHigherChangeRates,
                 decimalChangeRates, 
                 decimalHigherChangeRates, 
-                skipCountForFrequencyBand, 
-                dcsbiosIdentifier);
+                skipCountForFrequencyBand,
+                integerFrequencySkippers);
         }
     }
 }

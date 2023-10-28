@@ -1,4 +1,5 @@
-﻿using NonVisuals.Radios.RadioControls;
+﻿using NonVisuals.Helpers;
+using NonVisuals.Radios.RadioControls;
 
 namespace NonVisuals.Radios.RadioSettings
 {
@@ -19,9 +20,11 @@ namespace NonVisuals.Radios.RadioSettings
             var decimalChangeRates = new uint[] { 0, 0, 25, 25 };
             var decimalHigherChangeRates = new uint[] { 0, 0, 25, 25 };
             var skipCountForFrequencyBand = 2;
+            var integerFrequencySkippers = new[] { new ClickSkipper(1), new ClickSkipper(1), new ClickSkipper(1), new ClickSkipper(1) };
 
             RadioSettings = new FlightRadioSettings(
                 supportedFrequencyBands,
+                dcsbiosIdentifier,
                 lowIntegerFrequencyBounds,
                 highIntegerFrequencyBounds,
                 lowDecimalFrequencyBounds,
@@ -31,7 +34,7 @@ namespace NonVisuals.Radios.RadioSettings
                 decimalChangeRates,
                 decimalHigherChangeRates,
                 skipCountForFrequencyBand,
-                dcsbiosIdentifier);
+                integerFrequencySkippers);
         }
     }
 }

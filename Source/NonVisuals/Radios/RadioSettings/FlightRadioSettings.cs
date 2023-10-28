@@ -18,7 +18,8 @@ namespace NonVisuals.Radios.RadioSettings
         private readonly uint[] _decimalChangeRates;
         private readonly uint[] _decimalHigherChangeRates;
         private FlightRadioFrequencyBand[] _supportedFrequencyBands;
-        private readonly ClickSkipper _clickSkipperForFrequencyBand;
+        private readonly ClickSkipper _clickSkipperForFrequencyBandChanges;
+        private readonly ClickSkipper[] _integerFrequencySkippers;
 
         private readonly string _dcsbiosIdentifier;
 
@@ -28,6 +29,7 @@ namespace NonVisuals.Radios.RadioSettings
         /// Constructs a new object holding the settings for the FlightRadio.
         /// </summary>
         /// <param name="supportedFrequencyBands">Supported frequency bands</param>
+        /// <param name="dcsbiosIdentifier">DCS-BIOS identifier for the radio</param>
         /// <param name="lowIntegerFrequencyBounds">Lowest integer frequency per frequency band</param>
         /// <param name="highIntegerFrequencyBounds">Highest integer frequency per frequency band</param>
         /// <param name="lowDecimalFrequencyBounds">Lowest decimal frequency per frequency band</param>
@@ -36,11 +38,20 @@ namespace NonVisuals.Radios.RadioSettings
         /// <param name="integerHigherChangeRates">Higher change rates for integer frequency per frequency band</param>
         /// <param name="decimalChangeRates">Change rates for decimal frequency per frequency band</param>
         /// <param name="decimalHigherChangeRates">Higher change rates for decimal frequency per frequency band</param>
-        /// <param name="skipCountForFrequencyBand">Click skip count while changing frequency band</param>
-        /// <param name="dcsbiosIdentifier">DCS-BIOS identifier for the radio</param>
-        public FlightRadioSettings(FlightRadioFrequencyBand[] supportedFrequencyBands, uint[] lowIntegerFrequencyBounds, uint[] highIntegerFrequencyBounds, uint[] lowDecimalFrequencyBounds,
-            uint[] highDecimalFrequencyBounds, uint[] integerChangeRates, uint[] integerHigherChangeRates, uint[] decimalChangeRates, uint[] decimalHigherChangeRates,
-            int skipCountForFrequencyBand, string dcsbiosIdentifier)
+        /// <param name="skipCountForFrequencyBandChanges">Click skip count while changing frequency band</param>
+        /// <param name="integerFrequencySkippers">ClickSkippers for integer decimal as some are too sensitive</param>
+        public FlightRadioSettings(FlightRadioFrequencyBand[] supportedFrequencyBands, 
+            string dcsbiosIdentifier, 
+            uint[] lowIntegerFrequencyBounds, 
+            uint[] highIntegerFrequencyBounds, 
+            uint[] lowDecimalFrequencyBounds,
+            uint[] highDecimalFrequencyBounds, 
+            uint[] integerChangeRates, 
+            uint[] integerHigherChangeRates, 
+            uint[] decimalChangeRates, 
+            uint[] decimalHigherChangeRates,
+            int skipCountForFrequencyBandChanges, 
+            ClickSkipper[] integerFrequencySkippers)
         {
             _lowIntegerFrequencyBounds = lowIntegerFrequencyBounds;
             _highIntegerFrequencyBounds = highIntegerFrequencyBounds;
@@ -51,8 +62,9 @@ namespace NonVisuals.Radios.RadioSettings
             _decimalChangeRates = decimalChangeRates;
             _decimalHigherChangeRates = decimalHigherChangeRates;
             _supportedFrequencyBands = supportedFrequencyBands;
-            _clickSkipperForFrequencyBand = new ClickSkipper(skipCountForFrequencyBand);
+            _clickSkipperForFrequencyBandChanges = new ClickSkipper(skipCountForFrequencyBandChanges);
             _dcsbiosIdentifier = dcsbiosIdentifier;
+            _integerFrequencySkippers = integerFrequencySkippers;
         }
         private FlightRadioFrequencyBand[] SortFrequencyBand(FlightRadioFrequencyBand[] frequencyBand)
         {
@@ -160,9 +172,14 @@ namespace NonVisuals.Radios.RadioSettings
                 new KeyValuePair<string, uint[]>("_decimalHigherChangeRates",_decimalHigherChangeRates)
             };
 
-            foreach (var kvp in list.Where(o => o.Value.Length != 4))
+            foreach (var kvp in list.Where(o => o.Value.Length != ARRAY_LENGTH))
             {
                 throw new ArgumentOutOfRangeException(nameof(kvp), $@"FlightRadioSettings : Array count is wrong for {kvp.Key} ({kvp.Value}). All arrays must be {ARRAY_LENGTH} long.");
+            }
+
+            if (_integerFrequencySkippers.Length != ARRAY_LENGTH)
+            {
+                throw new ArgumentOutOfRangeException(nameof(_integerFrequencySkippers), $@"FlightRadioSettings : Array count is wrong for _integerFrequencySkipper ({_integerFrequencySkippers.Length}). All arrays must be {ARRAY_LENGTH} long.");
             }
         }
 
@@ -182,9 +199,11 @@ namespace NonVisuals.Radios.RadioSettings
 
         public uint[] DecimalHigherChangeRates => _decimalHigherChangeRates;
 
+        public ClickSkipper[] IntegerFrequencySkippers => _integerFrequencySkippers;
+
         public FlightRadioFrequencyBand[] SupportedFrequencyBands => _supportedFrequencyBands;
 
-        public ClickSkipper FrequencyBandSkipper => _clickSkipperForFrequencyBand;
+        public ClickSkipper FrequencyBandSkipper => _clickSkipperForFrequencyBandChanges;
 
         public string DCSBIOSIdentifier => _dcsbiosIdentifier;
     }

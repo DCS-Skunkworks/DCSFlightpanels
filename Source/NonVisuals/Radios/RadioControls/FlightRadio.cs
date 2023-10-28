@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using NonVisuals.Helpers;
 using NonVisuals.Radios.RadioSettings;
 
 namespace NonVisuals.Radios.RadioControls
@@ -46,6 +47,8 @@ namespace NonVisuals.Radios.RadioControls
 
         internal void IntegerFrequencyUp(bool changeFaster = false)
         {
+            if (_settings.IntegerFrequencySkippers[(int)_currentFrequencyBand].ShouldSkip()) return;
+
             if (GetIntegerFrequencyStandby() >= _settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand] ||
                 (changeFaster && GetIntegerFrequencyStandby() + _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] >= _settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand]))
             {
@@ -58,6 +61,8 @@ namespace NonVisuals.Radios.RadioControls
 
         internal void IntegerFrequencyDown(bool changeFaster = false)
         {
+            if (_settings.IntegerFrequencySkippers[(int)_currentFrequencyBand].ShouldSkip()) return;
+
             if (GetIntegerFrequencyStandby() <= _settings.LowIntegerFrequencyBounds[(int)_currentFrequencyBand] ||
                 (changeFaster && GetIntegerFrequencyStandby() - _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] <= _settings.LowIntegerFrequencyBounds[(int)_currentFrequencyBand]))
             {

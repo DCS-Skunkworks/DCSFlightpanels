@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using NonVisuals.BindingClasses.BIP;
 using NonVisuals.Radios.RadioControls;
+using NonVisuals.Radios.RadioSettings;
 
 namespace NonVisuals.Radios
 {
@@ -46,7 +47,7 @@ namespace NonVisuals.Radios
         /* VHF AM 118.000 to 173.975 MHz */
         /* UHF AM 225.000 to 399.975 MHz */
         private readonly object _lockARC210Object = new();
-        private ARC210 _arc210Radio;
+        private FlightRadio _arc210Radio;
         private DCSBIOSOutput _arc210RadioDCSBIOSControl;
 
         /*UHF*/
@@ -90,9 +91,7 @@ namespace NonVisuals.Radios
             CreateRadioKnobs();
             lock (_lockARC210Object)
             {
-                _arc210Radio = new ARC210("ARC_210_RADIO",
-                    ARC210FrequencyBand.VHF2,
-                    new[] { ARC210FrequencyBand.FM, ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF });
+                _arc210Radio = new FlightRadio(FlightRadioFrequencyBand.VHF2, new ARC210Settings("ARC_210_RADIO").RadioSettings);
                 _arc210Radio.InitRadio();
             }
 
@@ -356,7 +355,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _arc210Radio.BigFrequencyUp();
+                                                _arc210Radio.IntegerFrequencyUp();
                                             }
 
                                             break;
@@ -390,7 +389,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _arc210Radio.BigFrequencyDown();
+                                                _arc210Radio.IntegerFrequencyDown();
                                             }
                                             break;
                                         }
@@ -416,7 +415,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentF15ERadioMode.ARC210:
                                         {
-                                            _arc210Radio.SmallFrequencyUp();
+                                            _arc210Radio.DecimalFrequencyUp();
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -441,7 +440,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentF15ERadioMode.ARC210:
                                         {
-                                            _arc210Radio.SmallFrequencyDown();
+                                            _arc210Radio.DecimalFrequencyDown();
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -472,7 +471,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _arc210Radio.BigFrequencyUp();
+                                                _arc210Radio.IntegerFrequencyUp();
                                             }
                                             break;
                                         }
@@ -505,7 +504,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _arc210Radio.BigFrequencyDown();
+                                                _arc210Radio.IntegerFrequencyDown();
                                             }
                                             break;
                                         }
@@ -531,7 +530,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentF15ERadioMode.ARC210:
                                         {
-                                            _arc210Radio.SmallFrequencyUp();
+                                            _arc210Radio.DecimalFrequencyUp();
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
@@ -556,7 +555,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentF15ERadioMode.ARC210:
                                         {
-                                            _arc210Radio.SmallFrequencyDown();
+                                            _arc210Radio.DecimalFrequencyDown();
                                             break;
                                         }
                                     case CurrentF15ERadioMode.UHF:
