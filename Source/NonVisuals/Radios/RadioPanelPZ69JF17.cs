@@ -1,4 +1,5 @@
 ﻿using NonVisuals.BindingClasses.BIP;
+using NonVisuals.Radios.RadioSettings;
 
 namespace NonVisuals.Radios
 {
@@ -42,13 +43,13 @@ namespace NonVisuals.Radios
         /*COM1*/
         /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
         private readonly object _lockCOM1Object = new();
-        private ARC210 _com1Radio;
+        private FlightRadio _com1Radio;
         private DCSBIOSOutput _com1RadioControl;
 
         /*COM2*/
         /* 108.000 to 173.975 MHz  225.000 to 399.975 MHz */
         private readonly object _lockCOM2Object = new();
-        private ARC210 _com2Radio;
+        private FlightRadio _com2Radio;
         private DCSBIOSOutput _com2RadioControl;
 
         private long _doUpdatePanelLCD;
@@ -84,16 +85,12 @@ namespace NonVisuals.Radios
             CreateRadioKnobs();
             lock (_lockCOM1Object)
             {
-                _com1Radio = new ARC210("COMM1",
-                    ARC210FrequencyBand.VHF2,
-                    new[] { ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF });
+                _com1Radio = new FlightRadio(FlightRadioFrequencyBand.VHF2, new JF17ComSettings("COMM1").RadioSettings);
                 _com1Radio.InitRadio();
             }
             lock (_lockCOM2Object)
             {
-                _com2Radio = new ARC210("COMM2",
-                    ARC210FrequencyBand.VHF2,
-                    new[] { ARC210FrequencyBand.VHF1, ARC210FrequencyBand.VHF2, ARC210FrequencyBand.UHF });
+                _com2Radio = new FlightRadio(FlightRadioFrequencyBand.VHF2, new JF17ComSettings("COMM2").RadioSettings);
                 _com2Radio.InitRadio();
             }
 
@@ -368,7 +365,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _com1Radio.BigFrequencyUp();
+                                                _com1Radio.IntegerFrequencyUp();
                                             }
                                             break;
                                         }
@@ -381,7 +378,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _com2Radio.BigFrequencyUp();
+                                                _com2Radio.IntegerFrequencyUp();
                                             }
                                             break;
                                         }
@@ -402,7 +399,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _com1Radio.BigFrequencyDown();
+                                                _com1Radio.IntegerFrequencyDown();
                                             }
                                             break;
                                         }
@@ -415,7 +412,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _com2Radio.BigFrequencyDown();
+                                                _com2Radio.IntegerFrequencyDown();
                                             }
                                             break;
                                         }
@@ -429,12 +426,12 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            _com1Radio.SmallFrequencyUp();
+                                            _com1Radio.DecimalFrequencyUp();
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            _com2Radio.SmallFrequencyUp();
+                                            _com2Radio.DecimalFrequencyUp();
                                             break;
                                         }
                                 }
@@ -447,12 +444,12 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            _com1Radio.SmallFrequencyDown();
+                                            _com1Radio.DecimalFrequencyDown();
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            _com2Radio.SmallFrequencyDown();
+                                            _com2Radio.DecimalFrequencyDown();
                                             break;
                                         }
                                 }
@@ -472,7 +469,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _com1Radio.BigFrequencyUp();
+                                                _com1Radio.IntegerFrequencyUp();
                                             }
                                             break;
                                         }
@@ -485,7 +482,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _com2Radio.BigFrequencyUp();
+                                                _com2Radio.IntegerFrequencyUp();
                                             }
                                             break;
                                         }
@@ -506,7 +503,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _com1Radio.BigFrequencyDown();
+                                                _com1Radio.IntegerFrequencyDown();
                                             }
                                             break;
                                         }
@@ -519,7 +516,7 @@ namespace NonVisuals.Radios
                                             }
                                             else
                                             {
-                                                _com2Radio.BigFrequencyDown();
+                                                _com2Radio.IntegerFrequencyDown();
                                             }
                                             break;
                                         }
@@ -533,12 +530,12 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            _com1Radio.SmallFrequencyUp();
+                                            _com1Radio.DecimalFrequencyUp();
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            _com2Radio.SmallFrequencyUp();
+                                            _com2Radio.DecimalFrequencyUp();
                                             break;
                                         }
                                 }
@@ -551,12 +548,12 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentJF17RadioMode.COM1:
                                         {
-                                            _com1Radio.SmallFrequencyDown();
+                                            _com1Radio.DecimalFrequencyDown();
                                             break;
                                         }
                                     case CurrentJF17RadioMode.COM2:
                                         {
-                                            _com2Radio.SmallFrequencyDown();
+                                            _com2Radio.DecimalFrequencyDown();
                                             break;
                                         }
                                 }

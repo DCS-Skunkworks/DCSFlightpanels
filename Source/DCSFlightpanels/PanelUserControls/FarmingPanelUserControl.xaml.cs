@@ -24,7 +24,6 @@
     using NonVisuals.Panels.Saitek;
     using NonVisuals.Panels;
     using NonVisuals.HID;
-    using DCSFlightpanels.Properties;
 
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml

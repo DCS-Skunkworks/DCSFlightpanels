@@ -1,9 +1,7 @@
 ﻿using ClassLibraryCommon;
 using DCSFlightpanels.Interfaces;
-using Microsoft.VisualStudio.OLE.Interop;
 using NonVisuals.HID;
 using System.Windows.Controls;
-using System.Windows.Forms;
 
 namespace DCSFlightpanels.PanelUserControls.CDU737
 {

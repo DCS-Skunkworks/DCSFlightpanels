@@ -2,8 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Windows.Diagnostics;
-using NonVisuals.Helpers;
+using NonVisuals.Radios.RadioSettings;
 
 namespace NonVisuals.Radios.RadioControls
 {
@@ -17,13 +16,13 @@ namespace NonVisuals.Radios.RadioControls
 
     internal class FlightRadio
     {
-        private uint _bigFrequencyStandby;
-        private uint _smallFrequencyStandby;
+        private uint _integerFrequencyStandby;
+        private uint _decimalFrequencyStandby;
         private string _cockpitFrequency;
-        private uint[] _savedCockpitBigFrequencyPerBand;
-        private uint[] _savedCockpitSmallFrequencyPerBand;
-        private uint[] _savedBigFrequencyPerBand;
-        private uint[] _savedSmallFrequencyPerBand;
+        private readonly uint[] _savedCockpitIntegerFrequencyPerBand = new uint[4];
+        private readonly uint[] _savedCockpitDecimalFrequencyPerBand = new uint[4];
+        private readonly uint[] _savedIntegerFrequencyPerBand = new uint[4];
+        private readonly uint[] _savedDecimalFrequencyPerBand = new uint[4];
         private readonly FlightRadioFrequencyBand _initialFrequencyBand;
         private FlightRadioFrequencyBand _currentFrequencyBand;
         private FlightRadioFrequencyBand _tempFrequencyBand;
@@ -40,62 +39,62 @@ namespace NonVisuals.Radios.RadioControls
             _settings.VerifySettings();
             _currentFrequencyBand = _initialFrequencyBand;
             _tempFrequencyBand = _initialFrequencyBand;
-
+            PopulateSavedValues();
             FetchStandbyFrequencyFromArray(_initialFrequencyBand);
             _cockpitFrequency = FetchCockpitFrequencyFromArray(_initialFrequencyBand);
         }
 
-        internal void BigFrequencyUp(bool changeFaster = false)
+        internal void IntegerFrequencyUp(bool changeFaster = false)
         {
-            if (GetBigFrequencyStandby() >= _settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand] ||
-                (changeFaster && GetBigFrequencyStandby() + _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] >= _settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand]))
+            if (GetIntegerFrequencyStandby() >= _settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand] ||
+                (changeFaster && GetIntegerFrequencyStandby() + _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] >= _settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand]))
             {
-                SetBigFrequencyStandby(_settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand]);
+                SetIntegerFrequencyStandby(_settings.LowIntegerFrequencyBounds[(int)_currentFrequencyBand]);
                 return;
             }
 
-            AddBigFrequencyStandby(changeFaster ? _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] : _settings.IntegerChangeRates[(int)_currentFrequencyBand]);
+            AddIntegerFrequencyStandby(changeFaster ? _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] : _settings.IntegerChangeRates[(int)_currentFrequencyBand]);
         }
 
-        internal void BigFrequencyDown(bool changeFaster = false)
+        internal void IntegerFrequencyDown(bool changeFaster = false)
         {
-            if (GetBigFrequencyStandby() <= _settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand] ||
-                (changeFaster && GetBigFrequencyStandby() - _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] <= _settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand]))
+            if (GetIntegerFrequencyStandby() <= _settings.LowIntegerFrequencyBounds[(int)_currentFrequencyBand] ||
+                (changeFaster && GetIntegerFrequencyStandby() - _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] <= _settings.LowIntegerFrequencyBounds[(int)_currentFrequencyBand]))
             {
-                SetBigFrequencyStandby(_settings.HighIntegerFrequencyBounds[(int)FlightRadioFrequencyBand.HF]);
+                SetIntegerFrequencyStandby(_settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand]);
                 return;
             }
 
-            SubtractBigFrequencyStandby(changeFaster ? _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] : _settings.IntegerChangeRates[(int)_currentFrequencyBand]);
+            SubtractIntegerFrequencyStandby(changeFaster ? _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] : _settings.IntegerChangeRates[(int)_currentFrequencyBand]);
         }
 
-        internal void SmallFrequencyUp(bool changeFaster = false)
+        internal void DecimalFrequencyUp(bool changeFaster = false)
         {
-            if (GetSmallFrequencyStandby() >= _settings.HighDecimalFrequencyBounds[(int)_currentFrequencyBand] ||
-                (changeFaster && GetSmallFrequencyStandby() + _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] >= _settings.HighDecimalFrequencyBounds[(int)_currentFrequencyBand]))
+            if (GetDecimalFrequencyStandby() >= _settings.HighDecimalFrequencyBounds[(int)_currentFrequencyBand] ||
+                (changeFaster && GetDecimalFrequencyStandby() + _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] >= _settings.HighDecimalFrequencyBounds[(int)_currentFrequencyBand]))
             {
-                SetSmallFrequencyStandby(_settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand]);
+                SetDecimalFrequencyStandby(_settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand]);
                 return;
             }
 
-            AddSmallFrequencyStandby(changeFaster ? _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] : _settings.DecimalChangeRates[(int)_currentFrequencyBand]);
+            AddDecimalFrequencyStandby(changeFaster ? _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] : _settings.DecimalChangeRates[(int)_currentFrequencyBand]);
         }
 
-        internal void SmallFrequencyDown(bool changeFaster = false)
+        internal void DecimalFrequencyDown(bool changeFaster = false)
         {
-            if (GetSmallFrequencyStandby() <= _settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand] ||
-                (changeFaster && GetSmallFrequencyStandby() - _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] <= _settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand]))
+            if (GetDecimalFrequencyStandby() <= _settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand] ||
+                (changeFaster && GetDecimalFrequencyStandby() - _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] <= _settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand]))
             {
-                SetSmallFrequencyStandby(_settings.HighDecimalFrequencyBounds[(int)FlightRadioFrequencyBand.HF]);
+                SetDecimalFrequencyStandby(_settings.HighDecimalFrequencyBounds[(int)_currentFrequencyBand]);
                 return;
             }
 
-            SubtractSmallFrequencyStandby(changeFaster ? _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] : _settings.DecimalChangeRates[(int)_currentFrequencyBand]);
+            SubtractDecimalFrequencyStandby(changeFaster ? _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] : _settings.DecimalChangeRates[(int)_currentFrequencyBand]);
         }
 
         internal string GetStandbyFrequency()
         {
-            return GetBigFrequencyStandby() + "." + GetSmallFrequencyStandby().ToString().PadLeft(3, '0').Trim();
+            return GetIntegerFrequencyStandby() + "." + GetDecimalFrequencyStandby().ToString().PadLeft(3, '0').Trim();
         }
 
         internal string GetCockpitFrequency()
@@ -118,7 +117,7 @@ namespace NonVisuals.Radios.RadioControls
             Debug.WriteLine(LastFrequencies());
             if (!IsFrequencyBandSupported(frequency)) return;
             if (frequency == GetCockpitFrequency()) return;
-            
+
             var oldCockpitFrequency = _cockpitFrequency;
             Debug.WriteLine($"Old cockpit : {oldCockpitFrequency}");
             _cockpitFrequency = frequency;
@@ -126,7 +125,7 @@ namespace NonVisuals.Radios.RadioControls
             SaveCockpitFrequencyToArray();
             SetStandbyFrequency(oldCockpitFrequency);
             SaveStandByFrequencyToArray();
-            
+
 
             var newBand = GetFrequencyBand(_cockpitFrequency);
             var oldBand = GetFrequencyBand(GetStandbyFrequency());
@@ -158,8 +157,8 @@ namespace NonVisuals.Radios.RadioControls
         private void SetStandbyFrequency(string frequency)
         {
             var array = frequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
-            SetBigFrequencyStandby(uint.Parse(array[0]));
-            SetSmallFrequencyStandby(uint.Parse(array[1]));
+            SetIntegerFrequencyStandby(uint.Parse(array[0]));
+            SetDecimalFrequencyStandby(uint.Parse(array[1]));
         }
 
         internal string GetDCSBIOSCommand()
@@ -170,21 +169,21 @@ namespace NonVisuals.Radios.RadioControls
         private FlightRadioFrequencyBand GetFrequencyBand(string frequency)
         {
             var array = frequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
-            var bigFrequencyStandby = uint.Parse(array[0]);
+            var integerFrequencyStandby = uint.Parse(array[0]);
 
-            if (bigFrequencyStandby >= _settings.LowDecimalFrequencyBounds[(int)FlightRadioFrequencyBand.HF] && bigFrequencyStandby <= _settings.HighIntegerFrequencyBounds[(int)FlightRadioFrequencyBand.HF])
+            if (integerFrequencyStandby >= _settings.LowDecimalFrequencyBounds[(int)FlightRadioFrequencyBand.HF] && integerFrequencyStandby <= _settings.HighIntegerFrequencyBounds[(int)FlightRadioFrequencyBand.HF])
             {
                 return FlightRadioFrequencyBand.HF;
             }
-            if (bigFrequencyStandby >= _settings.LowDecimalFrequencyBounds[(int)FlightRadioFrequencyBand.VHF1] && bigFrequencyStandby <= _settings.HighIntegerFrequencyBounds[(int)FlightRadioFrequencyBand.VHF1])
+            if (integerFrequencyStandby >= _settings.LowDecimalFrequencyBounds[(int)FlightRadioFrequencyBand.VHF1] && integerFrequencyStandby <= _settings.HighIntegerFrequencyBounds[(int)FlightRadioFrequencyBand.VHF1])
             {
                 return FlightRadioFrequencyBand.VHF1;
             }
-            if (bigFrequencyStandby >= _settings.LowDecimalFrequencyBounds[(int)FlightRadioFrequencyBand.VHF2] && bigFrequencyStandby <= _settings.HighIntegerFrequencyBounds[(int)FlightRadioFrequencyBand.VHF2])
+            if (integerFrequencyStandby >= _settings.LowDecimalFrequencyBounds[(int)FlightRadioFrequencyBand.VHF2] && integerFrequencyStandby <= _settings.HighIntegerFrequencyBounds[(int)FlightRadioFrequencyBand.VHF2])
             {
                 return FlightRadioFrequencyBand.VHF2;
             }
-            if (bigFrequencyStandby >= _settings.LowDecimalFrequencyBounds[(int)FlightRadioFrequencyBand.UHF] && bigFrequencyStandby <= _settings.HighIntegerFrequencyBounds[(int)FlightRadioFrequencyBand.UHF])
+            if (integerFrequencyStandby >= _settings.LowDecimalFrequencyBounds[(int)FlightRadioFrequencyBand.UHF] && integerFrequencyStandby <= _settings.HighIntegerFrequencyBounds[(int)FlightRadioFrequencyBand.UHF])
             {
                 return FlightRadioFrequencyBand.UHF;
             }
@@ -194,7 +193,7 @@ namespace NonVisuals.Radios.RadioControls
 
         internal void TemporaryFrequencyBandUp()
         {
-            if (_settings.FrequencySkipper.ShouldSkip())
+            if (_settings.FrequencyBandSkipper.ShouldSkip())
             {
                 return;
             }
@@ -204,7 +203,7 @@ namespace NonVisuals.Radios.RadioControls
                 //   E
                 // C E H K     O    X
                 // 0 1 2 3     4    5
-                if (_tempFrequencyBand ==  _settings.SupportedFrequencyBands[i] && i < _settings.SupportedFrequencyBands.Length - 1)
+                if (_tempFrequencyBand == _settings.SupportedFrequencyBands[i] && i < _settings.SupportedFrequencyBands.Length - 1)
                 {
                     _tempFrequencyBand = _settings.SupportedFrequencyBands[i + 1];
                     break;
@@ -223,7 +222,7 @@ namespace NonVisuals.Radios.RadioControls
 
         internal void TemporaryFrequencyBandDown()
         {
-            if (_settings.FrequencySkipper.ShouldSkip())
+            if (_settings.FrequencyBandSkipper.ShouldSkip())
             {
                 return;
             }
@@ -251,37 +250,11 @@ namespace NonVisuals.Radios.RadioControls
             }
             Debug.WriteLine($"Temp Band After : {_tempFrequencyBand}");
         }
-        
+
         private void FetchStandbyFrequencyFromArray(FlightRadioFrequencyBand frequencyBand)
         {
-            switch (frequencyBand)
-            {
-                case FlightRadioFrequencyBand.HF:
-                {
-                    SetBigFrequencyStandby(_savedBigFrequencyPerBand[(int)FlightRadioFrequencyBand.HF]);
-                    SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[(int)FlightRadioFrequencyBand.HF]);
-                    break;
-                }
-                case FlightRadioFrequencyBand.VHF1:
-                {
-                    SetBigFrequencyStandby(_savedBigFrequencyPerBand[(int)FlightRadioFrequencyBand.VHF1]);
-                    SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[(int)FlightRadioFrequencyBand.VHF1]);
-                    break;
-                }
-                case FlightRadioFrequencyBand.VHF2:
-                {
-                    SetBigFrequencyStandby(_savedBigFrequencyPerBand[(int)FlightRadioFrequencyBand.VHF2]);
-                    SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[(int)FlightRadioFrequencyBand.VHF2]);
-                    break;
-                }
-                case FlightRadioFrequencyBand.UHF:
-                {
-                    SetBigFrequencyStandby(_savedBigFrequencyPerBand[(int)FlightRadioFrequencyBand.UHF]);
-                    SetSmallFrequencyStandby(_savedSmallFrequencyPerBand[(int)FlightRadioFrequencyBand.UHF]);
-                    break;
-                }
-            }
-
+            SetIntegerFrequencyStandby(_savedIntegerFrequencyPerBand[(int)frequencyBand]);
+            SetDecimalFrequencyStandby(_savedDecimalFrequencyPerBand[(int)frequencyBand]);
             VerifyStandbyFrequencyBand();
         }
 
@@ -295,13 +268,13 @@ namespace NonVisuals.Radios.RadioControls
         {
             Debug.WriteLine($"Saving : {frequency}");
             var frequencyBand = GetFrequencyBand(frequency);
-            
-            var array = frequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
-            var bigFrequency = uint.Parse(array[0]);
-            var smallFrequency = uint.Parse(array[1]);
 
-            _savedBigFrequencyPerBand[(int)frequencyBand] = bigFrequency;
-            _savedSmallFrequencyPerBand[(int)frequencyBand] = smallFrequency;
+            var array = frequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
+            var integerFrequency = uint.Parse(array[0]);
+            var decimalFrequency = uint.Parse(array[1]);
+
+            _savedIntegerFrequencyPerBand[(int)frequencyBand] = integerFrequency;
+            _savedDecimalFrequencyPerBand[(int)frequencyBand] = decimalFrequency;
         }
 
         private void SaveCockpitFrequencyToArray()
@@ -316,16 +289,16 @@ namespace NonVisuals.Radios.RadioControls
             var frequencyBand = GetFrequencyBand(frequency);
 
             var array = frequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
-            var bigFrequency = uint.Parse(array[0]);
-            var smallFrequency = uint.Parse(array[1]);
-            
-            _savedCockpitBigFrequencyPerBand[(int)frequencyBand] = bigFrequency;
-            _savedCockpitSmallFrequencyPerBand[(int)frequencyBand] = smallFrequency;
+            var integerFrequency = uint.Parse(array[0]);
+            var decimalFrequency = uint.Parse(array[1]);
+
+            _savedCockpitIntegerFrequencyPerBand[(int)frequencyBand] = integerFrequency;
+            _savedCockpitDecimalFrequencyPerBand[(int)frequencyBand] = decimalFrequency;
         }
-        
+
         private string FetchCockpitFrequencyFromArray(FlightRadioFrequencyBand frequencyBand)
         {
-            return $"{_savedCockpitBigFrequencyPerBand[(int)frequencyBand]}.{_savedCockpitSmallFrequencyPerBand[(int)frequencyBand].ToString().PadLeft(3, '0')}";
+            return $"{_savedCockpitIntegerFrequencyPerBand[(int)frequencyBand]}.{_savedCockpitDecimalFrequencyPerBand[(int)frequencyBand].ToString().PadLeft(3, '0')}";
         }
 
         private void VerifyStandbyFrequencyBand()
@@ -336,54 +309,54 @@ namespace NonVisuals.Radios.RadioControls
             }
         }
 
-        private uint GetBigFrequencyCockpit()
+        private uint GetIntegerFrequencyCockpit()
         {
             return uint.Parse(_cockpitFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries)[0]);
         }
 
-        private uint GetSmallFrequencyCockpit()
+        private uint GetDecimalFrequencyCockpit()
         {
             return uint.Parse(_cockpitFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries)[1]);
         }
 
-        private void SetBigFrequencyStandby(uint value)
+        private void SetIntegerFrequencyStandby(uint value)
         {
-            _bigFrequencyStandby = value;
+            _integerFrequencyStandby = value;
         }
 
-        private void AddBigFrequencyStandby(uint value)
+        private void AddIntegerFrequencyStandby(uint value)
         {
-            _bigFrequencyStandby += value;
+            _integerFrequencyStandby += value;
         }
 
-        private void SubtractBigFrequencyStandby(uint value)
+        private void SubtractIntegerFrequencyStandby(uint value)
         {
-            _bigFrequencyStandby -= value;
+            _integerFrequencyStandby -= value;
         }
 
-        private uint GetBigFrequencyStandby()
+        private uint GetIntegerFrequencyStandby()
         {
-            return _bigFrequencyStandby;
+            return _integerFrequencyStandby;
         }
 
-        private void SetSmallFrequencyStandby(uint value)
+        private void SetDecimalFrequencyStandby(uint value)
         {
-            _smallFrequencyStandby = value;
+            _decimalFrequencyStandby = value;
         }
 
-        private void AddSmallFrequencyStandby(uint value)
+        private void AddDecimalFrequencyStandby(uint value)
         {
-            _smallFrequencyStandby += value;
+            _decimalFrequencyStandby += value;
         }
 
-        private void SubtractSmallFrequencyStandby(uint value)
+        private void SubtractDecimalFrequencyStandby(uint value)
         {
-            _smallFrequencyStandby -= value;
+            _decimalFrequencyStandby -= value;
         }
 
-        private uint GetSmallFrequencyStandby()
+        private uint GetDecimalFrequencyStandby()
         {
-            return _smallFrequencyStandby;
+            return _decimalFrequencyStandby;
         }
 
         private bool IsFrequencyBandSupported(FlightRadioFrequencyBand frequencyBand)
@@ -406,7 +379,21 @@ namespace NonVisuals.Radios.RadioControls
 
         internal string GetLastStandbyFrequency(FlightRadioFrequencyBand frequencyBand)
         {
-            return _savedBigFrequencyPerBand[(int)frequencyBand] + "." + _savedSmallFrequencyPerBand[(int)frequencyBand].ToString().PadLeft(3, '0');
+            return _savedIntegerFrequencyPerBand[(int)frequencyBand] + "." + _savedDecimalFrequencyPerBand[(int)frequencyBand].ToString().PadLeft(3, '0');
+        }
+
+        private void PopulateSavedValues()
+        {
+            for (var i = 0; i < _settings.LowIntegerFrequencyBounds.Length; i++)
+            {
+                _savedIntegerFrequencyPerBand[i] = _settings.LowIntegerFrequencyBounds[i];
+                _savedCockpitIntegerFrequencyPerBand[i] = _settings.LowIntegerFrequencyBounds[i];
+            }
+            for (var i = 0; i < _settings.LowDecimalFrequencyBounds.Length; i++)
+            {
+                _savedDecimalFrequencyPerBand[i] = _settings.LowDecimalFrequencyBounds[i];
+                _savedCockpitDecimalFrequencyPerBand[i] = _settings.LowDecimalFrequencyBounds[i];
+            }
         }
 
         internal string LastFrequencies()

@@ -23,7 +23,6 @@ namespace DCSFlightpanels.PanelUserControls
     using NonVisuals.Panels.Saitek;
     using NonVisuals.Panels;
     using NonVisuals.HID;
-    using DCSFlightpanels.Properties;
 
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml

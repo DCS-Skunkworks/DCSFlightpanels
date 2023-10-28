@@ -1,16 +1,18 @@
 ﻿using NonVisuals.Helpers;
+using NonVisuals.Radios.RadioControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NonVisuals.Radios.RadioControls
+namespace NonVisuals.Radios.RadioSettings
 {
     internal class FlightRadioSettings
     {
-        private uint[] _lowIntegerFrequencyBounds;
-        private uint[] _highIntegerFrequencyBounds;
-        private uint[] _lowDecimalFrequencyBounds;
-        private uint[] _highDecimalFrequencyBounds;
+        private const int ARRAY_LENGTH = 4;
+        private readonly uint[] _lowIntegerFrequencyBounds;
+        private readonly uint[] _highIntegerFrequencyBounds;
+        private readonly uint[] _lowDecimalFrequencyBounds;
+        private readonly uint[] _highDecimalFrequencyBounds;
         private readonly uint[] _integerChangeRates;
         private readonly uint[] _integerHigherChangeRates;
         private readonly uint[] _decimalChangeRates;
@@ -25,6 +27,7 @@ namespace NonVisuals.Radios.RadioControls
         /// <summary>
         /// Constructs a new object holding the settings for the FlightRadio.
         /// </summary>
+        /// <param name="supportedFrequencyBands">Supported frequency bands</param>
         /// <param name="lowIntegerFrequencyBounds">Lowest integer frequency per frequency band</param>
         /// <param name="highIntegerFrequencyBounds">Highest integer frequency per frequency band</param>
         /// <param name="lowDecimalFrequencyBounds">Lowest decimal frequency per frequency band</param>
@@ -34,11 +37,10 @@ namespace NonVisuals.Radios.RadioControls
         /// <param name="decimalChangeRates">Change rates for decimal frequency per frequency band</param>
         /// <param name="decimalHigherChangeRates">Higher change rates for decimal frequency per frequency band</param>
         /// <param name="skipCountForFrequencyBand">Click skip count while changing frequency band</param>
-        /// <param name="supportedFrequencyBands">Supported frequency bands</param>
         /// <param name="dcsbiosIdentifier">DCS-BIOS identifier for the radio</param>
-        public FlightRadioSettings(uint[] lowIntegerFrequencyBounds, uint[] highIntegerFrequencyBounds, uint[] lowDecimalFrequencyBounds,
+        public FlightRadioSettings(FlightRadioFrequencyBand[] supportedFrequencyBands, uint[] lowIntegerFrequencyBounds, uint[] highIntegerFrequencyBounds, uint[] lowDecimalFrequencyBounds,
             uint[] highDecimalFrequencyBounds, uint[] integerChangeRates, uint[] integerHigherChangeRates, uint[] decimalChangeRates, uint[] decimalHigherChangeRates,
-            FlightRadioFrequencyBand[] supportedFrequencyBands, int skipCountForFrequencyBand, string dcsbiosIdentifier)
+            int skipCountForFrequencyBand, string dcsbiosIdentifier)
         {
             _lowIntegerFrequencyBounds = lowIntegerFrequencyBounds;
             _highIntegerFrequencyBounds = highIntegerFrequencyBounds;
@@ -76,17 +78,17 @@ namespace NonVisuals.Radios.RadioControls
             return result;
         }
 
-        private void CheckBandBoundsOrder(ref uint[] array)
+        private void CheckBandBoundsOrder(string name, uint[] array)
         {
             var lastValue = 1;
             foreach (var u in array)
             {
-                if (lastValue >= u)
+                if (lastValue >= u && u != 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(array), @"Array is not ordered.");
                 }
 
-                lastValue = (int)u;
+                lastValue = u == 0 ? lastValue : (int)u;
             }
         }
 
@@ -94,7 +96,7 @@ namespace NonVisuals.Radios.RadioControls
         {
             if (string.IsNullOrEmpty(_dcsbiosIdentifier))
             {
-                throw new ArgumentOutOfRangeException(nameof(_dcsbiosIdentifier),@"FlightRadioSettings : DCS-BIOS Identifier is null.");
+                throw new ArgumentOutOfRangeException(nameof(_dcsbiosIdentifier), @"FlightRadioSettings : DCS-BIOS Identifier is null.");
             }
 
             if (_lowIntegerFrequencyBounds == null || _lowIntegerFrequencyBounds.Length == 0)
@@ -139,41 +141,28 @@ namespace NonVisuals.Radios.RadioControls
             }
 
             CheckArrayCounts();
-            CheckBandBoundsOrder(ref _lowIntegerFrequencyBounds);
-            CheckBandBoundsOrder(ref _highIntegerFrequencyBounds);
-            CheckBandBoundsOrder(ref _lowDecimalFrequencyBounds);
-            CheckBandBoundsOrder(ref _highDecimalFrequencyBounds);
+            CheckBandBoundsOrder("_lowIntegerFrequencyBounds", _lowIntegerFrequencyBounds);
+            CheckBandBoundsOrder("_highIntegerFrequencyBounds", _highIntegerFrequencyBounds);
             _supportedFrequencyBands = SortFrequencyBand(_supportedFrequencyBands);
         }
 
         private void CheckArrayCounts()
         {
-            var count = -1;
-            var list = new List<uint[]>
+            var list = new List<KeyValuePair<string, uint[]>>()
             {
-                _lowIntegerFrequencyBounds,
-                _highIntegerFrequencyBounds,
-                _lowDecimalFrequencyBounds,
-                _highDecimalFrequencyBounds,
-                _integerChangeRates,
-                _integerHigherChangeRates,
-                _decimalChangeRates,
-                _decimalHigherChangeRates
+                new KeyValuePair<string, uint[]>("_lowIntegerFrequencyBounds",_lowIntegerFrequencyBounds),
+                new KeyValuePair<string, uint[]>("_highIntegerFrequencyBounds",_highIntegerFrequencyBounds),
+                new KeyValuePair<string, uint[]>("_lowDecimalFrequencyBounds",_lowDecimalFrequencyBounds),
+                new KeyValuePair<string, uint[]>("_highDecimalFrequencyBounds",_highDecimalFrequencyBounds),
+                new KeyValuePair<string, uint[]>("_integerChangeRates",_integerChangeRates),
+                new KeyValuePair<string, uint[]>("_integerHigherChangeRates",_integerHigherChangeRates),
+                new KeyValuePair<string, uint[]>("_decimalChangeRates",_decimalChangeRates),
+                new KeyValuePair<string, uint[]>("_decimalHigherChangeRates",_decimalHigherChangeRates)
             };
 
-            foreach (var array in list)
+            foreach (var kvp in list.Where(o => o.Value.Length != 4))
             {
-                if (count == -1) count = array.Length;
-
-                if (array.Length != count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(array), @"FlightRadioSettings : Array count differs. All arrays must have same number of entries.");
-                }
-            }
-
-            if (count != _supportedFrequencyBands.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(_supportedFrequencyBands), @"FlightRadioSettings : Array count differs. All arrays must have same number of entries.");
+                throw new ArgumentOutOfRangeException(nameof(kvp), $@"FlightRadioSettings : Array count is wrong for {kvp.Key} ({kvp.Value}). All arrays must be {ARRAY_LENGTH} long.");
             }
         }
 
@@ -195,7 +184,7 @@ namespace NonVisuals.Radios.RadioControls
 
         public FlightRadioFrequencyBand[] SupportedFrequencyBands => _supportedFrequencyBands;
 
-        public ClickSkipper FrequencySkipper => _clickSkipperForFrequencyBand;
+        public ClickSkipper FrequencyBandSkipper => _clickSkipperForFrequencyBand;
 
         public string DCSBIOSIdentifier => _dcsbiosIdentifier;
     }
