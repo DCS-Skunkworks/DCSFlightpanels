@@ -151,6 +151,11 @@ namespace NonVisuals.Radios.RadioSettings
             {
                 throw new ArgumentOutOfRangeException(nameof(_supportedFrequencyBands), @"FlightRadioSettings : Supported Frequencies Bands are empty.");
             }
+            
+            if (_integerFrequencySkippers == null || _integerFrequencySkippers.Length == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(_integerFrequencySkippers), @"FlightRadioSettings : Integer Frequency Skippers are empty.");
+            }
 
             CheckArrayCounts();
             CheckBandBoundsOrder("_lowIntegerFrequencyBounds", _lowIntegerFrequencyBounds);
@@ -160,16 +165,16 @@ namespace NonVisuals.Radios.RadioSettings
 
         private void CheckArrayCounts()
         {
-            var list = new List<KeyValuePair<string, uint[]>>()
+            var list = new List<KeyValuePair<string, uint[]>>
             {
-                new KeyValuePair<string, uint[]>("_lowIntegerFrequencyBounds",_lowIntegerFrequencyBounds),
-                new KeyValuePair<string, uint[]>("_highIntegerFrequencyBounds",_highIntegerFrequencyBounds),
-                new KeyValuePair<string, uint[]>("_lowDecimalFrequencyBounds",_lowDecimalFrequencyBounds),
-                new KeyValuePair<string, uint[]>("_highDecimalFrequencyBounds",_highDecimalFrequencyBounds),
-                new KeyValuePair<string, uint[]>("_integerChangeRates",_integerChangeRates),
-                new KeyValuePair<string, uint[]>("_integerHigherChangeRates",_integerHigherChangeRates),
-                new KeyValuePair<string, uint[]>("_decimalChangeRates",_decimalChangeRates),
-                new KeyValuePair<string, uint[]>("_decimalHigherChangeRates",_decimalHigherChangeRates)
+                new("_lowIntegerFrequencyBounds",_lowIntegerFrequencyBounds),
+                new("_highIntegerFrequencyBounds",_highIntegerFrequencyBounds),
+                new("_lowDecimalFrequencyBounds",_lowDecimalFrequencyBounds),
+                new("_highDecimalFrequencyBounds",_highDecimalFrequencyBounds),
+                new("_integerChangeRates",_integerChangeRates),
+                new("_integerHigherChangeRates",_integerHigherChangeRates),
+                new("_decimalChangeRates",_decimalChangeRates),
+                new("_decimalHigherChangeRates",_decimalHigherChangeRates)
             };
 
             foreach (var kvp in list.Where(o => o.Value.Length != ARRAY_LENGTH))
