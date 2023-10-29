@@ -50,13 +50,13 @@ namespace NonVisuals.Radios.RadioControls
             if (_settings.IntegerFrequencySkippers[(int)_currentFrequencyBand].ShouldSkip()) return;
 
             if (GetIntegerFrequencyStandby() >= _settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand] ||
-                (changeFaster && GetIntegerFrequencyStandby() + _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] >= _settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand]))
+                (changeFaster && GetIntegerFrequencyStandby() + _settings.IntegerHighChangeRates[(int)_currentFrequencyBand] >= _settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand]))
             {
                 SetIntegerFrequencyStandby(_settings.LowIntegerFrequencyBounds[(int)_currentFrequencyBand]);
                 return;
             }
 
-            AddIntegerFrequencyStandby(changeFaster ? _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] : _settings.IntegerChangeRates[(int)_currentFrequencyBand]);
+            AddIntegerFrequencyStandby(changeFaster ? _settings.IntegerHighChangeRates[(int)_currentFrequencyBand] : _settings.IntegerChangeRates[(int)_currentFrequencyBand]);
         }
 
         internal void IntegerFrequencyDown(bool changeFaster = false)
@@ -64,37 +64,37 @@ namespace NonVisuals.Radios.RadioControls
             if (_settings.IntegerFrequencySkippers[(int)_currentFrequencyBand].ShouldSkip()) return;
 
             if (GetIntegerFrequencyStandby() <= _settings.LowIntegerFrequencyBounds[(int)_currentFrequencyBand] ||
-                (changeFaster && GetIntegerFrequencyStandby() - _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] <= _settings.LowIntegerFrequencyBounds[(int)_currentFrequencyBand]))
+                (changeFaster && GetIntegerFrequencyStandby() - _settings.IntegerHighChangeRates[(int)_currentFrequencyBand] <= _settings.LowIntegerFrequencyBounds[(int)_currentFrequencyBand]))
             {
                 SetIntegerFrequencyStandby(_settings.HighIntegerFrequencyBounds[(int)_currentFrequencyBand]);
                 return;
             }
 
-            SubtractIntegerFrequencyStandby(changeFaster ? _settings.IntegerHigherChangeRates[(int)_currentFrequencyBand] : _settings.IntegerChangeRates[(int)_currentFrequencyBand]);
+            SubtractIntegerFrequencyStandby(changeFaster ? _settings.IntegerHighChangeRates[(int)_currentFrequencyBand] : _settings.IntegerChangeRates[(int)_currentFrequencyBand]);
         }
 
         internal void DecimalFrequencyUp(bool changeFaster = false)
         {
             if (GetDecimalFrequencyStandby() >= _settings.HighDecimalFrequencyBounds[(int)_currentFrequencyBand] ||
-                (changeFaster && GetDecimalFrequencyStandby() + _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] >= _settings.HighDecimalFrequencyBounds[(int)_currentFrequencyBand]))
+                (changeFaster && GetDecimalFrequencyStandby() + _settings.DecimalHighChangeRates[(int)_currentFrequencyBand] >= _settings.HighDecimalFrequencyBounds[(int)_currentFrequencyBand]))
             {
                 SetDecimalFrequencyStandby(_settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand]);
                 return;
             }
 
-            AddDecimalFrequencyStandby(changeFaster ? _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] : _settings.DecimalChangeRates[(int)_currentFrequencyBand]);
+            AddDecimalFrequencyStandby(changeFaster ? _settings.DecimalHighChangeRates[(int)_currentFrequencyBand] : _settings.DecimalChangeRates[(int)_currentFrequencyBand]);
         }
 
         internal void DecimalFrequencyDown(bool changeFaster = false)
         {
             if (GetDecimalFrequencyStandby() <= _settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand] ||
-                (changeFaster && GetDecimalFrequencyStandby() - _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] <= _settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand]))
+                (changeFaster && GetDecimalFrequencyStandby() - _settings.DecimalHighChangeRates[(int)_currentFrequencyBand] <= _settings.LowDecimalFrequencyBounds[(int)_currentFrequencyBand]))
             {
                 SetDecimalFrequencyStandby(_settings.HighDecimalFrequencyBounds[(int)_currentFrequencyBand]);
                 return;
             }
 
-            SubtractDecimalFrequencyStandby(changeFaster ? _settings.DecimalHigherChangeRates[(int)_currentFrequencyBand] : _settings.DecimalChangeRates[(int)_currentFrequencyBand]);
+            SubtractDecimalFrequencyStandby(changeFaster ? _settings.DecimalHighChangeRates[(int)_currentFrequencyBand] : _settings.DecimalChangeRates[(int)_currentFrequencyBand]);
         }
 
         internal string GetStandbyFrequency()

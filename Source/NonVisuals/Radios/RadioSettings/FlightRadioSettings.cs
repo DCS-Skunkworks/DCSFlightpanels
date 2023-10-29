@@ -14,9 +14,9 @@ namespace NonVisuals.Radios.RadioSettings
         private readonly uint[] _lowDecimalFrequencyBounds;
         private readonly uint[] _highDecimalFrequencyBounds;
         private readonly uint[] _integerChangeRates;
-        private readonly uint[] _integerHigherChangeRates;
+        private readonly uint[] _integerHighChangeRates;
         private readonly uint[] _decimalChangeRates;
-        private readonly uint[] _decimalHigherChangeRates;
+        private readonly uint[] _decimalHighChangeRates;
         private FlightRadioFrequencyBand[] _supportedFrequencyBands;
         private readonly ClickSkipper _clickSkipperForFrequencyBandChanges;
         private readonly ClickSkipper[] _integerFrequencySkippers;
@@ -35,9 +35,9 @@ namespace NonVisuals.Radios.RadioSettings
         /// <param name="lowDecimalFrequencyBounds">Lowest decimal frequency per frequency band</param>
         /// <param name="highDecimalFrequencyBounds">Highest decimal frequency per frequency band</param>
         /// <param name="integerChangeRates">Change rates for integer frequency per frequency band</param>
-        /// <param name="integerHigherChangeRates">Higher change rates for integer frequency per frequency band</param>
+        /// <param name="integerHighChangeRates">High change rates for integer frequency per frequency band</param>
         /// <param name="decimalChangeRates">Change rates for decimal frequency per frequency band</param>
-        /// <param name="decimalHigherChangeRates">Higher change rates for decimal frequency per frequency band</param>
+        /// <param name="decimalHighChangeRates">High change rates for decimal frequency per frequency band</param>
         /// <param name="skipCountForFrequencyBandChanges">Click skip count while changing frequency band</param>
         /// <param name="integerFrequencySkippers">ClickSkippers for integer decimal as some are too sensitive</param>
         public FlightRadioSettings(
@@ -48,9 +48,9 @@ namespace NonVisuals.Radios.RadioSettings
             uint[] lowDecimalFrequencyBounds,
             uint[] highDecimalFrequencyBounds, 
             uint[] integerChangeRates, 
-            uint[] integerHigherChangeRates, 
+            uint[] integerHighChangeRates, 
             uint[] decimalChangeRates, 
-            uint[] decimalHigherChangeRates,
+            uint[] decimalHighChangeRates,
             int skipCountForFrequencyBandChanges, 
             ClickSkipper[] integerFrequencySkippers)
         {
@@ -59,9 +59,9 @@ namespace NonVisuals.Radios.RadioSettings
             _lowDecimalFrequencyBounds = lowDecimalFrequencyBounds;
             _highDecimalFrequencyBounds = highDecimalFrequencyBounds;
             _integerChangeRates = integerChangeRates;
-            _integerHigherChangeRates = integerHigherChangeRates;
+            _integerHighChangeRates = integerHighChangeRates;
             _decimalChangeRates = decimalChangeRates;
-            _decimalHigherChangeRates = decimalHigherChangeRates;
+            _decimalHighChangeRates = decimalHighChangeRates;
             _supportedFrequencyBands = supportedFrequencyBands;
             _clickSkipperForFrequencyBandChanges = new ClickSkipper(skipCountForFrequencyBandChanges);
             _dcsbiosIdentifier = dcsbiosIdentifier;
@@ -114,38 +114,38 @@ namespace NonVisuals.Radios.RadioSettings
 
             if (_lowIntegerFrequencyBounds == null || _lowIntegerFrequencyBounds.Length == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(_lowIntegerFrequencyBounds), @"FlightRadioSettings : Integer Lower Frequency Bounds are empty.");
+                throw new ArgumentOutOfRangeException(nameof(_lowIntegerFrequencyBounds), @"FlightRadioSettings : Integer Low Frequency Bounds are empty.");
             }
             if (_highIntegerFrequencyBounds == null || _highIntegerFrequencyBounds.Length == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(_highIntegerFrequencyBounds), @"FlightRadioSettings : Integer Higher Frequency Bounds are empty.");
+                throw new ArgumentOutOfRangeException(nameof(_highIntegerFrequencyBounds), @"FlightRadioSettings : Integer High Frequency Bounds are empty.");
             }
 
             if (_lowDecimalFrequencyBounds == null || _lowDecimalFrequencyBounds.Length == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(_lowDecimalFrequencyBounds), @"FlightRadioSettings : Decimal Lower Frequency Bounds are empty.");
+                throw new ArgumentOutOfRangeException(nameof(_lowDecimalFrequencyBounds), @"FlightRadioSettings : Decimal Low Frequency Bounds are empty.");
             }
             if (_highDecimalFrequencyBounds == null || _highDecimalFrequencyBounds.Length == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(_highDecimalFrequencyBounds), @"FlightRadioSettings : Decimal Higher Frequency Bounds are empty.");
+                throw new ArgumentOutOfRangeException(nameof(_highDecimalFrequencyBounds), @"FlightRadioSettings : Decimal High Frequency Bounds are empty.");
             }
 
             if (_integerChangeRates == null || _integerChangeRates.Length == 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(_integerChangeRates), @"FlightRadioSettings : Integer Change Rates are empty.");
             }
-            if (_integerHigherChangeRates == null || _integerHigherChangeRates.Length == 0)
+            if (_integerHighChangeRates == null || _integerHighChangeRates.Length == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(_integerHigherChangeRates), @"FlightRadioSettings : Integer Higher Change Rates are empty.");
+                throw new ArgumentOutOfRangeException(nameof(_integerHighChangeRates), @"FlightRadioSettings : Integer High Change Rates are empty.");
             }
 
             if (_decimalChangeRates == null || _decimalChangeRates.Length == 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(_decimalChangeRates), @"FlightRadioSettings : Decimal Change Rates are empty.");
             }
-            if (_decimalHigherChangeRates == null || _decimalHigherChangeRates.Length == 0)
+            if (_decimalHighChangeRates == null || _decimalHighChangeRates.Length == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(_decimalHigherChangeRates), @"FlightRadioSettings : Decimal Higher Change Rates are empty.");
+                throw new ArgumentOutOfRangeException(nameof(_decimalHighChangeRates), @"FlightRadioSettings : Decimal High Change Rates are empty.");
             }
 
             if (_supportedFrequencyBands == null || _supportedFrequencyBands.Length == 0)
@@ -173,9 +173,9 @@ namespace NonVisuals.Radios.RadioSettings
                 new("_lowDecimalFrequencyBounds",_lowDecimalFrequencyBounds),
                 new("_highDecimalFrequencyBounds",_highDecimalFrequencyBounds),
                 new("_integerChangeRates",_integerChangeRates),
-                new("_integerHigherChangeRates",_integerHigherChangeRates),
+                new("_integerHighChangeRates",_integerHighChangeRates),
                 new("_decimalChangeRates",_decimalChangeRates),
-                new("_decimalHigherChangeRates",_decimalHigherChangeRates)
+                new("_decimalHighChangeRates",_decimalHighChangeRates)
             };
 
             foreach (var kvp in list.Where(o => o.Value.Length != ARRAY_LENGTH))
@@ -199,11 +199,11 @@ namespace NonVisuals.Radios.RadioSettings
 
         public uint[] IntegerChangeRates => _integerChangeRates;
 
-        public uint[] IntegerHigherChangeRates => _integerHigherChangeRates;
+        public uint[] IntegerHighChangeRates => _integerHighChangeRates;
 
         public uint[] DecimalChangeRates => _decimalChangeRates;
 
-        public uint[] DecimalHigherChangeRates => _decimalHigherChangeRates;
+        public uint[] DecimalHighChangeRates => _decimalHighChangeRates;
 
         public ClickSkipper[] IntegerFrequencySkippers => _integerFrequencySkippers;
 

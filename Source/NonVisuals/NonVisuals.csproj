@@ -51,5 +51,8 @@
     </PackageReference>
     <PackageReference Include="Xunit.StaFact" Version="1.1.11" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tests\FlightRadio\" />
+  </ItemGroup>
   <PropertyGroup />
 </Project>
