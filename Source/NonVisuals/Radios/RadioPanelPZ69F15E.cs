@@ -267,7 +267,7 @@ namespace NonVisuals.Radios
                             {
                                 if (_upperButtonPressed || _lowerButtonPressed)
                                 {
-                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetTemporaryFrequencyBandId(), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.TemporaryFrequencyBandId, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                                 else
                                 {
@@ -302,7 +302,7 @@ namespace NonVisuals.Radios
                             {
                                 if (_upperButtonPressed || _lowerButtonPressed)
                                 {
-                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetTemporaryFrequencyBandId(), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.TemporaryFrequencyBandId, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                                 else
                                 {
