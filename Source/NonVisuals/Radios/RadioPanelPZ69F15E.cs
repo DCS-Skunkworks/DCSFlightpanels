@@ -91,7 +91,7 @@ namespace NonVisuals.Radios
             CreateRadioKnobs();
             lock (_lockARC210Object)
             {
-                _arc210Radio = new FlightRadio(FlightRadioFrequencyBand.VHF2, new ARC210Settings("ARC_210_RADIO").RadioSettings);
+                _arc210Radio = new FlightRadio(new ARC210Settings("ARC_210_RADIO").RadioSettings);
                 _arc210Radio.InitRadio();
             }
 
@@ -271,9 +271,9 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetStandbyFrequency(), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.StandbyFrequency, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetCockpitFrequency(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.CockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             break;
                         }
@@ -306,9 +306,9 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetStandbyFrequency(), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.StandbyFrequency, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.GetCockpitFrequency(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _arc210Radio.CockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             break;
                         }

@@ -26,7 +26,7 @@ namespace NonVisuals.Radios.RadioSettings
             uint decimalHighChangeRate = 25,
             int integerSkipCount = 2)
         {
-            var supportedFrequencyBands = new FlightRadioFrequencyBand[]{ frequencyBand };
+            var supportedFrequencyBands = new []{ frequencyBand };
             var lowIntegerFrequencyBounds = new uint[] { 0, 0, 0, 0 };
             var highIntegerFrequencyBounds = new uint[] { 0, 0, 0, 0 };
             var lowDecimalFrequencyBounds = new uint[] { 0, 0, 0, 0 };
@@ -40,7 +40,7 @@ namespace NonVisuals.Radios.RadioSettings
 
             lowIntegerFrequencyBounds[(int)frequencyBand] = lowIntegerFrequency;
             highIntegerFrequencyBounds[(int)frequencyBand] = highIntegerFrequency;
-            lowIntegerFrequencyBounds[(int)frequencyBand] = lowDecimalFrequency;
+            lowDecimalFrequencyBounds[(int)frequencyBand] = lowDecimalFrequency;
             highDecimalFrequencyBounds[(int)frequencyBand] = highDecimalFrequency;
 
             integerChangeRates[(int)frequencyBand] = integerChangeRate;
@@ -49,6 +49,7 @@ namespace NonVisuals.Radios.RadioSettings
             decimalHighChangeRates[(int)frequencyBand] = decimalHighChangeRate;
 
             RadioSettings = new FlightRadioSettings(
+                frequencyBand,
                 supportedFrequencyBands,
                 dcsbiosIdentifier,
                 lowIntegerFrequencyBounds,

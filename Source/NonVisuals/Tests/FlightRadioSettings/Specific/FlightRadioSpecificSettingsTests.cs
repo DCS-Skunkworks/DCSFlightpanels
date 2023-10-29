@@ -1,11 +1,10 @@
 ﻿using System;
-using NonVisuals.Radios.RadioControls;
 using NonVisuals.Radios.RadioSettings;
 using Xunit;
 
 namespace NonVisuals.Tests.FlightRadioSettings.Specific
 {
-    public class PlaneFlightRadioSettingsTests
+    public class FlightRadioSpecificSettingsTests
     {
         /* ARC-210 */
         /* FM      30.000 to 87.975 MHz */

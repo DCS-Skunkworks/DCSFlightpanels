@@ -54,7 +54,6 @@ namespace NonVisuals.Radios
 
         private long _doUpdatePanelLCD;
         private readonly object _lockShowFrequenciesOnPanelObject = new();
-        private const uint QUART_FREQ_CHANGE_VALUE = 25;
 
         public RadioPanelPZ69JF17(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
@@ -85,12 +84,12 @@ namespace NonVisuals.Radios
             CreateRadioKnobs();
             lock (_lockCOM1Object)
             {
-                _com1Radio = new FlightRadio(FlightRadioFrequencyBand.VHF2, new JF17ComSettings("COMM1").RadioSettings);
+                _com1Radio = new FlightRadio(new JF17ComSettings("COMM1").RadioSettings);
                 _com1Radio.InitRadio();
             }
             lock (_lockCOM2Object)
             {
-                _com2Radio = new FlightRadio(FlightRadioFrequencyBand.VHF2, new JF17ComSettings("COMM2").RadioSettings);
+                _com2Radio = new FlightRadio(new JF17ComSettings("COMM2").RadioSettings);
                 _com2Radio.InitRadio();
             }
 
@@ -267,9 +266,9 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.GetStandbyFrequency(), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.StandbyFrequency, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.GetCockpitFrequency(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.CockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             break;
                         }
@@ -283,9 +282,9 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.GetStandbyFrequency(), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.StandbyFrequency, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.GetCockpitFrequency(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.CockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             break;
                         }
@@ -309,9 +308,9 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.GetStandbyFrequency(), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.StandbyFrequency, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.GetCockpitFrequency(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _com1Radio.CockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             break;
                         }
@@ -325,9 +324,9 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.GetStandbyFrequency(), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.StandbyFrequency, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.GetCockpitFrequency(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _com2Radio.CockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             break;
                         }

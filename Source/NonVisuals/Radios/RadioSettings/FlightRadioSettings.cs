@@ -9,6 +9,9 @@ namespace NonVisuals.Radios.RadioSettings
     internal class FlightRadioSettings
     {
         private const int ARRAY_LENGTH = 4;
+        private FlightRadioFrequencyBand _initialFrequencyBand;
+        private FlightRadioFrequencyBand[] _supportedFrequencyBands;
+        private readonly string _dcsbiosIdentifier;
         private readonly uint[] _lowIntegerFrequencyBounds;
         private readonly uint[] _highIntegerFrequencyBounds;
         private readonly uint[] _lowDecimalFrequencyBounds;
@@ -17,17 +20,16 @@ namespace NonVisuals.Radios.RadioSettings
         private readonly uint[] _integerHighChangeRates;
         private readonly uint[] _decimalChangeRates;
         private readonly uint[] _decimalHighChangeRates;
-        private FlightRadioFrequencyBand[] _supportedFrequencyBands;
         private readonly ClickSkipper _clickSkipperForFrequencyBandChanges;
         private readonly ClickSkipper[] _integerFrequencySkippers;
 
-        private readonly string _dcsbiosIdentifier;
 
 
 
         /// <summary>
         /// Constructs a new object holding the settings for the FlightRadio.
         /// </summary>
+        /// <param name="initialFrequencyBand">The Frequency Band the radio should use when initialized</param>
         /// <param name="supportedFrequencyBands">Supported frequency bands</param>
         /// <param name="dcsbiosIdentifier">DCS-BIOS identifier for the radio</param>
         /// <param name="lowIntegerFrequencyBounds">Lowest integer frequency per frequency band</param>
@@ -41,6 +43,7 @@ namespace NonVisuals.Radios.RadioSettings
         /// <param name="skipCountForFrequencyBandChanges">Click skip count while changing frequency band</param>
         /// <param name="integerFrequencySkippers">ClickSkippers for integer decimal as some are too sensitive</param>
         public FlightRadioSettings(
+            FlightRadioFrequencyBand initialFrequencyBand,
             FlightRadioFrequencyBand[] supportedFrequencyBands, 
             string dcsbiosIdentifier, 
             uint[] lowIntegerFrequencyBounds, 
@@ -54,6 +57,9 @@ namespace NonVisuals.Radios.RadioSettings
             int skipCountForFrequencyBandChanges, 
             ClickSkipper[] integerFrequencySkippers)
         {
+            _initialFrequencyBand = initialFrequencyBand;
+            _supportedFrequencyBands = supportedFrequencyBands;
+            _dcsbiosIdentifier = dcsbiosIdentifier;
             _lowIntegerFrequencyBounds = lowIntegerFrequencyBounds;
             _highIntegerFrequencyBounds = highIntegerFrequencyBounds;
             _lowDecimalFrequencyBounds = lowDecimalFrequencyBounds;
@@ -62,9 +68,7 @@ namespace NonVisuals.Radios.RadioSettings
             _integerHighChangeRates = integerHighChangeRates;
             _decimalChangeRates = decimalChangeRates;
             _decimalHighChangeRates = decimalHighChangeRates;
-            _supportedFrequencyBands = supportedFrequencyBands;
             _clickSkipperForFrequencyBandChanges = new ClickSkipper(skipCountForFrequencyBandChanges);
-            _dcsbiosIdentifier = dcsbiosIdentifier;
             _integerFrequencySkippers = integerFrequencySkippers;
         }
         private FlightRadioFrequencyBand[] SortFrequencyBand(FlightRadioFrequencyBand[] frequencyBand)
@@ -98,10 +102,21 @@ namespace NonVisuals.Radios.RadioSettings
             {
                 if (lastValue >= u && u != 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(array), @"Array is not ordered.");
+                    throw new ArgumentOutOfRangeException(nameof(array), $@"Array ({name}) values are not ordered.");
                 }
 
                 lastValue = u == 0 ? lastValue : (int)u;
+            }
+        }
+
+        private void CheckFrequencyLowAndHighOrder(uint[] lowIntegerFrequencies, uint[] highIntegerFrequencies)
+        {
+            for (var i = 0; i < lowIntegerFrequencies.Length; i++)
+            {
+                if (lowIntegerFrequencies[i] >= highIntegerFrequencies[i] && lowIntegerFrequencies[i] != 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(lowIntegerFrequencies), $@"Frequency Band {(FlightRadioFrequencyBand)i} either integer or decimal lower frequency is higher or equal to higher frequency.");
+                }
             }
         }
 
@@ -158,9 +173,31 @@ namespace NonVisuals.Radios.RadioSettings
                 throw new ArgumentOutOfRangeException(nameof(_integerFrequencySkippers), @"FlightRadioSettings : Integer Frequency Skippers are empty.");
             }
 
+            foreach (var frequencyBand in _supportedFrequencyBands)
+            {
+                if (_integerChangeRates[(int)frequencyBand] == 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(_integerChangeRates), @"FlightRadioSettings : Integer Frequency Change Rate can not be 0.");
+                }
+                if (_integerHighChangeRates[(int)frequencyBand] == 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(_integerHighChangeRates), @"FlightRadioSettings : Integer Frequency High Change Rate can not be 0.");
+                }
+                if (_decimalChangeRates[(int)frequencyBand] == 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(_decimalChangeRates), @"FlightRadioSettings : Decimal Frequency Change Rate can not be 0.");
+                }
+                if (_decimalHighChangeRates[(int)frequencyBand] == 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(_decimalHighChangeRates), @"FlightRadioSettings : Decimal Frequency High Change Rate can not be 0.");
+                }
+            }
+
             CheckArrayCounts();
             CheckBandBoundsOrder("_lowIntegerFrequencyBounds", _lowIntegerFrequencyBounds);
             CheckBandBoundsOrder("_highIntegerFrequencyBounds", _highIntegerFrequencyBounds);
+            CheckFrequencyLowAndHighOrder(_lowIntegerFrequencyBounds, _highIntegerFrequencyBounds);
+            CheckFrequencyLowAndHighOrder(_lowDecimalFrequencyBounds, _highDecimalFrequencyBounds);
             _supportedFrequencyBands = SortFrequencyBand(_supportedFrequencyBands);
         }
 
@@ -208,6 +245,8 @@ namespace NonVisuals.Radios.RadioSettings
         public ClickSkipper[] IntegerFrequencySkippers => _integerFrequencySkippers;
 
         public FlightRadioFrequencyBand[] SupportedFrequencyBands => _supportedFrequencyBands;
+
+        public FlightRadioFrequencyBand InitialFrequencyBand => _initialFrequencyBand;
 
         public ClickSkipper FrequencyBandSkipper => _clickSkipperForFrequencyBandChanges;
 
