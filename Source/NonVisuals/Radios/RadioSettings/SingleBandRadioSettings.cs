@@ -4,6 +4,9 @@ using NonVisuals.Radios.RadioControls;
 
 namespace NonVisuals.Radios.RadioSettings
 {
+    /// <summary>
+    /// Single Band radio configuration for the FlightRadio class.
+    /// </summary>
     internal class SingleBandRadioSettings : IFlightRadioSettings
     {
         public void VerifySettings()
