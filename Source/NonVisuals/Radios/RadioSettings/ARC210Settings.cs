@@ -13,7 +13,7 @@ namespace NonVisuals.Radios.RadioSettings
 
         public FlightRadioSettings RadioSettings { get; init; }
 
-        /* (FM) 30.000 to 87.975 MHz */
+        /* FM      30.000 to  87.975 MHz */
         /* VHF AM 108.000 to 115.975 MHz */
         /* VHF AM 118.000 to 173.975 MHz */
         /* UHF AM 225.000 to 399.975 MHz */
