@@ -1,11 +1,17 @@
 ﻿using NonVisuals.Helpers;
+using NonVisuals.Interfaces;
 using NonVisuals.Radios.RadioControls;
 
 namespace NonVisuals.Radios.RadioSettings
 {
-    internal class ARC210Settings
+    internal class ARC210Settings : IFlightRadioSettings
     {
-        internal FlightRadioSettings RadioSettings { get; init; }
+        public void VerifySettings()
+        {
+            RadioSettings.VerifySettings();
+        }
+
+        public FlightRadioSettings RadioSettings { get; init; }
 
         /* (FM) 30.000 to 87.975 MHz */
         /* VHF AM 108.000 to 115.975 MHz */
@@ -19,13 +25,14 @@ namespace NonVisuals.Radios.RadioSettings
             var lowDecimalFrequencyBounds = new uint[] { 0, 0, 0, 0 };
             var highDecimalFrequencyBounds = new uint[] { 975, 975, 975, 975 };
             var integerChangeRates = new uint[] { 1, 1, 1, 1 };
-            var integerHigherChangeRates = new uint[] { 5, 5, 10, 10 };
+            var integerHighChangeRates = new uint[] { 5, 5, 10, 10 };
             var decimalChangeRates = new uint[] { 25, 25, 25, 25 };
-            var decimalHigherChangeRates = new uint[] { 25, 25, 25, 25 };
+            var decimalHighChangeRates = new uint[] { 25, 25, 25, 25 };
             var skipCountForFrequencyBand = 2;
             var integerFrequencySkippers = new[] { new ClickSkipper(1), new ClickSkipper(1), new ClickSkipper(1), new ClickSkipper(1) };
 
             RadioSettings = new FlightRadioSettings(
+                FlightRadioFrequencyBand.VHF1,
                 supportedFrequencyBands,
                 dcsbiosIdentifier,
                 lowIntegerFrequencyBounds, 
@@ -33,9 +40,9 @@ namespace NonVisuals.Radios.RadioSettings
                 lowDecimalFrequencyBounds, 
                 highDecimalFrequencyBounds, 
                 integerChangeRates, 
-                integerHigherChangeRates,
+                integerHighChangeRates,
                 decimalChangeRates, 
-                decimalHigherChangeRates, 
+                decimalHighChangeRates, 
                 skipCountForFrequencyBand,
                 integerFrequencySkippers);
         }
