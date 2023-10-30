@@ -25,6 +25,23 @@ namespace NonVisuals.Tests.FlightRadioSettings.Generic
 
             Assert.Equal(result, flightRadio.ActiveFrequencyBand);
         }
+
+        [Theory]
+        [InlineData(FlightRadioFrequencyBand.HF, "ARC210_RADIO")]
+        internal void Multi_Band_Radio_Settings_Move_Frequency_Band_Down(FlightRadioFrequencyBand result, string dcsbiosIdentifier)
+        {
+            var multiBandRadioSettings = new ARC210Settings(dcsbiosIdentifier);
+            multiBandRadioSettings.RadioSettings.FrequencyBandSkipper.ClicksToSkip = 0;
+
+            var flightRadio = new Radios.RadioControls.FlightRadio(multiBandRadioSettings.RadioSettings);
+            flightRadio.InitRadio();
+
+            flightRadio.TemporaryFrequencyBandDown();
+            flightRadio.SwitchFrequencyBand();
+
+            Assert.Equal(result, flightRadio.ActiveFrequencyBand);
+        }
+
         [Theory]
         [InlineData(FlightRadioFrequencyBand.VHF1, "ARC210_RADIO")]
         internal void Multi_Band_Radio_Settings_Move_Frequency_Up_Until_Is_Same(FlightRadioFrequencyBand result, string dcsbiosIdentifier)
@@ -39,22 +56,6 @@ namespace NonVisuals.Tests.FlightRadioSettings.Generic
             flightRadio.TemporaryFrequencyBandUp();
             flightRadio.TemporaryFrequencyBandUp();
             flightRadio.TemporaryFrequencyBandUp();
-            flightRadio.SwitchFrequencyBand();
-
-            Assert.Equal(result, flightRadio.ActiveFrequencyBand);
-        }
-
-        [Theory]
-        [InlineData(FlightRadioFrequencyBand.HF, "ARC210_RADIO")]
-        internal void Multi_Band_Radio_Settings_Move_Frequency_Band_Down(FlightRadioFrequencyBand result, string dcsbiosIdentifier)
-        {
-            var multiBandRadioSettings = new ARC210Settings(dcsbiosIdentifier);
-            multiBandRadioSettings.RadioSettings.FrequencyBandSkipper.ClicksToSkip = 0;
-
-            var flightRadio = new Radios.RadioControls.FlightRadio(multiBandRadioSettings.RadioSettings);
-            flightRadio.InitRadio();
-
-            flightRadio.TemporaryFrequencyBandDown();
             flightRadio.SwitchFrequencyBand();
 
             Assert.Equal(result, flightRadio.ActiveFrequencyBand);
