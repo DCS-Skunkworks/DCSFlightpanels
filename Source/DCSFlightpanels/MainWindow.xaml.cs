@@ -146,7 +146,7 @@
 
                 LoadSettings();
 
-                DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation);
+                DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, true);
 
                 StartTimers();
 
@@ -1040,7 +1040,7 @@
                 if (settingsWindow.DCSBIOSChanged)
                 {
                     _profileHandler.DCSBIOSJSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation);
+                    DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, true);
                 }
                 if (settingsWindow.GeneralChanged)
                 {

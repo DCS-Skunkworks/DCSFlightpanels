@@ -103,7 +103,7 @@
             }
         }
 
-        public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder, bool loadMetaFiles = false, bool loadInternalModules = true)
+        public static void FillModulesListFromDcsBios(string dcsbiosJsonFolder, bool loadInternalModules)
         {
             lock (Lock)
             {
@@ -117,7 +117,7 @@
             var dcsbiosConfigFile = $"{AppDomain.CurrentDomain.BaseDirectory}dcs-bios_modules.txt";
             if (!File.Exists(dcsbiosConfigFile))
             {
-                LogErrorAndThrowException($"Failed to find {dcsbiosConfigFile}");
+                LogErrorAndThrowException($"Failed to find {dcsbiosConfigFile} in base directory.");
                 return;
             }
             
