@@ -163,7 +163,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF16C.UPPER_TACAN:
+                        case RadioPanelPZ69KnobsF16C.UPPER_NO_USE0:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -173,7 +173,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF16C.UPPER_ILS:
+                        case RadioPanelPZ69KnobsF16C.UPPER_NO_USE1:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -233,7 +233,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF16C.LOWER_TACAN:
+                        case RadioPanelPZ69KnobsF16C.LOWER_NO_USE0:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -243,7 +243,7 @@
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF16C.LOWER_ILS:
+                        case RadioPanelPZ69KnobsF16C.LOWER_NO_USE1:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
