@@ -71,13 +71,13 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="6" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Normal">
-					<Bold>COM 1 = ARC164 UHF</Bold><LineBreak/>
+					<Bold>COM 1 = AN/ARC-164 UHF</Bold><LineBreak/>
 					- Active portion: Display Active UHF frequency (as seens on DED)<LineBreak/>
 					- Standby portion: Display UHF Standby Frequency<LineBreak/>
 					<Underline>Small wheel:</Underline> Inc/dec decimal portion of UHF standby frequency<LineBreak/>
 					<Underline>Large wheel:</Underline> Inc/dec integer portion of UHF standby frequency<LineBreak/>
 					<LineBreak/>
-					<Bold>COM 2 = ARC222 VHF</Bold><LineBreak/>
+					<Bold>COM 2 = AN/ARC-222 VHF</Bold><LineBreak/>
 					- Active portion: Display Active VHF frequency (as seens on DED)<LineBreak/>
 					- Standby portion: Display VHF Standby Frequency<LineBreak/>
 					<Underline>Small wheel:</Underline> Inc/dec decimal portion of VHF standby frequency<LineBreak/>
