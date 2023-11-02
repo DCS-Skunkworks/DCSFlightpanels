@@ -4,6 +4,9 @@ using NonVisuals.Radios.RadioControls;
 
 namespace NonVisuals.Radios.RadioSettings
 {
+    /// <summary>
+    /// Emulates the radio found in JF-17.
+    /// </summary>
     internal class JF17ComSettings : IFlightRadioSettings
     {
         public void VerifySettings()
@@ -29,7 +32,7 @@ namespace NonVisuals.Radios.RadioSettings
             var integerFrequencySkippers = new[] { new ClickSkipper(1), new ClickSkipper(1), new ClickSkipper(1), new ClickSkipper(1) };
 
             RadioSettings = new FlightRadioSettings(
-                FlightRadioFrequencyBand.VHF1,
+                FlightRadioFrequencyBand.VHF2,
                 supportedFrequencyBands,
                 dcsbiosIdentifier,
                 lowIntegerFrequencyBounds,
