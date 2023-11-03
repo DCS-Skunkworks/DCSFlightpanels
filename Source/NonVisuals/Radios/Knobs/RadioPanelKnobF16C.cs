@@ -8,8 +8,8 @@
     {
         UPPER_UHF,      //COM1
         UPPER_VHF,      //COM2
-        UPPER_TACAN,          //NAV1
-        UPPER_ILS,             //NAV2
+        UPPER_NO_USE0,          //NAV1
+        UPPER_NO_USE1,             //NAV2
         UPPER_NO_USE2,       //ADF
         UPPER_NO_USE3,          //DME_
         UPPER_NO_USE4,            //XPDR
@@ -21,8 +21,8 @@
         
         LOWER_UHF,   //COM1
         LOWER_VHF,   //COM2
-        LOWER_TACAN,      //NAV1
-        LOWER_ILS,          //NAV2
+        LOWER_NO_USE0,      //NAV1
+        LOWER_NO_USE1,          //NAV2
         LOWER_NO_USE2,    //ADF
         LOWER_NO_USE3,      //DME_
         LOWER_NO_USE4,        //XPDR
@@ -73,8 +73,8 @@
                 new RadioPanelKnobF16C(2, 1 << 7, false, RadioPanelPZ69KnobsF16C.LOWER_LARGE_FREQ_WHEEL_DEC),
                 // Group 1
                 new RadioPanelKnobF16C(1, 1 << 0, true, RadioPanelPZ69KnobsF16C.LOWER_VHF), 
-                new RadioPanelKnobF16C(1, 1 << 1, true, RadioPanelPZ69KnobsF16C.LOWER_TACAN), 
-                new RadioPanelKnobF16C(1, 1 << 2, true, RadioPanelPZ69KnobsF16C.LOWER_ILS), 
+                new RadioPanelKnobF16C(1, 1 << 1, true, RadioPanelPZ69KnobsF16C.LOWER_NO_USE0), 
+                new RadioPanelKnobF16C(1, 1 << 2, true, RadioPanelPZ69KnobsF16C.LOWER_NO_USE1), 
                 new RadioPanelKnobF16C(1, 1 << 3, true, RadioPanelPZ69KnobsF16C.LOWER_NO_USE2), 
                 new RadioPanelKnobF16C(1, 1 << 4, true, RadioPanelPZ69KnobsF16C.LOWER_NO_USE3), 
                 new RadioPanelKnobF16C(1, 1 << 5, true, RadioPanelPZ69KnobsF16C.LOWER_NO_USE4), 
@@ -83,8 +83,8 @@
                 // Group 2
                 new RadioPanelKnobF16C(0, 1 << 0, true, RadioPanelPZ69KnobsF16C.UPPER_UHF), 
                 new RadioPanelKnobF16C(0, 1 << 1, true, RadioPanelPZ69KnobsF16C.UPPER_VHF), 
-                new RadioPanelKnobF16C(0, 1 << 2, true, RadioPanelPZ69KnobsF16C.UPPER_TACAN), 
-                new RadioPanelKnobF16C(0, 1 << 3, true, RadioPanelPZ69KnobsF16C.UPPER_ILS), 
+                new RadioPanelKnobF16C(0, 1 << 2, true, RadioPanelPZ69KnobsF16C.UPPER_NO_USE0), 
+                new RadioPanelKnobF16C(0, 1 << 3, true, RadioPanelPZ69KnobsF16C.UPPER_NO_USE1), 
                 new RadioPanelKnobF16C(0, 1 << 4, true, RadioPanelPZ69KnobsF16C.UPPER_NO_USE2), 
                 new RadioPanelKnobF16C(0, 1 << 5, true, RadioPanelPZ69KnobsF16C.UPPER_NO_USE3), 
                 new RadioPanelKnobF16C(0, 1 << 6, true, RadioPanelPZ69KnobsF16C.UPPER_NO_USE4), 

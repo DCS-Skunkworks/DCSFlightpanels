@@ -42,5 +42,20 @@ namespace NonVisuals.Tests.FlightRadioSettings.Specific
             Assert.Throws<ArgumentOutOfRangeException>(() => jf17Settings.VerifySettings());
         }
 
+        [Fact]
+        internal void ARC164_Verify_Settings()
+        {
+            ARC164Settings settings = new("XXX");
+            var exception = Record.Exception(() => settings.VerifySettings());
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        internal void ARC222_Verify_Settings()
+        {
+            ARC222Settings settings = new("XXX");
+            var exception = Record.Exception(() => settings.VerifySettings());
+            Assert.Null(exception);
+        }
     }
 }

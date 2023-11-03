@@ -771,7 +771,7 @@ namespace DCSFlightpanels
                 if (settingsWindow.DCSBIOSChanged)
                 {
                     DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation);
+                    DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, true);
                 }
             }
         }

@@ -71,13 +71,19 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="6" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Normal">
-                    <Bold>COM 1</Bold> = <Bold>UHF</Bold> - Active portion: Display DED UHF frequency or preset channel. Standby portion: Display steerpoint<LineBreak/><Underline>Small wheel:</Underline> Inc/dec COMM1 Volume<LineBreak/>
-                    <Bold>COM 2</Bold> = <Bold>VHF</Bold> - Active portion: Display DED VHF frequency or preset channel. Standby portion: Display last digits of current time.<LineBreak/><Underline>Small wheel:</Underline> Inc/dec COMM2 Volume<LineBreak/>
-                    <Bold>NAV 1</Bold> = <Bold>TACAN</Bold> - Display channel.<LineBreak/><Underline>Small wheel:</Underline> Change EHSI course.<LineBreak/><Underline>Large wheel:</Underline> Change EHSI heading.<LineBreak/><Underline>Freq change:</Underline> Change EHSI mode<LineBreak/>
-                    <Bold>NAV 2</Bold> = <Bold>ILS</Bold> - Display frequency<LineBreak/><Underline>Small wheel:</Underline> Change EHSI course.<LineBreak/><Underline>Large wheel:</Underline> Change EHSI heading.<LineBreak/><Underline>Freq change:</Underline> Change EHSI mode<LineBreak/>
-                    <Bold>ADF</Bold> = (not used)<LineBreak/>
-                    <Bold>DME</Bold> = (not used)<LineBreak/>
-                    <Bold>XPDR</Bold> = (not used)<LineBreak/>
+					<Bold>COM 1 = AN/ARC-164 UHF</Bold><LineBreak/>
+					- Active portion: Display Active UHF frequency (as seens on DED)<LineBreak/>
+					- Standby portion: Display UHF Standby Frequency<LineBreak/>
+					<Underline>Small wheel:</Underline> Inc/dec decimal portion of UHF standby frequency<LineBreak/>
+					<Underline>Large wheel:</Underline> Inc/dec integer portion of UHF standby frequency<LineBreak/>
+					<LineBreak/>
+					<Bold>COM 2 = AN/ARC-222 VHF</Bold><LineBreak/>
+					- Active portion: Display Active VHF frequency (as seens on DED)<LineBreak/>
+					- Standby portion: Display VHF Standby Frequency<LineBreak/>
+					<Underline>Small wheel:</Underline> Inc/dec decimal portion of VHF standby frequency<LineBreak/>
+					<Underline>Large wheel:</Underline> Inc/dec integer portion of VHF standby frequency<LineBreak/>
+					<LineBreak/>
+					<Bold>ACT/STBY button :</Bold> Swap Active and Standby frequencies<LineBreak/>
                 </TextBlock>                
             </StackPanel>
         </GroupBox>
@@ -113,10 +119,6 @@
             <Label Content="F-16C" FontSize="30" FontWeight="Bold"/>
             <Label Content="DED" FontWeight="Bold"/>
             <Image Height="120" Source="/Images/F-16C/F-16C_50_DED.png" />
-            <Label Content="EHSI" FontWeight="Bold"/>
-            <Image Height="130" Source="/Images/F-16C/F-16C_50_EHSI.png" />
-            <Label Content="COMM12-Vol" FontWeight="Bold"/>
-            <Image Height="110" Source="/Images/F-16C/F-16C_50_COM-1-2-VOL.png" />            
         </StackPanel>
         <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="6" LastChildFill="False">
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">

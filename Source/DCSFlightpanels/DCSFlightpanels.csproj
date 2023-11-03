@@ -124,9 +124,7 @@
     <Resource Include="Images\F-14\F-14 RIO Datalink.png" />
     <Resource Include="Images\F-14\F-14 TACAN.png" />
     <Resource Include="Images\F-14\rio-cap-f14.png" />
-    <Resource Include="Images\F-16C\F-16C_50_COM-1-2-VOL.png" />
     <Resource Include="Images\F-16C\F-16C_50_DED.png" />
-    <Resource Include="Images\F-16C\F-16C_50_EHSI.png" />
     <Resource Include="Images\F-5\F-5E_an_arc_164_radio.png" />
     <Resource Include="Images\F-5\F-5E_TACAN.png" />
     <Resource Include="Images\F-86\F86_.png" />

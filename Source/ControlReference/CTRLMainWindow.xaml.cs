@@ -112,7 +112,7 @@ namespace ControlReference
                 }
                 SetTopMost();
                 DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, true, false);
+                DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, false);
                 UpdateComboBoxModules();
                 CreateDCSBIOS();
                 StartupDCSBIOS();
@@ -243,7 +243,7 @@ namespace ControlReference
                     if (settingsWindow.DCSBIOSChanged)
                     {
                         DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                        DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, true, false);
+                        DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, false);
                         UpdateComboBoxModules();
                     }
                 }
