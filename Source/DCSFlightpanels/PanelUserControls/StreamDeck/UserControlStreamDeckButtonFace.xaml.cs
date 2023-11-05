@@ -24,6 +24,7 @@
     using NonVisuals.Panels.StreamDeck.Events;
     using NonVisuals.Panels.StreamDeck.Panels;
     using NonVisuals.Panels.StreamDeck;
+    using System.IO;
 
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonFace.xaml
@@ -115,7 +116,7 @@
 
         private void DisplayImagePreview()
         {
-            if (TextBoxImageFace.Bill.ContainsImageFace())
+            if (TextBoxImageFace.Bill.ContainsImagePath())
             {
                 var bitmap = BitMapCreator.BitmapOrFileNotFound(TextBoxImageFace.Bill.ImageFileRelativePath);
                 ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
@@ -304,7 +305,7 @@
                         }
                     case EnumStreamDeckFaceType.Image:
                         {
-                            return TextBoxImageFace.Bill.ContainsImageFace();
+                            return TextBoxImageFace.Bill.ContainsImagePath();
                         }
                 }
                 return false;
@@ -390,7 +391,7 @@
             throw new ArgumentException("ShowFaceConfiguration, failed to determine Face Type");
         }
 
-        public IStreamDeckButtonFace GetStreamDeckButtonFace(EnumStreamDeckButtonNames streamDeckButtonName)
+        public IStreamDeckButtonFace GetStreamDeckButtonFace(StreamDeckButton streamDeckButton)
         {
             switch (GetSelectedFaceType())
             {
@@ -400,7 +401,7 @@
                         {
                             return new FaceTypeText()
                             {
-                                StreamDeckButtonName = streamDeckButtonName,
+                                StreamDeckButtonName = streamDeckButton.StreamDeckButtonName,
                                 StreamDeckPanelInstance = _streamDeckPanel,
                                 ButtonTextTemplate = TextBoxButtonTextFace.Text,
                                 TextFont = TextBoxButtonTextFace.Bill.TextFont,
@@ -427,14 +428,23 @@
                     }
                 case EnumStreamDeckFaceType.Image:
                     {
-                        if (TextBoxImageFace.Bill.ContainsImageFace())
+                        if (TextBoxImageFace.Bill.ContainsImagePath())
                         {
-                            return new FaceTypeImage()
+                            FaceTypeImage faceTypeImage = new()
                             {
-                                StreamDeckButtonName = streamDeckButtonName,
+                                StreamDeckButtonName = streamDeckButton.StreamDeckButtonName,
                                 StreamDeckPanelInstance = _streamDeckPanel,
                                 ImageFile = TextBoxImageFace.Bill.ImageFileRelativePath
                             };
+                            
+                            //Fixes issue https://github.com/DCS-Skunkworks/DCSFlightpanels/issues/394
+                            //Since the path is busted but we have a serialized bitmap, copy the old bitmap on the new face
+                            if (!File.Exists(faceTypeImage.ImageFile) && ((FaceTypeImage)streamDeckButton.Face).Bitmap != null)
+                            {
+                                faceTypeImage.Bitmap = ((FaceTypeImage)streamDeckButton.Face).Bitmap;
+                                faceTypeImage.RawBitmap = ((FaceTypeImage)streamDeckButton.Face).RawBitmap;
+                            }
+                            return faceTypeImage;
                         }
                         return null;
                     }
