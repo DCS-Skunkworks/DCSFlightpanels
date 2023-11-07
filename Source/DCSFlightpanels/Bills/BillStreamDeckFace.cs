@@ -146,7 +146,7 @@
             return _textFont != null && !string.IsNullOrEmpty(TextBox.Text);
         }
         
-        public bool ContainsImageFace()
+        public bool ContainsImagePath()
         {
             return !string.IsNullOrEmpty(ImageFileRelativePath);
         }
