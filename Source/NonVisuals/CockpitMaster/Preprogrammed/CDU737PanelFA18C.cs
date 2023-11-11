@@ -51,10 +51,10 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
         {
             try
             {
+                base.InitPanel();
+
                 ConvertTable = CDUTextLineHelpers.AH64ConvertTable;
                 CDUPanelKeys = CDUMappedCommandKeyFA18C.GetMappedPanelKeys();
-                BIOSEventHandler.AttachStringListener(this);
-                BIOSEventHandler.AttachDataListener(this);
 
                 // UFC_BRT = DCSBIOSControlLocator.GetDCSBIOSOutput("UFC_BRT");
 
@@ -85,6 +85,9 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
                 UFC_SCRATCHPAD_STRING_2_DISPLAY = DCSBIOSControlLocator.GetStringDCSBIOSOutput("UFC_SCRATCHPAD_STRING_2_DISPLAY");
 
                 MASTER_CAUTION_LT = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("MASTER_CAUTION_LT");
+
+                BIOSEventHandler.AttachStringListener(this);
+                BIOSEventHandler.AttachDataListener(this);
 
                 SetLine(0, string.Format("{0,24}", "F/A-18C profile"));
 

@@ -19,6 +19,8 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
         {
             try
             {
+                base.InitPanel();
+
                 CDUPanelKeys = CDUMappedCommandKeySA342.GetMappedPanelKeys();
 
                 BIOSEventHandler.AttachStringListener(this);

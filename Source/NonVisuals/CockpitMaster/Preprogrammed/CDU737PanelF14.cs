@@ -80,11 +80,10 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
         {
             try
             {
+                base.InitPanel();
+
                 CDUPanelKeys = CDUMappedCommandKeyF14.GetMappedPanelKeys();
                 
-                BIOSEventHandler.AttachStringListener(this);
-                BIOSEventHandler.AttachDataListener(this);
-
                 BaseColor = CDUColor.WHITE;
 
                 _RIO_CAP_CATEGORY = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_CAP_CATRGORY");
@@ -101,6 +100,9 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
                 _RIO_RADAR_RWS = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_RADAR_RWS");
                 _RIO_RADAR_PDSTT = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_RADAR_PDSTT");
                 _RIO_RADAR_PSTT = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RIO_RADAR_PSTT");
+
+                BIOSEventHandler.AttachStringListener(this);
+                BIOSEventHandler.AttachDataListener(this);
 
                 SetLine(0, string.Format("{0,24}","F14 RIO profile"));
 
