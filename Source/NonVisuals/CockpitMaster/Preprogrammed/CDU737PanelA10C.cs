@@ -35,10 +35,10 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
         {
             try
             {
-                CDUPanelKeys = CDUMappedCommandKeyA10C.GetMappedPanelKeys();
-                BIOSEventHandler.AttachStringListener(this);
-                BIOSEventHandler.AttachDataListener(this);
+                base.InitPanel();
 
+                CDUPanelKeys = CDUMappedCommandKeyA10C.GetMappedPanelKeys();
+                
                 // CDU Lines & BRT
 
                 _CDU_LINE_0 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("CDU_LINE0");
@@ -54,6 +54,9 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
 
                 _CDU_BRT = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("CDU_BRT");
                 _MASTER_CAUTION = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("MASTER_CAUTION");
+
+                BIOSEventHandler.AttachStringListener(this);
+                BIOSEventHandler.AttachDataListener(this);
 
                 SetLine(0, string.Format("{0,24}","A10-C profile"));
 

@@ -43,10 +43,10 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
         {
             try
             {
+                base.InitPanel();
+
                 ConvertTable = CDUTextLineHelpers.AH64ConvertTable;
                 CDUPanelKeys = CDUMappedCommandKeyAH64D.GetMappedPanelKeys();
-                BIOSEventHandler.AttachStringListener(this);
-                BIOSEventHandler.AttachDataListener(this);
 
                 // PLT Keyboard display
 
@@ -77,6 +77,9 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
                 _PLT_EUFD_LINE14 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE14");
 
                 _PLT_MASTER_WARNING_L = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_MASTER_WARNING_L");
+
+                BIOSEventHandler.AttachStringListener(this);
+                BIOSEventHandler.AttachDataListener(this);
 
                 SetLine(0, string.Format("{0,24}", "AH64D profile"));
 
@@ -144,7 +147,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
 
                 UpdateCounter(e.Address, e.Data);
 
-                (shouldUpdate, newValue) = ShouldHandleDCSBiosData(e, _PLT_MASTER_IGN_SW);
+/*                (shouldUpdate, newValue) = ShouldHandleDCSBiosData(e, _PLT_MASTER_IGN_SW);
 
                 if (shouldUpdate)
                 {
@@ -155,7 +158,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
                     }
                     displayBufferOnCDU();
 
-                }
+                }*/
 
                 ( shouldUpdate, newValue) = ShouldHandleDCSBiosData(e, _PLT_EUFD_BRT);
 
