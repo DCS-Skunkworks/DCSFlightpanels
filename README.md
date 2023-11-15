@@ -17,10 +17,9 @@ Elite Dangerous, War Thunder, Flaming Cliff Series, IL-2.
 You can use multiple panels of each type and configure them separately.
 DCSFlightpanels supports [Simple Radio Standalone](https://github.com/ciribob/DCS-SimpleRadioStandalone) (PZ69 Radio Panel).
 
-
 <br/><br/>
 <p align="center">
-<a href="https://jb.gg/OpenSourceSupport"><img src="./Documentation/jetbrains.png" width="100"></a>
+<a href="https://jb.gg/OpenSourceSupport"><img src="https://github.com/DCS-Skunkworks/DCSFlightpanels/assets/10453261/1dd75424-f9c4-4ec9-a29e-f0be2681f4fe" width="100"></a>
 This project is proudly sponsored by Jetbrains Open Source Support Program.
 </p>
 <br/><br/>
