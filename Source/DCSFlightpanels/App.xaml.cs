@@ -32,7 +32,7 @@ namespace DCSFlightpanels
             notifyIconContextMenuQuit.Click += new EventHandler(NotifyIcon_Quit);
 
             System.Windows.Forms.ContextMenuStrip notifyIconContextMenu = new();
-            notifyIconContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripMenuItem[] { notifyIconContextMenuShow, notifyIconContextMenuQuit });
+            notifyIconContextMenu.Items.AddRange(new [] { notifyIconContextMenuShow, notifyIconContextMenuQuit });
 
             _notifyIcon = new System.Windows.Forms.NotifyIcon
             {

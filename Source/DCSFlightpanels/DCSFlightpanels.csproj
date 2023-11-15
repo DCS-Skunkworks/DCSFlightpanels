@@ -283,4 +283,7 @@
   <ItemGroup>
     <None Include="C:\dev\GitHub\DCSFlightpanels\Source\DCSFlightpanels\.editorconfig" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
 </Project>
