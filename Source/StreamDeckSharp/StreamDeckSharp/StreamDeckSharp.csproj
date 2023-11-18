@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DCSFPOpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
+    <ProjectReference Include="..\..\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
   </ItemGroup>
 
 </Project>

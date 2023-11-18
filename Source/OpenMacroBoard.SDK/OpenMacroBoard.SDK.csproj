@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <LangVersion>9.0</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!-- nuget stuff -->
+  <PropertyGroup>
+    <Version>5.0.0</Version>
+    <Title>OpenMacroBoard.SDK</Title>
+    <Description>Abstraction for macro boards (with LCD keys)</Description>
+    <RepositoryUrl>https://github.com/DCSFlightpanels/DCSOpenMacroBoard.SDK</RepositoryUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackAsTool>False</PackAsTool>
+    <PackageOutputPath>$(NuGetDirectory)</PackageOutputPath>    
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
+    <None Include="icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <DefineConstants>$(DefineConstants);SUPPORTS_HASHCODE</DefineConstants>
+  </PropertyGroup>
+
+</Project>
