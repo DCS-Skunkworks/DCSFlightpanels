@@ -28,10 +28,9 @@
   <ItemGroup>
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
-    <ProjectReference Include="..\DCSFPOpenMacroBoardMetaProject\src\DCSFPOpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
-    <ProjectReference Include="..\DCSFPOpenMacroBoardMetaProject\src\DCSFPStreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj" />
     <ProjectReference Include="..\HidLibrary\HidLibrary.csproj" />
     <ProjectReference Include="..\MEF\MEF.csproj" />
+    <ProjectReference Include="..\StreamDeckSharp\StreamDeckSharp\StreamDeckSharp.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
