@@ -19,6 +19,8 @@
   
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
+    <PackageReference Include="Verify.ImageSharp" Version="4.2.0" />
+    <PackageReference Include="Verify.Xunit" Version="22.5.0" />
     <None Include="icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
