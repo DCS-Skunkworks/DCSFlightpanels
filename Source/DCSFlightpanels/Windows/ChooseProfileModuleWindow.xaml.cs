@@ -15,6 +15,7 @@ namespace DCSFlightpanels.Windows
     public partial class ChooseProfileModuleWindow
     {
         private DCSAircraft _dcsAircraft;
+        private bool _isLoaded;
 
         public ChooseProfileModuleWindow()
         {
@@ -23,8 +24,11 @@ namespace DCSFlightpanels.Windows
 
         private void ChooseProfileModuleWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (_isLoaded) return;
+
             PopulateAirframeCombobox();
             DarkMode.SetFrameworkElementDarkMode(this);
+            _isLoaded = true;
         }
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
@@ -53,8 +57,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
-
+        
         private void PopulateAirframeCombobox()
         {
             if (!IsLoaded)
@@ -77,6 +80,14 @@ namespace DCSFlightpanels.Windows
             ComboBoxAirframe.ItemsSource = itemsSource;
             ComboBoxAirframe.SelectedIndex = 0;
             ComboBoxAirframe.SelectionChanged += ComboBoxAirframe_OnSelectionChanged;
+
+            if (ComboBoxAirframe.Items.Count <= 0)
+            {
+                return;
+            }
+
+            SetAirframe();
+            StackPanelA10C.Visibility = DCSAircraft.IsA10C(_dcsAircraft) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void SetAirframe()
