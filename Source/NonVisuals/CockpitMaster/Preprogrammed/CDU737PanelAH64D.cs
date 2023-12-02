@@ -29,7 +29,6 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
         private DCSBIOSOutput _PLT_EUFD_LINE12;
         private DCSBIOSOutput _PLT_EUFD_LINE14;
 
-        private DCSBIOSOutput _PLT_MASTER_IGN_SW;
         private DCSBIOSOutput _PLT_EUFD_BRT;
 
         // Lights
@@ -52,8 +51,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
 
                 _PLT_KU_DISPLAY = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_KU_DISPLAY");
 
-                _PLT_MASTER_IGN_SW = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_MASTER_IGN_SW");
-                _PLT_EUFD_BRT = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_BRT");
+                _PLT_EUFD_BRT = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_EUFD_BRT");
 
                 // UFD Upper status 
 
@@ -76,7 +74,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
 
                 _PLT_EUFD_LINE14 = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_EUFD_LINE14");
 
-                _PLT_MASTER_WARNING_L = DCSBIOSControlLocator.GetStringDCSBIOSOutput("PLT_MASTER_WARNING_L");
+                _PLT_MASTER_WARNING_L = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PLT_MASTER_WARNING_L");
 
                 BIOSEventHandler.AttachStringListener(this);
                 BIOSEventHandler.AttachDataListener(this);
@@ -111,6 +109,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
             base.Dispose(disposing);
         }
 
+        
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
@@ -146,19 +145,6 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
                 uint newValue;
 
                 UpdateCounter(e.Address, e.Data);
-
-/*                (shouldUpdate, newValue) = ShouldHandleDCSBiosData(e, _PLT_MASTER_IGN_SW);
-
-                if (shouldUpdate)
-                {
-                    if (newValue == 0)
-                    {
-                        ScreenBrightness = 0;
-                        KeyboardBrightness = 0;
-                    }
-                    displayBufferOnCDU();
-
-                }*/
 
                 ( shouldUpdate, newValue) = ShouldHandleDCSBiosData(e, _PLT_EUFD_BRT);
 

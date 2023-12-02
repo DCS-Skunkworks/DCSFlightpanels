@@ -199,6 +199,7 @@
             {
                 if (disposing)
                 {
+                    InitPanel();
                     _displayCDUTimer.Stop();
                     _displayCDUTimer.Dispose();
                 }
