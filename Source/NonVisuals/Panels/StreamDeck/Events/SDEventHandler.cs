@@ -189,9 +189,13 @@
             return OnStreamDeckSelectedButtonChangedEventHandler != null && OnStreamDeckSelectedButtonChangedEventHandler.GetInvocationList().Length > 0;
         }
 
-        public static void SelectedButtonChanged(object sender, StreamDeckButton streamDeckButton, string bindingHash)
+        public static void SelectedButtonChanged(object sender, StreamDeckButton streamDeckButton, StreamDeckPushRotary streamDeckPushRotary,  string bindingHash)
         {
-            var eventArgs = new StreamDeckSelectedButtonChangedArgs { SelectedButton = streamDeckButton, BindingHash = bindingHash };
+            var eventArgs = new StreamDeckSelectedButtonChangedArgs { 
+                SelectedButton = streamDeckButton,
+                SelectedPushRotary = streamDeckPushRotary,
+                BindingHash = bindingHash 
+            };
             OnStreamDeckSelectedButtonChangedEventHandler?.Invoke(sender, eventArgs);
         }
 

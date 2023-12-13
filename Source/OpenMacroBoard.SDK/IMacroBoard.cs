@@ -11,6 +11,7 @@ namespace OpenMacroBoard.SDK
         /// Is raised when a key is pressed
         /// </summary>
         event EventHandler<KeyEventArgs> KeyStateChanged;
+        event EventHandler<PushRotaryEventArgs> PushRotaryStateChanged;
 
         /// <summary>
         /// Is raised when the MarcoBoard is being disconnected or connected

@@ -33,6 +33,7 @@
     </FileVersion>
     <ApplicationIcon>Images\UI\flightpanels02_8Rc_icon.ico</ApplicationIcon>
     <StartupObject>DCSFlightpanels.App</StartupObject>
+	<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>bin\x64\Debug\</OutputPath>
@@ -164,6 +165,9 @@
     <Resource Include="Images\SA342\SA342_VHF FM.png" />
     <Resource Include="Images\Sidepanel\sidepanel.png" />
     <Resource Include="Images\Spitfire\Spitfire_ARI1063.png" />
+    <Resource Include="Images\Streamdeck\arrow_rotate_clockwise.png" />
+    <Resource Include="Images\Streamdeck\arrow_rotate_counterclockwise.png" />
+    <Resource Include="Images\Streamdeck\button.png" />
     <Resource Include="Images\Streamdeck\down_arrow.png" />
     <Resource Include="Images\Streamdeck\filenotfound.png" />
     <Resource Include="Images\Streamdeck\left_arrow.png" />
@@ -225,6 +229,9 @@
     <None Remove="Images\C-101\C-101_UHF_COMM.png" />
     <None Remove="Images\C-101\C-101_VHF_COMM.png" />
     <None Remove="Images\rio-cap-f14.png" />
+    <None Remove="Images\Streamdeck\arrow_rotate_clockwise.png" />
+    <None Remove="Images\Streamdeck\arrow_rotate_counterclockwise.png" />
+    <None Remove="Images\Streamdeck\button.png" />
     <None Remove="Images\Switchpanel\black.png" />
     <None Remove="Images\Switchpanel\green.png" />
     <None Remove="Images\Switchpanel\red.png" />

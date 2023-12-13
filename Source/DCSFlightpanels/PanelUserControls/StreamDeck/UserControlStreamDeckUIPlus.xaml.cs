@@ -33,13 +33,41 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             return 8;
         }
+        protected override int ButtonPushRotaryAmount()
+        {
+            return 4;
+        }
 
         private void FillControlLists()
         {
             Common.FindVisualChildren<StreamDeckImage>(GridButtons).ToList()
                 .ForEach(x => ButtonImages.Add(x));
 
+            Common.FindVisualChildren<StreamDeckPushRotaryCtrl>(GridButtons).ToList()
+                .ForEach(x => ButtonPushRotary.Add(x));
+
             CheckButtonControlListValidity();
+
+           SetRotariesImageVisibility();
+        }
+
+        private void SetRotariesImageVisibility()
+        {
+            StreamDeckPushRotary1.CCW.Visibility = Visibility.Visible;
+            StreamDeckPushRotary2.Push.Visibility = Visibility.Visible;
+            StreamDeckPushRotary3.CW.Visibility = Visibility.Visible;
+
+            StreamDeckPushRotary4.CCW.Visibility = Visibility.Visible;
+            StreamDeckPushRotary5.Push.Visibility = Visibility.Visible;
+            StreamDeckPushRotary6.CW.Visibility = Visibility.Visible;
+
+            StreamDeckPushRotary7.CCW.Visibility = Visibility.Visible;
+            StreamDeckPushRotary8.Push.Visibility = Visibility.Visible;
+            StreamDeckPushRotary9.CW.Visibility = Visibility.Visible;
+
+            StreamDeckPushRotary10.CCW.Visibility = Visibility.Visible;
+            StreamDeckPushRotary11.Push.Visibility = Visibility.Visible;
+            StreamDeckPushRotary12.CW.Visibility = Visibility.Visible;
         }
     }
 }

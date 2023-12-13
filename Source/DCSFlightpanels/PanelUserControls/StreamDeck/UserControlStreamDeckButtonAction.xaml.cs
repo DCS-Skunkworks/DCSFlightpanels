@@ -33,6 +33,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private readonly List<StreamDeckActionTextBox> _textBoxes = new();
 
         private StreamDeckButton _streamDeckButton;
+        private StreamDeckPushRotary _streamDeckPushRotary;
         private StreamDeckPanel _streamDeckPanel;
 
         public bool IsDirty { get; set; }
@@ -143,7 +144,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 StackPanelSoundDetails.IsEnabled = CheckBoxPlaySoundFile.IsChecked == true;
                 ButtonPlaySoundFile.IsEnabled = !string.IsNullOrEmpty(TextBoxSoundFile.Text) && File.Exists(TextBoxSoundFile.Text);
 
-                StackPanelChooseButtonActionType.IsEnabled = _streamDeckPanel.SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                StackPanelChooseButtonActionType.IsEnabled = (_streamDeckPanel.SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
+                                                             ||
+                                                             (_streamDeckPanel.SelectedPushRotaryName != EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY);
 
                 ButtonDeleteKeySequenceButtonOn.IsEnabled = TextBoxKeyPressButtonOn.Bill.ContainsKeySequence() ||
                                                             TextBoxKeyPressButtonOn.Bill.ContainsKeyPress();
@@ -189,6 +192,44 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             RadioButtonOSCommand.IsChecked = false;
 
             switch (_streamDeckButton.ActionType)
+            {
+                case EnumStreamDeckActionType.KeyPress:
+                    {
+                        RadioButtonKeyPress.IsChecked = true;
+                        break;
+                    }
+                case EnumStreamDeckActionType.DCSBIOS:
+                    {
+                        RadioButtonDCSBIOS.IsChecked = true;
+                        break;
+                    }
+                case EnumStreamDeckActionType.OSCommand:
+                    {
+                        RadioButtonOSCommand.IsChecked = true;
+                        break;
+                    }
+                case EnumStreamDeckActionType.LayerNavigation:
+                    {
+                        RadioButtonLayerNav.IsChecked = true;
+                        break;
+                    }
+            }
+        }
+
+        private void SetPushRotaryActionType()
+        {
+
+            if (_streamDeckPushRotary == null)
+            {
+                return;
+            }
+
+            RadioButtonKeyPress.IsChecked = false;
+            RadioButtonDCSBIOS.IsChecked = false;
+            RadioButtonLayerNav.IsChecked = false;
+            RadioButtonOSCommand.IsChecked = false;
+
+            switch (_streamDeckPushRotary.ActionType)
             {
                 case EnumStreamDeckActionType.KeyPress:
                     {
@@ -315,6 +356,19 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             ShowActionConfiguration(false, streamDeckButton.ActionForRelease);
         }
 
+        private void ShowStreamDeckPushRotary(StreamDeckPushRotary streamDeckPushRotary)
+        {
+            Clear();
+            _streamDeckPushRotary = streamDeckPushRotary;
+            if (streamDeckPushRotary == null)
+            {
+                return;
+            }
+            SetPushRotaryActionType();
+            ShowActionConfiguration(true, streamDeckPushRotary.ActionForPress);
+            ShowActionConfiguration(false, streamDeckPushRotary.ActionForRelease);
+        }
+
         private void ShowActionConfiguration(bool forPress, IStreamDeckButtonAction streamDeckButtonAction)
         {
             if (streamDeckButtonAction == null)
@@ -416,7 +470,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             var result = new ActionTypeKey(_streamDeckPanel)
                             {
-                                StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName,
+                                StreamDeckButtonName = _streamDeckButton != null ? _streamDeckButton.StreamDeckButtonName : EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON,
+                                StreamDeckPushRotaryName = _streamDeckPushRotary != null ? _streamDeckPushRotary.StreamDeckPushRotaryName : EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY,
                                 WhenTurnedOn = forButtonPressed,
                                 OSKeyPress = textBoxKeyPress.Bill.KeyPress
                             };
@@ -435,7 +490,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         if (textBoxDCSBIOS.Bill.ContainsDCSBIOS())
                         {
                             textBoxDCSBIOS.Bill.DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
-                            textBoxDCSBIOS.Bill.DCSBIOSBinding.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
+                            textBoxDCSBIOS.Bill.DCSBIOSBinding.StreamDeckButtonName = _streamDeckButton != null ? _streamDeckButton.StreamDeckButtonName : EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                            textBoxDCSBIOS.Bill.DCSBIOSBinding.StreamDeckPushRotaryName = _streamDeckPushRotary != null ? _streamDeckPushRotary.StreamDeckPushRotaryName : EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY;
                             if (SoundConfigIsOk() && forButtonPressed)
                             {
                                 textBoxDCSBIOS.Bill.DCSBIOSBinding.SoundFile = TextBoxSoundFile.Text;
@@ -453,7 +509,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                             {
                                 WhenTurnedOn = forButtonPressed,
                                 OSCommandObject = textBoxOSCommand.Bill.OSCommandObject,
-                                StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName
+                                StreamDeckButtonName = _streamDeckButton != null ? _streamDeckButton.StreamDeckButtonName : EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON,
+                                StreamDeckPushRotaryName = _streamDeckPushRotary != null ? _streamDeckPushRotary.StreamDeckPushRotaryName : EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY,
                             };
                             if (SoundConfigIsOk() && forButtonPressed)
                             {
@@ -512,7 +569,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = target;
 
                         var result = target;
-                        result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
+                        result.StreamDeckButtonName = _streamDeckButton != null ? _streamDeckButton.StreamDeckButtonName : EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                        result.StreamDeckPushRotaryName = _streamDeckPushRotary != null ? _streamDeckPushRotary.StreamDeckPushRotaryName : EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY;
                         if (SoundConfigIsOk() && forButtonPressed)
                         {
                             result.SoundFile = TextBoxSoundFile.Text;
@@ -976,73 +1034,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
-        public StreamDeckButtonOnOff GetStreamDeckButtonOnOff(StreamDeckActionTextBox textBox)
-        {
-            try
-            {
-                switch (GetSelectedActionType())
-                {
-                    case EnumStreamDeckActionType.KeyPress:
-                        {
-                            if (textBox.Equals(TextBoxKeyPressButtonOn))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, true);
-                            }
-                            if (textBox.Equals(TextBoxKeyPressButtonOff))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, false);
-                            }
-
-                            break;
-                        }
-                    case EnumStreamDeckActionType.DCSBIOS:
-                        {
-                            if (textBox.Equals(TextBoxDCSBIOSActionButtonOn))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, true);
-                            }
-                            if (textBox.Equals(TextBoxDCSBIOSActionButtonOff))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, false);
-                            }
-
-                            break;
-                        }
-                    case EnumStreamDeckActionType.OSCommand:
-                        {
-                            if (textBox.Equals(TextBoxOSCommandButtonOn))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, true);
-                            }
-                            if (textBox.Equals(TextBoxOSCommandButtonOff))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, false);
-                            }
-
-                            break;
-                        }
-                    case EnumStreamDeckActionType.LayerNavigation:
-                        {
-                            /*if (textBox.Equals(ComboBoxLayerNavigationButtonOn))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetButton(), true);
-                            }
-                            if (textBox.Equals(ComboBoxLayerNavigationButtonOff))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetButton(), false);
-                            }
-                            */
-                            break;
-                        }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-            throw new Exception("Failed to determine focused component (GetStreamDeckButtonOnOff) ");
-        }
-
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try
@@ -1083,7 +1074,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             {
                 if (_streamDeckPanel.BindingHash == e.BindingHash)
                 {
-                    ShowStreamDeckButton(_streamDeckPanel.SelectedButton);
+                    if (e.SelectedButton != null)
+                        ShowStreamDeckButton(_streamDeckPanel.SelectedButton);
+                    
+                    if (e.SelectedPushRotary != null)
+                        ShowStreamDeckPushRotary(_streamDeckPanel.SelectedPushRotary);
+
                     SetFormState();
                 }
             }

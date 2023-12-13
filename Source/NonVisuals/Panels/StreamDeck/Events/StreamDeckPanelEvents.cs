@@ -31,6 +31,7 @@ namespace NonVisuals.Panels.StreamDeck.Events
          */
         public string BindingHash { get; init; }
         public StreamDeckButton SelectedButton { get; init; }
+        public StreamDeckPushRotary SelectedPushRotary { get; init; }
     }
 
     public class StreamDeckShowNewLayerArgs : EventArgs

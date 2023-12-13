@@ -25,7 +25,10 @@ namespace NonVisuals.Panels.StreamDeck
         internal static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.KeyPress;
         public bool IsRepeatable() => true;
+        
         private EnumStreamDeckButtonNames _streamDeckButtonName;
+        private EnumStreamDeckPushRotaryNames _streamDeckPushRotaryName;
+
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
@@ -85,7 +88,7 @@ namespace NonVisuals.Panels.StreamDeck
          * Commands that must be cancelled by the release of the button are :
          * 1) Repeatable single command.
          */
-        public void Execute(CancellationToken threadCancellationToken)
+        public void Execute(CancellationToken threadCancellationToken, bool executeOnce = false)
         {
             Common.PlaySoundFile(SoundFile, Volume);
 
@@ -97,7 +100,14 @@ namespace NonVisuals.Panels.StreamDeck
                 }
                 else
                 {
-                    new Thread(() => SendKeysCommandsThread(threadCancellationToken)).Start();
+                    if (!executeOnce)
+                    {
+                        new Thread(() => SendKeysCommandsThread(threadCancellationToken)).Start();
+                    }
+                    else
+                    {
+                        OSKeyPress.Execute(threadCancellationToken, false);
+                    }
                 }
             }
 
@@ -135,6 +145,13 @@ namespace NonVisuals.Panels.StreamDeck
         {
             get => _streamDeckButtonName;
             set => _streamDeckButtonName = value;
+        }
+
+        [JsonProperty("StreamDeckPushRotaryName", Required = Required.Default)]
+        public EnumStreamDeckPushRotaryNames StreamDeckPushRotaryName
+        {
+            get => _streamDeckPushRotaryName;
+            set => _streamDeckPushRotaryName = value;
         }
 
         public static HashSet<ActionTypeKey> SetNegators(HashSet<ActionTypeKey> keyBindings)

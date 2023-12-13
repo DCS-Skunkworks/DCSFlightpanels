@@ -300,4 +300,25 @@
         LowerXPDR = 262144,
         Unknown = 0x80000
     }
+
+    public enum EnumStreamDeckPushRotaryNames
+    {
+        PUSHROTARY0_NO_PUSHROTARY,
+        
+        PUSHROTARY1,
+        PUSHROTARY2,
+        PUSHROTARY3,
+
+        PUSHROTARY4,
+        PUSHROTARY5,
+        PUSHROTARY6,
+
+        PUSHROTARY7,
+        PUSHROTARY8,
+        PUSHROTARY9,
+        
+        PUSHROTARY10,
+        PUSHROTARY11,
+        PUSHROTARY12,
+    }
 }

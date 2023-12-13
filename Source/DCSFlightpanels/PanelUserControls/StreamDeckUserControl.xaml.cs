@@ -19,6 +19,7 @@
     using NonVisuals.Panels.StreamDeck;
     using NonVisuals.Panels;
     using NonVisuals.HID;
+    using MEF;
 
     /// <summary>
     /// Interaction logic for StreamDeckUserControl.xaml
@@ -377,22 +378,45 @@
             {
                 try
                 {
+                    //Button
                     var streamDeckButton = _streamDeckPanel.SelectedButton;
-                    streamDeckButton.ActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
-                    streamDeckButton.ActionForRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
-
-                    streamDeckButton.Face = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton);
-
-                    if (streamDeckButton.HasConfig)
+                    if (streamDeckButton.StreamDeckButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
                     {
-                        _streamDeckPanel.SelectedLayer.AddButton(streamDeckButton);
+                        streamDeckButton.ActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
+                        streamDeckButton.ActionForRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
+
+                        streamDeckButton.Face = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton);
+
+                        if (streamDeckButton.HasConfig)
+                        {
+                            _streamDeckPanel.SelectedLayer.AddButton(streamDeckButton);
+                        }
+                        else
+                        {
+                            _streamDeckPanel.SelectedLayer.RemoveButton(streamDeckButton);
+                        }
+                        UCStreamDeckButtonAction.StateSaved();
+                        UCStreamDeckButtonFace.StateSaved();
                     }
-                    else
+
+                    //PushRotary
+                    var streamDeckPushRotary = _streamDeckPanel.SelectedPushRotary;
+                    if (streamDeckPushRotary.StreamDeckPushRotaryName != EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY)
                     {
-                        _streamDeckPanel.SelectedLayer.RemoveButton(streamDeckButton);
+                        streamDeckPushRotary.ActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
+                        streamDeckPushRotary.ActionForRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
+
+                        if (streamDeckPushRotary.HasConfig)
+                        {
+                            _streamDeckPanel.SelectedLayer.AddPushRotary(streamDeckPushRotary);
+                        }
+                        else
+                        {
+                            _streamDeckPanel.SelectedLayer.RemovePushRotary(streamDeckPushRotary);
+                        }
+                        UCStreamDeckButtonAction.StateSaved();
                     }
-                    UCStreamDeckButtonAction.StateSaved();
-                    UCStreamDeckButtonFace.StateSaved();
+
                     SDEventHandler.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                     SetFormState();
                 }
@@ -446,7 +470,7 @@
             try
             {
                 SDEventHandler.ClearSettings(this, true, false, false, _streamDeckPanel.BindingHash);
-                SDEventHandler.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton, _streamDeckPanel.BindingHash);
+                SDEventHandler.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton, _streamDeckPanel.SelectedPushRotary, _streamDeckPanel.BindingHash);              
                 SDEventHandler.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 SetFormState();
             }
@@ -490,7 +514,7 @@
             try
             {
                 SDEventHandler.ClearSettings(this, false, true, false, _streamDeckPanel.BindingHash);
-                SDEventHandler.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton, _streamDeckPanel.BindingHash);
+                SDEventHandler.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton, _streamDeckPanel.SelectedPushRotary, _streamDeckPanel.BindingHash);
                 SDEventHandler.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 _streamDeckPanel.SelectedButton.ClearFace();
                 SetFormState();
@@ -555,6 +579,7 @@
                 {
                     SetFormState();
                 }
+                UCStreamDeckButtonFace.Visibility = e.SelectedButton != null ? Visibility.Visible : Visibility.Collapsed;
             }
             catch (Exception ex)
             {
