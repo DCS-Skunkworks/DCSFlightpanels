@@ -21,7 +21,8 @@
 
         [JsonProperty("Name", Required = Required.Default)]
         public string Name { get; set; } = string.Empty;
-        public List<StreamDeckButton> StreamDeckButtons { get; set; } = new List<StreamDeckButton>();
+        public List<StreamDeckButton> StreamDeckButtons { get; set; } = new();
+        public List<StreamDeckPushRotary> StreamDeckPushRotaries { get; set; } = new();
 
         [JsonIgnore]
         public bool IsVisible
@@ -42,6 +43,7 @@
             {
                 _streamDeckPanel = value;
                 StreamDeckButtons.ForEach(button => button.StreamDeckPanelInstance = value);
+                StreamDeckPushRotaries.ForEach(pushRotary => pushRotary.StreamDeckPanelInstance = value);
             }
         }
 
@@ -79,6 +81,10 @@
             foreach (var streamDeckButton in StreamDeckButtons)
             {
                 streamDeckButton?.Dispose();
+            }
+            foreach (var streamDeckPushRotary in StreamDeckPushRotaries)
+            {
+                streamDeckPushRotary?.Dispose();
             }
             GC.SuppressFinalize(this);
         }
@@ -174,13 +180,43 @@
                 NotifyChanges();
             }
         }
+        public void AddPushRotary(StreamDeckPushRotary streamDeckPushRotary, bool silently = false)
+        {
+            streamDeckPushRotary.IsVisible = _isVisible;
 
+            var found = false;
+            foreach (var pushRotary in StreamDeckPushRotaries)
+            {
+                if (pushRotary.StreamDeckPushRotaryName == streamDeckPushRotary.StreamDeckPushRotaryName)
+                {
+                    pushRotary.Consume(streamDeckPushRotary);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                StreamDeckPushRotaries.Add(streamDeckPushRotary);
+            }
+
+            if (!silently)
+            {
+                NotifyChanges();
+            }
+        }
 
         public void RemoveButton(StreamDeckButton streamDeckButton)
         {
             streamDeckButton.Dispose();
             StreamDeckButtons.Remove(streamDeckButton);
             _streamDeckPanel.ClearFace(streamDeckButton.StreamDeckButtonName);
+            NotifyChanges();
+        }
+        public void RemovePushRotary(StreamDeckPushRotary streamDeckPushRotary)
+        {
+            streamDeckPushRotary.Dispose();
+            StreamDeckPushRotaries.Remove(streamDeckPushRotary);
             NotifyChanges();
         }
 
@@ -196,14 +232,34 @@
             }
         }
 
+        public void RemovePushRotaries(bool sendNotification)
+        {
+            StreamDeckPushRotaries.ForEach(pushRotary => pushRotary.Dispose());
+
+            StreamDeckPushRotaries.RemoveAll(o => o != null);
+
+            if (sendNotification)
+            {
+                NotifyChanges();
+            }
+        }
+
         public void RemoveEmptyButtons()
         {
             foreach (var streamDeckButton in StreamDeckButtons.Where(o => o.HasConfig == false))
             {
                 streamDeckButton.Dispose();
             }
-
             StreamDeckButtons.RemoveAll(o => !o.HasConfig);
+        }
+
+        public void RemoveEmptyPushRotaries()
+        {
+            foreach (var streamDeckPushRotary in StreamDeckPushRotaries.Where(o => o.HasConfig == false))
+            {
+                streamDeckPushRotary.Dispose();
+            }
+            StreamDeckPushRotaries.RemoveAll(o => !o.HasConfig);
         }
 
         public List<StreamDeckButton> GetButtonsWithConfig()
@@ -226,9 +282,29 @@
             return newButton;
         }
 
+        public StreamDeckPushRotary GetStreamDeckPushRotary(EnumStreamDeckPushRotaryNames streamDeckPushRotaryName)
+        {
+            foreach (var streamDeckpushRotary in StreamDeckPushRotaries)
+            {
+                if (streamDeckpushRotary.StreamDeckPushRotaryName == streamDeckPushRotaryName)
+                {
+                    return streamDeckpushRotary;
+                }
+            }
+
+            var newPushRotary = new StreamDeckPushRotary(streamDeckPushRotaryName, _streamDeckPanel);
+            StreamDeckPushRotaries.Add(newPushRotary);
+            return newPushRotary;
+        }
+
         public bool ContainStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             return StreamDeckButtons.Exists(x => x.StreamDeckButtonName == streamDeckButtonName);
+        }
+
+        public bool ContainsPushRotary(EnumStreamDeckPushRotaryNames streamDeckPushRotaryName)
+        {
+            return StreamDeckPushRotaries.Exists(x => x.StreamDeckPushRotaryName == streamDeckPushRotaryName);
         }
 
         public StreamDeckButton GetStreamDeckButtonName(EnumStreamDeckButtonNames streamDeckButtonName)
@@ -240,10 +316,20 @@
                     return streamDeckButton;
                 }
             }
-
             throw new Exception($"StreamDeckLayer [{Name}] does not contain button [{streamDeckButtonName}].");
         }
 
+        public StreamDeckPushRotary GetStreamDeckPushRotaryName(EnumStreamDeckPushRotaryNames streamDeckPushRotaryName)
+        {
+            foreach (var streamDeckPushRotary in StreamDeckPushRotaries)
+            {
+                if (streamDeckPushRotary.StreamDeckPushRotaryName == streamDeckPushRotaryName)
+                {
+                    return streamDeckPushRotary;
+                }
+            }
+            throw new Exception($"StreamDeckLayer [{Name}] does not contain a push rotary button [{streamDeckPushRotaryName}].");
+        }
     }
 
     public enum EnumButtonImportMode

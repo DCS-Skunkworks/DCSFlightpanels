@@ -25,10 +25,12 @@
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         protected readonly List<StreamDeckImage> ButtonImages = new();
+        protected readonly List<StreamDeckPushRotaryCtrl> ButtonPushRotary = new();
         protected bool UserControlLoaded;
         private StreamDeckPanel _streamDeckPanel;
         private string _lastShownLayer = string.Empty;
         private BillStreamDeckFace SelectedImageBill => (from image in ButtonImages where image.IsSelected select image.Bill).FirstOrDefault();
+        private StreamDeckPushRotaryCtrl SelectedPushRotaryCtrl => (from pushRottaryCtrl in ButtonPushRotary where pushRottaryCtrl.IsSelected select pushRottaryCtrl).FirstOrDefault();
 
         private JsonSerializerSettings _jsonSettings = new()
         {
@@ -52,12 +54,28 @@
                 return SelectedImageBill.StreamDeckButtonName;
             }
         }
+        private EnumStreamDeckPushRotaryNames SelectedPushRotaryName
+        {
+            get
+            {
+                if (SelectedPushRotaryCtrl == null)
+                {
+                    return EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY;
+                }
+                return SelectedPushRotaryCtrl.StreamDeckPushRotary.StreamDeckPushRotaryName;
+            }
+        }
 
         public bool IsDirty { get; set; }
 
         protected virtual void SetFormState() { }
 
         protected virtual int ButtonAmount()
+        {
+            return 0;
+        }
+
+        protected virtual int ButtonPushRotaryAmount()
         {
             return 0;
         }
@@ -83,6 +101,34 @@
                 else
                 {
                     StreamDeckPanelInstance.SelectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                }
+
+                /*Debug.WriteLine(StreamDeckPanelInstance.GetLayerHandlerInformation());
+                Debug.WriteLine(StreamDeckPanelInstance.GetConfigurationInformation());
+                Debug.WriteLine(EventHandlers.GetInformation());*/
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void StreamDeckPushRotary_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var pushRotary = (StreamDeckPushRotaryCtrl)sender;
+
+                SetSelectedPushRotaryUIOnly(pushRotary.StreamDeckPushRotary.StreamDeckPushRotaryName);
+                if (pushRotary.IsSelected)
+                {
+                    StreamDeckPanelInstance.SelectedPushRotaryName = pushRotary.StreamDeckPushRotary.StreamDeckPushRotaryName;
+                    pushRotary.Focus();
+                }
+                else
+                {
+                    StreamDeckPanelInstance.SelectedPushRotaryName = EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY;
                 }
 
                 /*Debug.WriteLine(StreamDeckPanelInstance.GetLayerHandlerInformation());
@@ -382,17 +428,31 @@
 
         protected void SetSelectedButtonUIOnly(EnumStreamDeckButtonNames selectedButtonName)
         {
-            //Deselect everything selected (normaly should only be 1 currently selected but we never know...
-            ButtonImages.Where(x => x.IsSelected).ToList().ForEach(x =>
-                {
-                    x.IsSelected = false;
-                });
+            DeselectEveryButtonControls();
 
             //Select the one
             var selectedButton = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == selectedButtonName);
             if (selectedButton != null)
             {
                 selectedButton.IsSelected = true;
+            }
+        }
+
+        private void DeselectEveryButtonControls()
+        {
+            ButtonImages.Where(x => x.IsSelected).ToList().ForEach(x => { x.IsSelected = false; });
+            ButtonPushRotary.Where(x => x.IsSelected).ToList().ForEach(x => { x.IsSelected = false; });
+        }
+
+        protected void SetSelectedPushRotaryUIOnly(EnumStreamDeckPushRotaryNames pushRotaryName)
+        {
+            DeselectEveryButtonControls();
+
+             //Select the one
+             var selectedPushRotaryCtrl = ButtonPushRotary.FirstOrDefault(x => x.StreamDeckPushRotary.StreamDeckPushRotaryName == pushRotaryName);
+            if (selectedPushRotaryCtrl != null)
+            {
+                selectedPushRotaryCtrl.IsSelected = true;
             }
         }
 
@@ -420,6 +480,16 @@
                     StreamDeckPanelInstance = _streamDeckPanel
                 };
                 buttonImage.SetDefaultButtonImage();
+            }
+
+            foreach (var buttonPushRotaryCtrl in ButtonPushRotary)
+            {
+                if (buttonPushRotaryCtrl.StreamDeckPanelInstance != null)
+                {
+                    continue;
+                }
+                buttonPushRotaryCtrl.StreamDeckPushRotary.StreamDeckPushRotaryName = (EnumStreamDeckPushRotaryNames)Enum.Parse(typeof(EnumStreamDeckPushRotaryNames), "PUSHROTARY" + buttonPushRotaryCtrl.Name.Replace("StreamDeckPushRotary", string.Empty));
+                buttonPushRotaryCtrl.StreamDeckPanelInstance = _streamDeckPanel;
             }
         }
 
@@ -490,12 +560,22 @@
         {
             try
             {
-                /*
-                 * Only do it when it is a different button selected. Should make more comments...
-                 */
-                if ((_streamDeckPanel.BindingHash == e.BindingHash && SelectedImageBill == null) || (SelectedImageBill != null && SelectedImageBill.Button.GetHash() != e.SelectedButton.GetHash()))
+                if (e.SelectedButton != null)
                 {
-                    SetSelectedButtonUIOnly(e.SelectedButton.StreamDeckButtonName);
+                    /*
+                     * Only do it when it is a different button selected. Should make more comments...
+                     */
+                    if ((_streamDeckPanel.BindingHash == e.BindingHash && SelectedImageBill == null) || (SelectedImageBill != null && SelectedImageBill.Button.GetHash() != e.SelectedButton.GetHash()))
+                    {
+                        SetSelectedButtonUIOnly(e.SelectedButton.StreamDeckButtonName);
+                    }
+                }
+                if (e.SelectedPushRotary != null)
+                {
+                    if ((_streamDeckPanel.BindingHash == e.BindingHash && SelectedPushRotaryCtrl == null) || (SelectedPushRotaryCtrl != null && SelectedPushRotaryCtrl.StreamDeckPushRotary.GetHash() != e.SelectedPushRotary.GetHash()))
+                    {
+                        SetSelectedPushRotaryUIOnly(e.SelectedPushRotary.StreamDeckPushRotaryName);
+                    }
                 }
             }
             catch (Exception ex)

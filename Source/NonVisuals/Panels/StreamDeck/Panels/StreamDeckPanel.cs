@@ -36,6 +36,7 @@ namespace NonVisuals.Panels.StreamDeck.Panels
         private readonly object _updateStreamDeckOledLockObject = new();
         private StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly int _buttonCount;
+        private readonly int _pushRotaryCount;
 
         private static readonly object LockObjectStreamDeckPanels = new();
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new();
@@ -46,6 +47,7 @@ namespace NonVisuals.Panels.StreamDeck.Panels
 
         public IMacroBoard StreamDeckBoard => _streamDeckBoard;
         public int ButtonCount => _buttonCount;
+        public int PushRotaryCount => _pushRotaryCount;
 
         public string SelectedLayerName { get => _streamDeckLayerHandler.SelectedLayerName; }
         public void SwitchToLayer(string layerName, bool switchedByUser, bool remotelySwitched) { _streamDeckLayerHandler.SwitchToLayer(layerName, switchedByUser, remotelySwitched); }
@@ -65,10 +67,20 @@ namespace NonVisuals.Panels.StreamDeck.Panels
             get => _streamDeckLayerHandler.SelectedButtonName;
             set => _streamDeckLayerHandler.SelectedButtonName = value;
         }
+        public EnumStreamDeckPushRotaryNames SelectedPushRotaryName
+        {
+            get => _streamDeckLayerHandler.SelectedPushRotaryName;
+            set => _streamDeckLayerHandler.SelectedPushRotaryName = value;
+        }
 
         public StreamDeckButton SelectedButton
         {
             get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+        }
+
+        public StreamDeckPushRotary SelectedPushRotary
+        {
+            get => SelectedLayer.GetStreamDeckPushRotary(SelectedPushRotaryName);
         }
 
         public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, bool unitTesting = false) : base(panelType, hidSkeleton)
@@ -80,14 +92,20 @@ namespace NonVisuals.Panels.StreamDeck.Panels
                 GamingPanelEnum.StreamDeckMiniV2 => 6,
 
                 GamingPanelEnum.StreamDeck or
-                    GamingPanelEnum.StreamDeckV2 or
-                    GamingPanelEnum.StreamDeckMK2 => 15,
+                GamingPanelEnum.StreamDeckV2 or
+                GamingPanelEnum.StreamDeckMK2 => 15,
 
                 GamingPanelEnum.StreamDeckXL or GamingPanelEnum.StreamDeckXLRev2 => 32,
 
                 GamingPanelEnum.StreamDeckPlus => 8,
 
                 _ => throw new Exception("Failed to determine Stream Deck model")
+            };
+
+            _pushRotaryCount = panelType switch
+            {
+                GamingPanelEnum.StreamDeckPlus => 4,
+                _ => 0
             };
         }
 
@@ -101,6 +119,7 @@ namespace NonVisuals.Panels.StreamDeck.Panels
                     if (_streamDeckBoard != null) // Null when unit testing
                     {
                         _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
+                        _streamDeckBoard.PushRotaryStateChanged -= StreamDeckPushRotaryListener;
                     }
                     SDEventHandler.DetachStreamDeckListener(this);
                     SDEventHandler.DetachStreamDeckConfigListener(this);
@@ -128,6 +147,7 @@ namespace NonVisuals.Panels.StreamDeck.Panels
                 {
                     _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(HIDSkeletonBase.HIDInstance, false);
                     _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
+                    _streamDeckBoard.PushRotaryStateChanged += StreamDeckPushRotaryListener;
                 }
 
                 _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
@@ -239,6 +259,45 @@ namespace NonVisuals.Panels.StreamDeck.Panels
                     return;
                 }
                 streamDeckButton.DoRelease();
+            }
+        }
+
+        private void StreamDeckPushRotaryListener(object sender, PushRotaryEventArgs e)
+        {
+            if (sender is not IMacroBoard)
+            {
+                return;
+            }
+
+            if (!ForwardPanelEvent)
+            {
+                return;
+            }
+
+            var streamDeckPushRotary = _streamDeckLayerHandler.GetSelectedLayerPushRotaryNumber(e.Key);
+
+            if (e.Ccw || e.Cw)
+            {
+                streamDeckPushRotary.DoPress(true);
+            }
+            else
+            {
+                if (e.IsDown)
+                {
+                    streamDeckPushRotary.DoPress(false);
+                }
+                else
+                {
+                    if (_layerSwitched)
+                    {
+                        // When pressing the button to switch to a new layer we must ignore the next
+                        // button release as it would execute on the next layer. Releasing the button
+                        // when switching layers should do nothing. 12.10.2023 JDA
+                        _layerSwitched = false;
+                        return;
+                    }
+                    streamDeckPushRotary.DoRelease();
+                }
             }
         }
 

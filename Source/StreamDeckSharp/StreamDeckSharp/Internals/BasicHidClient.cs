@@ -1,5 +1,6 @@
 using OpenMacroBoard.SDK;
 using System;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading;
 
@@ -7,8 +8,19 @@ namespace StreamDeckSharp.Internals
 {
     internal class BasicHidClient : IMacroBoard
     {
+        private enum PushRotaryAction
+        {
+            RotateCcw,
+            Push,
+            Release,
+            RotateCw
+        }
+
         private readonly byte[] _keyStates;
+        private readonly byte[] _rotariesStates;
         private readonly object _disposeLock = new();
+        private byte[] _ButtonsPushSignature = new byte[] { 0x01, 0x00, 0x08, 0x00 };
+        private byte[] _RotarySignature = new byte[] { 0x01, 0x03, 0x05, 0x00 };
 
         public BasicHidClient(IStreamDeckHid deckHid, IHardwareInternalInfos hardwareInformation)
         {
@@ -21,10 +33,12 @@ namespace StreamDeckSharp.Internals
             HardwareInfo = hardwareInformation;
             Buffer = new byte[deckHid.OutputReportLength];
             _keyStates = new byte[Keys.Count];
+            _rotariesStates = new byte[4]; //magic number shortcut, sdPlus has 4 rotaries, not used to stores values right now, we'll see how it goes from here
         }
 
         public event EventHandler<KeyEventArgs> KeyStateChanged;
         public event EventHandler<ConnectionEventArgs> ConnectionStateChanged;
+        public event EventHandler<PushRotaryEventArgs> PushRotaryStateChanged;
 
         public IKeyLayout Keys { get; }
         public bool IsDisposed { get; private set; }
@@ -135,10 +149,25 @@ namespace StreamDeckSharp.Internals
         private void DeckHid_ReportReceived(object sender, ReportReceivedEventArgs e)
         {
             ProcessKeys(e.ReportData);
+            ProcessRotaries(e.ReportData);
+        }
+
+        private bool KeyReportSignatureEqual(byte[] signature, byte[] report)
+        {
+            bool equal = true;
+            for (var i = 0; i < HardwareInfo.KeyReportOffset; i++)
+            {
+                if (signature[i] != report[i] && equal)
+                    equal = false;
+            }
+            return equal;
         }
 
         private void ProcessKeys(byte[] newStates)
         {
+            if (!KeyReportSignatureEqual(_ButtonsPushSignature, newStates))
+                return;
+
             for (var i = 0; i < _keyStates.Length; i++)
             {
                 var newStatePos = i + HardwareInfo.KeyReportOffset;
@@ -148,6 +177,86 @@ namespace StreamDeckSharp.Internals
                     var externalKeyId = HardwareInfo.HardwareKeyIdToExtKeyId(i);
                     KeyStateChanged?.Invoke(this, new KeyEventArgs(externalKeyId, newStates[newStatePos] != 0));
                     _keyStates[i] = newStates[newStatePos];
+                }
+            }
+        }
+
+        private int GetRotaryEnumKeyValue(int rotaryNum, PushRotaryAction action)
+        {
+            return rotaryNum switch
+            {
+                0 => action switch
+                {
+                    PushRotaryAction.RotateCcw => 1,
+                    PushRotaryAction.Push or PushRotaryAction.Release => 2,
+                    PushRotaryAction.RotateCw => 3,
+                    _ => throw new Exception()
+                },
+                1 => action switch
+                {
+                    PushRotaryAction.RotateCcw => 4,
+                    PushRotaryAction.Push or PushRotaryAction.Release => 5,
+                    PushRotaryAction.RotateCw => 6,
+                    _ => throw new Exception()
+                },
+                2 => action switch
+                {
+                    PushRotaryAction.RotateCcw => 7,
+                    PushRotaryAction.Push or PushRotaryAction.Release => 8,
+                    PushRotaryAction.RotateCw => 9,
+                    _ => throw new Exception()
+                },
+                3 => action switch
+                {
+                    PushRotaryAction.RotateCcw => 10,
+                    PushRotaryAction.Push or PushRotaryAction.Release => 11,
+                    PushRotaryAction.RotateCw => 12,
+                    _ => throw new Exception()
+                },
+                _ => throw new Exception()
+            };
+        }
+
+        private void ProcessRotaries(byte[] newStates)
+        {
+            if (!KeyReportSignatureEqual(_RotarySignature, newStates))
+                return;
+
+            //pushed or rotated ?
+            bool rotation = newStates[HardwareInfo.KeyReportOffset] == 0x01;
+
+            for (var i = 0; i < _rotariesStates.Length; i++)
+            {
+                var newStatePos = i + HardwareInfo.KeyReportOffset+1;
+             //   var externalKeyId = i+1;
+                if (_rotariesStates[i] != newStates[newStatePos])
+                {
+                    switch (newStates[newStatePos])
+                    {
+                        //push or rotate cw
+                        case 0x01:
+                            if (rotation)
+                                PushRotaryStateChanged?.Invoke(this, new PushRotaryEventArgs(GetRotaryEnumKeyValue(i, PushRotaryAction.RotateCw), false, false, true));
+                            else //push
+                            {
+                                PushRotaryStateChanged?.Invoke(this, new PushRotaryEventArgs(GetRotaryEnumKeyValue(i, PushRotaryAction.Push), true, false, false));
+                                _rotariesStates[i] = newStates[newStatePos];
+                            }
+                            break;
+
+                        //ccw
+                        case 0xff:
+                            PushRotaryStateChanged?.Invoke(this, new PushRotaryEventArgs(GetRotaryEnumKeyValue(i, PushRotaryAction.RotateCcw), false, true, false));
+                            break;
+
+                        //release
+                        case 0x00:
+                            {
+                                PushRotaryStateChanged?.Invoke(this, new PushRotaryEventArgs(GetRotaryEnumKeyValue(i, PushRotaryAction.Release), false, false, false));
+                                _rotariesStates[i] = newStates[newStatePos];
+                            }
+                            break;
+                    }
                 }
             }
         }

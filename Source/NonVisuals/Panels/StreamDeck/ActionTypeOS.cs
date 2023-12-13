@@ -22,6 +22,7 @@ namespace NonVisuals.Panels.StreamDeck
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.OSCommand;
         public bool IsRepeatable() => true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
+        private EnumStreamDeckPushRotaryNames _streamDeckPushRotaryName;
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
@@ -66,7 +67,7 @@ namespace NonVisuals.Panels.StreamDeck
         }
 
 
-        public void Execute(CancellationToken threadCancellationToken)
+        public void Execute(CancellationToken threadCancellationToken, bool executeOnce = false)
         {
             Common.PlaySoundFile(SoundFile, Volume);
             OSCommandObject.ExecuteCommand(threadCancellationToken);
@@ -84,6 +85,13 @@ namespace NonVisuals.Panels.StreamDeck
         {
             get => _streamDeckButtonName;
             set => _streamDeckButtonName = value;
+        }
+
+        [JsonProperty("StreamDeckButtonPushRotaryName", Required = Required.Default)]
+        public EnumStreamDeckPushRotaryNames StreamDeckPushRotaryName
+        {
+            get => _streamDeckPushRotaryName;
+            set => _streamDeckPushRotaryName = value;
         }
 
         [JsonIgnore]

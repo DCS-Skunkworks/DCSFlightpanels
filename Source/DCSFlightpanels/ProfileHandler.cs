@@ -637,6 +637,7 @@ namespace DCSFlightpanels
                 headerStringBuilder.AppendLine("#   StreamDeckMini");
                 headerStringBuilder.AppendLine("#   StreamDeck");
                 headerStringBuilder.AppendLine("#   StreamDeckXL");
+                headerStringBuilder.AppendLine("#   StreamDeckPlus");
 
                 var stringBuilder = new StringBuilder();
                 stringBuilder.AppendLine(headerStringBuilder.ToString());

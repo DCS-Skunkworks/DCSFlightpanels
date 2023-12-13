@@ -39,14 +39,11 @@
             (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), $"BUTTON{streamDeckButtonNumber}");
         }
 
-        public static EnumStreamDeckButtonNames ButtonName(string streamDeckButtonNumber)
+        public static EnumStreamDeckPushRotaryNames PushRotaryName(int streamDeckPushRotaryNumber)
         {
-            if (string.IsNullOrEmpty(streamDeckButtonNumber) || streamDeckButtonNumber == "0")
-            {
-                return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
-            }
-
-            return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
+            return streamDeckPushRotaryNumber == 0 ?
+            EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY :
+            (EnumStreamDeckPushRotaryNames)Enum.Parse(typeof(EnumStreamDeckPushRotaryNames), $"PUSHROTARY{streamDeckPushRotaryNumber}");
         }
 
         public static EnumComparator GetComparatorValue(string text)

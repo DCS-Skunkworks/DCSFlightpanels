@@ -20,7 +20,7 @@
 
         string ActionDescription { get; }
 
-        void Execute(CancellationToken threadCancellationToken);
+        void Execute(CancellationToken threadCancellationToken, bool executeOnce = false);
 
         bool IsRunning();
 

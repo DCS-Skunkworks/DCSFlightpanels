@@ -32,6 +32,7 @@
         [JsonIgnore] public bool IsSequenced => false;
         private volatile bool _isRunning;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
+        private EnumStreamDeckPushRotaryNames _streamDeckPushRotaryName;
 
         [JsonProperty("NavigationType", Required = Required.Default)]
         public LayerNavType NavigationType;
@@ -105,7 +106,7 @@
         }
 
 
-        public void Execute(CancellationToken threadCancellationToken)
+        public void Execute(CancellationToken threadCancellationToken, bool executeOnce = false)
         {
             _isRunning = true;
             Common.PlaySoundFile(SoundFile, Volume);
@@ -119,6 +120,13 @@
         {
             get => _streamDeckButtonName;
             set => _streamDeckButtonName = value;
+        }
+
+        [JsonProperty("StreamDeckButtonPushRotaryName", Required = Required.Default)]
+        public EnumStreamDeckPushRotaryNames StreamDeckPushRotaryName
+        {
+            get => _streamDeckPushRotaryName;
+            set => _streamDeckPushRotaryName = value;
         }
 
         public void Navigate(CancellationToken threadCancellationToken)

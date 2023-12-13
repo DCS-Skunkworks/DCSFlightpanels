@@ -54,6 +54,8 @@
 
         public const string NUMBER_BUTTON_PREFIX = "BUTTON";
 
+        public const string NUMBER_PUSHROTARY_PREFIX = "PUSHROTARY";
+
         public const string COLOR_MILITARY_GRAY = "#e6e6e6";
 
         public const string COLOR_DEFAULT_WHITE = "#f0e9ee";

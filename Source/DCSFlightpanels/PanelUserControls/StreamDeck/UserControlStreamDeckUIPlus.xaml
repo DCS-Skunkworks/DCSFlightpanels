@@ -29,10 +29,9 @@
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
             <EventSetter Event="MouseUp" Handler="ButtonImage_OnMouseUp"/>
-            <EventSetter Event="PreviewMouseDown" Handler="ButtonImage_PreviewMouseDown"/>
-            <!--<EventSetter Event="KeyDown" Handler="ButtonImage_OnKeyDown"/>
-            <EventSetter Event="PreviewKeyDown" Handler="ButtonImage_OnPreviewKeyDown"/>-->
+            <EventSetter Event="PreviewMouseDown" Handler="ButtonImage_PreviewMouseDown"/>       
         </Style>
+
 
     </UserControl.Resources>
 
@@ -40,8 +39,9 @@
     <Grid Name="GridButtons" Background="Black" >
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="118" />
-            <RowDefinition Height="118" />
+            <RowDefinition Height="78" />
+            <RowDefinition Height="78" />
+            <RowDefinition Height="78" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100*" />
@@ -92,7 +92,56 @@
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage8" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
             </Canvas>
-        </Border>        
+        </Border>
+        
+        <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                </Grid.ColumnDefinitions>
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="0" x:Name="StreamDeckPushRotary1" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp"/>
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="1" x:Name="StreamDeckPushRotary2" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp"/>
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="2" x:Name="StreamDeckPushRotary3" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp"/>
+            </Grid>
+        </Border>
+        <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                </Grid.ColumnDefinitions>
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="0" x:Name="StreamDeckPushRotary4" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp" />
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="1" x:Name="StreamDeckPushRotary5" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp"/>
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="2" x:Name="StreamDeckPushRotary6" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp"/>
+            </Grid>
+        </Border>
+        <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                </Grid.ColumnDefinitions>
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="0" x:Name="StreamDeckPushRotary7" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp" />
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="1" x:Name="StreamDeckPushRotary8" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp"/>
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="2" x:Name="StreamDeckPushRotary9" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp"/>
+            </Grid>
+        </Border>
+        <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                </Grid.ColumnDefinitions>
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="0" x:Name="StreamDeckPushRotary10" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp" />
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="1" x:Name="StreamDeckPushRotary11" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp"/>
+                <customControls:StreamDeckPushRotaryCtrl Grid.Column="2" x:Name="StreamDeckPushRotary12" Margin="2,2,2,2" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" MouseUp="StreamDeckPushRotary_OnMouseUp"/>
+            </Grid>
+        </Border>
 
 
     </Grid>

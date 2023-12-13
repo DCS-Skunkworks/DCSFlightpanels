@@ -27,6 +27,7 @@ namespace NonVisuals.Panels.StreamDeck
         private volatile string _selectedLayerName = string.Empty;
         private readonly IMacroBoard _streamDeckBoard;
         private EnumStreamDeckButtonNames _selectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+        private EnumStreamDeckPushRotaryNames _selectedPushRotaryName = EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY;
 
         private bool _jsonImported;
 
@@ -115,6 +116,10 @@ namespace NonVisuals.Panels.StreamDeck
         public StreamDeckButton SelectedButton
         {
             get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+        }
+        public StreamDeckPushRotary SelectedPushRotary
+        {
+            get => SelectedLayer.GetStreamDeckPushRotary(SelectedPushRotaryName);
         }
 
         public List<string> GetLayerNameList()
@@ -398,6 +403,19 @@ namespace NonVisuals.Panels.StreamDeck
             }
         }
 
+        public int SelectedPushRotaryNumber
+        {
+            get => _selectedPushRotaryName == EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY ? 999 : int.Parse(_selectedPushRotaryName.ToString().Replace(StreamDeckConstants.NUMBER_PUSHROTARY_PREFIX, string.Empty));
+            set
+            {
+                if (SelectedPushRotaryNumber != value)
+                {
+                    var selectedPushRotaryName = (EnumStreamDeckPushRotaryNames)Enum.Parse(typeof(EnumStreamDeckPushRotaryNames), StreamDeckConstants.NUMBER_PUSHROTARY_PREFIX + value, true);
+                    SelectedPushRotaryName = selectedPushRotaryName;
+                }
+            }
+        }
+
         public EnumStreamDeckButtonNames SelectedButtonName
         {
             get => _selectedButtonName;
@@ -406,14 +424,30 @@ namespace NonVisuals.Panels.StreamDeck
                 if (_selectedButtonName != value)
                 {
                     _selectedButtonName = value;
-                    SDEventHandler.SelectedButtonChanged(this, SelectedButton, _streamDeckPanel.BindingHash);
+                    _selectedPushRotaryName = EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY;
+                    SDEventHandler.SelectedButtonChanged(this, SelectedButton, null, _streamDeckPanel.BindingHash);
                     return;
                 }
 
                 _selectedButtonName = value;
             }
         }
+        public EnumStreamDeckPushRotaryNames SelectedPushRotaryName
+        {
+            get => _selectedPushRotaryName;
+            set
+            {
+                if (_selectedPushRotaryName != value)
+                {
+                    _selectedPushRotaryName = value;
+                    _selectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                    SDEventHandler.SelectedButtonChanged(this, null, SelectedPushRotary, _streamDeckPanel.BindingHash);
+                    return;
+                }
 
+                _selectedPushRotaryName = value;
+            }
+        }
         public List<string> GetStreamDeckLayerNames()
         {
             List<string> result = new();
@@ -474,15 +508,64 @@ namespace NonVisuals.Panels.StreamDeck
             return button;
         }
 
+        public StreamDeckPushRotary GetPushRotary(EnumStreamDeckPushRotaryNames pushRotaryName, string layerName, bool throwExceptionIfNotFound = true)
+        {
+            if (string.IsNullOrEmpty(layerName))
+            {
+                return null;
+            }
+
+            foreach (var layer in _layerList)
+            {
+                if (layer.Name == layerName && layer.ContainsPushRotary(pushRotaryName))
+                {
+                    return layer.GetStreamDeckPushRotaryName(pushRotaryName);
+                }
+            }
+
+            if (throwExceptionIfNotFound)
+            {
+                throw new Exception($"PushRotary [{pushRotaryName}] cannot be found in layer [{layerName}].");
+            }
+
+            var pushRotary = new StreamDeckPushRotary(pushRotaryName, _streamDeckPanel);
+
+            /*
+             * Silently means there won't be any event of type "New Button added". This is an empty button
+             * and unless it receives settings later it will just be here to serve the machinery instead of
+             * having to do with streamdeck buttons being null.
+             *
+             * The reason, Layer A has layer navigation on button 15 => Layer B.
+             * Layer B has nothing configured for button 15.
+             * When user presses button (button still pressed) a switch to Layer B occurs.
+             * When user releases the button Stream Deck Sharp reports an release event,
+             * DCSFP then retrieves the streamdeck button for 15 but none exists, it is then
+             * we end up here on the next line.
+             */
+            GetLayer(layerName).AddPushRotary(pushRotary, true);
+            return pushRotary;
+        }
+
         public StreamDeckButton GetSelectedLayerButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             return GetButton(streamDeckButtonName, SelectedLayerName, false);
+        }
+
+        public StreamDeckPushRotary GetSelectedLayerPushRotary(EnumStreamDeckPushRotaryNames streamDeckPushRotaryName)
+        {
+            return GetPushRotary(streamDeckPushRotaryName, SelectedLayerName, false);
         }
 
         public StreamDeckButton GetSelectedLayerButtonNumber(int streamDeckButtonNumber)
         {
             var streamDeckButtonName = StreamDeckCommon.ButtonName(streamDeckButtonNumber);
             return GetButton(streamDeckButtonName, SelectedLayerName, false);
+        }
+
+        public StreamDeckPushRotary GetSelectedLayerPushRotaryNumber(int streamDeckPushRotaryNumber)
+        {
+            var streamDeckPushRotaryName = StreamDeckCommon.PushRotaryName(streamDeckPushRotaryNumber);
+            return GetPushRotary(streamDeckPushRotaryName, SelectedLayerName, false);
         }
 
         public bool LayerExists(string layerName)
