@@ -28,12 +28,12 @@
     </Authors>
     <PackageId>DCSFlightpanels (DCSFP)</PackageId>
     <Version>1.0.0</Version>
-    <AssemblyVersion>4.11.3</AssemblyVersion>
+    <AssemblyVersion>4.11.5</AssemblyVersion>
     <FileVersion>
     </FileVersion>
     <ApplicationIcon>Images\UI\flightpanels02_8Rc_icon.ico</ApplicationIcon>
     <StartupObject>DCSFlightpanels.App</StartupObject>
-	<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>bin\x64\Debug\</OutputPath>
