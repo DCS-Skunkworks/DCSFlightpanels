@@ -25,19 +25,18 @@ namespace ControlReference.UserControls
         private ToolTip _copyToolTip = null;
         private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new();
         private bool _isLoaded = false;
+        private readonly string _luaCommand;
 
-        public DCSBIOSControlUserControl(DCSBIOSControl dcsbiosControl)
+        public DCSBIOSControlUserControl(DCSBIOSControl dcsbiosControl, string luaCommand)
         {
             InitializeComponent();
 
             _dcsbiosControl = dcsbiosControl;
+            _luaCommand = luaCommand;
             foreach (var dcsbiosControlOutput in dcsbiosControl.Outputs)
             {
                 _dcsbiosOutputs.Add(DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsbiosControl.Identifier, dcsbiosControlOutput.OutputDataType));
             }
-
-
-
 
             REFEventHandler.AttachDCSBIOSDataListener(this);
         }
@@ -170,6 +169,8 @@ namespace ControlReference.UserControls
         {
             try
             {
+                LabelLuaInformation.Visibility = string.IsNullOrEmpty(_luaCommand) ? Visibility.Collapsed : Visibility.Visible;
+
                 LabelControlId.Content = _dcsbiosControl.Identifier.Replace("_", "__");
                 LabelCategory.Content = _dcsbiosControl.Category;
                 LabelDescription.Content = _dcsbiosControl.Description;
@@ -481,7 +482,7 @@ namespace ControlReference.UserControls
             }
         }
 
-        private void LabelArduinoInformation_OnMouseEnter(object sender, MouseEventArgs e)
+        private void Label_OnMouseEnter(object sender, MouseEventArgs e)
         {
             try
             {
@@ -493,7 +494,7 @@ namespace ControlReference.UserControls
             }
         }
 
-        private void LabelArduinoInformation_OnMouseLeave(object sender, MouseEventArgs e)
+        private void Label_OnMouseLeave(object sender, MouseEventArgs e)
         {
             try
             {
@@ -535,6 +536,26 @@ namespace ControlReference.UserControls
             if (source == null || source.CompositionTarget == null) return new Point(0, 0);
             var targetPoints = source.CompositionTarget.TransformFromDevice.Transform(locationFromScreen);
             return targetPoints;
+        }
+
+        private void LabelLuaInformation_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var window = new LuaWindow(_dcsbiosControl, _luaCommand);
+                window.MaxHeight = 600;
+                window.SizeToContent = SizeToContent.WidthAndHeight;
+                var pos = GetPosition();
+                window.WindowStartupLocation = WindowStartupLocation.Manual;
+                window.Top = pos.Y;
+                window.Left = pos.X;
+                window.Topmost = true;
+                window.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }

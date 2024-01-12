@@ -25,8 +25,9 @@ namespace DCS_BIOS
         private static readonly object LockObject = new();
         private static DCSAircraft _dcsAircraft;
         private static string _jsonDirectory;
-        private const string DCSBIOS_NOT_FOUND_ERROR_MESSAGE = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
-
+        private const string DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE = "Error loading DCS-BIOS JSON. Check that the DCS-BIOS location setting points to the JSON directory.";
+        private const string DCSBIOS_LUA_NOT_FOUND_ERROR_MESSAGE = "Error loading DCS-BIOS lua.";
+        private static List<KeyValuePair<string, string>> _luaControls = new ();
 
         public static DCSAircraft DCSAircraft
         {
@@ -51,6 +52,7 @@ namespace DCS_BIOS
         {
             DCSBIOSAircraftLoadStatus.Clear();
             DCSBIOSControls.Clear();
+            _luaControls.Clear();   
         }
 
         public static DCSBIOSControl GetControl(string controlId)
@@ -152,7 +154,7 @@ namespace DCS_BIOS
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception($"Failed to find DCS-BIOS files. -> {Environment.NewLine}{ex.Message}");
+                        throw new Exception($"Failed to find DCS-BIOS json files. -> {Environment.NewLine}{ex.Message}");
                     }
 
                     foreach (var file in files)
@@ -171,7 +173,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
 
             return result;
@@ -196,7 +198,7 @@ namespace DCS_BIOS
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception($"Failed to find DCS-BIOS files. -> {Environment.NewLine}{ex.Message}");
+                        throw new Exception($"Failed to find DCS-BIOS json files. -> {Environment.NewLine}{ex.Message}");
                     }
 
                     foreach (var file in files)
@@ -211,7 +213,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
         
@@ -292,7 +294,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<==", ex);
+                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<==", ex);
             }
         }
 
@@ -358,7 +360,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
 
@@ -399,7 +401,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception($"{DCSBIOS_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
 
@@ -457,5 +459,69 @@ namespace DCS_BIOS
             LoadControls();
             return DCSBIOSControls.Where(controlObject => controlObject.Inputs.Count > 0);
         }
+        
+        public static string GetLuaCommand(string controlId)
+        {
+            if (_dcsAircraft == null || _dcsAircraft.IsMetaModule || string.IsNullOrEmpty(controlId)) return "";
+
+            if (_luaControls.Count == 0)
+            {
+                ReadLuaCommandsFromJson();
+                if (_luaControls.Count == 0) return "";
+            }
+
+            var result = _luaControls.Find(o => o.Key == controlId);
+            if (result.Key != controlId) return "";
+
+            return result.Value;
+        }
+
+        private static void ReadControlsFromLua(DCSAircraft dcsAircraft, string inputPath)
+        {
+            // input is a map from category string to a map from key string to control definition
+            // we read it all then flatten the grand children (the control definitions)
+            var lineArray = File.ReadAllLines(inputPath);
+            try
+            {
+                foreach (var s in lineArray)
+                {
+                    if (string.IsNullOrEmpty(s) || s.StartsWith("--") || !s.StartsWith(dcsAircraft.ModuleLuaName + ":define")) continue;
+
+                    //F_16C_50:define3PosTumb("MAIN_PWR_SW", 3, 3001, 510, "Electric System", "MAIN PWR Switch, MAIN PWR/BATT/OFF")
+                    var startIndex = s.IndexOf("\"", StringComparison.Ordinal);
+                    var endIndex = s.IndexOf("\"", s.IndexOf("\"") + 1);
+                    var controlId = s.Substring(startIndex + 1, endIndex - startIndex - 1);
+
+                    var entry = new KeyValuePair<string, string>(controlId, s);
+                    _luaControls.Add(entry);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "ReadControlsFromLua : Failed to read DCS-BIOS lua.");
+            }
+        }
+
+        /// <summary>
+        /// Load all lua controls
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        private static void ReadLuaCommandsFromJson()
+        {
+            _luaControls.Clear();
+
+            try
+            {
+                lock (LockObject)
+                {
+                    ReadControlsFromLua(_dcsAircraft, $"{_jsonDirectory}\\..\\..\\lib\\modules\\aircraft_modules\\{_dcsAircraft.LuaFilename}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{DCSBIOS_LUA_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+            }
+        }
+
     }
 }

@@ -36,6 +36,29 @@
 
         public string JSONFilename { get; }
 
+        public string LuaFilename
+        {
+            get => JSONFilename.Replace(".json", ".lua");
+        }
+
+        public bool IsMetaModule
+        {
+            get =>  JSONFilename.Contains("MetadataEnd") || JSONFilename.Contains("MetadataStart") || JSONFilename.Contains("CommonData");
+        }
+
+        /// <summary>
+        /// This is not exact science
+        /// </summary>
+        public string ModuleLuaName
+        {
+            get => JSONFilename.Replace(".json", "").Replace("-","_").Replace(" ", "_");
+        }
+
+        public string DCSName
+        {
+            get => JSONFilename.Replace(".json", "");
+        }
+
         public string Description { get; }
 
         public bool UseGenericRadio { get; set; }

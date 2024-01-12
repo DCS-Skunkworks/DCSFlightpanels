@@ -53,7 +53,7 @@ namespace ControlReference
             /*
              * Correct JSON folder path, move away from $USERDIRECTORY$.
              */
-            Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ?
+            Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ? 
                 Settings.Default.DCSBiosJSONLocation.Replace("$USERDIRECTORY$", "%userprofile%") : Settings.Default.DCSBiosJSONLocation);
             Settings.Default.Save();
         }
@@ -442,7 +442,8 @@ namespace ControlReference
 
                     foreach (var dcsbiosControl in filteredControls)
                     {
-                        _dcsbiosUIControlPanels.Add(new DCSBIOSControlUserControl(dcsbiosControl));
+                        var luaCommand = DCSBIOSControlLocator.GetLuaCommand(dcsbiosControl.Identifier);
+                        _dcsbiosUIControlPanels.Add(new DCSBIOSControlUserControl( dcsbiosControl, luaCommand));
                     }
 
                     ItemsControlControls.ItemsSource = null;
