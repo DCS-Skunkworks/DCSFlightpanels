@@ -114,7 +114,7 @@
             }
         }
 
-        private void StreamDeckPushRotary_OnMouseUp(object sender, MouseButtonEventArgs e)
+        protected void StreamDeckPushRotary_OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             try
             {
