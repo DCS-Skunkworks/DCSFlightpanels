@@ -1,11 +1,12 @@
 using FluentAssertions;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp.Internals;
+using StreamDeckSharp.Tests.VerifyStuff;
 using System;
 using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
-using OpenMacroBoard.SDK.VerifyStuff;
+
 
 namespace StreamDeckSharp.Tests
 {

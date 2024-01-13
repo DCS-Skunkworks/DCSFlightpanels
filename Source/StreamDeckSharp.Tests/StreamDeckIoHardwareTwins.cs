@@ -5,7 +5,7 @@ using VerifyXunit;
 using Xunit;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
-using OpenMacroBoard.SDK.VerifyStuff;
+using StreamDeckSharp.Tests.VerifyStuff;
 
 namespace StreamDeckSharp.Tests
 {

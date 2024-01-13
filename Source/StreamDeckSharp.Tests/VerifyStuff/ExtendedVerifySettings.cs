@@ -1,7 +1,7 @@
 using System;
 using VerifyTests;
 
-namespace OpenMacroBoard.SDK.VerifyStuff
+namespace StreamDeckSharp.Tests.VerifyStuff
 {
     public class ExtendedVerifySettings : ICloneable
     {
