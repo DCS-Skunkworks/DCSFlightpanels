@@ -120,6 +120,10 @@ Write-Host "Including SamplePanelEventPlugin.dll(s)" -foregroundcolor "Green"
 Copy-Item -Path $publishPath\SamplePanelEventPlugin1.dll -Destination $publishPath\Extensions\SamplePanelEventPlugin1.dll
 Copy-Item -Path $publishPath\SamplePanelEventPlugin2.dll -Destination $publishPath\Extensions\SamplePanelEventPlugin2.dll
 
+#remove 'EmptyFiles' Folder
+Write-Host "Removing EmptyFiles folder" -foregroundcolor "Green"
+Remove-Item $publishPath\EmptyFiles -Force  -Recurse -ErrorAction SilentlyContinue
+
 #Getting file info & remove revision from file_version
 Write-Host "Getting file info" -foregroundcolor "Green"
 $file_version = (Get-Command $publishPath\dcsfp.exe).FileVersionInfo.FileVersion
