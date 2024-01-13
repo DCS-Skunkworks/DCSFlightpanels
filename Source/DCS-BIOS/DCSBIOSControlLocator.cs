@@ -1,4 +1,5 @@
-﻿using DCS_BIOS.Json;
+﻿using System.Printing;
+using DCS_BIOS.Json;
 
 namespace DCS_BIOS
 {
@@ -27,7 +28,7 @@ namespace DCS_BIOS
         private static string _jsonDirectory;
         private const string DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE = "Error loading DCS-BIOS JSON. Check that the DCS-BIOS location setting points to the JSON directory.";
         private const string DCSBIOS_LUA_NOT_FOUND_ERROR_MESSAGE = "Error loading DCS-BIOS lua.";
-        private static List<KeyValuePair<string, string>> _luaControls = new ();
+        private static List<KeyValuePair<string, string>> _luaControls = new();
 
         public static DCSAircraft DCSAircraft
         {
@@ -52,7 +53,7 @@ namespace DCS_BIOS
         {
             DCSBIOSAircraftLoadStatus.Clear();
             DCSBIOSControls.Clear();
-            _luaControls.Clear();   
+            _luaControls.Clear();
         }
 
         public static DCSBIOSControl GetControl(string controlId)
@@ -141,7 +142,7 @@ namespace DCS_BIOS
         public static List<DCSBIOSControl> ReadDataFromJsonFileSimple(string filename, bool onlyDirectResult = false)
         {
             var result = new List<DCSBIOSControl>();
-            
+
             try
             {
                 lock (LockObject)
@@ -216,7 +217,7 @@ namespace DCS_BIOS
                 throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
-        
+
         /// <summary>
         /// Loads meta controls and returns them in a list.
         /// </summary>
@@ -459,7 +460,7 @@ namespace DCS_BIOS
             LoadControls();
             return DCSBIOSControls.Where(controlObject => controlObject.Inputs.Count > 0);
         }
-        
+
         public static string GetLuaCommand(string controlId)
         {
             if (_dcsAircraft == null || _dcsAircraft.IsMetaModule || string.IsNullOrEmpty(controlId)) return "";
@@ -483,23 +484,73 @@ namespace DCS_BIOS
             var lineArray = File.ReadAllLines(inputPath);
             try
             {
+                var luaBuffer = "";
+
                 foreach (var s in lineArray)
                 {
-                    if (string.IsNullOrEmpty(s) || s.StartsWith("--") || !s.StartsWith(dcsAircraft.ModuleLuaName + ":define")) continue;
+                    //s.StartsWith("--") 
+                    if (string.IsNullOrEmpty(s)) continue;
 
-                    //F_16C_50:define3PosTumb("MAIN_PWR_SW", 3, 3001, 510, "Electric System", "MAIN PWR Switch, MAIN PWR/BATT/OFF")
-                    var startIndex = s.IndexOf("\"", StringComparison.Ordinal);
-                    var endIndex = s.IndexOf("\"", s.IndexOf("\"") + 1);
-                    var controlId = s.Substring(startIndex + 1, endIndex - startIndex - 1);
+                    if (s.StartsWith(dcsAircraft.ModuleLuaName + ":define"))
+                    {
+                        luaBuffer = s;
 
-                    var entry = new KeyValuePair<string, string>(controlId, s);
-                    _luaControls.Add(entry);
+                        if (CountParenthesis(true, luaBuffer) == CountParenthesis(false, luaBuffer))
+                        {
+                            _luaControls.Add(CopyControlFromLuaBuffer(luaBuffer));
+                            luaBuffer = "";
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(luaBuffer))
+                    {
+                        //We have incomplete data from previously
+                        luaBuffer = luaBuffer + "\n" + s;
+                        if (CountParenthesis(true, luaBuffer) == CountParenthesis(false, luaBuffer))
+                        {
+                            _luaControls.Add(CopyControlFromLuaBuffer(luaBuffer));
+                            luaBuffer = "";
+                        }
+                    }
+                    
                 }
             }
             catch (Exception e)
             {
                 Logger.Error(e, "ReadControlsFromLua : Failed to read DCS-BIOS lua.");
             }
+        }
+
+        private static KeyValuePair<string, string> CopyControlFromLuaBuffer(string luaBuffer)
+        {
+            // We have the whole control
+            // F_16C_50:define3PosTumb("MAIN_PWR_SW", 3, 3001, 510, "Electric System", "MAIN PWR Switch, MAIN PWR/BATT/OFF")
+            /*
+             A_10C:defineString("ARC210_COMSEC_SUBMODE", function()
+                return Functions.coerce_nil_to_string(arc_210_data["comsec_submode"])
+             end, 5, "ARC-210 Display", "COMSEC submode (PT/CT/CT-TD)")
+            */
+            var startIndex = luaBuffer.IndexOf("\"", StringComparison.Ordinal);
+            var endIndex = luaBuffer.IndexOf("\"", luaBuffer.IndexOf("\"") + 1);
+            var controlId = luaBuffer.Substring(startIndex + 1, endIndex - startIndex - 1);
+
+            return new KeyValuePair<string, string>(controlId, luaBuffer);
+        }
+
+        private static int CountParenthesis(bool firstParenthesis, string s)
+        {
+            if (string.IsNullOrEmpty(s)) return 0;
+            var parenthesis = firstParenthesis ? '(' : ')';
+            var result = 0;
+            var insideQuote = false;
+
+            foreach (var c in s)
+            {
+                if(c == '"') insideQuote = !insideQuote;
+
+                if(c == parenthesis && !insideQuote) result++;
+            }
+
+            return result;
         }
 
         /// <summary>
