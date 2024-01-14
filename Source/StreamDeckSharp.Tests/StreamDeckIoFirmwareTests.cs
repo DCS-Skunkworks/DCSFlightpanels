@@ -6,7 +6,9 @@ using Xunit;
 
 namespace StreamDeckSharp.Tests
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class StreamDeckIoFirmwareTests
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
         [Theory]
         [MemberData(nameof(GetData))]
@@ -30,7 +32,9 @@ namespace StreamDeckSharp.Tests
         }
 
         [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Readability")]
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public static IEnumerable<object[]> GetData()
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
             // Real world examples from my devices
 

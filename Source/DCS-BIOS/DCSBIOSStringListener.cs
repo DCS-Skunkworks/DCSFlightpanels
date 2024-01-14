@@ -21,7 +21,7 @@
         private readonly List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new();
         private readonly object _lockObject = new();
         private readonly Encoding _iso88591 = Encoding.GetEncoding("ISO-8859-1");
-        private readonly uint _debugAddress = 10244; //->10251 Mi-8MT R863, Frequency
+        //private readonly uint _debugAddress = 10244; //->10251 Mi-8MT R863, Frequency
 
         public DCSBIOSStringListener()
         {

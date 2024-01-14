@@ -88,9 +88,9 @@ namespace NonVisuals.Radios
         private const string VUHF1_4TH_DIAL_DECREASE = "COMM_1_FREQ_100 DEC\n";
         private const string VUHF1_4TH_DIAL_NEUTRAL = "COMM_1_FREQ_100 1\n";
 
-        private DCSBIOSOutput _vuhf1DcsbiosOutputMode;
-        private volatile uint _vuhf1CockpitMode; // OFF = 0
-        private readonly ClickSpeedDetector _vuhf1ModeClickSpeedDetector = new(8);
+        /*private DCSBIOSOutput _vuhf1DcsbiosOutputMode;
+        private volatile uint _vuhf1CockpitMode; // OFF = 0*/
+        //private readonly ClickSpeedDetector _vuhf1ModeClickSpeedDetector = new(8);
         private byte _skipVuhf1SmallFreqChange;
         private long _vuhf1ThreadNowSynching;
         private Thread _vuhf1SyncThread;
@@ -143,9 +143,9 @@ namespace NonVisuals.Radios
         private const string VUHF2_4TH_DIAL_DECREASE = "COMM_2_FREQ_100 DEC\n";
         private const string VUHF2_4TH_DIAL_NEUTRAL = "COMM_2_FREQ_100 1\n";
 
-        private DCSBIOSOutput _vuhf2DcsbiosOutputMode;
+        /*private DCSBIOSOutput _vuhf2DcsbiosOutputMode;
         private volatile uint _vuhf2CockpitMode; // OFF = 0
-        private readonly ClickSpeedDetector _vuhf2ModeClickSpeedDetector = new(8);
+        private readonly ClickSpeedDetector _vuhf2ModeClickSpeedDetector = new(8);*/
         private byte _skipVuhf2SmallFreqChange;
         private long _vuhf2ThreadNowSynching;
         private Thread _vuhf2SyncThread;
@@ -2333,7 +2333,7 @@ namespace NonVisuals.Radios
             return Interlocked.Read(ref _vuhf2ThreadNowSynching) > 0;
         }
 
-        private static string GetCommandDirection10Dial(int desiredDialPosition, uint actualDialPosition)
+        /*private static string GetCommandDirection10Dial(int desiredDialPosition, uint actualDialPosition)
         {
             var counterUp = 0;
             var counterDown = 0;
@@ -2370,7 +2370,7 @@ namespace NonVisuals.Radios
                 }
             }
             return counterUp > counterDown ? DCSBIOS_DECREASE_COMMAND : DCSBIOS_INCREASE_COMMAND;
-        }
+        }*/
     }
 }
 

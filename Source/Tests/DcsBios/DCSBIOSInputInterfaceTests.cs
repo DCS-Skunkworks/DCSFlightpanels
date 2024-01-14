@@ -148,7 +148,7 @@ namespace DCSFPTests.DcsBios
         [InlineData("ThisIsAControlId", "456", "ThisIsAControlId 456\n")]
         [InlineData("ThisIsAControlId", "-123", "ThisIsAControlId -123\n")]
         [InlineData("ThisIsAControlId", "null", "ThisIsAControlId null\n")]
-        public void GetDCSBIOSCommand_Set_String_ShouldReturn_ExpectedResult(string controlId, string? specifiedStringArgument, string expectedResult)
+        public void GetDCSBIOSCommand_Set_String_ShouldReturn_ExpectedResult(string controlId, string specifiedStringArgument, string expectedResult)
         {
             DCSBIOSInputInterface inputInterface = new()
             {

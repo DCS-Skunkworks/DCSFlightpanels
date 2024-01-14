@@ -33,10 +33,10 @@ namespace NonVisuals.Radios
 
         private CurrentC101RadioMode _currentUpperRadioMode = CurrentC101RadioMode.VHF;
         private CurrentC101RadioMode _currentLowerRadioMode = CurrentC101RadioMode.VHF;
-        private bool _upperButtonPressed;
+        /*private bool _upperButtonPressed;
         private bool _lowerButtonPressed;
         private bool _upperButtonPressedAndDialRotated;
-        private bool _lowerButtonPressedAndDialRotated;
+        private bool _lowerButtonPressedAndDialRotated;*/
 
         /*VHF*/
         /* 116.000 to 149.975 */
