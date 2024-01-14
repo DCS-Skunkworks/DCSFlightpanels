@@ -20,6 +20,8 @@ namespace StreamDeckSharp.Internals
         private readonly byte[] _rotariesStates;
         private readonly object _disposeLock = new();
         private byte[] _ButtonsPushSignature = new byte[] { 0x01, 0x00, 0x08, 0x00 };
+        private byte[] _ButtonsPushSignature2 = new byte[] { 0x01, 0x00, 0x20, 0x00 };
+        private byte[] _ButtonsPushSignature3 = new byte[] { 0x01, 0x00, 0x0F, 0x00 };
         private byte[] _RotarySignature = new byte[] { 0x01, 0x03, 0x05, 0x00 };
 
         public BasicHidClient(IStreamDeckHid deckHid, IHardwareInternalInfos hardwareInformation)
@@ -165,7 +167,10 @@ namespace StreamDeckSharp.Internals
 
         private void ProcessKeys(byte[] newStates)
         {
-            if (!KeyReportSignatureEqual(_ButtonsPushSignature, newStates))
+            if (!KeyReportSignatureEqual(_ButtonsPushSignature, newStates) &&
+                !KeyReportSignatureEqual(_ButtonsPushSignature2, newStates) &&
+                !KeyReportSignatureEqual(_ButtonsPushSignature3, newStates)
+                )
                 return;
 
             for (var i = 0; i < _keyStates.Length; i++)
