@@ -11,9 +11,13 @@ using Xunit;
 namespace StreamDeckSharp.Tests
 {
     [UsesVerify]
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class StreamDeckIoBitmapKeyTests
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public ExtendedVerifySettings Verifier { get; } = DefaultVerifySettings.Build();
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
         [Theory]
         [ClassData(typeof(AllHardwareInfoTestData))]

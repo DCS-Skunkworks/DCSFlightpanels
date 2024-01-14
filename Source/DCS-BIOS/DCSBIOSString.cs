@@ -19,7 +19,7 @@
         private readonly int _length;
         private readonly uint _address;
 
-        private readonly uint _debugAddress = 10244; //->10251 Mi-8MT R863, Frequency
+        //private readonly uint _debugAddress = 10244; //->10251 Mi-8MT R863, Frequency
         public bool IsComplete  => _receivedAddresses.Count == 0;
 
         public string StringValue => string.Join(string.Empty, _internalBuffer);
