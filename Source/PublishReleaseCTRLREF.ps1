@@ -96,6 +96,10 @@ if ( 0 -ne $buildLastExitCode ) {
 	exit
 }
 
+#remove 'EmptyFiles' Folder
+Write-Host "Removing EmptyFiles folder" -foregroundcolor "Green"
+Remove-Item $publishPath\EmptyFiles -Force  -Recurse -ErrorAction SilentlyContinue
+
 #Getting file info & remove revision from file_version
 Write-Host "Getting file info" -foregroundcolor "Green"
 $file_version = (Get-Command $publishPath\ctrlref.exe).FileVersionInfo.FileVersion

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 
-namespace OpenMacroBoard.SDK.VerifyStuff
+namespace StreamDeckSharp.Tests.VerifyStuff
 {
     public static class ExtendedVerifySettingsExtensions
     {

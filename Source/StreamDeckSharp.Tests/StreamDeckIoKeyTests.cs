@@ -1,5 +1,5 @@
-using OpenMacroBoard.SDK.VerifyStuff;
 using StreamDeckSharp.Internals;
+using StreamDeckSharp.Tests.VerifyStuff;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

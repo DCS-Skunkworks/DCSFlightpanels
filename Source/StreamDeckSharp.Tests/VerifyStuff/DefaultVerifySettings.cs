@@ -1,6 +1,6 @@
 using VerifyTests;
 
-namespace OpenMacroBoard.SDK.VerifyStuff
+namespace StreamDeckSharp.Tests.VerifyStuff
 {
     public static class DefaultVerifySettings
     {

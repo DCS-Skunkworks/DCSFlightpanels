@@ -6,7 +6,7 @@ using Argon;
 using VerifyTests;
 using VerifyXunit;
 
-namespace OpenMacroBoard.SDK.VerifyStuff
+namespace StreamDeckSharp.Tests.VerifyStuff
 {
     [SuppressMessage("Minor Code Smell", "S3236:Caller information arguments should not be provided explicitly", Justification = "Intentional")]
     [SuppressMessage("Naming", "RCS1047:Non-asynchronous method name should not end with 'Async'.", Justification = "They are async!")]
