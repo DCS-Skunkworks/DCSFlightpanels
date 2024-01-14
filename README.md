@@ -45,6 +45,7 @@ Stream Deck Panels Supported:
 * Stream Deck
 * Stream Deck MK2
 * XL
+* Stream Deck +
 
 Cockpit Master devices supported:
 ---------------------------------------------
@@ -72,5 +73,6 @@ Links
 * [Demo video key emulation](https://www.youtube.com/watch?v=_TurR-WTgkY)
 * [Demo video A-10C](https://www.youtube.com/watch?v=adaLWO-nTwU)
 * [Demo video UH-1H](https://www.youtube.com/watch?v=jQxLX7UHMR8)
+* [Demo video of Stream Deck + rotary knobs](https://www.youtube.com/shorts/El_JTcfLhBs)
 * [Farming Panel Overlay for named buttons](https://forums.eagle.ru/topic/115280-dcsflightpanels-dcsfp-thread-saitek-pro-flight-panels-amp-dcs/page/53/?tab=comments#comment-4745816)
 * Here you find our [DCS-Skunkworks Discord Server](https://discord.gg/5svGwKX)
