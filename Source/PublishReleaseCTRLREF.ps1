@@ -12,9 +12,9 @@ if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env
 }
 
 #---------------------------------
-# Tests execution
+# Tests execution For DCSFP
 #---------------------------------
-Write-Host "Starting test execution" -foregroundcolor "Green"
+Write-Host "Starting tests execution for DCSFP" -foregroundcolor "Green"
 $testPath = $scriptPath + "\Tests"
 Set-Location -Path $testPath
 dotnet test
@@ -24,11 +24,26 @@ if ( 0 -ne $testsLastExitCode ) {
 	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
 	exit
 }
-Write-Host "Finished test execution" -foregroundcolor "Green"
+Write-Host "Finished tests execution for DCSFP" -foregroundcolor "Green"
 
-#---------------------------------
+#------------------------------------
+# Tests execution For StreamDeckSharp
+#------------------------------------
+Write-Host "Starting tests execution for StreamDeckSharp" -foregroundcolor "Green"
+$testPath = $scriptPath + "\StreamDeckSharp.Tests"
+Set-Location -Path $testPath
+dotnet test
+$testsLastExitCode = $LastExitCode
+Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
+if ( 0 -ne $testsLastExitCode ) {
+	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
+	exit
+}
+Write-Host "Finished tests execution for StreamDeckSharp" -foregroundcolor "Green"
+
+#-----------------------------------
 # Release version management ctrlref
-#---------------------------------
+#-----------------------------------
 Write-Host "Starting release version management" -foregroundcolor "Green"
 #Get Path to csproj
 $projectFilePath = $scriptPath + "\ControlReference\ControlReference.csproj"
