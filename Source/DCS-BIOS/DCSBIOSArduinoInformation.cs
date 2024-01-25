@@ -9,14 +9,13 @@ namespace DCS_BIOS
         public static List<string> GetInformation(DCSBIOSControl dcsbiosControl)
         {
             var result = new List<string>();
+            if (dcsbiosControl == null) return result;
 
-            if(dcsbiosControl.Inputs.Count > 0) { result.Add("Input"); }
+            if (dcsbiosControl.Inputs.Count > 0) { result.Add("Input"); }
 
             var fixedStepInputInfo = new List<string>();
             var integerOutputInfo = new List<string>();
-
-            if (dcsbiosControl == null) return result;
-
+            
             foreach (var input in dcsbiosControl.Inputs)
             {
                 var interfaceType = new DCSBIOSInputInterface();
@@ -255,7 +254,7 @@ namespace DCS_BIOS
         {
             //code.append($("<span>").text('DcsBios::AnalogMultiPos '+idCamelCase(cid)+'("'+cid+'", '));
             
-            var str = $"DcsBios::AnalogMultiPos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", PIN, STEPS, (RESOLUTION/STEPS));";
+            var str = $"DcsBios::AnalogMultiPos {MakeCamelCase(dcsbiosControl.Identifier)}(\"{dcsbiosControl.Identifier}\", PIN, STEPS);";
             return str;
         }
 

@@ -19,7 +19,7 @@ namespace ControlReference.Windows
     public partial class ArduinoWindow
     {
         private bool _isLoaded;
-        private DCSBIOSControl _dcsbiosControl;
+        private readonly DCSBIOSControl _dcsbiosControl;
         public ArduinoWindow(DCSBIOSControl dcsbiosControl)
         {
             InitializeComponent();
