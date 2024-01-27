@@ -44,8 +44,8 @@ namespace ControlReference.Windows
                 }
                 
                 var textBlock = new TextBlockSelectable(_luaCommand);
-                textBlock.MouseEnter += TextBlock_OnMouseEnter;
-                textBlock.MouseLeave += TextBlock_OnMouseLeave;
+                textBlock.MouseEnter += Common.UIElement_OnMouseEnterHandIcon;
+                textBlock.MouseLeave += Common.UIElement_OnMouseLeaveNormalIcon;
                 SetContextMenu(textBlock);
 
                 textBlock.FontFamily = new System.Windows.Media.FontFamily("Consolas");
@@ -71,34 +71,7 @@ namespace ControlReference.Windows
         {
 
         }
-
-
-
-        private void TextBlock_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                Mouse.OverrideCursor = Cursors.IBeam;
-            }
-            catch (Exception exception)
-            {
-                Common.ShowMessageBox(exception.Message + Environment.NewLine + exception.StackTrace);
-            }
-        }
-
-        private void TextBlock_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                Mouse.OverrideCursor = Cursors.Arrow;
-            }
-            catch (Exception exception)
-            {
-                Common.ShowMessageBox(exception.Message + Environment.NewLine + exception.StackTrace);
-            }
-        }
-
-
+        
         private void SetContextMenu(TextBlockSelectable textBlock)
         {
             try

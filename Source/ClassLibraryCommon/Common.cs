@@ -1,4 +1,6 @@
-﻿namespace ClassLibraryCommon
+﻿using System.Windows.Input;
+
+namespace ClassLibraryCommon
 {
     using NLog;
     using System;
@@ -320,6 +322,17 @@
 
             // here, To find the next parent in the tree. we are using recursion until we found the requested type or reached to the end of tree.
             return FindVisualParent<T>(parentObj);
+        }
+
+        //^[A-Za-z0-9 . \t]*(MouseEnter){1}(\s\+\=)\s*
+        public static void UIElement_OnMouseEnterHandIcon(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        public static void UIElement_OnMouseLeaveNormalIcon(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
     }
 }
