@@ -78,8 +78,8 @@
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 SetTextBoxBills();
+                UserControlLoaded = true;
             }
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
         

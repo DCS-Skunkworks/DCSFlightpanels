@@ -88,8 +88,8 @@
 
                 SetContextMenuClickHandlers();
                 SetAllBlack();
+                UserControlLoaded = true;
             }
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
         

@@ -83,8 +83,8 @@ namespace DCSFlightpanels.PanelUserControls
                 DarkMode.SetFrameworkElementDarkMode(this);
                 ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
                 SetTextBoxBills();
+                UserControlLoaded = true;
             }
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
         

@@ -89,14 +89,14 @@
 
         private void RadioPanelPZ69UserControlGeneric_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded)
+            if (!UserControlLoaded || !TextBoxBillsSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
                 SetTextBoxBills();
                 SetButtonBills();
+                UserControlLoaded = true;
             }
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
         
@@ -179,10 +179,8 @@
 
         private void SetTextBoxBills()
         {
-            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ69GenericTextBox>(this).Any())
-            {
-                return;
-            }
+            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ69GenericTextBox>(this).Any()) return;
+
             foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
             {
                 if (textBox.Bill != null || textBox.Equals(TextBoxLogPZ69))
@@ -196,10 +194,8 @@
 
         private void SetButtonBills()
         {
-            if (ButtonBillsSet)
-            {
-                return;
-            }
+            if (ButtonBillsSet) return;
+
             ButtonUpperLeftLcd.Bill = new BillPZ69LCDButton(ButtonUpperLeftLcd);
             ButtonLowerLeftLcd.Bill = new BillPZ69LCDButton(ButtonLowerLeftLcd);
             ButtonUpperRightLcd.Bill = new BillPZ69LCDButton(ButtonUpperRightLcd);

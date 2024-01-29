@@ -75,8 +75,8 @@
             if (!UserControlLoaded)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
+                UserControlLoaded = true;
             }
-            UserControlLoaded = true;
         }
 
         public override GamingPanel GetGamingPanel()

@@ -283,7 +283,7 @@ namespace ClassLibraryCommon
         {
             if (dependencyObject != null)
             {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(dependencyObject); i++)
+                for (var i = 0; i < VisualTreeHelper.GetChildrenCount(dependencyObject); i++)
                 {
                     var child = VisualTreeHelper.GetChild(dependencyObject, i);
                     if (child is T o)

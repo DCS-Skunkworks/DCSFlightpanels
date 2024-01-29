@@ -67,7 +67,6 @@
                 _radioPanelPZ69SRS.InitPanel();
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
                 ComboBoxSmallFreqStepping.SelectedValue = Settings.Default.SRSSmallFreqStepping;
-                UserControlLoaded = true;
             }
             catch (Exception ex)
             {
@@ -80,8 +79,8 @@
             if (!UserControlLoaded)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
+                UserControlLoaded = true;
             }
-            UserControlLoaded = true;
         }
 
         public override GamingPanel GetGamingPanel()

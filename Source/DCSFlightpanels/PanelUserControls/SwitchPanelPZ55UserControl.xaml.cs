@@ -104,8 +104,8 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
+                UserControlLoaded = true;
             }
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
 
