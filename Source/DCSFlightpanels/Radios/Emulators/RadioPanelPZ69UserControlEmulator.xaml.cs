@@ -80,13 +80,13 @@
 
         private void RadioPanelPZ69UserControlEmulator_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded)
+            if (!UserControlLoaded || !TextBoxBillsSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
                 SetTextBoxBills();
+                UserControlLoaded = true;
             }
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
         

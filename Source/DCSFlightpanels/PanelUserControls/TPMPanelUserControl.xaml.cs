@@ -79,8 +79,8 @@ namespace DCSFlightpanels.PanelUserControls
                 DarkMode.SetFrameworkElementDarkMode(this);
                 HidePositionIndicators();
                 SetTextBoxBills();
+                UserControlLoaded = true;
             }
-            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
 

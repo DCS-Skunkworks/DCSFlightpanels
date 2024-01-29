@@ -28,7 +28,7 @@
     </Authors>
     <PackageId>DCSFlightpanels (DCSFP)</PackageId>
     <Version>1.0.0</Version>
-    <AssemblyVersion>4.11.6</AssemblyVersion>
+    <AssemblyVersion>4.11.7</AssemblyVersion>
     <FileVersion>
     </FileVersion>
     <ApplicationIcon>Images\UI\flightpanels02_8Rc_icon.ico</ApplicationIcon>
@@ -68,6 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Resources\**" />
+    <EmbeddedResource Remove="Resources\**" />
+    <None Remove="Resources\**" />
+    <Page Remove="Resources\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
@@ -289,8 +295,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="C:\dev\GitHub\DCSFlightpanels\Source\DCSFlightpanels\.editorconfig" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
 </Project>

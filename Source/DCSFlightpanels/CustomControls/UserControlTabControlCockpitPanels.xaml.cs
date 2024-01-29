@@ -458,7 +458,6 @@ namespace DCSFlightpanels.CustomControls
                                 dcsAircraft.UseGenericRadio = true;
                                 AppEventHandler.PanelEvent(this, hidSkeleton.HIDInstance, hidSkeleton, PanelEventType.Created);
                             }
-
                             break;
                         }
                 }

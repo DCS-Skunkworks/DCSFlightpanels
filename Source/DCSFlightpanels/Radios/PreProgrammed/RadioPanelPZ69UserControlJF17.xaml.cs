@@ -63,7 +63,6 @@
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
                 ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
                 _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                UserControlLoaded = true;
             }
             catch (Exception ex)
             {
@@ -76,8 +75,8 @@
             if (!UserControlLoaded)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
+                UserControlLoaded = true;
             }
-            UserControlLoaded = true;
         }
 
         public override GamingPanel GetGamingPanel()
