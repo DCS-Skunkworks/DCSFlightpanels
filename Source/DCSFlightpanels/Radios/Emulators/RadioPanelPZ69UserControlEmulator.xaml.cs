@@ -8,8 +8,6 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using Interfaces;
     using Properties;
@@ -84,7 +82,7 @@
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
-                SetTextBoxBills();
+                SetTextBoxEnvironment();
                 UserControlLoaded = true;
             }
             ShowGraphicConfiguration();
@@ -167,7 +165,7 @@
             }
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
             if (TextBoxBillsSet || !Common.FindVisualChildren<PZ69TextBox>(this).Any())
             {
@@ -179,7 +177,7 @@
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ69Emulator(this, _radioPanelPZ69, textBox);
+                textBox.SetEnvironment(this, _radioPanelPZ69);
             }
             TextBoxBillsSet = true;
         }
@@ -189,13 +187,13 @@
             try
             {
                 KeyPressLength keyPressLength;
-                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeyPressSequence.Count == 0)
+                if (!textBox.ContainsKeyPress() || textBox.KeyPress.KeyPressSequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
                 }
                 else
                 {
-                    keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
+                    keyPressLength = textBox.KeyPress.GetLengthOfKeyPress();
                 }
                 _radioPanelPZ69.AddOrUpdateKeyStrokeBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
             }
@@ -205,11 +203,11 @@
             }
         }
 
-        private void UpdateOSCommandBindingsPZ55(PZ69TextBox textBox)
+        private void UpdateOSCommandBindingsPZ69Emulator(PZ69TextBox textBox)
         {
             try
             {
-                _radioPanelPZ69.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.Bill.OSCommandObject);
+                _radioPanelPZ69.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.OSCommandObject);
             }
             catch (Exception ex)
             {
@@ -345,11 +343,11 @@
         {
             foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogPZ69) || textBox.Bill == null)
+                if (textBox == TextBoxLogPZ69 || textBox == null)
                 {
                     continue;
                 }
-                textBox.Bill.ClearAll();
+                textBox.ClearAll();
             }
 
             if (clearAlsoProfile)
@@ -676,7 +674,7 @@
                     var textBox = (PZ69TextBox)GetTextBox(keyBinding.RadioPanelPZ69Key, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
-                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
+                        textBox.KeyPress = keyBinding.OSKeyPress;
                     }
                 }
 
@@ -685,14 +683,14 @@
                     var textBox = (PZ69TextBox)GetTextBox(operatingSystemCommand.RadioPanelPZ69Key, operatingSystemCommand.WhenTurnedOn);
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
-                        textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                        textBox.OSCommandObject = operatingSystemCommand.OSCommandObject;
                     }
                 }
 
                 foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
                 {
                     var textBox = (PZ69TextBox)GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
-                    textBox.Bill.BipLink = bipLinkPZ69;
+                    textBox.BipLink = bipLinkPZ69;
                 }
             }
             catch (Exception ex)

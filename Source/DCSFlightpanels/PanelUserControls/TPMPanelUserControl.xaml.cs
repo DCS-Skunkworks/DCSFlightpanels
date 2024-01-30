@@ -9,8 +9,6 @@ namespace DCSFlightpanels.PanelUserControls
     using System.Windows.Controls;
     using System.Windows.Input;
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using Interfaces;
     using Windows;
@@ -78,7 +76,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 HidePositionIndicators();
-                SetTextBoxBills();
+                SetTextBoxEnvironment();
                 UserControlLoaded = true;
             }
             ShowGraphicConfiguration();
@@ -199,12 +197,12 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogTPM) || textBox.Bill == null)
+                if (textBox == TextBoxLogTPM || textBox == null)
                 {
                     continue;
                 }
 
-                textBox.Bill.ClearAll();
+                textBox.ClearAll();
             }
 
             if (clearAlsoProfile)
@@ -215,7 +213,7 @@ namespace DCSFlightpanels.PanelUserControls
             ShowGraphicConfiguration();
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
             if (TextBoxBillsSet || !Common.FindVisualChildren<TPMTextBox>(this).Any())
             {
@@ -224,12 +222,12 @@ namespace DCSFlightpanels.PanelUserControls
 
             foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
-                if (textBox.Bill != null || textBox.Equals(TextBoxLogTPM))
+                if (textBox.Equals(TextBoxLogTPM))
                 {
                     continue;
                 }
 
-                textBox.Bill = new BillTPM(this, _tpmPanel, textBox);
+                textBox.SetEnvironment(this, _tpmPanel);
             }
             TextBoxBillsSet = true;
         }
@@ -427,13 +425,13 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 KeyPressLength keyPressLength;
-                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeyPressSequence.Count == 0)
+                if (!textBox.ContainsKeyPress() || textBox.KeyPress.KeyPressSequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
                 }
                 else
                 {
-                    keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
+                    keyPressLength = textBox.KeyPress.GetLengthOfKeyPress();
                 }
 
                 _tpmPanel.AddOrUpdateKeyStrokeBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
@@ -448,7 +446,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _tpmPanel.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.Bill.OSCommandObject);
+                _tpmPanel.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.OSCommandObject);
             }
             catch (Exception ex)
             {
@@ -470,11 +468,11 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (TPMTextBox) GetTextBox(keyBinding.TPMSwitch, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
-                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
+                        textBox.KeyPress = keyBinding.OSKeyPress;
                     }
                     else
                     {
-                        textBox.Bill.KeyPress = null;
+                        textBox.KeyPress = null;
                     }
                 }
 
@@ -483,11 +481,11 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (TPMTextBox)GetTextBox(operatingSystemCommand.TPMSwitch, operatingSystemCommand.WhenTurnedOn);
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
-                        textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                        textBox.OSCommandObject = operatingSystemCommand.OSCommandObject;
                     }
                     else
                     {
-                        textBox.Bill.OSCommandObject = null;
+                        textBox.OSCommandObject = null;
                     }
                 }
 
@@ -496,11 +494,11 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (TPMTextBox)GetTextBox(dcsBiosBinding.TPMSwitch, dcsBiosBinding.WhenTurnedOn);
                     if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
+                        textBox.DCSBIOSBinding = dcsBiosBinding;
                     }
                     else
                     {
-                        textBox.Bill.DCSBIOSBinding = null;
+                        textBox.DCSBIOSBinding = null;
                     }
                 }
 
@@ -509,11 +507,11 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (TPMTextBox)GetTextBox(bipLink.TPMSwitch, bipLink.WhenTurnedOn);
                     if (bipLink.BIPLights.Count > 0)
                     {
-                        textBox.Bill.BipLink = bipLink;
+                        textBox.BipLink = bipLink;
                     }
                     else
                     {
-                        textBox.Bill.BipLink = null;
+                        textBox.BipLink = null;
                     }
                 }
             }
@@ -605,7 +603,7 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
 
-                textBox.Bill.ClearAll();
+                textBox.ClearAll();
                 var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
                 if (string.IsNullOrEmpty(vkNull))
                 {
@@ -613,8 +611,8 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 var keyPress = new KeyPress(vkNull, KeyPressLength.ThirtyTwoMilliSec);
-                textBox.Bill.KeyPress = keyPress;
-                textBox.Bill.KeyPress.Description = "VK_NULL";
+                textBox.KeyPress = keyPress;
+                textBox.KeyPress.Description = "VK_NULL";
                 textBox.Text = vkNull;
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
@@ -635,9 +633,9 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 OSCommandWindow osCommandWindow;
-                if (textBox.Bill.ContainsOSCommand())
+                if (textBox.ContainsOSCommand())
                 {
-                    osCommandWindow = new OSCommandWindow(textBox.Bill.OSCommandObject);
+                    osCommandWindow = new OSCommandWindow(textBox.OSCommandObject);
                 }
                 else
                 {
@@ -655,7 +653,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
 
                     var operatingSystemCommand = osCommandWindow.OSCommandObject;
-                    textBox.Bill.OSCommandObject = operatingSystemCommand;
+                    textBox.OSCommandObject = operatingSystemCommand;
                     UpdateOSCommandBindingsTPM(textBox);
                     textBox.Text = operatingSystemCommand.Name;
                 }

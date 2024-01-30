@@ -1,9 +1,6 @@
 ﻿using NonVisuals.Panels.StreamDeck.Panels;
 using NonVisuals.Panels.StreamDeck;
-using System.Windows;
 using System.Windows.Controls;
-using ClassLibraryCommon;
-using System.Drawing;
 using System.Windows.Media;
 
 namespace DCSFlightpanels.CustomControls

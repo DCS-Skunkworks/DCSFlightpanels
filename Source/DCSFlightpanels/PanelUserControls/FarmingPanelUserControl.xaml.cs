@@ -8,8 +8,6 @@
     using System.Windows.Input;
 
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using Interfaces;
     using Windows;
@@ -77,7 +75,7 @@
             if (!UserControlLoaded || !TextBoxBillsSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
-                SetTextBoxBills();
+                SetTextBoxEnvironment();
                 UserControlLoaded = true;
             }
             ShowGraphicConfiguration();
@@ -188,11 +186,11 @@
         {
             foreach (var textBox in Common.FindVisualChildren<FarmingPanelTextBox>(this))
             {
-                if (textBox == TextBoxLogFarmingPanel || textBox.Bill == null)
+                if (textBox == TextBoxLogFarmingPanel || textBox == null)
                 {
                     continue;
                 }
-                textBox.Bill.ClearAll();
+                textBox.ClearAll();
             }
             if (clearAlsoProfile)
             {
@@ -202,7 +200,7 @@
             ShowGraphicConfiguration();
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
             if (TextBoxBillsSet || !Common.FindVisualChildren<FarmingPanelTextBox>(this).Any())
             {
@@ -210,12 +208,11 @@
             }
             foreach (var textBox in Common.FindVisualChildren<FarmingPanelTextBox>(this))
             {
-                if (textBox.Bill != null || textBox == TextBoxLogFarmingPanel)
+                if (!textBox.Equals(TextBoxLogFarmingPanel))
                 {
-                    continue;
+                    textBox.SetEnvironment(this, _farmingSidePanel);
                 }
-
-                textBox.Bill = new BillPFarmingPanel(this, _farmingSidePanel, textBox);
+                TextBoxBillsSet = true;
             }
             TextBoxBillsSet = true;
         }
@@ -599,11 +596,11 @@
                     var textBox = (FarmingPanelTextBox)GetTextBox(keyBinding.FarmingPanelKey, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
-                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
+                        textBox.KeyPress = keyBinding.OSKeyPress;
                     }
                     else
                     {
-                        textBox.Bill.KeyPress = null;
+                        textBox.KeyPress = null;
                     }
                 }
 
@@ -612,24 +609,25 @@
                     var textBox = (FarmingPanelTextBox)GetTextBox(operatingSystemCommand.FarmingPanelKey, operatingSystemCommand.WhenTurnedOn);
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
-                        textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                        textBox.OSCommandObject = operatingSystemCommand.OSCommandObject;
                     }
                     else
                     {
-                        textBox.Bill.OSCommandObject = null;
+                        textBox.OSCommandObject = null;
                     }
                 }
 
                 foreach (var dcsBiosBinding in _farmingSidePanel.DCSBiosBindings)
                 {
                     var textBox = (FarmingPanelTextBox)GetTextBox(dcsBiosBinding.FarmingPanelKey, dcsBiosBinding.WhenTurnedOn);
+                    //TODO search all these
                     if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
+                        textBox.DCSBIOSBinding = dcsBiosBinding;
                     }
                     else
                     {
-                        textBox.Bill.DCSBIOSBinding = null;
+                        textBox.DCSBIOSBinding = null;
                     }
                 }
 
@@ -639,11 +637,11 @@
                     var textBox = (FarmingPanelTextBox)GetTextBox(bipLink.FarmingPanelKey, bipLink.WhenTurnedOn);
                     if (bipLink.BIPLights.Count > 0)
                     {
-                        textBox.Bill.BipLink = bipLink;
+                        textBox.BipLink = bipLink;
                     }
                     else
                     {
-                        textBox.Bill.BipLink = null;
+                        textBox.BipLink = null;
                     }
                 }
             }

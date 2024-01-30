@@ -93,7 +93,7 @@
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
-                SetTextBoxBills();
+                SetTextBoxEnvironment();
                 SetButtonBills();
                 UserControlLoaded = true;
             }
@@ -177,17 +177,17 @@
             }
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
             if (TextBoxBillsSet || !Common.FindVisualChildren<PZ69GenericTextBox>(this).Any()) return;
 
             foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
             {
-                if (textBox.Bill != null || textBox.Equals(TextBoxLogPZ69))
+                if (textBox.Equals(TextBoxLogPZ69))
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ69Generic(this, _radioPanelPZ69, textBox);
+                textBox.SetEnvironment(this, _radioPanelPZ69);
             }
             TextBoxBillsSet = true;
         }
@@ -331,12 +331,12 @@
         {
             foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogPZ69) || textBox.Bill == null)
+                if (textBox == TextBoxLogPZ69 || textBox == null)
                 {
                     continue;
                 }
 
-                textBox.Bill.ClearAll();
+                textBox.ClearAll();
             }
 
             if (clearAlsoProfile)
@@ -678,7 +678,7 @@
                     var textBox = (PZ69GenericTextBox)GetTextBox(keyBinding.RadioPanelPZ69Key, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null && (keyBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || keyBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition))
                     {
-                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
+                        textBox.KeyPress = keyBinding.OSKeyPress;
                     }
                 }
 
@@ -688,14 +688,14 @@
                     if (operatingSystemCommand.OSCommandObject != null && (operatingSystemCommand.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || operatingSystemCommand.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition))
                         if (operatingSystemCommand.OSCommandObject != null)
                         {
-                            textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                            textBox.OSCommandObject = operatingSystemCommand.OSCommandObject;
                         }
                 }
 
                 foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
                 {
                     var textBox = (PZ69GenericTextBox)GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
-                    textBox.Bill.BipLink = bipLinkPZ69;
+                    textBox.BipLink = bipLinkPZ69;
                 }
 
                 foreach (var lcdBinding in _radioPanelPZ69.LCDBindings)
@@ -747,7 +747,7 @@
 
                     if (dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition)
                     {
-                        textBox.Bill.DCSBIOSBinding = dcsbiosBinding;
+                        textBox.DCSBIOSBinding = dcsbiosBinding;
                     }
                 }
             }

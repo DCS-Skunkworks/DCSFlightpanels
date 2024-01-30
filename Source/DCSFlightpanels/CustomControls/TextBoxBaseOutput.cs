@@ -4,8 +4,5 @@
 
     using Bills;
 
-    public class TextBoxBaseOutput : TextBox
-    {
-        public BillBaseOutput Bill { get; set; }
-    }
+    public abstract class TextBoxBaseOutput : TextBox {}
 }

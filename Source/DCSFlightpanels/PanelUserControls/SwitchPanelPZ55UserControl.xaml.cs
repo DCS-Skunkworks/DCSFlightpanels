@@ -10,8 +10,6 @@ namespace DCSFlightpanels.PanelUserControls
     using System.Windows.Input;
 
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using Interfaces;
     using Windows;
@@ -85,7 +83,7 @@ namespace DCSFlightpanels.PanelUserControls
             if (!UserControlLoaded || !TextBoxBillsSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
-                SetTextBoxBills(); 
+                SetTextBoxEnvironment(); 
                 LoadComboBoxesManualLeds();
                 SetContextMenuClickHandlers();
                 foreach (var image in Common.FindVisualChildren<Image>(this))
@@ -329,11 +327,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in Common.FindVisualChildren<PZ55TextBox>(this))
             {
-                if (textBox == TextBoxLogPZ55 || textBox.Bill == null)
+                if (textBox == TextBoxLogPZ55 || textBox == null)
                 {
                     continue;
                 }
-                textBox.Bill.ClearAll();
+                textBox.ClearAll();
             }
             if (clearAlsoProfile)
             {
@@ -343,7 +341,7 @@ namespace DCSFlightpanels.PanelUserControls
             ShowGraphicConfiguration();
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
             if (TextBoxBillsSet || !Common.FindVisualChildren<PZ55TextBox>(this).Any())
             {
@@ -351,12 +349,12 @@ namespace DCSFlightpanels.PanelUserControls
             }
             foreach (var textBox in Common.FindVisualChildren<PZ55TextBox>(this))
             {
-                if (textBox.Bill != null || textBox == TextBoxLogPZ55)
+                if (textBox == TextBoxLogPZ55)
                 {
                     continue;
                 }
 
-                textBox.Bill = new BillPZ55(this, _switchPanelPZ55, textBox);
+                textBox.SetEnvironment(this, _switchPanelPZ55);
             }
             TextBoxBillsSet = true;
         }
@@ -721,11 +719,11 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (PZ55TextBox)GetTextBox(keyBinding.SwitchPanelPZ55Key, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
-                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
+                        textBox.KeyPress = keyBinding.OSKeyPress;
                     }
                     else
                     {
-                        textBox.Bill.KeyPress = null;
+                        textBox.KeyPress = null;
                     }
                 }
 
@@ -734,11 +732,11 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (PZ55TextBox)GetTextBox(operatingSystemCommand.SwitchPanelPZ55Key, operatingSystemCommand.WhenTurnedOn);
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
-                        textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                        textBox.OSCommandObject = operatingSystemCommand.OSCommandObject;
                     }
                     else
                     {
-                        textBox.Bill.OSCommandObject = null;
+                        textBox.OSCommandObject = null;
                     }
                 }
 
@@ -747,11 +745,11 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (PZ55TextBox)GetTextBox(dcsBiosBinding.SwitchPanelPZ55Key, dcsBiosBinding.WhenTurnedOn);
                     if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
+                        textBox.DCSBIOSBinding = dcsBiosBinding;
                     }
                     else
                     {
-                        textBox.Bill.DCSBIOSBinding = null;
+                        textBox.DCSBIOSBinding = null;
                     }
                 }
 
@@ -761,11 +759,11 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (PZ55TextBox)GetTextBox(bipLinkPZ55.SwitchPanelPZ55Key, bipLinkPZ55.WhenTurnedOn);
                     if (bipLinkPZ55.BIPLights.Count > 0)
                     {
-                        textBox.Bill.BipLink = bipLinkPZ55;
+                        textBox.BipLink = bipLinkPZ55;
                     }
                     else
                     {
-                        textBox.Bill.BipLink = null;
+                        textBox.BipLink = null;
                     }
                 }
 
