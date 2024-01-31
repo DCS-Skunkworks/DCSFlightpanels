@@ -37,14 +37,9 @@
 
             if (_bitmap == null || RefreshBitmap)
             {
-                if (string.IsNullOrEmpty(_backgroundBitmapPath)) //User maybe only wants text displayed.
-                {
-                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(ButtonFinalText, TextFont, FontColor, OffsetX, OffsetY, Color.LightGray);
-                }
-                else
-                {
-                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(ButtonFinalText, TextFont, FontColor, OffsetX, OffsetY, _backgroundBitmap);
-                }
+                _bitmap = string.IsNullOrEmpty(_backgroundBitmapPath) ? 
+                    BitMapCreator.CreateStreamDeckBitmap(ButtonFinalText, TextFont, FontColor, OffsetX, OffsetY, Color.LightGray) 
+                    : BitMapCreator.CreateStreamDeckBitmap(ButtonFinalText, TextFont, FontColor, OffsetX, OffsetY, _backgroundBitmap); //User maybe only wants text displayed.
                 RefreshBitmap = true;
             }
         }

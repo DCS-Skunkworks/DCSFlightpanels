@@ -9,11 +9,11 @@
 
     public class GenericPanelBinding
     {
-        private GamingPanelEnum _panelType = GamingPanelEnum.Unknown;
+        private readonly GamingPanelEnum _panelType = GamingPanelEnum.Unknown;
         private string _hidInstance;
         private string _bindingHash;
         private List<string> _settings = new(50);
-        private StringBuilder _jsonString = new();
+        private readonly StringBuilder _jsonString = new();
 
 
         public GenericPanelBinding()
@@ -149,14 +149,7 @@
             stringBuilder.AppendLine("PanelInstanceID=" + _hidInstance);
             stringBuilder.AppendLine("BindingHash=" + _bindingHash);
 
-            if (IsJSON())
-            {
-                stringBuilder.AppendLine("BeginPanelJSON");
-            }
-            else
-            {
-                stringBuilder.AppendLine("BeginPanel");
-            }
+            stringBuilder.AppendLine(IsJSON() ? "BeginPanelJSON" : "BeginPanel");
 
             if (IsJSON())
             {

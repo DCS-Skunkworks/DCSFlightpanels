@@ -97,14 +97,9 @@ namespace DCSFlightpanels
                             }
                             if (arg.ToLower().Contains(Constants.CommandLineArgumentOpenProfile.ToLower()))
                             {
-                                if (arg.Contains("NEWPROFILE"))
-                                {
-                                    Settings.Default.LastProfileFileUsed = string.Empty;
-                                }
-                                else
-                                {
-                                    Settings.Default.LastProfileFileUsed = arg.ToLower().Replace("\"", string.Empty).Replace("'", string.Empty).Replace(Constants.CommandLineArgumentOpenProfile.ToLower(), string.Empty);
-                                }
+                                Settings.Default.LastProfileFileUsed = arg.Contains("NEWPROFILE") ? 
+                                    string.Empty : 
+                                    arg.ToLower().Replace("\"", string.Empty).Replace("'", string.Empty).Replace(Constants.CommandLineArgumentOpenProfile.ToLower(), string.Empty);
                                 Settings.Default.Save();
                                 closeCurrentInstance = true;
                             }
@@ -153,7 +148,7 @@ namespace DCSFlightpanels
                 {
                     foreach (var process in Process.GetProcesses())
                     {
-                        if (process.ProcessName.Equals(Process.GetCurrentProcess().ProcessName) && process.Id != Process.GetCurrentProcess().Id)
+                        if (process.ProcessName.Equals(Process.GetCurrentProcess().ProcessName) && process.Id != Environment.ProcessId)
                         {
                             process.Kill();
                             break;

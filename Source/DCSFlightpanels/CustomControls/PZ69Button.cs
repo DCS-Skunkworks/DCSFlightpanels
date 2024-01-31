@@ -1,10 +1,25 @@
 ﻿using System.Windows.Controls;
-using DCSFlightpanels.Bills;
+using NonVisuals.BindingClasses.DCSBIOSBindings;
 
 namespace DCSFlightpanels.CustomControls
 {
     public class PZ69Button : Button
     {
-        public BillPZ69LCDButton Bill { get; set; }
+        public DCSBIOSOutputBindingPZ69 DCSBIOSBindingLCD { get; set; }
+
+        public bool ContainsLCDBinding()
+        {
+            return DCSBIOSBindingLCD != null && DCSBIOSBindingLCD.HasBinding;
+        }
+
+        public bool IsEmpty()
+        {
+            return DCSBIOSBindingLCD.DCSBIOSOutputObject == null;
+        }
+
+        public void ClearAll()
+        {
+            DCSBIOSBindingLCD = null;
+        }
     }
 }

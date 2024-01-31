@@ -1,12 +1,10 @@
 ﻿using System.Drawing;
-using DCSFlightpanels.Bills;
 using MEF;
 using NonVisuals.Panels.StreamDeck.Panels;
 using NonVisuals.Panels.StreamDeck;
 using NonVisuals;
 using System.Windows.Media;
 using System.Windows;
-using System.Windows.Controls;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Drawing.Color;
 
@@ -108,7 +106,7 @@ namespace DCSFlightpanels.CustomControls
             }
         }
 
-        public void Clear()
+        public new void Clear()
         {
             _streamDeckTargetLayer = null;
             _bipLinkStreamDeck = null;

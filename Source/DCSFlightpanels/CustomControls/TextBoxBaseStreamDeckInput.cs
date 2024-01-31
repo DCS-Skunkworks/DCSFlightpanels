@@ -17,8 +17,7 @@
         public abstract bool ContainsBIPLink();
         public abstract bool IsEmpty();
         public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs);
-        public abstract void Clear();
-        protected TextBox TextBox { get; init; }
+        public new abstract void Clear();
 
         public OSCommand OSCommandObject
         {
@@ -26,7 +25,7 @@
             set
             {
                 _operatingSystemCommand = value;
-                TextBox.Text = _operatingSystemCommand != null ? _operatingSystemCommand.Name : string.Empty;
+                Text = _operatingSystemCommand != null ? _operatingSystemCommand.Name : string.Empty;
             }
         }
 
@@ -37,10 +36,10 @@
             {
                 if (value != null && ContainsDCSBIOS())
                 {
-                    throw new Exception("Cannot insert KeyPress, Bill already contains DCSBIOSInputs");
+                    throw new Exception("Cannot insert KeyPress, TextBox already containsDCSBIOSInputs");
                 }
                 _keyPress = value;
-                TextBox.Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : string.Empty;
+                Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : string.Empty;
             }
         }
 

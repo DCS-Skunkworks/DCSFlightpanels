@@ -43,14 +43,14 @@ namespace DCSFlightpanels.CustomControls
             {
                 if (ContainsKeyPress())
                 {
-                    throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
+                    throw new Exception("Cannot insert DCSBIOSInputs, TextBox already containsKeyPress");
                 }
                 _dcsbiosBindingPZ70 = (DCSBIOSActionBindingPZ70)value;
                 SetTextBoxText(value);
             }
         }
 
-        protected override void ClearDCSBIOSFromBill()
+        protected override void ClearDCSBIOS()
         {
             DCSBIOSBinding = null;
         }
@@ -77,10 +77,7 @@ namespace DCSFlightpanels.CustomControls
 
         protected override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
-            if (_dcsbiosBindingPZ70 == null)
-            {
-                _dcsbiosBindingPZ70 = new DCSBIOSActionBindingPZ70();
-            }
+            _dcsbiosBindingPZ70 ??= new DCSBIOSActionBindingPZ70();
 
             _dcsbiosBindingPZ70.DCSBIOSInputs = dcsBiosInputs;
             _dcsbiosBindingPZ70.IsSequenced = isSequenced;

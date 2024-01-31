@@ -70,7 +70,7 @@
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded || !TextBoxBillsSet)
+            if (!UserControlLoaded || !TextBoxEnvironmentSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this); 
                 var imageList = Common.FindVisualChildren<Image>(this);
@@ -340,14 +340,7 @@
             {
                 if (configurationIndicatorImage.Name.Contains(posString))
                 {
-                    if (show)
-                    {
-                        configurationIndicatorImage.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        configurationIndicatorImage.Visibility = Visibility.Collapsed;
-                    }
+                    configurationIndicatorImage.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
                 }
             }
         }

@@ -72,7 +72,7 @@
         
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded || !TextBoxBillsSet)
+            if (!UserControlLoaded || !TextBoxEnvironmentSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 SetTextBoxEnvironment();
@@ -202,7 +202,7 @@
 
         private void SetTextBoxEnvironment()
         {
-            if (TextBoxBillsSet || !Common.FindVisualChildren<FarmingPanelTextBox>(this).Any())
+            if (TextBoxEnvironmentSet || !Common.FindVisualChildren<FarmingPanelTextBox>(this).Any())
             {
                 return;
             }
@@ -212,9 +212,9 @@
                 {
                     textBox.SetEnvironment(this, _farmingSidePanel);
                 }
-                TextBoxBillsSet = true;
+                TextBoxEnvironmentSet = true;
             }
-            TextBoxBillsSet = true;
+            TextBoxEnvironmentSet = true;
         }
         
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
@@ -587,7 +587,7 @@
         {
             try
             {
-                if (!UserControlLoaded || !TextBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxEnvironmentSet)
                 {
                     return;
                 }
@@ -621,28 +621,14 @@
                 {
                     var textBox = (FarmingPanelTextBox)GetTextBox(dcsBiosBinding.FarmingPanelKey, dcsBiosBinding.WhenTurnedOn);
                     //TODO search all these
-                    if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                    {
-                        textBox.DCSBIOSBinding = dcsBiosBinding;
-                    }
-                    else
-                    {
-                        textBox.DCSBIOSBinding = null;
-                    }
+                    textBox.DCSBIOSBinding = dcsBiosBinding.DCSBIOSInputs.Count > 0 ? dcsBiosBinding : null;
                 }
 
-                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor); //Maybe we can remove this function and only retain the TextBoxBillsSet = true; ?
+                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor);
                 foreach (var bipLink in _farmingSidePanel.BIPLinkHashSet)
                 {
                     var textBox = (FarmingPanelTextBox)GetTextBox(bipLink.FarmingPanelKey, bipLink.WhenTurnedOn);
-                    if (bipLink.BIPLights.Count > 0)
-                    {
-                        textBox.BipLink = bipLink;
-                    }
-                    else
-                    {
-                        textBox.BipLink = null;
-                    }
+                    textBox.BipLink = bipLink.BIPLights.Count > 0 ? bipLink : null;
                 }
             }
             catch (Exception ex)
@@ -660,7 +646,7 @@
                     textBox.Background = brush;
                 }
             }
-            TextBoxBillsSet = true;
+            TextBoxEnvironmentSet = true;
         }
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)

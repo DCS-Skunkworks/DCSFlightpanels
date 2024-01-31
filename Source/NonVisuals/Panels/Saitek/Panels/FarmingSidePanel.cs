@@ -348,14 +348,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 if (keyBinding.FarmingPanelKey == farmingPanelSwitchOnOff.Switch && keyBinding.WhenTurnedOn == farmingPanelSwitchOnOff.ButtonState)
                 {
-                    if (string.IsNullOrEmpty(keyPress))
-                    {
-                        keyBinding.OSKeyPress = null;
-                    }
-                    else
-                    {
-                        keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
-                    }
+                    keyBinding.OSKeyPress = string.IsNullOrEmpty(keyPress) ? null : new KeyPress(keyPress, keyPressLength);
 
                     found = true;
                 }

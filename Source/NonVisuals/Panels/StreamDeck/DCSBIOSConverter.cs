@@ -141,28 +141,18 @@
 
                 case EnumConverterOutputType.ImageOverlay:
                     {
-                        if (numberFormatInfoFormula != null)
-                        {
-                            _faceTypeDCSBIOSOverlay.ButtonFinalText = _faceTypeDCSBIOSOverlay.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, string.Format(numberFormatInfoFormula, "{0:N}", _dcsbiosValue));
-                        }
-                        else
-                        {
-                            _faceTypeDCSBIOSOverlay.ButtonFinalText = _faceTypeDCSBIOSOverlay.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _dcsbiosValue.ToString(CultureInfo.InvariantCulture));
-                        }
+                        _faceTypeDCSBIOSOverlay.ButtonFinalText = _faceTypeDCSBIOSOverlay.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, 
+                            numberFormatInfoFormula != null ? string.Format(numberFormatInfoFormula, "{0:N}", _dcsbiosValue) 
+                                : _dcsbiosValue.ToString(CultureInfo.InvariantCulture));
                         result = _faceTypeDCSBIOSOverlay.Bitmap;
                         break;
                     }
 
                 case EnumConverterOutputType.Raw:
                     {
-                        if (numberFormatInfoFormula != null)
-                        {
-                            _faceTypeText.ButtonFinalText = _faceTypeText.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, string.Format(numberFormatInfoFormula, "{0:N}", _dcsbiosValue));
-                        }
-                        else
-                        {
-                            _faceTypeText.ButtonFinalText = _faceTypeText.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _dcsbiosValue.ToString(CultureInfo.InvariantCulture));
-                        }
+                        _faceTypeText.ButtonFinalText = _faceTypeText.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, numberFormatInfoFormula != null ? 
+                            string.Format(numberFormatInfoFormula, "{0:N}", _dcsbiosValue) 
+                            : _dcsbiosValue.ToString(CultureInfo.InvariantCulture));
                         result = _faceTypeText.Bitmap;
                         break;
                     }

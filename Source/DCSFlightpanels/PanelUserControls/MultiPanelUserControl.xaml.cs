@@ -77,7 +77,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void MultiPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded || !TextBoxBillsSet)
+            if (!UserControlLoaded || !TextBoxEnvironmentSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
@@ -150,7 +150,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ClearAll(bool clearAlsoProfile)
         {
-            if (TextBoxBillsSet)
+            if (TextBoxEnvironmentSet)
             {
                 foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
                 {
@@ -172,8 +172,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetTextBoxEnvironment()
         {
-            //TODO remove TextBoxBillsSet or rename
-            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ70TextBox>(this).Any())
+            if (TextBoxEnvironmentSet || !Common.FindVisualChildren<PZ70TextBox>(this).Any())
             {
                 return;
             }
@@ -184,9 +183,9 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     textBox.SetEnvironment(this, _multiPanelPZ70);
                 }
-                TextBoxBillsSet = true;
+                TextBoxEnvironmentSet = true;
             }
-            TextBoxBillsSet = true;
+            TextBoxEnvironmentSet = true;
         }
         
         public void SettingsModified(object sender, PanelInfoArgs e)
@@ -550,10 +549,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
 
-                if (dcsBiosOutputFormulaWindow == null)
-                {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description);
-                }
+                dcsBiosOutputFormulaWindow ??= new DCSBiosOutputFormulaWindow(description);
 
                 dcsBiosOutputFormulaWindow.ShowDialog();
                 if (dcsBiosOutputFormulaWindow.DialogResult.HasValue && dcsBiosOutputFormulaWindow.DialogResult.Value)
@@ -585,7 +581,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!UserControlLoaded || !TextBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxEnvironmentSet)
                 {
                     return;
                 }

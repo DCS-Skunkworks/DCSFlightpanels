@@ -78,7 +78,7 @@
 
         private void RadioPanelPZ69UserControlEmulator_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded || !TextBoxBillsSet)
+            if (!UserControlLoaded || !TextBoxEnvironmentSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
@@ -167,7 +167,7 @@
 
         private void SetTextBoxEnvironment()
         {
-            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ69TextBox>(this).Any())
+            if (TextBoxEnvironmentSet || !Common.FindVisualChildren<PZ69TextBox>(this).Any())
             {
                 return;
             }
@@ -179,40 +179,7 @@
                 }
                 textBox.SetEnvironment(this, _radioPanelPZ69);
             }
-            TextBoxBillsSet = true;
-        }
-
-        private void UpdateKeyBindingProfileSimpleKeyStrokes(PZ69TextBox textBox)
-        {
-            try
-            {
-                KeyPressLength keyPressLength;
-                if (!textBox.ContainsKeyPress() || textBox.KeyPress.KeyPressSequence.Count == 0)
-                {
-                    keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
-                }
-                else
-                {
-                    keyPressLength = textBox.KeyPress.GetLengthOfKeyPress();
-                }
-                _radioPanelPZ69.AddOrUpdateKeyStrokeBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void UpdateOSCommandBindingsPZ69Emulator(PZ69TextBox textBox)
-        {
-            try
-            {
-                _radioPanelPZ69.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.OSCommandObject);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            TextBoxEnvironmentSet = true;
         }
 
         private void UpdateDisplayValues(TextBox textBox)
@@ -369,36 +336,6 @@
             }
         }
 
-
-
-        private PZ69TextBox GetTextBoxInFocus()
-        {
-            foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogPZ69) && textBox.IsFocused && Equals(textBox.Background, DarkMode.TextBoxSelectedBackgroundColor))
-                {
-                    return textBox;
-                }
-            }
-            return null;
-        }
-        
-        private void ButtonClearAllClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (MessageBox.Show("Clear all settings for the Radio Panel?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-                {
-                    ClearAll(true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
         /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -412,14 +349,7 @@
             {
                 var textBox = (TextBox)sender;
 
-                if (textBox.Text.Contains('.'))
-                {
-                    textBox.MaxLength = 6;
-                }
-                else
-                {
-                    textBox.MaxLength = 5;
-                }
+                textBox.MaxLength = textBox.Text.Contains('.') ? 6 : 5;
                 if (!_allowedKeys.Contains(e.Key))
                 {
                     //Only figures and persion allowed
@@ -504,7 +434,7 @@
         {
             try
             {
-                if (!UserControlLoaded || !TextBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxEnvironmentSet)
                 {
                     return;
                 }

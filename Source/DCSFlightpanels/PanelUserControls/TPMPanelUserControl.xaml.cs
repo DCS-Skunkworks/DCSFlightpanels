@@ -72,7 +72,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded || !TextBoxBillsSet)
+            if (!UserControlLoaded || !TextBoxEnvironmentSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 HidePositionIndicators();
@@ -215,7 +215,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetTextBoxEnvironment()
         {
-            if (TextBoxBillsSet || !Common.FindVisualChildren<TPMTextBox>(this).Any())
+            if (TextBoxEnvironmentSet || !Common.FindVisualChildren<TPMTextBox>(this).Any())
             {
                 return;
             }
@@ -229,35 +229,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 textBox.SetEnvironment(this, _tpmPanel);
             }
-            TextBoxBillsSet = true;
-        }
-
-        private TPMTextBox GetTextBoxInFocus()
-        {
-            foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogTPM) && textBox.IsFocused && Equals(textBox.Background, DarkMode.TextBoxSelectedBackgroundColor))
-                {
-                    return textBox;
-                }
-            }
-
-            return null;
-        }
-        
-        private void ButtonClearAllClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (MessageBox.Show("Clear all settings for the Switch Panel?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-                {
-                    ClearAll(true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            TextBoxEnvironmentSet = true;
         }
 
         private void NotifySwitchChanges(HashSet<object> switches)
@@ -420,45 +392,11 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
         
-        private void UpdateKeyBindingProfileSimpleKeyStrokes(TPMTextBox textBox)
-        {
-            try
-            {
-                KeyPressLength keyPressLength;
-                if (!textBox.ContainsKeyPress() || textBox.KeyPress.KeyPressSequence.Count == 0)
-                {
-                    keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
-                }
-                else
-                {
-                    keyPressLength = textBox.KeyPress.GetLengthOfKeyPress();
-                }
-
-                _tpmPanel.AddOrUpdateKeyStrokeBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void UpdateOSCommandBindingsTPM(TPMTextBox textBox)
-        {
-            try
-            {
-                _tpmPanel.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.OSCommandObject);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-        
         private void ShowGraphicConfiguration()
         {
             try
             {
-                if (!UserControlLoaded || !TextBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxEnvironmentSet)
                 {
                     return;
                 }
@@ -492,27 +430,13 @@ namespace DCSFlightpanels.PanelUserControls
                 foreach (var dcsBiosBinding in _tpmPanel.DCSBiosBindings)
                 {
                     var textBox = (TPMTextBox)GetTextBox(dcsBiosBinding.TPMSwitch, dcsBiosBinding.WhenTurnedOn);
-                    if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                    {
-                        textBox.DCSBIOSBinding = dcsBiosBinding;
-                    }
-                    else
-                    {
-                        textBox.DCSBIOSBinding = null;
-                    }
+                    textBox.DCSBIOSBinding = dcsBiosBinding.DCSBIOSInputs.Count > 0 ? dcsBiosBinding : null;
                 }
 
                 foreach (var bipLink in _tpmPanel.BipLinkHashSet)
                 {
                     var textBox = (TPMTextBox)GetTextBox(bipLink.TPMSwitch, bipLink.WhenTurnedOn);
-                    if (bipLink.BIPLights.Count > 0)
-                    {
-                        textBox.BipLink = bipLink;
-                    }
-                    else
-                    {
-                        textBox.BipLink = null;
-                    }
+                    textBox.BipLink = bipLink.BIPLights.Count > 0 ? bipLink : null;
                 }
             }
             catch (Exception ex)
@@ -591,82 +515,7 @@ namespace DCSFlightpanels.PanelUserControls
                 _ => throw new Exception($"Failed to find text box based on key (TPMPanelUserControl) {key} and value {isTurnedOn}")
             };
         }
-
-
-        private void MenuItemAddNullKey_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                textBox.ClearAll();
-                var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
-                if (string.IsNullOrEmpty(vkNull))
-                {
-                    return;
-                }
-
-                var keyPress = new KeyPress(vkNull, KeyPressLength.ThirtyTwoMilliSec);
-                textBox.KeyPress = keyPress;
-                textBox.KeyPress.Description = "VK_NULL";
-                textBox.Text = vkNull;
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                OSCommandWindow osCommandWindow;
-                if (textBox.ContainsOSCommand())
-                {
-                    osCommandWindow = new OSCommandWindow(textBox.OSCommandObject);
-                }
-                else
-                {
-                    osCommandWindow = new OSCommandWindow();
-                }
-
-                osCommandWindow.ShowDialog();
-                if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
-                {
-                    //Clicked OK
-                    if (!osCommandWindow.IsDirty)
-                    {
-                        //User made no changes
-                        return;
-                    }
-
-                    var operatingSystemCommand = osCommandWindow.OSCommandObject;
-                    textBox.OSCommandObject = operatingSystemCommand;
-                    UpdateOSCommandBindingsTPM(textBox);
-                    textBox.Text = operatingSystemCommand.Name;
-                }
-
-                TextBoxLogTPM.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
+        
         private void ButtonClearSettings_OnClick(object sender, RoutedEventArgs e)
         {
             try

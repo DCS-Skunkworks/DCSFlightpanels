@@ -24,11 +24,11 @@
 
     public class SRSRadio
     {
-        internal static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private UdpClient _udpReceiveClient;
         private UdpClient _udpSendClient;
         private Thread _srsListeningThread;
-        private readonly string _srsSendToIPUdp;
+        private readonly string _srsSendToIpUdp;
         private readonly int _srsReceivePortUdp;
         private readonly int _srsSendPortUdp;
         private SRSPlayerRadioInfo _srsPlayerRadioInfo;
@@ -38,14 +38,14 @@
         private readonly object _readSRSDataLockObject = new();
         private IPEndPoint _ipEndPointReceiverUdp;
         private IPEndPoint _ipEndPointSenderUdp;
-        private System.Timers.Timer _udpReceiveThrottleTimer = new(10) { AutoReset = true }; //Throttle UDP receive every 10 ms in case nothing is available
-        private AutoResetEvent _udpReceiveThrottleAutoResetEvent = new(false);
+        private readonly System.Timers.Timer _udpReceiveThrottleTimer = new(10) { AutoReset = true }; //Throttle UDP receive every 10 ms in case nothing is available
+        private readonly AutoResetEvent _udpReceiveThrottleAutoResetEvent = new(false);
         public delegate void SRSDataReceivedEventHandler(object sender);
         public event SRSDataReceivedEventHandler OnSRSDataReceived;
 
         public SRSRadio(int portFrom, string ipAddressTo, int portTo)
         {
-            _srsSendToIPUdp = ipAddressTo;
+            _srsSendToIpUdp = ipAddressTo;
             _srsReceivePortUdp = portFrom;
             _srsSendPortUdp = portTo;
             Startup();
@@ -94,13 +94,13 @@
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(ex, "SRSRadio.ReceiveDataUdp()");
+                        Logger.Error(ex, "SRSRadio.ReceiveDataUdp()");
                     }
                 }
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "SRSRadio.ReceiveDataUdp()");
+                Logger.Error(ex, "SRSRadio.ReceiveDataUdp()");
             }
         }
 
@@ -111,7 +111,7 @@
             {
                 try
                 {
-                    var ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIPUdp), _srsSendPortUdp);
+                    var ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIpUdp), _srsSendPortUdp);
                     var unicodeBytes = Encoding.Unicode.GetBytes(stringData);
                     var asciiBytes = new List<byte>(stringData.Length);
                     asciiBytes.AddRange(Encoding.Convert(Encoding.Unicode, Encoding.ASCII, unicodeBytes));
@@ -119,7 +119,7 @@
                 }
                 catch (Exception ex)
                 {
-                    logger.Error(ex, $"Error sending data to SRS. {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                    Logger.Error(ex, $"Error sending data to SRS. {ex.Message}{Environment.NewLine}{ex.StackTrace}");
                 }
             }
 
@@ -138,7 +138,7 @@
                 _shutdownThread = true;
 
                 _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
-                _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIPUdp), _srsSendPortUdp);
+                _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIpUdp), _srsSendPortUdp);
                 _udpReceiveClient?.Close();
                 _udpReceiveClient = new UdpClient();
                 _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
@@ -166,7 +166,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "SRSRadio.StartupRP()");
+                Logger.Error(ex, "SRSRadio.StartupRP()");
                 if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
                 {
                     _udpReceiveClient.Close();
@@ -384,7 +384,7 @@
             return -1;
         }
 
-        private CurrentSRSRadioMode GetCurrentSrsRadioModeFromRadioId(int radioNumber)
+        private static CurrentSRSRadioMode GetCurrentSrsRadioModeFromRadioId(int radioNumber)
         {
             return radioNumber switch
             {
@@ -399,7 +399,7 @@
             };
         }
 
-        private int GetRadioIdFromCurrentSrsRadioMode(CurrentSRSRadioMode currentSRSRadioMode)
+        private static int GetRadioIdFromCurrentSrsRadioMode(CurrentSRSRadioMode currentSRSRadioMode)
         {
             return currentSRSRadioMode switch
             {
@@ -420,14 +420,14 @@
             //var result = "{ \"Command\": 0,\"RadioId\": " + radioId + ",\"Frequency\": " + value.ToString("0.000", CultureInfo.InvariantCulture) + " }\n";
             //SendDataFunction(result);
 
-            int radioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode);
+            //int radioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode);
             UDPInterfaceCommand udpOrder = new()
             {
                 Command = UDPInterfaceCommand.UDPCommandType.FREQUENCY_DELTA,
                 RadioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode),
                 Frequency = value,
             };
-            string order = JsonConvert.SerializeObject(udpOrder);
+            var order = JsonConvert.SerializeObject(udpOrder);
             SendDataFunction(order);
         }
 
@@ -442,7 +442,7 @@
                 Command = UDPInterfaceCommand.UDPCommandType.TOGGLE_GUARD,
                 RadioId = GetRadioIdFromCurrentSrsRadioMode(currentSRSRadioMode),
             };
-            string order = JsonConvert.SerializeObject(udpOrder);
+            var order = JsonConvert.SerializeObject(udpOrder);
             SendDataFunction(order);
         }
 
@@ -459,19 +459,13 @@
             UDPInterfaceCommand udpOrder = new()
             {
                 RadioId = radioId,
+                //result = "{\"Command\": 3,\"RadioId\":" + radioId + "}\n";
+                //result = "{\"Command\": 4,\"RadioId\":" + radioId + "}\n";
+                Command = increase ? UDPInterfaceCommand.UDPCommandType.CHANNEL_UP :
+                    UDPInterfaceCommand.UDPCommandType.CHANNEL_DOWN
             };
 
-            if (increase)
-            {
-                //result = "{\"Command\": 3,\"RadioId\":" + radioId + "}\n";
-                udpOrder.Command = UDPInterfaceCommand.UDPCommandType.CHANNEL_UP;
-            }
-            else
-            {
-                //result = "{\"Command\": 4,\"RadioId\":" + radioId + "}\n";
-                udpOrder.Command = UDPInterfaceCommand.UDPCommandType.CHANNEL_DOWN;
-            }
-            string order = JsonConvert.SerializeObject(udpOrder);
+            var order = JsonConvert.SerializeObject(udpOrder);
             SendDataFunction(order);
         }
 
@@ -513,7 +507,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "SRSRadio.ShutdownRP()");
+                Logger.Error(ex, "SRSRadio.ShutdownRP()");
             }
         }
     }

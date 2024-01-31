@@ -334,17 +334,13 @@ namespace NonVisuals.Panels.Saitek.Panels
 
         private PanelLEDColor GetManualGearsColorForStatus(ManualGearsStatus status)
         {
-            switch (status)
+            return status switch
             {
-                case ManualGearsStatus.Down:
-                    return _manualLandingGearLedsColorDown;
-                case ManualGearsStatus.Up:
-                    return _manualLandingGearLedsColorUp;
-                case ManualGearsStatus.Trans:
-                    return _manualLandingGearLedsColorTrans;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(status));
-            }
+                ManualGearsStatus.Down => _manualLandingGearLedsColorDown,
+                ManualGearsStatus.Up => _manualLandingGearLedsColorUp,
+                ManualGearsStatus.Trans => _manualLandingGearLedsColorTrans,
+                _ => throw new ArgumentOutOfRangeException(nameof(status))
+            };
         }
 
         private volatile bool _shutdownThread;
@@ -602,14 +598,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 if (keyBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
-                    if (string.IsNullOrEmpty(keyPress))
-                    {
-                        keyBinding.OSKeyPress = null;
-                    }
-                    else
-                    {
-                        keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
-                    }
+                    keyBinding.OSKeyPress = string.IsNullOrEmpty(keyPress) ? null : new KeyPress(keyPress, keyPressLength);
 
                     found = true;
                 }

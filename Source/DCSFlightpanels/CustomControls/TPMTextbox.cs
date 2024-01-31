@@ -43,7 +43,7 @@ namespace DCSFlightpanels.CustomControls
             {
                 if (ContainsKeyPress())
                 {
-                    throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
+                    throw new Exception("Cannot insert DCSBIOSInputs, TextBox already containsKeyPress");
                 }
                 _dcsbiosBindingTPM = (DCSBIOSActionBindingTPM)value;
                 SetTextBoxText(value);
@@ -72,16 +72,13 @@ namespace DCSFlightpanels.CustomControls
 
         protected override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
-            if (_dcsbiosBindingTPM == null)
-            {
-                _dcsbiosBindingTPM = new DCSBIOSActionBindingTPM();
-            }
+            _dcsbiosBindingTPM ??= new DCSBIOSActionBindingTPM();
 
             _dcsbiosBindingTPM.DCSBIOSInputs = dcsBiosInputs;
             _dcsbiosBindingTPM.IsSequenced = isSequenced;
         }
 
-        protected override void ClearDCSBIOSFromBill()
+        protected override void ClearDCSBIOS()
         {
             DCSBIOSBinding = null;
         }

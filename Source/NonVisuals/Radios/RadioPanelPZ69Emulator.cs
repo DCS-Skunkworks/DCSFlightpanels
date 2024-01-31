@@ -439,14 +439,7 @@ namespace NonVisuals.Radios
             {
                 if (keyBinding.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
                 {
-                    if (string.IsNullOrEmpty(keyPress))
-                    {
-                        keyBinding.OSKeyPress = null;
-                    }
-                    else
-                    {
-                        keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
-                    }
+                    keyBinding.OSKeyPress = string.IsNullOrEmpty(keyPress) ? null : new KeyPress(keyPress, keyPressLength);
                     found = true;
                 }
             }
@@ -481,14 +474,7 @@ namespace NonVisuals.Radios
             {
                 if (keyBinding.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
                 {
-                    if (keySequence.Count == 0)
-                    {
-                        keyBinding.OSKeyPress = null;
-                    }
-                    else
-                    {
-                        keyBinding.OSKeyPress = new KeyPress(description, keySequence);
-                    }
+                    keyBinding.OSKeyPress = keySequence.Count == 0 ? null : new KeyPress(description, keySequence);
 
                     found = true;
                     break;

@@ -9,8 +9,6 @@
     using System.Windows.Input;
     using System.Windows.Media.Imaging;
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using MEF;
     using NLog;
@@ -29,10 +27,10 @@
         protected bool UserControlLoaded;
         private StreamDeckPanel _streamDeckPanel;
         private string _lastShownLayer = string.Empty;
-        private BillStreamDeckFace SelectedImageBill => (from image in ButtonImages where image.IsSelected select image.Bill).FirstOrDefault();
-        private StreamDeckPushRotaryCtrl SelectedPushRotaryCtrl => (from pushRottaryCtrl in ButtonPushRotary where pushRottaryCtrl.IsSelected select pushRottaryCtrl).FirstOrDefault();
+        private StreamDeckImage SelectedImage => ButtonImages.FirstOrDefault(o => o.IsSelected);
+        private StreamDeckPushRotaryCtrl SelectedPushRotaryCtrl => (from pushRotaryCtrl in ButtonPushRotary where pushRotaryCtrl.IsSelected select pushRotaryCtrl).FirstOrDefault();
 
-        private JsonSerializerSettings _jsonSettings = new()
+        private readonly JsonSerializerSettings _jsonSettings = new()
         {
             ContractResolver = new ExcludeObsoletePropertiesResolver(),
             TypeNameHandling = TypeNameHandling.All,
@@ -47,22 +45,11 @@
         {
             get
             {
-                if (SelectedImageBill == null)
+                if (SelectedImage == null)
                 {
                     return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
                 }
-                return SelectedImageBill.StreamDeckButtonName;
-            }
-        }
-        private EnumStreamDeckPushRotaryNames SelectedPushRotaryName
-        {
-            get
-            {
-                if (SelectedPushRotaryCtrl == null)
-                {
-                    return EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY;
-                }
-                return SelectedPushRotaryCtrl.StreamDeckPushRotary.StreamDeckPushRotaryName;
+                return SelectedImage.StreamDeckButtonName;
             }
         }
 
@@ -91,11 +78,11 @@
             {
                 var image = (StreamDeckImage)sender;
 
-                SetSelectedButtonUIOnly(image.Bill.StreamDeckButtonName);
+                SetSelectedButtonUIOnly(image.StreamDeckButtonName);
 
                 if (image.IsSelected)
                 {
-                    StreamDeckPanelInstance.SelectedButtonName = image.Bill.Button.StreamDeckButtonName;
+                    StreamDeckPanelInstance.SelectedButtonName = image.Button.StreamDeckButtonName;
                     image.Focus();
                 }
                 else
@@ -178,7 +165,7 @@
 
         protected void SetButtonPicture(StreamDeckButton streamdeckButton)
         {
-            var button = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == streamdeckButton.StreamDeckButtonName);
+            var button = ButtonImages.FirstOrDefault(x => x.StreamDeckButtonName == streamdeckButton.StreamDeckButtonName);
             if (streamdeckButton.Face == null)
             {
                 return; // bug
@@ -226,11 +213,11 @@
 
             foreach (StreamDeckImage buttonImage in ButtonImages)
             {
-                buttonImage.Bill.Clear();
+                buttonImage.Clear();
 
-                var streamDeckButton = StreamDeckPanelInstance.SelectedLayer.GetStreamDeckButton(buttonImage.Bill.StreamDeckButtonName);
+                var streamDeckButton = StreamDeckPanelInstance.SelectedLayer.GetStreamDeckButton(buttonImage.StreamDeckButtonName);
 
-                buttonImage.Bill.Button = streamDeckButton;
+                buttonImage.Button = streamDeckButton;
 
                 if (streamDeckButton.HasConfig)
                 {
@@ -240,29 +227,6 @@
                 {
                     buttonImage.SetDefaultButtonImage();
                 }
-            }
-        }
-
-        private void UnSelect()
-        {
-            try
-            {
-                SetSelectedButtonUIOnly(EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        public void Clear()
-        {
-
-            HideAllDotImages();
-
-            foreach (var buttonImage in ButtonImages)
-            {
-                buttonImage.Bill.Clear();
             }
         }
 
@@ -431,7 +395,7 @@
             DeselectEveryButtonControls();
 
             //Select the one
-            var selectedButton = ButtonImages.FirstOrDefault(x => x.Bill.StreamDeckButtonName == selectedButtonName);
+            var selectedButton = ButtonImages.FirstOrDefault(x => x.StreamDeckButtonName == selectedButtonName);
             if (selectedButton != null)
             {
                 selectedButton.IsSelected = true;
@@ -466,19 +430,17 @@
             IsDirty = false;
         }
 
-        protected void SetImageBills()
+        protected void SetImageEnvironment()
         {
             foreach (var buttonImage in ButtonImages)
             {
-                if (buttonImage.Bill != null)
+                if (buttonImage.StreamDeckButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
                 {
                     continue;
                 }
-                buttonImage.Bill = new BillStreamDeckFace
-                {
-                    StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", string.Empty)),
-                    StreamDeckPanelInstance = _streamDeckPanel
-                };
+
+                buttonImage.StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", string.Empty));
+                buttonImage.StreamDeckPanelInstance = _streamDeckPanel;
                 buttonImage.SetDefaultButtonImage();
             }
 
@@ -565,7 +527,7 @@
                     /*
                      * Only do it when it is a different button selected. Should make more comments...
                      */
-                    if ((_streamDeckPanel.BindingHash == e.BindingHash && SelectedImageBill == null) || (SelectedImageBill != null && SelectedImageBill.Button.GetHash() != e.SelectedButton.GetHash()))
+                    if ((_streamDeckPanel.BindingHash == e.BindingHash && SelectedImage == null) || (SelectedImage != null && SelectedImage.Button.GetHash() != e.SelectedButton.GetHash()))
                     {
                         SetSelectedButtonUIOnly(e.SelectedButton.StreamDeckButtonName);
                     }

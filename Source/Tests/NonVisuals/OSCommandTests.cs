@@ -32,10 +32,7 @@ namespace DCSFPTests.NonVisuals
 
             Assert.Equal(command, osCommand.Command);
             Assert.Equal(argument, osCommand.Arguments);
-            if (string.IsNullOrEmpty(name))
-                Assert.Equal("OS Command", osCommand.Name);
-            else
-                Assert.Equal(name, osCommand.Name);
+            Assert.Equal(string.IsNullOrEmpty(name) ? "OS Command" : name, osCommand.Name);
         }
 
         [Theory]

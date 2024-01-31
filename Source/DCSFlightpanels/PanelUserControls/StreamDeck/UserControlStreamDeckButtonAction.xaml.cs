@@ -9,8 +9,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using System.Windows.Forms;
 
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using Shared;
     using Windows;
@@ -813,15 +811,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
-                OSCommandWindow osCommandWindow;
-                if (textBox.ContainsOSCommand())
-                {
-                    osCommandWindow = new OSCommandWindow(textBox.OSCommandObject);
-                }
-                else
-                {
-                    osCommandWindow = new OSCommandWindow();
-                }
+
+                var osCommandWindow = textBox.ContainsOSCommand() ? new OSCommandWindow(textBox.OSCommandObject) : new OSCommandWindow();
                 osCommandWindow.ShowDialog();
                 if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
                 {

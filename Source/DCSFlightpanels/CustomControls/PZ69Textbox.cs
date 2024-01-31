@@ -38,7 +38,7 @@ namespace DCSFlightpanels.CustomControls
             set { }
         }
         
-        protected override void ClearDCSBIOSFromBill()
+        protected override void ClearDCSBIOS()
         {
         }
 
@@ -49,7 +49,7 @@ namespace DCSFlightpanels.CustomControls
 
         protected override void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced)
         {
-            throw new Exception("BillPZ69 cannot contain DCS-BIOS");
+            throw new Exception("PZ69 cannot contain DCS-BIOS");
         }
 
         public override bool ContainsBIPLink()

@@ -436,14 +436,9 @@ namespace DCSFlightpanels.Windows
                     };
                     ComboBoxInterfaceType.Items.Add(comboBoxItem);
                 }
-                if (dcsbiosInput.SelectedDCSBIOSInterface != null)
-                {
-                    ComboBoxInterfaceType.SelectedValue = dcsbiosInput.SelectedDCSBIOSInterface.Interface.ToString();
-                }
-                else
-                {
-                    ComboBoxInterfaceType.SelectedValue = dcsbiosInput.DCSBIOSInputInterfaces[0].Interface.ToString();
-                }
+                ComboBoxInterfaceType.SelectedValue = dcsbiosInput.SelectedDCSBIOSInterface != null ? 
+                    dcsbiosInput.SelectedDCSBIOSInterface.Interface.ToString() 
+                    : dcsbiosInput.DCSBIOSInputInterfaces[0].Interface.ToString();
             }
             finally
             {

@@ -1,16 +1,15 @@
 ﻿using ClassLibraryCommon;
 using DCS_BIOS;
-using DCSFlightpanels.Bills;
 using NonVisuals.Panels.Saitek;
 using NonVisuals.Panels.StreamDeck.Panels;
 using NonVisuals.Panels.StreamDeck;
 using System.Collections.Generic;
 using System;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace DCSFlightpanels.CustomControls
 {
+    // Used by UserControlStreamDeckButtonAction to select type of action for a button
     public class StreamDeckActionTextBox : TextBoxBaseStreamDeckInput
     {
         private ActionTypeDCSBIOS _dcsbiosBindingStreamDeck;
@@ -26,7 +25,7 @@ namespace DCSFlightpanels.CustomControls
             set
             {
                 _bipLinkStreamDeck = value;
-                TextBox.Background = _bipLinkStreamDeck != null ? Brushes.Bisque : DarkMode.TextBoxUnselectedBackgroundColor;
+                Background = _bipLinkStreamDeck != null ? Brushes.Bisque : DarkMode.TextBoxUnselectedBackgroundColor;
             }
         }
 
@@ -37,16 +36,16 @@ namespace DCSFlightpanels.CustomControls
             {
                 if (ContainsKeyPress())
                 {
-                    throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
+                    throw new Exception("Cannot insert DCSBIOSInputs, TextBox already containsKeyPress");
                 }
                 _dcsbiosBindingStreamDeck = value;
                 if (_dcsbiosBindingStreamDeck != null)
                 {
-                    TextBox.Text = string.IsNullOrEmpty(_dcsbiosBindingStreamDeck.Description) ? "DCS-BIOS" : _dcsbiosBindingStreamDeck.Description;
+                    Text = string.IsNullOrEmpty(_dcsbiosBindingStreamDeck.Description) ? "DCS-BIOS" : _dcsbiosBindingStreamDeck.Description;
                 }
                 else
                 {
-                    TextBox.Text = string.Empty;
+                    Text = string.Empty;
                 }
             }
         }
@@ -64,8 +63,8 @@ namespace DCSFlightpanels.CustomControls
             Key = null;
             _dcsbiosBindingStreamDeck = null;
             _bipLinkStreamDeck = null;
-            TextBox.Background = Brushes.LightSteelBlue;
-            TextBox.Text = string.Empty;
+            Background = Brushes.LightSteelBlue;
+            Text = string.Empty;
         }
 
         public override bool ContainsDCSBIOS()
@@ -93,10 +92,7 @@ namespace DCSFlightpanels.CustomControls
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
         {
-            if (_dcsbiosBindingStreamDeck == null)
-            {
-                _dcsbiosBindingStreamDeck = new ActionTypeDCSBIOS(_streamDeckPanel);
-            }
+            _dcsbiosBindingStreamDeck ??= new ActionTypeDCSBIOS(_streamDeckPanel);
 
             _dcsbiosBindingStreamDeck.DCSBIOSInputs = dcsBiosInputs;
         }

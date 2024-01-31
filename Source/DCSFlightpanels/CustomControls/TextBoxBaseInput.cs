@@ -32,7 +32,7 @@ namespace DCSFlightpanels.CustomControls
         protected abstract bool IsEmptyNoCareBipLink();
         protected abstract void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced);
         public abstract void ClearAll();
-        protected abstract void ClearDCSBIOSFromBill();
+        protected abstract void ClearDCSBIOS();
         public abstract BIPLinkBase BipLink { get; set; }
         protected abstract List<DCSBIOSInput> DCSBIOSInputs { get; }
         public abstract DCSBIOSActionBindingBase DCSBIOSBinding { get; set; }
@@ -67,7 +67,7 @@ namespace DCSFlightpanels.CustomControls
             {
                 if (value != null && ContainsDCSBIOS())
                 {
-                    throw new Exception("Cannot insert KeyPress, Bill already contains DCSBIOSInputs");
+                    throw new Exception("Cannot insert KeyPress, TextBox already containsDCSBIOSInputs");
                 }
                 _keyPress = value;
                 Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : string.Empty;
@@ -178,7 +178,7 @@ namespace DCSFlightpanels.CustomControls
             }
         }
 
-        public void Paste()
+        public new void Paste()
         {
             var dataObject = Clipboard.GetDataObject();
             if (dataObject == null || !dataObject.GetDataPresent("NonVisuals.CopyPackage"))
@@ -493,14 +493,9 @@ namespace DCSFlightpanels.CustomControls
             var supportIndefinite = _saitekPanel.TypeOfPanel != GamingPanelEnum.FarmingPanel;
 
             KeyPressReadingSmallWindow keyPressReadingWindow;
-            if (ContainsKeyPress())
-            {
-                keyPressReadingWindow = new KeyPressReadingSmallWindow(GetKeyPress().LengthOfKeyPress, GetKeyPress().VirtualKeyCodesAsString, supportIndefinite);
-            }
-            else
-            {
-                keyPressReadingWindow = new KeyPressReadingSmallWindow(supportIndefinite);
-            }
+            keyPressReadingWindow = ContainsKeyPress() ? 
+                new KeyPressReadingSmallWindow(GetKeyPress().LengthOfKeyPress, GetKeyPress().VirtualKeyCodesAsString, supportIndefinite) 
+                : new KeyPressReadingSmallWindow(supportIndefinite);
 
             keyPressReadingWindow.ShowDialog();
             if (keyPressReadingWindow.DialogResult.HasValue && keyPressReadingWindow.DialogResult.Value)
@@ -601,15 +596,9 @@ namespace DCSFlightpanels.CustomControls
 
         public void EditDCSBIOS()
         {
-            DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
-            if (ContainsDCSBIOS())
-            {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(Name.Replace("TextBox", string.Empty), DCSBIOSInputs, Text, DCSBIOSBinding.IsSequenced, true);
-            }
-            else
-            {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(Name.Replace("TextBox", string.Empty), null, false, true);
-            }
+            var dcsBIOSInputControlsWindow = ContainsDCSBIOS() ? 
+                new DCSBIOSInputControlsWindow(Name.Replace("TextBox", string.Empty), DCSBIOSInputs, Text, DCSBIOSBinding.IsSequenced, true) 
+                : new DCSBIOSInputControlsWindow(Name.Replace("TextBox", string.Empty), null, false, true);
 
             dcsBIOSInputControlsWindow.ShowDialog();
             if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
@@ -828,7 +817,7 @@ namespace DCSFlightpanels.CustomControls
         {
             Text = string.Empty;
             _saitekPanel.RemoveSwitchFromList(ControlList.DCSBIOS, PanelUIParent.GetSwitch(this));
-            ClearDCSBIOSFromBill();
+            ClearDCSBIOS();
         }
 
         private void DeleteBIPLink()
