@@ -14,7 +14,7 @@
         WindowStartupLocation="CenterScreen"
         Icon="/ctrlref;component/Images/FlightPanels01.png" >
 
-    <Grid Name="MainGrid">
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
             <RowDefinition Height="37" />

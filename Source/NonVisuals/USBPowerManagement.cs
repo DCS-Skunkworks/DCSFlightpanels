@@ -13,8 +13,7 @@ namespace NonVisuals
      */
     public static class USBPowerManagement
     {
-
-        const string SAITEK_VID = "VID_06A3";
+        private const string SAITEK_VID = "VID_06A3";
 
 
         public static string FixSaitekUSBEnhancedPowerManagerIssues()

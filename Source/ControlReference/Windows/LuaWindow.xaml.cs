@@ -15,15 +15,13 @@ namespace ControlReference.Windows
     public partial class LuaWindow
     {
         private bool _isLoaded;
-        private DCSBIOSControl _dcsbiosControl;
-        private string _luaCommand;
+        private readonly string _luaCommand;
 
-        public LuaWindow(DCSBIOSControl dcsbiosControl, string luaCommand)
+        public LuaWindow(string dcsbiosControlId, string luaCommand)
         {
             InitializeComponent();
-            _dcsbiosControl = dcsbiosControl;
             _luaCommand = luaCommand;
-            LabelControl.Content = _dcsbiosControl.Identifier.Replace("_", "__");
+            LabelControl.Content = dcsbiosControlId.Replace("_", "__");
         }
 
         private void SetFormState()
@@ -45,10 +43,12 @@ namespace ControlReference.Windows
                 SetContextMenu(textBlock);
 
                 textBlock.FontFamily = new System.Windows.Media.FontFamily("Consolas");
-                textBlock.Width = Double.NaN;
+                textBlock.Width = double.NaN;
                 
-                var border = new Border();
-                border.Child = textBlock;
+                var border = new Border
+                {
+                    Child = textBlock
+                };
                 StackPanelLuaCommand.Children.Add(border);
                 StackPanelLuaCommand.Children.Add(new Line());
 
@@ -59,7 +59,7 @@ namespace ControlReference.Windows
             }
             catch (Exception exception)
             {
-                System.Windows.MessageBox.Show(exception.Message + Environment.NewLine + exception.StackTrace);
+                MessageBox.Show(exception.Message + Environment.NewLine + exception.StackTrace);
             }
         }
 
@@ -76,9 +76,11 @@ namespace ControlReference.Windows
                 ContextMenu contextMenu = new();
                 contextMenu.Opened += TextBlock_ContextMenuOpened;
                 contextMenu.Tag = textBlock;
-                var menuItemCopy = new MenuItem();
-                menuItemCopy.Tag = textBlock;
-                menuItemCopy.Header = "Copy";
+                var menuItemCopy = new MenuItem
+                {
+                    Tag = textBlock,
+                    Header = "Copy"
+                };
                 menuItemCopy.Click += MenuItemCopy_OnClick;
                 contextMenu.Items.Add(menuItemCopy);
                 textBlock.ContextMenu = contextMenu;
@@ -89,13 +91,14 @@ namespace ControlReference.Windows
             }
         }
 
-        private void TextBlock_ContextMenuOpened(object sender, RoutedEventArgs e)
+        private static void TextBlock_ContextMenuOpened(object sender, RoutedEventArgs e)
         {
             try
             {
                 var contextMenu = (ContextMenu)sender;
                 var textBlock = (TextBlockSelectable)contextMenu.Tag;
-                ((MenuItem)contextMenu.Items[0]).IsEnabled = !string.IsNullOrEmpty(textBlock.SelectedText);
+                
+                ((MenuItem)contextMenu.Items[0])!.IsEnabled = !string.IsNullOrEmpty(textBlock.SelectedText);
             }
             catch (Exception ex)
             {
@@ -116,7 +119,7 @@ namespace ControlReference.Windows
             }
         }
 
-        private void CopyToClipboard(TextBlockSelectable textBlock)
+        private static void CopyToClipboard(TextBlockSelectable textBlock)
         {
             if (string.IsNullOrEmpty(textBlock.SelectedText)) textBlock.SelectAll();
 

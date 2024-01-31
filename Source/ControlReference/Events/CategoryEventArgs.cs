@@ -3,15 +3,15 @@
     public class CategoryEventArgs : System.EventArgs
     {
         public object Sender { get; set; }
-        public string Category { get; set; }
+        public string Category { get; init; }
     }
 
     public class DCSBIOSDataCombinedEventArgs : System.EventArgs
     {
         public object Sender { get; set; }
-        public uint Address { get; set; }
-        public bool IsUIntValue { get; set; }
-        public string StringValue { get; set; }
-        public uint Data { get; set; }
+        public uint Address { get; init; }
+        public bool IsUIntValue { get; init; }
+        public string StringValue { get; init; }
+        public uint Data { get; init; }
     }
 }

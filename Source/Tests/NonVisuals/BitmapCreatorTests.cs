@@ -12,7 +12,7 @@ namespace DCSFPTests.NonVisuals
         [Fact]
         public void CreateEmptyStreamDeckBitmapShouldReturnExpectedBitmap()
         {
-            Bitmap createdBitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(Color.Red);
+            var createdBitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(Color.Red);
             Bitmap expectedBitmap = new(Path.Combine(_testsResourcesFolder, "EmptyRed_StreamdeckBitmap_72x72.bmp"));
             Assert.True(CompareBitmaps(expectedBitmap, createdBitmap));
         }

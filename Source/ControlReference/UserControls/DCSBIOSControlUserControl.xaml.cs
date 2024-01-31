@@ -19,12 +19,12 @@ namespace ControlReference.UserControls
     /// <summary>
     /// Interaction logic for DCSBIOSControlUserControl.xaml
     /// </summary>
-    public partial class DCSBIOSControlUserControl : UserControl, IDisposable, INewDCSBIOSData
+    public partial class DCSBIOSControlUserControl :  IDisposable, INewDCSBIOSData
     {
         private readonly DCSBIOSControl _dcsbiosControl;
-        private ToolTip _copyToolTip = null;
+        private ToolTip _copyToolTip;
         private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new();
-        private bool _isLoaded = false;
+        private bool _isLoaded;
         private readonly string _luaCommand;
 
         public DCSBIOSControlUserControl(DCSBIOSControl dcsbiosControl, string luaCommand)
@@ -123,7 +123,7 @@ namespace ControlReference.UserControls
                 {
                     return;
                 }
-                var percentage = (value * 100) / dcsbiosOutput.MaxValue;
+                var percentage = value * 100 / dcsbiosOutput.MaxValue;
                 Dispatcher?.BeginInvoke((Action)(() => LabelPercentage.Content = $"({percentage}%)"));
             }
             catch (Exception ex)
@@ -150,14 +150,13 @@ namespace ControlReference.UserControls
             {
                 if (SliderSetState.Visibility != Visibility.Visible) return;
 
-                if (Math.Abs(SliderSetState.Value - Convert.ToDouble(value)) > 0.5)
-                {
-                    SliderSetState.ValueChanged -= SliderSetState_OnValueChanged;
-                    SliderSetState.Value = value;
-                    SliderSetState.ValueChanged += SliderSetState_OnValueChanged;
+                if (!(Math.Abs(SliderSetState.Value - Convert.ToDouble(value)) > 0.5)) return;
 
-                    ButtonSetState.Content = value;
-                }
+                SliderSetState.ValueChanged -= SliderSetState_OnValueChanged;
+                SliderSetState.Value = value;
+                SliderSetState.ValueChanged += SliderSetState_OnValueChanged;
+
+                ButtonSetState.Content = value;
             }
             catch (Exception ex)
             {
@@ -290,7 +289,7 @@ namespace ControlReference.UserControls
                     Content = "Value copied.",
                     PlacementTarget = LabelControlId,
                     Placement = PlacementMode.Bottom,
-                    IsOpen = true,
+                    IsOpen = true
                 };
             }
             catch (Exception ex)
@@ -510,9 +509,11 @@ namespace ControlReference.UserControls
         {
             try
             {
-                var window = new ArduinoWindow(_dcsbiosControl);
-                window.MaxHeight = 600;
-                window.SizeToContent = SizeToContent.WidthAndHeight;
+                var window = new ArduinoWindow(_dcsbiosControl)
+                {
+                    MaxHeight = 600,
+                    SizeToContent = SizeToContent.WidthAndHeight
+                };
                 var pos = GetPosition();
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
                 window.Top = pos.Y;
@@ -542,9 +543,11 @@ namespace ControlReference.UserControls
         {
             try
             {
-                var window = new LuaWindow(_dcsbiosControl, _luaCommand);
-                window.MaxHeight = 600;
-                window.SizeToContent = SizeToContent.WidthAndHeight;
+                var window = new LuaWindow(_dcsbiosControl.Identifier, _luaCommand)
+                {
+                    MaxHeight = 600,
+                    SizeToContent = SizeToContent.WidthAndHeight
+                };
                 var pos = GetPosition();
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
                 window.Top = pos.Y;

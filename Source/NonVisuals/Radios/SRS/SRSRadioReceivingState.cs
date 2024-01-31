@@ -6,7 +6,7 @@ namespace NonVisuals.Radios.SRS
     public class SRSRadioReceivingState
     {
         [JsonIgnore]
-        public long LastReceviedAt { get; set; }
+        public long LastReceivedAt { get; set; }
 
         public bool IsSecondary { get; set; }
         public bool IsSimultaneous { get; set; }
@@ -18,7 +18,7 @@ namespace NonVisuals.Radios.SRS
         {
             get
             {
-                return (DateTime.Now.Ticks - LastReceviedAt) < 3500000;
+                return (DateTime.Now.Ticks - LastReceivedAt) < 3500000;
             }
         }
     }

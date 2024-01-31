@@ -11,9 +11,9 @@ namespace NonVisuals.Panels.StreamDeck
 
     public class LockBitmap
     {
-        readonly Bitmap _source;
-        IntPtr _intPtr = IntPtr.Zero;
-        BitmapData _bitmapData;
+        private readonly Bitmap _source;
+        private IntPtr _intPtr = IntPtr.Zero;
+        private BitmapData _bitmapData;
 
         public byte[] Pixels { get; set; }
         public int Depth { get; private set; }

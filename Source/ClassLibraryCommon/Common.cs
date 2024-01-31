@@ -28,7 +28,7 @@ namespace ClassLibraryCommon
     public static class Common
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static int _emulationModesFlag = 0;
+        private static int _emulationModesFlag;
 
 
         /// <summary>
@@ -111,21 +111,16 @@ namespace ClassLibraryCommon
 
         public static string RemoveCurlyBrackets(string s)
         {
-            if (string.IsNullOrEmpty(s))
-            {
-                return null;
-            }
-
-            return s.Replace("{", "").Replace("}", "");
+            return string.IsNullOrEmpty(s) ? null : s.Replace("{", "").Replace("}", "");
         }
 
         public static string RemoveLControl(string keySequence)
         {
             return true switch
             {
-                _ when keySequence.Contains(@"RMENU + LCONTROL") => keySequence.Replace(@"+ LCONTROL", string.Empty),
-                _ when keySequence.Contains(@"LCONTROL + RMENU") => keySequence.Replace(@"LCONTROL +", string.Empty),
-                _ => keySequence,
+                _ when keySequence.Contains("RMENU + LCONTROL") => keySequence.Replace("+ LCONTROL", string.Empty),
+                _ when keySequence.Contains("LCONTROL + RMENU") => keySequence.Replace("LCONTROL +", string.Empty),
+                _ => keySequence
             };
         }
 
@@ -145,18 +140,17 @@ namespace ClassLibraryCommon
             new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckXL),
             new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckXLRev2),
             new GamingPanelSkeleton(GamingPanelVendorEnum.CockpitMaster, GamingPanelEnum.CDU737),
-            new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckPlus),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckPlus)
         };
 
         private static void ValidateEmulationModeFlag()
         {
-            if (IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
+            if (!IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly)) return;
+
+            if (IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled) ||
+                IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled))
             {
-                if (IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled) ||
-                    IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled))
-                {
-                    throw new Exception($"Invalid emulation modes flag : {_emulationModesFlag}");
-                }
+                throw new Exception($"Invalid emulation modes flag : {_emulationModesFlag}");
             }
         }
 
@@ -185,7 +179,7 @@ namespace ClassLibraryCommon
 
         public static void ClearEmulationModesFlag(EmulationMode flagValue)
         {
-            _emulationModesFlag &= ~((int)flagValue);
+            _emulationModesFlag &= ~(int)flagValue;
         }
 
         public static void ResetEmulationModesFlag()
@@ -222,7 +216,7 @@ namespace ClassLibraryCommon
             var md5 = MD5.Create();
 
             // Convert the input string to a byte array and compute the hash.
-            byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
+            var data = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
 
             // Create a new Stringbuilder to collect the bytes
             // and create a string.
@@ -230,9 +224,9 @@ namespace ClassLibraryCommon
 
             // Loop through each byte of the hashed data 
             // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
+            foreach (var t in data)
             {
-                sBuilder.Append(data[i].ToString("x2"));
+                sBuilder.Append(t.ToString("x2"));
             }
 
             // Return the hexadecimal string.
@@ -281,20 +275,19 @@ namespace ClassLibraryCommon
 
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject dependencyObject) where T : DependencyObject
         {
-            if (dependencyObject != null)
-            {
-                for (var i = 0; i < VisualTreeHelper.GetChildrenCount(dependencyObject); i++)
-                {
-                    var child = VisualTreeHelper.GetChild(dependencyObject, i);
-                    if (child is T o)
-                    {
-                        yield return o;
-                    }
+            if (dependencyObject == null) yield break;
 
-                    foreach (var childOfChild in FindVisualChildren<T>(child))
-                    {
-                        yield return childOfChild;
-                    }
+            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(dependencyObject); i++)
+            {
+                var child = VisualTreeHelper.GetChild(dependencyObject, i);
+                if (child is T o)
+                {
+                    yield return o;
+                }
+
+                foreach (var childOfChild in FindVisualChildren<T>(child))
+                {
+                    yield return childOfChild;
                 }
             }
         }
@@ -304,24 +297,19 @@ namespace ClassLibraryCommon
         {
             if (child == null)
             {
-                return (null);
-            }
-            DependencyObject parentObj = VisualTreeHelper.GetParent(child);
-
-            //we've reached the end of the tree
-            if (parentObj == null)
-            {
                 return null;
             }
+            var parentObj = VisualTreeHelper.GetParent(child);
 
-            // check if the parent matches the type we are requested
-            if (parentObj is T parent)
+            return parentObj switch
             {
-                return parent;
-            }
-
-            // here, To find the next parent in the tree. we are using recursion until we found the requested type or reached to the end of tree.
-            return FindVisualParent<T>(parentObj);
+                //we've reached the end of the tree
+                null => null,
+                // check if the parent matches the type we are requested
+                T parent => parent,
+                // here, To find the next parent in the tree. we are using recursion until we found the requested type or reached to the end of tree.
+                _ => FindVisualParent<T>(parentObj)
+            };
         }
 
         //^[A-Za-z0-9 . \t]*(MouseEnter){1}(\s\+\=)\s*

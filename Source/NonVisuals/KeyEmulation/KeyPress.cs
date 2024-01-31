@@ -159,7 +159,7 @@ namespace NonVisuals.KeyEmulation
                         return;
                     }
 
-                    if (Common.APIModeUsed == APIModeEnum.keybd_event)
+                    if (Common.APIModeUsed == APIModeEnum.KeybdEvent)
                     {
                         KeyBdEvenAPI.Press(keyPressInfo.LengthOfBreak, keyPressInfo.VirtualKeyCodes.ToArray(), keyPressInfo.LengthOfKeyPress, _cancellationTokenSource.Token,outerCancellationToken, SLEEP_VALUE);
                         // Common.DebugP("KeyBdEventAPI result code -----------------------------------> " + Marshal.GetLastWin32Error());
@@ -223,7 +223,7 @@ namespace NonVisuals.KeyEmulation
             }
 
             // Insert 1. or 2. indicating API used
-            result.Insert(0, Common.APIModeUsed == APIModeEnum.keybd_event ? "1. " : "2. ");
+            result.Insert(0, Common.APIModeUsed == APIModeEnum.KeybdEvent ? "1. " : "2. ");
             return result.ToString();
         }
 

@@ -379,7 +379,7 @@
                 Left = Settings.Default.MainWindowLeft;
             }
 
-            Common.APIModeUsed = Settings.Default.APIMode == 0 ? APIModeEnum.keybd_event : APIModeEnum.SendInput;
+            Common.APIModeUsed = Settings.Default.APIMode == 0 ? APIModeEnum.KeybdEvent : APIModeEnum.SendInput;
         }
 
         private void MainWindowLocationChanged(object sender, EventArgs e)

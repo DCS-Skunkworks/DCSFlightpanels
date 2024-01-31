@@ -9,7 +9,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
     public enum PZ70LCDPosition
     {
         UpperLCD,
-        LowerLCD,
+        LowerLCD
     }
 
     [Serializable]

@@ -28,19 +28,19 @@ namespace ControlReference
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IDisposable, IDcsBiosConnectionListener, ICategoryChange, IDcsBiosDataListener, IDCSBIOSStringListener
+    public partial class MainWindow : IDisposable, IDcsBiosConnectionListener, ICategoryChange, IDcsBiosDataListener, IDCSBIOSStringListener
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private IEnumerable<DCSBIOSControl> _loadedControls = null;
+        private IEnumerable<DCSBIOSControl> _loadedControls;
         private readonly List<DCSBIOSOutput> _loadedDCSBIOSOutputs = new();
         private readonly List<DCSBIOSControlUserControl> _dcsbiosUIControlPanels = new();
         private DCSBIOS _dcsBios;
-        private bool _formLoaded = false;
+        private bool _formLoaded;
         private const int MAX_CONTROLS_ON_PAGE = 70;
         private DCSBIOSOutput _dcsbiosVersionOutput;
         private bool _checkDCSBIOSVersionOnce;
         private List<DCSBIOSControl> _metaControls;
-        private bool _changeOfModuleActive = false;
+        private bool _changeOfModuleActive;
         private bool _showLastProfile = true;
 
         public MainWindow()
@@ -63,24 +63,23 @@ namespace ControlReference
         #region Dispose
         protected virtual void Dispose(bool disposing)
         {
-            if (!_hasBeenCalledAlready)
+            if (_hasBeenCalledAlready) return;
+
+            if (disposing)
             {
-                if (disposing)
-                {
-                    //  dispose managed state (managed objects).
-                    _dcsBios?.Shutdown();
-                    _dcsBios?.Dispose();
-                    BIOSEventHandler.DetachConnectionListener(this);
-                    REFEventHandler.DetachCategoryListener(this);
-                    BIOSEventHandler.DetachDataListener(this);
-                    BIOSEventHandler.DetachStringListener(this);
-                }
-
-                //  free unmanaged resources (unmanaged objects) and override a finalizer below.
-
-                //  set large fields to null.
-                _hasBeenCalledAlready = true;
+                //  dispose managed state (managed objects).
+                _dcsBios?.Shutdown();
+                _dcsBios?.Dispose();
+                BIOSEventHandler.DetachConnectionListener(this);
+                REFEventHandler.DetachCategoryListener(this);
+                BIOSEventHandler.DetachDataListener(this);
+                BIOSEventHandler.DetachStringListener(this);
             }
+
+            //  free unmanaged resources (unmanaged objects) and override a finalizer below.
+
+            //  set large fields to null.
+            _hasBeenCalledAlready = true;
         }
 
         // This code added to correctly implement the disposable pattern.
@@ -150,11 +149,13 @@ namespace ControlReference
 
                 foreach (var dcsbiosOutput in _loadedDCSBIOSOutputs)
                 {
-                    if (dcsbiosOutput.Address == e.Address && dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.IntegerType)
+                    if (dcsbiosOutput.Address != e.Address || dcsbiosOutput.DCSBiosOutputType != DCSBiosOutputType.IntegerType)
                     {
-                        dcsbiosOutput.GetUIntValue(e.Data); // this is only to save the value inside the output for the export function
-                        REFEventHandler.NewDCSBIOSUIntData(this, e.Address, e.Data);
+                        continue;
                     }
+
+                    dcsbiosOutput.GetUIntValue(e.Data); // this is only to save the value inside the output for the export function
+                    REFEventHandler.NewDCSBIOSUIntData(this, e.Address, e.Data);
                 }
             }
             catch (Exception ex)
@@ -176,23 +177,27 @@ namespace ControlReference
 
                 foreach (var dcsbiosOutput in _loadedDCSBIOSOutputs)
                 {
-                    if (dcsbiosOutput.Address == e.Address && dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
+                    if (dcsbiosOutput.Address != e.Address || dcsbiosOutput.DCSBiosOutputType != DCSBiosOutputType.StringType)
                     {
-                        dcsbiosOutput.LastStringValue = e.StringData;
-                        REFEventHandler.NewDCSBIOSStringData(this, e.Address, e.StringData);
+                        continue;
                     }
+
+                    dcsbiosOutput.LastStringValue = e.StringData;
+                    REFEventHandler.NewDCSBIOSStringData(this, e.Address, e.StringData);
                 }
 
-                if (_checkDCSBIOSVersionOnce && _dcsbiosVersionOutput.Address == e.Address)
+                if (!_checkDCSBIOSVersionOnce || _dcsbiosVersionOutput.Address != e.Address)
                 {
-                    Dispatcher?.Invoke(() =>
-                    {
-                        LabelDCSBIOSVersion.Visibility = Visibility.Visible;
-                        LabelDCSBIOSVersion.Text = "DCS-BIOS Version : " + e.StringData;
-                    });
-
-                    _checkDCSBIOSVersionOnce = true;
+                    return;
                 }
+
+                Dispatcher?.Invoke(() =>
+                {
+                    LabelDCSBIOSVersion.Visibility = Visibility.Visible;
+                    LabelDCSBIOSVersion.Text = "DCS-BIOS Version : " + e.StringData;
+                });
+
+                _checkDCSBIOSVersionOnce = true;
             }
             catch (Exception ex)
             {
@@ -237,16 +242,13 @@ namespace ControlReference
             try
             {
 
-                var settingsWindow = new SettingsWindow(0);
-                if (settingsWindow.ShowDialog() == true)
-                {
-                    if (settingsWindow.DCSBIOSChanged)
-                    {
-                        DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                        DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, false);
-                        UpdateComboBoxModules();
-                    }
-                }
+                var settingsWindow = new SettingsWindow();
+                if (settingsWindow.ShowDialog() != true) return;
+                if (!settingsWindow.DCSBIOSChanged) return;
+
+                DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                DCSAircraft.FillModulesListFromDcsBios(Settings.Default.DCSBiosJSONLocation, false);
+                UpdateComboBoxModules();
             }
             finally
             {
@@ -256,14 +258,11 @@ namespace ControlReference
 
         private bool CheckDCSBIOSStatus()
         {
-            if (!DCSAircraft.Modules.Any())
-            {
-                MessageBox.Show(this,
-                    "No DCS-BIOS modules found. Make sure DCS-BIOS is correctly installed and that the path is set in Settings.", "DCS-BIOS Not Found", MessageBoxButton.OK);
-                return false;
-            }
+            if (DCSAircraft.Modules.Any()) return true;
 
-            return true;
+            MessageBox.Show(this,
+                "No DCS-BIOS modules found. Make sure DCS-BIOS is correctly installed and that the path is set in Settings.", "DCS-BIOS Not Found", MessageBoxButton.OK);
+            return false;
         }
 
         private void UpdateComboBoxModules()
@@ -281,11 +280,10 @@ namespace ControlReference
             {
                 foreach (var module in DCSAircraft.Modules)
                 {
-                    if (module.ID == Settings.Default.LastProfileID)
-                    {
-                        ComboBoxModules.SelectedIndex = DCSAircraft.Modules.IndexOf(module);
-                        found = true;
-                    }
+                    if (module.ID != Settings.Default.LastProfileID) continue;
+
+                    ComboBoxModules.SelectedIndex = DCSAircraft.Modules.IndexOf(module);
+                    found = true;
                 }
                 _showLastProfile = false;
             }
@@ -516,12 +514,12 @@ namespace ControlReference
 
             if (!string.IsNullOrEmpty(TextBoxSearchControl.Text))
             {
-                ButtonSearchControls.Source = new BitmapImage(new Uri(@"/ctrlref;component/Images/clear_search_result.png", UriKind.Relative));
+                ButtonSearchControls.Source = new BitmapImage(new Uri("/ctrlref;component/Images/clear_search_result.png", UriKind.Relative));
                 ButtonSearchControls.Tag = "Clear";
             }
             else
             {
-                ButtonSearchControls.Source = new BitmapImage(new Uri(@"/ctrlref;component/Images/search_controls.png", UriKind.Relative));
+                ButtonSearchControls.Source = new BitmapImage(new Uri("/ctrlref;component/Images/search_controls.png", UriKind.Relative));
                 ButtonSearchControls.Tag = "Search";
             }
         }
@@ -533,12 +531,12 @@ namespace ControlReference
                 var mode = (string)ButtonSearchControls.Tag;
                 if (mode == "Search")
                 {
-                    ButtonSearchControls.Source = new BitmapImage(new Uri(@"/ctrlref;component/Images/clear_search_result.png", UriKind.Relative));
+                    ButtonSearchControls.Source = new BitmapImage(new Uri("/ctrlref;component/Images/clear_search_result.png", UriKind.Relative));
                     ButtonSearchControls.Tag = "Clear";
                 }
                 else
                 {
-                    ButtonSearchControls.Source = new BitmapImage(new Uri(@"/ctrlref;component/Images/search_controls.png", UriKind.Relative));
+                    ButtonSearchControls.Source = new BitmapImage(new Uri("/ctrlref;component/Images/search_controls.png", UriKind.Relative));
                     ButtonSearchControls.Tag = "Search";
                     TextBoxSearchControl.Text = "";
                 }
@@ -572,12 +570,11 @@ namespace ControlReference
                     return;
                 }
 
-                if (Top > 0 && Left > 0)
-                {
-                    Settings.Default.MainWindowTop = Top;
-                    Settings.Default.MainWindowLeft = Left;
-                    Settings.Default.Save();
-                }
+                if (!(Top > 0) || !(Left > 0)) return;
+
+                Settings.Default.MainWindowTop = Top;
+                Settings.Default.MainWindowLeft = Left;
+                Settings.Default.Save();
             }
             catch (Exception ex)
             {
@@ -594,12 +591,11 @@ namespace ControlReference
                     return;
                 }
 
-                if (WindowState != WindowState.Minimized && WindowState != WindowState.Maximized)
-                {
-                    Settings.Default.MainWindowHeight = Height;
-                    Settings.Default.MainWindowWidth = Width;
-                    Settings.Default.Save();
-                }
+                if (WindowState == WindowState.Minimized || WindowState == WindowState.Maximized) return;
+
+                Settings.Default.MainWindowHeight = Height;
+                Settings.Default.MainWindowWidth = Width;
+                Settings.Default.Save();
             }
             catch (Exception ex)
             {
@@ -607,7 +603,7 @@ namespace ControlReference
             }
         }
 
-        private void TextBoxSearchControl_OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void TextBoxSearchControl_OnKeyDown(object sender, KeyEventArgs e)
         {
             try
             {
@@ -658,7 +654,7 @@ namespace ControlReference
         {
             try
             {
-                string errorLogFilePath = GetLogFilePathByTarget(targetName);
+                var errorLogFilePath = GetLogFilePathByTarget(targetName);
                 if (errorLogFilePath == null || !File.Exists(errorLogFilePath))
                 {
                     MessageBox.Show($"No log file found {errorLogFilePath}", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -686,7 +682,7 @@ namespace ControlReference
             string fileName;
             if (LogManager.Configuration != null && LogManager.Configuration.ConfiguredNamedTargets.Count != 0)
             {
-                Target target = LogManager.Configuration.FindTargetByName(targetName);
+                var target = LogManager.Configuration.FindTargetByName(targetName);
                 if (target == null)
                 {
                     throw new Exception($"Could not find log with a target named: [{targetName}]. See NLog.config for configured targets");
@@ -732,7 +728,7 @@ namespace ControlReference
                     {
                         result.AppendLine(string.Format(format, dcsbiosOutput.ControlId, dcsbiosOutput.LastUIntValue));
                     }
-                    if (dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
+                    else if (dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.StringType)
                     {
                         result.AppendLine(string.Format(format, dcsbiosOutput.ControlId, dcsbiosOutput.LastStringValue));
                     }

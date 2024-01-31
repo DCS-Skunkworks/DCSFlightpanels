@@ -16,7 +16,7 @@
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly object Lock = new();
-        private static List<DCSAircraft> ModulesList = new();
+        private static List<DCSAircraft> _modulesList = new();
 
         public static DCSAircraft SelectedAircraft { get; set; }
 
@@ -43,7 +43,7 @@
 
         public bool IsMetaModule
         {
-            get =>  JSONFilename.Contains("MetadataEnd") || JSONFilename.Contains("MetadataStart") || JSONFilename.Contains("CommonData");
+            get => JSONFilename.Contains("MetadataEnd") || JSONFilename.Contains("MetadataStart") || JSONFilename.Contains("CommonData");
         }
 
         /// <summary>
@@ -51,7 +51,7 @@
         /// </summary>
         public string ModuleLuaName
         {
-            get => JSONFilename.Replace(".json", "").Replace("-","_").Replace(" ", "_");
+            get => JSONFilename.Replace(".json", "").Replace("-", "_").Replace(" ", "_");
         }
 
         public string DCSName
@@ -76,7 +76,7 @@
             {
                 lock (Lock)
                 {
-                    return ModulesList;
+                    return _modulesList;
                 }
             }
         }
@@ -87,7 +87,7 @@
             {
                 lock (Lock)
                 {
-                    return ModulesList.Count - 3 > 0; // Three modules are not DCS-BIOS
+                    return _modulesList.Count - 3 > 0; // Three modules are not DCS-BIOS
                 }
             }
         }
@@ -98,7 +98,7 @@
             {
                 lock (Lock)
                 {
-                    return ModulesList.Count - 3; // Three modules are not DCS-BIOS
+                    return _modulesList.Count - 3; // Three modules are not DCS-BIOS
                 }
             }
         }
@@ -107,21 +107,21 @@
         {
             lock (Lock)
             {
-                if (!ModulesList.Exists(o => o.ID == 1))
+                if (!_modulesList.Exists(o => o.ID == 1))
                 {
                     var module = new DCSAircraft(1, "NoFrameLoadedYet", "NOFRAMELOADEDYET");
-                    ModulesList.Add(module);
+                    _modulesList.Add(module);
                 }
 
-                if (!ModulesList.Exists(o => o.ID == 2))
+                if (!_modulesList.Exists(o => o.ID == 2))
                 {
                     var module = new DCSAircraft(2, "Key Emulation", "KEYEMULATOR");
-                    ModulesList.Add(module);
+                    _modulesList.Add(module);
                 }
-                if (!ModulesList.Exists(o => o.ID == 3))
+                if (!_modulesList.Exists(o => o.ID == 3))
                 {
                     var module = new DCSAircraft(3, "Key Emulation with SRS support", "KEYEMULATOR_SRS");
-                    ModulesList.Add(module);
+                    _modulesList.Add(module);
                 }
             }
         }
@@ -130,7 +130,7 @@
         {
             lock (Lock)
             {
-                ModulesList.Clear();
+                _modulesList.Clear();
                 if (loadInternalModules)
                 {
                     AddInternalModules();
@@ -143,7 +143,7 @@
                 LogErrorAndThrowException($"Failed to find {dcsbiosConfigFile} in base directory.");
                 return;
             }
-            
+
             var result = Common.CheckJSONDirectory(dcsbiosJsonFolder);
             if (result.Item1 == false && result.Item2 == false)
             {
@@ -157,33 +157,35 @@
 
             lock (Lock)
             {
-                ModulesList.Add(new DCSAircraft(500, "MetadataEnd", "MetadataEnd.json"));
-                ModulesList.Add(new DCSAircraft(501, "MetadataStart", "MetadataStart.json"));
-                ModulesList.Add(new DCSAircraft(502, "CommonData", "CommonData.json"));
+                _modulesList.Add(new DCSAircraft(500, "MetadataEnd", "MetadataEnd.json"));
+                _modulesList.Add(new DCSAircraft(501, "MetadataStart", "MetadataStart.json"));
+                _modulesList.Add(new DCSAircraft(502, "CommonData", "CommonData.json"));
             }
 
             // A-10C|5|A-10C Thunderbolt/II
             foreach (var s in stringArray)
             {
-                if (!s.StartsWith("--") && s.Contains('|'))
+                if (s.StartsWith("--") || !s.Contains('|'))
                 {
-                    var parts = s.Split(new [] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                    continue;
+                }
+
+                var parts = s.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
 
 
-                    var json = parts[0]+ ".json";
-                    var id = int.Parse(parts[1]);
-                    var properName = parts[2];
+                var json = parts[0] + ".json";
+                var id = int.Parse(parts[1]);
+                var properName = parts[2];
 
-                    lock (Lock)
-                    {
-                        ModulesList.Add(new DCSAircraft(id, properName, json));
-                    }
+                lock (Lock)
+                {
+                    _modulesList.Add(new DCSAircraft(id, properName, json));
                 }
             }
 
             lock (Lock)
             {
-                ModulesList = ModulesList.OrderBy(o => o.Description).ToList();
+                _modulesList = _modulesList.OrderBy(o => o.Description).ToList();
             }
         }
 
@@ -527,11 +529,9 @@
             {
                 return Modules.Find(o => o.ID == moduleNumber);
             }
-            else
-            {
-                LogErrorAndThrowException("Failed to determine  profile ID (null) in your bindings file.");
-                return null; //just to avoid compilation problem "error CS0161 not all code paths return a value"
-            }
+
+            LogErrorAndThrowException("Failed to determine  profile ID (null) in your bindings file.");
+            return null; //just to avoid compilation problem "error CS0161 not all code paths return a value"
         }
     }
 }
