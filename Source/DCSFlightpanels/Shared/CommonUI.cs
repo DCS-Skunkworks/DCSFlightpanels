@@ -14,7 +14,7 @@ namespace DCSFlightpanels.Shared
             // Defaults to true so only if "is dirty" and "do not discard" will result change
             if (isDirty)
             {
-                return(MessageBox.Show(question, "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes);
+                return MessageBox.Show(question, "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
             }
             return true;
         }

@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    interface IFontFace
+    internal interface IFontFace
     {
         Font TextFont { get; set; }
         Color FontColor { get; set; }

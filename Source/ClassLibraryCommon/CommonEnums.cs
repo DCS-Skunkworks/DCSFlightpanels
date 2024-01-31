@@ -28,7 +28,7 @@ namespace ClassLibraryCommon
     /// </summary>
     public enum APIModeEnum
     {
-        keybd_event = 0,
+        KeybdEvent = 0,
         SendInput = 1
     }
 
@@ -40,7 +40,7 @@ namespace ClassLibraryCommon
         Saitek = 0x6A3,
         MadCatz = 0x0738,
         Elgato = 0xFD9,
-        CockpitMaster = 0x0483,
+        CockpitMaster = 0x0483
     }
 
     /// <summary>

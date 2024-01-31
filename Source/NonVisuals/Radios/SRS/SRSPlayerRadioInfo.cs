@@ -232,7 +232,7 @@ namespace NonVisuals.Radios.SRS
                             receivingState = new SRSRadioReceivingState
                             {
                                 IsSecondary = false,
-                                LastReceviedAt = DateTime.Now.Ticks,
+                                LastReceivedAt = DateTime.Now.Ticks,
                                 ReceivedOn = i
                             };
                             decryptable = true;
@@ -261,7 +261,7 @@ namespace NonVisuals.Radios.SRS
                             receivingState = new SRSRadioReceivingState
                             {
                                 IsSecondary = false,
-                                LastReceviedAt = DateTime.Now.Ticks,
+                                LastReceivedAt = DateTime.Now.Ticks,
                                 ReceivedOn = i
                             };
                             decryptable = true;
@@ -272,7 +272,7 @@ namespace NonVisuals.Radios.SRS
                         bestMatchingRadioState = new SRSRadioReceivingState
                         {
                             IsSecondary = false,
-                            LastReceviedAt = DateTime.Now.Ticks,
+                            LastReceivedAt = DateTime.Now.Ticks,
                             ReceivedOn = i
                         };
                         bestMatchingDecryptable = isDecryptable;
@@ -285,7 +285,7 @@ namespace NonVisuals.Radios.SRS
                             receivingState = new SRSRadioReceivingState
                             {
                                 IsSecondary = true,
-                                LastReceviedAt = DateTime.Now.Ticks,
+                                LastReceivedAt = DateTime.Now.Ticks,
                                 ReceivedOn = i
                             };
                             decryptable = true;
@@ -296,7 +296,7 @@ namespace NonVisuals.Radios.SRS
                         bestMatchingRadioState = new SRSRadioReceivingState
                         {
                             IsSecondary = true,
-                            LastReceviedAt = DateTime.Now.Ticks,
+                            LastReceivedAt = DateTime.Now.Ticks,
                             ReceivedOn = i
                         };
                     }

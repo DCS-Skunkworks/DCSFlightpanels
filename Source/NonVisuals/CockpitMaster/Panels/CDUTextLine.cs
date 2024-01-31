@@ -5,7 +5,7 @@ namespace NonVisuals.CockpitMaster.Panels
 {
     public class CDUTextLine
     {
-        const int MAX_CHAR = 24;
+        private const int MAX_CHAR = 24;
 
         private DisplayedChar[] _displayedChars = new DisplayedChar[MAX_CHAR];
 

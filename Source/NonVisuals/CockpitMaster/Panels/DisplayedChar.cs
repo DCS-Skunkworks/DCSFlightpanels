@@ -19,7 +19,7 @@
     public enum Modifier
     {
         Big = 1<<6,
-        Inverted = 1 << 7,
+        Inverted = 1 << 7
     }
     public enum CDUCharset
     {

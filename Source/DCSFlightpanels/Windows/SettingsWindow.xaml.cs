@@ -219,7 +219,7 @@ namespace DCSFlightpanels.Windows
                     if (RadioButtonKeyBd.IsChecked == true)
                     {
                         Settings.Default.APIMode = 0;
-                        Common.APIModeUsed = APIModeEnum.keybd_event;
+                        Common.APIModeUsed = APIModeEnum.KeybdEvent;
                         Settings.Default.Save();
                     }
                     if (RadioButtonSendInput.IsChecked == true)

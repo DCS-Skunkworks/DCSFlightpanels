@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace ClassLibraryCommon.CustomControls
@@ -9,7 +8,7 @@ namespace ClassLibraryCommon.CustomControls
     /// <summary>
     /// Interaction logic for UserControlSpinningWheel.xaml
     /// </summary>
-    public partial class UserControlSpinningWheel : UserControl, IDisposable
+    public partial class UserControlSpinningWheel : IDisposable
     {
         public static readonly DependencyProperty DoSpinProperty = DependencyProperty.Register(
             nameof(DoSpin), typeof(bool), typeof(UserControlSpinningWheel), new PropertyMetadata(default(bool)));
@@ -31,7 +30,7 @@ namespace ClassLibraryCommon.CustomControls
 
             if (DarkMode.DarkModeEnabled)
             {
-                ImageConnected.Source = new BitmapImage(new Uri(@"/ClassLibraryCommon;component/Images/gear-image-darkmode.png", UriKind.Relative));
+                ImageConnected.Source = new BitmapImage(new Uri("/ClassLibraryCommon;component/Images/gear-image-darkmode.png", UriKind.Relative));
             }
             _stopGearTimer.Elapsed += TimerStopRotation;
         }

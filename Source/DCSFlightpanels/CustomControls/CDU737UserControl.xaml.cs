@@ -13,7 +13,7 @@
         public void DisplayLines(string[] lines, int number)
         {
             CDULines.Text = "";
-            for (int i = 0; i < number; i++)
+            for (var i = 0; i < number; i++)
             {
                 CDULines.Text += lines[i] + '\n';
             }

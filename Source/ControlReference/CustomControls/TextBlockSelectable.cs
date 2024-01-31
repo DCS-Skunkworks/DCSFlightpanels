@@ -9,16 +9,16 @@ namespace ControlReference.CustomControls
 {
     internal class TextBlockSelectable : TextBlock
     {
-        TextPointer _startSelectPosition;
-        TextPointer _endSelectPosition;
+        private TextPointer _startSelectPosition;
+        private TextPointer _endSelectPosition;
         public string SelectedText = "";
 
         public delegate void TextSelectedHandler(string selectedText);
         public event TextSelectedHandler TextSelected;
         private TextRange _selectedTextRange;
-        
-        public static Color SelectedBackgroundColor { get; set; } = Color.FromRgb(187, 191, 189);
-        public static Color TextBackgroundColor { get; set; } = Colors.WhiteSmoke;
+
+        private static Color SelectedBackgroundColor { get; set; } = Color.FromRgb(187, 191, 189);
+        private static Color TextBackgroundColor { get; set; } = Colors.WhiteSmoke;
         
 
         public TextBlockSelectable(string text)

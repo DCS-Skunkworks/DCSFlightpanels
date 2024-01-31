@@ -17,7 +17,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                if (String.IsNullOrEmpty(textBoxSearch.Text))
+                if (string.IsNullOrEmpty(textBoxSearch.Text))
                 {
                     // Create an ImageBrush.
                     var textImageBrush = new ImageBrush
