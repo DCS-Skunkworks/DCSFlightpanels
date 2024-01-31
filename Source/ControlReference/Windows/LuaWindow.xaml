@@ -25,7 +25,7 @@
         </DockPanel>
 
         <ScrollViewer Grid.Row="1" Grid.Column="0">
-            <StackPanel Name="StackPanelLuaCommand" Height="Auto" Width="Auto" Grid.Row="1" Grid.Column="0" Margin="10,5,10,5">
+            <StackPanel Name="StackPanelLuaCommand" Height="Auto" Width="Auto" Margin="10,5,10,5">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="Margin" Value="0,10,0,0" />
@@ -42,7 +42,6 @@
 
             </StackPanel>
         </ScrollViewer>
-        <DockPanel Grid.Row="2" Grid.Column="0" Background="White">
-        </DockPanel>
+        <DockPanel Grid.Row="2" Grid.Column="0" Background="White" />
     </Grid>
 </Window>

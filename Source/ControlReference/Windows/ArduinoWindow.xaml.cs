@@ -28,8 +28,7 @@ namespace ControlReference.Windows
         }
 
         private void SetFormState()
-        {
-        }
+        { }
 
         private void ArduinoWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -51,13 +50,15 @@ namespace ControlReference.Windows
                     SetContextMenu(textBlock);
 
                     textBlock.FontFamily = new System.Windows.Media.FontFamily("Consolas");
-                    textBlock.Width = Double.NaN;
+                    textBlock.Width = double.NaN;
                     if (str == "Input" || str == "Output")
                     {
                         textBlock.FontWeight = FontWeights.Bold;
                     }
-                    var border = new Border();
-                    border.Child = textBlock;
+                    var border = new Border
+                    {
+                        Child = textBlock
+                    };
                     StackPanelArduinoInfo.Children.Add(border);
                     StackPanelArduinoInfo.Children.Add(new Line());
                 }
@@ -69,18 +70,18 @@ namespace ControlReference.Windows
             }
             catch (Exception exception)
             {
-                System.Windows.MessageBox.Show(exception.Message + Environment.NewLine + exception.StackTrace);
+                MessageBox.Show(exception.Message + Environment.NewLine + exception.StackTrace);
             }
         }
         
-        private void ArduinoWindow_OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void ArduinoWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
             
         }
 
 
 
-        private void TextBlock_OnMouseEnter(object sender, MouseEventArgs e)
+        private static void TextBlock_OnMouseEnter(object sender, MouseEventArgs e)
         {
             try
             {
@@ -92,7 +93,7 @@ namespace ControlReference.Windows
             }
         }
 
-        private void TextBlock_OnMouseLeave(object sender, MouseEventArgs e)
+        private static void TextBlock_OnMouseLeave(object sender, MouseEventArgs e)
         {
             try
             {
@@ -113,9 +114,11 @@ namespace ControlReference.Windows
                 ContextMenu contextMenu = new();
                 contextMenu.Opened += TextBlock_ContextMenuOpened;
                 contextMenu.Tag = textBlock;
-                var menuItemCopy = new MenuItem();
-                menuItemCopy.Tag = textBlock;
-                menuItemCopy.Header = "Copy";
+                var menuItemCopy = new MenuItem
+                {
+                    Tag = textBlock,
+                    Header = "Copy"
+                };
                 menuItemCopy.Click += MenuItemCopy_OnClick;
                 contextMenu.Items.Add(menuItemCopy);
                 textBlock.ContextMenu = contextMenu;
@@ -126,13 +129,13 @@ namespace ControlReference.Windows
             }
         }
         
-        private void TextBlock_ContextMenuOpened(object sender, RoutedEventArgs e)
+        private static void TextBlock_ContextMenuOpened(object sender, RoutedEventArgs e)
         {
             try
             {
                 var contextMenu = (ContextMenu) sender;
                 var textBlock = (TextBlockSelectable)contextMenu.Tag;
-                ((MenuItem)contextMenu.Items[0]).IsEnabled = !string.IsNullOrEmpty(textBlock.SelectedText);
+                ((MenuItem)contextMenu.Items[0]!).IsEnabled = !string.IsNullOrEmpty(textBlock.SelectedText);
             }
             catch (Exception ex)
             {
@@ -153,7 +156,7 @@ namespace ControlReference.Windows
             }
         }
 
-        private void CopyToClipboard(TextBlockSelectable textBlock)
+        private static void CopyToClipboard(TextBlockSelectable textBlock)
         {
             if(string.IsNullOrEmpty(textBlock.SelectedText)) textBlock.SelectAll();
 

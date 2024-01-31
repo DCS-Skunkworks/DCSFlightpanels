@@ -18,22 +18,17 @@ namespace ControlReference.Windows
     /// </summary>
     public partial class SettingsWindow
     {
-
-        public string IpAddressFromDCSBIOS { get; private set; }
-        public string PortFromDCSBIOS { get; private set; }
-        public string IpAddressToDCSBIOS { get; private set; }
-        public string PortToDCSBIOS { get; private set; }
-        public string DcsBiosJSONLocation { get; private set; }
-        public bool DCSBIOSChanged { get; private set; } = false;
-        public bool GeneralChanged { get; private set; } = false;
+        private string IpAddressFromDCSBIOS { get; set; }
+        private string PortFromDCSBIOS { get; set; }
+        private string IpAddressToDCSBIOS { get; set; }
+        private string PortToDCSBIOS { get; set; }
+        public bool DCSBIOSChanged { get; private set; }
 
         private bool _isLoaded;
-        private readonly int _tabIndex;
 
-        public SettingsWindow(int tabIndex)
+        public SettingsWindow()
         {
             InitializeComponent();
-            _tabIndex = tabIndex;
         }
 
         private void SetFormState()
@@ -117,7 +112,7 @@ namespace ControlReference.Windows
 
                 if (DCSBIOSChanged)
                 {
-                    Settings.Default.DCSBiosJSONLocation = TextBoxDcsBiosJSONLocation.Text;
+                    Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(TextBoxDcsBiosJSONLocation.Text);
                     Settings.Default.DCSBiosIPFrom = IpAddressFromDCSBIOS;
                     Settings.Default.DCSBiosPortFrom = PortFromDCSBIOS;
                     Settings.Default.DCSBiosIPTo = IpAddressToDCSBIOS;
@@ -140,7 +135,7 @@ namespace ControlReference.Windows
             {
                 var folderBrowserDialog = new FolderBrowserDialog()
                 {
-                    ShowNewFolderButton = false,
+                    ShowNewFolderButton = false
                 };
                 
                 var folderLocation = Settings.Default.DCSBiosJSONLocation;
@@ -153,13 +148,14 @@ namespace ControlReference.Windows
                 if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     var result = Common.CheckJSONDirectory(folderBrowserDialog.SelectedPath);
-                    if (result.Item1 && result.Item2)
+                    switch (result.Item1)
                     {
-                        TextBoxDcsBiosJSONLocation.Text = folderBrowserDialog.SelectedPath;
-                    }
-                    else if (result.Item1 && result.Item2 == false)
-                    {
-                        System.Windows.MessageBox.Show("Cannot use selected directory as it did not contain JSON files.", "Invalid directory", MessageBoxButton.OK, MessageBoxImage.Error);
+                        case true when result.Item2:
+                            TextBoxDcsBiosJSONLocation.Text = folderBrowserDialog.SelectedPath;
+                            break;
+                        case true when result.Item2 == false:
+                            System.Windows.MessageBox.Show("Cannot use selected directory as it did not contain JSON files.", "Invalid directory", MessageBoxButton.OK, MessageBoxImage.Error);
+                            break;
                     }
                 }
 
@@ -175,7 +171,6 @@ namespace ControlReference.Windows
         {
             try
             {
-                IPAddress ipAddress;
                 if (string.IsNullOrEmpty(TextBoxDCSBIOSFromIP.Text))
                 {
                     throw new Exception("DCS-BIOS IP address from cannot be empty");
@@ -198,7 +193,7 @@ namespace ControlReference.Windows
                 }
                 try
                 {
-                    if (!IPAddress.TryParse(TextBoxDCSBIOSFromIP.Text, out ipAddress))
+                    if (!IPAddress.TryParse(TextBoxDCSBIOSFromIP.Text, out _))
                     {
                         throw new Exception();
                     }
@@ -210,7 +205,7 @@ namespace ControlReference.Windows
                 }
                 try
                 {
-                    if (!IPAddress.TryParse(TextBoxDCSBIOSToIP.Text, out ipAddress))
+                    if (!IPAddress.TryParse(TextBoxDCSBIOSToIP.Text, out _))
                     {
                         throw new Exception();
                     }
@@ -222,7 +217,7 @@ namespace ControlReference.Windows
                 }
                 try
                 {
-                    var test = Convert.ToInt32(TextBoxDCSBIOSFromPort.Text);
+                    _ = Convert.ToInt32(TextBoxDCSBIOSFromPort.Text);
                     PortFromDCSBIOS = TextBoxDCSBIOSFromPort.Text;
                 }
                 catch (Exception ex)
@@ -231,7 +226,7 @@ namespace ControlReference.Windows
                 }
                 try
                 {
-                    var test = Convert.ToInt32(TextBoxDCSBIOSFromPort.Text);
+                    _ = Convert.ToInt32(TextBoxDCSBIOSFromPort.Text);
                     PortToDCSBIOS = TextBoxDCSBIOSToPort.Text;
                 }
                 catch (Exception ex)
@@ -240,8 +235,7 @@ namespace ControlReference.Windows
                 }
                 try
                 {
-                    var directoryInfo = new DirectoryInfo(TextBoxDcsBiosJSONLocation.Text);
-                    DcsBiosJSONLocation = TextBoxDcsBiosJSONLocation.Text;
+                    _ = new DirectoryInfo(Environment.ExpandEnvironmentVariables(TextBoxDcsBiosJSONLocation.Text));
                 }
                 catch (Exception ex)
                 {
@@ -262,18 +256,11 @@ namespace ControlReference.Windows
         
         private void SettingsWindow_OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (!ButtonOk.IsEnabled && e.Key == Key.Escape)
-            {
-                DialogResult = false;
-                e.Handled = true;
-                Close();
-            }
-        }
+            if (ButtonOk.IsEnabled || e.Key != Key.Escape) return;
 
-        private void GeneralDirty(object sender, RoutedEventArgs e)
-        {
-            GeneralChanged = true;
-            ButtonOk.IsEnabled = true;
+            DialogResult = false;
+            e.Handled = true;
+            Close();
         }
 
         private void HyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
