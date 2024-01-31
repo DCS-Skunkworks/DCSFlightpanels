@@ -21,7 +21,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             if (!UserControlLoaded)
             {
                 FillControlLists();
-                SetImageBills();
+                SetImageEnvironment();
                 ShowGraphicConfiguration();
                 SetContextMenus();
                 UserControlLoaded = true;

@@ -8,8 +8,6 @@
     using System.Windows.Forms;
     using System.Windows.Input;
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using Shared;
     using DCSFlightpanels.Windows.StreamDeck;
@@ -69,7 +67,6 @@
                     RadioButtonDCSBIOSFace.Visibility = Visibility.Collapsed;
                 }
                 FillControlLists();
-                SetBills();
                 LoadFontSettings();
             }
             catch (Exception ex)
@@ -116,14 +113,14 @@
 
         private void DisplayImagePreview()
         {
-            if (TextBoxImageFace.Bill.ContainsImagePath())
+            if (TextBoxImageFace.ContainsImagePath())
             {
-                var bitmap = BitMapCreator.BitmapOrFileNotFound(TextBoxImageFace.Bill.ImageFileRelativePath);
+                var bitmap = BitMapCreator.BitmapOrFileNotFound(TextBoxImageFace.ImageFileRelativePath);
                 ButtonImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
             }
-            if (TextBoxButtonTextFace.Bill.ContainsTextFace())
+            if (TextBoxButtonTextFace.ContainsTextFace())
             {
-                var bitmap = BitMapCreator.CreateStreamDeckBitmap(TextBoxButtonTextFace.Text, TextBoxButtonTextFace.Bill.TextFont, TextBoxButtonTextFace.Bill.FontColor, TextBoxButtonTextFace.Bill.OffsetX, TextBoxButtonTextFace.Bill.OffsetY, TextBoxButtonTextFace.Bill.BackgroundColor);
+                var bitmap = BitMapCreator.CreateStreamDeckBitmap(TextBoxButtonTextFace.Text, TextBoxButtonTextFace.TextFont, TextBoxButtonTextFace.FontColor, TextBoxButtonTextFace.OffsetX, TextBoxButtonTextFace.OffsetY, TextBoxButtonTextFace.BackgroundColor);
                 TextBoxImagePreview.Source = BitMapCreator.Bitmap2BitmapImage(bitmap);
             }
         }
@@ -144,7 +141,7 @@
         {
             foreach (var textBox in _textBoxList)
             {
-                textBox.Bill.Clear();
+                textBox.Clear();
             }
 
             foreach (var radioButton in _radioButtonList)
@@ -214,24 +211,13 @@
             _radioButtonList.Add(RadioButtonDCSBIOSFace);
         }
 
-        private void SetBills()
-        {
-            foreach (var textBox in _textBoxList)
-            {
-                textBox.Bill = new BillStreamDeckFace
-                {
-                    TextBox = textBox
-                };
-            }
-        }
-
         private void ButtonTextFaceFont_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (StreamDeckUICommon.SetFontStyle(TextBoxButtonTextFace) == DialogResult.OK)
                 {
-                    TextBoxFontInfo.TargetFont = TextBoxButtonTextFace.Bill.TextFont;
+                    TextBoxFontInfo.TargetFont = TextBoxButtonTextFace.TextFont;
                     SetIsDirty();
                 }
                 TextBoxButtonTextFace.TestImage(_streamDeckPanel);
@@ -249,7 +235,7 @@
             {
                 if (StreamDeckUICommon.SetFontColor(TextBoxButtonTextFace) == DialogResult.OK)
                 {
-                    TextBoxFontInfo.TargetFontColor = TextBoxButtonTextFace.Bill.FontColor;
+                    TextBoxFontInfo.TargetFontColor = TextBoxButtonTextFace.FontColor;
                     SetIsDirty();
 
                 }
@@ -268,7 +254,7 @@
             {
                 if (StreamDeckUICommon.SetBackgroundColor(TextBoxButtonTextFace) == DialogResult.OK)
                 {
-                    TextBoxFontInfo.TargetBackgroundColor = TextBoxButtonTextFace.Bill.BackgroundColor;
+                    TextBoxFontInfo.TargetBackgroundColor = TextBoxButtonTextFace.BackgroundColor;
                     SetIsDirty();
 
                 }
@@ -285,7 +271,7 @@
         {
             if (SettingsManager.DefaultFont != null)
             {
-                TextBoxButtonTextFace.Bill.TextFont = SettingsManager.DefaultFont;
+                TextBoxButtonTextFace.TextFont = SettingsManager.DefaultFont;
             }
         }
 
@@ -297,15 +283,15 @@
                 {
                     case EnumStreamDeckFaceType.Text:
                         {
-                            return TextBoxButtonTextFace.Bill.ContainsTextFace();
+                            return TextBoxButtonTextFace.ContainsTextFace();
                         }
                     case EnumStreamDeckFaceType.DCSBIOS:
                         {
-                            return TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS();
+                            return TextBoxDCSBIOSDecoder.ContainsDCSBIOS();
                         }
                     case EnumStreamDeckFaceType.Image:
                         {
-                            return TextBoxImageFace.Bill.ContainsImagePath();
+                            return TextBoxImageFace.ContainsImagePath();
                         }
                 }
                 return false;
@@ -334,9 +320,9 @@
 
         private void SetInfoTextBoxes()
         {
-            TextBoxFontInfo.TargetFont = TextBoxButtonTextFace.Bill.TextFont;
-            TextBoxFontInfo.TargetFontColor = TextBoxButtonTextFace.Bill.FontColor;
-            TextBoxFontInfo.TargetBackgroundColor = TextBoxButtonTextFace.Bill.BackgroundColor;
+            TextBoxFontInfo.TargetFont = TextBoxButtonTextFace.TextFont;
+            TextBoxFontInfo.TargetFontColor = TextBoxButtonTextFace.FontColor;
+            TextBoxFontInfo.TargetBackgroundColor = TextBoxButtonTextFace.BackgroundColor;
 
             TextBoxOffsetInfo.OffSetX = TextBoxOffsetInfo.OffSetX;
             TextBoxOffsetInfo.OffSetY = TextBoxOffsetInfo.OffSetY;
@@ -354,12 +340,12 @@
                 case EnumStreamDeckFaceType.Text:
                     {
                         var faceTypeText = (FaceTypeText)streamDeckButtonFace;
-                        TextBoxButtonTextFace.Bill.TextFont = faceTypeText.TextFont;
+                        TextBoxButtonTextFace.TextFont = faceTypeText.TextFont;
                         TextBoxButtonTextFace.Text = faceTypeText.ButtonTextTemplate;
-                        TextBoxButtonTextFace.Bill.FontColor = faceTypeText.FontColor;
-                        TextBoxButtonTextFace.Bill.BackgroundColor = faceTypeText.BackgroundColor;
-                        TextBoxButtonTextFace.Bill.OffsetX = faceTypeText.OffsetX;
-                        TextBoxButtonTextFace.Bill.OffsetY = faceTypeText.OffsetY;
+                        TextBoxButtonTextFace.FontColor = faceTypeText.FontColor;
+                        TextBoxButtonTextFace.BackgroundColor = faceTypeText.BackgroundColor;
+                        TextBoxButtonTextFace.OffsetX = faceTypeText.OffsetX;
+                        TextBoxButtonTextFace.OffsetY = faceTypeText.OffsetY;
 
                         SetInfoTextBoxes();
 
@@ -368,22 +354,22 @@
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
-                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = (DCSBIOSDecoder)streamDeckButtonFace;
+                        TextBoxDCSBIOSDecoder.DCSBIOSDecoder = (DCSBIOSDecoder)streamDeckButtonFace;
                         SetFormState();
                         return;
                     }
                 case EnumStreamDeckFaceType.Image:
                     {
                         var faceTypeImage = (FaceTypeImage)streamDeckButtonFace;
-                        TextBoxImageFace.Bill.ImageFileRelativePath = faceTypeImage.ImageFile;
+                        TextBoxImageFace.ImageFileRelativePath = faceTypeImage.ImageFile;
                         SetFormState();
                         return;
                     }
                 case EnumStreamDeckFaceType.Unknown:
                     {
-                        TextBoxButtonTextFace.Bill.Clear();
-                        TextBoxDCSBIOSDecoder.Bill.Clear();
-                        TextBoxImageFace.Bill.Clear();
+                        TextBoxButtonTextFace.Clear();
+                        TextBoxDCSBIOSDecoder.Clear();
+                        TextBoxImageFace.Clear();
                         return;
                     }
             }
@@ -397,18 +383,18 @@
             {
                 case EnumStreamDeckFaceType.Text:
                     {
-                        if (TextBoxButtonTextFace.Bill.ContainsTextFace())
+                        if (TextBoxButtonTextFace.ContainsTextFace())
                         {
                             return new FaceTypeText()
                             {
                                 StreamDeckButtonName = streamDeckButton.StreamDeckButtonName,
                                 StreamDeckPanelInstance = _streamDeckPanel,
                                 ButtonTextTemplate = TextBoxButtonTextFace.Text,
-                                TextFont = TextBoxButtonTextFace.Bill.TextFont,
-                                FontColor = TextBoxButtonTextFace.Bill.FontColor,
-                                BackgroundColor = TextBoxButtonTextFace.Bill.BackgroundColor,
-                                OffsetX = TextBoxButtonTextFace.Bill.OffsetX,
-                                OffsetY = TextBoxButtonTextFace.Bill.OffsetY
+                                TextFont = TextBoxButtonTextFace.TextFont,
+                                FontColor = TextBoxButtonTextFace.FontColor,
+                                BackgroundColor = TextBoxButtonTextFace.BackgroundColor,
+                                OffsetX = TextBoxButtonTextFace.OffsetX,
+                                OffsetY = TextBoxButtonTextFace.OffsetY
                             };
                         }
                         return null;
@@ -416,25 +402,25 @@
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
                         DCSBIOSDecoder result = null;
-                        if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
+                        if (TextBoxDCSBIOSDecoder.ContainsDCSBIOS())
                         {
-                            result = TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.CloneJson();
+                            result = TextBoxDCSBIOSDecoder.DCSBIOSDecoder.CloneJson();
                             result.StreamDeckPanelInstance = _streamDeckPanel;
                             DCSBIOSDecoder.ShowOnly(result, _streamDeckPanel);
-                            TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.IsVisible = false;
+                            TextBoxDCSBIOSDecoder.DCSBIOSDecoder.IsVisible = false;
                             result.AfterClone();
                         }
                         return result;
                     }
                 case EnumStreamDeckFaceType.Image:
                     {
-                        if (TextBoxImageFace.Bill.ContainsImagePath())
+                        if (TextBoxImageFace.ContainsImagePath())
                         {
                             FaceTypeImage faceTypeImage = new()
                             {
                                 StreamDeckButtonName = streamDeckButton.StreamDeckButtonName,
                                 StreamDeckPanelInstance = _streamDeckPanel,
-                                ImageFile = TextBoxImageFace.Bill.ImageFileRelativePath
+                                ImageFile = TextBoxImageFace.ImageFileRelativePath
                             };
                             
                             //Fixes issue https://github.com/DCS-Skunkworks/DCSFlightpanels/issues/394
@@ -490,9 +476,9 @@
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TextBoxOffsetInfo.OffSetY = TextBoxButtonTextFace.Bill.OffsetY;
-                SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
+                TextBoxButtonTextFace.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetY = TextBoxButtonTextFace.OffsetY;
+                SettingsManager.OffsetY = TextBoxButtonTextFace.OffsetY;
                 TextBoxButtonTextFace.TestImage(_streamDeckPanel);                
                 SetIsDirty();
             }
@@ -505,9 +491,9 @@
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TextBoxOffsetInfo.OffSetY = TextBoxButtonTextFace.Bill.OffsetY;
-                SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
+                TextBoxButtonTextFace.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetY = TextBoxButtonTextFace.OffsetY;
+                SettingsManager.OffsetY = TextBoxButtonTextFace.OffsetY;
                 TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
             }
@@ -521,9 +507,9 @@
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TextBoxOffsetInfo.OffSetX = TextBoxButtonTextFace.Bill.OffsetX;
-                SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
+                TextBoxButtonTextFace.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetX = TextBoxButtonTextFace.OffsetX;
+                SettingsManager.OffsetX = TextBoxButtonTextFace.OffsetX;
                 TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
             }
@@ -537,9 +523,9 @@
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TextBoxOffsetInfo.OffSetX = TextBoxButtonTextFace.Bill.OffsetX;
-                SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
+                TextBoxButtonTextFace.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetX = TextBoxButtonTextFace.OffsetX;
+                SettingsManager.OffsetX = TextBoxButtonTextFace.OffsetX;
                 TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
             }
@@ -565,13 +551,13 @@
                 {
                     Clear();
                     RadioButtonImageFace.IsChecked = true;
-                    TextBoxImageFace.Bill.ImageFileRelativePath = @"StreamDeckGallery\\Symbols\\home_white.png";
+                    TextBoxImageFace.ImageFileRelativePath = @"StreamDeckGallery\\Symbols\\home_white.png";
                 }
                 else if (e.TargetLayerName == StreamDeckConstants.BACK)
                 {
                     Clear();
                     RadioButtonImageFace.IsChecked = true;
-                    TextBoxImageFace.Bill.ImageFileRelativePath = @"StreamDeckGallery\\Symbols\\back_white.png";
+                    TextBoxImageFace.ImageFileRelativePath = @"StreamDeckGallery\\Symbols\\back_white.png";
                 }
                 else
                 {
@@ -581,8 +567,8 @@
                     Clear();
                     RadioButtonTextFace.IsChecked = true;
                     TextBoxButtonTextFace.Text = e.TargetLayerName;
-                    TextBoxButtonTextFace.Bill.FontColor = ColorTranslator.FromHtml(StreamDeckConstants.COLOR_DEFAULT_WHITE);
-                    TextBoxButtonTextFace.Bill.BackgroundColor = ColorTranslator.FromHtml(StreamDeckConstants.COLOR_GUNSHIP_GREEN);
+                    TextBoxButtonTextFace.FontColor = ColorTranslator.FromHtml(StreamDeckConstants.COLOR_DEFAULT_WHITE);
+                    TextBoxButtonTextFace.BackgroundColor = ColorTranslator.FromHtml(StreamDeckConstants.COLOR_GUNSHIP_GREEN);
                 }
                 SetIsDirty();
             }
@@ -594,10 +580,10 @@
             {
                 StreamDeckDCSBIOSDecoderWindow streamDeckDCSBIOSDecoderWindow = null;
 
-                if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
+                if (TextBoxDCSBIOSDecoder.ContainsDCSBIOS())
                 {
-                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.IsVisible = false;
-                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, _streamDeckPanel);
+                    TextBoxDCSBIOSDecoder.DCSBIOSDecoder.IsVisible = false;
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.DCSBIOSDecoder, _streamDeckPanel);
                 }
                 else
                 {
@@ -608,10 +594,10 @@
 
                 if (streamDeckDCSBIOSDecoderWindow.DialogResult == true)
                 {
-                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder?.Dispose();
-                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.CloneJson();
-                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.StreamDeckPanelInstance = _streamDeckPanel;
-                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.AfterClone();
+                    TextBoxDCSBIOSDecoder.DCSBIOSDecoder?.Dispose();
+                    TextBoxDCSBIOSDecoder.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.CloneJson();
+                    TextBoxDCSBIOSDecoder.DCSBIOSDecoder.StreamDeckPanelInstance = _streamDeckPanel;
+                    TextBoxDCSBIOSDecoder.DCSBIOSDecoder.AfterClone();
                     streamDeckDCSBIOSDecoderWindow.Dispose();
                     SetIsDirty();
                 }
@@ -634,9 +620,9 @@
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    TextBoxImageFace.Bill.ImageFileRelativePath = imageRelativePath;
+                    TextBoxImageFace.ImageFileRelativePath = imageRelativePath;
                     SettingsManager.LastImageFileDirectory = directory;
-                    _streamDeckPanel.SetImage(_streamDeckButton, new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath));
+                    _streamDeckPanel.SetImage(_streamDeckButton, new Bitmap(TextBoxImageFace.ImageFileRelativePath));
                     SetIsDirty();
 
                     SetFormState();
@@ -736,10 +722,10 @@
             {
                 if (_streamDeckPanel.BindingHash == e.BindingHash && e.ClearFaceConfiguration)
                 {
-                    if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
+                    if (TextBoxDCSBIOSDecoder.ContainsDCSBIOS())
                     {
-                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.Dispose();
-                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = null;
+                        TextBoxDCSBIOSDecoder.DCSBIOSDecoder.Dispose();
+                        TextBoxDCSBIOSDecoder.DCSBIOSDecoder = null;
                     }
                     Clear();
                 }

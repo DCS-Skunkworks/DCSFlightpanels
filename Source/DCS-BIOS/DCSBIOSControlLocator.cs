@@ -1,5 +1,4 @@
-﻿using System.Printing;
-using DCS_BIOS.Json;
+﻿using DCS_BIOS.Json;
 
 namespace DCS_BIOS
 {

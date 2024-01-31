@@ -10,8 +10,6 @@ namespace DCSFlightpanels.PanelUserControls
     using System.Windows.Input;
 
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using Interfaces;
     using Windows;
@@ -82,10 +80,10 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded || !TextBoxBillsSet)
+            if (!UserControlLoaded || !TextBoxEnvironmentSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
-                SetTextBoxBills(); 
+                SetTextBoxEnvironment(); 
                 LoadComboBoxesManualLeds();
                 SetContextMenuClickHandlers();
                 foreach (var image in Common.FindVisualChildren<Image>(this))
@@ -329,11 +327,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in Common.FindVisualChildren<PZ55TextBox>(this))
             {
-                if (textBox == TextBoxLogPZ55 || textBox.Bill == null)
+                if (textBox == TextBoxLogPZ55 || textBox == null)
                 {
                     continue;
                 }
-                textBox.Bill.ClearAll();
+                textBox.ClearAll();
             }
             if (clearAlsoProfile)
             {
@@ -343,22 +341,22 @@ namespace DCSFlightpanels.PanelUserControls
             ShowGraphicConfiguration();
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
-            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ55TextBox>(this).Any())
+            if (TextBoxEnvironmentSet || !Common.FindVisualChildren<PZ55TextBox>(this).Any())
             {
                 return;
             }
             foreach (var textBox in Common.FindVisualChildren<PZ55TextBox>(this))
             {
-                if (textBox.Bill != null || textBox == TextBoxLogPZ55)
+                if (textBox == TextBoxLogPZ55)
                 {
                     continue;
                 }
 
-                textBox.Bill = new BillPZ55(this, _switchPanelPZ55, textBox);
+                textBox.SetEnvironment(this, _switchPanelPZ55);
             }
-            TextBoxBillsSet = true;
+            TextBoxEnvironmentSet = true;
         }
 
         private void SetContextMenuClickHandlers()
@@ -712,7 +710,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!UserControlLoaded || !TextBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxEnvironmentSet)
                 {
                     return;
                 }
@@ -721,11 +719,11 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (PZ55TextBox)GetTextBox(keyBinding.SwitchPanelPZ55Key, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
-                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
+                        textBox.KeyPress = keyBinding.OSKeyPress;
                     }
                     else
                     {
-                        textBox.Bill.KeyPress = null;
+                        textBox.KeyPress = null;
                     }
                 }
 
@@ -734,39 +732,24 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (PZ55TextBox)GetTextBox(operatingSystemCommand.SwitchPanelPZ55Key, operatingSystemCommand.WhenTurnedOn);
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
-                        textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                        textBox.OSCommandObject = operatingSystemCommand.OSCommandObject;
                     }
                     else
                     {
-                        textBox.Bill.OSCommandObject = null;
+                        textBox.OSCommandObject = null;
                     }
                 }
 
                 foreach (var dcsBiosBinding in _switchPanelPZ55.DCSBiosBindings)
                 {
                     var textBox = (PZ55TextBox)GetTextBox(dcsBiosBinding.SwitchPanelPZ55Key, dcsBiosBinding.WhenTurnedOn);
-                    if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                    {
-                        textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
-                    }
-                    else
-                    {
-                        textBox.Bill.DCSBIOSBinding = null;
-                    }
+                    textBox.DCSBIOSBinding = dcsBiosBinding.DCSBIOSInputs.Count > 0 ? dcsBiosBinding : null;
                 }
 
-                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor); //Maybe we can remove this function and only retain the TextBoxBillsSet = true; ?
                 foreach (var bipLinkPZ55 in _switchPanelPZ55.BIPLinkHashSet)
                 {
                     var textBox = (PZ55TextBox)GetTextBox(bipLinkPZ55.SwitchPanelPZ55Key, bipLinkPZ55.WhenTurnedOn);
-                    if (bipLinkPZ55.BIPLights.Count > 0)
-                    {
-                        textBox.Bill.BipLink = bipLinkPZ55;
-                    }
-                    else
-                    {
-                        textBox.Bill.BipLink = null;
-                    }
+                    textBox.BipLink = bipLinkPZ55.BIPLights.Count > 0 ? bipLinkPZ55 : null;
                 }
 
                 CheckBoxManualLeDs.IsChecked = _switchPanelPZ55.ManualLandingGearLEDs;
@@ -777,18 +760,6 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 Common.ShowErrorMessageBox(ex);
             }
-        }
-
-        private void SetTextBoxBackgroundColors(Brush brush)
-        {
-            //foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
-            //{
-            //    if (!textBox.IsFocused && textBox.Background != DarkMode.TextBoxSelectedBackgroundColor)
-            //    {
-            //        textBox.Background = brush;
-            //    }
-            //}
-            TextBoxBillsSet = true;
         }
 
         private void SetConfigExistsImageVisibility()

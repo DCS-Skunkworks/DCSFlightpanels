@@ -396,14 +396,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && knobBinding.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                 {
-                    if (string.IsNullOrEmpty(keyPress))
-                    {
-                        knobBinding.OSKeyPress = null;
-                    }
-                    else
-                    {
-                        knobBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
-                    }
+                    knobBinding.OSKeyPress = string.IsNullOrEmpty(keyPress) ? null : new KeyPress(keyPress, keyPressLength);
 
                     found = true;
                 }
@@ -441,14 +434,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && knobBinding.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                 {
-                    if (keySequence.Count == 0)
-                    {
-                        knobBinding.OSKeyPress = null;
-                    }
-                    else
-                    {
-                        knobBinding.OSKeyPress = new KeyPress(description, keySequence);
-                    }
+                    knobBinding.OSKeyPress = keySequence.Count == 0 ? null : new KeyPress(description, keySequence);
 
                     found = true;
                     break;

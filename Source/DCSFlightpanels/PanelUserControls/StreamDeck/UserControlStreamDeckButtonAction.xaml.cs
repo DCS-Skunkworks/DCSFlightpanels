@@ -9,8 +9,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     using System.Windows.Forms;
 
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using Shared;
     using Windows;
@@ -74,7 +72,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     RadioButtonDCSBIOS.Visibility = Visibility.Collapsed;
                 }
                 FillTextBoxList();
-                SetTextBoxBills();
+                SetTextBoxEnvironment();
             }
             catch (Exception ex)
             {
@@ -104,7 +102,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             foreach (var textBox in _textBoxes)
             {
-                textBox.Bill.Clear();
+                textBox.Clear();
             }
 
             RadioButtonKeyPress.IsChecked = false;
@@ -148,14 +146,14 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                                                              ||
                                                              (_streamDeckPanel.SelectedPushRotaryName != EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY);
 
-                ButtonDeleteKeySequenceButtonOn.IsEnabled = TextBoxKeyPressButtonOn.Bill.ContainsKeySequence() ||
-                                                            TextBoxKeyPressButtonOn.Bill.ContainsKeyPress();
-                ButtonDeleteKeySequenceButtonOff.IsEnabled = TextBoxKeyPressButtonOff.Bill.ContainsKeySequence() ||
-                                                            TextBoxKeyPressButtonOff.Bill.ContainsKeyPress();
-                ButtonDeleteDCSBIOSActionButtonOn.IsEnabled = TextBoxDCSBIOSActionButtonOn.Bill.ContainsDCSBIOS();
-                ButtonDeleteDCSBIOSActionButtonOff.IsEnabled = TextBoxDCSBIOSActionButtonOff.Bill.ContainsDCSBIOS();
-                ButtonDeleteOSCommandButtonOn.IsEnabled = TextBoxOSCommandButtonOn.Bill.ContainsOSCommand();
-                ButtonDeleteOSCommandButtonOff.IsEnabled = TextBoxOSCommandButtonOff.Bill.ContainsOSCommand();
+                ButtonDeleteKeySequenceButtonOn.IsEnabled = TextBoxKeyPressButtonOn.ContainsKeySequence() ||
+                                                            TextBoxKeyPressButtonOn.ContainsKeyPress();
+                ButtonDeleteKeySequenceButtonOff.IsEnabled = TextBoxKeyPressButtonOff.ContainsKeySequence() ||
+                                                            TextBoxKeyPressButtonOff.ContainsKeyPress();
+                ButtonDeleteDCSBIOSActionButtonOn.IsEnabled = TextBoxDCSBIOSActionButtonOn.ContainsDCSBIOS();
+                ButtonDeleteDCSBIOSActionButtonOff.IsEnabled = TextBoxDCSBIOSActionButtonOff.ContainsDCSBIOS();
+                ButtonDeleteOSCommandButtonOn.IsEnabled = TextBoxOSCommandButtonOn.ContainsOSCommand();
+                ButtonDeleteOSCommandButtonOff.IsEnabled = TextBoxOSCommandButtonOff.ContainsOSCommand();
 
                 StackPanelControlRemoteStreamdeck.IsEnabled = CheckBoxControlRemoteStreamdeck.IsChecked == true;
             }
@@ -290,12 +288,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             };
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
             foreach (var textBox in _textBoxes)
             {
                 if (_streamDeckPanel != null) {
-                    textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, !textBox.Name.Contains("Off")), _streamDeckPanel);
+                    textBox.SetEnvironment(new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, !textBox.Name.Contains("Off")), _streamDeckPanel);
                 }
             }
         }
@@ -319,24 +317,24 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     case EnumStreamDeckActionType.KeyPress:
                         {
-                            return TextBoxKeyPressButtonOn.Bill.ContainsKeySequence() ||
-                                   TextBoxKeyPressButtonOn.Bill.ContainsKeyStroke() ||
-                                   TextBoxKeyPressButtonOff.Bill.ContainsKeySequence() ||
-                                   TextBoxKeyPressButtonOff.Bill.ContainsKeyStroke();
+                            return TextBoxKeyPressButtonOn.ContainsKeySequence() ||
+                                   TextBoxKeyPressButtonOn.ContainsKeyStroke() ||
+                                   TextBoxKeyPressButtonOff.ContainsKeySequence() ||
+                                   TextBoxKeyPressButtonOff.ContainsKeyStroke();
                         }
                     case EnumStreamDeckActionType.DCSBIOS:
                         {
-                            return TextBoxDCSBIOSActionButtonOn.Bill.ContainsDCSBIOS() ||
-                                   TextBoxDCSBIOSActionButtonOff.Bill.ContainsDCSBIOS();
+                            return TextBoxDCSBIOSActionButtonOn.ContainsDCSBIOS() ||
+                                   TextBoxDCSBIOSActionButtonOff.ContainsDCSBIOS();
                         }
                     case EnumStreamDeckActionType.OSCommand:
                         {
-                            return TextBoxOSCommandButtonOn.Bill.ContainsOSCommand() ||
-                                   TextBoxOSCommandButtonOff.Bill.ContainsOSCommand();
+                            return TextBoxOSCommandButtonOn.ContainsOSCommand() ||
+                                   TextBoxOSCommandButtonOff.ContainsOSCommand();
                         }
                     case EnumStreamDeckActionType.LayerNavigation:
                         {
-                            return TextBoxLayerNavButton.Bill.ContainsStreamDeckLayer();
+                            return TextBoxLayerNavButton.ContainsStreamDeckLayer();
                         }
                 }
                 return false;
@@ -382,7 +380,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     {
                         var keyBindingStreamDeck = (ActionTypeKey)streamDeckButtonAction;
                         var textBoxKeyPress = keyBindingStreamDeck.WhenTurnedOn ? TextBoxKeyPressButtonOn : TextBoxKeyPressButtonOff;
-                        textBoxKeyPress.Bill.KeyPress = keyBindingStreamDeck.OSKeyPress;
+                        textBoxKeyPress.KeyPress = keyBindingStreamDeck.OSKeyPress;
 
                         if (forPress)
                         {
@@ -396,7 +394,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     {
                         var dcsBIOSBinding = (ActionTypeDCSBIOS)streamDeckButtonAction;
                         var textBoxDCSBIOS = dcsBIOSBinding.WhenTurnedOn ? TextBoxDCSBIOSActionButtonOn : TextBoxDCSBIOSActionButtonOff;
-                        textBoxDCSBIOS.Bill.DCSBIOSBinding = dcsBIOSBinding;
+                        textBoxDCSBIOS.DCSBIOSBinding = dcsBIOSBinding;
 
                         if (forPress)
                         {
@@ -410,7 +408,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     {
                         var operatingSystemCommandBindingStreamDeck = (ActionTypeOS)streamDeckButtonAction;
                         var textBoxOSCommand = operatingSystemCommandBindingStreamDeck.WhenTurnedOn ? TextBoxOSCommandButtonOn : TextBoxOSCommandButtonOff;
-                        textBoxOSCommand.Bill.OSCommandObject = operatingSystemCommandBindingStreamDeck.OSCommandObject;
+                        textBoxOSCommand.OSCommandObject = operatingSystemCommandBindingStreamDeck.OSCommandObject;
 
                         if (forPress)
                         {
@@ -438,7 +436,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                             ComboBoxRemoteLayers.Text = layerBindingStreamDeck.RemoteStreamdeckTargetLayer;
                         }
 
-                        TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = layerBindingStreamDeck;
+                        TextBoxLayerNavButton.StreamDeckLayerTarget = layerBindingStreamDeck;
                         ActivateCheckBoxControlRemoteStreamdeck(true);
 
                         if (forPress)
@@ -466,14 +464,14 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             {
                 case EnumStreamDeckActionType.KeyPress:
                     {
-                        if (textBoxKeyPress.Bill.ContainsKeyPress())
+                        if (textBoxKeyPress.ContainsKeyPress())
                         {
                             var result = new ActionTypeKey(_streamDeckPanel)
                             {
                                 StreamDeckButtonName = _streamDeckButton != null ? _streamDeckButton.StreamDeckButtonName : EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON,
                                 StreamDeckPushRotaryName = _streamDeckPushRotary != null ? _streamDeckPushRotary.StreamDeckPushRotaryName : EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY,
                                 WhenTurnedOn = forButtonPressed,
-                                OSKeyPress = textBoxKeyPress.Bill.KeyPress
+                                OSKeyPress = textBoxKeyPress.KeyPress
                             };
                             if (SoundConfigIsOk() && forButtonPressed) // && forButtonPressed so as not to have sound for both events in case both events have actions
                             {
@@ -487,28 +485,28 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     }
                 case EnumStreamDeckActionType.DCSBIOS:
                     {
-                        if (textBoxDCSBIOS.Bill.ContainsDCSBIOS())
+                        if (textBoxDCSBIOS.ContainsDCSBIOS())
                         {
-                            textBoxDCSBIOS.Bill.DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
-                            textBoxDCSBIOS.Bill.DCSBIOSBinding.StreamDeckButtonName = _streamDeckButton != null ? _streamDeckButton.StreamDeckButtonName : EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
-                            textBoxDCSBIOS.Bill.DCSBIOSBinding.StreamDeckPushRotaryName = _streamDeckPushRotary != null ? _streamDeckPushRotary.StreamDeckPushRotaryName : EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY;
+                            textBoxDCSBIOS.DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
+                            textBoxDCSBIOS.DCSBIOSBinding.StreamDeckButtonName = _streamDeckButton != null ? _streamDeckButton.StreamDeckButtonName : EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                            textBoxDCSBIOS.DCSBIOSBinding.StreamDeckPushRotaryName = _streamDeckPushRotary != null ? _streamDeckPushRotary.StreamDeckPushRotaryName : EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY;
                             if (SoundConfigIsOk() && forButtonPressed)
                             {
-                                textBoxDCSBIOS.Bill.DCSBIOSBinding.SoundFile = TextBoxSoundFile.Text;
-                                textBoxDCSBIOS.Bill.DCSBIOSBinding.Volume = SliderVolume.Value;
+                                textBoxDCSBIOS.DCSBIOSBinding.SoundFile = TextBoxSoundFile.Text;
+                                textBoxDCSBIOS.DCSBIOSBinding.Volume = SliderVolume.Value;
                             }
-                            return textBoxDCSBIOS.Bill.DCSBIOSBinding;
+                            return textBoxDCSBIOS.DCSBIOSBinding;
                         }
                         return null;
                     }
                 case EnumStreamDeckActionType.OSCommand:
                     {
-                        if (textBoxOSCommand.Bill.ContainsOSCommand())
+                        if (textBoxOSCommand.ContainsOSCommand())
                         {
                             var result = new ActionTypeOS(_streamDeckPanel)
                             {
                                 WhenTurnedOn = forButtonPressed,
-                                OSCommandObject = textBoxOSCommand.Bill.OSCommandObject,
+                                OSCommandObject = textBoxOSCommand.OSCommandObject,
                                 StreamDeckButtonName = _streamDeckButton != null ? _streamDeckButton.StreamDeckButtonName : EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON,
                                 StreamDeckPushRotaryName = _streamDeckPushRotary != null ? _streamDeckPushRotary.StreamDeckPushRotaryName : EnumStreamDeckPushRotaryNames.PUSHROTARY0_NO_PUSHROTARY,
                             };
@@ -566,7 +564,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                             }
                         }
 
-                        TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = target;
+                        TextBoxLayerNavButton.StreamDeckLayerTarget = target;
 
                         var result = target;
                         result.StreamDeckButtonName = _streamDeckButton != null ? _streamDeckButton.StreamDeckButtonName : EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
@@ -627,8 +625,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                var keySequenceWindow = textBox.Bill.ContainsKeySequence() ?
-                    new KeySequenceWindow(textBox.Text, textBox.Bill.GetKeySequence()) :
+                var keySequenceWindow = textBox.ContainsKeySequence() ?
+                    new KeySequenceWindow(textBox.Text, textBox.GetKeySequence()) :
                     new KeySequenceWindow();
 
                 keySequenceWindow.ShowDialog();
@@ -646,20 +644,20 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     if (sequenceList.Count > 1)
                     {
                         var keyPress = new KeyPress("Key press sequence", sequenceList);
-                        textBox.Bill.KeyPress = keyPress;
+                        textBox.KeyPress = keyPress;
                         if (!string.IsNullOrEmpty(keySequenceWindow.Description))
                         {
-                            textBox.Bill.KeyPress.Description = keySequenceWindow.Description;
+                            textBox.KeyPress.Description = keySequenceWindow.Description;
                             textBox.Text = keySequenceWindow.Description;
                         }
                     }
                     else
                     {
                         //If only one press was created treat it as a simple keypress
-                        textBox.Bill.Clear();
+                        textBox.Clear();
                         var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Description = keySequenceWindow.Description;
+                        textBox.KeyPress = keyPress;
+                        textBox.KeyPress.Description = keySequenceWindow.Description;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                     }
                     SetIsDirty();
@@ -677,7 +675,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                TextBoxKeyPressButtonOn.Bill.Clear();
+                TextBoxKeyPressButtonOn.Clear();
                 SetIsDirty();
             }
             catch (Exception ex)
@@ -690,7 +688,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                TextBoxKeyPressButtonOff.Bill.Clear();
+                TextBoxKeyPressButtonOff.Clear();
                 SetIsDirty();
             }
             catch (Exception ex)
@@ -710,16 +708,16 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
                 DCSBIOSInputControlsWindow dcsbiosControlsConfigsWindow;
 
-                if (textBox.Bill.ContainsDCSBIOS())
+                if (textBox.ContainsDCSBIOS())
                 {
                     dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(
                         textBox.Name.Replace("TextBox", string.Empty),
-                        textBox.Bill.DCSBIOSBinding.DCSBIOSInputs,
+                        textBox.DCSBIOSBinding.DCSBIOSInputs,
                         textBox.Text,
-                        textBox.Bill.DCSBIOSBinding.IsSequenced,
+                        textBox.DCSBIOSBinding.IsSequenced,
                         true)
                     {
-                        IsSequenced = textBox.Bill.DCSBIOSBinding.IsSequenced //Add on, not optimal structure
+                        IsSequenced = textBox.DCSBIOSBinding.IsSequenced //Add on, not optimal structure
                     };
                 }
                 else
@@ -737,10 +735,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;
-                    textBox.Bill.Consume(dcsBiosInputs);
-                    textBox.Bill.DCSBIOSBinding.WhenTurnedOn = !textBox.Name.Contains("Off");
-                    textBox.Bill.DCSBIOSBinding.IsSequenced = dcsbiosControlsConfigsWindow.IsSequenced;
-                    textBox.Bill.DCSBIOSBinding.Description = dcsbiosControlsConfigsWindow.Description;
+                    textBox.Consume(dcsBiosInputs);
+                    textBox.DCSBIOSBinding.WhenTurnedOn = !textBox.Name.Contains("Off");
+                    textBox.DCSBIOSBinding.IsSequenced = dcsbiosControlsConfigsWindow.IsSequenced;
+                    textBox.DCSBIOSBinding.Description = dcsbiosControlsConfigsWindow.Description;
                     SetIsDirty();
                 }
                 ButtonFocus.Focus();
@@ -768,7 +766,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                TextBoxDCSBIOSActionButtonOn.Bill.Clear();
+                TextBoxDCSBIOSActionButtonOn.Clear();
                 SetIsDirty();
                 SetFormState();
             }
@@ -795,7 +793,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                TextBoxDCSBIOSActionButtonOff.Bill.Clear();
+                TextBoxDCSBIOSActionButtonOff.Clear();
                 SetIsDirty();
                 SetFormState();
             }
@@ -813,15 +811,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
-                OSCommandWindow osCommandWindow;
-                if (textBox.Bill.ContainsOSCommand())
-                {
-                    osCommandWindow = new OSCommandWindow(textBox.Bill.OSCommandObject);
-                }
-                else
-                {
-                    osCommandWindow = new OSCommandWindow();
-                }
+
+                var osCommandWindow = textBox.ContainsOSCommand() ? new OSCommandWindow(textBox.OSCommandObject) : new OSCommandWindow();
                 osCommandWindow.ShowDialog();
                 if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
                 {
@@ -832,7 +823,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         return;
                     }
                     var operatingSystemCommand = osCommandWindow.OSCommandObject;
-                    textBox.Bill.OSCommandObject = operatingSystemCommand;
+                    textBox.OSCommandObject = operatingSystemCommand;
                     textBox.Text = operatingSystemCommand.Name;
                     SetIsDirty();
                 }
@@ -861,7 +852,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                TextBoxOSCommandButtonOn.Bill.Clear();
+                TextBoxOSCommandButtonOn.Clear();
             }
             catch (Exception ex)
             {
@@ -886,7 +877,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                TextBoxOSCommandButtonOff.Bill.Clear();
+                TextBoxOSCommandButtonOff.Clear();
             }
             catch (Exception ex)
             {

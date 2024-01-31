@@ -8,8 +8,6 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using Interfaces;
     using Properties;
@@ -80,11 +78,11 @@
 
         private void RadioPanelPZ69UserControlEmulator_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded || !TextBoxBillsSet)
+            if (!UserControlLoaded || !TextBoxEnvironmentSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
-                SetTextBoxBills();
+                SetTextBoxEnvironment();
                 UserControlLoaded = true;
             }
             ShowGraphicConfiguration();
@@ -167,9 +165,9 @@
             }
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
-            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ69TextBox>(this).Any())
+            if (TextBoxEnvironmentSet || !Common.FindVisualChildren<PZ69TextBox>(this).Any())
             {
                 return;
             }
@@ -179,42 +177,9 @@
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ69Emulator(this, _radioPanelPZ69, textBox);
+                textBox.SetEnvironment(this, _radioPanelPZ69);
             }
-            TextBoxBillsSet = true;
-        }
-
-        private void UpdateKeyBindingProfileSimpleKeyStrokes(PZ69TextBox textBox)
-        {
-            try
-            {
-                KeyPressLength keyPressLength;
-                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeyPressSequence.Count == 0)
-                {
-                    keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
-                }
-                else
-                {
-                    keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
-                }
-                _radioPanelPZ69.AddOrUpdateKeyStrokeBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void UpdateOSCommandBindingsPZ55(PZ69TextBox textBox)
-        {
-            try
-            {
-                _radioPanelPZ69.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.Bill.OSCommandObject);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            TextBoxEnvironmentSet = true;
         }
 
         private void UpdateDisplayValues(TextBox textBox)
@@ -345,11 +310,11 @@
         {
             foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogPZ69) || textBox.Bill == null)
+                if (textBox == TextBoxLogPZ69 || textBox == null)
                 {
                     continue;
                 }
-                textBox.Bill.ClearAll();
+                textBox.ClearAll();
             }
 
             if (clearAlsoProfile)
@@ -371,36 +336,6 @@
             }
         }
 
-
-
-        private PZ69TextBox GetTextBoxInFocus()
-        {
-            foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogPZ69) && textBox.IsFocused && Equals(textBox.Background, DarkMode.TextBoxSelectedBackgroundColor))
-                {
-                    return textBox;
-                }
-            }
-            return null;
-        }
-        
-        private void ButtonClearAllClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (MessageBox.Show("Clear all settings for the Radio Panel?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-                {
-                    ClearAll(true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
         /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -414,14 +349,7 @@
             {
                 var textBox = (TextBox)sender;
 
-                if (textBox.Text.Contains('.'))
-                {
-                    textBox.MaxLength = 6;
-                }
-                else
-                {
-                    textBox.MaxLength = 5;
-                }
+                textBox.MaxLength = textBox.Text.Contains('.') ? 6 : 5;
                 if (!_allowedKeys.Contains(e.Key))
                 {
                     //Only figures and persion allowed
@@ -506,7 +434,7 @@
         {
             try
             {
-                if (!UserControlLoaded || !TextBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxEnvironmentSet)
                 {
                     return;
                 }
@@ -676,7 +604,7 @@
                     var textBox = (PZ69TextBox)GetTextBox(keyBinding.RadioPanelPZ69Key, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
-                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
+                        textBox.KeyPress = keyBinding.OSKeyPress;
                     }
                 }
 
@@ -685,14 +613,14 @@
                     var textBox = (PZ69TextBox)GetTextBox(operatingSystemCommand.RadioPanelPZ69Key, operatingSystemCommand.WhenTurnedOn);
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
-                        textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                        textBox.OSCommandObject = operatingSystemCommand.OSCommandObject;
                     }
                 }
 
                 foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
                 {
                     var textBox = (PZ69TextBox)GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
-                    textBox.Bill.BipLink = bipLinkPZ69;
+                    textBox.BipLink = bipLinkPZ69;
                 }
             }
             catch (Exception ex)

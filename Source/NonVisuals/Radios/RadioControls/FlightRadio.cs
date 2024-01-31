@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using NonVisuals.Helpers;
 using NonVisuals.Radios.RadioSettings;
 
 namespace NonVisuals.Radios.RadioControls

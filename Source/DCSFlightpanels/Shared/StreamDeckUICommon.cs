@@ -67,7 +67,7 @@
 
             if (result == DialogResult.OK)
             {
-                textBox.Bill.TextFont = font;
+                textBox.TextFont = font;
             }
 
             return result;
@@ -102,7 +102,7 @@
 
             if (result == DialogResult.OK)
             {
-                textBox.Bill.FontColor = color;
+                textBox.FontColor = color;
             }
 
             return result;
@@ -134,7 +134,7 @@
 
             if (result == DialogResult.OK)
             {
-                textBox.Bill.BackgroundColor = color;
+                textBox.BackgroundColor = color;
             }
 
             return result;

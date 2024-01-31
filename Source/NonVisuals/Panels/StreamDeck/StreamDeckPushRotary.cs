@@ -12,7 +12,6 @@
     using Interfaces;
     using Plugin;
     using Panels;
-    using NLog;
 
     [Serializable]
     public class StreamDeckPushRotary : IDisposable

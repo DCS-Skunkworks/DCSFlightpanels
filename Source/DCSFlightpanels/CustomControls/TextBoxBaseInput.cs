@@ -1,47 +1,28 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using DCS_BIOS;
+using DCSFlightpanels.Interfaces;
+using NonVisuals;
 using NonVisuals.BindingClasses.BIP;
 using NonVisuals.BindingClasses.DCSBIOSBindings;
+using NonVisuals.KeyEmulation;
+using NonVisuals.Panels.Saitek.Panels;
 
-namespace DCSFlightpanels.Bills
+namespace DCSFlightpanels.CustomControls
 {
     using System;
-    using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+
     using ClassLibraryCommon;
-
-    using DCS_BIOS;
-    using Interfaces;
-    using Windows;
-
-
+    using DCSFlightpanels.Windows;
     using MEF;
+    using System.Linq;
 
-    using NonVisuals;
-    using NonVisuals.Panels.Saitek.Panels;
-    using NonVisuals.KeyEmulation;
-
-
-
-    /// <summary>
-    /// A Bill(Input) is attached to each UI TextBox that is used for adding configuration to a panel switch/knob/key.
-    /// A TextBox by itself can't hold complex information as such. Each UI Panel Control(Switch/Multi/etc) has its own TextBox type which holds the specific Bill class.
-    ///
-    /// The Bill communicates directly to the Saitek Panel class and updates the settings whenever they are changed.
-    ///
-    /// The purpose of the Bill is to :
-    /// 1) Hold the setting(s) the user has specified
-    /// 2) Provide a contextmenu which enables the user to edit/copy/paste/delete settings
-    /// held by the specific TextBox
-    /// 3) Handle double clicking
-    ///
-    /// Each panel type has its own different classes(each panel has unique switches/buttons) for binding a switch / key to a setting.
-    /// Using this solution it is possible to for example copy settings from one panel to another.
-    /// It is also easy to create the UI infrastructure for a new panel when needed.
-    /// </summary>
-    public abstract class BillBaseInput
+    public abstract class TextBoxBaseInput : TextBox
     {
-        private readonly SaitekPanel _saitekPanel;
+        private SaitekPanel _saitekPanel;
         private KeyPress _keyPress;
         private ContextMenuPanelTextBox _contextMenu;
 
@@ -51,14 +32,23 @@ namespace DCSFlightpanels.Bills
         protected abstract bool IsEmptyNoCareBipLink();
         protected abstract void Consume(List<DCSBIOSInput> dcsBiosInputs, bool isSequenced);
         public abstract void ClearAll();
-        protected abstract void ClearDCSBIOSFromBill();
+        protected abstract void ClearDCSBIOS();
         public abstract BIPLinkBase BipLink { get; set; }
         protected abstract List<DCSBIOSInput> DCSBIOSInputs { get; }
         public abstract DCSBIOSActionBindingBase DCSBIOSBinding { get; set; }
-
-        protected TextBox TextBox { get; init; }
         private OSCommand OSCommand { get; set; }
-        public IPanelUI PanelUIParent { get; init; }
+        public IPanelUI PanelUIParent { get; set; }
+        
+        protected TextBoxBaseInput()
+        {
+            this.SetResourceReference(StyleProperty, typeof(TextBox));
+            PreviewKeyDown += TextBox_PreviewKeyDown;
+            MouseDoubleClick += TextBoxMouseDoubleClick;
+            MouseDown += TextBox_OnMouseDown;
+            GotFocus += TextBoxGotFocus;
+            LostFocus += TextBoxLostFocus;
+            TextChanged += TextBoxTextChanged;
+        }
 
         public OSCommand OSCommandObject
         {
@@ -66,7 +56,7 @@ namespace DCSFlightpanels.Bills
             set
             {
                 OSCommand = value;
-                TextBox.Text = OSCommand != null ? OSCommand.Name : string.Empty;
+                Text = OSCommand != null ? OSCommand.Name : string.Empty;
             }
         }
 
@@ -77,10 +67,10 @@ namespace DCSFlightpanels.Bills
             {
                 if (value != null && ContainsDCSBIOS())
                 {
-                    throw new Exception("Cannot insert KeyPress, Bill already contains DCSBIOSInputs");
+                    throw new Exception("Cannot insert KeyPress, TextBox already containsDCSBIOSInputs");
                 }
                 _keyPress = value;
-                TextBox.Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : string.Empty;
+                Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : string.Empty;
             }
         }
 
@@ -90,20 +80,20 @@ namespace DCSFlightpanels.Bills
             {
                 if (!string.IsNullOrEmpty(dcsbiosActionBindingBase.Description))
                 {
-                    TextBox.Text = dcsbiosActionBindingBase.Description;
+                    Text = dcsbiosActionBindingBase.Description;
                 }
                 else if (dcsbiosActionBindingBase.DCSBIOSInputs.Any())
                 {
-                    TextBox.Text = dcsbiosActionBindingBase.DCSBIOSInputs[0].ControlId;
+                    Text = dcsbiosActionBindingBase.DCSBIOSInputs[0].ControlId;
                 }
                 else
                 {
-                    TextBox.Text = "DCS-BIOS";
+                    Text = "DCS-BIOS";
                 }
             }
             else
             {
-                TextBox.Text = string.Empty;
+                Text = string.Empty;
             }
         }
 
@@ -113,26 +103,25 @@ namespace DCSFlightpanels.Bills
             {
                 if (!string.IsNullOrEmpty(description))
                 {
-                    TextBox.Text = description;
+                    Text = description;
                 }
                 else if (dcsBiosInputs.Any())
                 {
-                    TextBox.Text = dcsBiosInputs[0].ControlId;
+                    Text = dcsBiosInputs[0].ControlId;
                 }
                 else
                 {
-                    TextBox.Text = "DCS-BIOS";
+                    Text = "DCS-BIOS";
                 }
             }
             else
             {
-                TextBox.Text = string.Empty;
+                Text = string.Empty;
             }
         }
 
-        protected BillBaseInput(TextBox textBox, IPanelUI panelUI, SaitekPanel saitekPanel)
+        internal void SetEnvironment(IPanelUI panelUI, SaitekPanel saitekPanel)
         {
-            TextBox = textBox;
             PanelUIParent = panelUI;
             _saitekPanel = saitekPanel;
         }
@@ -182,14 +171,14 @@ namespace DCSFlightpanels.Bills
                 {
                     ContentType = copyContentType,
                     Content = content,
-                    SourceName = TextBox.Name,
+                    SourceName = Name,
                     Description = description
                 };
                 Clipboard.SetDataObject(copyPackage);
             }
         }
 
-        public void Paste()
+        public new void Paste()
         {
             var dataObject = Clipboard.GetDataObject();
             if (dataObject == null || !dataObject.GetDataPresent("NonVisuals.CopyPackage"))
@@ -198,7 +187,7 @@ namespace DCSFlightpanels.Bills
             }
 
             var copyPackage = (CopyPackage)dataObject.GetData("NonVisuals.CopyPackage");
-            if (copyPackage?.Content == null || copyPackage.SourceName == TextBox.Name)
+            if (copyPackage?.Content == null || copyPackage.SourceName == Name)
             {
                 return;
             }
@@ -272,9 +261,9 @@ namespace DCSFlightpanels.Bills
             _contextMenu.ContextMenuItemPaste.Click += MenuItemPaste_OnClick;
 
             _contextMenu.ContextMenuItemDeleteSettings.Click += MenuItemDeleteSettings_OnClick;
-            _contextMenu.TextBox = TextBox;
-            TextBox.ContextMenu = _contextMenu;
-            TextBox.ContextMenuOpening += TextBoxContextMenuOpening;
+            _contextMenu.TextBox = this;
+            ContextMenu = _contextMenu;
+            ContextMenuOpening += TextBoxContextMenuOpening;
         }
 
         private void MenuItemAddNullKey_OnClick(object sender, RoutedEventArgs e)
@@ -341,7 +330,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                if (!(TextBox.IsFocused && Equals(TextBox.Background, DarkMode.TextBoxSelectedBackgroundColor)))
+                if (!(IsFocused && Equals(Background, DarkMode.TextBoxSelectedBackgroundColor)))
                 {
                     // UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
                     _contextMenu.HideAll();
@@ -386,7 +375,7 @@ namespace DCSFlightpanels.Bills
                         _contextMenu.ContextMenuItemCopySingle.Click += MenuItemCopyOSCommand_OnClick;
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -495,7 +484,7 @@ namespace DCSFlightpanels.Bills
             {
                 Description = "VK_NULL"
             };
-            TextBox.Text = virtualKeyNull;
+            Text = virtualKeyNull;
             UpdateKeyBindingKeyStroke();
         }
 
@@ -504,14 +493,9 @@ namespace DCSFlightpanels.Bills
             var supportIndefinite = _saitekPanel.TypeOfPanel != GamingPanelEnum.FarmingPanel;
 
             KeyPressReadingSmallWindow keyPressReadingWindow;
-            if (ContainsKeyPress())
-            {
-                keyPressReadingWindow = new KeyPressReadingSmallWindow(GetKeyPress().LengthOfKeyPress, GetKeyPress().VirtualKeyCodesAsString, supportIndefinite);
-            }
-            else
-            {
-                keyPressReadingWindow = new KeyPressReadingSmallWindow(supportIndefinite);
-            }
+            keyPressReadingWindow = ContainsKeyPress() ? 
+                new KeyPressReadingSmallWindow(GetKeyPress().LengthOfKeyPress, GetKeyPress().VirtualKeyCodesAsString, supportIndefinite) 
+                : new KeyPressReadingSmallWindow(supportIndefinite);
 
             keyPressReadingWindow.ShowDialog();
             if (keyPressReadingWindow.DialogResult.HasValue && keyPressReadingWindow.DialogResult.Value)
@@ -527,15 +511,15 @@ namespace DCSFlightpanels.Bills
                 if (string.IsNullOrEmpty(keyPressReadingWindow.VirtualKeyCodesAsString))
                 {
                     KeyPress = null;
-                    TextBox.Text = string.Empty;
+                    Text = string.Empty;
                 }
                 else
                 {
                     KeyPress = new KeyPress(keyPressReadingWindow.VirtualKeyCodesAsString, keyPressReadingWindow.LengthOfKeyPress)
-                        {
-                            Description = string.Empty
-                        };
-                    TextBox.Text = keyPressReadingWindow.VirtualKeyCodesAsString;
+                    {
+                        Description = string.Empty
+                    };
+                    Text = keyPressReadingWindow.VirtualKeyCodesAsString;
                 }
                 UpdateKeyBindingKeyStroke();
             }
@@ -547,7 +531,7 @@ namespace DCSFlightpanels.Bills
             keyPress.KeyPressSequence.Add(0, keyStroke.CloneJson());
             keyPress.Description = string.Empty;
             KeyPress = keyPress;
-            TextBox.Text = keyStroke.VirtualKeyCodesAsString;
+            Text = keyStroke.VirtualKeyCodesAsString;
             UpdateKeyBindingKeyStroke();
         }
 
@@ -559,7 +543,7 @@ namespace DCSFlightpanels.Bills
             };
             if (!string.IsNullOrEmpty(description))
             {
-                TextBox.Text = description;
+                Text = description;
             }
             UpdateKeyBindingSequencedKeyStrokes();
         }
@@ -567,7 +551,7 @@ namespace DCSFlightpanels.Bills
         public void EditKeySequence()
         {
             var supportIndefinite = _saitekPanel.TypeOfPanel != GamingPanelEnum.FarmingPanel;
-            var keySequenceWindow = ContainsKeySequence() ? new KeySequenceWindow(TextBox.Text, GetKeySequence(), supportIndefinite) : new KeySequenceWindow(supportIndefinite);
+            var keySequenceWindow = ContainsKeySequence() ? new KeySequenceWindow(Text, GetKeySequence(), supportIndefinite) : new KeySequenceWindow(supportIndefinite);
             keySequenceWindow.ShowDialog();
 
             if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
@@ -592,10 +576,10 @@ namespace DCSFlightpanels.Bills
                 {
                     // If only one press was created treat it as a simple keypress
                     KeyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress)
-                        {
-                            Description = keySequenceWindow.Description
-                        };
-                    TextBox.Text = sequenceList[0].VirtualKeyCodesAsString;
+                    {
+                        Description = keySequenceWindow.Description
+                    };
+                    Text = sequenceList[0].VirtualKeyCodesAsString;
                     UpdateKeyBindingKeyStroke();
                 }
             }
@@ -612,15 +596,9 @@ namespace DCSFlightpanels.Bills
 
         public void EditDCSBIOS()
         {
-            DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
-            if (ContainsDCSBIOS())
-            {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(TextBox.Name.Replace("TextBox", string.Empty), DCSBIOSInputs, TextBox.Text,   DCSBIOSBinding.IsSequenced,  true);
-            }
-            else
-            {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow( TextBox.Name.Replace("TextBox", string.Empty), null, false, true);
-            }
+            var dcsBIOSInputControlsWindow = ContainsDCSBIOS() ? 
+                new DCSBIOSInputControlsWindow(Name.Replace("TextBox", string.Empty), DCSBIOSInputs, Text, DCSBIOSBinding.IsSequenced, true) 
+                : new DCSBIOSInputControlsWindow(Name.Replace("TextBox", string.Empty), null, false, true);
 
             dcsBIOSInputControlsWindow.ShowDialog();
             if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
@@ -724,7 +702,7 @@ namespace DCSFlightpanels.Bills
         private void AddOSCommand(OSCommand operatingSystemCommand)
         {
             OSCommandObject = operatingSystemCommand.CloneJson();
-            TextBox.Text = operatingSystemCommand.Name;
+            Text = operatingSystemCommand.Name;
             UpdateOSCommandBindings();
         }
 
@@ -759,7 +737,7 @@ namespace DCSFlightpanels.Bills
                     keyPressLength = KeyPress.GetLengthOfKeyPress();
                 }
 
-                _saitekPanel.AddOrUpdateKeyStrokeBinding(PanelUIParent.GetSwitch(TextBox), TextBox.Text, keyPressLength);
+                _saitekPanel.AddOrUpdateKeyStrokeBinding(PanelUIParent.GetSwitch(this), Text, keyPressLength);
             }
             catch (Exception ex)
             {
@@ -773,7 +751,7 @@ namespace DCSFlightpanels.Bills
             {
                 if (_keyPress != null)
                 {
-                    _saitekPanel.AddOrUpdateSequencedKeyBinding(PanelUIParent.GetSwitch(TextBox), TextBox.Text, _keyPress.KeyPressSequence);
+                    _saitekPanel.AddOrUpdateSequencedKeyBinding(PanelUIParent.GetSwitch(this), Text, _keyPress.KeyPressSequence);
                 }
             }
             catch (Exception ex)
@@ -786,7 +764,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                _saitekPanel.AddOrUpdateDCSBIOSBinding(PanelUIParent.GetSwitch(TextBox), DCSBIOSInputs, TextBox.Text, DCSBIOSBinding.IsSequenced);
+                _saitekPanel.AddOrUpdateDCSBIOSBinding(PanelUIParent.GetSwitch(this), DCSBIOSInputs, Text, DCSBIOSBinding.IsSequenced);
             }
             catch (Exception ex)
             {
@@ -800,7 +778,7 @@ namespace DCSFlightpanels.Bills
             {
                 if (BipLink != null)
                 {
-                    _saitekPanel.AddOrUpdateBIPLinkBinding(PanelUIParent.GetSwitch(TextBox), BipLink);
+                    _saitekPanel.AddOrUpdateBIPLinkBinding(PanelUIParent.GetSwitch(this), BipLink);
                 }
             }
             catch (Exception ex)
@@ -813,7 +791,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                _saitekPanel.AddOrUpdateOSCommandBinding(PanelUIParent.GetSwitch(TextBox), OSCommandObject);
+                _saitekPanel.AddOrUpdateOSCommandBinding(PanelUIParent.GetSwitch(this), OSCommandObject);
             }
             catch (Exception ex)
             {
@@ -824,38 +802,38 @@ namespace DCSFlightpanels.Bills
         private void DeleteKeyStroke()
         {
             KeyPress?.KeyPressSequence?.Clear();
-            TextBox.Text = string.Empty;
+            Text = string.Empty;
             UpdateKeyBindingSequencedKeyStrokes();
         }
 
         private void DeleteSequence()
         {
             KeyPress?.KeyPressSequence?.Clear();
-            TextBox.Text = string.Empty;
+            Text = string.Empty;
             UpdateKeyBindingSequencedKeyStrokes();
         }
 
         private void DeleteDCSBIOS()
         {
-            TextBox.Text = string.Empty;
-            _saitekPanel.RemoveSwitchFromList(ControlList.DCSBIOS, PanelUIParent.GetSwitch(TextBox));
-            ClearDCSBIOSFromBill();
+            Text = string.Empty;
+            _saitekPanel.RemoveSwitchFromList(ControlList.DCSBIOS, PanelUIParent.GetSwitch(this));
+            ClearDCSBIOS();
         }
 
         private void DeleteBIPLink()
         {
             BipLink?.BIPLights?.Clear();
-            if (!TextBox.IsFocused && TextBox.Background != DarkMode.TextBoxSelectedBackgroundColor)
+            if (!IsFocused && Background != DarkMode.TextBoxSelectedBackgroundColor)
             {
-                TextBox.Background = DarkMode.TextBoxUnselectedBackgroundColor;
+                Background = DarkMode.TextBoxUnselectedBackgroundColor;
             }
             UpdateBIPLinkBindings();
         }
 
         private void DeleteOSCommand()
         {
-            TextBox.Text = string.Empty;
-            _saitekPanel.RemoveSwitchFromList(ControlList.OSCOMMANDS, PanelUIParent.GetSwitch(TextBox));
+            Text = string.Empty;
+            _saitekPanel.RemoveSwitchFromList(ControlList.OSCOMMANDS, PanelUIParent.GetSwitch(this));
             OSCommandObject = null;
         }
 
@@ -892,6 +870,127 @@ namespace DCSFlightpanels.Bills
         public SortedList<int, IKeyPressInfo> GetKeySequence()
         {
             return _keyPress.KeyPressSequence;
+        }
+        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                var textBox = (TextBoxBaseInput)sender;
+                if (textBox.ContextMenu == null)
+                {
+                    return;
+                }
+
+                if (e.Key == Key.C && Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    textBox.ContextMenu.IsOpen = true;
+                    ((ContextMenuPanelTextBox)textBox.ContextMenu).SetVisibility(
+                        IsEmpty(),
+                        ContainsKeyStroke(),
+                        ContainsKeySequence(),
+                        ContainsDCSBIOS(),
+                        ContainsBIPLink(),
+                        ContainsOSCommand());
+                    ((ContextMenuPanelTextBox)textBox.ContextMenu).OpenCopySubMenuItem();
+                }
+                else if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    var dummy = 0;
+                    var menuItemVisibilities = ((ContextMenuPanelTextBox)textBox.ContextMenu).GetVisibility(
+                        ref dummy,
+                        IsEmpty(), 
+                        ContainsKeyStroke(), 
+                        ContainsKeySequence(), 
+                        ContainsDCSBIOS(), 
+                        ContainsBIPLink(), 
+                        ContainsOSCommand());
+                    if (menuItemVisibilities.PasteVisible)
+                    {
+                        Paste();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (e.ChangedButton != MouseButton.Left) return;
+
+                if (IsEmpty() || ContainsKeyStroke() || string.IsNullOrEmpty(Text))
+                {
+                    EditKeyStroke();
+                }
+                else if (ContainsKeySequence())
+                {
+                    EditKeySequence();
+                }
+                else if (ContainsDCSBIOS())
+                {
+                    EditDCSBIOS();
+                }
+                else if (ContainsOSCommand())
+                {
+                    EditOSCommand();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBox_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                ((TextBox)sender).Background = DarkMode.TextBoxSelectedBackgroundColor;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ((TextBox)sender).Background = DarkMode.TextBoxSelectedBackgroundColor;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Background = ContainsBIPLink() ? Brushes.Bisque : DarkMode.TextBoxUnselectedBackgroundColor;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                FontStyle = ContainsKeySequence() ? FontStyles.Oblique : FontStyles.Normal;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }

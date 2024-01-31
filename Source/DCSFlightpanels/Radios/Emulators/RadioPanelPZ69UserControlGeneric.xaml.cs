@@ -10,7 +10,6 @@
     using ClassLibraryCommon;
 
     using DCS_BIOS;
-    using Bills;
     using CustomControls;
     using Interfaces;
     using Properties;
@@ -89,12 +88,11 @@
 
         private void RadioPanelPZ69UserControlGeneric_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded || !TextBoxBillsSet)
+            if (!UserControlLoaded || !TextBoxEnvironmentSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
-                SetTextBoxBills();
-                SetButtonBills();
+                SetTextBoxEnvironment();
                 UserControlLoaded = true;
             }
             ShowGraphicConfiguration();
@@ -177,30 +175,19 @@
             }
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
-            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ69GenericTextBox>(this).Any()) return;
+            if (TextBoxEnvironmentSet || !Common.FindVisualChildren<PZ69GenericTextBox>(this).Any()) return;
 
             foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
             {
-                if (textBox.Bill != null || textBox.Equals(TextBoxLogPZ69))
+                if (textBox.Equals(TextBoxLogPZ69))
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ69Generic(this, _radioPanelPZ69, textBox);
+                textBox.SetEnvironment(this, _radioPanelPZ69);
             }
-            TextBoxBillsSet = true;
-        }
-
-        private void SetButtonBills()
-        {
-            if (ButtonBillsSet) return;
-
-            ButtonUpperLeftLcd.Bill = new BillPZ69LCDButton(ButtonUpperLeftLcd);
-            ButtonLowerLeftLcd.Bill = new BillPZ69LCDButton(ButtonLowerLeftLcd);
-            ButtonUpperRightLcd.Bill = new BillPZ69LCDButton(ButtonUpperRightLcd);
-            ButtonLowerRightLcd.Bill = new BillPZ69LCDButton(ButtonLowerRightLcd);
-            ButtonBillsSet = true;
+            TextBoxEnvironmentSet = true;
         }
         
         private void UpdateDisplayValues(TextBox textBox)
@@ -331,12 +318,12 @@
         {
             foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogPZ69) || textBox.Bill == null)
+                if (textBox == TextBoxLogPZ69 || textBox == null)
                 {
                     continue;
                 }
 
-                textBox.Bill.ClearAll();
+                textBox.ClearAll();
             }
 
             if (clearAlsoProfile)
@@ -371,14 +358,7 @@
             {
                 var textBox = (TextBox)sender;
 
-                if (textBox.Text.Contains('.'))
-                {
-                    textBox.MaxLength = 6;
-                }
-                else
-                {
-                    textBox.MaxLength = 5;
-                }
+                textBox.MaxLength = textBox.Text.Contains('.') ? 6 : 5;
                 if (!_allowedKeys.Contains(e.Key))
                 {
                     //Only digits and period allowed
@@ -464,7 +444,7 @@
         {
             try
             {
-                if (!UserControlLoaded || !TextBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxEnvironmentSet)
                 {
                     return;
                 }
@@ -678,7 +658,7 @@
                     var textBox = (PZ69GenericTextBox)GetTextBox(keyBinding.RadioPanelPZ69Key, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null && (keyBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || keyBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition))
                     {
-                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
+                        textBox.KeyPress = keyBinding.OSKeyPress;
                     }
                 }
 
@@ -688,14 +668,14 @@
                     if (operatingSystemCommand.OSCommandObject != null && (operatingSystemCommand.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || operatingSystemCommand.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition))
                         if (operatingSystemCommand.OSCommandObject != null)
                         {
-                            textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                            textBox.OSCommandObject = operatingSystemCommand.OSCommandObject;
                         }
                 }
 
                 foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
                 {
                     var textBox = (PZ69GenericTextBox)GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
-                    textBox.Bill.BipLink = bipLinkPZ69;
+                    textBox.BipLink = bipLinkPZ69;
                 }
 
                 foreach (var lcdBinding in _radioPanelPZ69.LCDBindings)
@@ -709,13 +689,13 @@
                     {
                         if (lcdBinding.PZ69LcdPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
                         {
-                            ButtonUpperLeftLcd.Bill.DCSBIOSBindingLCD = lcdBinding;
+                            ButtonUpperLeftLcd.DCSBIOSBindingLCD = lcdBinding;
                             DotTopLeftLcd.Visibility = Visibility.Visible;
                         }
 
                         if (lcdBinding.PZ69LcdPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
                         {
-                            ButtonUpperRightLcd.Bill.DCSBIOSBindingLCD = lcdBinding;
+                            ButtonUpperRightLcd.DCSBIOSBindingLCD = lcdBinding;
                             DotTopRightLcd.Visibility = Visibility.Visible;
                         }
 
@@ -724,13 +704,13 @@
                     {
                         if (lcdBinding.PZ69LcdPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT)
                         {
-                            ButtonLowerLeftLcd.Bill.DCSBIOSBindingLCD = lcdBinding;
+                            ButtonLowerLeftLcd.DCSBIOSBindingLCD = lcdBinding;
                             DotBottomLeftLcd.Visibility = Visibility.Visible;
                         }
 
                         if (lcdBinding.PZ69LcdPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                         {
-                            ButtonLowerRightLcd.Bill.DCSBIOSBindingLCD = lcdBinding;
+                            ButtonLowerRightLcd.DCSBIOSBindingLCD = lcdBinding;
                             DotBottomRightLcd.Visibility = Visibility.Visible;
                         }
                     }
@@ -747,7 +727,7 @@
 
                     if (dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition)
                     {
-                        textBox.Bill.DCSBIOSBinding = dcsbiosBinding;
+                        textBox.DCSBIOSBinding = dcsbiosBinding;
                     }
                 }
             }
@@ -1238,10 +1218,7 @@
                         break;
                     }
                 }
-                if (dcsBiosOutputFormulaWindow == null)
-                {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description, false, true);
-                }
+                dcsBiosOutputFormulaWindow ??= new DCSBiosOutputFormulaWindow(description, false, true);
 
                 dcsBiosOutputFormulaWindow.ShowDialog();
                 if (dcsBiosOutputFormulaWindow.DialogResult.HasValue && dcsBiosOutputFormulaWindow.DialogResult.Value)

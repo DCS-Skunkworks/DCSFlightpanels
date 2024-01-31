@@ -116,14 +116,9 @@
         {
             Bitmap createdBitmap;
 
-            if (backgroundBitmap == null)
-            {
-                createdBitmap = new Bitmap(StreamDeckConstants.STREAMDECK_ICON_WIDTH, StreamDeckConstants.STREAMDECK_ICON_HEIGHT);
-            }
-            else
-            {
-                createdBitmap = new Bitmap(backgroundBitmap, StreamDeckConstants.STREAMDECK_ICON_WIDTH, StreamDeckConstants.STREAMDECK_ICON_HEIGHT);
-            }
+            createdBitmap = backgroundBitmap == null ? 
+                new Bitmap(StreamDeckConstants.STREAMDECK_ICON_WIDTH, StreamDeckConstants.STREAMDECK_ICON_HEIGHT) 
+                : new Bitmap(backgroundBitmap, StreamDeckConstants.STREAMDECK_ICON_WIDTH, StreamDeckConstants.STREAMDECK_ICON_HEIGHT);
 
             // Create a graphics object to measure the text's width and height.
             Graphics graphicsObject = Graphics.FromImage(createdBitmap);
@@ -161,14 +156,10 @@
         {
             var assembly = Assembly.GetExecutingAssembly();
             var directoryName = Path.GetDirectoryName(assembly.Location);
-            if (directoryName == null)
-            {
-                throw new Exception("FileNotFoundBitmap : Failed to get assembly file path.");
-            }
-            return new Bitmap(Path.Combine(directoryName, @"Images\filenotfound.png"));
-
+            return directoryName == null ? 
+                throw new Exception("FileNotFoundBitmap : Failed to get assembly file path.") 
+                : new Bitmap(Path.Combine(directoryName, @"Images\filenotfound.png"));
             //Old code does not preserve transparency :
-
             //BitmapImage tmpBitMapImage = new();
             //using (var stream = assembly.GetManifestResourceStream(@"NonVisuals.Images.filenotfound.png"))
             //{

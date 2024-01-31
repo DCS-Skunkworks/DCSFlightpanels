@@ -334,14 +334,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 if (keyBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && keyBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                 {
-                    if (string.IsNullOrEmpty(keyPress))
-                    {
-                        keyBinding.OSKeyPress = null;
-                    }
-                    else
-                    {
-                        keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
-                    }
+                    keyBinding.OSKeyPress = string.IsNullOrEmpty(keyPress) ? null : new KeyPress(keyPress, keyPressLength);
 
                     found = true;
                 }
@@ -431,14 +424,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 if (keyBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && keyBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                 {
-                    if (keySequence.Count == 0)
-                    {
-                        keyBinding.OSKeyPress = null;
-                    }
-                    else
-                    {
-                        keyBinding.OSKeyPress = new KeyPress(description, keySequence);
-                    }
+                    keyBinding.OSKeyPress = keySequence.Count == 0 ? null : new KeyPress(description, keySequence);
 
                     found = true;
                     break;

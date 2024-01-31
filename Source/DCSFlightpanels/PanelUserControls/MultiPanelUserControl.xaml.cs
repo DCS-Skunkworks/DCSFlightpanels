@@ -11,7 +11,6 @@ namespace DCSFlightpanels.PanelUserControls
     using ClassLibraryCommon;
 
     using DCS_BIOS;
-    using Bills;
     using CustomControls;
     using Interfaces;
     using Properties;
@@ -78,11 +77,11 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void MultiPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded || !TextBoxBillsSet)
+            if (!UserControlLoaded || !TextBoxEnvironmentSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
                 ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
-                SetTextBoxBills();
+                SetTextBoxEnvironment();
                 UserControlLoaded = true;
             }
             ShowGraphicConfiguration();
@@ -151,15 +150,15 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ClearAll(bool clearAlsoProfile)
         {
-            if (TextBoxBillsSet)
+            if (TextBoxEnvironmentSet)
             {
                 foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
                 {
-                    if (textBox == TextBoxLogPZ70 || textBox.Bill == null)
+                    if (textBox == TextBoxLogPZ70 || textBox == null)
                     {
                         continue;
                     }
-                    textBox.Bill.ClearAll();
+                    textBox.ClearAll();
                 }
             }
 
@@ -171,23 +170,22 @@ namespace DCSFlightpanels.PanelUserControls
             ShowGraphicConfiguration();
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
-            if (TextBoxBillsSet || !Common.FindVisualChildren<PZ70TextBox>(this).Any())
+            if (TextBoxEnvironmentSet || !Common.FindVisualChildren<PZ70TextBox>(this).Any())
             {
                 return;
             }
 
             foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
             {
-                if (textBox.Bill == null && !textBox.Equals(TextBoxLogPZ70))
+                if (!textBox.Equals(TextBoxLogPZ70))
                 {
-                    textBox.Bill = new BillPZ70(this, _multiPanelPZ70, textBox);
+                    textBox.SetEnvironment(this, _multiPanelPZ70);
                 }
-                TextBoxBillsSet = true;
+                TextBoxEnvironmentSet = true;
             }
-            TextBoxBillsSet = true;
-            
+            TextBoxEnvironmentSet = true;
         }
         
         public void SettingsModified(object sender, PanelInfoArgs e)
@@ -551,10 +549,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
 
-                if (dcsBiosOutputFormulaWindow == null)
-                {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(description);
-                }
+                dcsBiosOutputFormulaWindow ??= new DCSBiosOutputFormulaWindow(description);
 
                 dcsBiosOutputFormulaWindow.ShowDialog();
                 if (dcsBiosOutputFormulaWindow.DialogResult.HasValue && dcsBiosOutputFormulaWindow.DialogResult.Value)
@@ -586,7 +581,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!UserControlLoaded || !TextBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxEnvironmentSet)
                 {
                     return;
                 }
@@ -608,7 +603,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            textBox.Bill.KeyPress = keyBinding.OSKeyPress;
+                            textBox.KeyPress = keyBinding.OSKeyPress;
                         }
                     }
                 }
@@ -619,7 +614,7 @@ namespace DCSFlightpanels.PanelUserControls
                     if (operatingSystemCommand.DialPosition == _multiPanelPZ70.PZ70DialPosition)
                         if (operatingSystemCommand.OSCommandObject != null)
                         {
-                            textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                            textBox.OSCommandObject = operatingSystemCommand.OSCommandObject;
                         }
                 }
 
@@ -628,7 +623,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (PZ70TextBox)GetTextBox(dcsBiosBinding.MultiPanelPZ70Knob, dcsBiosBinding.WhenTurnedOn);
                     if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
+                        textBox.DCSBIOSBinding = dcsBiosBinding;
                     }
                 }
 
@@ -638,7 +633,7 @@ namespace DCSFlightpanels.PanelUserControls
                     if (bipLink.DialPosition == _multiPanelPZ70.PZ70DialPosition && bipLink.BIPLights.Count > 0)
                     {
                         var textBox = (PZ70TextBox)GetTextBox(bipLink.MultiPanelPZ70Knob, bipLink.WhenTurnedOn);
-                        textBox.Bill.BipLink = bipLink;
+                        textBox.BipLink = bipLink;
                     }
                 }
 

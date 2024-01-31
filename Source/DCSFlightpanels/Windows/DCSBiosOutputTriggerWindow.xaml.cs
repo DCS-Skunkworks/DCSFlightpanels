@@ -129,20 +129,12 @@ namespace DCSFlightpanels.Windows
                 {
                     throw new Exception("Comparison criteria cannot be empty");
                 }
-                if (_dcsbiosControl == null)
-                {
-                    _dcsbiosControl = DCSBIOSControlLocator.GetControl(TextBoxControlId.Text);
-                }
+                _dcsbiosControl ??= DCSBIOSControlLocator.GetControl(TextBoxControlId.Text);
                 _dcsBiosOutput.Consume(_dcsbiosControl, DCSBiosOutputType.IntegerType);
-                if (!_showCriteria)
-                {
-                    //Value isn't used anyways
-                    _dcsBiosOutput.DCSBiosOutputComparison = DCSBiosOutputComparison.Equals;
-                }
-                else
-                {
-                    _dcsBiosOutput.DCSBiosOutputComparison = EnumEx.GetValueFromDescription<DCSBiosOutputComparison>(ComboBoxComparisonCriteria.SelectedValue.ToString());
-                }
+                //Value isn't used anyways
+                _dcsBiosOutput.DCSBiosOutputComparison = !_showCriteria ? 
+                    DCSBiosOutputComparison.Equals 
+                    : EnumEx.GetValueFromDescription<DCSBiosOutputComparison>(ComboBoxComparisonCriteria.SelectedValue.ToString());
                 try
                 {
                     if (_showCriteria)

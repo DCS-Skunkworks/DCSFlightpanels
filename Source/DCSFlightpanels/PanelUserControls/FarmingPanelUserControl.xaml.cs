@@ -8,8 +8,6 @@
     using System.Windows.Input;
 
     using ClassLibraryCommon;
-
-    using Bills;
     using CustomControls;
     using Interfaces;
     using Windows;
@@ -74,10 +72,10 @@
         
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!UserControlLoaded || !TextBoxBillsSet)
+            if (!UserControlLoaded || !TextBoxEnvironmentSet)
             {
                 DarkMode.SetFrameworkElementDarkMode(this);
-                SetTextBoxBills();
+                SetTextBoxEnvironment();
                 UserControlLoaded = true;
             }
             ShowGraphicConfiguration();
@@ -188,11 +186,11 @@
         {
             foreach (var textBox in Common.FindVisualChildren<FarmingPanelTextBox>(this))
             {
-                if (textBox == TextBoxLogFarmingPanel || textBox.Bill == null)
+                if (textBox == TextBoxLogFarmingPanel || textBox == null)
                 {
                     continue;
                 }
-                textBox.Bill.ClearAll();
+                textBox.ClearAll();
             }
             if (clearAlsoProfile)
             {
@@ -202,22 +200,21 @@
             ShowGraphicConfiguration();
         }
 
-        private void SetTextBoxBills()
+        private void SetTextBoxEnvironment()
         {
-            if (TextBoxBillsSet || !Common.FindVisualChildren<FarmingPanelTextBox>(this).Any())
+            if (TextBoxEnvironmentSet || !Common.FindVisualChildren<FarmingPanelTextBox>(this).Any())
             {
                 return;
             }
             foreach (var textBox in Common.FindVisualChildren<FarmingPanelTextBox>(this))
             {
-                if (textBox.Bill != null || textBox == TextBoxLogFarmingPanel)
+                if (!textBox.Equals(TextBoxLogFarmingPanel))
                 {
-                    continue;
+                    textBox.SetEnvironment(this, _farmingSidePanel);
                 }
-
-                textBox.Bill = new BillPFarmingPanel(this, _farmingSidePanel, textBox);
+                TextBoxEnvironmentSet = true;
             }
-            TextBoxBillsSet = true;
+            TextBoxEnvironmentSet = true;
         }
         
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
@@ -590,7 +587,7 @@
         {
             try
             {
-                if (!UserControlLoaded || !TextBoxBillsSet)
+                if (!UserControlLoaded || !TextBoxEnvironmentSet)
                 {
                     return;
                 }
@@ -599,11 +596,11 @@
                     var textBox = (FarmingPanelTextBox)GetTextBox(keyBinding.FarmingPanelKey, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
-                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
+                        textBox.KeyPress = keyBinding.OSKeyPress;
                     }
                     else
                     {
-                        textBox.Bill.KeyPress = null;
+                        textBox.KeyPress = null;
                     }
                 }
 
@@ -612,39 +609,26 @@
                     var textBox = (FarmingPanelTextBox)GetTextBox(operatingSystemCommand.FarmingPanelKey, operatingSystemCommand.WhenTurnedOn);
                     if (operatingSystemCommand.OSCommandObject != null)
                     {
-                        textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
+                        textBox.OSCommandObject = operatingSystemCommand.OSCommandObject;
                     }
                     else
                     {
-                        textBox.Bill.OSCommandObject = null;
+                        textBox.OSCommandObject = null;
                     }
                 }
 
                 foreach (var dcsBiosBinding in _farmingSidePanel.DCSBiosBindings)
                 {
                     var textBox = (FarmingPanelTextBox)GetTextBox(dcsBiosBinding.FarmingPanelKey, dcsBiosBinding.WhenTurnedOn);
-                    if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                    {
-                        textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
-                    }
-                    else
-                    {
-                        textBox.Bill.DCSBIOSBinding = null;
-                    }
+                    //TODO search all these
+                    textBox.DCSBIOSBinding = dcsBiosBinding.DCSBIOSInputs.Count > 0 ? dcsBiosBinding : null;
                 }
 
-                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor); //Maybe we can remove this function and only retain the TextBoxBillsSet = true; ?
+                SetTextBoxBackgroundColors(DarkMode.TextBoxUnselectedBackgroundColor);
                 foreach (var bipLink in _farmingSidePanel.BIPLinkHashSet)
                 {
                     var textBox = (FarmingPanelTextBox)GetTextBox(bipLink.FarmingPanelKey, bipLink.WhenTurnedOn);
-                    if (bipLink.BIPLights.Count > 0)
-                    {
-                        textBox.Bill.BipLink = bipLink;
-                    }
-                    else
-                    {
-                        textBox.Bill.BipLink = null;
-                    }
+                    textBox.BipLink = bipLink.BIPLights.Count > 0 ? bipLink : null;
                 }
             }
             catch (Exception ex)
@@ -662,7 +646,7 @@
                     textBox.Background = brush;
                 }
             }
-            TextBoxBillsSet = true;
+            TextBoxEnvironmentSet = true;
         }
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)

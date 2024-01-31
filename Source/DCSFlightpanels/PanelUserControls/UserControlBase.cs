@@ -10,8 +10,7 @@ namespace DCSFlightpanels.PanelUserControls
         private bool _disposed;
 
         protected bool UserControlLoaded { get; set; }
-        protected bool TextBoxBillsSet { get; set; }
-        protected bool ButtonBillsSet { get; set; }
+        protected bool TextBoxEnvironmentSet { get; set; }
 
         public abstract void Init();
 

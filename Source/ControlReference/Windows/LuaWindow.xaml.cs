@@ -2,14 +2,10 @@
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Shapes;
 using ClassLibraryCommon;
 using ControlReference.CustomControls;
-using DCS_BIOS;
 using DCS_BIOS.Json;
-using Cursors = System.Windows.Input.Cursors;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace ControlReference.Windows
 {

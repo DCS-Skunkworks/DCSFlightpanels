@@ -144,7 +144,7 @@
             set => _dcsbiosConverter = value;
         }
 
-        private void IssueInvalidDoubleTextBoxWarning(TextBox textBox)
+        private static void IssueInvalidDoubleTextBoxWarning(TextBox textBox)
         {
             System.Windows.Forms.MessageBox.Show("Please enter a valid number.", "Invalid number.", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
             textBox.SelectAll();
@@ -463,15 +463,7 @@
         {
             try
             {
-                TextBox textBox;
-                if (sender.Equals(ButtonBrowseImage))
-                {
-                    textBox = TextBoxImagePath;
-                }
-                else
-                {
-                    textBox = TextBoxOverlayImagePath;
-                }
+                TextBox textBox = sender.Equals(ButtonBrowseImage) ? TextBoxImagePath : TextBoxOverlayImagePath;
                 var imageRelativePath = string.Empty;
                 var directory = SettingsManager.LastImageFileDirectory;
 

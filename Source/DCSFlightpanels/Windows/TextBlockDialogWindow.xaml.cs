@@ -40,14 +40,7 @@ namespace DCSFlightpanels.Windows
 
         public void AddItalic(string text, bool bold = false)
         {
-            if (bold)
-            {
-                TextBlockInformation.Inlines.Add(new Italic(new Run(text) { FontWeight = FontWeights.Bold }));
-            }
-            else
-            {
-                TextBlockInformation.Inlines.Add(new Italic(new Run(text)));
-            }
+            TextBlockInformation.Inlines.Add(bold ? new Italic(new Run(text) { FontWeight = FontWeights.Bold }) : new Italic(new Run(text)));
         }
 
         public void AddLineBreak()
