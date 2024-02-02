@@ -1,4 +1,5 @@
 ﻿using DCS_BIOS;
+using System;
 using Xunit;
 
 namespace DCSFPTests.DcsBios
@@ -169,5 +170,16 @@ namespace DCSFPTests.DcsBios
             Assert.Equal(valueToCompare, dcsOutput.LastUIntValue);
         }
 
+        [Fact]
+        public void SpecifiedValueUInt_ShouldTrowIfOutputTypeNotSetToInteger() {
+            Assert.Throws<Exception>(() => {
+                DCSBIOSOutput dcsOutput = new()
+                {
+                    Address = 99,
+                    DCSBiosOutputType = DCSBiosOutputType.FloatBuffer,
+                    SpecifiedValueUInt = 6
+                };
+            });
+        }
     }
 }
