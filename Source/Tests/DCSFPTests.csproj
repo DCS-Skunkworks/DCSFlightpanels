@@ -17,6 +17,7 @@
 		</AllowedReferenceRelatedFileExtensions>
 	</PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="ExpectedObjects" Version="3.5.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NLog" Version="5.2.7" />
@@ -170,6 +171,10 @@
     <None Update="NonVisuals\BitmapCreatorTestsResources\Original_50x50.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Serialization\Resources\" />
   </ItemGroup>
 
 </Project>
