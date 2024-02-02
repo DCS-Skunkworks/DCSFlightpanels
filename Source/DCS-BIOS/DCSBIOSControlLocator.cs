@@ -7,6 +7,7 @@ namespace DCS_BIOS
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Windows.Controls;
     using ClassLibraryCommon;
 
     using Newtonsoft.Json;
@@ -27,7 +28,10 @@ namespace DCS_BIOS
         private static string _jsonDirectory;
         private const string DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE = "Error loading DCS-BIOS JSON. Check that the DCS-BIOS location setting points to the JSON directory.";
         private const string DCSBIOS_LUA_NOT_FOUND_ERROR_MESSAGE = "Error loading DCS-BIOS lua.";
-        private static List<KeyValuePair<string, string>> _luaControls = new();
+        private static readonly List<KeyValuePair<string, string>> LuaControls = new();
+        private static readonly List<string> LuaModuleSignatures = new();
+        private static string _dcsbiosAircraftLuaLocation;
+        private static string _dcsbiosModuleLuaFilePath;
 
         public static DCSAircraft DCSAircraft
         {
@@ -45,14 +49,20 @@ namespace DCS_BIOS
         public static string JSONDirectory
         {
             get => _jsonDirectory;
-            set => _jsonDirectory = value;
+            set
+            {
+                _jsonDirectory = value;
+                _dcsbiosAircraftLuaLocation = $@"{value}\..\..\lib\modules\aircraft_modules\";
+                _dcsbiosModuleLuaFilePath = $@"{value}\..\..\lib\modules\Module.lua";
+            }
         }
 
         private static void Reset()
         {
             DCSBIOSAircraftLoadStatus.Clear();
             DCSBIOSControls.Clear();
-            _luaControls.Clear();
+            LuaControls.Clear();
+            LuaModuleSignatures.Clear();
         }
 
         public static DCSBIOSControl GetControl(string controlId)
@@ -364,11 +374,11 @@ namespace DCS_BIOS
             }
         }
 
-        private static List<DCSBIOSControl> ReadControlsFromDocJson(string inputPath)
+        private static List<DCSBIOSControl> ReadControlsFromDocJson(string fileFullPath)
         {
             // input is a map from category string to a map from key string to control definition
             // we read it all then flatten the grand children (the control definitions)
-            var input = File.ReadAllText(inputPath);
+            var input = File.ReadAllText(fileFullPath);
             try
             {
                 return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, DCSBIOSControl>>>(input)!
@@ -460,27 +470,54 @@ namespace DCS_BIOS
             return DCSBIOSControls.Where(controlObject => controlObject.Inputs.Count > 0);
         }
 
-        public static string GetLuaCommand(string controlId)
+        public static string GetLuaCommand(string controlId, bool includeSignature)
         {
             if (_dcsAircraft == null || _dcsAircraft.IsMetaModule || string.IsNullOrEmpty(controlId)) return "";
 
-            if (_luaControls.Count == 0)
+            if (LuaControls.Count == 0)
             {
                 ReadLuaCommandsFromJson();
-                if (_luaControls.Count == 0) return "";
+                if (LuaControls.Count == 0) return "";
             }
 
-            var result = _luaControls.Find(o => o.Key == controlId);
+            var result = LuaControls.Find(o => o.Key == controlId);
+
             if (result.Key != controlId) return "";
 
-            return result.Value;
+            var stringResult = result.Value;
+            if (includeSignature)
+            {
+                var signature = GetLuaCommandSignature(result.Value);
+                stringResult = string.IsNullOrEmpty(signature) ? result.Value : signature + "\n" + result.Value;
+            }
+            return stringResult;
         }
 
-        private static void ReadControlsFromLua(DCSAircraft dcsAircraft, string inputPath)
+        private static string GetLuaCommandSignature(string luaCommand)
+        {
+            try
+            {
+                //A_10C:definePotentiometer("HARS_LATITUDE", 44, 3005, 271, { 0, 1 }, "HARS", "HARS Latitude Dial")
+                var startIndex = luaCommand.IndexOf(":", StringComparison.Ordinal);
+                var endIndex = luaCommand.IndexOf("(", StringComparison.Ordinal) - startIndex;
+                var functionName = "function Module" + luaCommand.Substring(startIndex, endIndex);
+
+                var luaSignature = LuaModuleSignatures.Find(o => o.StartsWith(functionName + "("));
+                return string.IsNullOrEmpty(luaSignature) ? "" : $"{luaSignature.Replace("function ", "")}";
+            }
+            catch (Exception exception)
+            {
+                Common.ShowErrorMessageBox(exception);
+            }
+
+            return "";
+        }
+
+        private static void ReadControlsFromLua(DCSAircraft dcsAircraft, string fileFullPath)
         {
             // input is a map from category string to a map from key string to control definition
             // we read it all then flatten the grand children (the control definitions)
-            var lineArray = File.ReadAllLines(inputPath);
+            var lineArray = File.ReadAllLines(fileFullPath);
             try
             {
                 var luaBuffer = "";
@@ -496,7 +533,7 @@ namespace DCS_BIOS
 
                         if (CountParenthesis(true, luaBuffer) == CountParenthesis(false, luaBuffer))
                         {
-                            _luaControls.Add(CopyControlFromLuaBuffer(luaBuffer));
+                            LuaControls.Add(CopyControlFromLuaBuffer(luaBuffer));
                             luaBuffer = "";
                         }
                     }
@@ -506,7 +543,7 @@ namespace DCS_BIOS
                         luaBuffer = luaBuffer + "\n" + s;
                         if (CountParenthesis(true, luaBuffer) == CountParenthesis(false, luaBuffer))
                         {
-                            _luaControls.Add(CopyControlFromLuaBuffer(luaBuffer));
+                            LuaControls.Add(CopyControlFromLuaBuffer(luaBuffer));
                             luaBuffer = "";
                         }
                     }
@@ -517,6 +554,54 @@ namespace DCS_BIOS
             {
                 Logger.Error(e, "ReadControlsFromLua : Failed to read DCS-BIOS lua.");
             }
+        }
+
+        private static List<string> ReadModuleFunctionSignatures(string moduleFile)
+        {
+            if (LuaModuleSignatures.Count > 0) return LuaModuleSignatures;
+
+            LuaModuleSignatures.Clear();
+
+
+            var lineArray = File.ReadAllLines(moduleFile);
+            try
+            {
+                var luaBuffer = "";
+
+                foreach (var s in lineArray)
+                {
+                    //s.StartsWith("--") 
+                    if (string.IsNullOrEmpty(s)) continue;
+
+                    if (s.StartsWith("function Module:define"))
+                    {
+                        luaBuffer = s;
+
+                        if (CountParenthesis(true, luaBuffer) == CountParenthesis(false, luaBuffer))
+                        {
+                            LuaModuleSignatures.Add(luaBuffer);
+                            luaBuffer = "";
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(luaBuffer))
+                    {
+                        //We have incomplete data from previously
+                        luaBuffer = luaBuffer + "\n" + s;
+                        if (CountParenthesis(true, luaBuffer) == CountParenthesis(false, luaBuffer))
+                        {
+                            LuaModuleSignatures.Add(luaBuffer);
+                            luaBuffer = "";
+                        }
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "GetModuleFunctionSignatures : Failed to read Module.lua.");
+            }
+
+            return LuaModuleSignatures;
         }
 
         private static KeyValuePair<string, string> CopyControlFromLuaBuffer(string luaBuffer)
@@ -558,13 +643,15 @@ namespace DCS_BIOS
         /// <exception cref="Exception"></exception>
         private static void ReadLuaCommandsFromJson()
         {
-            _luaControls.Clear();
+            LuaControls.Clear();
+            LuaModuleSignatures.Clear();
 
             try
             {
                 lock (LockObject)
                 {
                     ReadControlsFromLua(_dcsAircraft, $"{_jsonDirectory}\\..\\..\\lib\\modules\\aircraft_modules\\{_dcsAircraft.LuaFilename}");
+                    ReadModuleFunctionSignatures(_dcsbiosModuleLuaFilePath);
                 }
             }
             catch (Exception ex)
