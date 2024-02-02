@@ -440,7 +440,7 @@ namespace ControlReference
 
                     foreach (var dcsbiosControl in filteredControls)
                     {
-                        var luaCommand = DCSBIOSControlLocator.GetLuaCommand(dcsbiosControl.Identifier);
+                        var luaCommand = DCSBIOSControlLocator.GetLuaCommand(dcsbiosControl.Identifier, true);
                         _dcsbiosUIControlPanels.Add(new DCSBIOSControlUserControl( dcsbiosControl, luaCommand));
                     }
 
