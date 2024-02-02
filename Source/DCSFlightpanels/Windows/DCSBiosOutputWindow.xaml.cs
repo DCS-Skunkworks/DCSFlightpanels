@@ -30,8 +30,7 @@ namespace DCSFlightpanels.Windows
             _description = description;
             _userEditsDescription = userEditsDescription;
             _dcsBiosOutput = new DCSBIOSOutput();
-            DCSBIOSControlLocator.LoadControls();
-            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
         }
 
         public DCSBiosOutputWindow(string description, DCSBIOSOutput dcsBiosOutput, bool userEditsDescription = false)
@@ -40,9 +39,8 @@ namespace DCSFlightpanels.Windows
             _description = description;
             _userEditsDescription = userEditsDescription;
             _dcsBiosOutput = dcsBiosOutput;
-            DCSBIOSControlLocator.LoadControls();
             _dcsbiosControl = DCSBIOSControlLocator.GetControl(_dcsBiosOutput.ControlId);
-            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)

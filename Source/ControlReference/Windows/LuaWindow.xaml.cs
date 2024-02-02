@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Shapes;
 using ClassLibraryCommon;
 using ControlReference.CustomControls;
-using DCS_BIOS.Json;
 
 namespace ControlReference.Windows
 {

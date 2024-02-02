@@ -52,8 +52,7 @@ namespace DCSFlightpanels.Windows
         public JaceSandboxWindow()
         {
             BIOSEventHandler.AttachDataListener(this);
-            DCSBIOSControlLocator.LoadControls();
-            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
             var thread = new Thread(ThreadLoop);
             thread.Start();
             InitializeComponent();

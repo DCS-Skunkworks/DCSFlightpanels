@@ -1,6 +1,4 @@
-﻿using NonVisuals.KeyEmulation;
-
-namespace DCSFlightpanels.PanelUserControls
+﻿namespace DCSFlightpanels.PanelUserControls
 {
     using System;
     using System.Collections.Generic;
@@ -11,8 +9,6 @@ namespace DCSFlightpanels.PanelUserControls
     using ClassLibraryCommon;
     using CustomControls;
     using Interfaces;
-    using Windows;
-
     using MEF;
     using NonVisuals.EventArgs;
     using NonVisuals.Interfaces;
