@@ -136,7 +136,7 @@ namespace ControlReference
             {
                 return;
             }
-            _metaControls = DCSBIOSControlLocator.LoadMetaControls();
+            _metaControls = DCSBIOSControlLocator.GetMetaControls();
             _dcsbiosVersionOutput = new DCSBIOSOutput();
             _dcsbiosVersionOutput.Consume(_metaControls.Find(o => o.Identifier == "DCS_BIOS"), DCSBiosOutputType.StringType);
         }

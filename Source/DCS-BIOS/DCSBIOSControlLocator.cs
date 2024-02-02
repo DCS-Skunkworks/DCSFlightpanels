@@ -7,7 +7,6 @@ namespace DCS_BIOS
     using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Windows.Controls;
     using ClassLibraryCommon;
 
     using Newtonsoft.Json;
@@ -22,16 +21,11 @@ namespace DCS_BIOS
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private static List<DCSBIOSControl> DCSBIOSControls = new();
+        private static List<DCSBIOSControl> _dcsbiosControls = new();
         private static readonly object LockObject = new();
         private static DCSAircraft _dcsAircraft;
         private static string _jsonDirectory;
         private const string DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE = "Error loading DCS-BIOS JSON. Check that the DCS-BIOS location setting points to the JSON directory.";
-        private const string DCSBIOS_LUA_NOT_FOUND_ERROR_MESSAGE = "Error loading DCS-BIOS lua.";
-        private static readonly List<KeyValuePair<string, string>> LuaControls = new();
-        private static readonly List<string> LuaModuleSignatures = new();
-        private static string _dcsbiosAircraftLuaLocation;
-        private static string _dcsbiosModuleLuaFilePath;
 
         public static DCSAircraft DCSAircraft
         {
@@ -41,6 +35,7 @@ namespace DCS_BIOS
                 if (_dcsAircraft != value)
                 {
                     _dcsAircraft = value;
+                    LuaAssistant.DCSAircraft = _dcsAircraft;
                     Reset();
                 }
             }
@@ -52,17 +47,8 @@ namespace DCS_BIOS
             set
             {
                 _jsonDirectory = value;
-                _dcsbiosAircraftLuaLocation = $@"{value}\..\..\lib\modules\aircraft_modules\";
-                _dcsbiosModuleLuaFilePath = $@"{value}\..\..\lib\modules\Module.lua";
+                LuaAssistant.JSONDirectory = value;
             }
-        }
-
-        private static void Reset()
-        {
-            DCSBIOSAircraftLoadStatus.Clear();
-            DCSBIOSControls.Clear();
-            LuaControls.Clear();
-            LuaModuleSignatures.Clear();
         }
 
         public static DCSBIOSControl GetControl(string controlId)
@@ -78,12 +64,12 @@ namespace DCS_BIOS
                 {
                     LoadControls();
 
-                    if (!DCSBIOSControls.Exists(controlObject => controlObject.Identifier.Equals(controlId)))
+                    if (!_dcsbiosControls.Exists(controlObject => controlObject.Identifier.Equals(controlId)))
                     {
                         throw new Exception($"Error, control {controlId} does not exist. ({DCSAircraft.Description})");
                     }
 
-                    return DCSBIOSControls.Single(controlObject => controlObject.Identifier.Equals(controlId));
+                    return _dcsbiosControls.Single(controlObject => controlObject.Identifier.Equals(controlId));
                 }
                 catch (InvalidOperationException ioe)
                 {
@@ -145,7 +131,8 @@ namespace DCS_BIOS
         }
 
         /// <summary>
-        /// Simple loading, not bothered with DCSFP various key emulator stuff and such
+        /// Simple loading of all modules, not bothered with EmulationMode or whether to load Meta or FC3 modules.
+        /// Member DCSAircraft is not taken into account.
         /// </summary>
         /// <exception cref="Exception"></exception>
         public static List<DCSBIOSControl> ReadDataFromJsonFileSimple(string filename, bool onlyDirectResult = false)
@@ -172,7 +159,7 @@ namespace DCS_BIOS
                         var controls = ReadControlsFromDocJson(file.FullName);
                         if (!onlyDirectResult)
                         {
-                            DCSBIOSControls.AddRange(controls);
+                            _dcsbiosControls.AddRange(controls);
                         }
                         result.AddRange(controls);
                         PrintDuplicateControlIdentifiers(controls);
@@ -189,48 +176,10 @@ namespace DCS_BIOS
             return result;
         }
 
-        private static void ReadDataFromJsonFile(string filename)
-        {
-            if (DCSBIOSAircraftLoadStatus.IsLoaded(filename) || filename == DCSAircraft.GetKeyEmulator().JSONFilename || filename == DCSAircraft.GetNoFrameLoadedYet().JSONFilename)
-            {
-                return;
-            }
-
-            try
-            {
-                lock (LockObject)
-                {
-                    var directoryInfo = new DirectoryInfo(_jsonDirectory);
-                    IEnumerable<FileInfo> files;
-                    try
-                    {
-                        files = directoryInfo.EnumerateFiles(filename, SearchOption.TopDirectoryOnly);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception($"Failed to find DCS-BIOS json files. -> {Environment.NewLine}{ex.Message}");
-                    }
-
-                    foreach (var file in files)
-                    {
-                        var controls = ReadControlsFromDocJson(file.FullName);
-                        DCSBIOSControls.AddRange(controls);
-                        PrintDuplicateControlIdentifiers(controls);
-                    }
-
-                    DCSBIOSAircraftLoadStatus.SetLoaded(filename, true);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
-            }
-        }
-
         /// <summary>
         /// Loads meta controls and returns them in a list.
         /// </summary>
-        public static List<DCSBIOSControl> LoadMetaControls()
+        public static List<DCSBIOSControl> GetMetaControls()
         {
             var controlList = ReadDataFromJsonFileSimple("MetadataStart.json", true);
             controlList.AddRange(ReadDataFromJsonFileSimple("MetadataEnd.json", true));
@@ -238,7 +187,61 @@ namespace DCS_BIOS
             return controlList;
         }
 
-        public static void LoadControls()
+        public static IEnumerable<DCSBIOSControl> GetControls()
+        {
+            LoadControls();
+
+            // Remove duplicates which may come from loading NS430 or other additional profiles
+            return _dcsbiosControls.Distinct(new DCSBIOSControlComparer()).ToList();
+        }
+
+        public static IEnumerable<DCSBIOSControl> GetOutputControls(DCSBiosOutputType dcsBiosOutputType)
+        {
+            /*"CM_CHAFFCNT_DISPLAY": {
+                   "category": "Countermeasures",
+               "control_type": "display",
+                "description": "Chaff Counter",
+                 "identifier": "CM_CHAFFCNT_DISPLAY",
+                     "inputs": [  ],
+                    "outputs": [ {
+                                       "address": 5408,
+                                   "description": "Chaff Counter",
+                                    "max_length": 2, 
+                                        "suffix": "",
+                                          "type": "string"
+                               } ]
+                },*/
+            if (!Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+            {
+                return null;
+            }
+
+            LoadControls();
+            return _dcsbiosControls.Where(o => o.Outputs.Count > 0 && o.Outputs.Any(x => x.OutputDataType == dcsBiosOutputType));
+        }
+
+        public static IEnumerable<DCSBIOSControl> GetInputControls()
+        {
+            if (!Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled))
+            {
+                return null;
+            }
+
+            LoadControls();
+            return _dcsbiosControls.Where(controlObject => controlObject.Inputs.Count > 0);
+        }
+
+        public static string GetLuaCommand(string dcsbiosIdentifier, bool includeSignature)
+        {
+            return LuaAssistant.GetLuaCommand(dcsbiosIdentifier, includeSignature);
+        }
+
+        /// <summary>
+        /// Checks DCSAircraft and EmulationMode loads appropriate modules (NS430 or FC3 +/- Meta modules).
+        /// Set DCSAircraft and JSON path before calling this.
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        private static void LoadControls()
         {
             /*
              * Load profile for current airframe
@@ -253,7 +256,7 @@ namespace DCS_BIOS
             /*
              * Check if already loaded.
              */
-            if (DCSBIOSControls.Count > 0)
+            if (_dcsbiosControls.Count > 0)
             {
                 return;
             }
@@ -300,7 +303,7 @@ namespace DCS_BIOS
                 }
 
                 // Remove duplicates which may come from loading NS430 or other additional profiles
-                DCSBIOSControls = DCSBIOSControls.Distinct(new DCSBIOSControlComparer()).ToList();
+                _dcsbiosControls = _dcsbiosControls.Distinct(new DCSBIOSControlComparer()).ToList();
             }
             catch (Exception ex)
             {
@@ -363,7 +366,7 @@ namespace DCS_BIOS
             {
                 lock (LockObject)
                 {
-                    DCSBIOSControls.AddRange(ReadControlsFromDocJson(jsonDirectory + "\\MetadataEnd.json"));
+                    _dcsbiosControls.AddRange(ReadControlsFromDocJson(jsonDirectory + "\\MetadataEnd.json"));
 
                     DCSBIOSAircraftLoadStatus.SetLoaded("MetadataEnd", true);
                 }
@@ -405,7 +408,7 @@ namespace DCS_BIOS
             {
                 lock (LockObject)
                 {
-                    DCSBIOSControls.AddRange(ReadControlsFromDocJson(jsonDirectory + "\\CommonData.json"));
+                    _dcsbiosControls.AddRange(ReadControlsFromDocJson(jsonDirectory + "\\CommonData.json"));
                     DCSBIOSAircraftLoadStatus.SetLoaded("CommonData", true);
                 }
             }
@@ -415,250 +418,49 @@ namespace DCS_BIOS
             }
         }
 
-        public static IEnumerable<DCSBIOSControl> GetControls()
+        private static void ReadDataFromJsonFile(string filename)
         {
-            LoadControls();
-
-            // Remove duplicates which may come from loading NS430 or other additional profiles
-            return DCSBIOSControls.Distinct(new DCSBIOSControlComparer()).ToList();
-        }
-
-        public static IEnumerable<DCSBIOSControl> GetStringOutputControls()
-        {
-            /*"CM_CHAFFCNT_DISPLAY": {
-                   "category": "Countermeasures",
-               "control_type": "display",
-                "description": "Chaff Counter",
-                 "identifier": "CM_CHAFFCNT_DISPLAY",
-                     "inputs": [  ],
-                    "outputs": [ {
-                                       "address": 5408,
-                                   "description": "Chaff Counter",
-                                    "max_length": 2, 
-                                        "suffix": "",
-                                          "type": "string"
-                               } ]
-                },*/
-            if (!Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+            if (DCSBIOSAircraftLoadStatus.IsLoaded(filename) || filename == DCSAircraft.GetKeyEmulator().JSONFilename || filename == DCSAircraft.GetNoFrameLoadedYet().JSONFilename)
             {
-                return null;
+                return;
             }
-
-            LoadControls();
-            return DCSBIOSControls.Where(o => o.Outputs.Count > 0 && o.Outputs.Any(x => x.OutputDataType == DCSBiosOutputType.StringType));
-        }
-
-        public static IEnumerable<DCSBIOSControl> GetIntegerOutputControls()
-        {
-            if (!Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
-            {
-                return null;
-            }
-
-            LoadControls();
-            return DCSBIOSControls.Where(o => o.Outputs.Count > 0 && o.Outputs.Any(x => x.OutputDataType == DCSBiosOutputType.IntegerType));
-        }
-
-        public static IEnumerable<DCSBIOSControl> GetInputControls()
-        {
-            if (!Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled))
-            {
-                return null;
-            }
-
-            LoadControls();
-            return DCSBIOSControls.Where(controlObject => controlObject.Inputs.Count > 0);
-        }
-
-        public static string GetLuaCommand(string controlId, bool includeSignature)
-        {
-            if (_dcsAircraft == null || _dcsAircraft.IsMetaModule || string.IsNullOrEmpty(controlId)) return "";
-
-            if (LuaControls.Count == 0)
-            {
-                ReadLuaCommandsFromJson();
-                if (LuaControls.Count == 0) return "";
-            }
-
-            var result = LuaControls.Find(o => o.Key == controlId);
-
-            if (result.Key != controlId) return "";
-
-            var stringResult = result.Value;
-            if (includeSignature)
-            {
-                var signature = GetLuaCommandSignature(result.Value);
-                stringResult = string.IsNullOrEmpty(signature) ? result.Value : signature + "\n" + result.Value;
-            }
-            return stringResult;
-        }
-
-        private static string GetLuaCommandSignature(string luaCommand)
-        {
-            try
-            {
-                //A_10C:definePotentiometer("HARS_LATITUDE", 44, 3005, 271, { 0, 1 }, "HARS", "HARS Latitude Dial")
-                var startIndex = luaCommand.IndexOf(":", StringComparison.Ordinal);
-                var endIndex = luaCommand.IndexOf("(", StringComparison.Ordinal) - startIndex;
-                var functionName = "function Module" + luaCommand.Substring(startIndex, endIndex);
-
-                var luaSignature = LuaModuleSignatures.Find(o => o.StartsWith(functionName + "("));
-                return string.IsNullOrEmpty(luaSignature) ? "" : $"{luaSignature.Replace("function ", "")}";
-            }
-            catch (Exception exception)
-            {
-                Common.ShowErrorMessageBox(exception);
-            }
-
-            return "";
-        }
-
-        private static void ReadControlsFromLua(DCSAircraft dcsAircraft, string fileFullPath)
-        {
-            // input is a map from category string to a map from key string to control definition
-            // we read it all then flatten the grand children (the control definitions)
-            var lineArray = File.ReadAllLines(fileFullPath);
-            try
-            {
-                var luaBuffer = "";
-
-                foreach (var s in lineArray)
-                {
-                    //s.StartsWith("--") 
-                    if (string.IsNullOrEmpty(s)) continue;
-
-                    if (s.StartsWith(dcsAircraft.ModuleLuaName + ":define"))
-                    {
-                        luaBuffer = s;
-
-                        if (CountParenthesis(true, luaBuffer) == CountParenthesis(false, luaBuffer))
-                        {
-                            LuaControls.Add(CopyControlFromLuaBuffer(luaBuffer));
-                            luaBuffer = "";
-                        }
-                    }
-                    else if (!string.IsNullOrEmpty(luaBuffer))
-                    {
-                        //We have incomplete data from previously
-                        luaBuffer = luaBuffer + "\n" + s;
-                        if (CountParenthesis(true, luaBuffer) == CountParenthesis(false, luaBuffer))
-                        {
-                            LuaControls.Add(CopyControlFromLuaBuffer(luaBuffer));
-                            luaBuffer = "";
-                        }
-                    }
-                    
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "ReadControlsFromLua : Failed to read DCS-BIOS lua.");
-            }
-        }
-
-        private static List<string> ReadModuleFunctionSignatures(string moduleFile)
-        {
-            if (LuaModuleSignatures.Count > 0) return LuaModuleSignatures;
-
-            LuaModuleSignatures.Clear();
-
-
-            var lineArray = File.ReadAllLines(moduleFile);
-            try
-            {
-                var luaBuffer = "";
-
-                foreach (var s in lineArray)
-                {
-                    //s.StartsWith("--") 
-                    if (string.IsNullOrEmpty(s)) continue;
-
-                    if (s.StartsWith("function Module:define"))
-                    {
-                        luaBuffer = s;
-
-                        if (CountParenthesis(true, luaBuffer) == CountParenthesis(false, luaBuffer))
-                        {
-                            LuaModuleSignatures.Add(luaBuffer);
-                            luaBuffer = "";
-                        }
-                    }
-                    else if (!string.IsNullOrEmpty(luaBuffer))
-                    {
-                        //We have incomplete data from previously
-                        luaBuffer = luaBuffer + "\n" + s;
-                        if (CountParenthesis(true, luaBuffer) == CountParenthesis(false, luaBuffer))
-                        {
-                            LuaModuleSignatures.Add(luaBuffer);
-                            luaBuffer = "";
-                        }
-                    }
-
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "GetModuleFunctionSignatures : Failed to read Module.lua.");
-            }
-
-            return LuaModuleSignatures;
-        }
-
-        private static KeyValuePair<string, string> CopyControlFromLuaBuffer(string luaBuffer)
-        {
-            // We have the whole control
-            // F_16C_50:define3PosTumb("MAIN_PWR_SW", 3, 3001, 510, "Electric System", "MAIN PWR Switch, MAIN PWR/BATT/OFF")
-            /*
-             A_10C:defineString("ARC210_COMSEC_SUBMODE", function()
-                return Functions.coerce_nil_to_string(arc_210_data["comsec_submode"])
-             end, 5, "ARC-210 Display", "COMSEC submode (PT/CT/CT-TD)")
-            */
-            var startIndex = luaBuffer.IndexOf("\"", StringComparison.Ordinal);
-            var endIndex = luaBuffer.IndexOf("\"", luaBuffer.IndexOf("\"") + 1);
-            var controlId = luaBuffer.Substring(startIndex + 1, endIndex - startIndex - 1);
-
-            return new KeyValuePair<string, string>(controlId, luaBuffer);
-        }
-
-        private static int CountParenthesis(bool firstParenthesis, string s)
-        {
-            if (string.IsNullOrEmpty(s)) return 0;
-            var parenthesis = firstParenthesis ? '(' : ')';
-            var result = 0;
-            var insideQuote = false;
-
-            foreach (var c in s)
-            {
-                if(c == '"') insideQuote = !insideQuote;
-
-                if(c == parenthesis && !insideQuote) result++;
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Load all lua controls
-        /// </summary>
-        /// <exception cref="Exception"></exception>
-        private static void ReadLuaCommandsFromJson()
-        {
-            LuaControls.Clear();
-            LuaModuleSignatures.Clear();
 
             try
             {
                 lock (LockObject)
                 {
-                    ReadControlsFromLua(_dcsAircraft, $"{_jsonDirectory}\\..\\..\\lib\\modules\\aircraft_modules\\{_dcsAircraft.LuaFilename}");
-                    ReadModuleFunctionSignatures(_dcsbiosModuleLuaFilePath);
+                    var directoryInfo = new DirectoryInfo(_jsonDirectory);
+                    IEnumerable<FileInfo> files;
+                    try
+                    {
+                        files = directoryInfo.EnumerateFiles(filename, SearchOption.TopDirectoryOnly);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Failed to find DCS-BIOS json files. -> {Environment.NewLine}{ex.Message}");
+                    }
+
+                    foreach (var file in files)
+                    {
+                        var controls = ReadControlsFromDocJson(file.FullName);
+                        _dcsbiosControls.AddRange(controls);
+                        PrintDuplicateControlIdentifiers(controls);
+                    }
+
+                    DCSBIOSAircraftLoadStatus.SetLoaded(filename, true);
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception($"{DCSBIOS_LUA_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
             }
         }
 
+        private static void Reset()
+        {
+            DCSBIOSAircraftLoadStatus.Clear();
+            _dcsbiosControls.Clear();
+            LuaAssistant.Reset();
+        }
     }
 }

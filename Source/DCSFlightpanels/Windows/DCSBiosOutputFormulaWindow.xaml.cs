@@ -48,8 +48,7 @@ namespace DCSFlightpanels.Windows
             _userEditsDescription = userEditsDescription;
             _showDecimalSetting = showDecimalSetting;
             _dcsBiosOutput = new DCSBIOSOutput();
-            DCSBIOSControlLocator.LoadControls();
-            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
             BIOSEventHandler.AttachDataListener(this);
         }
 
@@ -62,9 +61,8 @@ namespace DCSFlightpanels.Windows
             _dcsBiosOutput = dcsBiosOutput;
             _limitDecimals = limitDecimals;
             _decimalPlaces = decimalPlaces;
-            DCSBIOSControlLocator.LoadControls();
             _dcsbiosControl = DCSBIOSControlLocator.GetControl(_dcsBiosOutput.ControlId);
-            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
             BIOSEventHandler.AttachDataListener(this);
         }
 
@@ -77,8 +75,7 @@ namespace DCSFlightpanels.Windows
             _dcsbiosOutputFormula = dcsBiosOutputFormula;
             _limitDecimals = limitDecimals;
             _decimalPlaces = decimalPlaces;
-            DCSBIOSControlLocator.LoadControls();
-            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
             BIOSEventHandler.AttachDataListener(this);
         }
 

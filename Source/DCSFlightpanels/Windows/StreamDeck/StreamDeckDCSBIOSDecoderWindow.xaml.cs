@@ -48,8 +48,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             InitializeComponent();
             _dcsbiosDecoder = dcsbiosDecoder;
-            DCSBIOSControlLocator.LoadControls();
-            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
             _streamDeckPanel = streamDeckPanel;
 
             BIOSEventHandler.AttachDataListener(this);
@@ -66,8 +65,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 StreamDeckButtonName = streamDeckPanel.SelectedButtonName
             };
             LoadDefaults();
-            DCSBIOSControlLocator.LoadControls();
-            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
             BIOSEventHandler.AttachDataListener(this);
         }
 
@@ -785,7 +783,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+                _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
                 if (_dcsbiosDecoder != null)
                 {
                     _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.IntegerType;
@@ -802,7 +800,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                _dcsbiosControls = DCSBIOSControlLocator.GetStringOutputControls();
+                _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.StringType);
                 if (_dcsbiosDecoder != null)
                 {
                     _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.StringType;

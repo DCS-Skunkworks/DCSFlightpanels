@@ -33,8 +33,7 @@ namespace DCSFlightpanels.Windows
             _showCriteria = showCriteria;
             _description = description;
             _dcsBiosOutput = new DCSBIOSOutput();
-            DCSBIOSControlLocator.LoadControls();
-            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
         }
 
         public DCSBiosOutputTriggerWindow(string description, DCSBIOSOutput dcsBiosOutput, bool showCriteria = true)
@@ -43,9 +42,8 @@ namespace DCSFlightpanels.Windows
             _showCriteria = showCriteria;
             _description = description;
             _dcsBiosOutput = dcsBiosOutput;
-            DCSBIOSControlLocator.LoadControls();
             _dcsbiosControl = DCSBIOSControlLocator.GetControl(_dcsBiosOutput.ControlId);
-            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetOutputControls(DCSBiosOutputType.IntegerType);
 
         }
 
@@ -131,7 +129,7 @@ namespace DCSFlightpanels.Windows
                 }
                 _dcsbiosControl ??= DCSBIOSControlLocator.GetControl(TextBoxControlId.Text);
                 _dcsBiosOutput.Consume(_dcsbiosControl, DCSBiosOutputType.IntegerType);
-                //Value isn't used anyways
+                //Value isn't used anyway
                 _dcsBiosOutput.DCSBiosOutputComparison = !_showCriteria ? 
                     DCSBiosOutputComparison.Equals 
                     : EnumEx.GetValueFromDescription<DCSBiosOutputComparison>(ComboBoxComparisonCriteria.SelectedValue.ToString());
