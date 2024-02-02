@@ -11,11 +11,10 @@ using NonVisuals.Panels.StreamDeck;
 using NonVisuals.Panels.StreamDeck.Panels;
 using Xunit;
 
-namespace DCSFPTests.NonVisuals
-{
+namespace DCSFPTests.NonVisuals {
     public class CloneTests {
-        
-        private const string _stringValue1 ="Some string value 1";
+
+        private const string _stringValue1 = "Some string value 1";
         private const string _stringValue2 = "Some string value 2";
         private const string _stringValue3 = "Some string value 3";
         private const int _intValue1 = 456;
@@ -30,7 +29,7 @@ namespace DCSFPTests.NonVisuals
             };
 
             KeyPressInfo cloned = source.CloneJson();
-            
+
             Assert.NotNull(cloned);
             Assert.Equal(KeyPressLength.SecondAndHalf, cloned.LengthOfKeyPress);
             Assert.Equal(KeyPressLength.FortySecs, cloned.LengthOfBreak);
@@ -62,8 +61,8 @@ namespace DCSFPTests.NonVisuals
             Assert.NotEmpty(cloned);
         }
 
-        [Fact]        
-        public void BIPLink_MustBe_Clonable_UseOf_BIPLinkPZ69() {
+        [Fact]
+        public void BIPLinkPZ69_MustBe_Clonable() {
             //Note: BIPLink is Absract
             BIPLinkPZ69 source = new()
             {
@@ -79,7 +78,7 @@ namespace DCSFPTests.NonVisuals
         }
 
         [Fact]
-        public void BIPLink_MustBe_Clonable_UseOf_BIPLinkPZ55() {
+        public void BIPLinkPZ55_MustBe_Clonable() {
             //Note: BIPLink is Absract
             BIPLinkPZ55 source = new()
             {
@@ -88,6 +87,70 @@ namespace DCSFPTests.NonVisuals
             };
 
             BIPLinkPZ55 cloned = source.CloneJson();
+
+            Assert.NotNull(cloned);
+            Assert.Equal(_stringValue1, cloned.Description);
+            Assert.False(cloned.WhenTurnedOn);
+        }
+
+        [Fact]
+        public void BIPLinkPZ70_MustBe_Clonable() {
+            //Note: BIPLink is Absract
+            BIPLinkPZ70 source = new()
+            {
+                Description = _stringValue1,
+                WhenTurnedOn = false
+            };
+
+            BIPLinkPZ70 cloned = source.CloneJson();
+
+            Assert.NotNull(cloned);
+            Assert.Equal(_stringValue1, cloned.Description);
+            Assert.False(cloned.WhenTurnedOn);
+        }
+
+        [Fact]
+        public void BIPLinkTPM_MustBe_Clonable() {
+            //Note: BIPLink is Absract
+            BIPLinkTPM source = new()
+            {
+                Description = _stringValue1,
+                WhenTurnedOn = false
+            };
+
+            BIPLinkTPM cloned = source.CloneJson();
+
+            Assert.NotNull(cloned);
+            Assert.Equal(_stringValue1, cloned.Description);
+            Assert.False(cloned.WhenTurnedOn);
+        }
+
+        [Fact]
+        public void BIPLinkStreamDeck_MustBe_Clonable() {
+            //Note: BIPLink is Absract
+            BIPLinkStreamDeck source = new()
+            {
+                Description = _stringValue1,
+                WhenTurnedOn = false
+            };
+
+            BIPLinkStreamDeck cloned = source.CloneJson();
+
+            Assert.NotNull(cloned);
+            Assert.Equal(_stringValue1, cloned.Description);
+            Assert.False(cloned.WhenTurnedOn);
+        }
+
+        [Fact]
+        public void BIPLinkFarmingPanel_MustBe_Clonable() {
+            //Note: BIPLink is Absract
+            BIPLinkFarmingPanel source = new()
+            {
+                Description = _stringValue1,
+                WhenTurnedOn = false
+            };
+
+            BIPLinkFarmingPanel cloned = source.CloneJson();
 
             Assert.NotNull(cloned);
             Assert.Equal(_stringValue1, cloned.Description);

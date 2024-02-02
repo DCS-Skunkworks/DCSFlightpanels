@@ -2,6 +2,7 @@
 
 namespace NonVisuals.Panels.StreamDeck
 {
+    using System;
     using System.Linq;
 
     using MEF;
@@ -11,6 +12,7 @@ namespace NonVisuals.Panels.StreamDeck
     /// <summary>
     /// This class binds a physical key on a Stream Deck with a BIP LED
     /// </summary>
+    [Serializable]
     public class BIPLinkStreamDeck : BIPLinkBase
     {
         [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
