@@ -11,36 +11,6 @@ if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env
 	exit
 }
 
-#---------------------------------
-# Tests execution For DCSFP
-#---------------------------------
-Write-Host "Starting tests execution for DCSFP" -foregroundcolor "Green"
-$testPath = $scriptPath + "\Tests"
-Set-Location -Path $testPath
-dotnet test
-$testsLastExitCode = $LastExitCode
-Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
-if ( 0 -ne $testsLastExitCode ) {
-	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
-	exit
-}
-Write-Host "Finished tests execution for DCSFP" -foregroundcolor "Green"
-
-#------------------------------------
-# Tests execution For StreamDeckSharp
-#------------------------------------
-Write-Host "Starting tests execution for StreamDeckSharp" -foregroundcolor "Green"
-$testPath = $scriptPath + "\StreamDeckSharp.Tests"
-Set-Location -Path $testPath
-dotnet test
-$testsLastExitCode = $LastExitCode
-Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
-if ( 0 -ne $testsLastExitCode ) {
-	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
-	exit
-}
-Write-Host "Finished tests execution for StreamDeckSharp" -foregroundcolor "Green"
-
 #-----------------------------------
 # Release version management ctrlref
 #-----------------------------------
@@ -80,6 +50,36 @@ else
 $xml.Project.PropertyGroup.AssemblyVersion = "$avMajor.$avMinor.$avPatch".Trim()
 [string]$assemblyVersion = $xml.Project.PropertyGroup.AssemblyVersion
 Write-Host "New assembly version is $assemblyVersion" -foregroundcolor "Green"
+
+#---------------------------------
+# Tests execution For DCSFP
+#---------------------------------
+Write-Host "Starting tests execution for DCSFP" -foregroundcolor "Green"
+$testPath = $scriptPath + "\Tests"
+Set-Location -Path $testPath
+dotnet test
+$testsLastExitCode = $LastExitCode
+Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
+if ( 0 -ne $testsLastExitCode ) {
+	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
+	exit
+}
+Write-Host "Finished tests execution for DCSFP" -foregroundcolor "Green"
+
+#------------------------------------
+# Tests execution For StreamDeckSharp
+#------------------------------------
+Write-Host "Starting tests execution for StreamDeckSharp" -foregroundcolor "Green"
+$testPath = $scriptPath + "\StreamDeckSharp.Tests"
+Set-Location -Path $testPath
+dotnet test
+$testsLastExitCode = $LastExitCode
+Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
+if ( 0 -ne $testsLastExitCode ) {
+	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
+	exit
+}
+Write-Host "Finished tests execution for StreamDeckSharp" -foregroundcolor "Green"
 
 #Saving project file
 $xml.Save($projectFilePath)

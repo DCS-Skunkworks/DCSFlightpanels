@@ -56,6 +56,7 @@ namespace ControlReference
             Settings.Default.DCSBiosJSONLocation = Environment.ExpandEnvironmentVariables(Settings.Default.DCSBiosJSONLocation.Contains("$USERDIRECTORY$") ? 
                 Settings.Default.DCSBiosJSONLocation.Replace("$USERDIRECTORY$", "%userprofile%") : Settings.Default.DCSBiosJSONLocation);
             Settings.Default.Save();
+
         }
 
         private bool _hasBeenCalledAlready;
@@ -102,6 +103,11 @@ namespace ControlReference
                 {
                     return;
                 }
+
+                Top = Settings.Default.MainWindowTop;
+                Left = Settings.Default.MainWindowLeft;
+                Height = Settings.Default.MainWindowHeight;
+                Width = Settings.Default.MainWindowWidth;
 
                 var result = Common.CheckJSONDirectory(Settings.Default.DCSBiosJSONLocation);
                 if (result.Item1 == false && result.Item2 == false)
