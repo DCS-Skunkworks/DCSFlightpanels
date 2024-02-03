@@ -4,45 +4,6 @@ $publishPath = $scriptPath + "\_PublishTemp_\"
 
 $changeProjectVersion = Read-Host "Change Project Version? Y/N"
 
-#---------------------------------
-# Pre-checks
-#---------------------------------
-#Checking destination folder first
-if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env:dcsfpReleaseDestinationFolderPath))) {
-	Write-Host "Fatal error. Destination folder does not exists. Please set environment variable 'dcsfpReleaseDestinationFolderPath' to a valid value" -foregroundcolor "Red"
-	exit
-}
-
-#---------------------------------
-# Tests execution For DCSFP
-#---------------------------------
-Write-Host "Starting tests execution for DCSFP" -foregroundcolor "Green"
-$testPath = $scriptPath + "\Tests"
-Set-Location -Path $testPath
-dotnet test
-$testsLastExitCode = $LastExitCode
-Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
-if ( 0 -ne $testsLastExitCode ) {
-	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
-	exit
-}
-Write-Host "Finished tests execution for DCSFP" -foregroundcolor "Green"
-
-#------------------------------------
-# Tests execution For StreamDeckSharp
-#------------------------------------
-Write-Host "Starting tests execution for StreamDeckSharp" -foregroundcolor "Green"
-$testPath = $scriptPath + "\StreamDeckSharp.Tests"
-Set-Location -Path $testPath
-dotnet test
-$testsLastExitCode = $LastExitCode
-Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
-if ( 0 -ne $testsLastExitCode ) {
-	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
-	exit
-}
-Write-Host "Finished tests execution for StreamDeckSharp" -foregroundcolor "Green"
-
 #-------------------------------------------
 # Release version management DCSFlightpanels
 #-------------------------------------------
@@ -90,6 +51,46 @@ if($changeProjectVersion.Trim().ToLower().Equals("y"))
 	Write-Host "Project file updated" -foregroundcolor "Green"
 	Write-Host "Finished release version management" -foregroundcolor "Green"
 }
+
+#---------------------------------
+# Pre-checks
+#---------------------------------
+#Checking destination folder first
+if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env:dcsfpReleaseDestinationFolderPath))) {
+	Write-Host "Fatal error. Destination folder does not exists. Please set environment variable 'dcsfpReleaseDestinationFolderPath' to a valid value" -foregroundcolor "Red"
+	exit
+}
+
+#---------------------------------
+# Tests execution For DCSFP
+#---------------------------------
+Write-Host "Starting tests execution for DCSFP" -foregroundcolor "Green"
+$testPath = $scriptPath + "\Tests"
+Set-Location -Path $testPath
+dotnet test
+$testsLastExitCode = $LastExitCode
+Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
+if ( 0 -ne $testsLastExitCode ) {
+	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
+	exit
+}
+Write-Host "Finished tests execution for DCSFP" -foregroundcolor "Green"
+
+#------------------------------------
+# Tests execution For StreamDeckSharp
+#------------------------------------
+Write-Host "Starting tests execution for StreamDeckSharp" -foregroundcolor "Green"
+$testPath = $scriptPath + "\StreamDeckSharp.Tests"
+Set-Location -Path $testPath
+dotnet test
+$testsLastExitCode = $LastExitCode
+Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
+if ( 0 -ne $testsLastExitCode ) {
+	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
+	exit
+}
+Write-Host "Finished tests execution for StreamDeckSharp" -foregroundcolor "Green"
+
 #---------------------------------
 # Publish-Build & Zip
 #---------------------------------
