@@ -1,4 +1,5 @@
 ﻿using System;
+using ClassLibraryCommon;
 using DCS_BIOS.Json;
 
 namespace DCS_BIOS
@@ -10,6 +11,7 @@ namespace DCS_BIOS
     /// that is sent to DCS-BIOS when it should trigger (e.g. user switches a switch).
     /// </summary>
     [Serializable]
+    [SerializeCritical]
     public class DCSBIOSInputInterface
     {
         private string _specifiedActionArgument;

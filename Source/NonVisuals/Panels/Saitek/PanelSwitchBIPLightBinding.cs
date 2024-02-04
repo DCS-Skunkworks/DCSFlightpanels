@@ -1,11 +1,12 @@
 ﻿namespace NonVisuals.Panels.Saitek
 {
     using System;
-
+    using ClassLibraryCommon;
     using Newtonsoft.Json;
     using Panels;
 
     [Serializable]
+    [SerializeCritical]
     public abstract class PanelSwitchBIPLightBinding
     {
         public abstract void ImportSettings(string settings);

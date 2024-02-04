@@ -1,0 +1,14 @@
+{
+  "$type": "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals",
+  "LengthOfBreak": 32,
+  "LengthOfKeyPress": 500,
+  "VirtualKeyCodes": {
+    "$type": "System.Collections.Generic.HashSet`1[[MEF.VirtualKeyCode, MEF]], System.Private.CoreLib",
+    "$values": [
+      117,
+      86,
+      162,
+      32
+    ]
+  }
+}

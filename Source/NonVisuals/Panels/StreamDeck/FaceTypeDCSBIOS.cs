@@ -7,8 +7,10 @@
     using Newtonsoft.Json;
 
     using Interfaces;
+    using ClassLibraryCommon;
 
     [Serializable]
+    [SerializeCritical]
     public class FaceTypeDCSBIOS : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
         [JsonProperty("FaceType", Required = Required.Default)]

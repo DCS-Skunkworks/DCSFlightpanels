@@ -22,6 +22,7 @@ namespace NonVisuals.KeyEmulation
     /// as well as executing the key press using a Windows API.
     /// </summary>
     [Serializable]
+    [SerializeCritical]
     public class KeyPress
     {
         private const int SLEEP_VALUE = 32;

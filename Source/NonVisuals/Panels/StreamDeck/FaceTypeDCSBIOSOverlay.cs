@@ -7,8 +7,10 @@
 
     using Interfaces;
     using Panels;
+    using ClassLibraryCommon;
 
     [Serializable]
+    [SerializeCritical]
     public class FaceTypeDCSBIOSOverlay : FaceTypeDCSBIOS
     {
         [JsonProperty("FaceType", Required = Required.Default)]

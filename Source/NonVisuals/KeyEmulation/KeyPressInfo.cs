@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
-
+    using ClassLibraryCommon;
     using MEF;
 
     using Newtonsoft.Json;
@@ -16,6 +16,7 @@
     /// of the actual keypresses.
     /// </summary>
     [Serializable]
+    [SerializeCritical]
     public class KeyPressInfo : IKeyPressInfo
     {
         private KeyPressLength _lengthOfBreak = KeyPressLength.FiftyMilliSec;

@@ -14,6 +14,7 @@
     using Panels;
 
     [Serializable]
+    [SerializeCritical]
     public class StreamDeckButton : IDisposable
     {
         private EnumStreamDeckButtonNames _streamDeckButtonName;

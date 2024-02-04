@@ -4,6 +4,7 @@ namespace DCS_BIOS
 {
     using System;
     using System.Collections.Generic;
+    using ClassLibraryCommon;
     using NLog;
 
     /// <summary>
@@ -11,6 +12,7 @@ namespace DCS_BIOS
     /// to produce a result based on DCS-BIOS value(s).
     /// </summary>
     [Serializable]
+    [SerializeCritical]
     public class DCSBIOSOutputFormula
     {
         [NonSerialized]

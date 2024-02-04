@@ -1,12 +1,12 @@
 {
   "$type": "DCS_BIOS.DCSBIOSOutput, DCS-BIOS",
-  "ControlId": "123",
+  "ControlId": "CtrlId 7521",
   "Address": 1,
   "Mask": 2,
   "Shiftvalue": 3,
   "DCSBiosOutputType": 1,
   "DCSBiosOutputComparison": 2,
-  "ControlDescription": "abc",
+  "ControlDescription": "xsh lkj 1",
   "MaxValue": 4,
   "MaxLength": 5,
   "ControlType": "type"

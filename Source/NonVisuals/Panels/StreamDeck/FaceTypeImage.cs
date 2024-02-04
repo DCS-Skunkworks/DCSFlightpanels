@@ -12,8 +12,10 @@ namespace NonVisuals.Panels.StreamDeck
     using Interfaces;
     
     using Panels;
+    using ClassLibraryCommon;
 
     [Serializable]
+    [SerializeCritical]
     public class FaceTypeImage : FaceTypeBase, IStreamDeckButtonFace
     {
         [JsonProperty("FaceType", Required = Required.Default)]
