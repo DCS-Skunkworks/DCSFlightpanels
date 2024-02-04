@@ -2,6 +2,7 @@
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Shapes;
 using ClassLibraryCommon;
 using ControlReference.CustomControls;
@@ -124,6 +125,20 @@ namespace ControlReference.Windows
 
             Clipboard.SetText(textBlock.SelectedText ?? "");
             SystemSounds.Asterisk.Play();
+        }
+
+        private void LuaWindow_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key != Key.Escape) return;
+
+                Close();
+            }
+            catch (Exception exception)
+            {
+                Common.ShowMessageBox(exception.Message + Environment.NewLine + exception.StackTrace);
+            }
         }
     }
 }
