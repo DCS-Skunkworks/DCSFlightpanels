@@ -192,10 +192,7 @@ namespace ControlReference
                     REFEventHandler.NewDCSBIOSStringData(this, e.Address, e.StringData);
                 }
 
-                if (!_checkDCSBIOSVersionOnce || _dcsbiosVersionOutput.Address != e.Address)
-                {
-                    return;
-                }
+                if (_checkDCSBIOSVersionOnce || _dcsbiosVersionOutput.Address != e.Address) return;
 
                 Dispatcher?.Invoke(() =>
                 {
