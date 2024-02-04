@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Media;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using ClassLibraryCommon;
 using ControlReference.Events;
 using ControlReference.Interfaces;
@@ -19,13 +22,16 @@ namespace ControlReference.UserControls
     /// <summary>
     /// Interaction logic for DCSBIOSControlUserControl.xaml
     /// </summary>
-    public partial class DCSBIOSControlUserControl :  IDisposable, INewDCSBIOSData
+    public partial class DCSBIOSControlUserControl : IDisposable, INewDCSBIOSData
     {
         private readonly DCSBIOSControl _dcsbiosControl;
         private ToolTip _copyToolTip;
         private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new();
         private bool _isLoaded;
         private readonly string _luaCommand;
+        private bool _textBoxDataFocused;
+        private bool _sendDataArrayRunning;
+        private Thread _sendDataThread;
 
         public DCSBIOSControlUserControl(DCSBIOSControl dcsbiosControl, string luaCommand)
         {
@@ -79,6 +85,9 @@ namespace ControlReference.UserControls
                 ButtonSetString.IsEnabled = !string.IsNullOrEmpty(TextBoxSetStringValue.Text);
                 ButtonSetVariableIncrease.IsEnabled = ButtonSetVariableStep.IsEnabled;
                 ButtonSetVariableDecrease.IsEnabled = ButtonSetVariableStep.IsEnabled;
+                ButtonSendData.IsEnabled = _textBoxDataFocused && !string.IsNullOrEmpty(TextBoxDataToSend.Text);
+                ComboBoxSendDelay.IsEnabled = ButtonSendData.IsEnabled && !_sendDataArrayRunning;
+                LabelDelay.IsEnabled = ButtonSendData.IsEnabled;
             }
             catch (Exception ex)
             {
@@ -179,6 +188,7 @@ namespace ControlReference.UserControls
                 StackPanelSetState.Visibility = Visibility.Collapsed;
                 StackPanelAction.Visibility = Visibility.Collapsed;
                 StackPanelSetString.Visibility = Visibility.Collapsed;
+                StackPanelSendData.Visibility = Visibility.Collapsed;
 
                 foreach (var dcsbiosControlInput in _dcsbiosControl.Inputs)
                 {
@@ -210,10 +220,10 @@ namespace ControlReference.UserControls
                                 break;
                             }
                         case "set_string":
-                        {
-                            StackPanelSetString.Visibility = Visibility.Visible;
-                            break;
-                        }
+                            {
+                                StackPanelSetString.Visibility = Visibility.Visible;
+                                break;
+                            }
                         default:
                             {
                                 throw new Exception(
@@ -554,6 +564,98 @@ namespace ControlReference.UserControls
                 window.Left = pos.X;
                 window.Topmost = true;
                 window.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxDataToSend_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonSendData_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var commands = TextBoxDataToSend.Text;
+                var delay = int.Parse(ComboBoxSendDelay.SelectedValue.ToString() ?? "500");
+                _sendDataThread = new Thread(() => SendData(commands, delay));
+                _sendDataThread.Start();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelShowSendData_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                StackPanelSendData.Visibility = StackPanelSendData.Visibility == Visibility.Collapsed ? StackPanelSendData.Visibility = Visibility.Visible : Visibility.Collapsed;
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxDataToSend_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_textBoxDataFocused) return;
+
+                TextBoxDataToSend.Text = "";
+                _textBoxDataFocused = true;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void SendData(string commands, int delay)
+        {
+            try
+            {
+                _sendDataArrayRunning = true;
+                var commandArray = commands.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                foreach (var command in commandArray)
+                {
+                    Dispatcher?.Invoke(() => TextBoxExecutedCommand.Text = command.Replace("\n","").Replace("\r",""));
+                    DCSBIOS.Send(command + "\n");
+                    Dispatcher?.Invoke(SetFormState);
+                    Thread.Sleep(delay);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+
+            _sendDataArrayRunning = false;
+            SystemSounds.Beep.Play();
+            Dispatcher?.Invoke(SetFormState);
+        }
+
+        private void TextBoxDataToSend_OnPreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                SetFormState();
             }
             catch (Exception ex)
             {

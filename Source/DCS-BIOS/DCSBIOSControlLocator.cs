@@ -46,8 +46,8 @@ namespace DCS_BIOS
             get => _jsonDirectory;
             set
             {
-                _jsonDirectory = value;
-                LuaAssistant.JSONDirectory = value;
+                _jsonDirectory = Environment.ExpandEnvironmentVariables(value);
+                LuaAssistant.JSONDirectory = _jsonDirectory;
             }
         }
 

@@ -322,5 +322,24 @@ namespace ClassLibraryCommon
         {
             Mouse.OverrideCursor = Cursors.Arrow;
         }
+
+        public static int GetNthIndexOf(string s, char c, int instance)
+        {
+            if (string.IsNullOrEmpty(s)) return -1;
+
+            var count = 0;
+            for (var i = 0; i < s.Length; i++)
+            {
+                if (s[i] == c)
+                {
+                    count++;
+                    if (count == instance)
+                    {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        }
     }
 }

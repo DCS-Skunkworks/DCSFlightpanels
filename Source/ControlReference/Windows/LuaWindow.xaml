@@ -8,7 +8,7 @@
         Title="" Height="400" Width="Auto"
         Loaded="LuaWindow_OnLoaded"
         WindowStartupLocation="CenterScreen" 
-        KeyDown="LuaWindow_OnKeyDown" Icon="/Images/FlightPanels01.png">
+        KeyDown="LuaWindow_OnKeyDown" KeyUp="LuaWindow_OnKeyUp" Icon="/Images/FlightPanels01.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />

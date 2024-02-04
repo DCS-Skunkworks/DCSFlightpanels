@@ -163,5 +163,19 @@ namespace ControlReference.Windows
             Clipboard.SetText(textBlock.SelectedText ?? "");
             SystemSounds.Asterisk.Play();
         }
+
+        private void ArduinoWindow_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key != Key.Escape) return;
+
+                Close();
+            }
+            catch (Exception exception)
+            {
+                Common.ShowMessageBox(exception.Message + Environment.NewLine + exception.StackTrace);
+            }
+        }
     }
 }
