@@ -8,7 +8,7 @@
         Title="" Height="400" Width="Auto"
         Loaded="ArduinoWindow_OnLoaded"
         WindowStartupLocation="CenterScreen" 
-        KeyDown="ArduinoWindow_OnKeyDown" Icon="/Images/FlightPanels01.png">
+        KeyDown="ArduinoWindow_OnKeyDown" KeyUp="ArduinoWindow_OnKeyUp" Icon="/Images/FlightPanels01.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
