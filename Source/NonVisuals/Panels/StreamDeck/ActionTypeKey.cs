@@ -20,6 +20,7 @@ namespace NonVisuals.Panels.StreamDeck
     using NLog;
 
     [Serializable]
+    [SerializeCritical]
     public class ActionTypeKey : KeyBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         internal static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -32,6 +33,8 @@ namespace NonVisuals.Panels.StreamDeck
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
+        public ActionTypeKey() {
+        }
 
         public ActionTypeKey(StreamDeckPanel streamDeckPanel)
         {

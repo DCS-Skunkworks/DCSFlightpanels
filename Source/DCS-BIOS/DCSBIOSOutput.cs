@@ -4,7 +4,7 @@ namespace DCS_BIOS
 {
     using System;
     using System.ComponentModel;
-
+    using ClassLibraryCommon;
     using Newtonsoft.Json;
 
     public enum DCSBiosOutputType
@@ -39,6 +39,7 @@ namespace DCS_BIOS
     /// and with what.
     /// </summary>
     [Serializable]
+    [SerializeCritical]
     public class DCSBIOSOutput
     {
         // These are loaded and saved, all the rest are fetched from DCS-BIOS

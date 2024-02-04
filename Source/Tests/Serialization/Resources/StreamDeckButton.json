@@ -1,0 +1,10 @@
+{
+  "$type": "NonVisuals.Panels.StreamDeck.StreamDeckButton, NonVisuals",
+  "StreamDeckButtonName": 1,
+  "Face": null,
+  "ActionForPress": null,
+  "ActionForRelease": null,
+  "HasConfig": false,
+  "ActionType": 0,
+  "FaceType": 0
+}

@@ -9,6 +9,7 @@ namespace DCS_BIOS
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using ClassLibraryCommon;
     using Newtonsoft.Json;
     using NLog;
 
@@ -45,6 +46,7 @@ namespace DCS_BIOS
     /// When the user specifies a DCS-BIOS Control they also select a specific input type.
     /// </summary>
     [Serializable]
+    [SerializeCritical]
     public class DCSBIOSInput
     {
         internal static Logger Logger = LogManager.GetCurrentClassLogger();

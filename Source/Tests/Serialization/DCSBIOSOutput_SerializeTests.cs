@@ -1,42 +1,17 @@
 ﻿using DCS_BIOS;
+using DCSFPTests.Serialization.Common;
 using Newtonsoft.Json;
-using NonVisuals.Panels.StreamDeck;
 using Xunit;
 
 namespace DCSFPTests.Serialization {
-    public class DCSBIOSOutputSerializeTests {
-        private JsonSerializerSettings _jsonSettings = new()
-        {
-            ContractResolver = new ExcludeObsoletePropertiesResolver(),
-            TypeNameHandling = TypeNameHandling.All,
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            Error = (sender, args) => {
-                throw new System.Exception($"JSON Serialization Error.{args.ErrorContext.Error.Message}");
-            }
-        };
+
+    public static class DCSBIOSOutput_SerializeTests {
 
         [Fact]
-        public void DCSBIOSOutput_ShouldBeSeriazable() {
-            DCSBIOSOutput s = new()
-            {
-                ControlId = "123",
-                Address = 1,
-                Mask = 2,
-                ShiftValue = 3,
-                DCSBiosOutputType = DCSBiosOutputType.IntegerType,
-                DCSBiosOutputComparison = DCSBiosOutputComparison.BiggerThan,
-                ControlDescription = "abc",
-                MaxValue = 4,
-                MaxLength = 5,
-                ControlType = "type",
+        public static void DCSBIOSOutput_ShouldBeSerializable() {
+            DCSBIOSOutput s = GetObject();
 
-                //should be not serialized: 
-                LastUIntValue = 666,
-                LastStringValue = "ShouldNotBeSerialized",
-                SpecifiedValueUInt = 777
-            };
-
-            string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, _jsonSettings);
+            string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
             DCSBIOSOutput d = JsonConvert.DeserializeObject<DCSBIOSOutput>(serializedObj);
 
             Assert.True(s.ControlId == d.ControlId);
@@ -61,14 +36,34 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(string.Empty, d.LastStringValue);
 
             RepositorySerialized repo = new();
-
             //Save sample file in project (use it only once)
-            repo.SaveSerializedObjectToFile(d.GetType(), serializedObj);
+            //repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
 
             DCSBIOSOutput deseralizedObjFromFile = JsonConvert.DeserializeObject<DCSBIOSOutput>(repo.GetSerializedObjectString(d.GetType()));
 
             //Should be nice to test the object 's' with 'deseralizedObjFromFile' but since serialization/ deserialization is asymetric we will use the 'd' object 
             DeepAssert.Equal(d, deseralizedObjFromFile);
+        }
+
+        private static DCSBIOSOutput GetObject(int instanceNbr = 1) {
+            return new()
+            {
+                ControlId = $"CtrlId 752{instanceNbr}",
+                Address = 1,
+                Mask = 2,
+                ShiftValue = 3,
+                DCSBiosOutputType = DCSBiosOutputType.IntegerType,
+                DCSBiosOutputComparison = DCSBiosOutputComparison.BiggerThan,
+                ControlDescription = $"xsh lkj {instanceNbr}",
+                MaxValue = 4,
+                MaxLength = 5,
+                ControlType = "type",
+
+                //should be not serialized: 
+                LastUIntValue = 666,
+                LastStringValue = "ShouldNotBeSerialized",
+                SpecifiedValueUInt = 777
+            };
         }
     }
 }

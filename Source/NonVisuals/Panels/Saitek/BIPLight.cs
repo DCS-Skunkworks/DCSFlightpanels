@@ -2,6 +2,7 @@
 {
     using System;
     using System.Text;
+    using ClassLibraryCommon;
     using Panels;
 
     public enum BIPLightDelays
@@ -33,6 +34,7 @@
     /// So when the key is pressed the BIP LED will change color accordingly. 
     /// </summary>
     [Serializable]
+    [SerializeCritical]
     public class BIPLight : PanelSwitchBIPLightBinding
     {
         public override void ImportSettings(string settings)

@@ -12,8 +12,10 @@
     using System.IO;
     using System.Drawing.Imaging;
     using NLog;
+    using ClassLibraryCommon;
 
     [Serializable]
+    [SerializeCritical]
     public abstract class FaceTypeBase : IDisposable
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
