@@ -16,22 +16,22 @@ namespace DCSFPTests.Serialization {
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
             FaceTypeDCSBIOSOverlay d = JsonConvert.DeserializeObject<FaceTypeDCSBIOSOverlay>(serializedObj);
 
-            Assert.True(d.FaceType == EnumStreamDeckFaceType.DCSBIOSOverlay);
-            Assert.True(s.FaceType == d.FaceType);
-            Assert.True(s.ButtonTextTemplate == d.ButtonTextTemplate);
-            Assert.True(s.BackgroundBitmapPath == d.BackgroundBitmapPath);
+            Assert.Equal(EnumStreamDeckFaceType.DCSBIOSOverlay, d.FaceType);
+            Assert.Equal(s.FaceType , d.FaceType);
+            Assert.Equal(s.ButtonTextTemplate, d.ButtonTextTemplate);
+            Assert.Equal(s.BackgroundBitmapPath, d.BackgroundBitmapPath);
             DeepAssert.Equal(s.TextFont, d.TextFont);
             DeepAssert.Equals(s.FontColor, d.FontColor);
             DeepAssert.Equal(s.BackgroundColor, d.BackgroundColor);
 
-            Assert.True(s.StreamDeckButtonName == d.StreamDeckButtonName);
-            Assert.True(s.OffsetX == d.OffsetX);
-            Assert.True(s.OffsetY == d.OffsetY);
-            Assert.True(s.UIntDcsBiosValue == d.UIntDcsBiosValue);
-            Assert.True(s.StringDcsBiosValue == d.StringDcsBiosValue);
+            Assert.Equal(s.StreamDeckButtonName, d.StreamDeckButtonName);
+            Assert.Equal(s.OffsetX, d.OffsetX);
+            Assert.Equal(s.OffsetY,  d.OffsetY);
+            Assert.Equal(s.UIntDcsBiosValue, d.UIntDcsBiosValue);
+            Assert.Equal(s.StringDcsBiosValue, d.StringDcsBiosValue);
             Assert.NotNull(d.RawBitmap);
 
-            //should be not serialized :
+            //Not serialized :
             Assert.True(s.ConfigurationOK); //Dependant of object state
             Assert.True(d.ConfigurationOK); //Dependant of object state
             Assert.False(string.IsNullOrEmpty(s.FaceDescription));//Dependant of object state
@@ -51,28 +51,28 @@ namespace DCSFPTests.Serialization {
             //Save sample file in project (use it only once)
             //repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
 
-            FaceTypeDCSBIOSOverlay deseralizedObjFromFile = JsonConvert.DeserializeObject<FaceTypeDCSBIOSOverlay>(repo.GetSerializedObjectString(d.GetType()));
+            FaceTypeDCSBIOSOverlay deseralizedObjFromFile = JsonConvert.DeserializeObject<FaceTypeDCSBIOSOverlay>(repo.GetSerializedObjectString(s.GetType()));
 
-            Assert.True(s.FaceType == deseralizedObjFromFile.FaceType);
-            Assert.True(s.ButtonTextTemplate == deseralizedObjFromFile.ButtonTextTemplate);
-            Assert.True(s.BackgroundBitmapPath == deseralizedObjFromFile.BackgroundBitmapPath);
+            Assert.Equal(s.FaceType, deseralizedObjFromFile.FaceType);
+            Assert.Equal(s.ButtonTextTemplate, deseralizedObjFromFile.ButtonTextTemplate);
+            Assert.Equal(s.BackgroundBitmapPath, deseralizedObjFromFile.BackgroundBitmapPath);
             DeepAssert.Equal(s.TextFont, deseralizedObjFromFile.TextFont);
             DeepAssert.Equals(s.FontColor, deseralizedObjFromFile.FontColor);
             DeepAssert.Equal(s.BackgroundColor, deseralizedObjFromFile.BackgroundColor);
 
-            Assert.True(s.StreamDeckButtonName == deseralizedObjFromFile.StreamDeckButtonName);
-            Assert.True(s.OffsetX == deseralizedObjFromFile.OffsetX);
-            Assert.True(s.OffsetY == deseralizedObjFromFile.OffsetY);
+            Assert.Equal(s.StreamDeckButtonName, deseralizedObjFromFile.StreamDeckButtonName);
+            Assert.Equal(s.OffsetX, deseralizedObjFromFile.OffsetX);
+            Assert.Equal(s.OffsetY, deseralizedObjFromFile.OffsetY);
             Assert.Null(deseralizedObjFromFile.StreamDeckPanelInstance);
             Assert.Null(deseralizedObjFromFile.StreamDeckButton);
             Assert.True(string.IsNullOrEmpty(deseralizedObjFromFile.ButtonFinalText));
-            Assert.True(s.UIntDcsBiosValue == deseralizedObjFromFile.UIntDcsBiosValue);
-            Assert.True(s.StringDcsBiosValue == deseralizedObjFromFile.StringDcsBiosValue);
+            Assert.Equal(s.UIntDcsBiosValue, deseralizedObjFromFile.UIntDcsBiosValue);
+            Assert.Equal(s.StringDcsBiosValue, deseralizedObjFromFile.StringDcsBiosValue);
             Assert.Null(deseralizedObjFromFile.BackgroundBitmap);
             Assert.NotNull(deseralizedObjFromFile.RawBitmap);
         }
 
-        private static FaceTypeDCSBIOSOverlay GetObject(int instanceNbr = 1) {
+        public static FaceTypeDCSBIOSOverlay GetObject(int instanceNbr = 1) {
             return new()
             {
                 ButtonTextTemplate = $"lyn dct {instanceNbr}",

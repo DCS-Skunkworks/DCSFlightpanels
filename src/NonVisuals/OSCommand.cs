@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.Media;
     using System.Threading;
+    using ClassLibraryCommon;
     using NLog;
     using Panels.Saitek;
 
@@ -15,6 +16,7 @@
     /// Can be used for starting up certain applications used while playing.
     /// </summary>
     [Serializable]
+    [SerializeCritical]
     public class OSCommand
     {
         internal static Logger Logger = LogManager.GetCurrentClassLogger();

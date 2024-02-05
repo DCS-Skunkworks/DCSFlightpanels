@@ -1,0 +1,13 @@
+{
+  "$type": "NonVisuals.Panels.StreamDeck.ActionTypeLayer, NonVisuals",
+  "NavigationType": 3,
+  "TargetLayer": "ggy ool 1",
+  "RemoteStreamdeckBindingHash": "ttr efb 1",
+  "RemoteStreamdeckTargetLayer": "kjq cyn 1",
+  "ActionType": 16,
+  "StreamDeckButtonName": 1,
+  "StreamDeckButtonPushRotaryName": 1,
+  "SoundFile": "xdl ero 1",
+  "Volume": 200.0,
+  "Delay": 142
+}

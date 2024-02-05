@@ -24,6 +24,7 @@
     }
 
     [Serializable]
+    [SerializeCritical]
     public class ActionTypeLayer : IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.LayerNavigation;
@@ -46,7 +47,8 @@
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
-
+        public ActionTypeLayer() {
+        }
 
         public ActionTypeLayer(StreamDeckPanel streamDeckPanel)
         {

@@ -13,9 +13,10 @@ namespace DCSFPTests.Serialization {
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
             KeyPress d = JsonConvert.DeserializeObject<KeyPress>(serializedObj, JSonSettings.JsonDefaultSettings);
 
-            Assert.True(s.Information == d.Information);
-            Assert.True(s.Description == d.Description);
-            Assert.True(s.Abort == d.Abort);
+            Assert.Equal(s.Information, d.Information);
+            Assert.Equal(s.Description, d.Description);
+            Assert.Equal(s.Abort, d.Abort);
+            DeepAssert.Equal(s.KeyPressSequence, d.KeyPressSequence);
 
             //not serialized : 
             Assert.Empty(d.NegatorOSKeyPresses);
@@ -26,9 +27,10 @@ namespace DCSFPTests.Serialization {
 
             KeyPress deseralizedObjFromFile = JsonConvert.DeserializeObject<KeyPress>(repo.GetSerializedObjectString(s.GetType()), JSonSettings.JsonDefaultSettings);
 
-            Assert.True(s.Information == deseralizedObjFromFile.Information);
-            Assert.True(s.Description == deseralizedObjFromFile.Description);
-            Assert.True(s.Abort == deseralizedObjFromFile.Abort);
+            Assert.Equal(s.Information, deseralizedObjFromFile.Information);
+            Assert.Equal(s.Description, deseralizedObjFromFile.Description);
+            Assert.Equal(s.Abort, deseralizedObjFromFile.Abort);
+            DeepAssert.Equal(s.KeyPressSequence, deseralizedObjFromFile.KeyPressSequence);
             Assert.Empty(deseralizedObjFromFile.NegatorOSKeyPresses);
         }
 
@@ -40,7 +42,7 @@ namespace DCSFPTests.Serialization {
                 Abort = true,
                 KeyPressSequence = new() {
                     { instanceNbr, KeyPressInfo_SerializeTests.GetObject(instanceNbr) },
-                    { instanceNbr+1, KeyPressInfo_SerializeTests.GetObject(instanceNbr+1)} 
+                    { instanceNbr+1, KeyPressInfo_SerializeTests.GetObject(instanceNbr+1)}
                 }
             };
         }

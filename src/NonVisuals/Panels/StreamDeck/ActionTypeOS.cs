@@ -17,6 +17,7 @@ namespace NonVisuals.Panels.StreamDeck
     using Panels;
 
     [Serializable]
+    [SerializeCritical]
     public class ActionTypeOS : OSCommandBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.OSCommand;
@@ -26,6 +27,8 @@ namespace NonVisuals.Panels.StreamDeck
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
+        public ActionTypeOS() {
+        }
 
         public ActionTypeOS(StreamDeckPanel streamDeckPanel)
         {

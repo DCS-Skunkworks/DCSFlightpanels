@@ -10,6 +10,7 @@ namespace NonVisuals.BindingClasses.OSCommand
     /// It is used when a user maps a OSCommand to a physical key on a panel.
     /// </summary>
     [Serializable]
+    [SerializeCritical]
     public abstract class OSCommandBindingBase
     {
         private bool _whenOnTurnedOn = true;

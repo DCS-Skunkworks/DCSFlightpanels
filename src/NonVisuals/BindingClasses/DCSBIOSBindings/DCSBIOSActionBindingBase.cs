@@ -19,6 +19,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
     /// A dcs-bios binding is used when a user maps a physical switch with one or several dcs-bios command(s).
     /// </summary>
     [Serializable]
+    [SerializeCritical]
     public abstract class DCSBIOSActionBindingBase : IDisposable
     {
         internal static Logger Logger = LogManager.GetCurrentClassLogger();

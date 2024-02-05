@@ -5,7 +5,6 @@ namespace DCSFPTests.Serialization.Common
 {
     internal class DeepAssert
     {
-
         public static void Equal<T>(T expected, T actual)
         {
             if (expected is null || actual is null)
@@ -13,7 +12,6 @@ namespace DCSFPTests.Serialization.Common
                 Assert.Equal(expected, actual);
                 return;
             }
-
             actual.ToExpectedObject().ShouldEqual(expected);
         }
     }
