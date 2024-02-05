@@ -102,6 +102,7 @@ Set-Location -Path $scriptPath
 
 Write-Host "Starting Publish ControlReference" -foregroundcolor "Green"
 dotnet publish ControlReference\ControlReference.csproj --self-contained false -f net6.0-windows -r win-x64 -c Release -o $publishPath /p:DebugType=None /p:DebugSymbols=false
+#dotnet publish ControlReference\ControlReference.csproj -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true --self-contained false -f net6.0-windows -r win-x64 -c Release -o $publishPath /p:DebugType=None /p:DebugSymbols=false
 $buildLastExitCode = $LastExitCode
 
 Write-Host "Build ControlRef LastExitCode: $buildLastExitCode" -foregroundcolor "Green"
