@@ -15,6 +15,7 @@ namespace NonVisuals.Panels.StreamDeck
     using Panels;
 
     [Serializable]
+    [SerializeCritical]
     public class ActionTypeDCSBIOS : DCSBIOSActionBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.DCSBIOS;
@@ -26,6 +27,8 @@ namespace NonVisuals.Panels.StreamDeck
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
+        public ActionTypeDCSBIOS() {
+        }
 
         public ActionTypeDCSBIOS(StreamDeckPanel streamDeckPanel)
         {

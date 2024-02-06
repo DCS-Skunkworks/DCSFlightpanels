@@ -14,26 +14,25 @@ namespace DCSFPTests.Serialization {
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
             DCSBIOSInput d = JsonConvert.DeserializeObject<DCSBIOSInput>(serializedObj);
 
-            Assert.True(s.ControlId == d.ControlId);
-            Assert.True(s.Delay == d.Delay);
+            Assert.Equal(s.ControlId, d.ControlId);
+            Assert.Equal(s.Delay, d.Delay);
             DeepAssert.Equal(s.SelectedDCSBIOSInterface, d.SelectedDCSBIOSInterface);
-            Assert.True(s.ControlDescription == d.ControlDescription);
-            Assert.True(s.ControlType == d.ControlType);
+            Assert.Equal(s.ControlDescription, d.ControlDescription);
+            Assert.Equal(s.ControlType, d.ControlType);
             DeepAssert.Equal(s.DCSBIOSInputInterfaces, d.DCSBIOSInputInterfaces);
             // Assert.False(d.Debug); //deprecated
 
             RepositorySerialized repo = new();
-
             //Save sample file in project (use it only once)
             //repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
 
-            DCSBIOSInput deseralizedObjFromFile = JsonConvert.DeserializeObject<DCSBIOSInput>(repo.GetSerializedObjectString(d.GetType()));
+            DCSBIOSInput deseralizedObjFromFile = JsonConvert.DeserializeObject<DCSBIOSInput>(repo.GetSerializedObjectString(s.GetType()));
 
             DeepAssert.Equal(s, deseralizedObjFromFile);
             DeepAssert.Equal(d, deseralizedObjFromFile);
         }
 
-        private static DCSBIOSInput GetObject(int instanceNbr = 1) {
+        public static DCSBIOSInput GetObject(int instanceNbr = 1) {
             return new()
             {
                 ControlId = $"CtrlId 741{instanceNbr}",

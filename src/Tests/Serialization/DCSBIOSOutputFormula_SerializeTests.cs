@@ -18,15 +18,14 @@ namespace DCSFPTests.Serialization {
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
             DCSBIOSOutputFormula d = JsonConvert.DeserializeObject<DCSBIOSOutputFormula>(serializedObj);
 
-            Assert.True(s.FormulaResult == d.FormulaResult);
-            Assert.True(s.Formula == d.Formula);
+            Assert.Equal(s.FormulaResult, d.FormulaResult);
+            Assert.Equal(s.Formula, d.Formula);
 
             RepositorySerialized repo = new();
-
             //Save sample file in project (use it only once)
             //repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
 
-            DCSBIOSOutputFormula deseralizedObjFromFile = JsonConvert.DeserializeObject<DCSBIOSOutputFormula>(repo.GetSerializedObjectString(d.GetType()));
+            DCSBIOSOutputFormula deseralizedObjFromFile = JsonConvert.DeserializeObject<DCSBIOSOutputFormula>(repo.GetSerializedObjectString(s.GetType()));
 
             DeepAssert.Equal(s, deseralizedObjFromFile);
             DeepAssert.Equal(d, deseralizedObjFromFile);

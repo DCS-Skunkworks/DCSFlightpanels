@@ -17,27 +17,26 @@ namespace DCSFPTests.Serialization {
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
             DCSBIOSInputInterface d = JsonConvert.DeserializeObject<DCSBIOSInputInterface>(serializedObj);
 
-            Assert.True(s.ControlId == d.ControlId);
-            Assert.True(s.Delay == d.Delay);
-            Assert.True(s.Description == d.Description);
-            Assert.True(s.MaxValue == d.MaxValue);
-            Assert.True(s.Interface == d.Interface);
-            Assert.True(s.SuggestedStep == d.SuggestedStep);
+            Assert.Equal(s.ControlId, d.ControlId);
+            Assert.Equal(s.Delay, d.Delay);
+            Assert.Equal(s.Description, d.Description);
+            Assert.Equal(s.MaxValue, d.MaxValue);
+            Assert.Equal(s.Interface, d.Interface);
+            Assert.Equal(s.SuggestedStep, d.SuggestedStep);
 
-            Assert.True(s.SpecifiedActionArgument == d.SpecifiedActionArgument);
-            Assert.True(s.SpecifiedSetStateArgument == d.SpecifiedSetStateArgument);
-            Assert.True(s.SpecifiedVariableStepArgument == d.SpecifiedVariableStepArgument);
-            Assert.True(s.SpecifiedFixedStepArgument == d.SpecifiedFixedStepArgument);
-            Assert.True(s.SpecifiedSetStringArgument == d.SpecifiedSetStringArgument);
+            Assert.Equal(s.SpecifiedActionArgument, d.SpecifiedActionArgument);
+            Assert.Equal(s.SpecifiedSetStateArgument, d.SpecifiedSetStateArgument);
+            Assert.Equal(s.SpecifiedVariableStepArgument, d.SpecifiedVariableStepArgument);
+            Assert.Equal(s.SpecifiedFixedStepArgument, d.SpecifiedFixedStepArgument);
+            Assert.Equal(s.SpecifiedSetStringArgument, d.SpecifiedSetStringArgument);
 
-            Assert.True(s.SelectedArgumentValue == d.SpecifiedSetStringArgument);
+            Assert.Equal(s.SelectedArgumentValue, d.SpecifiedSetStringArgument);
 
             RepositorySerialized repo = new();
-
             //Save sample file in project (use it only once)
             //repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
 
-            DCSBIOSInputInterface deseralizedObjFromFile = JsonConvert.DeserializeObject<DCSBIOSInputInterface>(repo.GetSerializedObjectString(d.GetType()));
+            DCSBIOSInputInterface deseralizedObjFromFile = JsonConvert.DeserializeObject<DCSBIOSInputInterface>(repo.GetSerializedObjectString(s.GetType()));
 
             DeepAssert.Equal(s, deseralizedObjFromFile);
             DeepAssert.Equal(d, deseralizedObjFromFile);

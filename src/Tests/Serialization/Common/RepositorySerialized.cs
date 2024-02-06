@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.IO;
 
-
 namespace DCSFPTests.Serialization.Common
 {
     internal class RepositorySerialized
@@ -21,7 +20,6 @@ namespace DCSFPTests.Serialization.Common
                 }
                 path = Directory.GetParent(path).FullName;
             }
-
             return path;
         }
 

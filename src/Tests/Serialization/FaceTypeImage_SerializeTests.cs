@@ -16,19 +16,19 @@ namespace DCSFPTests.Serialization {
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
             FaceTypeImage d = JsonConvert.DeserializeObject<FaceTypeImage>(serializedObj);
 
-            Assert.True(d.FaceType == EnumStreamDeckFaceType.Image);
-            Assert.True(s.FaceType == d.FaceType);
+            Assert.Equal(EnumStreamDeckFaceType.Image, d.FaceType);
+            Assert.Equal(d.FaceType, s.FaceType);
             DeepAssert.Equal(s.TextFont, d.TextFont);
             DeepAssert.Equals(s.FontColor, d.FontColor);
             DeepAssert.Equal(s.BackgroundColor, d.BackgroundColor);
 
-            Assert.True(s.StreamDeckButtonName == d.StreamDeckButtonName);
-            Assert.True(s.OffsetX == d.OffsetX);
-            Assert.True(s.OffsetY == d.OffsetY);
-            Assert.True(s.ImageFile == d.ImageFile);
+            Assert.Equal(d.StreamDeckButtonName, s.StreamDeckButtonName);
+            Assert.Equal(d.OffsetX, s.OffsetX);
+            Assert.Equal(d.OffsetY, s.OffsetY);
+            Assert.Equal(d.ImageFile, s.ImageFile);
 
 
-            //should be not serialized :
+            //Not serialized :
             Assert.True(s.ConfigurationOK); //Dependant of object state
             Assert.True(d.ConfigurationOK); //Dependant of object state
             Assert.False(string.IsNullOrEmpty(s.FaceDescription));//Dependant of object state
@@ -45,24 +45,24 @@ namespace DCSFPTests.Serialization {
             //Save sample file in project (use it only once)
             //repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
 
-            FaceTypeImage deseralizedObjFromFile = JsonConvert.DeserializeObject<FaceTypeImage>(repo.GetSerializedObjectString(d.GetType()));
+            FaceTypeImage deseralizedObjFromFile = JsonConvert.DeserializeObject<FaceTypeImage>(repo.GetSerializedObjectString(s.GetType()));
 
-            Assert.True(s.FaceType == deseralizedObjFromFile.FaceType);
+            Assert.Equal(s.FaceType, deseralizedObjFromFile.FaceType);
 
             DeepAssert.Equal(s.TextFont, deseralizedObjFromFile.TextFont);
             DeepAssert.Equals(s.FontColor, deseralizedObjFromFile.FontColor);
             DeepAssert.Equal(s.BackgroundColor, deseralizedObjFromFile.BackgroundColor);
 
-            Assert.True(s.StreamDeckButtonName == deseralizedObjFromFile.StreamDeckButtonName);
-            Assert.True(s.OffsetX == deseralizedObjFromFile.OffsetX);
-            Assert.True(s.OffsetY == deseralizedObjFromFile.OffsetY);
+            Assert.Equal(s.StreamDeckButtonName, deseralizedObjFromFile.StreamDeckButtonName);
+            Assert.Equal(s.OffsetX, deseralizedObjFromFile.OffsetX);
+            Assert.Equal(s.OffsetY, deseralizedObjFromFile.OffsetY);
             Assert.True(string.IsNullOrEmpty(deseralizedObjFromFile.Text));
-            Assert.True(s.ImageFile == deseralizedObjFromFile.ImageFile);
+            Assert.Equal(s.ImageFile, deseralizedObjFromFile.ImageFile);
             Assert.Null(deseralizedObjFromFile.StreamDeckPanelInstance);
             Assert.Null(deseralizedObjFromFile.StreamDeckButton);
         }
 
-        private static FaceTypeImage GetObject(int instanceNbr = 1) {
+        public static FaceTypeImage GetObject(int instanceNbr = 1) {
             return new()
             {
                 Text = $"wor nmp {instanceNbr}",

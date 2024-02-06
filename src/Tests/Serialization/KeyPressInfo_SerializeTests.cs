@@ -16,15 +16,15 @@ namespace DCSFPTests.Serialization {
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
             KeyPressInfo d = JsonConvert.DeserializeObject<KeyPressInfo>(serializedObj);
 
-            Assert.True(s.LengthOfBreak == d.LengthOfBreak);
-            Assert.True(s.LengthOfKeyPress == d.LengthOfKeyPress);
+            Assert.Equal(s.LengthOfBreak, d.LengthOfBreak);
+            Assert.Equal(s.LengthOfKeyPress, d.LengthOfKeyPress);
             DeepAssert.Equal(s.VirtualKeyCodes, d.VirtualKeyCodes);
 
             RepositorySerialized repo = new();
             //Save sample file in project (use it only once)
             //repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
 
-            KeyPressInfo deseralizedObjFromFile = JsonConvert.DeserializeObject<KeyPressInfo>(repo.GetSerializedObjectString(d.GetType()));
+            KeyPressInfo deseralizedObjFromFile = JsonConvert.DeserializeObject<KeyPressInfo>(repo.GetSerializedObjectString(s.GetType()));
 
             DeepAssert.Equal(s, deseralizedObjFromFile);
             DeepAssert.Equal(d, deseralizedObjFromFile);
@@ -62,8 +62,8 @@ namespace DCSFPTests.Serialization {
             return new()
             {
                 LengthOfBreak = GetKeyPressLengthFromInstance(instanceNbr),
-                LengthOfKeyPress = GetKeyPressLengthFromInstance(instanceNbr+1),
-                VirtualKeyCodes = new() { 
+                LengthOfKeyPress = GetKeyPressLengthFromInstance(instanceNbr + 1),
+                VirtualKeyCodes = new() {
                   GetVirtualKeyCodeFromInstance(instanceNbr)
                 , GetVirtualKeyCodeFromInstance(instanceNbr+1)
                 , GetVirtualKeyCodeFromInstance(instanceNbr+2)

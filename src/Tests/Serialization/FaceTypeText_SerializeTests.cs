@@ -8,7 +8,7 @@ using Xunit;
 namespace DCSFPTests.Serialization {
 
     public static class FaceTypeText_SerializeTests {
-      
+
         [Fact]
         public static void FaceTypeText_ShouldBeSerializable() {
             FaceTypeText s = GetObject();
@@ -16,19 +16,19 @@ namespace DCSFPTests.Serialization {
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
             FaceTypeText d = JsonConvert.DeserializeObject<FaceTypeText>(serializedObj);
 
-            Assert.True(d.FaceType == EnumStreamDeckFaceType.Text);
-            Assert.True(s.FaceType == d.FaceType);
+            Assert.Equal(EnumStreamDeckFaceType.Text, d.FaceType);
+            Assert.Equal(s.FaceType, d.FaceType);
             Assert.True(s.ButtonTextTemplate == d.ButtonTextTemplate);
             DeepAssert.Equal(s.TextFont, d.TextFont);
             DeepAssert.Equals(s.FontColor, d.FontColor);
             DeepAssert.Equal(s.BackgroundColor, d.BackgroundColor);
 
-            Assert.True(s.StreamDeckButtonName == d.StreamDeckButtonName);
-            Assert.True(s.OffsetX == d.OffsetX);
-            Assert.True(s.OffsetY == d.OffsetY);
+            Assert.Equal(s.StreamDeckButtonName, d.StreamDeckButtonName);
+            Assert.Equal(s.OffsetX, d.OffsetX);
+            Assert.Equal(s.OffsetY, d.OffsetY);
 
 
-            //should be not serialized :
+            //Not serialized :
             Assert.True(s.ConfigurationOK); //Dependant of object state
             Assert.True(d.ConfigurationOK); //Dependant of object state
             Assert.False(string.IsNullOrEmpty(s.FaceDescription));//Dependant of object state
@@ -39,31 +39,31 @@ namespace DCSFPTests.Serialization {
             Assert.NotNull(d.Bitmap); //Dependant of object state
             Assert.Null(d.StreamDeckPanelInstance);
             Assert.Null(d.StreamDeckButton);
-         
+
 
             RepositorySerialized repo = new();
             //Save sample file in project (use it only once)
             //repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
 
-            FaceTypeText deseralizedObjFromFile = JsonConvert.DeserializeObject<FaceTypeText>(repo.GetSerializedObjectString(d.GetType()));
+            FaceTypeText deseralizedObjFromFile = JsonConvert.DeserializeObject<FaceTypeText>(repo.GetSerializedObjectString(s.GetType()));
 
-            Assert.True(s.FaceType == deseralizedObjFromFile.FaceType);
-            Assert.True(s.ButtonTextTemplate == deseralizedObjFromFile.ButtonTextTemplate);
+            Assert.Equal(s.FaceType, deseralizedObjFromFile.FaceType);
+            Assert.Equal(s.ButtonTextTemplate, deseralizedObjFromFile.ButtonTextTemplate);
             DeepAssert.Equal(s.TextFont, deseralizedObjFromFile.TextFont);
             DeepAssert.Equals(s.FontColor, deseralizedObjFromFile.FontColor);
             DeepAssert.Equal(s.BackgroundColor, deseralizedObjFromFile.BackgroundColor);
 
-            Assert.True(s.StreamDeckButtonName == deseralizedObjFromFile.StreamDeckButtonName);
-            Assert.True(s.OffsetX == deseralizedObjFromFile.OffsetX);
-            Assert.True(s.OffsetY == deseralizedObjFromFile.OffsetY);
+            Assert.Equal(s.StreamDeckButtonName, deseralizedObjFromFile.StreamDeckButtonName);
+            Assert.Equal(s.OffsetX, deseralizedObjFromFile.OffsetX);
+            Assert.Equal(s.OffsetY, deseralizedObjFromFile.OffsetY);
             Assert.Null(deseralizedObjFromFile.StreamDeckPanelInstance);
             Assert.Null(deseralizedObjFromFile.StreamDeckButton);
             Assert.True(string.IsNullOrEmpty(deseralizedObjFromFile.ButtonFinalText));
 
         }
 
-        private static FaceTypeText GetObject(int instanceNbr = 1) {
-           return new()
+        public static FaceTypeText GetObject(int instanceNbr = 1) {
+            return new()
             {
                 ButtonTextTemplate = $"ltn qae {instanceNbr}",
                 ButtonFinalText = $"rth kiv {instanceNbr}",
