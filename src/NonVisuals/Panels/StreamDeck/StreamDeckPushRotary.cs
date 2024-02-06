@@ -14,6 +14,7 @@
     using Panels;
 
     [Serializable]
+    [SerializeCritical]
     public class StreamDeckPushRotary : IDisposable
     {
         private EnumStreamDeckPushRotaryNames _streamDeckPushRotaryName;
