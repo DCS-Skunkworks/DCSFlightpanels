@@ -24,9 +24,6 @@ namespace DCS_BIOS.ControlLocator
         // then GetHashCode() must return the same value for these objects.
         public int GetHashCode(DCSBIOSControl dcsbiosControl)
         {
-            //Check whether the object is null
-            if (ReferenceEquals(dcsbiosControl, null)) return 0;
-
             //Get hash code for the Identifier field if it is not null.
             return dcsbiosControl.Identifier == null ? 0 : dcsbiosControl.Identifier.GetHashCode();
         }

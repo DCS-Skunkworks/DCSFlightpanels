@@ -18,7 +18,7 @@ namespace DCS_BIOS.ControlLocator
     /// <summary>
     /// Reads the aircraft's / helicopter's JSON file containing the cockpit controls.
     /// Whenever a class needs a specific DCS-BIOS control it asks for the control using
-    /// this class. There are separate functions for getting a input or output control.
+    /// this centralized class. There are separate functions for getting an input or output control.
     /// </summary>
     public static class DCSBIOSControlLocator
     {
@@ -134,11 +134,11 @@ namespace DCS_BIOS.ControlLocator
         }
 
         /// <summary>
-        /// Simple loading of all modules, not bothered with EmulationMode or whether to load Meta or FC3 modules.
+        /// Simple loading of module's controls regardless of current context (chosen airframe, profile etc.).
         /// Member DCSAircraft is not taken into account.
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public static List<DCSBIOSControl> ReadDataFromJsonFileSimple(string filename, bool onlyDirectResult = false)
+        public static List<DCSBIOSControl> GetModuleControlsFromJson(string filename, bool onlyDirectResult = false)
         {
             var result = new List<DCSBIOSControl>();
 
@@ -184,9 +184,9 @@ namespace DCS_BIOS.ControlLocator
         /// </summary>
         public static List<DCSBIOSControl> GetMetaControls()
         {
-            var controlList = ReadDataFromJsonFileSimple("MetadataStart.json", true);
-            controlList.AddRange(ReadDataFromJsonFileSimple("MetadataEnd.json", true));
-            controlList.AddRange(ReadDataFromJsonFileSimple("CommonData.json", true));
+            var controlList = GetModuleControlsFromJson("MetadataStart.json", true);
+            controlList.AddRange(GetModuleControlsFromJson("MetadataEnd.json", true));
+            controlList.AddRange(GetModuleControlsFromJson("CommonData.json", true));
             return controlList;
         }
 
