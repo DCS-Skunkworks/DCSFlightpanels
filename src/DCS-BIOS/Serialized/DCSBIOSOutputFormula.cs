@@ -5,8 +5,8 @@ namespace DCS_BIOS.Serialized
     using System;
     using System.Collections.Generic;
     using ClassLibraryCommon;
-    using DCS_BIOS.ControlLocator;
-    using DCS_BIOS.misc;
+    using ControlLocator;
+    using misc;
     using NLog;
 
     /// <summary>

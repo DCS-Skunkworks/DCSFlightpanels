@@ -67,7 +67,7 @@ namespace NonVisuals
         /// <summary>
         /// Creates a <see cref="Image"/> from a given <see cref="System.Drawing.Bitmap"/>.
         /// </summary>
-        public static SixLabors.ImageSharp.Image ToImageSharpImage(this System.Drawing.Bitmap bitmap)
+        public static SixLabors.ImageSharp.Image ToImageSharpImage(this Bitmap bitmap)
         {
             using var memoryStream = new MemoryStream();
             bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);

@@ -9,7 +9,7 @@
     using System.Timers;
     using Newtonsoft.Json;
     using NLog;
-    using NonVisuals.Radios.Knobs;
+    using Knobs;
 
     public enum SRSRadioMode
     {

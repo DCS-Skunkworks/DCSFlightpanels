@@ -9,13 +9,13 @@
     using DCS_BIOS.EventArgs;
 
     using MEF;
-    using NonVisuals.Plugin;
-    using NonVisuals.Radios.Knobs;
-    using NonVisuals.Radios.SRS;
-    using NonVisuals.Panels.Saitek;
-    using NonVisuals.HID;
-    using NonVisuals.BindingClasses.BIP;
-    using NonVisuals.Helpers;
+    using Plugin;
+    using Knobs;
+    using SRS;
+    using Panels.Saitek;
+    using HID;
+    using BindingClasses.BIP;
+    using Helpers;
     using DCS_BIOS.Serialized;
 
     public struct SRSRadioSmallFreqStepping

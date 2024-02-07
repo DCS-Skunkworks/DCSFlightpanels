@@ -20,7 +20,7 @@ namespace NonVisuals.Panels.Saitek.Panels
     using NonVisuals;
     using Saitek;
     using HID;
-    using NonVisuals.Helpers;
+    using Helpers;
     using DCS_BIOS.Serialized;
 
     /// <summary>

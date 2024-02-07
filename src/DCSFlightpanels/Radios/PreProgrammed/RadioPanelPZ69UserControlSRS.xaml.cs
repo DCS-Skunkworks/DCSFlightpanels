@@ -8,9 +8,9 @@
 
     using ClassLibraryCommon;
 
-    using DCSFlightpanels.Interfaces;
-    using DCSFlightpanels.PanelUserControls;
-    using DCSFlightpanels.Properties;
+    using Interfaces;
+    using PanelUserControls;
+    using Properties;
     using NonVisuals.EventArgs;
     using NonVisuals.HID;
     using NonVisuals.Interfaces;

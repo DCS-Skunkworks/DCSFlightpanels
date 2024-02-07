@@ -8,7 +8,7 @@ namespace DCS_BIOS.Serialized
     using System.ComponentModel;
     using ClassLibraryCommon;
     using DCS_BIOS;
-    using DCS_BIOS.ControlLocator;
+    using ControlLocator;
     using Newtonsoft.Json;
 
     public enum DCSBiosOutputType
