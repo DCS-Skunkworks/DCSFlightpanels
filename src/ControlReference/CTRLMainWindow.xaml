@@ -9,9 +9,9 @@
         xmlns:customControls="clr-namespace:ClassLibraryCommon.CustomControls;assembly=ClassLibraryCommon"
         Loaded="MainWindow_OnLoaded" 
         Closed="MainWindow_OnClosed" 
-        LocationChanged="MainWindow_OnLocationChanged" 
+        Closing="MainWindow_OnClosing"
         SizeChanged="MainWindow_OnSizeChanged"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="Manual"
         Icon="/ctrlref;component/Images/FlightPanels01.png" >
 
     <Grid >

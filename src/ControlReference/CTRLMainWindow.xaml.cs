@@ -3,6 +3,7 @@ using ControlReference.Properties;
 using DCS_BIOS;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -105,11 +106,10 @@ namespace ControlReference
                 {
                     return;
                 }
-
-                Top = Settings.Default.MainWindowTop;
-                Left = Settings.Default.MainWindowLeft;
-                Height = Settings.Default.MainWindowHeight;
-                Width = Settings.Default.MainWindowWidth;
+                Top = Settings.Default.MainWindowTop.CompareTo(-1) == 0 ? Top : Settings.Default.MainWindowTop; 
+                Left = Settings.Default.MainWindowLeft.CompareTo(-1) == 0 ? Top : Settings.Default.MainWindowLeft;
+                Height = Settings.Default.MainWindowHeight.CompareTo(-1) == 0 ? Top : Settings.Default.MainWindowHeight;
+                Width = Settings.Default.MainWindowWidth.CompareTo(-1) == 0 ? Top : Settings.Default.MainWindowWidth;
 
                 var result = Common.CheckJSONDirectory(Settings.Default.DCSBiosJSONLocation);
                 if (result.Item1 == false && result.Item2 == false)
@@ -566,27 +566,6 @@ namespace ControlReference
             }
         }
 
-        private void MainWindow_OnLocationChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!_formLoaded)
-                {
-                    return;
-                }
-
-                if (!(Top > 0) || !(Left > 0)) return;
-
-                Settings.Default.MainWindowTop = Top;
-                Settings.Default.MainWindowLeft = Left;
-                Settings.Default.Save();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             try
@@ -746,6 +725,20 @@ namespace ControlReference
                 }
                 Clipboard.SetText(result.ToString());
                 SystemSounds.Exclamation.Play();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            try
+            {
+                Settings.Default.MainWindowTop = Top;
+                Settings.Default.MainWindowLeft = Left;
+                Settings.Default.Save();
             }
             catch (Exception ex)
             {
