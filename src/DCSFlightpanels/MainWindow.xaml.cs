@@ -71,7 +71,7 @@
             AppEventHandler.AttachSettingsModified(this);
             AppEventHandler.AttachPanelEventListener(this);
             AppEventHandler.AttachForwardPanelEventListener(this);
-            BIOSEventHandler.AttachConnectionListener(this); 
+            BIOSEventHandler.AttachConnectionListener(this);
             BIOSEventHandler.AttachStringListener(this);
             /*
              * Correct JSON folder path, move away from $USERDIRECTORY$.
@@ -184,7 +184,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void FindDCSBIOSControls()
         {
             if (!DCSAircraft.HasDCSBIOSModules || DCSAircraft.IsKeyEmulator(ProfileHandler.ActiveDCSAircraft) || DCSAircraft.IsKeyEmulatorSRS(ProfileHandler.ActiveDCSAircraft))
@@ -361,49 +361,12 @@
         {
             LoadProcessPriority();
 
-            if (Settings.Default.MainWindowHeight > 0)
-            {
-                Height = Settings.Default.MainWindowHeight;
-            }
-
-            if (Settings.Default.MainWindowWidth > 0)
-            {
-                Width = Settings.Default.MainWindowWidth;
-            }
-
-            if (Settings.Default.MainWindowTop > 0)
-            {
-                Top = Settings.Default.MainWindowTop;
-            }
-
-            if (Settings.Default.MainWindowLeft > 0)
-            {
-                Left = Settings.Default.MainWindowLeft;
-            }
+            Height = Settings.Default.MainWindowHeight;
+            Width = Settings.Default.MainWindowWidth;
+            Top = Settings.Default.MainWindowTop;
+            Left = Settings.Default.MainWindowLeft;
 
             Common.APIModeUsed = Settings.Default.APIMode == 0 ? APIModeEnum.KeybdEvent : APIModeEnum.SendInput;
-        }
-
-        private void MainWindowLocationChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!_isLoaded)
-                {
-                    return;
-                }
-
-                if (Top > 0 && Left > 0)
-                {
-                    Settings.Default.MainWindowTop = Top;
-                    Settings.Default.MainWindowLeft = Left;
-                    Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
         }
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
@@ -576,6 +539,10 @@
                 {
                     e.Cancel = true;
                 }
+
+                Settings.Default.MainWindowTop = Top;
+                Settings.Default.MainWindowLeft = Left;
+                Settings.Default.Save();
             }
             catch (Exception ex)
             {
@@ -1380,7 +1347,7 @@
                     FileName = AppDomain.CurrentDomain.BaseDirectory + "ctrlref.exe",
                     UseShellExecute = true
                 });
-                
+
             }
             catch (Exception ex)
             {

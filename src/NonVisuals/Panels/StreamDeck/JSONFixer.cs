@@ -20,6 +20,17 @@
              */
             json = json.Replace("NonVisuals.KeyPress, NonVisuals", "NonVisuals.KeyEmulation.KeyPress, NonVisuals");
             json = json.Replace("NonVisuals.KeyPressInfo, NonVisuals", "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals");
+
+            /*
+             * 07.02.2024, organized DCS-BIOS classes
+             */
+            json = json.Replace("DCS_BIOS.DCSBIOSInput, DCS-BIOS", "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS");
+            json = json.Replace("DCS_BIOS.DCSBIOSOutput, DCS-BIOS", "DCS_BIOS.Serialized.DCSBIOSOutput, DCS-BIOS");
+            json = json.Replace("DCS_BIOS.DCSBIOSOutputFormula, DCS-BIOS", "DCS_BIOS.Serialized.DCSBIOSOutputFormula, DCS-BIOS");
+            json = json.Replace("DCS_BIOS.DCSBIOSInputInterface, DCS-BIOS", "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS");
+
+
+
             return json;
         }
 

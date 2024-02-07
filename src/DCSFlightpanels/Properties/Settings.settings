@@ -6,10 +6,10 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="MainWindowHeight" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">800</Value>
     </Setting>
     <Setting Name="MainWindowWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">1300</Value>
     </Setting>
     <Setting Name="MainWindowTop" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0</Value>

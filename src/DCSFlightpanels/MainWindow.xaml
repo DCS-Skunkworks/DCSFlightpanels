@@ -9,7 +9,6 @@
         Loaded="WindowLoaded" 
         Closing="MainWindowClosing" 
         Closed="MainWindow_OnClosed" 
-        LocationChanged="MainWindowLocationChanged" 
         KeyDown="MainWindow_OnKeyDown"
         SizeChanged="MainWindowSizeChanged"
         WindowStartupLocation="CenterScreen"  

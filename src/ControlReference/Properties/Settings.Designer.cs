@@ -85,7 +85,7 @@ namespace ControlReference.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("600")]
         public double MainWindowHeight {
             get {
                 return ((double)(this["MainWindowHeight"]));
@@ -97,7 +97,7 @@ namespace ControlReference.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("700")]
         public double MainWindowWidth {
             get {
                 return ((double)(this["MainWindowWidth"]));

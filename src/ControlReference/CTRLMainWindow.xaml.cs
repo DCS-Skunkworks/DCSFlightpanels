@@ -106,10 +106,11 @@ namespace ControlReference
                 {
                     return;
                 }
-                Top = Settings.Default.MainWindowTop.CompareTo(-1) == 0 ? Top : Settings.Default.MainWindowTop; 
-                Left = Settings.Default.MainWindowLeft.CompareTo(-1) == 0 ? Top : Settings.Default.MainWindowLeft;
-                Height = Settings.Default.MainWindowHeight.CompareTo(-1) == 0 ? Top : Settings.Default.MainWindowHeight;
-                Width = Settings.Default.MainWindowWidth.CompareTo(-1) == 0 ? Top : Settings.Default.MainWindowWidth;
+
+                Top = Settings.Default.MainWindowTop; 
+                Left = Settings.Default.MainWindowLeft;
+                Height = Settings.Default.MainWindowHeight;
+                Width = Settings.Default.MainWindowWidth;
 
                 var result = Common.CheckJSONDirectory(Settings.Default.DCSBiosJSONLocation);
                 if (result.Item1 == false && result.Item2 == false)
