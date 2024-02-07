@@ -332,7 +332,7 @@ namespace ControlReference
                     Settings.Default.LastProfileID = selectedModule.ID;
                     Settings.Default.Save();
                     DCSBIOSControlLocator.DCSAircraft = selectedModule;
-                    _loadedControls = DCSBIOSControlLocator.ReadDataFromJsonFileSimple(selectedModule.JSONFilename);
+                    _loadedControls = DCSBIOSControlLocator.GetModuleControlsFromJson(selectedModule.JSONFilename);
                     _loadedDCSBIOSOutputs.Clear();
                     foreach (var dcsbiosControl in _loadedControls)
                     {

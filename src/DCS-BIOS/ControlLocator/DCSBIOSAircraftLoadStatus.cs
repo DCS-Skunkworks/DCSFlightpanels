@@ -27,7 +27,7 @@ namespace DCS_BIOS.ControlLocator
         {
             if (!IsRegistered(profile))
             {
-                LoadStatusList.Add(new DCSBIOSAircraftLoadStatus(profile, loaded));
+                LoadStatusList.Add(new DCSBIOSAircraftLoadStatus(profile, loaded)); // <-- loaded set here
                 return;
             }
 
