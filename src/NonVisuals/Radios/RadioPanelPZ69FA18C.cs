@@ -21,6 +21,8 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
+    using DCS_BIOS.Serialized;
+    using DCS_BIOS.ControlLocator;
 
 
     /// <summary>

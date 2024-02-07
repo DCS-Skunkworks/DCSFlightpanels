@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DCS_BIOS;
 using DCSFlightpanels.Interfaces;
 using NonVisuals;
 using NonVisuals.BindingClasses.BIP;
@@ -19,6 +18,7 @@ namespace DCSFlightpanels.CustomControls
     using DCSFlightpanels.Windows;
     using MEF;
     using System.Linq;
+    using DCS_BIOS.Serialized;
 
     public abstract class TextBoxBaseInput : TextBox
     {

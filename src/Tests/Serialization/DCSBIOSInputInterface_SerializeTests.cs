@@ -1,9 +1,11 @@
-﻿using DCS_BIOS;
+﻿using DCS_BIOS.misc;
+using DCS_BIOS.Serialized;
 using DCSFPTests.Serialization.Common;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace DCSFPTests.Serialization {
+namespace DCSFPTests.Serialization
+{
 
     /// <summary>
     /// Note: SelectedArgumentValue is private set but should reflect the last value passed to one of the 'Specifiedfields*'

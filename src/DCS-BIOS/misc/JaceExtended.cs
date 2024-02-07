@@ -2,7 +2,7 @@
 using Jace;
 using NLog;
 
-namespace DCS_BIOS
+namespace DCS_BIOS.misc
 {
     public class JaceExtended
     {

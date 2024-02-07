@@ -22,6 +22,8 @@ using System.Text;
 using System.Windows.Media.Imaging;
 using NLog.Targets.Wrappers;
 using NLog.Targets;
+using DCS_BIOS.Serialized;
+using DCS_BIOS.ControlLocator;
 
 namespace ControlReference
 {

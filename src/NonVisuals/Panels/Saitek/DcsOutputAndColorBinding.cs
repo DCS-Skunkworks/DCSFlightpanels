@@ -2,8 +2,7 @@
 {
     using System;
     using System.Text;
-
-    using DCS_BIOS;
+    using DCS_BIOS.Serialized;
     using Panels;
 
     public enum PanelLEDColor : byte

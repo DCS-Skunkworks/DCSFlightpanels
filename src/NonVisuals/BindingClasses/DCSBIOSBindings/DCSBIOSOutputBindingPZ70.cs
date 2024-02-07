@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using DCS_BIOS;
+using DCS_BIOS.Serialized;
 using NonVisuals.Panels.Saitek;
 using NonVisuals.Panels.Saitek.Panels;
 

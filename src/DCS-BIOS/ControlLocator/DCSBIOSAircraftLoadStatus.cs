@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace DCS_BIOS
+namespace DCS_BIOS.ControlLocator
 {
     /// <summary>
     /// Convenience class for DCSBIOSControlLocator.

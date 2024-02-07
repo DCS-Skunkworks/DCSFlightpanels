@@ -1,7 +1,7 @@
 ﻿using DCS_BIOS.Json;
 using System.Collections.Generic;
 
-namespace DCS_BIOS
+namespace DCS_BIOS.ControlLocator
 {
     internal class DCSBIOSControlComparer : IEqualityComparer<DCSBIOSControl>
     {

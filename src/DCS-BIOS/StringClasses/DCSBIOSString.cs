@@ -1,7 +1,7 @@
-﻿namespace DCS_BIOS
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace DCS_BIOS.StringClasses
+{
     /// <summary>
     /// Wrapper for DCS-BIOS strings which has to be constructed
     /// from several packets sent from DCS-BIOS.
@@ -20,7 +20,7 @@
         private readonly uint _address;
 
         //private readonly uint _debugAddress = 10244; //->10251 Mi-8MT R863, Frequency
-        public bool IsComplete  => _receivedAddresses.Count == 0;
+        public bool IsComplete => _receivedAddresses.Count == 0;
 
         public string StringValue => string.Join(string.Empty, _internalBuffer);
         public uint Address
@@ -66,16 +66,16 @@
             {
                 return;
             }
-            
+
             _receivedAddresses.Remove(address);
 
             var offset = address - _address;
-                
+
             if (!string.IsNullOrEmpty(str1))
             {
                 _internalBuffer[offset] = str1;
             }
-                
+
             if (offset + 1 < _internalBuffer.Length && str2 != null)
             {
                 // index = 5, length = 6
@@ -91,7 +91,7 @@
                 _receivedAddresses.Remove(address);
 
                 var offset = address - _address;
-                
+
                 if (!string.IsNullOrEmpty(str2))
                 {
                     _internalBuffer[offset] = str2;

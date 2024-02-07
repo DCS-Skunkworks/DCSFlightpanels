@@ -8,8 +8,6 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using ClassLibraryCommon;
-
-    using DCS_BIOS;
     using CustomControls;
     using Interfaces;
     using Properties;
@@ -24,6 +22,7 @@
     using NonVisuals.Panels.Saitek;
     using NonVisuals.Panels;
     using NonVisuals.HID;
+    using DCS_BIOS.Serialized;
 
     /// <summary>
     /// GUI wrapper for the RadioPanelPZ69Generic. 

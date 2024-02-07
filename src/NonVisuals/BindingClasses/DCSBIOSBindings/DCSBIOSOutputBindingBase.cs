@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using DCS_BIOS;
+using DCS_BIOS.Serialized;
 
 namespace NonVisuals.BindingClasses.DCSBIOSBindings
 {

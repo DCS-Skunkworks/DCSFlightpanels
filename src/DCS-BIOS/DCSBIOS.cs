@@ -5,8 +5,8 @@
  */
 
 using System.Diagnostics;
+using DCS_BIOS.StringClasses;
 using NLog;
-
 namespace DCS_BIOS
 {
     using System;

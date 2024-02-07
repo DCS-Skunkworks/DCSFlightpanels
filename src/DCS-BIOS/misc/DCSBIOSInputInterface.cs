@@ -1,8 +1,9 @@
 ﻿using System;
 using ClassLibraryCommon;
 using DCS_BIOS.Json;
+using DCS_BIOS.Serialized;
 
-namespace DCS_BIOS
+namespace DCS_BIOS.misc
 {
 
     /// <summary>
@@ -116,8 +117,8 @@ namespace DCS_BIOS
         /// <summary>
         /// variable_step = new_value|-decrease_by|+increase_by 
         /// </summary>
-        public int SpecifiedVariableStepArgument 
-        { 
+        public int SpecifiedVariableStepArgument
+        {
             get => _specifiedVariableStepArgument;
             set
             {

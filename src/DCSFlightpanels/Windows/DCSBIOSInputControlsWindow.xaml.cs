@@ -6,7 +6,7 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using ClassLibraryCommon;
-    using DCS_BIOS;
+    using DCS_BIOS.Serialized;
     using NonVisuals;
     using NonVisuals.Interfaces;
 

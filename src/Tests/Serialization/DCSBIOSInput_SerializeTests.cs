@@ -1,9 +1,10 @@
-﻿using DCS_BIOS;
+﻿using DCS_BIOS.Serialized;
 using DCSFPTests.Serialization.Common;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace DCSFPTests.Serialization {
+namespace DCSFPTests.Serialization
+{
 
     public static class DCSBIOSInput_SerializeTests {
 

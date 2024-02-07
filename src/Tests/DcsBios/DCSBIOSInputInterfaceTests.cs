@@ -1,6 +1,7 @@
 ﻿using System;
-using DCS_BIOS;
 using DCS_BIOS.Json;
+using DCS_BIOS.misc;
+using DCS_BIOS.Serialized;
 using Xunit;
 
 namespace DCSFPTests.DcsBios

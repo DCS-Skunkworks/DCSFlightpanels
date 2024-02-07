@@ -3,9 +3,11 @@
 namespace DCSFlightpanels.Windows
 {
     using ClassLibraryCommon;
-    using DCS_BIOS;
+    using DCS_BIOS.ControlLocator;
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
+    using DCS_BIOS.misc;
+    using DCS_BIOS.Serialized;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;

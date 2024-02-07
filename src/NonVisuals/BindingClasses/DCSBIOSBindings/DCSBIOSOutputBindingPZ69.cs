@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using DCS_BIOS;
+using DCS_BIOS.Serialized;
 using MEF;
 using NonVisuals.Panels.Saitek;
 using NonVisuals.Radios;

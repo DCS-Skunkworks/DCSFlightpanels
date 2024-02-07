@@ -2,9 +2,8 @@
 {
     using System;
     using System.Text;
+    using DCS_BIOS.Serialized;
 
-    using DCS_BIOS;
-    
     /// <summary>
     /// Used for setting the brightness of the BIP LEDs. 
     /// </summary>

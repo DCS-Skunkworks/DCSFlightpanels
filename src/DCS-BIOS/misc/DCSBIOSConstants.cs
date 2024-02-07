@@ -1,4 +1,4 @@
-﻿namespace DCS_BIOS
+﻿namespace DCS_BIOS.misc
 {
     public static class DCSBIOSConstants
     {

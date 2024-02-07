@@ -4,12 +4,14 @@
 
 using DCS_BIOS.Json;
 
-namespace DCS_BIOS
+namespace DCS_BIOS.Serialized
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using ClassLibraryCommon;
+    using DCS_BIOS.ControlLocator;
+    using DCS_BIOS.misc;
     using Newtonsoft.Json;
     using NLog;
 
@@ -266,23 +268,23 @@ namespace DCS_BIOS
                     }
 
                 case DCSBIOSInputType.SET_STRING:
-                {
-                    foreach (var dcsbiosInputInterface in _dcsbiosInputInterfaces)
                     {
-                        if (dcsbiosInputInterface.Interface == DCSBIOSInputType.SET_STRING)
+                        foreach (var dcsbiosInputInterface in _dcsbiosInputInterfaces)
                         {
-                            dcsbiosInputInterface.SpecifiedSetStringArgument = entries[2];
-                            SelectedDCSBIOSInterface = dcsbiosInputInterface;
-                            SelectedDCSBIOSInterface.Delay = entries.Length == 4 ? int.Parse(entries[3]) : 0;
-                            break;
+                            if (dcsbiosInputInterface.Interface == DCSBIOSInputType.SET_STRING)
+                            {
+                                dcsbiosInputInterface.SpecifiedSetStringArgument = entries[2];
+                                SelectedDCSBIOSInterface = dcsbiosInputInterface;
+                                SelectedDCSBIOSInterface.Delay = entries.Length == 4 ? int.Parse(entries[3]) : 0;
+                                break;
+                            }
                         }
+                        break;
                     }
-                    break;
-                }
                 default:
-                {
-                    throw new Exception($"Failed to determine input interface type {type}.");
-                }
+                    {
+                        throw new Exception($"Failed to determine input interface type {type}.");
+                    }
             }
         }
     }

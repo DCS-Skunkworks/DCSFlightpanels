@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
     using ClassLibraryCommon;
-
-    using DCS_BIOS;
     using DCS_BIOS.EventArgs;
     using EventArgs;
     using Switches;
@@ -13,6 +11,7 @@
     using System.Timers;
     using Timer = System.Timers.Timer;
     using HID;
+    using DCS_BIOS.Serialized;
 
     public enum CDU737Led
     {

@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
     using ClassLibraryCommon;
-
-    using DCS_BIOS;
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
     using NLog;
@@ -12,6 +10,7 @@
     using Interfaces;
     using NonVisuals;
     using HID;
+    using DCS_BIOS.Serialized;
 
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty, IDisposable
     {
