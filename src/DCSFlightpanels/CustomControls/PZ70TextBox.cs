@@ -1,10 +1,10 @@
 ﻿using ClassLibraryCommon;
-using DCS_BIOS;
 using NonVisuals.BindingClasses.BIP;
 using NonVisuals.BindingClasses.DCSBIOSBindings;
 using System.Collections.Generic;
 using System;
 using System.Windows.Media;
+using DCS_BIOS.Serialized;
 
 namespace DCSFlightpanels.CustomControls
 {

@@ -1,4 +1,4 @@
-﻿using DCS_BIOS;
+﻿using DCS_BIOS.Serialized;
 using System;
 using Xunit;
 

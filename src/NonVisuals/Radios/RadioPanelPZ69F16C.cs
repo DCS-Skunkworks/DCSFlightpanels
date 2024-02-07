@@ -19,7 +19,9 @@ namespace NonVisuals.Radios
     using HID;
     using NonVisuals.Radios.RadioControls;
     using NonVisuals.Radios.RadioSettings;
-    
+    using DCS_BIOS.Serialized;
+    using DCS_BIOS.ControlLocator;
+
     /*
      * Pre-programmed radio panel for the F-16 C Block 50.
      */

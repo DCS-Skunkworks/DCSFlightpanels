@@ -8,7 +8,6 @@ namespace NonVisuals.Panels.StreamDeck.Panels
     using System.Linq;
     using System.Threading;
     using ClassLibraryCommon;
-    using DCS_BIOS;
     using DCS_BIOS.EventArgs;
     using OpenMacroBoard.SDK;
     using MEF;
@@ -16,12 +15,13 @@ namespace NonVisuals.Panels.StreamDeck.Panels
     using Interfaces;
     using Saitek;
     using Events;
-    
+
     using NonVisuals;
     using StreamDeck;
     using NonVisuals.Panels.Saitek.Panels;
     using NonVisuals.Panels;
     using HID;
+    using DCS_BIOS.Serialized;
 
     public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {

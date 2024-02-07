@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using DCS_BIOS.StringClasses;
 
 namespace NonVisuals.Panels.StreamDeck
 {
@@ -8,7 +9,6 @@ namespace NonVisuals.Panels.StreamDeck
     using System.Globalization;
     using System.Text;
     using System.Threading;
-    using DCS_BIOS;
     using DCS_BIOS.EventArgs;
     using DCS_BIOS.Interfaces;
 
@@ -17,6 +17,7 @@ namespace NonVisuals.Panels.StreamDeck
     using Events;
     using Panels;
     using NonVisuals;
+    using DCS_BIOS.Serialized;
 
     [Serializable]
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener, IDisposable

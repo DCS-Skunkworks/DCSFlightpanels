@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using ClassLibraryCommon;
-using DCS_BIOS;
+using DCS_BIOS.ControlLocator;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
 using MEF;

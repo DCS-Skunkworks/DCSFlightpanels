@@ -13,8 +13,6 @@ namespace NonVisuals.Radios
     using System.Threading;
 
     using ClassLibraryCommon;
-
-    using DCS_BIOS;
     using DCS_BIOS.EventArgs;
 
     using MEF;
@@ -25,6 +23,7 @@ namespace NonVisuals.Radios
     using NonVisuals.Panels.Saitek.Panels;
     using Panels.Saitek;
     using HID;
+    using DCS_BIOS.Serialized;
 
 
     /// <summary>

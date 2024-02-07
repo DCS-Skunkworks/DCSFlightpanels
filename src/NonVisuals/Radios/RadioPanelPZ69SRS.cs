@@ -6,8 +6,6 @@
     using System.Threading;
 
     using ClassLibraryCommon;
-
-    using DCS_BIOS;
     using DCS_BIOS.EventArgs;
 
     using MEF;
@@ -18,6 +16,7 @@
     using NonVisuals.HID;
     using NonVisuals.BindingClasses.BIP;
     using NonVisuals.Helpers;
+    using DCS_BIOS.Serialized;
 
     public struct SRSRadioSmallFreqStepping
     {

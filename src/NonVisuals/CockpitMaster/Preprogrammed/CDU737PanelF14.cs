@@ -6,6 +6,8 @@ using DCS_BIOS.Interfaces;
 using NonVisuals.CockpitMaster.Switches;
 using System.Collections.Generic;
 using NonVisuals.HID;
+using DCS_BIOS.Serialized;
+using DCS_BIOS.ControlLocator;
 
 namespace NonVisuals.CockpitMaster.PreProgrammed
 {

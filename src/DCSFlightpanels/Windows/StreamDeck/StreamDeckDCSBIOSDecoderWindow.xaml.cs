@@ -18,12 +18,13 @@ namespace DCSFlightpanels.Windows.StreamDeck
     using System.Windows.Media;
     using System.Windows.Navigation;
     using ClassLibraryCommon;
-    using DCS_BIOS;
     using Shared;
     using NonVisuals;
     using NonVisuals.Interfaces;
     using NonVisuals.Panels.StreamDeck.Panels;
     using NonVisuals.Panels.StreamDeck;
+    using DCS_BIOS.Serialized;
+    using DCS_BIOS.ControlLocator;
 
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.

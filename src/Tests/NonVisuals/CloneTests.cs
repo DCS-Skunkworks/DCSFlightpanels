@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using ClassLibraryCommon;
-using DCS_BIOS;
+using DCS_BIOS.Serialized;
 using MEF;
 using NonVisuals;
 using NonVisuals.BindingClasses.BIP;
@@ -11,7 +11,8 @@ using NonVisuals.Panels.StreamDeck;
 using NonVisuals.Panels.StreamDeck.Panels;
 using Xunit;
 
-namespace DCSFPTests.NonVisuals {
+namespace DCSFPTests.NonVisuals
+{
     public class CloneTests {
 
         private const string _stringValue1 = "Some string value 1";

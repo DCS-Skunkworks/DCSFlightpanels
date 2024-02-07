@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
 
-namespace DCS_BIOS
+namespace DCS_BIOS.Serialized
 {
     using System;
     using System.Collections.Generic;
     using ClassLibraryCommon;
+    using DCS_BIOS.ControlLocator;
+    using DCS_BIOS.misc;
     using NLog;
 
     /// <summary>
@@ -23,10 +25,10 @@ namespace DCS_BIOS
         [NonSerialized]
         private readonly JaceExtended _jaceExtended = new();
         private string _formula;
-        
+
         [NonSerialized]
         private readonly object _jaceLockObject = new();
-        
+
         public double FormulaResult { get; set; }
 
         public DCSBIOSOutputFormula()
@@ -39,7 +41,7 @@ namespace DCS_BIOS
             ExtractDCSBIOSOutputsInFormula();
         }
 
-        
+
         public List<DCSBIOSOutput> DCSBIOSOutputs()
         {
             return _dcsbiosOutputs;
@@ -62,7 +64,7 @@ namespace DCS_BIOS
                         DCSBIOSProtocolParser.RegisterAddressToBroadCast(dcsbiosOutput.Address);
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -188,11 +190,11 @@ namespace DCS_BIOS
 
             ExtractDCSBIOSOutputsInFormula();
         }
-        
+
         [JsonProperty("Formula", Required = Required.Default)]
         public string Formula
         {
-            get => _formula; 
+            get => _formula;
             set
             {
                 _formula = value;
@@ -202,7 +204,7 @@ namespace DCS_BIOS
                 }
             }
         }
-        
+
         public override string ToString()
         {
             return "DCSBiosOutputFormula{" + _formula + "}";

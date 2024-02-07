@@ -1,13 +1,12 @@
-﻿namespace DCS_BIOS
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using DCS_BIOS.EventArgs;
+using DCS_BIOS.Interfaces;
+using NLog;
+
+namespace DCS_BIOS.StringClasses
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
-    using EventArgs;
-    using Interfaces;
-    using NLog;
-
     /// <summary>
     /// Classes reports which strings they want to get updates for.
     /// This class handles the listening and broadcasts the strings

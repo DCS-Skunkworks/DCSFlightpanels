@@ -5,7 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
-using DCS_BIOS;
+using DCS_BIOS.ControlLocator;
+using DCS_BIOS.misc;
 
 namespace DCSFlightpanels.Windows
 {

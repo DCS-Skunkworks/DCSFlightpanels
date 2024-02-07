@@ -5,8 +5,7 @@ using NLog;
 namespace NonVisuals
 {
     using System.Collections.Generic;
-
-    using DCS_BIOS;
+    using DCS_BIOS.misc;
 
     public static class JaceExtendedFactory
     {

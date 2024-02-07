@@ -11,8 +11,6 @@ namespace NonVisuals.Panels.Saitek.Panels
     using System.Threading;
 
     using ClassLibraryCommon;
-
-    using DCS_BIOS;
     using DCS_BIOS.EventArgs;
 
     using MEF;
@@ -23,6 +21,7 @@ namespace NonVisuals.Panels.Saitek.Panels
     using Saitek;
     using HID;
     using NonVisuals.Helpers;
+    using DCS_BIOS.Serialized;
 
     /// <summary>
     /// The implementation class for the Logitech Multi Panel (PZ70)

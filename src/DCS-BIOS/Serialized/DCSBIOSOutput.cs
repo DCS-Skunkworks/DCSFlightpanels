@@ -1,10 +1,14 @@
 ﻿using DCS_BIOS.Json;
+using DCS_BIOS.StringClasses;
 
-namespace DCS_BIOS
+
+namespace DCS_BIOS.Serialized
 {
     using System;
     using System.ComponentModel;
     using ClassLibraryCommon;
+    using DCS_BIOS;
+    using DCS_BIOS.ControlLocator;
     using Newtonsoft.Json;
 
     public enum DCSBiosOutputType
@@ -361,7 +365,7 @@ namespace DCS_BIOS
                 _specifiedValueUInt = value;
             }
         }
-        
+
         [JsonProperty("ControlDescription", Required = Required.Default)]
         public string ControlDescription
         {
@@ -416,7 +420,7 @@ namespace DCS_BIOS
             var counter = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("_UPDATE_COUNTER");
             return counter;
         }
-        
+
         public string GetOutputType()
         {
             return DCSBiosOutputType switch

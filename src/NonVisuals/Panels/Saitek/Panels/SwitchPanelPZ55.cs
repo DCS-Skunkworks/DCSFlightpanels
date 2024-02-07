@@ -13,8 +13,6 @@ namespace NonVisuals.Panels.Saitek.Panels
     using System.Threading;
 
     using ClassLibraryCommon;
-
-    using DCS_BIOS;
     using DCS_BIOS.EventArgs;
 
     using MEF;
@@ -24,6 +22,7 @@ namespace NonVisuals.Panels.Saitek.Panels
     using NonVisuals;
     using Saitek;
     using HID;
+    using DCS_BIOS.Serialized;
 
     public enum SwitchPanelPZ55LEDPosition : byte
     {

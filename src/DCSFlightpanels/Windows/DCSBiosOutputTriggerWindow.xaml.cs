@@ -10,7 +10,8 @@ namespace DCSFlightpanels.Windows
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using ClassLibraryCommon;
-    using DCS_BIOS;
+    using DCS_BIOS.ControlLocator;
+    using DCS_BIOS.Serialized;
     using EnumEx = ClassLibraryCommon.EnumEx;
 
     /// <summary>

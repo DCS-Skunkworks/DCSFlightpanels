@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
-using DCS_BIOS;
+using DCS_BIOS.Serialized;
 using NonVisuals.Panels.Saitek;
 using NonVisuals.Panels.Saitek.Panels;
 

@@ -1,4 +1,6 @@
-﻿namespace DCS_BIOS
+﻿using DCS_BIOS.Serialized;
+
+namespace DCS_BIOS.StringClasses
 {
     /// <summary>
     /// Easy wrapper for listening to DCS-BIOS strings.

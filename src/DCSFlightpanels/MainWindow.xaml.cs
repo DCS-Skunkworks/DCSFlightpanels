@@ -37,6 +37,8 @@
     using Octokit;
     using NonVisuals.Panels;
     using NonVisuals.HID;
+    using DCS_BIOS.Serialized;
+    using DCS_BIOS.ControlLocator;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener, IDCSBIOSStringListener
     {

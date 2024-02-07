@@ -1,11 +1,11 @@
 ﻿using ClassLibraryCommon;
-using DCS_BIOS;
 using NonVisuals.Panels.Saitek;
 using NonVisuals.Panels.StreamDeck.Panels;
 using NonVisuals.Panels.StreamDeck;
 using System.Collections.Generic;
 using System;
 using System.Windows.Media;
+using DCS_BIOS.Serialized;
 
 namespace DCSFlightpanels.CustomControls
 {

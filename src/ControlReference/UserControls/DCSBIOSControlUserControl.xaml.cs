@@ -15,7 +15,9 @@ using ControlReference.Events;
 using ControlReference.Interfaces;
 using ControlReference.Windows;
 using DCS_BIOS;
+using DCS_BIOS.ControlLocator;
 using DCS_BIOS.Json;
+using DCS_BIOS.Serialized;
 
 namespace ControlReference.UserControls
 {

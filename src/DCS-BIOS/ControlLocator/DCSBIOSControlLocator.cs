@@ -1,6 +1,8 @@
 ﻿using DCS_BIOS.Json;
+using DCS_BIOS.StringClasses;
 
-namespace DCS_BIOS
+
+namespace DCS_BIOS.ControlLocator
 {
     using System;
     using System.Collections.Generic;
@@ -8,7 +10,8 @@ namespace DCS_BIOS
     using System.Linq;
     using System.Text;
     using ClassLibraryCommon;
-
+    using DCS_BIOS.misc;
+    using DCS_BIOS.Serialized;
     using Newtonsoft.Json;
     using NLog;
 

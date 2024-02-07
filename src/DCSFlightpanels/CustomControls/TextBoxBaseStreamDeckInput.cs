@@ -1,12 +1,12 @@
 ﻿namespace DCSFlightpanels.CustomControls
 {
-    using DCS_BIOS;
     using MEF;
     using NonVisuals.KeyEmulation;
     using NonVisuals;
     using System.Collections.Generic;
     using System;
     using System.Windows.Controls;
+    using DCS_BIOS.Serialized;
 
     public abstract class TextBoxBaseStreamDeckInput : TextBox
     {

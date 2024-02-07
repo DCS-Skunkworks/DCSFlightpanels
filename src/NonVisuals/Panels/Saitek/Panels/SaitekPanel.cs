@@ -7,8 +7,6 @@ namespace NonVisuals.Panels.Saitek.Panels
 
     using ClassLibraryCommon;
 
-    using DCS_BIOS;
-
     using HidLibrary;
 
     using MEF;
@@ -19,6 +17,7 @@ namespace NonVisuals.Panels.Saitek.Panels
     using Saitek;
     using NonVisuals.Panels;
     using HID;
+    using DCS_BIOS.Serialized;
 
     /// <summary>
     /// Base class for Saitek Panels. Contains common functions and properties shared between the panels. 

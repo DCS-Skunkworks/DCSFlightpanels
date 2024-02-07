@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace DCS_BIOS
+namespace DCS_BIOS.misc
 {
     internal class LuaAssistant
     {

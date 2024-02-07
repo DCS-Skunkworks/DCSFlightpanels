@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
-using DCS_BIOS;
+using DCS_BIOS.Serialized;
 using Newtonsoft.Json;
 using NLog;
 using NonVisuals.Panels.Saitek;
