@@ -1,9 +1,8 @@
 ﻿using System;
 using ClassLibraryCommon;
 using DCS_BIOS.Json;
-using DCS_BIOS.Serialized;
 
-namespace DCS_BIOS.misc
+namespace DCS_BIOS.Serialized
 {
 
     /// <summary>

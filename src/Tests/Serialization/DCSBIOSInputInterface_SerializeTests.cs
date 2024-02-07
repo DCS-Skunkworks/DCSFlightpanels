@@ -1,5 +1,4 @@
-﻿using DCS_BIOS.misc;
-using DCS_BIOS.Serialized;
+﻿using DCS_BIOS.Serialized;
 using DCSFPTests.Serialization.Common;
 using Newtonsoft.Json;
 using Xunit;
