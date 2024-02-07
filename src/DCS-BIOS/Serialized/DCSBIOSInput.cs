@@ -10,8 +10,8 @@ namespace DCS_BIOS.Serialized
     using System.Collections.Generic;
     using System.Linq;
     using ClassLibraryCommon;
-    using DCS_BIOS.ControlLocator;
-    using DCS_BIOS.misc;
+    using ControlLocator;
+    using misc;
     using Newtonsoft.Json;
     using NLog;
 

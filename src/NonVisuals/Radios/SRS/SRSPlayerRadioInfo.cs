@@ -310,15 +310,15 @@ namespace NonVisuals.Radios.SRS
 
         public SRSPlayerRadioInfo DeepClone()
         {
-            var clone = (SRSPlayerRadioInfo)this.MemberwiseClone();
+            var clone = (SRSPlayerRadioInfo)MemberwiseClone();
 
-            clone.iff = this.iff.Copy();
+            clone.iff = iff.Copy();
             //ignore position
             clone.radios = new SRSRadioInformation[11];
 
             for (var i = 0; i < 11; i++)
             {
-                clone.radios[i] = this.radios[i].Copy();
+                clone.radios[i] = radios[i].Copy();
             }
 
             return clone;

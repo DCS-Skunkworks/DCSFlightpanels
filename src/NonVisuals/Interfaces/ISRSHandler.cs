@@ -1,6 +1,6 @@
 ﻿namespace NonVisuals.Interfaces
 {
-    using NonVisuals.Radios.SRS;
+    using Radios.SRS;
 
     public interface ISRSHandler
     {

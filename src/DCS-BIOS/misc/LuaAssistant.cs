@@ -6,6 +6,9 @@ using System.IO;
 
 namespace DCS_BIOS.misc
 {
+    /// <summary>
+    /// Class for reading lua code from dcs-bios for a certain control. Can also read the signature for the function from Module.lua.
+    /// </summary>
     internal class LuaAssistant
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -66,12 +69,10 @@ namespace DCS_BIOS.misc
             if (result.Key != controlId) return "";
 
             var stringResult = result.Value;
-            if (includeSignature)
-            {
-                var signature = GetLuaCommandSignature(result.Value);
-                stringResult = string.IsNullOrEmpty(signature) ? result.Value : signature + "\n" + result.Value;
-            }
-            return stringResult;
+            if (!includeSignature) return stringResult;
+
+            var signature = GetLuaCommandSignature(result.Value);
+            return string.IsNullOrEmpty(signature) ? result.Value : signature + "\n" + result.Value;
         }
 
         private static string GetLuaCommandSignature(string luaCommand)

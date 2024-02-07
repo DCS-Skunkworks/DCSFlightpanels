@@ -32,7 +32,7 @@
         
         public ContextMenuPanelTextBox(bool keyboardEmulationOnly)
         {
-            this.SetResourceReference(StyleProperty, typeof(ContextMenu));
+            SetResourceReference(StyleProperty, typeof(ContextMenu));
 
             _keyboardEmulationOnly = keyboardEmulationOnly;
             

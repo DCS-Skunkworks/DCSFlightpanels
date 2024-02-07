@@ -18,7 +18,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
-    using NonVisuals.Helpers;
+    using Helpers;
     using DCS_BIOS.Serialized;
     using DCS_BIOS.ControlLocator;
 
@@ -2439,7 +2439,7 @@ namespace NonVisuals.Radios
                     1 => "25",
                     2 => "50",
                     3 => "75",
-                    _ => throw new System.Exception($"Unexpected _arc210VhfCockpitFreq5DialPos [{_arc210VhfCockpitFreq5DialPos}]")
+                    _ => throw new Exception($"Unexpected _arc210VhfCockpitFreq5DialPos [{_arc210VhfCockpitFreq5DialPos}]")
                 };
 
                 frequencyAsString += freq;
@@ -4009,7 +4009,7 @@ namespace NonVisuals.Radios
             if (desiredDialPosition < 0 || desiredDialPosition > 3 || actualDialPosition > 3)
                 throw new Exception($"Unexpected value for GetCommandDirectionForARC210VhfDial1. Desired: {actualDialPosition} Actual: {actualDialPosition}");
 
-            return actualDialPosition < desiredDialPosition ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+            return actualDialPosition < desiredDialPosition ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
         }
 
         /// <summary>
@@ -4023,7 +4023,7 @@ namespace NonVisuals.Radios
             if (desiredDialPosition < 0 || desiredDialPosition > 9 || actualDialPosition > 9)
                 throw new Exception($"Unexpected value for GetCommandDirectionForARC210VhfDial23. Desired: {actualDialPosition} Actual: {actualDialPosition}");
 
-            return actualDialPosition < desiredDialPosition ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+            return actualDialPosition < desiredDialPosition ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
         }
 
 
@@ -4041,9 +4041,9 @@ namespace NonVisuals.Radios
             int shift = desiredDialPosition - (int)actualDialPosition;
 
             if (shift > 0)
-                return shift <= 6 ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+                return shift <= 6 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
             else
-                return shift < -6 ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+                return shift < -6 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
         }
 
         /// <summary>
@@ -4060,9 +4060,9 @@ namespace NonVisuals.Radios
             int shift = desiredDialPosition - (int)actualDialPosition;
 
             if (shift > 0)
-                return shift <= 5 ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+                return shift <= 5 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
             else
-                return shift <= -5 ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+                return shift <= -5 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
         }
 
 

@@ -18,7 +18,7 @@ namespace NonVisuals.Radios
     using Knobs;
     using Panels.Saitek;
     using HID;
-    using NonVisuals.Helpers;
+    using Helpers;
     using DCS_BIOS.Serialized;
     using DCS_BIOS.ControlLocator;
 
@@ -4002,9 +4002,9 @@ namespace NonVisuals.Radios
             int shift = desiredDialPosition - (int)actualDialPosition;
 
             if (shift > 0)
-                return shift <= 6 ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+                return shift <= 6 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
             else
-                return shift < -6 ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+                return shift < -6 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
         }
 
         /// <summary>
@@ -4021,9 +4021,9 @@ namespace NonVisuals.Radios
             int shift = desiredDialPosition - (int)actualDialPosition;
 
             if (shift > 0)
-                return shift <= 5 ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+                return shift <= 5 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
             else
-                return shift <= -5 ? RadioPanelPZ69Base.DCSBIOS_INCREASE_COMMAND : RadioPanelPZ69Base.DCSBIOS_DECREASE_COMMAND;
+                return shift <= -5 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
         }
 
         private void SaveCockpitFrequencyVhfAm()

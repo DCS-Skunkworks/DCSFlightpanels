@@ -63,7 +63,7 @@ namespace ControlReference.Windows
             }
         }
 
-        private void LuaWindow_OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void LuaWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
 
         }

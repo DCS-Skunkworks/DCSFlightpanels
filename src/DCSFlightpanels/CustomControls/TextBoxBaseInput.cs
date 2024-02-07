@@ -15,7 +15,7 @@ namespace DCSFlightpanels.CustomControls
     using System.Windows.Media;
 
     using ClassLibraryCommon;
-    using DCSFlightpanels.Windows;
+    using Windows;
     using MEF;
     using System.Linq;
     using DCS_BIOS.Serialized;
@@ -41,7 +41,7 @@ namespace DCSFlightpanels.CustomControls
         
         protected TextBoxBaseInput()
         {
-            this.SetResourceReference(StyleProperty, typeof(TextBox));
+            SetResourceReference(StyleProperty, typeof(TextBox));
             PreviewKeyDown += TextBox_PreviewKeyDown;
             MouseDoubleClick += TextBoxMouseDoubleClick;
             MouseDown += TextBox_OnMouseDown;
