@@ -9,12 +9,12 @@
   "WhenTurnedOn": true,
   "Description": "jjf llv 1",
   "DCSBIOSInputs": {
-    "$type": "System.Collections.Generic.List`1[[DCS_BIOS.DCSBIOSInput, DCS-BIOS]], System.Private.CoreLib",
+    "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS]], System.Private.CoreLib",
     "$values": [
       {
-        "$type": "DCS_BIOS.DCSBIOSInput, DCS-BIOS",
+        "$type": "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS",
         "SelectedDCSBIOSInterface": {
-          "$type": "DCS_BIOS.DCSBIOSInputInterface, DCS-BIOS",
+          "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
           "Delay": 1,
           "ControlId": "CtrlId 9521",
           "Description": "urt vdf 1",
@@ -33,10 +33,10 @@
         "ControlDescription": "ikf xsd 1",
         "ControlType": "xmd rty",
         "DCSBIOSInputInterfaces": {
-          "$type": "System.Collections.Generic.List`1[[DCS_BIOS.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
+          "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
           "$values": [
             {
-              "$type": "DCS_BIOS.DCSBIOSInputInterface, DCS-BIOS",
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
               "Delay": 1,
               "ControlId": "CtrlId 9521",
               "Description": "urt vdf 1",
@@ -51,7 +51,7 @@
               "SelectedArgumentValue": "sdd vbn"
             },
             {
-              "$type": "DCS_BIOS.DCSBIOSInputInterface, DCS-BIOS",
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
               "Delay": 1,
               "ControlId": "CtrlId 9522",
               "Description": "urt vdf 2",
@@ -69,9 +69,9 @@
         }
       },
       {
-        "$type": "DCS_BIOS.DCSBIOSInput, DCS-BIOS",
+        "$type": "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS",
         "SelectedDCSBIOSInterface": {
-          "$type": "DCS_BIOS.DCSBIOSInputInterface, DCS-BIOS",
+          "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
           "Delay": 1,
           "ControlId": "CtrlId 9521",
           "Description": "urt vdf 1",
@@ -90,10 +90,10 @@
         "ControlDescription": "ikf xsd 1",
         "ControlType": "xmd rty",
         "DCSBIOSInputInterfaces": {
-          "$type": "System.Collections.Generic.List`1[[DCS_BIOS.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
+          "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
           "$values": [
             {
-              "$type": "DCS_BIOS.DCSBIOSInputInterface, DCS-BIOS",
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
               "Delay": 1,
               "ControlId": "CtrlId 9521",
               "Description": "urt vdf 1",
@@ -108,7 +108,7 @@
               "SelectedArgumentValue": "sdd vbn"
             },
             {
-              "$type": "DCS_BIOS.DCSBIOSInputInterface, DCS-BIOS",
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
               "Delay": 1,
               "ControlId": "CtrlId 9522",
               "Description": "urt vdf 2",

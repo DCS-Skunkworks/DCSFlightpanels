@@ -58,7 +58,7 @@ namespace DCSFPTests.Serialization {
                 RemoteStreamdeckBindingHash = $"ttr efb {instanceNbr}",
                 RemoteStreamdeckTargetLayer = $"kjq cyn {instanceNbr}",
                 StreamDeckButtonName = StreamDeckButton_SerializeTests.GetStreamDeckButtonNameFromInstance(instanceNbr),
-                StreamDeckPushRotaryName = StreamDeckButton_SerializeTests.GetStreamDeckPushRotaryNameFromInstance(instanceNbr),
+                StreamDeckPushRotaryName = StreamDeckPushRotary_SerializeTests.GetStreamDeckPushRotaryNameFromInstance(instanceNbr),
                 SoundFile = $"xdl ero {instanceNbr}",
                 Volume = 199 + instanceNbr,
                 Delay = 141 + instanceNbr

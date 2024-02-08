@@ -57,7 +57,7 @@ namespace DCSFPTests.Serialization {
             return new()
             {
                 StreamDeckButtonName = StreamDeckButton_SerializeTests.GetStreamDeckButtonNameFromInstance(instanceNbr),
-                StreamDeckPushRotaryName = StreamDeckButton_SerializeTests.GetStreamDeckPushRotaryNameFromInstance(instanceNbr),
+                StreamDeckPushRotaryName = StreamDeckPushRotary_SerializeTests.GetStreamDeckPushRotaryNameFromInstance(instanceNbr),
                 SoundFile = $"hht iiu {instanceNbr}",
                 Volume = 125 + instanceNbr,
                 Delay = 555 + instanceNbr,

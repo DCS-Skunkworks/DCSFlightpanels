@@ -39,12 +39,7 @@ namespace DCSFPTests.Serialization {
             return buttonName;
         }
 
-        public static EnumStreamDeckPushRotaryNames GetStreamDeckPushRotaryNameFromInstance(int instanceNbr) {
-            Enum.TryParse($"PUSHROTARY{instanceNbr}", out EnumStreamDeckPushRotaryNames pushRotaryName);
-            return pushRotaryName;
-        }
-
-        private static IStreamDeckButtonFace GetFaceFromInstanceNbr(int instanceNbr) {
+        public static IStreamDeckButtonFace GetFaceFromInstanceNbr(int instanceNbr) {
             return instanceNbr switch
             {
                 1 => FaceTypeDCSBIOS_SerializeTests.GetObject(instanceNbr),
@@ -54,7 +49,8 @@ namespace DCSFPTests.Serialization {
                 _ => FaceTypeDCSBIOS_SerializeTests.GetObject(instanceNbr),
             };
         }
-        private static IStreamDeckButtonAction GetActionFromInstanceNbr(int instanceNbr) {
+
+        public static IStreamDeckButtonAction GetActionFromInstanceNbr(int instanceNbr) {
             return instanceNbr switch
             {
                 1 => ActionTypeDCSBIOS_SerializeTests.GetObject(instanceNbr),
@@ -64,13 +60,14 @@ namespace DCSFPTests.Serialization {
                 _ => ActionTypeDCSBIOS_SerializeTests.GetObject(instanceNbr),
             };
         }
+
         private static StreamDeckButton GetObject(int instanceNbr = 1) {
             return new()
             {
                 StreamDeckButtonName = GetStreamDeckButtonNameFromInstance(instanceNbr),
-                Face = GetFaceFromInstanceNbr(instanceNbr), 
+                Face = GetFaceFromInstanceNbr(instanceNbr),
                 ActionForPress = GetActionFromInstanceNbr(instanceNbr),
-                ActionForRelease = GetActionFromInstanceNbr(instanceNbr+1),
+                ActionForRelease = GetActionFromInstanceNbr(instanceNbr + 1),
 
                 //HasConfig = true, //get only
                 //ActionType = EnumStreamDeckActionType.DCSBIOS, //get only

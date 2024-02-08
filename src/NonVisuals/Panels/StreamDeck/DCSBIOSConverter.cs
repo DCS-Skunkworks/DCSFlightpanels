@@ -5,12 +5,13 @@
     using System.Drawing;
     using System.Globalization;
     using System.Text;
-
+    using ClassLibraryCommon;
     using Newtonsoft.Json;
     using NonVisuals;
     using Panels;
 
     [Serializable]
+    [SerializeCritical]
     public class DCSBIOSConverter
     {
         private EnumComparator _comparator1 = EnumComparator.NotSet;
@@ -29,6 +30,9 @@
 
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
+
+        public DCSBIOSConverter() {
+        }
 
         public DCSBIOSConverter(StreamDeckPanel streamDeckPanel)
         {

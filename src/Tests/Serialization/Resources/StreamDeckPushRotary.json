@@ -1,0 +1,36 @@
+{
+  "$type": "NonVisuals.Panels.StreamDeck.StreamDeckPushRotary, NonVisuals",
+  "StreamDeckPushRotaryName": 2,
+  "ActionForPress": {
+    "$type": "NonVisuals.Panels.StreamDeck.ActionTypeLayer, NonVisuals",
+    "NavigationType": 1,
+    "TargetLayer": "ggy ool 3",
+    "RemoteStreamdeckBindingHash": "ttr efb 3",
+    "RemoteStreamdeckTargetLayer": "kjq cyn 3",
+    "ActionType": 16,
+    "StreamDeckButtonName": 3,
+    "StreamDeckButtonPushRotaryName": 3,
+    "SoundFile": "xdl ero 3",
+    "Volume": 202.0,
+    "Delay": 144
+  },
+  "ActionForRelease": {
+    "$type": "NonVisuals.Panels.StreamDeck.ActionTypeOS, NonVisuals",
+    "ActionType": 4,
+    "StreamDeckButtonName": 4,
+    "StreamDeckButtonPushRotaryName": 4,
+    "SoundFile": "xdl ero 4",
+    "Volume": 108.0,
+    "Delay": 1005,
+    "WhenTurnedOn": true,
+    "OSCommandObject": {
+      "$type": "NonVisuals.OSCommand, NonVisuals",
+      "Command": "ggt ooi 4",
+      "Arguments": "bvr opm 4",
+      "Name": "hrv kfp 4",
+      "IsEmpty": false
+    }
+  },
+  "HasConfig": true,
+  "ActionType": 16
+}
