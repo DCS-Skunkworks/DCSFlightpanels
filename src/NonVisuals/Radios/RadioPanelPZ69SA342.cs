@@ -60,9 +60,14 @@ namespace NonVisuals.Radios
             Digits1S
         }
 
+
         /*COM1 SA342 VHF AM Radio*/
         // Large dial 118-143
         // Small dial 0-975
+        private readonly string _amRadioFreq1s = "AM_RADIO_FREQ_1S";
+        private readonly string _amRadioFreq10s = "AM_RADIO_FREQ_10S";
+        private readonly string _amRadioFreqTenths = "AM_RADIO_FREQ_TENTHS";
+        private readonly string _amRadioFreqHundrendths = "AM_RADIO_FREQ_HUNDREDTHS";
         private readonly int[] _dialPositionsWholeNumbers = { 0, 6553, 13107, 19660, 26214, 32767, 39321, 45874, 52428, 58981 };
         private readonly int[] _dialPositionsDecial100S = { 0, 16383, 32767, 49151 };
         private double _vhfAmBigFrequencyStandby = 118;
@@ -99,12 +104,13 @@ namespace NonVisuals.Radios
         /*COM2 SA342 FM PR4G Radio*/
         // Large dial 0-7 Presets 1, 2, 3, 4, 5, 6, 0, RG
         // Small dial 
+        private readonly string _fmRadioChannel = "FM_RADIO_CHANNEL";
         private DCSBIOSOutput _fmRadioPresetDcsbiosOutput;
         private volatile uint _fmRadioPresetCockpitDialPos = 1;
         private const string FM_RADIO_PRESET_COMMAND_INC = "FM_RADIO_CHANNEL INC\n";
         private const string FM_RADIO_PRESET_COMMAND_DEC = "FM_RADIO_CHANNEL DEC\n";
         private readonly object _lockFmRadioPresetObject = new();
-
+        
         /*NAV1 SA342 UHF Radio*/
         // Large dial 225-399
         // Small dial 000-975 where only 2 digits can be used
@@ -143,6 +149,7 @@ namespace NonVisuals.Radios
         /*Large dial Counter Clockwise 100s increase*/
         /*Large dial Clockwise 10s increase*/
         /*Small dial 1s and decimals*/
+        private readonly string _adfSwitchUnit = "ADF1_ADF2_SELECT";
         private const string ADF1_UNIT100_S_INCREASE = "ADF_NAV1_100 +3200\n";
         private const string ADF1_UNIT10_S_INCREASE = "ADF_NAV1_10 +3200\n";
         private const string ADF1_UNIT1_S_DECIMALS_INCREASE = "ADF_NAV1_1 +3200\n";
@@ -163,6 +170,8 @@ namespace NonVisuals.Radios
         // Large dial Mode selector (VENT, C.M DEC, V.S DER, TPS CAP,P.P, BUT)
         // Small dial Doppler modes ARRET, VEILLE, TERRE, MER, ANEMO,TEST SOL.
         // Large
+        private readonly string _nadirParameter = "NADIR_PARAMETER";
+        private readonly string _nadirDopplerMode = "NADIR_DOPPLER_MODE";
         private const string NADIR_MODE_COMMAND_INC = "NADIR_PARAMETER INC\n";
         private const string NADIR_MODE_COMMAND_DEC = "NADIR_PARAMETER DEC\n";
 
@@ -206,20 +215,20 @@ namespace NonVisuals.Radios
             CreateRadioKnobs();
 
             // VHF AM
-            _vhfAmDcsbiosOutputReading10S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_10s");
-            _vhfAmDcsbiosOutputReading1S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_1s");
-            _vhfAmDcsbiosOutputReadingDecimal10S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_TENTHS");
-            _vhfAmDcsbiosOutputReadingDecimal100S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("AM_RADIO_FREQ_HUNDREDTHS");
+            _vhfAmDcsbiosOutputReading10S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(_amRadioFreq10s);
+            _vhfAmDcsbiosOutputReading1S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(_amRadioFreq1s);
+            _vhfAmDcsbiosOutputReadingDecimal10S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(_amRadioFreqTenths);
+            _vhfAmDcsbiosOutputReadingDecimal100S = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(_amRadioFreqHundrendths);
 
             // FM PR4G
-            _fmRadioPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FM_RADIO_CHANNEL");
+            _fmRadioPresetDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(_fmRadioChannel);
 
             // ADF
-            _adfSwitchUnitDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("ADF1_ADF2_SELECT");
+            _adfSwitchUnitDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(_adfSwitchUnit);
 
             // DME
-            _nadirModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("NADIR_PARAMETER");
-            _nadirDopplerModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("NADIR_DOPPLER_MODE");
+            _nadirModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(_nadirDopplerMode);
+            _nadirDopplerModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput(_nadirDopplerMode);
 
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
