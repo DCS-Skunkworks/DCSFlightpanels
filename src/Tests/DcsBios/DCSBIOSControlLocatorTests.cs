@@ -34,9 +34,9 @@ namespace DCSFPTests.DcsBios
             DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
             DCSBIOSControlLocator.JSONDirectory = jsonPath;
 
-            var arc21025SelectorControl = DCSBIOSControlLocator.GetControl(dcsbiosControlId);
+            var dcsbiosControl = DCSBIOSControlLocator.GetControl(dcsbiosControlId);
 
-            Assert.Equal(arc21025SelectorControl.Identifier, dcsbiosControlId);
+            Assert.Equal(dcsbiosControl.Identifier, dcsbiosControlId);
         }
 
         [Theory]
@@ -101,9 +101,9 @@ namespace DCSFPTests.DcsBios
             DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
             DCSBIOSControlLocator.JSONDirectory = jsonPath;
 
-            var arc21025Output = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControlId, dcsBiosOutputType);
+            var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControlId, dcsBiosOutputType);
 
-            Assert.Equal(arc21025Output.DCSBiosOutputType, dcsBiosOutputType);
+            Assert.Equal(dcsbiosOutput.DCSBiosOutputType, dcsBiosOutputType);
         }
 
         [Theory]
@@ -147,15 +147,15 @@ namespace DCSFPTests.DcsBios
             DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
             DCSBIOSControlLocator.JSONDirectory = jsonPath;
 
-            var arc21025Output = dcsBiosOutputType switch
+            var dcsbiosOutput = dcsBiosOutputType switch
             {
                 DCSBiosOutputType.IntegerType => DCSBIOSControlLocator.GetUIntDCSBIOSOutput(dcsbiosControlId),
                 DCSBiosOutputType.StringType => DCSBIOSControlLocator.GetStringDCSBIOSOutput(dcsbiosControlId),
                 _ => null
             };
 
-            Assert.NotNull(arc21025Output);
-            Assert.Equal(arc21025Output.DCSBiosOutputType, dcsBiosOutputType);
+            Assert.NotNull(dcsbiosOutput);
+            Assert.Equal(dcsbiosOutput.DCSBiosOutputType, dcsBiosOutputType);
         }
 
         [Theory]
