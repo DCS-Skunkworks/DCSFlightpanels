@@ -99,14 +99,6 @@ namespace DCS_BIOS.Serialized
             return searched?.MaxValue ?? -99;
         }
 
-        public static DCSBIOSInput GetDCSBIOSInput(string controlId)
-        {
-            var result = new DCSBIOSInput();
-            var control = DCSBIOSControlLocator.GetControl(controlId);
-            result.Consume(control);
-            return result;
-        }
-
         public void Consume(DCSBIOSControl dcsbiosControl)
         {
             ControlId = dcsbiosControl.Identifier;
