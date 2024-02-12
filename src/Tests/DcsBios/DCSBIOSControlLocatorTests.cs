@@ -9,30 +9,54 @@ using Xunit;
 
 namespace DCSFPTests.DcsBios
 {
+    [Collection("Sequential")] // This uses EmulationMode
     public class DCSBIOSControlLocatorTests
     {
         //private readonly int _a10C = 5; // A-10C Thunderbolt/II
         //private readonly string _dcsbiosPath = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json");
         //private readonly string _arc21025KhzSelectorId = "ARC210_25KHZ_SEL";
-
-        [Theory]
-        [InlineData("ARC210_25KHZ_SEL", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)] // A-10C Thunderbolt/II
-        public void GetControlWithValidJSONPath(string dcsbiosControlId, string jsonPath, int aircraftId)
+        
+        private bool SetBaseParameters(string jsonPath)
         {
             // !! Invalid path logs to error log but doesn't throw exception to the outside
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
             {
                 //No need to test as dcs-bios isn't installed
-                return;
+                return false;
             }
+
+            DCSBIOSControlLocator.JSONDirectory = jsonPath;
             Common.ResetEmulationModesFlag();
 
+            return true;
+        }
+
+        private bool SetBaseParameters(string jsonPath, int dcsAircraftId)
+        {
+            // !! Invalid path logs to error log but doesn't throw exception to the outside
+            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
+            if (!Directory.Exists(jsonPath))
+            {
+                //No need to test as dcs-bios isn't installed
+                return false;
+            }
+
             DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(aircraftId);
+            var dcsAircraft = DCSAircraft.GetAircraft(dcsAircraftId);
 
             DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
             DCSBIOSControlLocator.JSONDirectory = jsonPath;
+            Common.ResetEmulationModesFlag();
+
+            return true;
+        }
+
+        [Theory]
+        [InlineData("ARC210_25KHZ_SEL", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)] // A-10C Thunderbolt/II
+        public void GetControlWithValidJSONPath(string dcsbiosControlId, string jsonPath, int dcsAircraftId)
+        {
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
 
             var dcsbiosControl = DCSBIOSControlLocator.GetControl(dcsbiosControlId);
 
@@ -41,42 +65,21 @@ namespace DCSFPTests.DcsBios
 
         [Theory]
         [InlineData("NO_CONTROL_WITH_THIS_ID", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)] // A-10C Thunderbolt/II
-        public void GetControlUsingInvalidControlIdentifierShouldThrow(string dcsbiosControlId, string jsonPath, int aircraftId)
+        public void GetControlUsingInvalidControlIdentifierShouldThrow(string dcsbiosControlId, string jsonPath, int dcsAircraftId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
-
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(aircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
 
             Assert.Throws<Exception>(() => DCSBIOSControlLocator.GetControl(dcsbiosControlId));
         }
 
         [Theory]
         [InlineData("ARC210_25KHZ_SEL", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)] // A-10C Thunderbolt/II
-        public void GetControlWithKeyEmulationSet(string dcsbiosControlId, string jsonPath, int aircraftId)
+        public void GetControlWithKeyEmulationSet(string dcsbiosControlId, string jsonPath, int dcsAircraftId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
+
             // Since key emulation is set DCSBIOSControlLocator shouldn't return any controls.
             Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(aircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
 
             var control = DCSBIOSControlLocator.GetControl(dcsbiosControlId);
             Assert.Null(control);
@@ -87,19 +90,7 @@ namespace DCSFPTests.DcsBios
         [InlineData(DCSBiosOutputType.StringType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "ARC210_25KHZ_SEL")]
         public void GetDCSBIOSOutputBasedOnOutputTypeWithValidInputs(DCSBiosOutputType dcsBiosOutputType, string jsonPath, int dcsAircraftId, string dcsbiosControlId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
-
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(dcsAircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
 
             var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControlId, dcsBiosOutputType);
 
@@ -111,19 +102,7 @@ namespace DCSFPTests.DcsBios
         [InlineData("NO_SUCH_CONTROL_ID", DCSBiosOutputType.StringType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
         public void GetDCSBIOSOutputUsingInvalidControlIdentifierShouldThrow(string dcsbiosControlId, DCSBiosOutputType dcsBiosOutputType, string jsonPath, int dcsAircraftId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
-
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(dcsAircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
 
             Assert.Throws<Exception>(() => DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControlId, dcsBiosOutputType));
         }
@@ -133,19 +112,7 @@ namespace DCSFPTests.DcsBios
         [InlineData(DCSBiosOutputType.StringType, "ARC210_25KHZ_SEL", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
         public void GetDCSBIOSOutputPerOutputTypeUsingValidControlIdentifier(DCSBiosOutputType dcsBiosOutputType, string dcsbiosControlId, string jsonPath, int dcsAircraftId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
-
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(dcsAircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
 
             var dcsbiosOutput = dcsBiosOutputType switch
             {
@@ -163,19 +130,7 @@ namespace DCSFPTests.DcsBios
         [InlineData("NO_SUCH_CONTROL_ID", DCSBiosOutputType.StringType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
         public void GetDCSBIOSOutputPerOutputTypeUsingInvalidControlIdentifierShouldThrow(string dcsbiosControlId, DCSBiosOutputType dcsBiosOutputType, string jsonPath, int dcsAircraftId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
-
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(dcsAircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
 
             switch (dcsBiosOutputType)
             {
@@ -192,14 +147,7 @@ namespace DCSFPTests.DcsBios
         [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", "A-10C.json")]
         public void GetModuleControlsFromJson(string jsonPath, string filename)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
+            if (!SetBaseParameters(jsonPath)) return;
 
             var controls = DCSBIOSControlLocator.GetModuleControlsFromJson(filename);
 
@@ -213,14 +161,7 @@ namespace DCSFPTests.DcsBios
         [InlineData("_UPDATE_COUNTER", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json")] // MetaDataEnd
         public void GetMetaControls(string controlId, string jsonPath)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
+            if (!SetBaseParameters(jsonPath)) return;
 
             var controls = DCSBIOSControlLocator.GetMetaControls();
 
@@ -232,27 +173,14 @@ namespace DCSFPTests.DcsBios
         [InlineData(DCSBiosOutputType.StringType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
         public void GetOutputControls(DCSBiosOutputType dcsBiosOutputType, string jsonPath, int dcsAircraftId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
             Common.SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled);
-
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(dcsAircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
 
             var controls = DCSBIOSControlLocator.GetOutputControls(dcsBiosOutputType);
             foreach (var dcsbiosControl in controls)
             {
                 var count = dcsbiosControl.Outputs.Count(o => o.OutputDataType == dcsBiosOutputType);
                 Assert.True(count > 0);
-
             }
         }
 
@@ -261,20 +189,8 @@ namespace DCSFPTests.DcsBios
         [InlineData(DCSBiosOutputType.StringType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
         public void GetOutputControlsDCSBIOSOutputEnabledFlagNotSet(DCSBiosOutputType dcsBiosOutputType, string jsonPath, int dcsAircraftId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
             // Since Flag DCSBIOSOutputEnabled is not set DCSBIOSControlLocator returns null.
-
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(dcsAircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
 
             var controls = DCSBIOSControlLocator.GetOutputControls(dcsBiosOutputType);
             Assert.Null(controls);
@@ -284,20 +200,8 @@ namespace DCSFPTests.DcsBios
         [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
         public void GetInputControls(string jsonPath, int dcsAircraftId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
             Common.SetEmulationModes(EmulationMode.DCSBIOSInputEnabled);
-
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(dcsAircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
 
             var controls = DCSBIOSControlLocator.GetInputControls();
             foreach (var dcsbiosControl in controls)
@@ -312,20 +216,8 @@ namespace DCSFPTests.DcsBios
         [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
         public void GetOutputControlsDCSBIOSInputEnabledFlagNotSet(string jsonPath, int dcsAircraftId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
             // Since Flag DCSBIOSInputEnabled is not set DCSBIOSControlLocator returns null.
-
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(dcsAircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
 
             var controls = DCSBIOSControlLocator.GetInputControls();
             Assert.Null(controls);
@@ -337,20 +229,8 @@ namespace DCSFPTests.DcsBios
         [InlineData("UFC_10", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
         public void GetLuaCommand(string controlId, string jsonPath, int dcsAircraftId)
         {
-            jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
-            if (!Directory.Exists(jsonPath))
-            {
-                //No need to test as dcs-bios isn't installed
-                return;
-            }
-            Common.ResetEmulationModesFlag();
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
             Common.SetEmulationModes(EmulationMode.DCSBIOSInputEnabled);
-
-            DCSAircraft.FillModulesListFromDcsBios(jsonPath, true);
-            var dcsAircraft = DCSAircraft.GetAircraft(dcsAircraftId);
-
-            DCSBIOSControlLocator.DCSAircraft = dcsAircraft;
-            DCSBIOSControlLocator.JSONDirectory = jsonPath;
 
             var luaCommand = DCSBIOSControlLocator.GetLuaCommand(controlId, false);
             Assert.False(string.IsNullOrEmpty(luaCommand));

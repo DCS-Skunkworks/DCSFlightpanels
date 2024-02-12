@@ -5,6 +5,7 @@ using Xunit;
 
 namespace DCSFPTests.ClassLibraryCommon
 {
+    [Collection("Sequential")] // This uses EmulationMode
     public class CommonTests
     {
         [Theory]
@@ -81,6 +82,7 @@ namespace DCSFPTests.ClassLibraryCommon
         {
             try
             {
+                Common.ResetEmulationModesFlag();
                 modes.ToList().ForEach(x => Common.SetEmulationModes(x));
                 Assert.Equal(expectedValue, Common.GetEmulationModesFlag());
             }
