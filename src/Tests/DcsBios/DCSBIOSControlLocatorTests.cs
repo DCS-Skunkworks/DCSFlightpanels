@@ -239,5 +239,16 @@ namespace DCSFPTests.DcsBios
             Assert.False(string.IsNullOrEmpty(luaCommand));
         }
 
+        [Theory]
+        [InlineData("NO_SUCH_CONTROL_ID", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        public void GetLuaCommandWithInvalidControlIdentifier(string controlId, string jsonPath, int dcsAircraftId)
+        {
+            if (!SetBaseParameters(jsonPath, dcsAircraftId)) return;
+            Common.SetEmulationModes(EmulationMode.DCSBIOSInputEnabled);
+
+            var luaCommand = DCSBIOSControlLocator.GetLuaCommand(controlId, false);
+            Assert.True(string.IsNullOrEmpty(luaCommand));
+        }
+
     }
 }
