@@ -165,7 +165,7 @@ namespace DCSFPTests.DcsBios
 
             var controls = DCSBIOSControlLocator.GetMetaControls();
 
-            Assert.True(controls.Count(o => o.Identifier == controlId) == 1);
+            Assert.Single(controls.Where(o => o.Identifier == controlId));
         }
 
         [Theory]
