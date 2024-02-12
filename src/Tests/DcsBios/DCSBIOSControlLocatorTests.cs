@@ -16,8 +16,8 @@ namespace DCSFPTests.DcsBios
         //private readonly string _arc21025KhzSelectorId = "ARC210_25KHZ_SEL";
 
         [Theory]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "ARC210_25KHZ_SEL")] // A-10C Thunderbolt/II
-        public void TestLocatorGetControlValidJSONPath(string jsonPath, int aircraftId, string dcsbiosControlId)
+        [InlineData("ARC210_25KHZ_SEL", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)] // A-10C Thunderbolt/II
+        public void TestLocatorGetControlValidJSONPath(string dcsbiosControlId, string jsonPath, int aircraftId)
         {
             // !! Invalid path logs to error log but doesn't throw exception to the outside
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
@@ -40,8 +40,8 @@ namespace DCSFPTests.DcsBios
         }
 
         [Theory]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "NO_CONTROL_WITH_THIS_ID")] // A-10C Thunderbolt/II
-        public void TestLocatorGetControlInvalidControlId(string jsonPath, int aircraftId, string dcsbiosControlId)
+        [InlineData("NO_CONTROL_WITH_THIS_ID", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)] // A-10C Thunderbolt/II
+        public void TestLocatorGetControlInvalidControlId(string dcsbiosControlId, string jsonPath, int aircraftId)
         {
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
@@ -61,8 +61,8 @@ namespace DCSFPTests.DcsBios
         }
 
         [Theory]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "ARC210_25KHZ_SEL")] // A-10C Thunderbolt/II
-        public void TestLocatorGetControlKeyEmulation(string jsonPath, int aircraftId, string dcsbiosControlId)
+        [InlineData("ARC210_25KHZ_SEL", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)] // A-10C Thunderbolt/II
+        public void TestLocatorGetControlKeyEmulation(string dcsbiosControlId, string jsonPath, int aircraftId)
         {
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
@@ -79,13 +79,13 @@ namespace DCSFPTests.DcsBios
             DCSBIOSControlLocator.JSONDirectory = jsonPath;
 
             var control = DCSBIOSControlLocator.GetControl(dcsbiosControlId);
-            Assert.Null(control); 
+            Assert.Null(control);
         }
 
         [Theory]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "ARC210_25KHZ_SEL", DCSBiosOutputType.IntegerType)]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "ARC210_25KHZ_SEL", DCSBiosOutputType.StringType)]
-        public void TestLocatorGetDCSBIOSOutput(string jsonPath, int dcsAircraftId, string dcsbiosControlId, DCSBiosOutputType dcsBiosOutputType)
+        [InlineData(DCSBiosOutputType.IntegerType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "ARC210_25KHZ_SEL")]
+        [InlineData(DCSBiosOutputType.StringType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "ARC210_25KHZ_SEL")]
+        public void TestLocatorGetDCSBIOSOutput(DCSBiosOutputType dcsBiosOutputType, string jsonPath, int dcsAircraftId, string dcsbiosControlId)
         {
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
@@ -107,9 +107,9 @@ namespace DCSFPTests.DcsBios
         }
 
         [Theory]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "NO_SUCH_CONTROL_ID", DCSBiosOutputType.IntegerType)]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "NO_SUCH_CONTROL_ID", DCSBiosOutputType.StringType)]
-        public void TestLocatorGetDCSBIOSOutputFail(string jsonPath, int dcsAircraftId, string dcsbiosControlId, DCSBiosOutputType dcsBiosOutputType)
+        [InlineData("NO_SUCH_CONTROL_ID", DCSBiosOutputType.IntegerType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        [InlineData("NO_SUCH_CONTROL_ID", DCSBiosOutputType.StringType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        public void TestLocatorGetDCSBIOSOutputFail(string dcsbiosControlId, DCSBiosOutputType dcsBiosOutputType, string jsonPath, int dcsAircraftId)
         {
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
@@ -129,9 +129,9 @@ namespace DCSFPTests.DcsBios
         }
 
         [Theory]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "ARC210_25KHZ_SEL", DCSBiosOutputType.IntegerType)]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "ARC210_25KHZ_SEL", DCSBiosOutputType.StringType)]
-        public void TestLocatorGetDCSBIOSOutput2(string jsonPath, int dcsAircraftId, string dcsbiosControlId, DCSBiosOutputType dcsBiosOutputType)
+        [InlineData(DCSBiosOutputType.IntegerType, "ARC210_25KHZ_SEL", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        [InlineData(DCSBiosOutputType.StringType, "ARC210_25KHZ_SEL", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        public void TestLocatorGetDCSBIOSOutput2(DCSBiosOutputType dcsBiosOutputType, string dcsbiosControlId, string jsonPath, int dcsAircraftId)
         {
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
@@ -159,9 +159,9 @@ namespace DCSFPTests.DcsBios
         }
 
         [Theory]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "NO_SUCH_CONTROL_ID", DCSBiosOutputType.IntegerType)]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "NO_SUCH_CONTROL_ID", DCSBiosOutputType.StringType)]
-        public void TestLocatorGetDCSBIOSOutput2Fail(string jsonPath, int dcsAircraftId, string dcsbiosControlId, DCSBiosOutputType dcsBiosOutputType)
+        [InlineData("NO_SUCH_CONTROL_ID", DCSBiosOutputType.IntegerType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        [InlineData("NO_SUCH_CONTROL_ID", DCSBiosOutputType.StringType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        public void TestLocatorGetDCSBIOSOutput2Fail(string dcsbiosControlId, DCSBiosOutputType dcsBiosOutputType, string jsonPath, int dcsAircraftId)
         {
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
@@ -207,11 +207,11 @@ namespace DCSFPTests.DcsBios
             Assert.NotEmpty(controls);
         }
 
-        [Theory] 
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", "LON_SEC_FRAC")]    // CommonData
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", "_ACFT_NAME")]      // MetaDataStart
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", "_UPDATE_COUNTER")] // MetaDataEnd
-        public void TestLocatorGetMetaControls(string jsonPath, string controlId)
+        [Theory]
+        [InlineData("LON_SEC_FRAC", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json")]    // CommonData
+        [InlineData("_ACFT_NAME", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json")]      // MetaDataStart
+        [InlineData("_UPDATE_COUNTER", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json")] // MetaDataEnd
+        public void TestLocatorGetMetaControls(string controlId, string jsonPath)
         {
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
@@ -228,9 +228,9 @@ namespace DCSFPTests.DcsBios
         }
 
         [Theory]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, DCSBiosOutputType.IntegerType)]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, DCSBiosOutputType.StringType)]
-        public void TestLocatorGetOutputControls(string jsonPath, int dcsAircraftId, DCSBiosOutputType dcsBiosOutputType)
+        [InlineData(DCSBiosOutputType.IntegerType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        [InlineData(DCSBiosOutputType.StringType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        public void TestLocatorGetOutputControls(DCSBiosOutputType dcsBiosOutputType, string jsonPath, int dcsAircraftId)
         {
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
@@ -257,9 +257,9 @@ namespace DCSFPTests.DcsBios
         }
 
         [Theory]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, DCSBiosOutputType.IntegerType)]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, DCSBiosOutputType.StringType)]
-        public void TestLocatorGetOutputControlsDCSBIOSOutputEnabledFlagNotSet(string jsonPath, int dcsAircraftId, DCSBiosOutputType dcsBiosOutputType)
+        [InlineData(DCSBiosOutputType.IntegerType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        [InlineData(DCSBiosOutputType.StringType, @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        public void TestLocatorGetOutputControlsDCSBIOSOutputEnabledFlagNotSet(DCSBiosOutputType dcsBiosOutputType, string jsonPath, int dcsAircraftId)
         {
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
@@ -332,10 +332,10 @@ namespace DCSFPTests.DcsBios
         }
 
         [Theory]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "FLAPS_SWITCH")]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "SASP_MONITOR_TEST")]
-        [InlineData(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5, "UFC_10")]
-        public void TestLocatorGetLuaCommand(string jsonPath, int dcsAircraftId, string controlId)
+        [InlineData("FLAPS_SWITCH",@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        [InlineData("SASP_MONITOR_TEST", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        [InlineData("UFC_10", @"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json", 5)]
+        public void TestLocatorGetLuaCommand(string controlId, string jsonPath, int dcsAircraftId)
         {
             jsonPath = Environment.ExpandEnvironmentVariables(jsonPath);
             if (!Directory.Exists(jsonPath))
@@ -354,7 +354,7 @@ namespace DCSFPTests.DcsBios
 
             var luaCommand = DCSBIOSControlLocator.GetLuaCommand(controlId, false);
             Assert.False(string.IsNullOrEmpty(luaCommand));
-            
+
             luaCommand = DCSBIOSControlLocator.GetLuaCommand(controlId, true);
             Assert.False(string.IsNullOrEmpty(luaCommand));
         }
