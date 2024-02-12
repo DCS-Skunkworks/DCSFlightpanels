@@ -183,9 +183,9 @@ namespace DCS_BIOS.ControlLocator
         /// </summary>
         public static List<DCSBIOSControl> GetMetaControls()
         {
-            var controlList = GetModuleControlsFromJson("MetadataStart.json", true);
-            controlList.AddRange(GetModuleControlsFromJson("MetadataEnd.json", true));
-            controlList.AddRange(GetModuleControlsFromJson("CommonData.json", true));
+            var controlList = GetModuleControlsFromJson(DCSAircraft.DCSBIOS_META_DATA_START_FILE_NAME, true);
+            controlList.AddRange(GetModuleControlsFromJson(DCSAircraft.DCSBIOS_META_DATA_END_FILE_NAME, true));
+            controlList.AddRange(GetModuleControlsFromJson(DCSAircraft.DCSBIOS_COMMON_DATA_FILE_NAME, true));
             return controlList;
         }
 
@@ -312,28 +312,6 @@ namespace DCS_BIOS.ControlLocator
                 throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<==", ex);
             }
         }
-        
-        private static void LoadMetaDataEnd(string jsonDirectory)
-        {
-            if (DCSBIOSAircraftLoadStatus.IsLoaded("MetadataEnd") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSAircraft.IsNoFrameLoadedYet(_dcsAircraft))
-            {
-                return;
-            }
-
-            try
-            {
-                lock (LockObject)
-                {
-                    _dcsbiosControls.AddRange(ReadControlsFromDocJson(jsonDirectory + "\\MetadataEnd.json"));
-
-                    DCSBIOSAircraftLoadStatus.SetLoaded("MetadataEnd", true);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
-            }
-        }
 
         private static List<DCSBIOSControl> ReadControlsFromDocJson(string fileFullPath)
         {
@@ -355,9 +333,9 @@ namespace DCS_BIOS.ControlLocator
             return null;
         }
 
-        private static void LoadCommonData(string jsonDirectory)
+        private static void LoadMetaDataEnd(string jsonDirectory)
         {
-            if (DCSBIOSAircraftLoadStatus.IsLoaded("CommonData") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSAircraft.IsNoFrameLoadedYet(_dcsAircraft))
+            if (DCSBIOSAircraftLoadStatus.IsLoaded(DCSAircraft.DCSBIOS_META_DATA_END_FILE_NAME) || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSAircraft.IsNoFrameLoadedYet(_dcsAircraft))
             {
                 return;
             }
@@ -366,8 +344,30 @@ namespace DCS_BIOS.ControlLocator
             {
                 lock (LockObject)
                 {
-                    _dcsbiosControls.AddRange(ReadControlsFromDocJson(jsonDirectory + "\\CommonData.json"));
-                    DCSBIOSAircraftLoadStatus.SetLoaded("CommonData", true);
+                    _dcsbiosControls.AddRange(ReadControlsFromDocJson(jsonDirectory + $"\\{DCSAircraft.DCSBIOS_META_DATA_END_FILE_NAME}"));
+
+                    DCSBIOSAircraftLoadStatus.SetLoaded(DCSAircraft.DCSBIOS_META_DATA_END_FILE_NAME, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+            }
+        }
+
+        private static void LoadCommonData(string jsonDirectory)
+        {
+            if (DCSBIOSAircraftLoadStatus.IsLoaded(DCSAircraft.DCSBIOS_COMMON_DATA_FILE_NAME) || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSAircraft.IsNoFrameLoadedYet(_dcsAircraft))
+            {
+                return;
+            }
+
+            try
+            {
+                lock (LockObject)
+                {
+                    _dcsbiosControls.AddRange(ReadControlsFromDocJson(jsonDirectory + $"\\{DCSAircraft.DCSBIOS_COMMON_DATA_FILE_NAME}"));
+                    DCSBIOSAircraftLoadStatus.SetLoaded(DCSAircraft.DCSBIOS_COMMON_DATA_FILE_NAME, true);
                 }
             }
             catch (Exception ex)
