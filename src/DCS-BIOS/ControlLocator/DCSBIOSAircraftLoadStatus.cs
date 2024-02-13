@@ -8,13 +8,13 @@ namespace DCS_BIOS.ControlLocator
     /// </summary>
     internal class DCSBIOSAircraftLoadStatus
     {
-        private string Profile { get; }
+        private string Filename { get; }
         private bool Loaded { get; set; }
         private static readonly List<DCSBIOSAircraftLoadStatus> LoadStatusList = new();
 
-        private DCSBIOSAircraftLoadStatus(string profile, bool loaded)
+        private DCSBIOSAircraftLoadStatus(string filename, bool loaded)
         {
-            Profile = profile;
+            Filename = filename;
             Loaded = loaded;
         }
 
@@ -23,33 +23,33 @@ namespace DCS_BIOS.ControlLocator
             LoadStatusList.Clear();
         }
 
-        public static void SetLoaded(string profile, bool loaded)
+        public static void SetLoaded(string filename, bool loaded)
         {
-            if (!IsRegistered(profile))
+            if (!IsRegistered(filename))
             {
-                LoadStatusList.Add(new DCSBIOSAircraftLoadStatus(profile, loaded)); // <-- loaded set here
+                LoadStatusList.Add(new DCSBIOSAircraftLoadStatus(filename, loaded)); // <-- loaded set here
                 return;
             }
 
-            foreach (var loadStatus in LoadStatusList.Where(loadStatus => loadStatus.Profile == profile))
+            foreach (var loadStatus in LoadStatusList.Where(loadStatus => loadStatus.Filename == filename))
             {
                 loadStatus.Loaded = loaded;
             }
         }
 
-        public static bool IsLoaded(string profile)
+        public static bool IsLoaded(string filename)
         {
-            return LoadStatusList.Exists(loadStatus => loadStatus.Profile == profile && loadStatus.Loaded);
+            return LoadStatusList.Exists(loadStatus => loadStatus.Filename == filename && loadStatus.Loaded);
         }
 
-        private static bool IsRegistered(string profile)
+        private static bool IsRegistered(string filename)
         {
-            return LoadStatusList.Exists(loadStatus => loadStatus.Profile == profile);
+            return LoadStatusList.Exists(loadStatus => loadStatus.Filename == filename);
         }
 
-        public static void Remove(string profile)
+        public static void Remove(string filename)
         {
-            var itemToRemove = LoadStatusList.SingleOrDefault(r => r.Profile == profile);
+            var itemToRemove = LoadStatusList.SingleOrDefault(r => r.Filename == filename);
             if (itemToRemove != null)
             {
                 LoadStatusList.Remove(itemToRemove);

@@ -19,6 +19,12 @@
         private static List<DCSAircraft> _modulesList = new();
 
         public static DCSAircraft SelectedAircraft { get; set; }
+        public const string DCSBIOS_META_DATA_START_FILE_NAME = "MetadataStart.json";
+        public const string DCSBIOS_META_DATA_END_FILE_NAME = "MetadataEnd.json";
+        public const string DCSBIOS_COMMON_DATA_FILE_NAME = "CommonData.json";
+        private const string DCSBIOS_META_DATA_START_MODULE = "MetadataStart";
+        private const string DCSBIOS_META_DATA_END_MODULE = "MetadataEnd";
+        private const string DCSBIOS_COMMON_DATA_MODULE = "CommonData";
 
         private DCSAircraft(int id, string description, string jsonFilename)
         {
@@ -43,7 +49,7 @@
 
         public bool IsMetaModule
         {
-            get => JSONFilename.Contains("MetadataEnd") || JSONFilename.Contains("MetadataStart") || JSONFilename.Contains("CommonData");
+            get => JSONFilename.Contains(DCSBIOS_META_DATA_END_MODULE) || JSONFilename.Contains(DCSBIOS_META_DATA_START_MODULE) || JSONFilename.Contains(DCSBIOS_COMMON_DATA_MODULE);
         }
 
         /// <summary>
@@ -157,9 +163,9 @@
 
             lock (Lock)
             {
-                _modulesList.Add(new DCSAircraft(500, "MetadataEnd", "MetadataEnd.json"));
-                _modulesList.Add(new DCSAircraft(501, "MetadataStart", "MetadataStart.json"));
-                _modulesList.Add(new DCSAircraft(502, "CommonData", "CommonData.json"));
+                _modulesList.Add(new DCSAircraft(500, DCSBIOS_META_DATA_END_MODULE, DCSBIOS_META_DATA_END_FILE_NAME));
+                _modulesList.Add(new DCSAircraft(501, DCSBIOS_META_DATA_START_MODULE, DCSBIOS_META_DATA_START_FILE_NAME));
+                _modulesList.Add(new DCSAircraft(502, DCSBIOS_COMMON_DATA_MODULE, DCSBIOS_COMMON_DATA_FILE_NAME));
             }
 
             // A-10C|5|A-10C Thunderbolt/II

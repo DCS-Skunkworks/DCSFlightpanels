@@ -8,7 +8,6 @@ namespace DCS_BIOS.ControlLocator
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using ClassLibraryCommon;
     using misc;
     using Serialized;
@@ -138,7 +137,7 @@ namespace DCS_BIOS.ControlLocator
         /// Member DCSAircraft is not taken into account.
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public static List<DCSBIOSControl> GetModuleControlsFromJson(string filename, bool onlyDirectResult = false)
+        public static List<DCSBIOSControl> GetModuleControlsFromJson(string filename, bool onlyDirectResult = false)//variable name is terrible, should be changed.
         {
             var result = new List<DCSBIOSControl>();
 
@@ -165,7 +164,6 @@ namespace DCS_BIOS.ControlLocator
                             _dcsbiosControls.AddRange(controls);
                         }
                         result.AddRange(controls);
-                        PrintDuplicateControlIdentifiers(controls);
                     }
 
                     DCSBIOSAircraftLoadStatus.SetLoaded(filename, true);
@@ -184,9 +182,9 @@ namespace DCS_BIOS.ControlLocator
         /// </summary>
         public static List<DCSBIOSControl> GetMetaControls()
         {
-            var controlList = GetModuleControlsFromJson("MetadataStart.json", true);
-            controlList.AddRange(GetModuleControlsFromJson("MetadataEnd.json", true));
-            controlList.AddRange(GetModuleControlsFromJson("CommonData.json", true));
+            var controlList = GetModuleControlsFromJson(DCSAircraft.DCSBIOS_META_DATA_START_FILE_NAME, true);
+            controlList.AddRange(GetModuleControlsFromJson(DCSAircraft.DCSBIOS_META_DATA_END_FILE_NAME, true));
+            controlList.AddRange(GetModuleControlsFromJson(DCSAircraft.DCSBIOS_COMMON_DATA_FILE_NAME, true));
             return controlList;
         }
 
@@ -314,72 +312,6 @@ namespace DCS_BIOS.ControlLocator
             }
         }
 
-        private static void PrintDuplicateControlIdentifiers(List<DCSBIOSControl> dcsbiosControls, bool printAll = false)
-        {
-            List<string> result = new();
-            List<string> dupes = new();
-            foreach (var dcsbiosControl in dcsbiosControls)
-            {
-                if (printAll)
-                {
-                    result.Add(dcsbiosControl.Identifier);
-                }
-
-                // Debug.Print(dcsbiosControl.identifier);
-                var found = false;
-                foreach (var str in result)
-                {
-                    if (str.Trim() == dcsbiosControl.Identifier.Trim())
-                    {
-                        found = true;
-                    }
-                }
-
-                if (!found)
-                {
-                    result.Add(dcsbiosControl.Identifier);
-                }
-
-                if (found)
-                {
-                    dupes.Add(dcsbiosControl.Identifier);
-                }
-            }
-
-            if (dupes.Count > 0)
-            {
-                StringBuilder message = new();
-                message.AppendLine($"Below is a list of duplicate identifiers found in the {DCSAircraft.JSONFilename} profile (DCS-BIOS)");
-                message.AppendLine($"The identifier must be unique, please correct the profile {DCSAircraft.JSONFilename} in the DCS-BIOS lib folder");
-                message.AppendLine("---------------------------------------------");
-                dupes.ForEach(dupe => message.AppendLine(dupe));
-                message.AppendLine("---------------------------------------------");
-                Logger.Error(message);
-            }
-        }
-
-        private static void LoadMetaDataEnd(string jsonDirectory)
-        {
-            if (DCSBIOSAircraftLoadStatus.IsLoaded("MetadataEnd") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSAircraft.IsNoFrameLoadedYet(_dcsAircraft))
-            {
-                return;
-            }
-
-            try
-            {
-                lock (LockObject)
-                {
-                    _dcsbiosControls.AddRange(ReadControlsFromDocJson(jsonDirectory + "\\MetadataEnd.json"));
-
-                    DCSBIOSAircraftLoadStatus.SetLoaded("MetadataEnd", true);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
-            }
-        }
-
         private static List<DCSBIOSControl> ReadControlsFromDocJson(string fileFullPath)
         {
             // input is a map from category string to a map from key string to control definition
@@ -400,9 +332,9 @@ namespace DCS_BIOS.ControlLocator
             return null;
         }
 
-        private static void LoadCommonData(string jsonDirectory)
+        private static void LoadMetaDataEnd(string jsonDirectory)
         {
-            if (DCSBIOSAircraftLoadStatus.IsLoaded("CommonData") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSAircraft.IsNoFrameLoadedYet(_dcsAircraft))
+            if (DCSBIOSAircraftLoadStatus.IsLoaded(DCSAircraft.DCSBIOS_META_DATA_END_FILE_NAME) || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSAircraft.IsNoFrameLoadedYet(_dcsAircraft))
             {
                 return;
             }
@@ -411,8 +343,30 @@ namespace DCS_BIOS.ControlLocator
             {
                 lock (LockObject)
                 {
-                    _dcsbiosControls.AddRange(ReadControlsFromDocJson(jsonDirectory + "\\CommonData.json"));
-                    DCSBIOSAircraftLoadStatus.SetLoaded("CommonData", true);
+                    _dcsbiosControls.AddRange(ReadControlsFromDocJson(jsonDirectory + $"\\{DCSAircraft.DCSBIOS_META_DATA_END_FILE_NAME}"));
+
+                    DCSBIOSAircraftLoadStatus.SetLoaded(DCSAircraft.DCSBIOS_META_DATA_END_FILE_NAME, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+            }
+        }
+
+        private static void LoadCommonData(string jsonDirectory)
+        {
+            if (DCSBIOSAircraftLoadStatus.IsLoaded(DCSAircraft.DCSBIOS_COMMON_DATA_FILE_NAME) || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSAircraft.IsNoFrameLoadedYet(_dcsAircraft))
+            {
+                return;
+            }
+
+            try
+            {
+                lock (LockObject)
+                {
+                    _dcsbiosControls.AddRange(ReadControlsFromDocJson(jsonDirectory + $"\\{DCSAircraft.DCSBIOS_COMMON_DATA_FILE_NAME}"));
+                    DCSBIOSAircraftLoadStatus.SetLoaded(DCSAircraft.DCSBIOS_COMMON_DATA_FILE_NAME, true);
                 }
             }
             catch (Exception ex)
@@ -447,7 +401,6 @@ namespace DCS_BIOS.ControlLocator
                     {
                         var controls = ReadControlsFromDocJson(file.FullName);
                         _dcsbiosControls.AddRange(controls);
-                        PrintDuplicateControlIdentifiers(controls);
                     }
 
                     DCSBIOSAircraftLoadStatus.SetLoaded(filename, true);
