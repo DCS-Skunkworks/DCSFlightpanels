@@ -9,7 +9,7 @@ using Xunit;
 
 namespace DCSFPTests.DcsBios
 {
-    [Collection("Sequential")] 
+    [Collection("Sequential")]
     public class DCSBIOSInputTests
     {
         private readonly string _dcsbiosPath = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json");
@@ -52,7 +52,7 @@ namespace DCSFPTests.DcsBios
         [InlineData("ARC210_25KHZ_SEL", 5)] // A-10C Thunderbolt/II
         [InlineData("FLAPS_SWITCH", 5)]
         [InlineData("UFC_1", 5)]
-        public void TestDCSBIOSInputConsume(string dcsbiosControlId, int dcsAircraftId)
+        public void Consume(string dcsbiosControlId, int dcsAircraftId)
         {
             if (!SetBaseParameters(dcsAircraftId)) return;
 
@@ -68,7 +68,7 @@ namespace DCSFPTests.DcsBios
         [InlineData(DCSBIOSInputType.SET_STATE, 5, "UFC_1")]
         [InlineData(DCSBIOSInputType.VARIABLE_STEP, 5, "ENGINE_THROTTLE_FRICTION")]
         [InlineData(DCSBIOSInputType.SET_STRING, 38, "UHF_ARC51")] // UH-1H Huey
-        public void TestDCSBIOSInputSetSelectedInputInterface(DCSBIOSInputType dcsbiosInputType, int dcsAircraftId, string dcsbiosControlId)
+        public void SetSelectedInputInterface(DCSBIOSInputType dcsbiosInputType, int dcsAircraftId, string dcsbiosControlId)
         {
             if (!SetBaseParameters(dcsAircraftId)) return;
 
@@ -85,7 +85,7 @@ namespace DCSFPTests.DcsBios
         [InlineData("set position", 5, "UFC_1", DCSBIOSInputType.SET_STATE)]
         [InlineData("turn the dial left or right", 5, "ENGINE_THROTTLE_FRICTION", DCSBIOSInputType.VARIABLE_STEP)]
         [InlineData("The frequency to set, with or without a decimal place", 38, "UHF_ARC51", DCSBIOSInputType.SET_STRING)] // UH-1H Huey
-        public void TestDCSBIOSInputGetDescriptionForInterface(string description, int dcsAircraftId, string dcsbiosControlId, DCSBIOSInputType dcsbiosInputType)
+        public void GetDescriptionForInterface(string description, int dcsAircraftId, string dcsbiosControlId, DCSBIOSInputType dcsbiosInputType)
         {
             if (!SetBaseParameters(dcsAircraftId)) return;
 
@@ -101,7 +101,7 @@ namespace DCSFPTests.DcsBios
         [InlineData(0, 5, "FLAPS_SWITCH", DCSBIOSInputType.FIXED_STEP)]
         [InlineData(65535, 5, "TACAN_VOL", DCSBIOSInputType.SET_STATE)]
         [InlineData(65535, 5, "ENGINE_THROTTLE_FRICTION", DCSBIOSInputType.VARIABLE_STEP)]
-        public void TestDCSBIOSInputGetMaxValueInterface(int maxValue, int dcsAircraftId, string dcsbiosControlId, DCSBIOSInputType dcsbiosInputType)
+        public void GetMaxValueInterface(int maxValue, int dcsAircraftId, string dcsbiosControlId, DCSBIOSInputType dcsbiosInputType)
         {
             if (!SetBaseParameters(dcsAircraftId)) return;
 
@@ -110,6 +110,20 @@ namespace DCSFPTests.DcsBios
             dcsbiosInput.Consume(dcsbiosControl);
 
             Assert.Equal(maxValue, dcsbiosInput.GetMaxValueForInterface(dcsbiosInputType));
+        }
+
+        [Theory]
+        [InlineData("DCSBIOSInput{FLAPS_SWITCH|SET_STATE|0|0}", 5)]
+        [InlineData("DCSBIOSInput{FLAPS_SWITCH|FIXED_STEP|INC|2000}", 5)]
+        [InlineData("DCSBIOSInput{ENGINE_THROTTLE_FRICTION|VARIABLE_STEP|-1000|0}", 5)]
+        public void TestImportExportBindingSetting(string bindingCode, int dcsAircraftId)
+        {
+            if (!SetBaseParameters(dcsAircraftId)) return;
+
+            var dcsbiosInput = new DCSBIOSInput();
+            dcsbiosInput.ImportString(bindingCode);
+
+            Assert.Equal(bindingCode, dcsbiosInput.ToString());
         }
     }
 }
