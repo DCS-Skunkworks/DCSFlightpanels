@@ -1,7 +1,6 @@
 ﻿using DCSFPTests.Serialization.Common;
 using MEF;
 using Newtonsoft.Json;
-using NonVisuals.Interfaces;
 using NonVisuals.Panels.StreamDeck;
 using System;
 using Xunit;

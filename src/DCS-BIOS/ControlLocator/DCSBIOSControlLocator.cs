@@ -8,7 +8,6 @@ namespace DCS_BIOS.ControlLocator
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using ClassLibraryCommon;
     using misc;
     using Serialized;
