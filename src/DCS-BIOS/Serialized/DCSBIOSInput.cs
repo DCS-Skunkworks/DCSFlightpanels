@@ -11,7 +11,6 @@ namespace DCS_BIOS.Serialized
     using System.Linq;
     using ClassLibraryCommon;
     using ControlLocator;
-    using misc;
     using Newtonsoft.Json;
     using NLog;
 
