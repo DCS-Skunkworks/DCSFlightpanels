@@ -81,21 +81,21 @@ namespace DCS_BIOS.Serialized
 
         public string GetDescriptionForInterface(DCSBIOSInputType dcsbiosInputType)
         {
-            var searched = _dcsbiosInputInterfaces.FirstOrDefault(x => x.Interface == dcsbiosInputType);
+            var dcsbiosInputInterface = _dcsbiosInputInterfaces.FirstOrDefault(x => x.Interface == dcsbiosInputType);
 
-            return searched != null ? searched.Description : string.Empty;
+            return dcsbiosInputInterface != null ? dcsbiosInputInterface.Description : string.Empty;
         }
 
         public int GetMaxValueForInterface(DCSBIOSInputType dcsbiosInputType)
         {
-            if (dcsbiosInputType == DCSBIOSInputType.ACTION || dcsbiosInputType == DCSBIOSInputType.FIXED_STEP || dcsbiosInputType == DCSBIOSInputType.SET_STRING)
+            if (dcsbiosInputType == DCSBIOSInputType.SET_STRING)
             {
-                return -99;
+                return 0;
             }
 
             var searched = _dcsbiosInputInterfaces.FirstOrDefault(x => x.Interface == dcsbiosInputType);
 
-            return searched?.MaxValue ?? -99;
+            return searched?.MaxValue ?? 0;
         }
 
         public void Consume(DCSBIOSControl dcsbiosControl)

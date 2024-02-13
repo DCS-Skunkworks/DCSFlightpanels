@@ -55,7 +55,7 @@ namespace DCSFPTests.DcsBios
 
             var dcsbiosControl = DCSBIOSControlLocator.GetControl(dcsbiosControlId);
 
-            Assert.Equal(dcsbiosControl.Identifier, dcsbiosControlId);
+            Assert.Equal(dcsbiosControlId, dcsbiosControl.Identifier);
         }
 
         [Theory]
@@ -89,7 +89,7 @@ namespace DCSFPTests.DcsBios
 
             var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControlId, dcsBiosOutputType);
 
-            Assert.Equal(dcsbiosOutput.DCSBiosOutputType, dcsBiosOutputType);
+            Assert.Equal(dcsBiosOutputType, dcsbiosOutput.DCSBiosOutputType);
         }
 
         [Theory]
@@ -117,7 +117,7 @@ namespace DCSFPTests.DcsBios
             };
 
             Assert.NotNull(dcsbiosOutput);
-            Assert.Equal(dcsbiosOutput.DCSBiosOutputType, dcsBiosOutputType);
+            Assert.Equal(dcsBiosOutputType, dcsbiosOutput.DCSBiosOutputType);
         }
 
         [Theory]
