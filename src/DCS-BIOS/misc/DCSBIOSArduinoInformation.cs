@@ -81,6 +81,11 @@ namespace DCS_BIOS.misc
                             //RotaryEncoder_variable_step
                             break;
                         }
+                    case DCSBIOSInputType.SET_STRING:
+                    {
+                        result.Add(StringInput(dcsbiosControl, interfaceType));
+                        break;
+                    }
                 }
             }
 
@@ -275,6 +280,14 @@ namespace DCS_BIOS.misc
             return str;
         }
 
+        private static string StringInput(DCSBIOSControl dcsbiosControl, DCSBIOSInputInterface inputInterface)
+        {
+            var functionName = MakeCamelCase(dcsbiosControl.Identifier) + "FreqSetFreq";
+            var str = CommonInputData(dcsbiosControl, inputInterface);
+            str += $"void {functionName}(\"{dcsbiosControl.Identifier}\", FREQUENCY, PIN);\n";
+            return str;
+        }
+
         private static string IntegerOutput(DCSBIOSControl dcsbiosControl, DCSBIOSControlOutput output)
         {
             var functionName = MakeCamelCase("ON_" + dcsbiosControl.Identifier + "_CHANGE");
@@ -362,6 +375,12 @@ namespace DCS_BIOS.misc
 
                         break;
                     }
+                case DCSBIOSInputType.SET_STRING:
+                {
+                    str += $"Message :        {dcsbiosControl.Identifier} set frequency\n";
+
+                    break;
+                }
             }
 
             str += $"Description :    {inputInterface.Description}\n";

@@ -188,14 +188,7 @@ namespace DCSFlightpanels.Windows
             if (_dcsBiosInput?.SelectedDCSBIOSInterface != null)
             {
                 TextBoxInputTypeDescription.Text = _dcsBiosInput.SelectedDCSBIOSInterface.Description;
-                if (_dcsBiosInput.SelectedDCSBIOSInterface.Interface == DCSBIOSInputType.SET_STATE || _dcsBiosInput.SelectedDCSBIOSInterface.Interface == DCSBIOSInputType.VARIABLE_STEP)
-                {
-                    TextBoxMaxValue.Text = _dcsBiosInput.GetMaxValueForInterface(_dcsBiosInput.SelectedDCSBIOSInterface.Interface).ToString();
-                }
-                else
-                {
-                    TextBoxMaxValue.Text = string.Empty;
-                }
+                TextBoxMaxValue.Text = _dcsBiosInput.GetMaxValueForInterface(_dcsBiosInput.SelectedDCSBIOSInterface.Interface).ToString();
             }
         }
 
@@ -437,8 +430,8 @@ namespace DCSFlightpanels.Windows
                     };
                     ComboBoxInterfaceType.Items.Add(comboBoxItem);
                 }
-                ComboBoxInterfaceType.SelectedValue = dcsbiosInput.SelectedDCSBIOSInterface != null ? 
-                    dcsbiosInput.SelectedDCSBIOSInterface.Interface.ToString() 
+                ComboBoxInterfaceType.SelectedValue = dcsbiosInput.SelectedDCSBIOSInterface != null ?
+                    dcsbiosInput.SelectedDCSBIOSInterface.Interface.ToString()
                     : dcsbiosInput.DCSBIOSInputInterfaces[0].Interface.ToString();
             }
             finally
@@ -475,10 +468,7 @@ namespace DCSFlightpanels.Windows
                 var inputType = (DCSBIOSInputType)Enum.Parse(typeof(DCSBIOSInputType), GetComboBoxSelectedInterface());
                 _dcsBiosInput.SetSelectedInterface(inputType);
                 TextBoxInputTypeDescription.Text = _dcsBiosInput.SelectedDCSBIOSInterface.Description;
-                if (_dcsBiosInput.SelectedDCSBIOSInterface.Interface == DCSBIOSInputType.SET_STATE || _dcsBiosInput.SelectedDCSBIOSInterface.Interface == DCSBIOSInputType.VARIABLE_STEP)
-                {
-                    TextBoxMaxValue.Text = _dcsBiosInput.SelectedDCSBIOSInterface.MaxValue.ToString();
-                }
+                TextBoxMaxValue.Text = _dcsBiosInput.SelectedDCSBIOSInterface.MaxValue.ToString();
                 SetFormState();
             }
             catch (Exception ex)
