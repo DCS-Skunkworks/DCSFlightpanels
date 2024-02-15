@@ -120,7 +120,10 @@ namespace ControlReference.UserControls
             try
             {
                 Dispatcher?.BeginInvoke((Action)(() => LabelCurrentUIntValue.Content = Convert.ToString(value)));
-                Dispatcher?.BeginInvoke((Action)(() => SetSliderValue(value)));
+                
+                // Setting this will interfere when user is setting its own value, if the update cycle is fast the user
+                // won't be able to test at all
+                // Dispatcher?.BeginInvoke((Action)(() => SetSliderValue(value)));
 
                 if (_dcsbiosOutputs.Any(o => o.DCSBiosOutputType == DCSBiosOutputType.IntegerType) == false)
                 {
@@ -153,6 +156,7 @@ namespace ControlReference.UserControls
             }
         }
 
+        /*
         private void SetSliderValue(uint value)
         {
             try
@@ -172,6 +176,7 @@ namespace ControlReference.UserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
+        */
 
         private void ShowControl()
         {
@@ -312,7 +317,6 @@ namespace ControlReference.UserControls
         {
             try
             {
-                DCSBIOS.Send($"{_dcsbiosControl.Identifier} {e.NewValue}\n");
                 ButtonSetState.Content = e.NewValue;
             }
             catch (Exception ex)
