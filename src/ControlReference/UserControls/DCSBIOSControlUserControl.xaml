@@ -24,7 +24,7 @@
             <Label Name="LabelCategory" FontStyle="Italic" DockPanel.Dock="Right" Content="" Margin="0,0,10,0"  MouseEnter="LabelCategory_OnMouseEnter" MouseLeave="LabelCategory_OnMouseLeave" MouseDown="LabelCategory_OnMouseDown"/>
             <Label Name="LabelArduinoInformation"  Content="API" Margin="0,0,10,0" DockPanel.Dock="Right" HorizontalAlignment="Right" MouseEnter="Label_OnMouseEnter" MouseLeave="Label_OnMouseLeave" MouseDown="LabelArduinoInformation_OnMouseDown"/>
             <Label Name="LabelLuaInformation"  Content="lua" DockPanel.Dock="Right" Margin="0,0,10,0" HorizontalAlignment="Right" MouseEnter="Label_OnMouseEnter" MouseLeave="Label_OnMouseLeave" MouseDown="LabelLuaInformation_OnMouseDown"/>
-            <Label Name="LabelShowSendData"  Content="send data" DockPanel.Dock="Right" Margin="0,0,10,0" HorizontalAlignment="Right" MouseEnter="Label_OnMouseEnter" MouseLeave="Label_OnMouseLeave" MouseDown="LabelShowSendData_OnMouseDown"/>
+            <Label Name="LabelShowSendData"  Content="send cmd" DockPanel.Dock="Right" Margin="0,0,10,0" HorizontalAlignment="Right" MouseEnter="Label_OnMouseEnter" MouseLeave="Label_OnMouseLeave" MouseDown="LabelShowSendData_OnMouseDown"/>
         </DockPanel>
         <StackPanel Name="StackPanelInputInterfaces" Grid.Row="1" Grid.Column="0" Margin="0,5,0,0">
             <StackPanel Name="StackPanelFixedStep" Orientation="Horizontal" >
