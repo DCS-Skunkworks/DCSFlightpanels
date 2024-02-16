@@ -46,7 +46,7 @@ namespace DCSFPTests.Serialization
             DeepAssert.Equal(d, deseralizedObjFromFile);
         }
 
-        private static DCSBIOSOutput GetObject(int instanceNbr = 1) {
+        public static DCSBIOSOutput GetObject(int instanceNbr = 1) {
             return new()
             {
                 ControlId = $"CtrlId 752{instanceNbr}",

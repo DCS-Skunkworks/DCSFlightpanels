@@ -73,7 +73,7 @@ namespace DCSFPTests.Serialization {
             };
         }
 
-        private static DCSBIOSConverter GetObject(int instanceNbr = 1) {
+        public static DCSBIOSConverter GetObject(int instanceNbr = 1) {
             return new()
             {
                 FaceTypeText = FaceTypeText_SerializeTests.GetObject(instanceNbr + 1),

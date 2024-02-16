@@ -1,0 +1,329 @@
+{
+  "$type": "NonVisuals.Panels.StreamDeck.DCSBIOSDecoder, NonVisuals",
+  "UseFormula": false,
+  "FormulaInstance": {
+    "$type": "DCS_BIOS.Serialized.DCSBIOSOutputFormula, DCS-BIOS",
+    "FormulaResult": 790.0,
+    "Formula": null
+  },
+  "DCSBIOSOutput": {
+    "$type": "DCS_BIOS.Serialized.DCSBIOSOutput, DCS-BIOS",
+    "ControlId": "CtrlId 7522",
+    "Address": 1,
+    "Mask": 2,
+    "Shiftvalue": 3,
+    "DCSBiosOutputType": 1,
+    "DCSBiosOutputComparison": 2,
+    "ControlDescription": "xsh lkj 2",
+    "MaxValue": 4,
+    "MaxLength": 5,
+    "ControlType": "type"
+  },
+  "DCSBIOSConverters": {
+    "$type": "System.Collections.Generic.List`1[[NonVisuals.Panels.StreamDeck.DCSBIOSConverter, NonVisuals]], System.Private.CoreLib",
+    "$values": [
+      {
+        "$type": "NonVisuals.Panels.StreamDeck.DCSBIOSConverter, NonVisuals",
+        "FaceTypeText": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeText, NonVisuals",
+          "FaceType": 1,
+          "ButtonTextTemplate": "ltn qae 2",
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "AliceBlue",
+          "BackgroundColor": "Violet",
+          "StreamDeckButtonName": 2,
+          "OffsetX": 12,
+          "OffsetY": 22,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAIAAADajyQQAAABgmlDQ1BJQ0MgcHJvZmlsZQAAKM+VkTlIA0EYhb9sFEUUC1OIWGyhVgbEiFpKFEVQkBjBq3B3Y6KQXcNuxMZSsBUsPBqvwsZaWwtbQRA8QKwtrBRtJKz/bIQEIYIDw3y8mfeYeQPaYdayvaousJ28mxiJ69Mzs3rNCxphGugjZlhebnxyOEnF8XlHSK23UZXF/0ZDatGzIKQLD1g5Ny+8INy7ls8p3hWOWEtGSvhMuNOVCwo/KN0s8qviTMCayoy4ycSgcERYz5SxWcbWkmsL9wi3pWxH8rXpIqcUryu2s6vWzz3VC+sXnalJpctsZYRRxplAx2SVZbLkicrqiOKRkP14BX9L4J8QlymuZSxxDLGCjRH4UX/wu1svHesuJtXHofrZ99/boWYbClu+/3Xk+4VjCD/BpVPyrxxC/4foWyWt7QAaN+D8qqSZO3CxCc2POcM1AiksU0un4e1UvmkGmm6gbq7Y288+J/eQlK7GrmFvHzoykj1f4d215b39eSboj/g3yZxyyp5HRTAAAAAJcEhZcwAALiIAAC4iAari3ZIAAAAHdElNRQfoAgMOAjfeoyVGAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAARVJREFUaEPt1kGKAkEQRNE6i/eY+6/7RE6pX2baaIUQUswiHrnoRUHwdz3O4+j6+BnHt++5XUMPVfP2ST2rbl6GNfckbAkStpZ72IrWrJoS1k3CuklYNwnrJmHdJEyMT2HPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZM74d9uYR1k7BuEtZNwrpJWDfzV+zE50q2yz/mabW2bfyFrdN2rdqFrdB2r3oM6932r+ogbB7vetlXzTsIm8frLqTqvI1fuXR9IH48JAgAAAAASUVORK5CYII="
+          }
+        },
+        "FaceTypeImage": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeImage, NonVisuals",
+          "FaceType": 2,
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "MediumVioletRed",
+          "BackgroundColor": "GreenYellow",
+          "ImageFile": "xzj kga 3",
+          "StreamDeckButtonName": 3,
+          "OffsetX": 33,
+          "OffsetY": 43,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAIAAADajyQQAAABgmlDQ1BJQ0MgcHJvZmlsZQAAKM+VkTlIA0EYhb9sFEUUC1OIWGyhVgbEiFpKFEVQkBjBq3B3Y6KQXcNuxMZSsBUsPBqvwsZaWwtbQRA8QKwtrBRtJKz/bIQEIYIDw3y8mfeYeQPaYdayvaousJ28mxiJ69Mzs3rNCxphGugjZlhebnxyOEnF8XlHSK23UZXF/0ZDatGzIKQLD1g5Ny+8INy7ls8p3hWOWEtGSvhMuNOVCwo/KN0s8qviTMCayoy4ycSgcERYz5SxWcbWkmsL9wi3pWxH8rXpIqcUryu2s6vWzz3VC+sXnalJpctsZYRRxplAx2SVZbLkicrqiOKRkP14BX9L4J8QlymuZSxxDLGCjRH4UX/wu1svHesuJtXHofrZ99/boWYbClu+/3Xk+4VjCD/BpVPyrxxC/4foWyWt7QAaN+D8qqSZO3CxCc2POcM1AiksU0un4e1UvmkGmm6gbq7Y288+J/eQlK7GrmFvHzoykj1f4d215b39eSboj/g3yZxyyp5HRTAAAAAJcEhZcwAALiIAAC4iAari3ZIAAAAHdElNRQfoAgMOAjfeoyVGAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAARVJREFUaEPt1kGKAkEQRNE6i/eY+6/7RE6pX2baaIUQUswiHrnoRUHwdz3O4+j6+BnHt++5XUMPVfP2ST2rbl6GNfckbAkStpZ72IrWrJoS1k3CuklYNwnrJmHdJEyMT2HPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZM74d9uYR1k7BuEtZNwrpJWDfzV+zE50q2yz/mabW2bfyFrdN2rdqFrdB2r3oM6932r+ogbB7vetlXzTsIm8frLqTqvI1fuXR9IH48JAgAAAAASUVORK5CYII="
+          }
+        },
+        "FaceTypeDCSBIOSOverlay": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeDCSBIOSOverlay, NonVisuals",
+          "FaceType": 8,
+          "BackgroundBitmapPath": "rtt uy 4",
+          "ButtonTextTemplate": "lyn dct 4",
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "Chartreuse",
+          "BackgroundColor": "Honeydew",
+          "UIntDcsBiosValue": 3004,
+          "StringDcsBiosValue": "wxe ofs 4",
+          "StreamDeckButtonName": 4,
+          "OffsetX": 59,
+          "OffsetY": 70,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "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"
+          }
+        },
+        "ConverterOutputType": 1,
+        "Comparator1": 0,
+        "ReferenceValue1": 889.0,
+        "Comparator2": 1,
+        "ReferenceValue2": 1889.0
+      },
+      {
+        "$type": "NonVisuals.Panels.StreamDeck.DCSBIOSConverter, NonVisuals",
+        "FaceTypeText": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeText, NonVisuals",
+          "FaceType": 1,
+          "ButtonTextTemplate": "ltn qae 3",
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "AliceBlue",
+          "BackgroundColor": "Violet",
+          "StreamDeckButtonName": 3,
+          "OffsetX": 13,
+          "OffsetY": 23,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAIAAADajyQQAAABgmlDQ1BJQ0MgcHJvZmlsZQAAKM+VkTlIA0EYhb9sFEUUC1OIWGyhVgbEiFpKFEVQkBjBq3B3Y6KQXcNuxMZSsBUsPBqvwsZaWwtbQRA8QKwtrBRtJKz/bIQEIYIDw3y8mfeYeQPaYdayvaousJ28mxiJ69Mzs3rNCxphGugjZlhebnxyOEnF8XlHSK23UZXF/0ZDatGzIKQLD1g5Ny+8INy7ls8p3hWOWEtGSvhMuNOVCwo/KN0s8qviTMCayoy4ycSgcERYz5SxWcbWkmsL9wi3pWxH8rXpIqcUryu2s6vWzz3VC+sXnalJpctsZYRRxplAx2SVZbLkicrqiOKRkP14BX9L4J8QlymuZSxxDLGCjRH4UX/wu1svHesuJtXHofrZ99/boWYbClu+/3Xk+4VjCD/BpVPyrxxC/4foWyWt7QAaN+D8qqSZO3CxCc2POcM1AiksU0un4e1UvmkGmm6gbq7Y288+J/eQlK7GrmFvHzoykj1f4d215b39eSboj/g3yZxyyp5HRTAAAAAJcEhZcwAALiIAAC4iAari3ZIAAAAHdElNRQfoAgMOAjfeoyVGAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAARVJREFUaEPt1kGKAkEQRNE6i/eY+6/7RE6pX2baaIUQUswiHrnoRUHwdz3O4+j6+BnHt++5XUMPVfP2ST2rbl6GNfckbAkStpZ72IrWrJoS1k3CuklYNwnrJmHdJEyMT2HPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZM74d9uYR1k7BuEtZNwrpJWDfzV+zE50q2yz/mabW2bfyFrdN2rdqFrdB2r3oM6932r+ogbB7vetlXzTsIm8frLqTqvI1fuXR9IH48JAgAAAAASUVORK5CYII="
+          }
+        },
+        "FaceTypeImage": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeImage, NonVisuals",
+          "FaceType": 2,
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "MediumVioletRed",
+          "BackgroundColor": "GreenYellow",
+          "ImageFile": "xzj kga 4",
+          "StreamDeckButtonName": 4,
+          "OffsetX": 34,
+          "OffsetY": 44,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAIAAADajyQQAAABgmlDQ1BJQ0MgcHJvZmlsZQAAKM+VkTlIA0EYhb9sFEUUC1OIWGyhVgbEiFpKFEVQkBjBq3B3Y6KQXcNuxMZSsBUsPBqvwsZaWwtbQRA8QKwtrBRtJKz/bIQEIYIDw3y8mfeYeQPaYdayvaousJ28mxiJ69Mzs3rNCxphGugjZlhebnxyOEnF8XlHSK23UZXF/0ZDatGzIKQLD1g5Ny+8INy7ls8p3hWOWEtGSvhMuNOVCwo/KN0s8qviTMCayoy4ycSgcERYz5SxWcbWkmsL9wi3pWxH8rXpIqcUryu2s6vWzz3VC+sXnalJpctsZYRRxplAx2SVZbLkicrqiOKRkP14BX9L4J8QlymuZSxxDLGCjRH4UX/wu1svHesuJtXHofrZ99/boWYbClu+/3Xk+4VjCD/BpVPyrxxC/4foWyWt7QAaN+D8qqSZO3CxCc2POcM1AiksU0un4e1UvmkGmm6gbq7Y288+J/eQlK7GrmFvHzoykj1f4d215b39eSboj/g3yZxyyp5HRTAAAAAJcEhZcwAALiIAAC4iAari3ZIAAAAHdElNRQfoAgMOAjfeoyVGAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAARVJREFUaEPt1kGKAkEQRNE6i/eY+6/7RE6pX2baaIUQUswiHrnoRUHwdz3O4+j6+BnHt++5XUMPVfP2ST2rbl6GNfckbAkStpZ72IrWrJoS1k3CuklYNwnrJmHdJEyMT2HPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZM74d9uYR1k7BuEtZNwrpJWDfzV+zE50q2yz/mabW2bfyFrdN2rdqFrdB2r3oM6932r+ogbB7vetlXzTsIm8frLqTqvI1fuXR9IH48JAgAAAAASUVORK5CYII="
+          }
+        },
+        "FaceTypeDCSBIOSOverlay": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeDCSBIOSOverlay, NonVisuals",
+          "FaceType": 8,
+          "BackgroundBitmapPath": "rtt uy 5",
+          "ButtonTextTemplate": "lyn dct 5",
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "Chartreuse",
+          "BackgroundColor": "Honeydew",
+          "UIntDcsBiosValue": 3005,
+          "StringDcsBiosValue": "wxe ofs 5",
+          "StreamDeckButtonName": 5,
+          "OffsetX": 60,
+          "OffsetY": 71,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAalSURBVHhe7ZzvS1VJGMdd2H2xr/bF7vt9uX9ESqLQD4XU7JdCKyS+sZ9KVCsWpbZgEUltiyUqSbGZZSgmgmVUpKyhab5IJfsBYRllZGlZ6ux8H+cZ5969dm7nnnPB23zg6TrPzL2e87nnzJmZcyyOmZub+1nGXzIGZMyIbwy5z1MyumT8IYs/KC3zyESirHhBLS2Q1SvjV5bziyyMzVdZGOnkpnz5DqdW5XzKEox08zsEDamyJQjpphaC5lTZEoRU04c+yLIIUtCIFfQFrCAHrCAHrCAHrCAHrCAHfBc0MDAgbty4ERCvX7+munfv3unc+Pg45cCTJ08od/MmRvqBDA8P6/dwjI6Oqlrv8V1QWVmZWLZsWUD09fVR3dOnT3UOIplLly5RLjk5WWUWOHPmjH4Px/Xr11Wt90RNUEJCgkhNTaVgGZEIio+PFxkZGRS3b99Wtd4TNUF79+5VmQUiEbR582aV8ZeoCdq9e7eYnJykYCIRlJ2drT9P7oSq9Z6o90E4NRiv+qD379+rWu+xghyImqBt27aREAQTiaANGzboz5udnVW13hM1QW466aSkJDEzM0PBxGwn7UYQR3p6uqpZEJSYmCjy8/Mpurq6VK33LFlBZrS3t6ta7/Fd0J07d2iHQ00b3rx5Q3WIsbGFmyoPHjzQeURzc7OqEeLevXsBdYhHjx6pWu/xXdBSxwpywApywApywApywFdBHz58EOXl5RTmmk1nZyflKioqVGaB+/fvi6KiIpGWlkYT3I6ODlUzT1NTk/5MM16+fKlaeIuvgjBH4rFKSkqKnjPV19dTbtWqVVRmcAlfvny5fg/HlStXVAshDh8+/L96BFYh/SBqghAXL16kfChBckPE9u3bKY8JLQaEK1as0O2mpqaoXW1trdi6dav+zPXr19M8z69l16gK4qMolCDsILerq6ujHAaXnDNXDTE55fzly5dV1h+iKgiBoyiUIEw1uM2tW7coZ05FGhsbKQdiUlBBQQG94iiqqamhn01BOEK4LaYaAKcV56qqqigHYlJQW1sbreHgZ0w+8WoK6u3t1W3v3r1LOVyZOHfu3DnKgZgUhMs1JHEZYQp6/Pixzl+9epVy5mmH9zIxK+jTp0901eGcKejjx490Swh5jH+eP38ujh49qtuaM/aYFQRaW1t1zhQEzp49q+vMQP8lN1S1inFB09PTYt26dZQLFoSR98GDB/V7EDk5OQFrRSBmBGFHRkZGKN6+fauygnYYuVALXVh/HhwcFC0tLaKnp0cPEE1wNPHnmvf0/cBXQbGAFeSAFeSAFeSAr4LQ4WI+9erVK/wilV1auBKEKwuWIszAANCku7ubLuN8Oc7LyxMvXgT+MdGFCxf0+xm0Q/nUqVMqM79OxO3MhbcDBw5QDgtmDK6Q3BbbhMU3jMxxRXWDa0G84xwYBTMPHz6kNZ3gNhj/YBzEYH7FdQxuKaNsrjbics/tsrKyxOfPnym/b98+ypWWllIZQBC3NWPPnj0Bt7DDJWJBJ0+epJm4efuXpwhYHcQ3fuzYMd0ezxQybgQhrl27RnknQVh0279/vy67uQMbsaBQzwfynKq4uJjKmGdx+yNHjlAOuBXER5GTIKwKYHSO9W2Ud+zYoVqFT8SCCgsLxYkTJ7QobBDXnT59mnJg06ZNlMNElHEjCM864hVHUTiCwKFDh6iML07uMOXCxbM+CJIAhv6c4zVosHPnTspt2bJFZdwJ4tMVRxEeiMDPToKOHz+uc9x/hUvEgnBE4IrDfQs2gOvMK9HatWsph86ScSNoaGhIrFy5kn7GIzB4dRLEi/y5ublU/hp86YMyMzOpDpdYYLbHEcDgHhfn+TK8ceNGKqODZUxBWNw/f/68LiO+JAgPefKtJPN3h4svgiorK6kO33BDQ4MoKSnR7XHTkDHXobFiiDqzzAQLmpiY0EcRYjFBeDaJl3cRobbVCV8EPXv2jB6f4zYcOH3MPgBLIKHaoSPGEiwTLAiYp+digsyorq7GzqpW4eNa0Jo1ayhCPRgFcGeCr1yIXbt26b/RMMEDVqtXr9btcNcjWHp/f7/+fTwax1GEkTJy5qmDhX5uiy8Edfg8N3KAK0Hhgo3CBuNJsi+Bowo7jnC7I37hq6BYwApywApywApywApywApywApygATJf75uivsNId38C0H9qmwJQrr5G4L+VGVLENJNKgT9KMP+J0tBSCf/0P9hBmThNxk9qs4iBJZDf1J65pGJ76WkfBn1MoZljH5j0S+jWkaaUiKJi/sPxy9PBETd2o4AAAAASUVORK5CYII="
+          }
+        },
+        "ConverterOutputType": 2,
+        "Comparator1": 1,
+        "ReferenceValue1": 890.0,
+        "Comparator2": 2,
+        "ReferenceValue2": 1890.0
+      },
+      {
+        "$type": "NonVisuals.Panels.StreamDeck.DCSBIOSConverter, NonVisuals",
+        "FaceTypeText": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeText, NonVisuals",
+          "FaceType": 1,
+          "ButtonTextTemplate": "ltn qae 4",
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "AliceBlue",
+          "BackgroundColor": "Violet",
+          "StreamDeckButtonName": 4,
+          "OffsetX": 14,
+          "OffsetY": 24,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAIAAADajyQQAAABgmlDQ1BJQ0MgcHJvZmlsZQAAKM+VkTlIA0EYhb9sFEUUC1OIWGyhVgbEiFpKFEVQkBjBq3B3Y6KQXcNuxMZSsBUsPBqvwsZaWwtbQRA8QKwtrBRtJKz/bIQEIYIDw3y8mfeYeQPaYdayvaousJ28mxiJ69Mzs3rNCxphGugjZlhebnxyOEnF8XlHSK23UZXF/0ZDatGzIKQLD1g5Ny+8INy7ls8p3hWOWEtGSvhMuNOVCwo/KN0s8qviTMCayoy4ycSgcERYz5SxWcbWkmsL9wi3pWxH8rXpIqcUryu2s6vWzz3VC+sXnalJpctsZYRRxplAx2SVZbLkicrqiOKRkP14BX9L4J8QlymuZSxxDLGCjRH4UX/wu1svHesuJtXHofrZ99/boWYbClu+/3Xk+4VjCD/BpVPyrxxC/4foWyWt7QAaN+D8qqSZO3CxCc2POcM1AiksU0un4e1UvmkGmm6gbq7Y288+J/eQlK7GrmFvHzoykj1f4d215b39eSboj/g3yZxyyp5HRTAAAAAJcEhZcwAALiIAAC4iAari3ZIAAAAHdElNRQfoAgMOAjfeoyVGAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAARVJREFUaEPt1kGKAkEQRNE6i/eY+6/7RE6pX2baaIUQUswiHrnoRUHwdz3O4+j6+BnHt++5XUMPVfP2ST2rbl6GNfckbAkStpZ72IrWrJoS1k3CuklYNwnrJmHdJEyMT2HPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZM74d9uYR1k7BuEtZNwrpJWDfzV+zE50q2yz/mabW2bfyFrdN2rdqFrdB2r3oM6932r+ogbB7vetlXzTsIm8frLqTqvI1fuXR9IH48JAgAAAAASUVORK5CYII="
+          }
+        },
+        "FaceTypeImage": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeImage, NonVisuals",
+          "FaceType": 2,
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "MediumVioletRed",
+          "BackgroundColor": "GreenYellow",
+          "ImageFile": "xzj kga 5",
+          "StreamDeckButtonName": 5,
+          "OffsetX": 35,
+          "OffsetY": 45,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAIAAADajyQQAAABgmlDQ1BJQ0MgcHJvZmlsZQAAKM+VkTlIA0EYhb9sFEUUC1OIWGyhVgbEiFpKFEVQkBjBq3B3Y6KQXcNuxMZSsBUsPBqvwsZaWwtbQRA8QKwtrBRtJKz/bIQEIYIDw3y8mfeYeQPaYdayvaousJ28mxiJ69Mzs3rNCxphGugjZlhebnxyOEnF8XlHSK23UZXF/0ZDatGzIKQLD1g5Ny+8INy7ls8p3hWOWEtGSvhMuNOVCwo/KN0s8qviTMCayoy4ycSgcERYz5SxWcbWkmsL9wi3pWxH8rXpIqcUryu2s6vWzz3VC+sXnalJpctsZYRRxplAx2SVZbLkicrqiOKRkP14BX9L4J8QlymuZSxxDLGCjRH4UX/wu1svHesuJtXHofrZ99/boWYbClu+/3Xk+4VjCD/BpVPyrxxC/4foWyWt7QAaN+D8qqSZO3CxCc2POcM1AiksU0un4e1UvmkGmm6gbq7Y288+J/eQlK7GrmFvHzoykj1f4d215b39eSboj/g3yZxyyp5HRTAAAAAJcEhZcwAALiIAAC4iAari3ZIAAAAHdElNRQfoAgMOAjfeoyVGAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAARVJREFUaEPt1kGKAkEQRNE6i/eY+6/7RE6pX2baaIUQUswiHrnoRUHwdz3O4+j6+BnHt++5XUMPVfP2ST2rbl6GNfckbAkStpZ72IrWrJoS1k3CuklYNwnrJmHdJEyMT2HPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZM74d9uYR1k7BuEtZNwrpJWDfzV+zE50q2yz/mabW2bfyFrdN2rdqFrdB2r3oM6932r+ogbB7vetlXzTsIm8frLqTqvI1fuXR9IH48JAgAAAAASUVORK5CYII="
+          }
+        },
+        "FaceTypeDCSBIOSOverlay": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeDCSBIOSOverlay, NonVisuals",
+          "FaceType": 8,
+          "BackgroundBitmapPath": "rtt uy 6",
+          "ButtonTextTemplate": "lyn dct 6",
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "Chartreuse",
+          "BackgroundColor": "Honeydew",
+          "UIntDcsBiosValue": 3006,
+          "StringDcsBiosValue": "wxe ofs 6",
+          "StreamDeckButtonName": 6,
+          "OffsetX": 61,
+          "OffsetY": 72,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "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"
+          }
+        },
+        "ConverterOutputType": 3,
+        "Comparator1": 2,
+        "ReferenceValue1": 891.0,
+        "Comparator2": 3,
+        "ReferenceValue2": 1891.0
+      },
+      {
+        "$type": "NonVisuals.Panels.StreamDeck.DCSBIOSConverter, NonVisuals",
+        "FaceTypeText": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeText, NonVisuals",
+          "FaceType": 1,
+          "ButtonTextTemplate": "ltn qae 5",
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "AliceBlue",
+          "BackgroundColor": "Violet",
+          "StreamDeckButtonName": 5,
+          "OffsetX": 15,
+          "OffsetY": 25,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAIAAADajyQQAAABgmlDQ1BJQ0MgcHJvZmlsZQAAKM+VkTlIA0EYhb9sFEUUC1OIWGyhVgbEiFpKFEVQkBjBq3B3Y6KQXcNuxMZSsBUsPBqvwsZaWwtbQRA8QKwtrBRtJKz/bIQEIYIDw3y8mfeYeQPaYdayvaousJ28mxiJ69Mzs3rNCxphGugjZlhebnxyOEnF8XlHSK23UZXF/0ZDatGzIKQLD1g5Ny+8INy7ls8p3hWOWEtGSvhMuNOVCwo/KN0s8qviTMCayoy4ycSgcERYz5SxWcbWkmsL9wi3pWxH8rXpIqcUryu2s6vWzz3VC+sXnalJpctsZYRRxplAx2SVZbLkicrqiOKRkP14BX9L4J8QlymuZSxxDLGCjRH4UX/wu1svHesuJtXHofrZ99/boWYbClu+/3Xk+4VjCD/BpVPyrxxC/4foWyWt7QAaN+D8qqSZO3CxCc2POcM1AiksU0un4e1UvmkGmm6gbq7Y288+J/eQlK7GrmFvHzoykj1f4d215b39eSboj/g3yZxyyp5HRTAAAAAJcEhZcwAALiIAAC4iAari3ZIAAAAHdElNRQfoAgMOAjfeoyVGAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAARVJREFUaEPt1kGKAkEQRNE6i/eY+6/7RE6pX2baaIUQUswiHrnoRUHwdz3O4+j6+BnHt++5XUMPVfP2ST2rbl6GNfckbAkStpZ72IrWrJoS1k3CuklYNwnrJmHdJEyMT2HPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZM74d9uYR1k7BuEtZNwrpJWDfzV+zE50q2yz/mabW2bfyFrdN2rdqFrdB2r3oM6932r+ogbB7vetlXzTsIm8frLqTqvI1fuXR9IH48JAgAAAAASUVORK5CYII="
+          }
+        },
+        "FaceTypeImage": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeImage, NonVisuals",
+          "FaceType": 2,
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "MediumVioletRed",
+          "BackgroundColor": "GreenYellow",
+          "ImageFile": "xzj kga 6",
+          "StreamDeckButtonName": 6,
+          "OffsetX": 36,
+          "OffsetY": 46,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAIAAADajyQQAAABgmlDQ1BJQ0MgcHJvZmlsZQAAKM+VkTlIA0EYhb9sFEUUC1OIWGyhVgbEiFpKFEVQkBjBq3B3Y6KQXcNuxMZSsBUsPBqvwsZaWwtbQRA8QKwtrBRtJKz/bIQEIYIDw3y8mfeYeQPaYdayvaousJ28mxiJ69Mzs3rNCxphGugjZlhebnxyOEnF8XlHSK23UZXF/0ZDatGzIKQLD1g5Ny+8INy7ls8p3hWOWEtGSvhMuNOVCwo/KN0s8qviTMCayoy4ycSgcERYz5SxWcbWkmsL9wi3pWxH8rXpIqcUryu2s6vWzz3VC+sXnalJpctsZYRRxplAx2SVZbLkicrqiOKRkP14BX9L4J8QlymuZSxxDLGCjRH4UX/wu1svHesuJtXHofrZ99/boWYbClu+/3Xk+4VjCD/BpVPyrxxC/4foWyWt7QAaN+D8qqSZO3CxCc2POcM1AiksU0un4e1UvmkGmm6gbq7Y288+J/eQlK7GrmFvHzoykj1f4d215b39eSboj/g3yZxyyp5HRTAAAAAJcEhZcwAALiIAAC4iAari3ZIAAAAHdElNRQfoAgMOAjfeoyVGAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAARVJREFUaEPt1kGKAkEQRNE6i/eY+6/7RE6pX2baaIUQUswiHrnoRUHwdz3O4+j6+BnHt++5XUMPVfP2ST2rbl6GNfckbAkStpZ72IrWrJoS1k3CuklYNwnrJmHdJEyMT2HPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZMCRPM1mPPlDDBbD32TAkTzNZjz5QwwWw99kwJE8zWY8+UMMFsPfZM74d9uYR1k7BuEtZNwrpJWDfzV+zE50q2yz/mabW2bfyFrdN2rdqFrdB2r3oM6932r+ogbB7vetlXzTsIm8frLqTqvI1fuXR9IH48JAgAAAAASUVORK5CYII="
+          }
+        },
+        "FaceTypeDCSBIOSOverlay": {
+          "$type": "NonVisuals.Panels.StreamDeck.FaceTypeDCSBIOSOverlay, NonVisuals",
+          "FaceType": 8,
+          "BackgroundBitmapPath": "rtt uy 7",
+          "ButtonTextTemplate": "lyn dct 7",
+          "TextFont": "Segoe UI, 9pt",
+          "FontColor": "Chartreuse",
+          "BackgroundColor": "Honeydew",
+          "UIntDcsBiosValue": 3007,
+          "StringDcsBiosValue": "wxe ofs 7",
+          "StreamDeckButtonName": 7,
+          "OffsetX": 62,
+          "OffsetY": 73,
+          "RawBitmap": {
+            "$type": "System.Byte[], System.Private.CoreLib",
+            "$value": "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"
+          }
+        },
+        "ConverterOutputType": 0,
+        "Comparator1": 3,
+        "ReferenceValue1": 892.0,
+        "Comparator2": 4,
+        "ReferenceValue2": 1892.0
+      }
+    ]
+  },
+  "TreatStringAsNumber": true,
+  "RawTextFont": "Arial, 15pt, style=Bold",
+  "RawFontColor": "BlanchedAlmond",
+  "RawBackgroundColor": "Goldenrod",
+  "DecoderSourceType": 0,
+  "DecoderOutputType": 0,
+  "LimitDecimalPlaces": true,
+  "NumberFormatInfoFormula": {
+    "$type": "System.Globalization.NumberFormatInfo, System.Private.CoreLib",
+    "CurrencyDecimalDigits": 2,
+    "CurrencyDecimalSeparator": ".",
+    "IsReadOnly": false,
+    "CurrencyGroupSizes": {
+      "$type": "System.Int32[], System.Private.CoreLib",
+      "$values": [
+        3
+      ]
+    },
+    "NumberGroupSizes": {
+      "$type": "System.Int32[], System.Private.CoreLib",
+      "$values": [
+        3
+      ]
+    },
+    "PercentGroupSizes": {
+      "$type": "System.Int32[], System.Private.CoreLib",
+      "$values": [
+        3
+      ]
+    },
+    "CurrencyGroupSeparator": ",",
+    "CurrencySymbol": "¤",
+    "NaNSymbol": "NaN",
+    "CurrencyNegativePattern": 0,
+    "NumberNegativePattern": 1,
+    "PercentPositivePattern": 0,
+    "PercentNegativePattern": 0,
+    "NegativeInfinitySymbol": "-Infinity",
+    "NegativeSign": "-",
+    "NumberDecimalDigits": 4,
+    "NumberDecimalSeparator": ".",
+    "NumberGroupSeparator": ",",
+    "CurrencyPositivePattern": 0,
+    "PositiveInfinitySymbol": "Infinity",
+    "PositiveSign": "+",
+    "PercentDecimalDigits": 2,
+    "PercentDecimalSeparator": ".",
+    "PercentGroupSeparator": ",",
+    "PercentSymbol": "%",
+    "PerMilleSymbol": "‰",
+    "NativeDigits": {
+      "$type": "System.String[], System.Private.CoreLib",
+      "$values": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    "DigitSubstitution": 1
+  },
+  "FaceType": 4,
+  "ButtonTextTemplate": "",
+  "TextFont": "Arial, 15pt, style=Bold",
+  "FontColor": "BlanchedAlmond",
+  "BackgroundColor": "Goldenrod",
+  "UIntDcsBiosValue": 4294967295,
+  "StringDcsBiosValue": "",
+  "StreamDeckButtonName": 0,
+  "OffsetX": 0,
+  "OffsetY": 0,
+  "RawBitmap": null
+}

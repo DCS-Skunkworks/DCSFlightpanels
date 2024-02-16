@@ -32,7 +32,7 @@ namespace DCSFPTests.Serialization
             DeepAssert.Equal(d, deseralizedObjFromFile);
         }
 
-        private static DCSBIOSOutputFormula GetObject(int instanceNbr = 1) {
+        public static DCSBIOSOutputFormula GetObject(int instanceNbr = 1) {
             return new()
             {
                 // Formula = $"Formula528 {instanceNbr}", //can't do that, see notes
