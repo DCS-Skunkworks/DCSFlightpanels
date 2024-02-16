@@ -18,8 +18,10 @@ namespace NonVisuals.Panels.StreamDeck
     using Panels;
     using NonVisuals;
     using DCS_BIOS.Serialized;
+    using ClassLibraryCommon;
 
     [Serializable]
+    [SerializeCritical]
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener, IDisposable
     {
         internal static readonly Logger Logger = LogManager.GetCurrentClassLogger();
