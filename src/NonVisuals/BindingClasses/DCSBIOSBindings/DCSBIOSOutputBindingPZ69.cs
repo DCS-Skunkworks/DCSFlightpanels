@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using ClassLibraryCommon;
 using DCS_BIOS.Serialized;
 using MEF;
 using NonVisuals.Panels.Saitek;
@@ -8,6 +9,7 @@ using NonVisuals.Radios;
 namespace NonVisuals.BindingClasses.DCSBIOSBindings
 {
     [Serializable]
+    [SerializeCriticalCustom]
     public class DCSBIOSOutputBindingPZ69 : DCSBIOSOutputBindingBase
     {
         /*
