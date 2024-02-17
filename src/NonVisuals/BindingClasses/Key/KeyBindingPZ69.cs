@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using ClassLibraryCommon;
 using MEF;
 
 namespace NonVisuals.BindingClasses.Key
 {
     [Serializable]
+    [SerializeCriticalCustom]
     public class KeyBindingPZ69 : KeyBindingBase
     {
         /*

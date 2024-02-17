@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using ClassLibraryCommon;
 using MEF;
 using NonVisuals.Panels.Saitek.Panels;
 
 namespace NonVisuals.BindingClasses.Key
 {
     [Serializable]
+    [SerializeCriticalCustom]
     public class KeyBindingPZ70 : KeyBindingBase
     {
         /*

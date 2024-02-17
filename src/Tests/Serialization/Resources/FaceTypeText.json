@@ -2,7 +2,7 @@
   "$type": "NonVisuals.Panels.StreamDeck.FaceTypeText, NonVisuals",
   "FaceType": 1,
   "ButtonTextTemplate": "ltn qae 1",
-  "TextFont": "Segoe UI, 9pt",
+  "TextFont": "Arial, 12pt, style=Italic",
   "FontColor": "AliceBlue",
   "BackgroundColor": "Violet",
   "StreamDeckButtonName": 1,

@@ -1,0 +1,43 @@
+{
+  "$type": "NonVisuals.BindingClasses.Key.KeyBindingPZ70, NonVisuals",
+  "DialPosition": 0,
+  "MultiPanelPZ70Knob": 0,
+  "OSKeyPress": {
+    "$type": "NonVisuals.KeyEmulation.KeyPress, NonVisuals",
+    "Information": "ecw azs 1",
+    "Description": "wws zze 1",
+    "KeyPressSequence": {
+      "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[MEF.IKeyPressInfo, MEF]], System.Collections",
+      "1": {
+        "$type": "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals",
+        "LengthOfBreak": 32,
+        "LengthOfKeyPress": 500,
+        "VirtualKeyCodes": {
+          "$type": "System.Collections.Generic.HashSet`1[[MEF.VirtualKeyCode, MEF]], System.Private.CoreLib",
+          "$values": [
+            117,
+            86,
+            162,
+            32
+          ]
+        }
+      },
+      "2": {
+        "$type": "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals",
+        "LengthOfBreak": 500,
+        "LengthOfKeyPress": 2000,
+        "VirtualKeyCodes": {
+          "$type": "System.Collections.Generic.HashSet`1[[MEF.VirtualKeyCode, MEF]], System.Private.CoreLib",
+          "$values": [
+            86,
+            162,
+            32,
+            46
+          ]
+        }
+      }
+    },
+    "Abort": true
+  },
+  "WhenTurnedOn": true
+}

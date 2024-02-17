@@ -9,7 +9,7 @@ namespace DCSFPTests.Serialization {
     public class DCSBIOSDecoder_SerializeTests {
 
         [Fact]
-        public static void BIPLight_ShouldBeSerializable() {
+        public static void DCSBIOSDecoder_ShouldBeSerializable() {
             DCSBIOSDecoder s = GetObject();
 
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);

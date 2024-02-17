@@ -67,7 +67,7 @@ namespace DCSFPTests.Serialization {
             {
                 ButtonTextTemplate = $"ltn qae {instanceNbr}",
                 ButtonFinalText = $"rth kiv {instanceNbr}",
-                TextFont = SystemFonts.CaptionFont,
+                TextFont = new Font(new FontFamily("Arial"), 12, FontStyle.Italic),
                 FontColor = Color.AliceBlue,
                 BackgroundColor = Color.Violet,
                 StreamDeckButtonName = StreamDeckButton_SerializeTests.GetStreamDeckButtonNameFromInstance(instanceNbr),

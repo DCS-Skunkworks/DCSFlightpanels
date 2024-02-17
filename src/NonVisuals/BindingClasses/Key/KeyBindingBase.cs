@@ -11,6 +11,7 @@ namespace NonVisuals.BindingClasses.Key
     /// It is used when a user binds a physical switch to a virtual keypress. (key emulation)
     /// </summary>
     [Serializable]
+    [SerializeCriticalCustom]
     public abstract class KeyBindingBase
     {
         private KeyPress _keyPress;
