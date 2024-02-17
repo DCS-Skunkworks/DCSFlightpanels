@@ -8,7 +8,7 @@ namespace DCSFPTests.Serialization {
     public class KeyBindingPZ55_SerializeTests {
 
         [Fact]
-        public static void BIPLight_ShouldBeSerializable() {
+        public static void KeyBindingPZ55_ShouldBeSerializable() {
             KeyBindingPZ55 s = GetObject();
 
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
@@ -36,7 +36,7 @@ namespace DCSFPTests.Serialization {
         }
 
         private static SwitchPanelPZ55Keys GetSwitchPanelPZ55KeysFromInstance(int instanceNbr) {
-            return instanceNbr switch
+            return instanceNbr switch 
             {
                 1 => SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT,
                 2 => SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT,
