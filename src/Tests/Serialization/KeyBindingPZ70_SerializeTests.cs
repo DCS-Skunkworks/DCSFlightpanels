@@ -39,7 +39,7 @@ namespace DCSFPTests.Serialization
             Assert.Equal(s.OSKeyPress.Description, deseralizedObjFromFile.OSKeyPress.Description);
         }
 
-        private static PZ70DialPosition GetPZ70DialPositionFromInstance(int instanceNbr) {
+        public static PZ70DialPosition GetPZ70DialPositionFromInstance(int instanceNbr) {
             return instanceNbr switch
             {
                 1 => PZ70DialPosition.ALT,

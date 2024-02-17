@@ -1,0 +1,85 @@
+{
+  "$type": "NonVisuals.BindingClasses.DCSBIOSBindings.DCSBIOSOutputBindingPZ69, NonVisuals",
+  "DialPosition": 0,
+  "PZ69LcdPosition": 1,
+  "LimitDecimalPlaces": true,
+  "DecimalPlaces": 4,
+  "NumberFormatInfoDecimals": {
+    "$type": "System.Globalization.NumberFormatInfo, System.Private.CoreLib",
+    "CurrencyDecimalDigits": 2,
+    "CurrencyDecimalSeparator": ".",
+    "IsReadOnly": false,
+    "CurrencyGroupSizes": {
+      "$type": "System.Int32[], System.Private.CoreLib",
+      "$values": [
+        3
+      ]
+    },
+    "NumberGroupSizes": {
+      "$type": "System.Int32[], System.Private.CoreLib",
+      "$values": [
+        3
+      ]
+    },
+    "PercentGroupSizes": {
+      "$type": "System.Int32[], System.Private.CoreLib",
+      "$values": [
+        3
+      ]
+    },
+    "CurrencyGroupSeparator": ",",
+    "CurrencySymbol": "¤",
+    "NaNSymbol": "NaN",
+    "CurrencyNegativePattern": 0,
+    "NumberNegativePattern": 1,
+    "PercentPositivePattern": 0,
+    "PercentNegativePattern": 0,
+    "NegativeInfinitySymbol": "-Infinity",
+    "NegativeSign": "-",
+    "NumberDecimalDigits": 4,
+    "NumberDecimalSeparator": ".",
+    "NumberGroupSeparator": ",",
+    "CurrencyPositivePattern": 0,
+    "PositiveInfinitySymbol": "Infinity",
+    "PositiveSign": "+",
+    "PercentDecimalDigits": 2,
+    "PercentDecimalSeparator": ".",
+    "PercentGroupSeparator": ",",
+    "PercentSymbol": "%",
+    "PerMilleSymbol": "‰",
+    "NativeDigits": {
+      "$type": "System.String[], System.Private.CoreLib",
+      "$values": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    "DigitSubstitution": 1
+  },
+  "CurrentValue": 123.4567,
+  "CurrentValueAsString": "123.4567",
+  "DCSBIOSOutputObject": {
+    "$type": "DCS_BIOS.Serialized.DCSBIOSOutput, DCS-BIOS",
+    "ControlId": "CtrlId 7522",
+    "Address": 1,
+    "Mask": 2,
+    "Shiftvalue": 3,
+    "DCSBiosOutputType": 1,
+    "DCSBiosOutputComparison": 2,
+    "ControlDescription": "xsh lkj 2",
+    "MaxValue": 4,
+    "MaxLength": 5,
+    "ControlType": "type"
+  },
+  "DCSBIOSOutputFormulaObject": null,
+  "HasBinding": true,
+  "UseFormula": false
+}

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using ClassLibraryCommon;
 using DCS_BIOS.Serialized;
 
 namespace NonVisuals.BindingClasses.DCSBIOSBindings
 {
     [Serializable]
+    [SerializeCriticalCustom]
     public abstract class DCSBIOSOutputBindingBase
     {
         private double _currentValue;
@@ -73,8 +75,11 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
             get => _dcsbiosOutputFormula;
             set
             {
-                _dcsbiosOutputFormula = value;
-                _dcsbiosOutput = null;
+                // IF condition added to be consistent with serialization and following the principle given in the field declaration _dcsbiosOutputFormula
+                if (value != null) { 
+                    _dcsbiosOutputFormula = value;
+                    _dcsbiosOutput = null;
+                }
             }
         }
 

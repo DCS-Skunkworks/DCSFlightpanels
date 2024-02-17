@@ -1,0 +1,77 @@
+{
+  "$type": "NonVisuals.BindingClasses.DCSBIOSBindings.DCSBIOSOutputBindingPZ70, NonVisuals",
+  "DialPosition": 0,
+  "PZ70LCDPosition": 0,
+  "LimitDecimalPlaces": true,
+  "DecimalPlaces": 2,
+  "NumberFormatInfoDecimals": {
+    "$type": "System.Globalization.NumberFormatInfo, System.Private.CoreLib",
+    "CurrencyDecimalDigits": 2,
+    "CurrencyDecimalSeparator": ".",
+    "IsReadOnly": false,
+    "CurrencyGroupSizes": {
+      "$type": "System.Int32[], System.Private.CoreLib",
+      "$values": [
+        3
+      ]
+    },
+    "NumberGroupSizes": {
+      "$type": "System.Int32[], System.Private.CoreLib",
+      "$values": [
+        3
+      ]
+    },
+    "PercentGroupSizes": {
+      "$type": "System.Int32[], System.Private.CoreLib",
+      "$values": [
+        3
+      ]
+    },
+    "CurrencyGroupSeparator": ",",
+    "CurrencySymbol": "¤",
+    "NaNSymbol": "NaN",
+    "CurrencyNegativePattern": 0,
+    "NumberNegativePattern": 1,
+    "PercentPositivePattern": 0,
+    "PercentNegativePattern": 0,
+    "NegativeInfinitySymbol": "-Infinity",
+    "NegativeSign": "-",
+    "NumberDecimalDigits": 2,
+    "NumberDecimalSeparator": ".",
+    "NumberGroupSeparator": ",",
+    "CurrencyPositivePattern": 0,
+    "PositiveInfinitySymbol": "Infinity",
+    "PositiveSign": "+",
+    "PercentDecimalDigits": 2,
+    "PercentDecimalSeparator": ".",
+    "PercentGroupSeparator": ",",
+    "PercentSymbol": "%",
+    "PerMilleSymbol": "‰",
+    "NativeDigits": {
+      "$type": "System.String[], System.Private.CoreLib",
+      "$values": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    "DigitSubstitution": 1
+  },
+  "CurrentValue": 543.21,
+  "CurrentValueAsString": "543.21",
+  "DCSBIOSOutputObject": null,
+  "DCSBIOSOutputFormulaObject": {
+    "$type": "DCS_BIOS.Serialized.DCSBIOSOutputFormula, DCS-BIOS",
+    "FormulaResult": 792.0,
+    "Formula": null
+  },
+  "HasBinding": true,
+  "UseFormula": true
+}
