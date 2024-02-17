@@ -35,7 +35,7 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(s.OSKeyPress.Description, deseralizedObjFromFile.OSKeyPress.Description);
         }
 
-        private static RadioPanelPZ69KnobsEmulator GetRadioPanelPZ69KnobsEmulatorFromInstance(int instanceNbr) {
+        public static RadioPanelPZ69KnobsEmulator GetRadioPanelPZ69KnobsEmulatorFromInstance(int instanceNbr) {
             return instanceNbr switch 
             {
                1 => RadioPanelPZ69KnobsEmulator.UpperCOM1,
