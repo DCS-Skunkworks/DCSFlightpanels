@@ -1,14 +1,14 @@
 {
-  "$type": "NonVisuals.BindingClasses.BIP.BIPLinkTPM, NonVisuals",
-  "TPMSwitch": 8,
+  "$type": "NonVisuals.BindingClasses.BIP.BIPLinkFarmingPanel, NonVisuals",
+  "FarmingPanelKey": 3,
   "BIPLights": {
     "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[NonVisuals.Panels.Saitek.BIPLight, NonVisuals]], System.Collections",
     "1": {
       "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
       "LEDColor": 1,
-      "BIPLedPosition": 10,
-      "DelayBefore": 3000,
-      "BindingHash": "dre tiy 11",
+      "BIPLedPosition": 1,
+      "DelayBefore": 50,
+      "BindingHash": "dre tiy 2",
       "Separator": {
         "$type": "System.String[], System.Private.CoreLib",
         "$values": [
@@ -18,10 +18,10 @@
     },
     "2": {
       "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
-      "LEDColor": 1,
-      "BIPLedPosition": 11,
-      "DelayBefore": 4000,
-      "BindingHash": "dre tiy 12",
+      "LEDColor": 4,
+      "BIPLedPosition": 3,
+      "DelayBefore": 200,
+      "BindingHash": "dre tiy 4",
       "Separator": {
         "$type": "System.String[], System.Private.CoreLib",
         "$values": [
@@ -32,9 +32,9 @@
     "3": {
       "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
       "LEDColor": 1,
-      "BIPLedPosition": 12,
-      "DelayBefore": 5000,
-      "BindingHash": "dre tiy 13",
+      "BIPLedPosition": 5,
+      "DelayBefore": 400,
+      "BindingHash": "dre tiy 6",
       "Separator": {
         "$type": "System.String[], System.Private.CoreLib",
         "$values": [
@@ -44,5 +44,5 @@
     }
   },
   "WhenTurnedOn": true,
-  "Description": "poi kjh 1"
+  "Description": "rfv nht 1"
 }

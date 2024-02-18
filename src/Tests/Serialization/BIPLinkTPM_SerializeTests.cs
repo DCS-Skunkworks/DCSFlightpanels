@@ -34,7 +34,7 @@ namespace DCSFPTests.Serialization {
             {
                 TPMSwitch = KeyBindingTPM_SerializeTests.GetTPMPanelSwitchesFromInstance(instanceNbr + 3),
                 WhenTurnedOn = true,
-                Description = $"btc ojo {instanceNbr}",
+                Description = $"poi kjh {instanceNbr}",
                 BIPLights = new()
                 {   {instanceNbr, BIPLight_SerializeTests.GetObject(instanceNbr+10) },
                     {instanceNbr+1, BIPLight_SerializeTests.GetObject(instanceNbr+11) },
