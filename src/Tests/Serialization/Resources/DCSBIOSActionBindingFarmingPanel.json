@@ -1,0 +1,127 @@
+{
+  "$type": "NonVisuals.BindingClasses.DCSBIOSBindings.DCSBIOSActionBindingFarmingPanel, NonVisuals",
+  "FarmingPanelKey": 9,
+  "WhenTurnedOn": true,
+  "Description": "dkk aqk 1",
+  "DCSBIOSInputs": {
+    "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS]], System.Private.CoreLib",
+    "$values": [
+      {
+        "$type": "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS",
+        "SelectedDCSBIOSInterface": {
+          "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+          "Delay": 1,
+          "ControlId": "CtrlId 9521",
+          "Description": "urt vdf 1",
+          "Interface": 4,
+          "MaxValue": 2,
+          "SuggestedStep": 3,
+          "SpecifiedActionArgument": "dov csd",
+          "SpecifiedSetStateArgument": 4,
+          "SpecifiedVariableStepArgument": 5,
+          "SpecifiedFixedStepArgument": 0,
+          "SpecifiedSetStringArgument": "sdd vbn",
+          "SelectedArgumentValue": "sdd vbn"
+        },
+        "ControlId": "CtrlId 7418",
+        "Delay": 1,
+        "ControlDescription": "ikf xsd 8",
+        "ControlType": "xmd rty",
+        "DCSBIOSInputInterfaces": {
+          "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
+          "$values": [
+            {
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+              "Delay": 1,
+              "ControlId": "CtrlId 9521",
+              "Description": "urt vdf 1",
+              "Interface": 4,
+              "MaxValue": 2,
+              "SuggestedStep": 3,
+              "SpecifiedActionArgument": "dov csd",
+              "SpecifiedSetStateArgument": 4,
+              "SpecifiedVariableStepArgument": 5,
+              "SpecifiedFixedStepArgument": 0,
+              "SpecifiedSetStringArgument": "sdd vbn",
+              "SelectedArgumentValue": "sdd vbn"
+            },
+            {
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+              "Delay": 1,
+              "ControlId": "CtrlId 9522",
+              "Description": "urt vdf 2",
+              "Interface": 4,
+              "MaxValue": 2,
+              "SuggestedStep": 3,
+              "SpecifiedActionArgument": "dov csd",
+              "SpecifiedSetStateArgument": 4,
+              "SpecifiedVariableStepArgument": 6,
+              "SpecifiedFixedStepArgument": 0,
+              "SpecifiedSetStringArgument": "sdd vbn",
+              "SelectedArgumentValue": "sdd vbn"
+            }
+          ]
+        }
+      },
+      {
+        "$type": "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS",
+        "SelectedDCSBIOSInterface": {
+          "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+          "Delay": 1,
+          "ControlId": "CtrlId 9521",
+          "Description": "urt vdf 1",
+          "Interface": 4,
+          "MaxValue": 2,
+          "SuggestedStep": 3,
+          "SpecifiedActionArgument": "dov csd",
+          "SpecifiedSetStateArgument": 4,
+          "SpecifiedVariableStepArgument": 5,
+          "SpecifiedFixedStepArgument": 0,
+          "SpecifiedSetStringArgument": "sdd vbn",
+          "SelectedArgumentValue": "sdd vbn"
+        },
+        "ControlId": "CtrlId 7419",
+        "Delay": 1,
+        "ControlDescription": "ikf xsd 9",
+        "ControlType": "xmd rty",
+        "DCSBIOSInputInterfaces": {
+          "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
+          "$values": [
+            {
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+              "Delay": 1,
+              "ControlId": "CtrlId 9521",
+              "Description": "urt vdf 1",
+              "Interface": 4,
+              "MaxValue": 2,
+              "SuggestedStep": 3,
+              "SpecifiedActionArgument": "dov csd",
+              "SpecifiedSetStateArgument": 4,
+              "SpecifiedVariableStepArgument": 5,
+              "SpecifiedFixedStepArgument": 0,
+              "SpecifiedSetStringArgument": "sdd vbn",
+              "SelectedArgumentValue": "sdd vbn"
+            },
+            {
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+              "Delay": 1,
+              "ControlId": "CtrlId 9522",
+              "Description": "urt vdf 2",
+              "Interface": 4,
+              "MaxValue": 2,
+              "SuggestedStep": 3,
+              "SpecifiedActionArgument": "dov csd",
+              "SpecifiedSetStateArgument": 4,
+              "SpecifiedVariableStepArgument": 6,
+              "SpecifiedFixedStepArgument": 0,
+              "SpecifiedSetStringArgument": "sdd vbn",
+              "SelectedArgumentValue": "sdd vbn"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "WhenOnTurnedOn": true,
+  "IsSequenced": true
+}
