@@ -1,0 +1,12 @@
+{
+  "$type": "NonVisuals.BindingClasses.OSCommand.OSCommandBindingPZ69Emulator, NonVisuals",
+  "RadioPanelPZ69Key": 4,
+  "WhenTurnedOn": true,
+  "OSCommandObject": {
+    "$type": "NonVisuals.OSCommand, NonVisuals",
+    "Command": "ggt ooi 2",
+    "Arguments": "bvr opm 2",
+    "Name": "hrv kfp 2",
+    "IsEmpty": false
+  }
+}
