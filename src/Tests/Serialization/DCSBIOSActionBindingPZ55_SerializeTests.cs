@@ -15,6 +15,7 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(s.SwitchPanelPZ55Key, d.SwitchPanelPZ55Key);
             Assert.Equal(s.WhenTurnedOn, d.WhenTurnedOn);
             Assert.Equal(s.Description, d.Description);
+            Assert.Equal(s.IsSequenced, d.IsSequenced);
             DeepAssert.Equal(s.DCSBIOSInputs, d.DCSBIOSInputs);
 
 
@@ -27,6 +28,7 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(s.SwitchPanelPZ55Key, deseralizedObjFromFile.SwitchPanelPZ55Key);
             Assert.Equal(s.WhenTurnedOn, deseralizedObjFromFile.WhenTurnedOn);
             Assert.Equal(s.Description, deseralizedObjFromFile.Description);
+            Assert.Equal(s.IsSequenced, deseralizedObjFromFile.IsSequenced);
             DeepAssert.Equal(s.DCSBIOSInputs, deseralizedObjFromFile.DCSBIOSInputs);
         }
 
@@ -36,6 +38,7 @@ namespace DCSFPTests.Serialization {
                 SwitchPanelPZ55Key = KeyBindingPZ55_SerializeTests.GetSwitchPanelPZ55KeysFromInstance(instanceNbr + 4),
                 WhenTurnedOn = true,
                 Description = $"iiu kkh {instanceNbr}",
+                IsSequenced = true,
                 DCSBIOSInputs = new(){
                     DCSBIOSInput_SerializeTests.GetObject(instanceNbr + 2),
                     DCSBIOSInput_SerializeTests.GetObject(instanceNbr + 3)

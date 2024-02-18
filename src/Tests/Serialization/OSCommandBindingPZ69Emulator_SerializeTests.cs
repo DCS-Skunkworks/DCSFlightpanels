@@ -28,7 +28,7 @@ namespace DCSFPTests.Serialization {
 
             Assert.Equal(s.RadioPanelPZ69Key, deseralizedObjFromFile.RadioPanelPZ69Key);
             Assert.Equal(s.WhenTurnedOn, deseralizedObjFromFile.WhenTurnedOn);
-            DeepAssert.Equal(s.OSCommandObject, d.OSCommandObject);
+            DeepAssert.Equal(s.OSCommandObject, deseralizedObjFromFile.OSCommandObject);
         }
 
         private static OSCommandBindingPZ69Emulator GetObject(int instanceNbr = 1) {

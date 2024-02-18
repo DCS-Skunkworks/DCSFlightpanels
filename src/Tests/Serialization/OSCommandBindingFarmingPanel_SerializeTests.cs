@@ -28,7 +28,7 @@ namespace DCSFPTests.Serialization {
 
             Assert.Equal(s.FarmingPanelKey, deseralizedObjFromFile.FarmingPanelKey);
             Assert.Equal(s.WhenTurnedOn, deseralizedObjFromFile.WhenTurnedOn);
-            DeepAssert.Equal(s.OSCommandObject, d.OSCommandObject);
+            DeepAssert.Equal(s.OSCommandObject, deseralizedObjFromFile.OSCommandObject);
         }
 
         private static OSCommandBindingFarmingPanel GetObject(int instanceNbr = 1) {

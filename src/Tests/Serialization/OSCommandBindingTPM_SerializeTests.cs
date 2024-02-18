@@ -1,5 +1,4 @@
 ﻿using DCSFPTests.Serialization.Common;
-using MEF;
 using Newtonsoft.Json;
 using NonVisuals.BindingClasses.OSCommand;
 using Xunit;
@@ -30,7 +29,7 @@ namespace DCSFPTests.Serialization {
 
             Assert.Equal(s.TPMSwitch, deseralizedObjFromFile.TPMSwitch);
             Assert.Equal(s.WhenTurnedOn, deseralizedObjFromFile.WhenTurnedOn);
-            DeepAssert.Equal(s.OSCommandObject, d.OSCommandObject);
+            DeepAssert.Equal(s.OSCommandObject, deseralizedObjFromFile.OSCommandObject);
         }
 
         private static OSCommandBindingTPM GetObject(int instanceNbr = 1) {

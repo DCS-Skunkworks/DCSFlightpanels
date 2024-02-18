@@ -28,7 +28,7 @@ namespace DCSFPTests.Serialization {
 
             Assert.Equal(s.SwitchPanelPZ55Key, deseralizedObjFromFile.SwitchPanelPZ55Key);
             Assert.Equal(s.WhenTurnedOn, deseralizedObjFromFile.WhenTurnedOn);
-            DeepAssert.Equal(s.OSCommandObject, d.OSCommandObject);
+            DeepAssert.Equal(s.OSCommandObject, deseralizedObjFromFile.OSCommandObject);
         }
 
         private static OSCommandBindingPZ55 GetObject(int instanceNbr = 1) {

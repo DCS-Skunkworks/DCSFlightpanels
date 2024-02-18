@@ -123,5 +123,5 @@
     ]
   },
   "WhenOnTurnedOn": true,
-  "IsSequenced": false
+  "IsSequenced": true
 }

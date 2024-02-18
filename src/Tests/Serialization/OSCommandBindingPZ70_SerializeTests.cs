@@ -1,5 +1,4 @@
 ﻿using DCSFPTests.Serialization.Common;
-using MEF;
 using Newtonsoft.Json;
 using NonVisuals.BindingClasses.OSCommand;
 using Xunit;
@@ -32,7 +31,7 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(s.DialPosition, deseralizedObjFromFile.DialPosition);
             Assert.Equal(s.MultiPanelPZ70Knob, d.MultiPanelPZ70Knob);
             Assert.Equal(s.WhenTurnedOn, deseralizedObjFromFile.WhenTurnedOn);
-            DeepAssert.Equal(s.OSCommandObject, d.OSCommandObject);
+            DeepAssert.Equal(s.OSCommandObject, deseralizedObjFromFile.OSCommandObject);
         }
 
         private static OSCommandBindingPZ70 GetObject(int instanceNbr = 1) {
