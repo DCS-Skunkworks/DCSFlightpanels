@@ -1,0 +1,12 @@
+{
+  "$type": "NonVisuals.BindingClasses.OSCommand.OSCommandBindingTPM, NonVisuals",
+  "TPMSwitch": 64,
+  "WhenTurnedOn": true,
+  "OSCommandObject": {
+    "$type": "NonVisuals.OSCommand, NonVisuals",
+    "Command": "ggt ooi 3",
+    "Arguments": "bvr opm 3",
+    "Name": "hrv kfp 3",
+    "IsEmpty": false
+  }
+}
