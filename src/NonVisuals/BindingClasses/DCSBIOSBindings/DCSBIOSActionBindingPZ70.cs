@@ -1,10 +1,12 @@
 ﻿using System;
+using ClassLibraryCommon;
 using MEF;
 using NonVisuals.Panels.Saitek.Panels;
 
 namespace NonVisuals.BindingClasses.DCSBIOSBindings
 {
     [Serializable]
+    [SerializeCriticalCustom]
     public class DCSBIOSActionBindingPZ70 : DCSBIOSActionBindingBase
     {
         /*
