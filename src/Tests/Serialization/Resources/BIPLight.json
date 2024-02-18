@@ -1,9 +1,9 @@
 {
   "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
-  "LEDColor": 2,
-  "BIPLedPosition": 13,
-  "DelayBefore": 500,
-  "BindingHash": "BL Hash 1",
+  "LEDColor": 0,
+  "BIPLedPosition": 0,
+  "DelayBefore": 0,
+  "BindingHash": "dre tiy 1",
   "Separator": {
     "$type": "System.String[], System.Private.CoreLib",
     "$values": [
