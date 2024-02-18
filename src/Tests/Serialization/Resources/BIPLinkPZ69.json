@@ -1,0 +1,49 @@
+{
+  "$type": "NonVisuals.BindingClasses.BIP.BIPLinkPZ69, NonVisuals",
+  "DialPosition": 0,
+  "RadioPanelPZ69Knob": 32,
+  "BIPLights": {
+    "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[NonVisuals.Panels.Saitek.BIPLight, NonVisuals]], System.Collections",
+    "1": {
+      "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+      "LEDColor": 1,
+      "BIPLedPosition": 4,
+      "DelayBefore": 300,
+      "BindingHash": "dre tiy 5",
+      "Separator": {
+        "$type": "System.String[], System.Private.CoreLib",
+        "$values": [
+          "|"
+        ]
+      }
+    },
+    "2": {
+      "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+      "LEDColor": 1,
+      "BIPLedPosition": 5,
+      "DelayBefore": 400,
+      "BindingHash": "dre tiy 6",
+      "Separator": {
+        "$type": "System.String[], System.Private.CoreLib",
+        "$values": [
+          "|"
+        ]
+      }
+    },
+    "3": {
+      "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+      "LEDColor": 1,
+      "BIPLedPosition": 6,
+      "DelayBefore": 500,
+      "BindingHash": "dre tiy 7",
+      "Separator": {
+        "$type": "System.String[], System.Private.CoreLib",
+        "$values": [
+          "|"
+        ]
+      }
+    }
+  },
+  "WhenTurnedOn": true,
+  "Description": "ook bom 1"
+}

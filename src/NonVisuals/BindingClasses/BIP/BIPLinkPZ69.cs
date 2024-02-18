@@ -1,10 +1,12 @@
 ﻿using System;
+using ClassLibraryCommon;
 using MEF;
 using NonVisuals.Panels.Saitek.Panels;
 
 namespace NonVisuals.BindingClasses.BIP
 {
     [Serializable]
+    [SerializeCriticalCustom]
     public class BIPLinkPZ69 : BIPLinkBase
     {
         /*
