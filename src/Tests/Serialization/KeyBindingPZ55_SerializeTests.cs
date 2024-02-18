@@ -35,7 +35,7 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(s.OSKeyPress.Description, deseralizedObjFromFile.OSKeyPress.Description);
         }
 
-        private static SwitchPanelPZ55Keys GetSwitchPanelPZ55KeysFromInstance(int instanceNbr) {
+        public static SwitchPanelPZ55Keys GetSwitchPanelPZ55KeysFromInstance(int instanceNbr) {
             return instanceNbr switch 
             {
                 1 => SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT,

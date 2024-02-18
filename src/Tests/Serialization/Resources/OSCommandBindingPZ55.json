@@ -1,0 +1,12 @@
+{
+  "$type": "NonVisuals.BindingClasses.OSCommand.OSCommandBindingPZ55, NonVisuals",
+  "SwitchPanelPZ55Key": 16,
+  "WhenTurnedOn": true,
+  "OSCommandObject": {
+    "$type": "NonVisuals.OSCommand, NonVisuals",
+    "Command": "ggt ooi 6",
+    "Arguments": "bvr opm 6",
+    "Name": "hrv kfp 6",
+    "IsEmpty": false
+  }
+}
