@@ -46,13 +46,13 @@ namespace DCSFPTests.Serialization
         public static DCSBIOSInputInterface GetObject(int instanceNbr = 1) {
             return new()
             {
-                ControlId = $"CtrlId 952{instanceNbr}",
+                ControlId = $"ijw evv {instanceNbr}",
                 Delay = 1,
                 Description = $"urt vdf {instanceNbr}",
                 MaxValue = 2,
                 Interface = DCSBIOSInputType.SET_STRING,
                 SuggestedStep = 3,
-                SpecifiedActionArgument = "dov csd",
+                SpecifiedActionArgument = $"dov csd {instanceNbr}",
                 SpecifiedSetStateArgument = 4,
                 SpecifiedVariableStepArgument = 4 + instanceNbr,
                 SpecifiedFixedStepArgument = DCSBIOSFixedStepInput.INC,
