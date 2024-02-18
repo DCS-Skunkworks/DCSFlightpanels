@@ -1,9 +1,11 @@
 ﻿using System;
+using ClassLibraryCommon;
 using MEF;
 
 namespace NonVisuals.BindingClasses.BIP
 {
     [Serializable]
+    [SerializeCriticalCustom]
     public class BIPLinkTPM : BIPLinkBase
     {
         private TPMPanelSwitches _tpmSwitch;
