@@ -39,6 +39,9 @@ namespace DCSFPTests.Serialization.Common
             return File.ReadAllText(GetFile(objectType));
         }
 
+        /// <summary>
+        /// Even if this function has 0 references, do not delete this, used in tests
+        /// </summary>
         internal void SaveSerializedObjectToFile(Type objectType, string serialized)
         {
             string mockFolderPath = GetMockFolderPath();

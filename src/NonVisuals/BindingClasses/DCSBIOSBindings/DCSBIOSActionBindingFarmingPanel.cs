@@ -1,9 +1,11 @@
 ﻿using System;
+using ClassLibraryCommon;
 using MEF;
 
 namespace NonVisuals.BindingClasses.DCSBIOSBindings
 {
     [Serializable]
+    [SerializeCriticalCustom]
     public class DCSBIOSActionBindingFarmingPanel : DCSBIOSActionBindingBase
     {
         /*

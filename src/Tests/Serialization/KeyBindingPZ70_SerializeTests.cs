@@ -51,7 +51,7 @@ namespace DCSFPTests.Serialization
             };
         }
 
-        private static MultiPanelPZ70Knobs GetMultiPanelPZ70KnobsFromInstance(int instanceNbr) {
+        public static MultiPanelPZ70Knobs GetMultiPanelPZ70KnobsFromInstance(int instanceNbr) {
             return instanceNbr switch
             {
                 1 => MultiPanelPZ70Knobs.KNOB_ALT,

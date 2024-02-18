@@ -1,0 +1,12 @@
+{
+  "$type": "NonVisuals.BindingClasses.OSCommand.OSCommandBindingFarmingPanel, NonVisuals",
+  "FarmingPanelKey": 7,
+  "WhenTurnedOn": true,
+  "OSCommandObject": {
+    "$type": "NonVisuals.OSCommand, NonVisuals",
+    "Command": "ggt ooi 3",
+    "Arguments": "bvr opm 3",
+    "Name": "hrv kfp 3",
+    "IsEmpty": false
+  }
+}

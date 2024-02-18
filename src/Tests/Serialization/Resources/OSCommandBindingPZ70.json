@@ -1,0 +1,13 @@
+{
+  "$type": "NonVisuals.BindingClasses.OSCommand.OSCommandBindingPZ70, NonVisuals",
+  "DialPosition": 8,
+  "MultiPanelPZ70Knob": 4,
+  "WhenTurnedOn": true,
+  "OSCommandObject": {
+    "$type": "NonVisuals.OSCommand, NonVisuals",
+    "Command": "ggt ooi 5",
+    "Arguments": "bvr opm 5",
+    "Name": "hrv kfp 5",
+    "IsEmpty": false
+  }
+}

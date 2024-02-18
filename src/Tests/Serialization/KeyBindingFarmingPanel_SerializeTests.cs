@@ -35,7 +35,7 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(s.OSKeyPress.Description, deseralizedObjFromFile.OSKeyPress.Description);
         }
 
-        private static FarmingPanelMKKeys GetFarmingPanelMKKeysFromInstance(int instanceNbr) {
+        public static FarmingPanelMKKeys GetFarmingPanelMKKeysFromInstance(int instanceNbr) {
             return instanceNbr switch
             {
                 1 => FarmingPanelMKKeys.BUTTON_1,

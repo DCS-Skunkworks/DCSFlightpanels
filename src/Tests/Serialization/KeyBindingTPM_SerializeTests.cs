@@ -34,7 +34,7 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(s.OSKeyPress.Description, deseralizedObjFromFile.OSKeyPress.Description);
         }
 
-        private static TPMPanelSwitches GetTPMPanelSwitchesFromInstance(int instanceNbr) {
+        public static TPMPanelSwitches GetTPMPanelSwitchesFromInstance(int instanceNbr) {
             return instanceNbr switch
             {
                 1 => TPMPanelSwitches.G1,
