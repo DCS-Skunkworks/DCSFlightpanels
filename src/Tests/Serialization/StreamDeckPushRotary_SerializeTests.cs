@@ -30,6 +30,7 @@ namespace DCSFPTests.Serialization {
             //repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
 
             StreamDeckPushRotary deseralizedObjFromFile = JsonConvert.DeserializeObject<StreamDeckPushRotary>(repo.GetSerializedObjectString(s.GetType()), JSonSettings.JsonDefaultSettings);
+            Assert.Equal(s.StreamDeckPushRotaryName, deseralizedObjFromFile.StreamDeckPushRotaryName);
         }
 
         public static EnumStreamDeckPushRotaryNames GetStreamDeckPushRotaryNameFromInstance(int instanceNbr) {

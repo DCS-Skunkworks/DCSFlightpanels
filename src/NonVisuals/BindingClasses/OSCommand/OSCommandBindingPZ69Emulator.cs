@@ -1,9 +1,11 @@
 ﻿using System;
+using ClassLibraryCommon;
 using MEF;
 
 namespace NonVisuals.BindingClasses.OSCommand
 {
     [Serializable]
+    [SerializeCriticalCustom]
     public class OSCommandBindingPZ69Emulator : OSCommandBindingBase
     {
         /*

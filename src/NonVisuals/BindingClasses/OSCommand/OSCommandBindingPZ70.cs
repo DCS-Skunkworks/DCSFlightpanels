@@ -1,10 +1,12 @@
 ﻿using System;
+using ClassLibraryCommon;
 using MEF;
 using NonVisuals.Panels.Saitek.Panels;
 
 namespace NonVisuals.BindingClasses.OSCommand
 {
     [Serializable]
+    [SerializeCriticalCustom]
     public class OSCommandBindingPZ70 : OSCommandBindingBase
     {
         /*
