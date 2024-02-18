@@ -1,0 +1,13 @@
+{
+  "$type": "NonVisuals.BindingClasses.OSCommand.OSCommandBindingPZ69FullEmulator, NonVisuals",
+  "DialPosition": 32,
+  "RadioPanelPZ69Key": 64,
+  "WhenTurnedOn": true,
+  "OSCommandObject": {
+    "$type": "NonVisuals.OSCommand, NonVisuals",
+    "Command": "ggt ooi 8",
+    "Arguments": "bvr opm 8",
+    "Name": "hrv kfp 8",
+    "IsEmpty": false
+  }
+}
