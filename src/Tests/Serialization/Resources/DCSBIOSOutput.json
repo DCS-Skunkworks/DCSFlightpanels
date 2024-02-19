@@ -1,6 +1,6 @@
 {
-  "$type": "DCS_BIOS.DCSBIOSOutput, DCS-BIOS",
-  "ControlId": "CtrlId 7521",
+  "$type": "DCS_BIOS.Serialized.DCSBIOSOutput, DCS-BIOS",
+  "ControlId": "qqw ggs 1",
   "Address": 1,
   "Mask": 2,
   "Shiftvalue": 3,
@@ -9,5 +9,5 @@
   "ControlDescription": "xsh lkj 1",
   "MaxValue": 4,
   "MaxLength": 5,
-  "ControlType": "type"
+  "ControlType": "vvt ikj 1"
 }

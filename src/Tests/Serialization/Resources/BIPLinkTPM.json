@@ -1,0 +1,48 @@
+{
+  "$type": "NonVisuals.BindingClasses.BIP.BIPLinkTPM, NonVisuals",
+  "TPMSwitch": 8,
+  "BIPLights": {
+    "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[NonVisuals.Panels.Saitek.BIPLight, NonVisuals]], System.Collections",
+    "1": {
+      "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+      "LEDColor": 1,
+      "BIPLedPosition": 10,
+      "DelayBefore": 3000,
+      "BindingHash": "dre tiy 11",
+      "Separator": {
+        "$type": "System.String[], System.Private.CoreLib",
+        "$values": [
+          "|"
+        ]
+      }
+    },
+    "2": {
+      "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+      "LEDColor": 1,
+      "BIPLedPosition": 11,
+      "DelayBefore": 4000,
+      "BindingHash": "dre tiy 12",
+      "Separator": {
+        "$type": "System.String[], System.Private.CoreLib",
+        "$values": [
+          "|"
+        ]
+      }
+    },
+    "3": {
+      "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+      "LEDColor": 1,
+      "BIPLedPosition": 12,
+      "DelayBefore": 5000,
+      "BindingHash": "dre tiy 13",
+      "Separator": {
+        "$type": "System.String[], System.Private.CoreLib",
+        "$values": [
+          "|"
+        ]
+      }
+    }
+  },
+  "WhenTurnedOn": true,
+  "Description": "poi kjh 1"
+}

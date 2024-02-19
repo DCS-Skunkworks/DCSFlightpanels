@@ -1,0 +1,49 @@
+{
+  "$type": "NonVisuals.BindingClasses.BIP.BIPLinkPZ70, NonVisuals",
+  "DialPosition": 4,
+  "MultiPanelPZ70Knob": 8,
+  "BIPLights": {
+    "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[NonVisuals.Panels.Saitek.BIPLight, NonVisuals]], System.Collections",
+    "1": {
+      "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+      "LEDColor": 1,
+      "BIPLedPosition": 7,
+      "DelayBefore": 1000,
+      "BindingHash": "dre tiy 8",
+      "Separator": {
+        "$type": "System.String[], System.Private.CoreLib",
+        "$values": [
+          "|"
+        ]
+      }
+    },
+    "2": {
+      "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+      "LEDColor": 1,
+      "BIPLedPosition": 8,
+      "DelayBefore": 1500,
+      "BindingHash": "dre tiy 9",
+      "Separator": {
+        "$type": "System.String[], System.Private.CoreLib",
+        "$values": [
+          "|"
+        ]
+      }
+    },
+    "3": {
+      "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+      "LEDColor": 1,
+      "BIPLedPosition": 9,
+      "DelayBefore": 2000,
+      "BindingHash": "dre tiy 10",
+      "Separator": {
+        "$type": "System.String[], System.Private.CoreLib",
+        "$values": [
+          "|"
+        ]
+      }
+    }
+  },
+  "WhenTurnedOn": true,
+  "Description": "btc ojo 1"
+}

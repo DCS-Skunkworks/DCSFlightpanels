@@ -49,7 +49,7 @@ namespace DCSFPTests.Serialization
         public static DCSBIOSOutput GetObject(int instanceNbr = 1) {
             return new()
             {
-                ControlId = $"CtrlId 752{instanceNbr}",
+                ControlId = $"qqw ggs {instanceNbr}",
                 Address = 1,
                 Mask = 2,
                 ShiftValue = 3,
@@ -58,7 +58,7 @@ namespace DCSFPTests.Serialization
                 ControlDescription = $"xsh lkj {instanceNbr}",
                 MaxValue = 4,
                 MaxLength = 5,
-                ControlType = "type",
+                ControlType = $"vvt ikj {instanceNbr}",
 
                 //Not serialized : 
                 LastUIntValue = 666,

@@ -68,7 +68,7 @@
   "CurrentValueAsString": "123.4567",
   "DCSBIOSOutputObject": {
     "$type": "DCS_BIOS.Serialized.DCSBIOSOutput, DCS-BIOS",
-    "ControlId": "CtrlId 7522",
+    "ControlId": "qqw ggs 2",
     "Address": 1,
     "Mask": 2,
     "Shiftvalue": 3,
@@ -77,7 +77,7 @@
     "ControlDescription": "xsh lkj 2",
     "MaxValue": 4,
     "MaxLength": 5,
-    "ControlType": "type"
+    "ControlType": "vvt ikj 2"
   },
   "DCSBIOSOutputFormulaObject": null,
   "HasBinding": true,

@@ -36,12 +36,12 @@ namespace DCSFPTests.Serialization
         public static DCSBIOSInput GetObject(int instanceNbr = 1) {
             return new()
             {
-                ControlId = $"CtrlId 741{instanceNbr}",
+                ControlId = $"uyt ffs {instanceNbr}",
                 Delay = 1,
                 SelectedDCSBIOSInterface = DCSBIOSInputInterface_SerializeTests.GetObject(1),
                 //Debug = true,  //deprecated
                 ControlDescription = $"ikf xsd {instanceNbr}",
-                ControlType = "xmd rty",
+                ControlType = $"xmd rty {instanceNbr}",
                 DCSBIOSInputInterfaces = new() {
                     DCSBIOSInputInterface_SerializeTests.GetObject(1),
                     DCSBIOSInputInterface_SerializeTests.GetObject(2)
