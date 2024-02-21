@@ -37,7 +37,7 @@
     <PackageReference Include="Jace" Version="1.0.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NLog" Version="5.2.7" />
+    <PackageReference Include="NLog" Version="5.2.8" />
   </ItemGroup>
   <PropertyGroup>
     <Description>For using DCS-BIOS from C# based projects</Description>

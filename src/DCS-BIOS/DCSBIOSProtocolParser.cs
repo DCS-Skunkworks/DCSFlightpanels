@@ -52,9 +52,6 @@ namespace DCS_BIOS
         public static DCSBIOSProtocolParser DCSBIOSProtocolParserSO;
         private AutoResetEvent _autoResetEvent = new(false);
 
-
-        //private object _lockArrayToProcess = new object();
-        //private List<byte[]> _arraysToProcess = new List<byte[]>();
         private readonly ConcurrentQueue<byte[]> _arraysToProcess = new();
         private Thread _processingThread;
 
@@ -216,9 +213,6 @@ namespace DCS_BIOS
                     case DCSBiosStateEnum.DATA_HIGH:
                         _data = (uint)(b << 8) | _data;
                         _count--;
-
-                        BIOSEventHandler.ConnectionActive(this);
-
                         
                         if (IsBroadcastable(_address))
                         {

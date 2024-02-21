@@ -1,11 +1,12 @@
-﻿using DCS_BIOS.Interfaces;
+﻿using System.Threading.Tasks;
+using DCS_BIOS.Interfaces;
 
 namespace DCS_BIOS.EventArgs
 {
     public static class BIOSEventHandler
     {
         /*
-         * Source of data from DCS-BIOS
+         * Source of data from DCS-BIOS, parsed by ProtocolParser
          */
         public delegate void DcsDataAddressValueEventHandler(object sender, DCSBIOSDataEventArgs e);
         public static event DcsDataAddressValueEventHandler OnDcsDataAddressValue;
@@ -28,6 +29,56 @@ namespace DCS_BIOS.EventArgs
         public static void DCSBIOSDataAvailable(object sender, uint address, uint data)
         {
             OnDcsDataAddressValue?.Invoke(sender, new DCSBIOSDataEventArgs { Address = address, Data = data });
+        }        
+        
+        /*
+         * Source of data from DCS-BIOS, this is not parsed by ProtocolParser, instead
+         * passed on as is.
+         */
+        public delegate void DcsBulkDataEventHandler(object sender, DCSBIOSBulkDataEventArgs e);
+        public static event DcsBulkDataEventHandler OnDcsBulkData;
+
+        public static bool OnDcsBulkDataEventSubscribed()
+        {
+            return OnDcsBulkData != null && OnDcsBulkData.GetInvocationList().Length > 0;
+        }
+
+        public static void AttachBulkDataListener(IDcsBiosBulkDataListener biosBulkDataListener)
+        {
+            OnDcsBulkData += biosBulkDataListener.DcsBiosBulkDataReceived;
+        }
+
+        public static void DetachBulkDataListener(IDcsBiosBulkDataListener biosBulkDataListener)
+        {
+            OnDcsBulkData -= biosBulkDataListener.DcsBiosBulkDataReceived;
+        }
+
+        public static void DCSBIOSBulkDataAvailable(object sender, byte[] data)
+        {
+            OnDcsBulkData?.Invoke(sender, new DCSBIOSBulkDataEventArgs { Data = data });
+        }
+
+        public delegate Task AsyncDcsBulkDataEventHandler(object sender, DCSBIOSBulkDataEventArgs e);
+        public static event AsyncDcsBulkDataEventHandler AsyncOnDcsBulkData;
+
+        public static bool OnAsyncDcsBulkDataEventSubscribed()
+        {
+            return AsyncOnDcsBulkData != null && AsyncOnDcsBulkData.GetInvocationList().Length > 0;
+        }
+
+        public static void AttachAsyncBulkDataListener(IAsyncDcsBiosBulkDataListener asyncBulkDataListener)
+        {
+            AsyncOnDcsBulkData += asyncBulkDataListener.AsyncDcsBiosBulkDataReceived;
+        }
+
+        public static void DetachAsyncBulkDataListener(IAsyncDcsBiosBulkDataListener asyncBulkDataListener)
+        {
+            AsyncOnDcsBulkData -= asyncBulkDataListener.AsyncDcsBiosBulkDataReceived;
+        }
+
+        public static void AsyncDCSBIOSBulkDataAvailable(object sender, byte[] data)
+        {
+            AsyncOnDcsBulkData?.Invoke(sender, new DCSBIOSBulkDataEventArgs { Data = data });
         }
 
         /*
