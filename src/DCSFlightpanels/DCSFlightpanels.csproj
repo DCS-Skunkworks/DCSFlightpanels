@@ -23,7 +23,7 @@
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-    <Company>DCSFlightpanels (DCSFP)</Company>
+    <Company>DCS-Skunkworks</Company>
     <Authors>
     </Authors>
     <PackageId>DCSFlightpanels (DCSFP)</PackageId>
