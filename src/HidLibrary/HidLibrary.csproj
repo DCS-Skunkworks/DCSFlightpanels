@@ -34,7 +34,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
     <PackageReference Include="NLog">
-      <Version>5.2.7</Version>
+      <Version>5.2.8</Version>
     </PackageReference>
   </ItemGroup>
 

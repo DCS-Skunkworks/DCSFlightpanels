@@ -18,6 +18,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <PackageReference Include="NLog" Version="5.2.8" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
     <None Include="icon.png" Pack="true" PackagePath="" />
   </ItemGroup>

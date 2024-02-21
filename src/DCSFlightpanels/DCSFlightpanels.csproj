@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
@@ -227,7 +227,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NLog" Version="5.2.7" />
+    <PackageReference Include="NLog" Version="5.2.8" />
     <PackageReference Include="Octokit" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
