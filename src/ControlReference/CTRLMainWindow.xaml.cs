@@ -218,7 +218,11 @@ namespace ControlReference
                 return;
             }
 
-            _dcsBios = new DCSBIOS(Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
+            _dcsBios = new DCSBIOS(Settings.Default.DCSBiosIPFrom, 
+                Settings.Default.DCSBiosIPTo, 
+                int.Parse(Settings.Default.DCSBiosPortFrom), 
+                int.Parse(Settings.Default.DCSBiosPortTo), 
+                DcsBiosNotificationMode.Parse);
             if (!_dcsBios.HasLastException())
             {
                 ControlSpinningWheel.RotateGear(2000);

@@ -5,6 +5,7 @@
  */
 
 using System.Diagnostics;
+using DCS_BIOS.EventArgs;
 using DCS_BIOS.StringClasses;
 using NLog;
 namespace DCS_BIOS
@@ -21,8 +22,8 @@ namespace DCS_BIOS
     [Flags]
     public enum DcsBiosNotificationMode
     {
-        AddressValue = 2,
-        ByteArray = 4
+        Parse = 2,
+        PassThrough = 4
     }
 
     /// <summary>
@@ -199,10 +200,15 @@ namespace DCS_BIOS
                     {
                         if (_udpReceiveClient.Available > 0)
                         {
+                            BIOSEventHandler.ConnectionActive(this);
                             var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
-                            if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.AddressValue) == DcsBiosNotificationMode.AddressValue)
+                            if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.Parse) == DcsBiosNotificationMode.Parse)
                             {
                                 _dcsProtocolParser.AddArray(byteData);
+                            }
+                            else if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.PassThrough) == DcsBiosNotificationMode.PassThrough)
+                            {
+                                BIOSEventHandler.AsyncDCSBIOSBulkDataAvailable(this, byteData);
                             }
                             continue;
                         }

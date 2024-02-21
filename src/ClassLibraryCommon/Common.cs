@@ -42,6 +42,8 @@ namespace ClassLibraryCommon
         /// </returns>
         public static Tuple<bool, bool> CheckJSONDirectory(string jsonDirectory)
         {
+            jsonDirectory = Environment.ExpandEnvironmentVariables(jsonDirectory);
+
             if (string.IsNullOrEmpty(jsonDirectory) || !Directory.Exists(jsonDirectory))
             {
                 /*
