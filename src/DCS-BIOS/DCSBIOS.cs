@@ -206,7 +206,7 @@ namespace DCS_BIOS
                             {
                                 _dcsProtocolParser.AddArray(byteData);
                             }
-                            else if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.PassThrough) == DcsBiosNotificationMode.PassThrough)
+                            if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.PassThrough) == DcsBiosNotificationMode.PassThrough)
                             {
                                 BIOSEventHandler.AsyncDCSBIOSBulkDataAvailable(this, byteData);
                             }
