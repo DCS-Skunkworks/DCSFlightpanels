@@ -19,8 +19,8 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="#FF83F5A0">
-            <Label Name="LabelDescription" Content="" DockPanel.Dock="Left"/>
-            <Label Name="LabelControlId" FontStyle="Italic" Content="" DockPanel.Dock="Left" MouseEnter="LabelControlId_OnMouseEnter" MouseLeave="LabelControlId_OnMouseLeave" MouseDown="LabelControlId_OnMouseDown"/>
+            <Label Name="LabelDescription" Content="" DockPanel.Dock="Left" MouseEnter="UIElement_OnMouseEnter" MouseLeave="UIElement_OnMouseLeave" MouseDown="LabelControlDescription_OnMouseDown"/>
+            <Label Name="LabelControlId" FontStyle="Italic" Content="" DockPanel.Dock="Left" MouseEnter="UIElement_OnMouseEnter" MouseLeave="UIElement_OnMouseLeave" MouseDown="LabelControlId_OnMouseDown"/>
             <Label Name="LabelCategory" FontStyle="Italic" DockPanel.Dock="Right" Content="" Margin="0,0,10,0"  MouseEnter="LabelCategory_OnMouseEnter" MouseLeave="LabelCategory_OnMouseLeave" MouseDown="LabelCategory_OnMouseDown"/>
             <Label Name="LabelArduinoInformation"  Content="API" Margin="0,0,10,0" DockPanel.Dock="Right" HorizontalAlignment="Right" MouseEnter="Label_OnMouseEnter" MouseLeave="Label_OnMouseLeave" MouseDown="LabelArduinoInformation_OnMouseDown"/>
             <Label Name="LabelLuaInformation"  Content="lua" DockPanel.Dock="Right" Margin="0,0,10,0" HorizontalAlignment="Right" MouseEnter="Label_OnMouseEnter" MouseLeave="Label_OnMouseLeave" MouseDown="LabelLuaInformation_OnMouseDown"/>
