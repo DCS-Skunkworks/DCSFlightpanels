@@ -750,5 +750,37 @@ namespace ControlReference
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+        private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.F && (Keyboard.Modifiers & (ModifierKeys.Control)) == (ModifierKeys.Control))
+                {
+                    TextBoxSearchControl.Focus();
+                }
+                if (e.Key == Key.F && (Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == (ModifierKeys.Control | ModifierKeys.Shift))
+                {
+                    var globalSearchWindow = new GlobalSearchWindow();
+                    globalSearchWindow.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MessageBox.Show("CTRL + F => Search in module\nCTRL + SHIFT + F => Search in all modules");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

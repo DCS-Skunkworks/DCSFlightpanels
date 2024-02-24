@@ -1,4 +1,5 @@
-﻿using DCS_BIOS.Json;
+﻿using System.Globalization;
+using DCS_BIOS.Json;
 using DCS_BIOS.StringClasses;
 
 
@@ -230,6 +231,50 @@ namespace DCS_BIOS.ControlLocator
 
             LoadControls();
             return _dcsbiosControls.Where(controlObject => controlObject.Inputs.Count > 0);
+        }
+
+        public static List<Tuple<string, DCSBIOSControl>> GlobalControlSearch(string keyword)
+        {
+            var returnList = new List<Tuple<string, DCSBIOSControl>>();
+            try
+            {
+
+                lock (LockObject)
+                {
+                    var directoryInfo = new DirectoryInfo(_jsonDirectory);
+                    IEnumerable<FileInfo> files;
+                    try
+                    {
+                        files = directoryInfo.EnumerateFiles("*.json", SearchOption.TopDirectoryOnly);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Failed to find DCS-BIOS json files. -> {Environment.NewLine}{ex.Message}");
+                    }
+
+                    foreach (var file in files)
+                    {
+                        var controls = ReadControlsFromDocJson(file.FullName);
+
+                        if(controls == null || controls.Count == 0)  continue; 
+
+                        foreach (var dcsbiosControl in controls)
+                        {
+                            if(dcsbiosControl.Identifier.ToLower(CultureInfo.InvariantCulture).Contains(keyword.ToLower(CultureInfo.InvariantCulture)) ||
+                               dcsbiosControl.Description.ToLower(CultureInfo.InvariantCulture).Contains(keyword.ToLower(CultureInfo.InvariantCulture)))
+                            {
+                                returnList.Add(new Tuple<string, DCSBIOSControl>(file.Name, dcsbiosControl));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{DCSBIOS_JSON_NOT_FOUND_ERROR_MESSAGE} ==>[{_jsonDirectory}]<=={Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+            }
+
+            return returnList;
         }
 
         public static string GetLuaCommand(string dcsbiosIdentifier, bool includeSignature)
