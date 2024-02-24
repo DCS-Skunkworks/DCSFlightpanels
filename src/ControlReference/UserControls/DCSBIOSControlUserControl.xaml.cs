@@ -265,7 +265,7 @@ namespace ControlReference.UserControls
             }
         }
 
-        private void LabelControlId_OnMouseEnter(object sender, MouseEventArgs e)
+        private void UIElement_OnMouseEnter(object sender, MouseEventArgs e)
         {
             try
             {
@@ -277,7 +277,7 @@ namespace ControlReference.UserControls
             }
         }
 
-        private void LabelControlId_OnMouseLeave(object sender, MouseEventArgs e)
+        private void UIElement_OnMouseLeave(object sender, MouseEventArgs e)
         {
             try
             {
@@ -298,6 +298,26 @@ namespace ControlReference.UserControls
             try
             {
                 Clipboard.SetText(_dcsbiosControl.Identifier);
+                SystemSounds.Exclamation.Play();
+                _copyToolTip = new ToolTip
+                {
+                    Content = "Value copied.",
+                    PlacementTarget = LabelControlId,
+                    Placement = PlacementMode.Bottom,
+                    IsOpen = true
+                };
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+        
+        private void LabelControlDescription_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText(_dcsbiosControl.Description);
                 SystemSounds.Exclamation.Play();
                 _copyToolTip = new ToolTip
                 {
