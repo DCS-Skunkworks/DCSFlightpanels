@@ -12,6 +12,7 @@
         Closing="MainWindow_OnClosing"
         SizeChanged="MainWindow_OnSizeChanged"
         WindowStartupLocation="Manual"
+        KeyDown="MainWindow_OnKeyDown"
         Icon="/ctrlref;component/Images/FlightPanels01.png" >
 
     <Grid >
@@ -37,6 +38,7 @@
                 <MenuItem Name ="MenuItemExportValues" Header="Copy values to Clipboard" Click="MenuItemExportValues_OnClick" />
             </MenuItem>
             <MenuItem Header="Help">
+                <MenuItem Header="Keyboard shortcuts" Click="MenuItem_OnClick" />
                 <MenuItem Name="MenuItemDiscord" Header="Discord Server" Click="MenuItemDiscord_OnClick" />
             </MenuItem>
         </Menu>
