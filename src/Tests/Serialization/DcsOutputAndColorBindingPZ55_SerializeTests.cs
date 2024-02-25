@@ -4,6 +4,8 @@ using Xunit;
 using Newtonsoft.Json;
 using NonVisuals.Panels.Saitek.Panels;
 using DCS_BIOS.Serialized;
+using System.Collections.Generic;
+using NonVisuals.Panels.StreamDeck;
 
 namespace DCSFPTests.Serialization {
     public class DcsOutputAndColorBindingPZ55_SerializeTests {
@@ -13,7 +15,20 @@ namespace DCSFPTests.Serialization {
             DcsOutputAndColorBindingPZ55 s = GetObject();
 
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
-          //  DcsOutputAndColorBindingPZ55 d = JsonConvert.DeserializeObject<DcsOutputAndColorBindingPZ55>(serializedObj, JSonSettings.JsonDefaultSettings);
+            DcsOutputAndColorBindingPZ55 d = JsonConvert.DeserializeObject<DcsOutputAndColorBindingPZ55>(serializedObj,
+                //JSonSettings.JsonDefaultSettings
+                new JsonSerializerSettings
+                 {
+                    ContractResolver = new ExcludeObsoletePropertiesResolver(),
+                    TypeNameHandling = TypeNameHandling.All,
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    Error = (sender, args) =>
+                    {
+                        throw new System.Exception($"JSON Serialization Error.{args.ErrorContext.Error.Message}");
+                    },
+                    Converters = new List<JsonConverter> { new UnknownEnumConverter() }
+                 }                
+                );
 
             //Assert.Equal(s.LEDColor, d.LEDColor);
             //Assert.Equal(s.SaitekLEDPosition, d.SaitekLEDPosition);
