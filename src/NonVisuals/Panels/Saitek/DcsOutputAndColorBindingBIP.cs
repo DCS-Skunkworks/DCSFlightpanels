@@ -32,7 +32,7 @@
 
             // Position_1_4|GREEN|
             var settingsArray = settings.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-            SaitekLEDPosition = new SaitekPanelLEDPosition((BIPLedPositionEnum)Enum.Parse(typeof(BIPLedPositionEnum), settingsArray[0]));
+            SaitekLEDPosition = new SaitekPanelLEDPosition((int)Enum.Parse(typeof(BIPLedPositionEnum), settingsArray[0]));
             LEDColor = (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), settingsArray[1]);
             DCSBiosOutputLED = new DCSBIOSOutput();
             DCSBiosOutputLED.ImportString(dcsBiosOutputString);

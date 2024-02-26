@@ -30,6 +30,21 @@
             }
         }
     }
+
+    //public class VersionConverter : JsonConverter<Version> {
+    //    public override void WriteJson(JsonWriter writer, Version value, JsonSerializer serializer) {
+    //        writer.WriteValue(value.ToString());
+    //    }
+
+    //    public override Version ReadJson(JsonReader reader, Type objectType, Version existingValue, bool hasExistingValue, JsonSerializer serializer) {
+    //        string s = (string)reader.Value;
+
+    //        return new Version(s);
+    //    }
+    //}
+
+
+
     [SerializeCritical]
     public class DcsOutputAndColorBindingPZ55 : DcsOutputAndColorBinding
     {
@@ -42,15 +57,15 @@
 
             if (settings.Contains("SwitchPanelLedUp"))
             {
-                SaitekLEDPosition = new SaitekPanelLEDPosition(SwitchPanelPZ55LEDPosition.UP);
+                SaitekLEDPosition = new SaitekPanelLEDPosition((int)SwitchPanelPZ55LEDPosition.UP);
             }
             else if (settings.Contains("SwitchPanelLedLeft"))
             {
-                SaitekLEDPosition = new SaitekPanelLEDPosition(SwitchPanelPZ55LEDPosition.LEFT);
+                SaitekLEDPosition = new SaitekPanelLEDPosition((int)SwitchPanelPZ55LEDPosition.LEFT);
             }
             else if (settings.Contains("SwitchPanelLedRight"))
             {
-                SaitekLEDPosition = new SaitekPanelLEDPosition(SwitchPanelPZ55LEDPosition.RIGHT);
+                SaitekLEDPosition = new SaitekPanelLEDPosition((int)SwitchPanelPZ55LEDPosition.RIGHT);
             }
 
             // SwitchPanelLedUp{DARK|DCSBiosOutput{INTEGER_TYPE|Equals|0x0000|0x0000|0|0}}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}

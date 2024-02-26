@@ -868,7 +868,7 @@ namespace NonVisuals.Panels.Saitek.Panels
              * Replace all old entries found for this position with the new ones for this particular position
              * If list is empty then so be it
              */
-            _listColorOutputBinding.RemoveAll(item => item.SaitekLEDPosition.Position.Equals(new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition).Position));
+            _listColorOutputBinding.RemoveAll(item => item.SaitekLEDPosition.Position.Equals(new SaitekPanelLEDPosition((int)switchPanelPZ55LEDPosition).Position));
 
             foreach (var dcsOutputAndColorBinding in dcsOutputAndColorBindingPZ55List)
             {
@@ -926,7 +926,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                         }
                 }
 
-                AppEventHandler.LedLightChanged(this, HIDSkeletonBase.HIDInstance, new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
+                AppEventHandler.LedLightChanged(this, HIDSkeletonBase.HIDInstance, new SaitekPanelLEDPosition((int)switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
                 SetLandingGearLED(_ledUpperColor | _ledLeftColor | _ledRightColor);
             }
             catch (Exception ex)

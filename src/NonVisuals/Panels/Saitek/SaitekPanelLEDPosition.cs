@@ -5,24 +5,24 @@
     [SerializeCritical]
     public class SaitekPanelLEDPosition
     {
-        private Enum _position;
+        private int _position;
 
-        public SaitekPanelLEDPosition(Enum position)
+        public SaitekPanelLEDPosition(int position)
         {
             _position = position;
         }
 
-        public Enum GetPosition()
+        public int GetPosition()
         {
             return _position;
         }
 
-        public void SetPosition(Enum position)
+        public void SetPosition(int position)
         {
             _position = position;
         }
 
-        public Enum Position
+        public int Position
         {
             get => _position;
             set => _position = value;
