@@ -3,49 +3,9 @@
     using System.Text;
     using ClassLibraryCommon;
     using DCS_BIOS.Serialized;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
     using Panels;
    
-    public class SaitekPanelLEDPositionEnumConverter : StringEnumConverter {
-        public SaitekPanelLEDPosition DefaultValue { get; set; }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
-            try {
-                return base.ReadJson(reader, objectType, existingValue, serializer);
-            }
-            catch (JsonSerializationException) {
-                return DefaultValue;
-            }
-        }
-    }
-
-    public class UnknownEnumConverter : StringEnumConverter {
-        public override object ReadJson(JsonReader reader, Type enumType, object existingValue, JsonSerializer serializer) {
-            try {
-                return base.ReadJson(reader, enumType, existingValue, serializer);
-            }
-            catch (JsonSerializationException) when (enumType.IsEnum) {
-                return Activator.CreateInstance(enumType);
-            }
-        }
-    }
-
-    //public class VersionConverter : JsonConverter<Version> {
-    //    public override void WriteJson(JsonWriter writer, Version value, JsonSerializer serializer) {
-    //        writer.WriteValue(value.ToString());
-    //    }
-
-    //    public override Version ReadJson(JsonReader reader, Type objectType, Version existingValue, bool hasExistingValue, JsonSerializer serializer) {
-    //        string s = (string)reader.Value;
-
-    //        return new Version(s);
-    //    }
-    //}
-
-
-
-    [SerializeCritical]
+    [SerializeCriticalCustom]
     public class DcsOutputAndColorBindingPZ55 : DcsOutputAndColorBinding
     {
         public override void ImportSettings(string settings)

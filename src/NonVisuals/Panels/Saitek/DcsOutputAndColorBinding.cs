@@ -17,7 +17,7 @@
     /// 0 would show RED.
     /// </summary>
 
-    [SerializeCritical]
+    [SerializeCriticalCustom]
     public abstract class DcsOutputAndColorBinding
     {
         public abstract void ImportSettings(string settings);

@@ -3,9 +3,6 @@ using NonVisuals.Panels.Saitek;
 using Xunit;
 using Newtonsoft.Json;
 using NonVisuals.Panels.Saitek.Panels;
-using DCS_BIOS.Serialized;
-using System.Collections.Generic;
-using NonVisuals.Panels.StreamDeck;
 
 namespace DCSFPTests.Serialization {
     public class DcsOutputAndColorBindingPZ55_SerializeTests {
@@ -15,32 +12,26 @@ namespace DCSFPTests.Serialization {
             DcsOutputAndColorBindingPZ55 s = GetObject();
 
             string serializedObj = JsonConvert.SerializeObject(s, Formatting.Indented, JSonSettings.JsonDefaultSettings);
-            DcsOutputAndColorBindingPZ55 d = JsonConvert.DeserializeObject<DcsOutputAndColorBindingPZ55>(serializedObj,
-                //JSonSettings.JsonDefaultSettings
-                new JsonSerializerSettings
-                 {
-                    ContractResolver = new ExcludeObsoletePropertiesResolver(),
-                    TypeNameHandling = TypeNameHandling.All,
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    Error = (sender, args) =>
-                    {
-                        throw new System.Exception($"JSON Serialization Error.{args.ErrorContext.Error.Message}");
-                    },
-                    Converters = new List<JsonConverter> { new UnknownEnumConverter() }
-                 }                
-                );
-
-            //Assert.Equal(s.LEDColor, d.LEDColor);
-            //Assert.Equal(s.SaitekLEDPosition, d.SaitekLEDPosition);
+            DcsOutputAndColorBindingPZ55 d = JsonConvert.DeserializeObject<DcsOutputAndColorBindingPZ55>(serializedObj, JSonSettings.JsonDefaultSettings);
+               
+            Assert.Equal(s.LEDColor, d.LEDColor);
+            DeepAssert.Equal(s.SaitekLEDPosition, d.SaitekLEDPosition);
+            Assert.Equal(s.SaitekLEDPosition.GetPosition(), d.SaitekLEDPosition.GetPosition());
+            Assert.Equal(s.DCSBiosOutputLED.Address, d.DCSBiosOutputLED.Address);
+            Assert.Equal(s.DCSBiosOutputLED.DCSBiosOutputType, d.DCSBiosOutputLED.DCSBiosOutputType);
+            Assert.Equal(s.DCSBiosOutputLED.MaxLength, d.DCSBiosOutputLED.MaxLength);
 
             RepositorySerialized repo = new();
             //Save sample file in project (use it only once)
-          //  repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
+            //repo.SaveSerializedObjectToFile(s.GetType(), serializedObj);
 
-         //   DcsOutputAndColorBindingPZ55 deseralizedObjFromFile = JsonConvert.DeserializeObject<DcsOutputAndColorBindingPZ55>(repo.GetSerializedObjectString(s.GetType()), JSonSettings.JsonDefaultSettings);
+            DcsOutputAndColorBindingPZ55 deseralizedObjFromFile = JsonConvert.DeserializeObject<DcsOutputAndColorBindingPZ55>(repo.GetSerializedObjectString(s.GetType()), JSonSettings.JsonDefaultSettings);
 
-          //  DeepAssert.Equal(s, deseralizedObjFromFile);
-          //  DeepAssert.Equal(d, deseralizedObjFromFile);
+            DeepAssert.Equal(s.SaitekLEDPosition, deseralizedObjFromFile.SaitekLEDPosition);
+            Assert.Equal(s.SaitekLEDPosition.GetPosition(), deseralizedObjFromFile.SaitekLEDPosition.GetPosition());
+            Assert.Equal(s.DCSBiosOutputLED.Address, deseralizedObjFromFile.DCSBiosOutputLED.Address);
+            Assert.Equal(s.DCSBiosOutputLED.DCSBiosOutputType, deseralizedObjFromFile.DCSBiosOutputLED.DCSBiosOutputType);
+            Assert.Equal(s.DCSBiosOutputLED.MaxLength, deseralizedObjFromFile.DCSBiosOutputLED.MaxLength);
         }
 
         private static SwitchPanelPZ55LEDPosition GetSwitchPanelPZ55LEDPositionFromInstance(int instanceNbr) {
@@ -57,7 +48,7 @@ namespace DCSFPTests.Serialization {
             return new()
             {
                 LEDColor = BIPLight_SerializeTests.GetPanelLEDColorFromInstance(instanceNbr+1),
-                SaitekLEDPosition = new SaitekPanelLEDPosition(GetSwitchPanelPZ55LEDPositionFromInstance(instanceNbr+1)),
+                SaitekLEDPosition = new SaitekPanelLEDPosition((int)GetSwitchPanelPZ55LEDPositionFromInstance(instanceNbr+1)),
                 DCSBiosOutputLED = DCSBIOSOutput_SerializeTests.GetObject(instanceNbr + 1)
             };
         }

@@ -5,7 +5,7 @@
     using DCS_BIOS.Serialized;
     using Panels;
 
-    [SerializeCritical]
+    [SerializeCriticalCustom]
     public class DcsOutputAndColorBindingBIP : DcsOutputAndColorBinding
     {
         public override void ImportSettings(string settings)
