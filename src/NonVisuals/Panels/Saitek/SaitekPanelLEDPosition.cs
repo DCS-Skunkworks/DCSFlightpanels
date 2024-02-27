@@ -1,5 +1,4 @@
 ﻿namespace NonVisuals.Panels.Saitek {
-    using System;
     using ClassLibraryCommon;
 
     [SerializeCritical]
