@@ -98,7 +98,6 @@ Write-Host "Finished tests execution for StreamDeckSharp" -foregroundcolor "Gree
 Write-Host "Starting cleaning previous build" -foregroundcolor "Green"
 Set-Location -Path $scriptPath
 dotnet clean DCSFlightpanels\DCSFlightpanels.csproj -o $publishPath
-dotnet clean ControlReference\ControlReference.csproj -o $publishPath
 
 #Removing eventual previous non-splitted sample extensions
 Write-Host "Starting Removing eventual previous non-splitted sample extensions" -foregroundcolor "Green"
@@ -107,18 +106,6 @@ remove-Item -Path $publishPath\Extensions\SamplePanelEventPlugin.dll -ErrorActio
 
 Write-Host "Starting Publish" -foregroundcolor "Green"
 Set-Location -Path $scriptPath
-
-
-Write-Host "Starting Publish ControlReference" -foregroundcolor "Green"
-dotnet publish ControlReference\ControlReference.csproj --self-contained false -f net6.0-windows -r win-x64 -c Release -o $publishPath /p:DebugType=None /p:DebugSymbols=false
-$buildLastExitCode = $LastExitCode
-
-Write-Host "Build ControlRef LastExitCode: $buildLastExitCode" -foregroundcolor "Green"
-
-if ( 0 -ne $buildLastExitCode ) {
-	Write-Host "Fatal error. Build seems to have failed on ControlReference. No Zip & copy will be done." -foregroundcolor "Red"
-	exit
-}
 
 Write-Host "Starting Publish DCSFP" -foregroundcolor "Green"
 dotnet publish DCSFlightpanels\DCSFlightpanels.csproj --self-contained false -f net6.0-windows -r win-x64 -c Release -o $publishPath /p:DebugType=None /p:DebugSymbols=false
