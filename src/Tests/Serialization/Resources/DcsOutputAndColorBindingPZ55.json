@@ -1,0 +1,21 @@
+{
+  "$type": "NonVisuals.Panels.Saitek.DcsOutputAndColorBindingPZ55, NonVisuals",
+  "LEDColor": 1,
+  "SaitekLEDPosition": {
+    "$type": "NonVisuals.Panels.Saitek.SaitekPanelLEDPosition, NonVisuals",
+    "Position": 1
+  },
+  "DCSBiosOutputLED": {
+    "$type": "DCS_BIOS.Serialized.DCSBIOSOutput, DCS-BIOS",
+    "ControlId": "qqw ggs 2",
+    "Address": 1,
+    "Mask": 2,
+    "Shiftvalue": 3,
+    "DCSBiosOutputType": 1,
+    "DCSBiosOutputComparison": 2,
+    "ControlDescription": "xsh lkj 2",
+    "MaxValue": 4,
+    "MaxLength": 5,
+    "ControlType": "vvt ikj 2"
+  }
+}

@@ -6,7 +6,7 @@
     using Panels;
 
     [Serializable]
-    [SerializeCritical]
+    [SerializeCriticalCustom]
     public abstract class PanelSwitchBIPLightBinding
     {
         public abstract void ImportSettings(string settings);
