@@ -421,7 +421,7 @@ namespace DCSFlightpanels.Windows
             dialog.AddLineBreak();
             dialog.AddLineBreak();
             dialog.Add("Build the formula first with numbers and make sure it works by using the Test button. Once it works use the search box to search for the DCS-BIOS Controls you want in your formula. ");
-            dialog.Add("Copy the control's name as is into the formula replacing the test values you used. As always use DCS-BIOS Control Reference Page (Chrome) to get a better understanding of the values for the DCS-BIOS Control. ");
+            dialog.Add("Copy the control's name as is into the formula replacing the test values you used. As always use BIOSBuddy or Bort to get a better understanding of the values for the DCS-BIOS Control. ");
             dialog.AddLineBreak();
             dialog.AddLineBreak();
             dialog.AddBold("Example");

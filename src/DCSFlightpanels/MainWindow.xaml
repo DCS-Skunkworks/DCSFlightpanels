@@ -41,7 +41,6 @@
                 <MenuItem Name ="MenuItemDebugLog" Header="Open debug log" Click="MenuItemDebugLog_OnClick" />
                 <MenuItem Name ="MenuItemAutoBackup" Header="Open Profiles AutoBackup folder" Click="ProfilesAutoBackupFolderOpen_OnClick" />
                 <MenuItem Name ="MenuItemFormulaSandbox" Header="Formula sandbox" Click="MenuItemFormulaSandbox_OnClick" />
-                <MenuItem Name ="MenuItemCTRLRef" Header="CTRL-REF" Click="MenuItemCTRLRef_OnClick" />
                 <Separator/>
                 <MenuItem Name ="MenuItemUSBPowerManagement" Header="Disable USB Power Management" Click="MenuItemUSBPowerManagement_OnClick" />
                 <Separator/>

@@ -1342,23 +1342,6 @@
             });
         }
 
-        private void MenuItemCTRLRef_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = AppDomain.CurrentDomain.BaseDirectory + "ctrlref.exe",
-                    UseShellExecute = true
-                });
-
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void LabelDownloadNewVersion_OnMouseEnter(object sender, MouseEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Hand;
