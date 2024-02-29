@@ -76,7 +76,8 @@ namespace DCS_BIOS.Serialized
         [JsonProperty("ControlDescription", Required = Required.Default)]
         public string ControlDescription { get; set; }
 
-        [JsonProperty("ControlType", Required = Required.Default)]
+        [Obsolete]
+        [JsonIgnore]
         public string ControlType { get; set; }
 
         public string GetDescriptionForInterface(DCSBIOSInputType dcsbiosInputType)
@@ -102,7 +103,7 @@ namespace DCS_BIOS.Serialized
         {
             ControlId = dcsbiosControl.Identifier;
             ControlDescription = dcsbiosControl.Description;
-            ControlType = dcsbiosControl.PhysicalVariant;
+
             try
             {
                 foreach (var dcsbiosControlInput in dcsbiosControl.Inputs)

@@ -60,7 +60,6 @@ namespace DCS_BIOS.Serialized
         private int _maxLength;
         private volatile uint _lastUIntValue = uint.MaxValue;
         private volatile string _lastStringValue = "";
-        private string _controlType; // display button toggle etc
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.None;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
         private bool _uintValueHasChanged = false;
@@ -75,7 +74,7 @@ namespace DCS_BIOS.Serialized
                 ControlId = dcsbiosOutput.ControlId,
                 Address = dcsbiosOutput.Address,
                 ControlDescription = dcsbiosOutput.ControlDescription,
-                ControlType = dcsbiosOutput.ControlType,
+                //ControlType = dcsbiosOutput.ControlType,
                 DCSBiosOutputComparison = dcsbiosOutput.DCSBiosOutputComparison,
                 Mask = dcsbiosOutput.Mask,
                 MaxLength = dcsbiosOutput.MaxLength,
@@ -99,7 +98,7 @@ namespace DCS_BIOS.Serialized
             ControlId = dcsbiosOutput.ControlId;
             Address = dcsbiosOutput.Address;
             ControlDescription = dcsbiosOutput.ControlDescription;
-            ControlType = dcsbiosOutput.ControlType;
+            //ControlType = dcsbiosOutput.ControlType;
             DCSBiosOutputComparison = dcsbiosOutput.DCSBiosOutputComparison;
             Mask = dcsbiosOutput.Mask;
             MaxLength = dcsbiosOutput.MaxLength;
@@ -114,7 +113,6 @@ namespace DCS_BIOS.Serialized
         {
             _controlId = dcsbiosControl.Identifier;
             _controlDescription = dcsbiosControl.Description;
-            _controlType = dcsbiosControl.PhysicalVariant;
             try
             {
                 if (!dcsbiosControl.HasOutput())
@@ -387,13 +385,10 @@ namespace DCS_BIOS.Serialized
             set => _maxLength = value;
         }
 
-        [JsonProperty("ControlType", Required = Required.Default)]
-        public string ControlType
-        {
-            get => _controlType;
-            set => _controlType = value;
-        }
-
+        [Obsolete]
+        [JsonIgnore]
+        public string ControlType { get; set; }
+        
         [JsonIgnore]
         public uint LastUIntValue
         {

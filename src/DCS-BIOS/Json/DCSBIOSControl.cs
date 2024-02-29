@@ -26,16 +26,20 @@ namespace DCS_BIOS.Json
 
         [JsonProperty("inputs", Required = Required.Default)]
         public List<DCSBIOSControlInput> Inputs { get; set; }
-
+        /*
+        [Obsolete]
+        [JsonIgnore]
         [JsonProperty("momentary_positions", Required = Required.Default)]
         public string MomentaryPositions { get; set; }
-
+        */
         [JsonProperty("outputs", Required = Required.Default)]
         public List<DCSBIOSControlOutput> Outputs { get; set; }
-
+        /*
+        [Obsolete]
+        [JsonIgnore]
         [JsonProperty("physical_variant", Required = Required.Default)]
         public string PhysicalVariant { get; set; }
-
+        */
         public bool HasOutput()
         {
             return Outputs.Count > 0;
