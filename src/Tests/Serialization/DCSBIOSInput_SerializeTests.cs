@@ -19,7 +19,6 @@ namespace DCSFPTests.Serialization
             Assert.Equal(s.Delay, d.Delay);
             DeepAssert.Equal(s.SelectedDCSBIOSInterface, d.SelectedDCSBIOSInterface);
             Assert.Equal(s.ControlDescription, d.ControlDescription);
-            Assert.Equal(s.ControlType, d.ControlType);
             DeepAssert.Equal(s.DCSBIOSInputInterfaces, d.DCSBIOSInputInterfaces);
             // Assert.False(d.Debug); //deprecated
 
@@ -41,7 +40,6 @@ namespace DCSFPTests.Serialization
                 SelectedDCSBIOSInterface = DCSBIOSInputInterface_SerializeTests.GetObject(1),
                 //Debug = true,  //deprecated
                 ControlDescription = $"ikf xsd {instanceNbr}",
-                ControlType = $"xmd rty {instanceNbr}",
                 DCSBIOSInputInterfaces = new() {
                     DCSBIOSInputInterface_SerializeTests.GetObject(1),
                     DCSBIOSInputInterface_SerializeTests.GetObject(2)

@@ -24,7 +24,6 @@ namespace DCSFPTests.Serialization
             Assert.Equal(s.ControlDescription, d.ControlDescription);
             Assert.Equal(s.MaxValue, d.MaxValue);
             Assert.Equal(s.MaxLength, d.MaxLength);
-            Assert.Equal(s.ControlType, d.ControlType);
 
             //Not serialized : 
             Assert.False(s.LastUIntValue == d.LastUIntValue);
@@ -58,7 +57,6 @@ namespace DCSFPTests.Serialization
                 ControlDescription = $"xsh lkj {instanceNbr}",
                 MaxValue = 4,
                 MaxLength = 5,
-                ControlType = $"vvt ikj {instanceNbr}",
 
                 //Not serialized : 
                 LastUIntValue = 666,
