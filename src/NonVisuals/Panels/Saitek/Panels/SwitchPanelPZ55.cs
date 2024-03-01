@@ -35,23 +35,25 @@ namespace NonVisuals.Panels.Saitek.Panels
     /// The implementation class for the Logitech Switch Panel (PZ55)
     /// See bottom of file for communication information.
     /// </summary>
+    [SerializeCriticalCustom]
     public class SwitchPanelPZ55 : SaitekPanel
     {
         private readonly List<DcsOutputAndColorBindingPZ55> _listColorOutputBinding = new();
         private readonly object _dcsBiosDataReceivedLock = new();
-        private HashSet<DCSBIOSActionBindingPZ55> _dcsBiosBindings = new();
-        private HashSet<KeyBindingPZ55> _keyBindings = new();
-        private List<OSCommandBindingPZ55> _operatingSystemCommandBindings = new();
-        private HashSet<BIPLinkPZ55> _bipLinks = new();
         private SwitchPanelPZ55LEDs _ledUpperColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledLeftColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledRightColor = SwitchPanelPZ55LEDs.ALL_DARK;
-        private bool _manualLandingGearLeds;
-        private PanelLEDColor _manualLandingGearLedsColorDown = PanelLEDColor.GREEN;
-        private PanelLEDColor _manualLandingGearLedsColorUp = PanelLEDColor.DARK;
-        private PanelLEDColor _manualLandingGearLedsColorTrans = PanelLEDColor.RED;
-        private int _manualLandingGearTransTimeSeconds = 5;
         private Thread _manualLandingGearThread;
+
+        public HashSet<DCSBIOSActionBindingPZ55> DCSBiosBindings { get; set; } = new();
+        public HashSet<KeyBindingPZ55> KeyBindingsHashSet { get; set; } = new();
+        public List<OSCommandBindingPZ55> OSCommandList { get; set; } = new();
+        public HashSet<BIPLinkPZ55> BIPLinkHashSet { get; set; } = new();
+        public bool ManualLandingGearLEDs { get; set; }
+        public PanelLEDColor ManualLandingGearLEDsColorDown { get; set; } = PanelLEDColor.GREEN;
+        public PanelLEDColor ManualLandingGearLEDsColorUp { get; set; } = PanelLEDColor.DARK;
+        public PanelLEDColor ManualLandingGearLEDsColorTrans { get; set; } = PanelLEDColor.RED;
+        public int ManualLandingGearTransTimeSeconds { get; set; } = 5;
 
         private enum ManualGearsStatus
         {
@@ -120,13 +122,13 @@ namespace NonVisuals.Panels.Saitek.Panels
                     {
                         var keyBinding = new KeyBindingPZ55();
                         keyBinding.ImportSettings(setting);
-                        _keyBindings.Add(keyBinding);
+                        KeyBindingsHashSet.Add(keyBinding);
                     }
                     else if (setting.StartsWith("SwitchPanelOSPZ55"))
                     {
                         var operatingSystemCommand = new OSCommandBindingPZ55();
                         operatingSystemCommand.ImportSettings(setting);
-                        _operatingSystemCommandBindings.Add(operatingSystemCommand);
+                        OSCommandList.Add(operatingSystemCommand);
                     }
                     else if (setting.StartsWith("SwitchPanelLed"))
                     {
@@ -138,39 +140,39 @@ namespace NonVisuals.Panels.Saitek.Panels
                     {
                         var dcsBIOSBindingPZ55 = new DCSBIOSActionBindingPZ55();
                         dcsBIOSBindingPZ55.ImportSettings(setting);
-                        _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
+                        DCSBiosBindings.Add(dcsBIOSBindingPZ55);
                     }
                     else if (setting.StartsWith("SwitchPanelBIPLink"))
                     {
                         var bipLinkPZ55 = new BIPLinkPZ55();
                         bipLinkPZ55.ImportSettings(setting);
-                        _bipLinks.Add(bipLinkPZ55);
+                        BIPLinkHashSet.Add(bipLinkPZ55);
                     }
                     else if (setting.StartsWith("ManualLandingGearLEDs{"))
                     {
-                        _manualLandingGearLeds = setting.Contains("True");
+                        ManualLandingGearLEDs = setting.Contains("True");
                     }
                     else if (setting.StartsWith("ManualLandingGearLedsColorDown{"))
                     {
-                        _manualLandingGearLedsColorDown = GetSettingPanelLEDColor(setting);
+                        ManualLandingGearLEDsColorDown = GetSettingPanelLEDColor(setting);
                     }
                     else if (setting.StartsWith("ManualLandingGearLedsColorUp{"))
                     {
-                        _manualLandingGearLedsColorUp = GetSettingPanelLEDColor(setting);
+                        ManualLandingGearLEDsColorUp = GetSettingPanelLEDColor(setting);
                     }
                     else if (setting.StartsWith("ManualLandingGearLedsColorTrans{"))
                     {
-                        _manualLandingGearLedsColorTrans = GetSettingPanelLEDColor(setting);
+                        ManualLandingGearLEDsColorTrans = GetSettingPanelLEDColor(setting);
                     }
                     else if (setting.StartsWith("ManualLandingGearTransTimeSeconds{"))
                     {
-                        _manualLandingGearTransTimeSeconds = Convert.ToInt16(GetValueFromSetting(setting));
+                        ManualLandingGearTransTimeSeconds = Convert.ToInt16(GetValueFromSetting(setting));
                     }
                 }
             }
 
             AppEventHandler.SettingsApplied(this, HIDSkeletonBase.HIDInstance, TypeOfPanel);
-            _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
+            KeyBindingsHashSet = KeyBindingPZ55.SetNegators(KeyBindingsHashSet);
         }
 
         private static string GetValueFromSetting(string setting)
@@ -193,7 +195,7 @@ namespace NonVisuals.Panels.Saitek.Panels
 
             var result = new List<string>();
 
-            foreach (var keyBinding in _keyBindings)
+            foreach (var keyBinding in KeyBindingsHashSet)
             {
                 if (keyBinding.OSKeyPress != null)
                 {
@@ -201,7 +203,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 }
             }
 
-            foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
+            foreach (var operatingSystemCommand in OSCommandList)
             {
                 if (!operatingSystemCommand.OSCommandObject.IsEmpty)
                 {
@@ -209,7 +211,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 }
             }
 
-            foreach (var dcsBiosBinding in _dcsBiosBindings)
+            foreach (var dcsBiosBinding in DCSBiosBindings)
             {
                 if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                 {
@@ -217,7 +219,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 }
             }
 
-            foreach (var bipLink in _bipLinks)
+            foreach (var bipLink in BIPLinkHashSet)
             {
                 if (bipLink.BIPLights.Count > 0)
                 {
@@ -230,11 +232,11 @@ namespace NonVisuals.Panels.Saitek.Panels
                 result.Add(colorOutputBinding.ExportSettings());
             }
 
-            result.Add("ManualLandingGearLEDs{" + _manualLandingGearLeds + "}");
-            result.Add("ManualLandingGearLedsColorUp{" + _manualLandingGearLedsColorUp + "}");
-            result.Add("ManualLandingGearLedsColorDown{" + _manualLandingGearLedsColorDown + "}");
-            result.Add("ManualLandingGearLedsColorTrans{" + _manualLandingGearLedsColorTrans + "}");
-            result.Add("ManualLandingGearTransTimeSeconds{" + _manualLandingGearTransTimeSeconds + "}");
+            result.Add("ManualLandingGearLEDs{" + ManualLandingGearLEDs + "}");
+            result.Add("ManualLandingGearLedsColorUp{" + ManualLandingGearLEDsColorUp + "}");
+            result.Add("ManualLandingGearLedsColorDown{" + ManualLandingGearLEDsColorDown + "}");
+            result.Add("ManualLandingGearLedsColorTrans{" + ManualLandingGearLEDsColorTrans + "}");
+            result.Add("ManualLandingGearTransTimeSeconds{" + ManualLandingGearTransTimeSeconds + "}");
             return result;
         }
 
@@ -301,11 +303,11 @@ namespace NonVisuals.Panels.Saitek.Panels
 
         public override void ClearSettings(bool setIsDirty = false)
         {
-            _keyBindings.Clear();
-            _operatingSystemCommandBindings.Clear();
+            KeyBindingsHashSet.Clear();
+            OSCommandList.Clear();
             _listColorOutputBinding.Clear();
-            _dcsBiosBindings.Clear();
-            _bipLinks.Clear();
+            DCSBiosBindings.Clear();
+            BIPLinkHashSet.Clear();
 
             if (setIsDirty)
             {
@@ -313,31 +315,13 @@ namespace NonVisuals.Panels.Saitek.Panels
             }
         }
 
-        public HashSet<KeyBindingPZ55> KeyBindingsHashSet
-        {
-            get => _keyBindings;
-            set => _keyBindings = value;
-        }
-
-        public HashSet<BIPLinkPZ55> BIPLinkHashSet
-        {
-            get => _bipLinks;
-            set => _bipLinks = value;
-        }
-
-        public List<OSCommandBindingPZ55> OSCommandList
-        {
-            get => _operatingSystemCommandBindings;
-            set => _operatingSystemCommandBindings = value;
-        }
-
         private PanelLEDColor GetManualGearsColorForStatus(ManualGearsStatus status)
         {
             return status switch
             {
-                ManualGearsStatus.Down => _manualLandingGearLedsColorDown,
-                ManualGearsStatus.Up => _manualLandingGearLedsColorUp,
-                ManualGearsStatus.Trans => _manualLandingGearLedsColorTrans,
+                ManualGearsStatus.Down => ManualLandingGearLEDsColorDown,
+                ManualGearsStatus.Up => ManualLandingGearLEDsColorUp,
+                ManualGearsStatus.Trans => ManualLandingGearLEDsColorTrans,
                 _ => throw new ArgumentOutOfRangeException(nameof(status))
             };
         }
@@ -352,7 +336,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 var rightSet = false;
                 var leftSet = false;
 
-                int transitionMs = _manualLandingGearTransTimeSeconds * 1000;
+                int transitionMs = ManualLandingGearTransTimeSeconds * 1000;
                 int randomTransitionDeviation = 3000;
                 var delayUp = random.Next(transitionMs, transitionMs + randomTransitionDeviation);
                 var delayRight = random.Next(transitionMs, transitionMs + randomTransitionDeviation);
@@ -431,7 +415,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 var found = false;
 
                 // Look if leds are manually operated
-                if (!isFirstReport && _manualLandingGearLeds)
+                if (!isFirstReport && ManualLandingGearLEDs)
                 {
                     if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP && switchPanelKey.IsOn)
                     {
@@ -453,7 +437,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 }
 
                 var keyBindingFound = false;
-                foreach (var keyBinding in _keyBindings)
+                foreach (var keyBinding in KeyBindingsHashSet)
                 {
                     if (!isFirstReport && keyBinding.OSKeyPress != null && keyBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelKey.IsOn)
                     {
@@ -490,7 +474,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                         null);
                 }
 
-                foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
+                foreach (var operatingSystemCommand in OSCommandList)
                 {
                     if (!isFirstReport && operatingSystemCommand.OSCommandObject != null && operatingSystemCommand.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && operatingSystemCommand.WhenTurnedOn == switchPanelKey.IsOn)
                     {
@@ -500,7 +484,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                     }
                 }
 
-                foreach (var bipLinkPZ55 in _bipLinks)
+                foreach (var bipLinkPZ55 in BIPLinkHashSet)
                 {
                     if (!isFirstReport && bipLinkPZ55.BIPLights.Count > 0 && bipLinkPZ55.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && bipLinkPZ55.WhenTurnedOn == switchPanelKey.IsOn)
                     {
@@ -511,7 +495,7 @@ namespace NonVisuals.Panels.Saitek.Panels
 
                 if (!isFirstReport && !found)
                 {
-                    foreach (var dcsBiosBinding in _dcsBiosBindings)
+                    foreach (var dcsBiosBinding in DCSBiosBindings)
                     {
                         if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == switchPanelKey.IsOn)
                         {
@@ -527,8 +511,6 @@ namespace NonVisuals.Panels.Saitek.Panels
         {
             try
             {
-
-
                 foreach (var cavb in _listColorOutputBinding)
                 {
                     if (cavb.DCSBiosOutputLED.UIntConditionIsMet(address, data))
@@ -570,7 +552,7 @@ namespace NonVisuals.Panels.Saitek.Panels
         public string GetKeyPressForLoggingPurposes(SwitchPanelKey switchPanelKey)
         {
             var result = string.Empty;
-            foreach (var keyBinding in _keyBindings)
+            foreach (var keyBinding in KeyBindingsHashSet)
             {
                 if (keyBinding.OSKeyPress != null && keyBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelKey.IsOn)
                 {
@@ -593,7 +575,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             }
 
             var found = false;
-            foreach (var keyBinding in _keyBindings)
+            foreach (var keyBinding in KeyBindingsHashSet)
             {
                 if (keyBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
@@ -611,10 +593,10 @@ namespace NonVisuals.Panels.Saitek.Panels
                     OSKeyPress = new KeyPress(keyPress, keyPressLength),
                     WhenTurnedOn = pz55SwitchOnOff.ButtonState
                 };
-                _keyBindings.Add(keyBinding);
+                KeyBindingsHashSet.Add(keyBinding);
             }
 
-            _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
+            KeyBindingsHashSet = KeyBindingPZ55.SetNegators(KeyBindingsHashSet);
             SetIsDirty();
         }
 
@@ -631,7 +613,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             // This must accept lists
             var found = false;
 
-            foreach (var keyBinding in _keyBindings)
+            foreach (var keyBinding in KeyBindingsHashSet)
             {
                 if (keyBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
@@ -659,10 +641,10 @@ namespace NonVisuals.Panels.Saitek.Panels
                 var keyPress = new KeyPress(description, keySequence);
                 keyBinding.OSKeyPress = keyPress;
                 keyBinding.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
-                _keyBindings.Add(keyBinding);
+                KeyBindingsHashSet.Add(keyBinding);
             }
 
-            _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
+            KeyBindingsHashSet = KeyBindingPZ55.SetNegators(KeyBindingsHashSet);
             SetIsDirty();
         }
 
@@ -673,7 +655,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             // This must accept lists
             var found = false;
 
-            foreach (var operatingSystemCommandBinding in _operatingSystemCommandBindings)
+            foreach (var operatingSystemCommandBinding in OSCommandList)
             {
                 if (operatingSystemCommandBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && operatingSystemCommandBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
@@ -691,7 +673,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                     OSCommandObject = operatingSystemCommand,
                     WhenTurnedOn = pz55SwitchOnOff.ButtonState
                 };
-                _operatingSystemCommandBindings.Add(operatingSystemCommandBindingPZ55);
+                OSCommandList.Add(operatingSystemCommandBindingPZ55);
             }
 
             SetIsDirty();
@@ -712,7 +694,7 @@ namespace NonVisuals.Panels.Saitek.Panels
 
             // This must accept lists
             var found = false;
-            foreach (var dcsBiosBinding in _dcsBiosBindings)
+            foreach (var dcsBiosBinding in DCSBiosBindings)
             {
                 if (dcsBiosBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
@@ -734,7 +716,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                     Description = description,
                     IsSequenced = isSequenced
                 };
-                _dcsBiosBindings.Add(dcsBiosBinding);
+                DCSBiosBindings.Add(dcsBiosBinding);
             }
 
             SetIsDirty();
@@ -754,7 +736,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             // This must accept lists
             var found = false;
 
-            foreach (var tmpBipLink in _bipLinks)
+            foreach (var tmpBipLink in BIPLinkHashSet)
             {
                 if (tmpBipLink.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && tmpBipLink.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
@@ -769,7 +751,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             {
                 bipLinkPZ55.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
                 bipLinkPZ55.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
-                _bipLinks.Add(bipLinkPZ55);
+                BIPLinkHashSet.Add(bipLinkPZ55);
             }
 
             SetIsDirty();
@@ -783,7 +765,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             var found = false;
             if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.KEYS)
             {
-                foreach (var keyBindingPZ55 in _keyBindings)
+                foreach (var keyBindingPZ55 in KeyBindingsHashSet)
                 {
                     if (keyBindingPZ55.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && keyBindingPZ55.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                     {
@@ -795,7 +777,7 @@ namespace NonVisuals.Panels.Saitek.Panels
 
             if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.DCSBIOS)
             {
-                foreach (var dcsBiosBinding in _dcsBiosBindings)
+                foreach (var dcsBiosBinding in DCSBiosBindings)
                 {
                     if (dcsBiosBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                     {
@@ -807,7 +789,7 @@ namespace NonVisuals.Panels.Saitek.Panels
 
             if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.BIPS)
             {
-                foreach (var bipLink in _bipLinks)
+                foreach (var bipLink in BIPLinkHashSet)
                 {
                     if (bipLink.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && bipLink.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                     {
@@ -820,20 +802,20 @@ namespace NonVisuals.Panels.Saitek.Panels
             if (controlListPZ55 == ControlList.ALL || controlListPZ55 == ControlList.OSCOMMANDS)
             {
                 OSCommandBindingPZ55 operatingSystemCommandBindingPZ55 = null;
-                for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
+                for (int i = 0; i < OSCommandList.Count; i++)
                 {
-                    var operatingSystemCommand = _operatingSystemCommandBindings[i];
+                    var operatingSystemCommand = OSCommandList[i];
 
                     if (operatingSystemCommand.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && operatingSystemCommand.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                     {
-                        operatingSystemCommandBindingPZ55 = _operatingSystemCommandBindings[i];
+                        operatingSystemCommandBindingPZ55 = OSCommandList[i];
                         found = true;
                     }
                 }
 
                 if (operatingSystemCommandBindingPZ55 != null)
                 {
-                    _operatingSystemCommandBindings.Remove(operatingSystemCommandBindingPZ55);
+                    OSCommandList.Remove(operatingSystemCommandBindingPZ55);
                 }
             }
 
@@ -996,62 +978,6 @@ namespace NonVisuals.Panels.Saitek.Panels
         {
             // _switchPanelKeys = SwitchPanelKey.GetPanelSwitchKeys();
             SaitekPanelKnobs = SwitchPanelKey.GetPanelSwitchKeys();
-        }
-
-        public HashSet<DCSBIOSActionBindingPZ55> DCSBiosBindings
-        {
-            get => _dcsBiosBindings;
-            set => _dcsBiosBindings = value;
-        }
-
-        public bool ManualLandingGearLEDs
-        {
-            get => _manualLandingGearLeds;
-            set
-            {
-                _manualLandingGearLeds = value;
-                SetIsDirty();
-            }
-        }
-
-        public PanelLEDColor ManualLandingGearLEDsColorDown
-        {
-            get => _manualLandingGearLedsColorDown;
-            set
-            {
-                _manualLandingGearLedsColorDown = value;
-                SetIsDirty();
-            }
-        }
-
-        public PanelLEDColor ManualLandingGearLEDsColorUp
-        {
-            get => _manualLandingGearLedsColorUp;
-            set
-            {
-                _manualLandingGearLedsColorUp = value;
-                SetIsDirty();
-            }
-        }
-
-        public PanelLEDColor ManualLandingGearLEDsColorTrans
-        {
-            get => _manualLandingGearLedsColorTrans;
-            set
-            {
-                _manualLandingGearLedsColorTrans = value;
-                SetIsDirty();
-            }
-        }
-
-        public int ManualLandingGearTransTimeSeconds
-        {
-            get => _manualLandingGearTransTimeSeconds;
-            set
-            {
-                _manualLandingGearTransTimeSeconds = value;
-                SetIsDirty();
-            }
         }
     }
 
