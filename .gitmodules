@@ -1,0 +1,3 @@
+[submodule "src/DCSFPCommon"]
+	path = src/DCSFPCommon
+	url = https://github.com/DCS-Skunkworks/DCSFPCommon

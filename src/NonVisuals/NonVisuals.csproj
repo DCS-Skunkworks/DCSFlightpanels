@@ -26,8 +26,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj" />
-    <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
+    <ProjectReference Include="..\DCSFPCommon\src\ClassLibraryCommon\ClassLibraryCommon.csproj" />
+    <ProjectReference Include="..\DCSFPCommon\src\DCS-BIOS\DCS-BIOS.csproj" />
     <ProjectReference Include="..\HidLibrary\HidLibrary.csproj" />
     <ProjectReference Include="..\MEF\MEF.csproj" />
     <ProjectReference Include="..\StreamDeckSharp\StreamDeckSharp\StreamDeckSharp.csproj" />
