@@ -1,6 +1,7 @@
 ﻿using DCSFPTests.Serialization.Common;
 using Newtonsoft.Json;
 using NonVisuals.BindingClasses.OSCommand;
+using System.Collections.Generic;
 using Xunit;
 
 namespace DCSFPTests.Serialization {
@@ -29,6 +30,14 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(s.SwitchPanelPZ55Key, deseralizedObjFromFile.SwitchPanelPZ55Key);
             Assert.Equal(s.WhenTurnedOn, deseralizedObjFromFile.WhenTurnedOn);
             DeepAssert.Equal(s.OSCommandObject, deseralizedObjFromFile.OSCommandObject);
+        }
+
+        public static HashSet<OSCommandBindingPZ55> GetObjects() {
+            HashSet<OSCommandBindingPZ55> hashSet = new();
+            for (int i = 0; i < 3; i++) {
+                hashSet.Add(GetObject(i));
+            }
+            return hashSet;
         }
 
         private static OSCommandBindingPZ55 GetObject(int instanceNbr = 1) {
