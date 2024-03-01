@@ -1,6 +1,7 @@
 ﻿using DCSFPTests.Serialization.Common;
 using Newtonsoft.Json;
 using NonVisuals.BindingClasses.BIP;
+using System.Collections.Generic;
 using Xunit;
 
 namespace DCSFPTests.Serialization {
@@ -28,6 +29,14 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(s.WhenTurnedOn, deseralizedObjFromFile.WhenTurnedOn);
             Assert.Equal(s.Description, deseralizedObjFromFile.Description);
             DeepAssert.Equal(s.BIPLights, deseralizedObjFromFile.BIPLights);
+        }
+
+        public static HashSet<BIPLinkPZ55> GetObjects() {
+            HashSet<BIPLinkPZ55> hashSet = new();
+            for (int i = 0; i < 3; i++) {
+                hashSet.Add(GetObject(i));
+            }
+            return hashSet;
         }
 
         private static BIPLinkPZ55 GetObject(int instanceNbr = 1) {

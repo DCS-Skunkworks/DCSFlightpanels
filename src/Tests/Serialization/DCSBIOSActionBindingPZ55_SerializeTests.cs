@@ -1,6 +1,7 @@
 ﻿using DCSFPTests.Serialization.Common;
 using Newtonsoft.Json;
 using NonVisuals.BindingClasses.DCSBIOSBindings;
+using System.Collections.Generic;
 using Xunit;
 
 namespace DCSFPTests.Serialization {
@@ -30,6 +31,14 @@ namespace DCSFPTests.Serialization {
             Assert.Equal(s.Description, deseralizedObjFromFile.Description);
             Assert.Equal(s.IsSequenced, deseralizedObjFromFile.IsSequenced);
             DeepAssert.Equal(s.DCSBIOSInputs, deseralizedObjFromFile.DCSBIOSInputs);
+        }
+
+        public static HashSet<DCSBIOSActionBindingPZ55> GetObjects() {
+            HashSet<DCSBIOSActionBindingPZ55> hashSet = new();
+            for (int i = 0; i<3; i++) {
+                hashSet.Add(GetObject(i));
+            }
+            return hashSet;
         }
 
         private static DCSBIOSActionBindingPZ55 GetObject(int instanceNbr = 1) {

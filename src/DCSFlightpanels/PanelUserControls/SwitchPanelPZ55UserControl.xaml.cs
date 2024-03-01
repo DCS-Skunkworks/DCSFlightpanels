@@ -811,6 +811,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_switchPanelPZ55 != null)
                 {
                     _switchPanelPZ55.ManualLandingGearLEDs = CheckBoxManualLeDs.IsChecked.HasValue && CheckBoxManualLeDs.IsChecked.Value;
+                    _switchPanelPZ55.SetIsDirty();
                 }
             }
             catch (Exception ex)
@@ -954,21 +955,25 @@ namespace DCSFlightpanels.PanelUserControls
         private void ManualLedUpCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _switchPanelPZ55.ManualLandingGearLEDsColorUp = (PanelLEDColor)((ComboBox)sender).SelectedValue;
+            _switchPanelPZ55.SetIsDirty();
         }
 
         private void ManualLedTransCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _switchPanelPZ55.ManualLandingGearLEDsColorTrans = (PanelLEDColor)((ComboBox)sender).SelectedValue;
+            _switchPanelPZ55.SetIsDirty();
         }
 
         private void ManualLedDownCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _switchPanelPZ55.ManualLandingGearLEDsColorDown = (PanelLEDColor)((ComboBox)sender).SelectedValue;
+            _switchPanelPZ55.SetIsDirty();
         }
 
         private void ManualLedTransSecondsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _switchPanelPZ55.ManualLandingGearTransTimeSeconds = (int)((ComboBox)sender).SelectedValue;
+            _switchPanelPZ55.SetIsDirty();
         }
 
         private void SetManualLedColorsSelectionVisibility(bool isVisible)

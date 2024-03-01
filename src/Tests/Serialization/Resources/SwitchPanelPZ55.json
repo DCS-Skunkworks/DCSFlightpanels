@@ -1,0 +1,717 @@
+{
+  "$type": "NonVisuals.Panels.Saitek.Panels.SwitchPanelPZ55, NonVisuals",
+  "DCSBiosBindings": {
+    "$type": "System.Collections.Generic.HashSet`1[[NonVisuals.BindingClasses.DCSBIOSBindings.DCSBIOSActionBindingPZ55, NonVisuals]], System.Private.CoreLib",
+    "$values": [
+      {
+        "$type": "NonVisuals.BindingClasses.DCSBIOSBindings.DCSBIOSActionBindingPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 8,
+        "WhenTurnedOn": true,
+        "Description": "iiu kkh 0",
+        "DCSBIOSInputs": {
+          "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS]], System.Private.CoreLib",
+          "$values": [
+            {
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS",
+              "SelectedDCSBIOSInterface": {
+                "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                "Delay": 1,
+                "ControlId": "ijw evv 1",
+                "Description": "urt vdf 1",
+                "Interface": 4,
+                "MaxValue": 2,
+                "SuggestedStep": 3,
+                "SpecifiedActionArgument": "dov csd 1",
+                "SpecifiedSetStateArgument": 4,
+                "SpecifiedVariableStepArgument": 5,
+                "SpecifiedFixedStepArgument": 0,
+                "SpecifiedSetStringArgument": "sdd vbn",
+                "SelectedArgumentValue": "sdd vbn"
+              },
+              "ControlId": "uyt ffs 2",
+              "Delay": 1,
+              "ControlDescription": "ikf xsd 2",
+              "DCSBIOSInputInterfaces": {
+                "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
+                "$values": [
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 1",
+                    "Description": "urt vdf 1",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 1",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 5,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  },
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 2",
+                    "Description": "urt vdf 2",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 2",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 6,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  }
+                ]
+              }
+            },
+            {
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS",
+              "SelectedDCSBIOSInterface": {
+                "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                "Delay": 1,
+                "ControlId": "ijw evv 1",
+                "Description": "urt vdf 1",
+                "Interface": 4,
+                "MaxValue": 2,
+                "SuggestedStep": 3,
+                "SpecifiedActionArgument": "dov csd 1",
+                "SpecifiedSetStateArgument": 4,
+                "SpecifiedVariableStepArgument": 5,
+                "SpecifiedFixedStepArgument": 0,
+                "SpecifiedSetStringArgument": "sdd vbn",
+                "SelectedArgumentValue": "sdd vbn"
+              },
+              "ControlId": "uyt ffs 3",
+              "Delay": 1,
+              "ControlDescription": "ikf xsd 3",
+              "DCSBIOSInputInterfaces": {
+                "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
+                "$values": [
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 1",
+                    "Description": "urt vdf 1",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 1",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 5,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  },
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 2",
+                    "Description": "urt vdf 2",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 2",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 6,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "WhenOnTurnedOn": true,
+        "IsSequenced": true
+      },
+      {
+        "$type": "NonVisuals.BindingClasses.DCSBIOSBindings.DCSBIOSActionBindingPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 16,
+        "WhenTurnedOn": true,
+        "Description": "iiu kkh 1",
+        "DCSBIOSInputs": {
+          "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS]], System.Private.CoreLib",
+          "$values": [
+            {
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS",
+              "SelectedDCSBIOSInterface": {
+                "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                "Delay": 1,
+                "ControlId": "ijw evv 1",
+                "Description": "urt vdf 1",
+                "Interface": 4,
+                "MaxValue": 2,
+                "SuggestedStep": 3,
+                "SpecifiedActionArgument": "dov csd 1",
+                "SpecifiedSetStateArgument": 4,
+                "SpecifiedVariableStepArgument": 5,
+                "SpecifiedFixedStepArgument": 0,
+                "SpecifiedSetStringArgument": "sdd vbn",
+                "SelectedArgumentValue": "sdd vbn"
+              },
+              "ControlId": "uyt ffs 3",
+              "Delay": 1,
+              "ControlDescription": "ikf xsd 3",
+              "DCSBIOSInputInterfaces": {
+                "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
+                "$values": [
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 1",
+                    "Description": "urt vdf 1",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 1",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 5,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  },
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 2",
+                    "Description": "urt vdf 2",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 2",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 6,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  }
+                ]
+              }
+            },
+            {
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS",
+              "SelectedDCSBIOSInterface": {
+                "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                "Delay": 1,
+                "ControlId": "ijw evv 1",
+                "Description": "urt vdf 1",
+                "Interface": 4,
+                "MaxValue": 2,
+                "SuggestedStep": 3,
+                "SpecifiedActionArgument": "dov csd 1",
+                "SpecifiedSetStateArgument": 4,
+                "SpecifiedVariableStepArgument": 5,
+                "SpecifiedFixedStepArgument": 0,
+                "SpecifiedSetStringArgument": "sdd vbn",
+                "SelectedArgumentValue": "sdd vbn"
+              },
+              "ControlId": "uyt ffs 4",
+              "Delay": 1,
+              "ControlDescription": "ikf xsd 4",
+              "DCSBIOSInputInterfaces": {
+                "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
+                "$values": [
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 1",
+                    "Description": "urt vdf 1",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 1",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 5,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  },
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 2",
+                    "Description": "urt vdf 2",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 2",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 6,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "WhenOnTurnedOn": true,
+        "IsSequenced": true
+      },
+      {
+        "$type": "NonVisuals.BindingClasses.DCSBIOSBindings.DCSBIOSActionBindingPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 32,
+        "WhenTurnedOn": true,
+        "Description": "iiu kkh 2",
+        "DCSBIOSInputs": {
+          "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS]], System.Private.CoreLib",
+          "$values": [
+            {
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS",
+              "SelectedDCSBIOSInterface": {
+                "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                "Delay": 1,
+                "ControlId": "ijw evv 1",
+                "Description": "urt vdf 1",
+                "Interface": 4,
+                "MaxValue": 2,
+                "SuggestedStep": 3,
+                "SpecifiedActionArgument": "dov csd 1",
+                "SpecifiedSetStateArgument": 4,
+                "SpecifiedVariableStepArgument": 5,
+                "SpecifiedFixedStepArgument": 0,
+                "SpecifiedSetStringArgument": "sdd vbn",
+                "SelectedArgumentValue": "sdd vbn"
+              },
+              "ControlId": "uyt ffs 4",
+              "Delay": 1,
+              "ControlDescription": "ikf xsd 4",
+              "DCSBIOSInputInterfaces": {
+                "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
+                "$values": [
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 1",
+                    "Description": "urt vdf 1",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 1",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 5,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  },
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 2",
+                    "Description": "urt vdf 2",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 2",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 6,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  }
+                ]
+              }
+            },
+            {
+              "$type": "DCS_BIOS.Serialized.DCSBIOSInput, DCS-BIOS",
+              "SelectedDCSBIOSInterface": {
+                "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                "Delay": 1,
+                "ControlId": "ijw evv 1",
+                "Description": "urt vdf 1",
+                "Interface": 4,
+                "MaxValue": 2,
+                "SuggestedStep": 3,
+                "SpecifiedActionArgument": "dov csd 1",
+                "SpecifiedSetStateArgument": 4,
+                "SpecifiedVariableStepArgument": 5,
+                "SpecifiedFixedStepArgument": 0,
+                "SpecifiedSetStringArgument": "sdd vbn",
+                "SelectedArgumentValue": "sdd vbn"
+              },
+              "ControlId": "uyt ffs 5",
+              "Delay": 1,
+              "ControlDescription": "ikf xsd 5",
+              "DCSBIOSInputInterfaces": {
+                "$type": "System.Collections.Generic.List`1[[DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS]], System.Private.CoreLib",
+                "$values": [
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 1",
+                    "Description": "urt vdf 1",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 1",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 5,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  },
+                  {
+                    "$type": "DCS_BIOS.Serialized.DCSBIOSInputInterface, DCS-BIOS",
+                    "Delay": 1,
+                    "ControlId": "ijw evv 2",
+                    "Description": "urt vdf 2",
+                    "Interface": 4,
+                    "MaxValue": 2,
+                    "SuggestedStep": 3,
+                    "SpecifiedActionArgument": "dov csd 2",
+                    "SpecifiedSetStateArgument": 4,
+                    "SpecifiedVariableStepArgument": 6,
+                    "SpecifiedFixedStepArgument": 0,
+                    "SpecifiedSetStringArgument": "sdd vbn",
+                    "SelectedArgumentValue": "sdd vbn"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "WhenOnTurnedOn": true,
+        "IsSequenced": true
+      }
+    ]
+  },
+  "KeyBindingsHashSet": {
+    "$type": "System.Collections.Generic.HashSet`1[[NonVisuals.BindingClasses.Key.KeyBindingPZ55, NonVisuals]], System.Private.CoreLib",
+    "$values": [
+      {
+        "$type": "NonVisuals.BindingClasses.Key.KeyBindingPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 0,
+        "OSKeyPress": {
+          "$type": "NonVisuals.KeyEmulation.KeyPress, NonVisuals",
+          "Information": "ecw azs 0",
+          "Description": "wws zze 0",
+          "KeyPressSequence": {
+            "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[MEF.IKeyPressInfo, MEF]], System.Collections",
+            "0": {
+              "$type": "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals",
+              "LengthOfBreak": 1500,
+              "LengthOfKeyPress": 32,
+              "VirtualKeyCodes": {
+                "$type": "System.Collections.Generic.HashSet`1[[MEF.VirtualKeyCode, MEF]], System.Private.CoreLib",
+                "$values": [
+                  84,
+                  117,
+                  86,
+                  162
+                ]
+              }
+            },
+            "1": {
+              "$type": "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals",
+              "LengthOfBreak": 32,
+              "LengthOfKeyPress": 500,
+              "VirtualKeyCodes": {
+                "$type": "System.Collections.Generic.HashSet`1[[MEF.VirtualKeyCode, MEF]], System.Private.CoreLib",
+                "$values": [
+                  117,
+                  86,
+                  162,
+                  32
+                ]
+              }
+            }
+          },
+          "Abort": true
+        },
+        "WhenTurnedOn": true
+      },
+      {
+        "$type": "NonVisuals.BindingClasses.Key.KeyBindingPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 0,
+        "OSKeyPress": {
+          "$type": "NonVisuals.KeyEmulation.KeyPress, NonVisuals",
+          "Information": "ecw azs 1",
+          "Description": "wws zze 1",
+          "KeyPressSequence": {
+            "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[MEF.IKeyPressInfo, MEF]], System.Collections",
+            "1": {
+              "$type": "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals",
+              "LengthOfBreak": 32,
+              "LengthOfKeyPress": 500,
+              "VirtualKeyCodes": {
+                "$type": "System.Collections.Generic.HashSet`1[[MEF.VirtualKeyCode, MEF]], System.Private.CoreLib",
+                "$values": [
+                  117,
+                  86,
+                  162,
+                  32
+                ]
+              }
+            },
+            "2": {
+              "$type": "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals",
+              "LengthOfBreak": 500,
+              "LengthOfKeyPress": 2000,
+              "VirtualKeyCodes": {
+                "$type": "System.Collections.Generic.HashSet`1[[MEF.VirtualKeyCode, MEF]], System.Private.CoreLib",
+                "$values": [
+                  86,
+                  162,
+                  32,
+                  46
+                ]
+              }
+            }
+          },
+          "Abort": true
+        },
+        "WhenTurnedOn": true
+      },
+      {
+        "$type": "NonVisuals.BindingClasses.Key.KeyBindingPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 2,
+        "OSKeyPress": {
+          "$type": "NonVisuals.KeyEmulation.KeyPress, NonVisuals",
+          "Information": "ecw azs 2",
+          "Description": "wws zze 2",
+          "KeyPressSequence": {
+            "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[MEF.IKeyPressInfo, MEF]], System.Collections",
+            "2": {
+              "$type": "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals",
+              "LengthOfBreak": 500,
+              "LengthOfKeyPress": 2000,
+              "VirtualKeyCodes": {
+                "$type": "System.Collections.Generic.HashSet`1[[MEF.VirtualKeyCode, MEF]], System.Private.CoreLib",
+                "$values": [
+                  86,
+                  162,
+                  32,
+                  46
+                ]
+              }
+            },
+            "3": {
+              "$type": "NonVisuals.KeyEmulation.KeyPressInfo, NonVisuals",
+              "LengthOfBreak": 2000,
+              "LengthOfKeyPress": 5000,
+              "VirtualKeyCodes": {
+                "$type": "System.Collections.Generic.HashSet`1[[MEF.VirtualKeyCode, MEF]], System.Private.CoreLib",
+                "$values": [
+                  162,
+                  32,
+                  46,
+                  112
+                ]
+              }
+            }
+          },
+          "Abort": true
+        },
+        "WhenTurnedOn": true
+      }
+    ]
+  },
+  "OSCommandList": {
+    "$type": "System.Collections.Generic.List`1[[NonVisuals.BindingClasses.OSCommand.OSCommandBindingPZ55, NonVisuals]], System.Private.CoreLib",
+    "$values": [
+      {
+        "$type": "NonVisuals.BindingClasses.OSCommand.OSCommandBindingPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 8,
+        "WhenTurnedOn": true,
+        "OSCommandObject": {
+          "$type": "NonVisuals.OSCommand, NonVisuals",
+          "Command": "ggt ooi 5",
+          "Arguments": "bvr opm 5",
+          "Name": "hrv kfp 5",
+          "IsEmpty": false
+        }
+      },
+      {
+        "$type": "NonVisuals.BindingClasses.OSCommand.OSCommandBindingPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 16,
+        "WhenTurnedOn": true,
+        "OSCommandObject": {
+          "$type": "NonVisuals.OSCommand, NonVisuals",
+          "Command": "ggt ooi 6",
+          "Arguments": "bvr opm 6",
+          "Name": "hrv kfp 6",
+          "IsEmpty": false
+        }
+      },
+      {
+        "$type": "NonVisuals.BindingClasses.OSCommand.OSCommandBindingPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 32,
+        "WhenTurnedOn": true,
+        "OSCommandObject": {
+          "$type": "NonVisuals.OSCommand, NonVisuals",
+          "Command": "ggt ooi 7",
+          "Arguments": "bvr opm 7",
+          "Name": "hrv kfp 7",
+          "IsEmpty": false
+        }
+      }
+    ]
+  },
+  "BIPLinkHashSet": {
+    "$type": "System.Collections.Generic.HashSet`1[[NonVisuals.BindingClasses.BIP.BIPLinkPZ55, NonVisuals]], System.Private.CoreLib",
+    "$values": [
+      {
+        "$type": "NonVisuals.BindingClasses.BIP.BIPLinkPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 8,
+        "BIPLights": {
+          "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[NonVisuals.Panels.Saitek.BIPLight, NonVisuals]], System.Collections",
+          "0": {
+            "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+            "LEDColor": 0,
+            "BIPLedPosition": 0,
+            "DelayBefore": 0,
+            "BindingHash": "dre tiy 1",
+            "Separator": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "|"
+              ]
+            }
+          },
+          "1": {
+            "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+            "LEDColor": 1,
+            "BIPLedPosition": 1,
+            "DelayBefore": 50,
+            "BindingHash": "dre tiy 2",
+            "Separator": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "|"
+              ]
+            }
+          },
+          "2": {
+            "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+            "LEDColor": 2,
+            "BIPLedPosition": 2,
+            "DelayBefore": 100,
+            "BindingHash": "dre tiy 3",
+            "Separator": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "|"
+              ]
+            }
+          }
+        },
+        "WhenTurnedOn": true,
+        "Description": "hgh ido 0"
+      },
+      {
+        "$type": "NonVisuals.BindingClasses.BIP.BIPLinkPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 16,
+        "BIPLights": {
+          "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[NonVisuals.Panels.Saitek.BIPLight, NonVisuals]], System.Collections",
+          "1": {
+            "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+            "LEDColor": 1,
+            "BIPLedPosition": 1,
+            "DelayBefore": 50,
+            "BindingHash": "dre tiy 2",
+            "Separator": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "|"
+              ]
+            }
+          },
+          "2": {
+            "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+            "LEDColor": 2,
+            "BIPLedPosition": 2,
+            "DelayBefore": 100,
+            "BindingHash": "dre tiy 3",
+            "Separator": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "|"
+              ]
+            }
+          },
+          "3": {
+            "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+            "LEDColor": 4,
+            "BIPLedPosition": 3,
+            "DelayBefore": 200,
+            "BindingHash": "dre tiy 4",
+            "Separator": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "|"
+              ]
+            }
+          }
+        },
+        "WhenTurnedOn": true,
+        "Description": "hgh ido 1"
+      },
+      {
+        "$type": "NonVisuals.BindingClasses.BIP.BIPLinkPZ55, NonVisuals",
+        "SwitchPanelPZ55Key": 32,
+        "BIPLights": {
+          "$type": "System.Collections.Generic.SortedList`2[[System.Int32, System.Private.CoreLib],[NonVisuals.Panels.Saitek.BIPLight, NonVisuals]], System.Collections",
+          "2": {
+            "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+            "LEDColor": 2,
+            "BIPLedPosition": 2,
+            "DelayBefore": 100,
+            "BindingHash": "dre tiy 3",
+            "Separator": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "|"
+              ]
+            }
+          },
+          "3": {
+            "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+            "LEDColor": 4,
+            "BIPLedPosition": 3,
+            "DelayBefore": 200,
+            "BindingHash": "dre tiy 4",
+            "Separator": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "|"
+              ]
+            }
+          },
+          "4": {
+            "$type": "NonVisuals.Panels.Saitek.BIPLight, NonVisuals",
+            "LEDColor": 1,
+            "BIPLedPosition": 4,
+            "DelayBefore": 300,
+            "BindingHash": "dre tiy 5",
+            "Separator": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "|"
+              ]
+            }
+          }
+        },
+        "WhenTurnedOn": true,
+        "Description": "hgh ido 2"
+      }
+    ]
+  },
+  "ManualLandingGearLEDs": false,
+  "ManualLandingGearLEDsColorDown": 0,
+  "ManualLandingGearLEDsColorUp": 1,
+  "ManualLandingGearLEDsColorTrans": 2,
+  "ManualLandingGearTransTimeSeconds": 7,
+  "IsDirty": false,
+  "SettingsLoading": false,
+  "TypeOfPanel": 3431,
+  "ForwardPanelEvent": false,
+  "VendorId": 1699,
+  "ProductId": 3431,
+  "HIDInstance": "FakeHidInstanceForTests",
+  "BindingHash": "e0bb02a4b46459d211ba5cef6ec20358"
+}

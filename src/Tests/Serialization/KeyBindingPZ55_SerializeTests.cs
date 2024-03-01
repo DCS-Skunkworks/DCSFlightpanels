@@ -3,6 +3,7 @@ using Xunit;
 using Newtonsoft.Json;
 using NonVisuals.BindingClasses.Key;
 using MEF;
+using System.Collections.Generic;
 
 namespace DCSFPTests.Serialization {
     public class KeyBindingPZ55_SerializeTests {
@@ -60,6 +61,14 @@ namespace DCSFPTests.Serialization {
                 20 => SwitchPanelPZ55Keys.LEVER_GEAR_DOWN,
                 _ => SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT
             };
+        }
+
+        public static HashSet<KeyBindingPZ55> GetObjects() {
+            HashSet<KeyBindingPZ55> hashSet = new();
+            for (int i = 0; i < 3; i++) {
+                hashSet.Add(GetObject(i));
+            }
+            return hashSet;
         }
 
         private static KeyBindingPZ55 GetObject(int instanceNbr = 1) {
