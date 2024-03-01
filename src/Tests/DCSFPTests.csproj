@@ -34,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj" />
     <ProjectReference Include="..\DCSFlightpanels\DCSFlightpanels.csproj" />
     <ProjectReference Include="..\NonVisuals\NonVisuals.csproj" />
   </ItemGroup>
