@@ -27,6 +27,15 @@ namespace DCS_BIOS.Json
 
         [JsonProperty("max_length", Required = Required.Default)]
         public int MaxLength { get; set; }
+        
+        [JsonProperty("address_identifier", Required = Required.Default)]
+        public string AddressIdentifier { get; set; }
+
+        [JsonProperty("address_mask_identifier", Required = Required.Default)]
+        public string AddressMaskIdentifier { get; set; }
+
+        [JsonProperty("address_mask_shift_identifier", Required = Required.Default)]
+        public string AddressMaskShiftIdentifier { get; set; }
 
         [JsonProperty("type", Required = Required.Default)]
         public string Type
