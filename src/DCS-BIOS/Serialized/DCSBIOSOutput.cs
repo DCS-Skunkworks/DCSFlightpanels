@@ -46,23 +46,13 @@ namespace DCS_BIOS.Serialized
     [SerializeCritical]
     public class DCSBIOSOutput
     {
-        // These are loaded and saved, all the rest are fetched from DCS-BIOS
-        private string _controlId;
-
         // The target value used for comparison as chosen by the user
         private uint _specifiedValueUInt;
 
-        private string _controlDescription;
-        private int _maxValue;
         private uint _address;
-        private uint _mask;
-        private int _shiftValue;
-        private int _maxLength;
         private volatile uint _lastUIntValue = uint.MaxValue;
         private volatile string _lastStringValue = "";
-        private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.None;
-        private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
-        private bool _uintValueHasChanged = false;
+        private bool _uintValueHasChanged;
 
         [NonSerialized] private object _lockObject = new();
 
@@ -74,7 +64,6 @@ namespace DCS_BIOS.Serialized
                 ControlId = dcsbiosOutput.ControlId,
                 Address = dcsbiosOutput.Address,
                 ControlDescription = dcsbiosOutput.ControlDescription,
-                //ControlType = dcsbiosOutput.ControlType,
                 DCSBiosOutputComparison = dcsbiosOutput.DCSBiosOutputComparison,
                 Mask = dcsbiosOutput.Mask,
                 MaxLength = dcsbiosOutput.MaxLength,
@@ -98,12 +87,15 @@ namespace DCS_BIOS.Serialized
             ControlId = dcsbiosOutput.ControlId;
             Address = dcsbiosOutput.Address;
             ControlDescription = dcsbiosOutput.ControlDescription;
-            //ControlType = dcsbiosOutput.ControlType;
             DCSBiosOutputComparison = dcsbiosOutput.DCSBiosOutputComparison;
             Mask = dcsbiosOutput.Mask;
             MaxLength = dcsbiosOutput.MaxLength;
             MaxValue = dcsbiosOutput.MaxValue;
             ShiftValue = dcsbiosOutput.ShiftValue;
+            AddressIdentifier = dcsbiosOutput.AddressIdentifier;
+            AddressMaskIdentifier = dcsbiosOutput.AddressMaskIdentifier;
+            AddressMaskShiftIdentifier = dcsbiosOutput.AddressMaskShiftIdentifier;
+
             if (DCSBiosOutputType == DCSBiosOutputType.IntegerType)
             {
                 SpecifiedValueUInt = dcsbiosOutput.SpecifiedValueUInt;
@@ -111,13 +103,13 @@ namespace DCS_BIOS.Serialized
         }
         public void Consume(DCSBIOSControl dcsbiosControl, DCSBiosOutputType dcsBiosOutputType)
         {
-            _controlId = dcsbiosControl.Identifier;
-            _controlDescription = dcsbiosControl.Description;
+            ControlId = dcsbiosControl.Identifier;
+            ControlDescription = dcsbiosControl.Description;
             try
             {
                 if (!dcsbiosControl.HasOutput())
                 {
-                    _dcsBiosOutputType = DCSBiosOutputType.None;
+                    DCSBiosOutputType = DCSBiosOutputType.None;
                     return;
                 }
 
@@ -125,12 +117,16 @@ namespace DCS_BIOS.Serialized
                 {
                     if (dcsbiosControlOutput.OutputDataType == dcsBiosOutputType)
                     {
-                        _dcsBiosOutputType = dcsbiosControlOutput.OutputDataType;
+                        DCSBiosOutputType = dcsbiosControlOutput.OutputDataType;
                         _address = dcsbiosControlOutput.Address;
-                        _mask = dcsbiosControlOutput.Mask;
-                        _maxValue = dcsbiosControlOutput.MaxValue;
-                        _maxLength = dcsbiosControlOutput.MaxLength;
-                        _shiftValue = dcsbiosControlOutput.ShiftBy;
+                        Mask = dcsbiosControlOutput.Mask;
+                        MaxValue = dcsbiosControlOutput.MaxValue;
+                        MaxLength = dcsbiosControlOutput.MaxLength;
+                        ShiftValue = dcsbiosControlOutput.ShiftBy;
+
+                        AddressIdentifier = dcsbiosControlOutput.AddressIdentifier;
+                        AddressMaskIdentifier = dcsbiosControlOutput.AddressMaskIdentifier;
+                        AddressMaskShiftIdentifier = dcsbiosControlOutput.AddressMaskShiftIdentifier;
 
                         if (dcsBiosOutputType == DCSBiosOutputType.StringType)
                         {
@@ -143,7 +139,7 @@ namespace DCS_BIOS.Serialized
             }
             catch (Exception)
             {
-                throw new Exception($"Failed to copy control {_controlId}. Control output is missing.{Environment.NewLine}");
+                throw new Exception($"Failed to copy control {ControlId}. Control output is missing.{Environment.NewLine}");
             }
         }
 
@@ -270,12 +266,12 @@ namespace DCS_BIOS.Serialized
 
         public override string ToString()
         {
-            if (_dcsBiosOutputType == DCSBiosOutputType.StringType)
+            if (DCSBiosOutputType == DCSBiosOutputType.StringType)
             {
                 return "";
             }
 
-            return "DCSBiosOutput{" + _controlId + "|" + _dcsBiosOutputComparison + "|" + _specifiedValueUInt + "}";
+            return "DCSBiosOutput{" + ControlId + "|" + DCSBiosOutputComparison + "|" + _specifiedValueUInt + "}";
         }
 
         public void ImportString(string str)
@@ -296,19 +292,15 @@ namespace DCS_BIOS.Serialized
 
             // AAP_EGIPWR|Equals|0
             var entries = value.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-            _controlId = entries[0];
-            var dcsBIOSControl = DCSBIOSControlLocator.GetControl(_controlId);
+            ControlId = entries[0];
+            var dcsBIOSControl = DCSBIOSControlLocator.GetControl(ControlId);
             Consume(dcsBIOSControl, DCSBiosOutputType.IntegerType);
-            _dcsBiosOutputComparison = (DCSBiosOutputComparison)Enum.Parse(typeof(DCSBiosOutputComparison), entries[1]);
+            DCSBiosOutputComparison = (DCSBiosOutputComparison)Enum.Parse(typeof(DCSBiosOutputComparison), entries[1]);
             _specifiedValueUInt = (uint)int.Parse(entries[2]);
         }
 
         [JsonProperty("ControlId", Required = Required.Default)]
-        public string ControlId
-        {
-            get => _controlId;
-            set => _controlId = value;
-        }
+        public string ControlId { get; set; }
 
         [JsonProperty("Address", Required = Required.Default)]
         public uint Address
@@ -322,32 +314,16 @@ namespace DCS_BIOS.Serialized
         }
 
         [JsonProperty("Mask", Required = Required.Default)]
-        public uint Mask
-        {
-            get => _mask;
-            set => _mask = value;
-        }
+        public uint Mask { get; set; }
 
         [JsonProperty("Shiftvalue", Required = Required.Default)]
-        public int ShiftValue
-        {
-            get => _shiftValue;
-            set => _shiftValue = value;
-        }
+        public int ShiftValue { get; set; }
 
         [JsonProperty("DCSBiosOutputType", Required = Required.Default)]
-        public DCSBiosOutputType DCSBiosOutputType
-        {
-            get => _dcsBiosOutputType;
-            set => _dcsBiosOutputType = value;
-        }
+        public DCSBiosOutputType DCSBiosOutputType { get; set; } = DCSBiosOutputType.None;
 
         [JsonProperty("DCSBiosOutputComparison", Required = Required.Default)]
-        public DCSBiosOutputComparison DCSBiosOutputComparison
-        {
-            get => _dcsBiosOutputComparison;
-            set => _dcsBiosOutputComparison = value;
-        }
+        public DCSBiosOutputComparison DCSBiosOutputComparison { get; set; } = DCSBiosOutputComparison.Equals;
 
         [JsonIgnore]
         public uint SpecifiedValueUInt
@@ -365,25 +341,22 @@ namespace DCS_BIOS.Serialized
         }
 
         [JsonProperty("ControlDescription", Required = Required.Default)]
-        public string ControlDescription
-        {
-            get => _controlDescription;
-            set => _controlDescription = value;
-        }
+        public string ControlDescription { get; set; }
 
         [JsonProperty("MaxValue", Required = Required.Default)]
-        public int MaxValue
-        {
-            get => _maxValue;
-            set => _maxValue = value;
-        }
+        public int MaxValue { get; set; }
+
+        [JsonIgnore]
+        public string AddressIdentifier { get; set; }
+
+        [JsonIgnore]
+        public string AddressMaskIdentifier { get; set; }
+
+        [JsonIgnore]
+        public string AddressMaskShiftIdentifier { get; set; }
 
         [JsonProperty("MaxLength", Required = Required.Default)]
-        public int MaxLength
-        {
-            get => _maxLength;
-            set => _maxLength = value;
-        }
+        public int MaxLength { get; set; }
 
         [Obsolete]
         [JsonIgnore]
@@ -423,7 +396,7 @@ namespace DCS_BIOS.Serialized
                 DCSBiosOutputType.IntegerType => "integer",
                 DCSBiosOutputType.StringType => "string",
                 DCSBiosOutputType.None => "none",
-                DCSBiosOutputType.FloatBuffer => "float buffer",
+                DCSBiosOutputType.FloatBuffer => "float",
                 DCSBiosOutputType.LED => "led",
                 DCSBiosOutputType.ServoOutput => "servo output",
                 _ => throw new Exception($"GetOutputType() : Failed to identify {DCSBiosOutputType} output type.")
