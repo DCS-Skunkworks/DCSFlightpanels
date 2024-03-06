@@ -28,19 +28,13 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
     <PackageReference Include="NLog">
-      <Version>5.1.4</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
-    <PackageReference Include="NLog">
       <Version>5.2.8</Version>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2'">
     <PackageReference Include="NLog">
-      <Version>5.1.4</Version>
+      <Version>5.2.8</Version>
     </PackageReference>
   </ItemGroup>
 
