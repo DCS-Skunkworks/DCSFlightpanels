@@ -7,7 +7,7 @@ namespace DCSFPTests.Serialization.Common
     internal class RepositorySerialized
     {
         private const string _folderPath = @"Serialization\Resources";
-        private const string _projectFolder = "Tests";
+        private const string _projectFolder = "DCSFlightpanels.Tests";
 
         private string GetMockFolderPath()
         {
