@@ -65,7 +65,7 @@ if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env
 # Tests execution For DCSFP
 #---------------------------------
 Write-Host "Starting tests execution for DCSFP" -foregroundcolor "Green"
-$testPath = $scriptPath + "\Tests"
+$testPath = $scriptPath + "\DCSFlightpanels.Tests"
 Set-Location -Path $testPath
 dotnet test
 $testsLastExitCode = $LastExitCode
@@ -75,6 +75,21 @@ if ( 0 -ne $testsLastExitCode ) {
 	exit
 }
 Write-Host "Finished tests execution for DCSFP" -foregroundcolor "Green"
+
+#---------------------------------
+# Tests execution For NonVisuals
+#---------------------------------
+Write-Host "Starting tests execution for NonVisuals" -foregroundcolor "Green"
+$testPath = $scriptPath + "\NonVisuals.Tests"
+Set-Location -Path $testPath
+dotnet test
+$testsLastExitCode = $LastExitCode
+Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
+if ( 0 -ne $testsLastExitCode ) {
+	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
+	exit
+}
+Write-Host "Finished tests execution for NonVisuals" -foregroundcolor "Green"
 
 #------------------------------------
 # Tests execution For StreamDeckSharp
