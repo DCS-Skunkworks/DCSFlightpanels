@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using NonVisuals.Radios.RadioSettings;
 
-namespace NonVisuals.Radios.RadioControls
-{
+[assembly: InternalsVisibleTo("NonVisuals.Tests")]
+namespace NonVisuals.Radios.RadioControls {
+    
     internal enum FlightRadioFrequencyBand
     {
         HF = 0,
