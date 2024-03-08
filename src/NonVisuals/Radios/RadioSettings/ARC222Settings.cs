@@ -5,7 +5,7 @@ using NonVisuals.Radios.RadioControls;
 
 namespace NonVisuals.Radios.RadioSettings
 {
-    internal class ARC222Settings : IFlightRadioSettings
+    public class ARC222Settings : IFlightRadioSettings
     {
         public FlightRadioSettings RadioSettings { get; init; }
 

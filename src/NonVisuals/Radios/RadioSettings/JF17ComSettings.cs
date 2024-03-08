@@ -7,7 +7,7 @@ namespace NonVisuals.Radios.RadioSettings
     /// <summary>
     /// Emulates the radio found in JF-17.
     /// </summary>
-    internal class JF17ComSettings : IFlightRadioSettings
+    public class JF17ComSettings : IFlightRadioSettings
     {
         public void VerifySettings()
         {
