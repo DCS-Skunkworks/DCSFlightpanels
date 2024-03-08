@@ -1,5 +1,0 @@
-﻿Feature
-{
-  0x03 0x02
-} => return True
-
