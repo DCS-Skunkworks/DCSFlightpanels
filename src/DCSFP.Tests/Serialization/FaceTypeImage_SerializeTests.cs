@@ -67,7 +67,7 @@ namespace DCSFP.Tests.Serialization {
             {
                 Text = $"wor nmp {instanceNbr}",
                 ImageFile = $"xzj kga {instanceNbr}",
-                TextFont = SystemFonts.CaptionFont,
+                TextFont = new Font(new FontFamily("Arial"), 9, FontStyle.Italic),
                 FontColor = Color.MediumVioletRed,
                 BackgroundColor = Color.GreenYellow,
                 StreamDeckButtonName = StreamDeckButton_SerializeTests.GetStreamDeckButtonNameFromInstance(instanceNbr),

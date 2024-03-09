@@ -1,7 +1,7 @@
 {
   "$type": "NonVisuals.Panels.StreamDeck.FaceTypeImage, NonVisuals",
   "FaceType": 2,
-  "TextFont": "Segoe UI, 9pt",
+  "TextFont": "Arial, 9pt, style=Italic",
   "FontColor": "MediumVioletRed",
   "BackgroundColor": "GreenYellow",
   "ImageFile": "xzj kga 1",

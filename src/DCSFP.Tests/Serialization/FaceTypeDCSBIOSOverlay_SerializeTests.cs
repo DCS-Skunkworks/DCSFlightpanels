@@ -79,7 +79,7 @@ namespace DCSFP.Tests.Serialization {
                 ButtonFinalText = $"qzd iuc {instanceNbr}",
                 BackgroundBitmapPath = $"rtt uy {instanceNbr}",
                 BackgroundBitmap = new RepositorySerialized().GetTestImageBitmap(),
-                TextFont = SystemFonts.CaptionFont,
+                TextFont = new Font(new FontFamily("Arial"), 10, FontStyle.Regular),
                 FontColor = Color.Chartreuse,
                 BackgroundColor = Color.Honeydew,
                 StreamDeckButtonName = StreamDeckButton_SerializeTests.GetStreamDeckButtonNameFromInstance(instanceNbr),

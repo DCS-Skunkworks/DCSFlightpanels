@@ -105,9 +105,9 @@ namespace DCSFP.Tests.Serialization {
                     DCSBIOSConverter_SerializeTests.GetObject(instanceNbr+3)
                 },
                 TreatStringAsNumber = true,
-                RawTextFont = new Font(new System.Drawing.FontFamily("Arial"), 15, FontStyle.Bold),
-                RawFontColor = System.Drawing.Color.BlanchedAlmond,
-                RawBackgroundColor = System.Drawing.Color.Goldenrod,
+                RawTextFont = new Font(new FontFamily("Arial"), 15, FontStyle.Bold),
+                RawFontColor = Color.BlanchedAlmond,
+                RawBackgroundColor = Color.Goldenrod,
                 DecoderSourceType = GetDCSBiosOutputTypeFromInstance(instanceNbr),
                 DecoderOutputType = GetDCSBIOSDecoderOutputTypeFromInstance(instanceNbr),
                 DefaultImageFilePath = "ycf lbs",
