@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using NonVisuals.Radios.RadioSettings;
 
+[assembly: InternalsVisibleTo("DCSFP.Tests")]
 namespace NonVisuals.Radios.RadioControls
 {
-    public enum FlightRadioFrequencyBand
+    internal enum FlightRadioFrequencyBand
     {
         HF = 0,
         VHF1 = 1,
@@ -14,7 +16,7 @@ namespace NonVisuals.Radios.RadioControls
         UHF = 3
     }
 
-    public class FlightRadio
+    internal class FlightRadio
     {
         private uint _integerFrequencyStandby;
         private uint _decimalFrequencyStandby;
@@ -28,12 +30,12 @@ namespace NonVisuals.Radios.RadioControls
         private readonly FlightRadioSettings _settings;
         private bool _isInitialized;
 
-        public FlightRadio(FlightRadioSettings flightRadioSettings)
+        internal FlightRadio(FlightRadioSettings flightRadioSettings)
         {
             _settings = flightRadioSettings;
         }
 
-        public void InitRadio()
+        internal void InitRadio()
         {
             _isInitialized = true;
             _settings.VerifySettings();
@@ -55,7 +57,7 @@ namespace NonVisuals.Radios.RadioControls
         /// Move up whole number part of standby frequency
         /// </summary>
         /// <param name="changeFaster"></param>
-        public void IntegerFrequencyUp(bool changeFaster = false)
+        internal void IntegerFrequencyUp(bool changeFaster = false)
         {
             VerifyIsInitialized();
 
@@ -75,7 +77,7 @@ namespace NonVisuals.Radios.RadioControls
         /// Move down whole number part of standby frequency
         /// </summary>
         /// <param name="changeFaster"></param>
-        public void IntegerFrequencyDown(bool changeFaster = false)
+        internal void IntegerFrequencyDown(bool changeFaster = false)
         {
             VerifyIsInitialized();
 
@@ -95,7 +97,7 @@ namespace NonVisuals.Radios.RadioControls
         /// Move up decimal part of standby frequency
         /// </summary>
         /// <param name="changeFaster"></param>
-        public void DecimalFrequencyUp(bool changeFaster = false)
+        internal void DecimalFrequencyUp(bool changeFaster = false)
         {
             VerifyIsInitialized();
 
@@ -113,7 +115,7 @@ namespace NonVisuals.Radios.RadioControls
         /// Move down decimal part of standby frequency
         /// </summary>
         /// <param name="changeFaster"></param>
-        public void DecimalFrequencyDown(bool changeFaster = false)
+        internal void DecimalFrequencyDown(bool changeFaster = false)
         {
             VerifyIsInitialized();
 
@@ -127,17 +129,17 @@ namespace NonVisuals.Radios.RadioControls
             SubtractDecimalFrequencyStandby(changeFaster ? _settings.DecimalHighChangeRates[(int)_activeFrequencyBand] : _settings.DecimalChangeRates[(int)_activeFrequencyBand]);
         }
 
-        public string StandbyFrequency => GetIntegerFrequencyStandby() + "." + GetDecimalFrequencyStandby().ToString().PadLeft(3, '0').Trim();
+        internal string StandbyFrequency => GetIntegerFrequencyStandby() + "." + GetDecimalFrequencyStandby().ToString().PadLeft(3, '0').Trim();
 
-        public string CockpitFrequency => _cockpitFrequency.Trim();
+        internal string CockpitFrequency => _cockpitFrequency.Trim();
 
-        public string ActiveFrequencyBandId => ((int)_activeFrequencyBand).ToString();
+        internal string ActiveFrequencyBandId => ((int)_activeFrequencyBand).ToString();
 
-        public string TemporaryFrequencyBandId => ((int)_tempFrequencyBand).ToString();
+        internal string TemporaryFrequencyBandId => ((int)_tempFrequencyBand).ToString();
 
-        public FlightRadioFrequencyBand TemporaryFrequencyBand => _tempFrequencyBand;
+        internal FlightRadioFrequencyBand TemporaryFrequencyBand => _tempFrequencyBand;
 
-        public void SetCockpitFrequency(string frequency)
+        internal void SetCockpitFrequency(string frequency)
         {
             VerifyIsInitialized();
 
@@ -166,7 +168,7 @@ namespace NonVisuals.Radios.RadioControls
             Debug.WriteLine(LastFrequencies());
         }
 
-        public void SwitchFrequencyBand()
+        internal void SwitchFrequencyBand()
         {
             VerifyIsInitialized();
 
@@ -192,7 +194,7 @@ namespace NonVisuals.Radios.RadioControls
             SetDecimalFrequencyStandby(uint.Parse(array[1]));
         }
 
-        public string GetDCSBIOSCommand()
+        internal string GetDCSBIOSCommand()
         {
             return $"{_settings.DCSBIOSIdentifier} {StandbyFrequency}\n";
         }
@@ -224,7 +226,7 @@ namespace NonVisuals.Radios.RadioControls
             throw new Exception("FlightRadio : Frequency not matching any frequency bands.");
         }
 
-        public void TemporaryFrequencyBandUp()
+        internal void TemporaryFrequencyBandUp()
         {
             VerifyIsInitialized();
 
@@ -257,7 +259,7 @@ namespace NonVisuals.Radios.RadioControls
             }
         }
 
-        public void TemporaryFrequencyBandDown()
+        internal void TemporaryFrequencyBandDown()
         {
             VerifyIsInitialized();
 
@@ -410,15 +412,15 @@ namespace NonVisuals.Radios.RadioControls
             return _settings.SupportedFrequencyBands.Any(supportedBand => GetFrequencyBand(frequency) == supportedBand);
         }
 
-        public FlightRadioFrequencyBand[] SupportedFrequencyBands()
+        internal FlightRadioFrequencyBand[] SupportedFrequencyBands()
         {
             return _settings.SupportedFrequencyBands;
         }
 
-        public FlightRadioFrequencyBand ActiveFrequencyBand => _activeFrequencyBand;
+        internal FlightRadioFrequencyBand ActiveFrequencyBand => _activeFrequencyBand;
 
 
-        public string GetLastStandbyFrequency(FlightRadioFrequencyBand frequencyBand)
+        internal string GetLastStandbyFrequency(FlightRadioFrequencyBand frequencyBand)
         {
             return _savedIntegerFrequencyPerBand[(int)frequencyBand] + "." + _savedDecimalFrequencyPerBand[(int)frequencyBand].ToString().PadLeft(3, '0');
         }
@@ -437,7 +439,7 @@ namespace NonVisuals.Radios.RadioControls
             }
         }
 
-        public string LastFrequencies()
+        internal string LastFrequencies()
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("\nStandby :");

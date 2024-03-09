@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace NonVisuals.Radios.RadioSettings
 {
-    public class FlightRadioSettings
+    internal class FlightRadioSettings
     {
         private const int ARRAY_LENGTH = 4;
         private FlightRadioFrequencyBand _initialFrequencyBand;

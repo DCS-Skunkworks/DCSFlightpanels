@@ -1,10 +1,12 @@
 ﻿using NonVisuals.Helpers;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios.RadioControls;
+using System.Runtime.CompilerServices;
+
 
 namespace NonVisuals.Radios.RadioSettings
 {
-    public class ARC164Settings : IFlightRadioSettings
+    internal class ARC164Settings : IFlightRadioSettings
     {
         public FlightRadioSettings RadioSettings { get; init; }
 
