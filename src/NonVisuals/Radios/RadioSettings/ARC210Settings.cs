@@ -7,7 +7,7 @@ namespace NonVisuals.Radios.RadioSettings
     /// <summary>
     /// Emulates the ARC-210 radio with 4 different bands.
     /// </summary>
-    public class ARC210Settings : IFlightRadioSettings
+    internal class ARC210Settings : IFlightRadioSettings
     {
         public void VerifySettings()
         {
