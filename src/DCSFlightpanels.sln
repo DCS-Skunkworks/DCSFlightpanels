@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DCSFPTests", "Tests\DCSFPTests.csproj", "{D80E361D-35C3-4DBD-855B-B6E5F93FC9A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DCSFP.Tests", "DCSFP.Tests\DCSFP.Tests.csproj", "{D80E361D-35C3-4DBD-855B-B6E5F93FC9A5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HidLibrary", "HidLibrary\HidLibrary.csproj", "{727A27D0-6A57-48E3-B704-A47FA93F66BE}"
 EndProject

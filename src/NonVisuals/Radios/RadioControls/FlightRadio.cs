@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using NonVisuals.Radios.RadioSettings;
 
+[assembly: InternalsVisibleTo("DCSFP.Tests")]
 namespace NonVisuals.Radios.RadioControls
 {
     internal enum FlightRadioFrequencyBand
@@ -166,7 +168,7 @@ namespace NonVisuals.Radios.RadioControls
             Debug.WriteLine(LastFrequencies());
         }
 
-        public void SwitchFrequencyBand()
+        internal void SwitchFrequencyBand()
         {
             VerifyIsInitialized();
 
@@ -415,7 +417,7 @@ namespace NonVisuals.Radios.RadioControls
             return _settings.SupportedFrequencyBands;
         }
 
-        public FlightRadioFrequencyBand ActiveFrequencyBand => _activeFrequencyBand;
+        internal FlightRadioFrequencyBand ActiveFrequencyBand => _activeFrequencyBand;
 
 
         internal string GetLastStandbyFrequency(FlightRadioFrequencyBand frequencyBand)
