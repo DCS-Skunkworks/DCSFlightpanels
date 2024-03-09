@@ -65,7 +65,7 @@ if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env
 # Tests execution For DCSFP
 #---------------------------------
 Write-Host "Starting tests execution for DCSFP" -foregroundcolor "Green"
-$testPath = $scriptPath + "\Tests"
+$testPath = $scriptPath + "\DCSFP.Tests"
 Set-Location -Path $testPath
 dotnet test
 $testsLastExitCode = $LastExitCode
