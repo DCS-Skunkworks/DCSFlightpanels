@@ -5,7 +5,7 @@ using NonVisuals;
 using NonVisuals.KeyEmulation;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals
+namespace DCSFlightpanels.Tests.NonVisuals
 {
     public class CopyPackageTests
     {

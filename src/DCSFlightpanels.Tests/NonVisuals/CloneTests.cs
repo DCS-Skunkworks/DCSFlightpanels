@@ -11,7 +11,7 @@ using NonVisuals.Panels.StreamDeck;
 using NonVisuals.Panels.StreamDeck.Panels;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals
+namespace DCSFlightpanels.Tests.NonVisuals
 {
     public class CloneTests {
 

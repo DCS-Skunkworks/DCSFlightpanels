@@ -4,8 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using MEF;
 
-namespace DCSFP.Tests
-{
+namespace DCSFlightpanels.Tests {
     /*
      * Use this class as a template for your plugin.
      * Reference the MEF project where the interface and necessary files are located.

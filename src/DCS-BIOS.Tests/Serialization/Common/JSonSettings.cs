@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace DCS_BIOS.Tests.Serialization.Common {
-    public static class JSonSettings
+    internal static class JSonSettings
     {
         public static JsonSerializerSettings JsonDefaultSettings = new()
         {
