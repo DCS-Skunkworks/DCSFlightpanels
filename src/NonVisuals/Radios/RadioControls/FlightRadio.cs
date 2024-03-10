@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using NonVisuals.Radios.RadioSettings;
 
-[assembly: InternalsVisibleTo("DCSFP.Tests")]
+[assembly: InternalsVisibleTo("NonVisuals.Tests")]
 namespace NonVisuals.Radios.RadioControls
 {
     internal enum FlightRadioFrequencyBand
