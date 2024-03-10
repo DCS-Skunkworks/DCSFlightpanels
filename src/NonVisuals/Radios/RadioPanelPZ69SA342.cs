@@ -170,7 +170,7 @@ namespace NonVisuals.Radios
         // Large dial Mode selector (VENT, C.M DEC, V.S DER, TPS CAP,P.P, BUT)
         // Small dial Doppler modes ARRET, VEILLE, TERRE, MER, ANEMO,TEST SOL.
         // Large
-        private readonly string _nadirParameter = "NADIR_PARAMETER";
+       // private readonly string _nadirParameter = "NADIR_PARAMETER";
         private readonly string _nadirDopplerMode = "NADIR_DOPPLER_MODE";
         private const string NADIR_MODE_COMMAND_INC = "NADIR_PARAMETER INC\n";
         private const string NADIR_MODE_COMMAND_DEC = "NADIR_PARAMETER DEC\n";

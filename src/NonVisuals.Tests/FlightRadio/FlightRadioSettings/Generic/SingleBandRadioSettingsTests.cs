@@ -1,9 +1,9 @@
-﻿using System;
-using NonVisuals.Radios.RadioControls;
+﻿using NonVisuals.Radios.RadioControls;
 using NonVisuals.Radios.RadioSettings;
+using System;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals.FlightRadioSettings.Generic
+namespace NonVisuals.Tests.FlightRadio.FlightRadioSettings.Generic
 {
     public class SingleBandRadioSettingsTests
     {

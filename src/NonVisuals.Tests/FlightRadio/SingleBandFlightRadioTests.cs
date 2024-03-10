@@ -2,7 +2,7 @@
 using NonVisuals.Radios.RadioSettings;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals.FlightRadio
+namespace NonVisuals.Tests.FlightRadio
 {
     public class SingleBandFlightRadioTests
     {

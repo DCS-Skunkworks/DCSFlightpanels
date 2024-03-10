@@ -32,6 +32,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DCS-BIOS", "DCSFPCommon\src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibraryCommon", "DCSFPCommon\src\ClassLibraryCommon\ClassLibraryCommon.csproj", "{C28A2290-1FEC-477E-89F2-D3E0DE3D9421}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NonVisuals.Tests", "NonVisuals.Tests\NonVisuals.Tests.csproj", "{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -186,6 +188,18 @@ Global
 		{C28A2290-1FEC-477E-89F2-D3E0DE3D9421}.Release|x64.Build.0 = Release|Any CPU
 		{C28A2290-1FEC-477E-89F2-D3E0DE3D9421}.Release|x86.ActiveCfg = Release|Any CPU
 		{C28A2290-1FEC-477E-89F2-D3E0DE3D9421}.Release|x86.Build.0 = Release|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Debug|x64.Build.0 = Debug|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Debug|x86.Build.0 = Debug|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Release|x64.ActiveCfg = Release|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Release|x64.Build.0 = Release|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Release|x86.ActiveCfg = Release|Any CPU
+		{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

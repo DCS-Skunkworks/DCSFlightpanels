@@ -2,7 +2,7 @@
 using NonVisuals.Radios.RadioSettings;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals.FlightRadioSettings.Generic
+namespace NonVisuals.Tests.FlightRadio.FlightRadioSettings.Generic
 {
     /// <summary>
     /// ARC-210 is a multi-band radio so those settings are used.

@@ -3,11 +3,10 @@ using System.IO;
 using NonVisuals.Panels.StreamDeck;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals
-{
+namespace NonVisuals.Tests {
     public class BitmapCreatorTests
     {
-        private readonly string _testsResourcesFolder = @"NonVisuals\BitmapCreatorTestsResources\";
+        private readonly string _testsResourcesFolder = @"BitmapCreatorTestsResources\";
 
         [Fact]
         public void CreateEmptyStreamDeckBitmapShouldReturnExpectedBitmap()
@@ -103,7 +102,7 @@ namespace DCSFP.Tests.NonVisuals
         public void BitmapOrFileNotFound_WithValidPath_ShouldReturnExpectedBitmap()
         {
             Bitmap expectedImage = new(Path.Combine(_testsResourcesFolder, "BackGroundImage_CduU_72x72.bmp"));
-            string imageWithValidPath = @"NonVisuals\BitmapCreatorTestsResources\BackGroundImage_CduU_72x72.bmp";
+            string imageWithValidPath = @"BitmapCreatorTestsResources\BackGroundImage_CduU_72x72.bmp";
             var loadedImage = BitMapCreator.BitmapOrFileNotFound(imageWithValidPath);
             Assert.True(CompareBitmaps(expectedImage, loadedImage));
         }

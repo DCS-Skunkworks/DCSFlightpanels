@@ -1,8 +1,8 @@
-﻿using System;
-using NonVisuals.Radios.RadioSettings;
+﻿using NonVisuals.Radios.RadioSettings;
+using System;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals.FlightRadioSettings.Specific
+namespace NonVisuals.Tests.FlightRadio.FlightRadioSettings.Specific
 {
     public class FlightRadioSpecificSettingsTests
     {

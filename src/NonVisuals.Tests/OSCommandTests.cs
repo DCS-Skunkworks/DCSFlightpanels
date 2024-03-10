@@ -1,7 +1,6 @@
-﻿using NonVisuals;
-using Xunit;
+﻿using Xunit;
 
-namespace DCSFP.Tests.NonVisuals
+namespace NonVisuals.Tests 
 {
     public class OSCommandTests
     {
