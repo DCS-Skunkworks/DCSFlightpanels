@@ -62,10 +62,10 @@ if (($env:dcsfpReleaseDestinationFolderPath -eq $null) -or (-not (Test-Path $env
 }
 
 #---------------------------------
-# Tests execution For DCSFP
+# Tests execution For DCSFlightpanels
 #---------------------------------
-Write-Host "Starting tests execution for DCSFP" -foregroundcolor "Green"
-$testPath = $scriptPath + "\DCSFP.Tests"
+Write-Host "Starting tests execution for DCSFlightpanels" -foregroundcolor "Green"
+$testPath = $scriptPath + "\DCSFlightpanels.Tests"
 Set-Location -Path $testPath
 dotnet test
 $testsLastExitCode = $LastExitCode
@@ -74,7 +74,22 @@ if ( 0 -ne $testsLastExitCode ) {
 	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
 	exit
 }
-Write-Host "Finished tests execution for DCSFP" -foregroundcolor "Green"
+Write-Host "Finished tests execution for DCSFlightpanels" -foregroundcolor "Green"
+
+#---------------------------------
+# Tests execution For DCS-BIOS
+#---------------------------------
+Write-Host "Starting tests execution for DCS-BIOS" -foregroundcolor "Green"
+$testPath = $scriptPath + "\DCS-BIOS.Tests"
+Set-Location -Path $testPath
+dotnet test
+$testsLastExitCode = $LastExitCode
+Write-Host "Tests LastExitCode: $testsLastExitCode" -foregroundcolor "Green"
+if ( 0 -ne $testsLastExitCode ) {
+	Write-Host "Fatal error. Some unit tests failed." -foregroundcolor "Red"
+	exit
+}
+Write-Host "Finished tests execution for DCS-BIOS" -foregroundcolor "Green"
 
 #---------------------------------
 # Tests execution For NonVisuals
