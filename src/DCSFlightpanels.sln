@@ -32,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DCS-BIOS", "DCSFPCommon\src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibraryCommon", "DCSFPCommon\src\ClassLibraryCommon\ClassLibraryCommon.csproj", "{C28A2290-1FEC-477E-89F2-D3E0DE3D9421}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NonVisuals.Tests", "NonVisuals.Tests\NonVisuals.Tests.csproj", "{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NonVisuals.Tests", "NonVisuals.Tests\NonVisuals.Tests.csproj", "{973ECF33-FC33-4D4D-84C5-40DFD0B04B68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
