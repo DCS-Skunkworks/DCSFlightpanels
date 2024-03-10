@@ -56,7 +56,7 @@
                 <LineBreak/>
                 1. Close DCSFP.
                 <LineBreak/>
-                2. Goto address : <Bold> C:\Users\&lt;your username&gt;\AppData\Local\DCSFlightpanels.</Bold>
+                2. Goto address : <Bold> C:\Users\&lt;your username&gt;\AppData\Local\DCS-Skunkworks\DCSFlightpanels.</Bold>
                 <LineBreak/>
                 3. Delete all folders (usually named e.g. <Italic>dcsfp.exe_Url_n2i5x0axp4hoy52v1z5yxhp1jnsc11lm)</Italic>
                 <LineBreak/>
