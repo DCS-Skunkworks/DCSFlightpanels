@@ -1,7 +1,7 @@
 ﻿using NonVisuals.Radios;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals
+namespace NonVisuals.Tests.Radios 
 {
     public class RadioPanelPZ69Mi8Tests
     {

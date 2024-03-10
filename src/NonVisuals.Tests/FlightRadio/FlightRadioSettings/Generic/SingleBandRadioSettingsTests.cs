@@ -1,5 +1,6 @@
 ﻿using NonVisuals.Radios.RadioControls;
 using NonVisuals.Radios.RadioSettings;
+using System;
 using Xunit;
 
 namespace NonVisuals.Tests.FlightRadio.FlightRadioSettings.Generic

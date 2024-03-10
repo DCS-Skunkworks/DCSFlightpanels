@@ -2,7 +2,7 @@ using System;
 using NonVisuals.Panels.Saitek.Panels;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals
+namespace NonVisuals.Tests
 {
     public class BackLitPanelTests
     {

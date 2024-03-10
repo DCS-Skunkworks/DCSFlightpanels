@@ -1,8 +1,8 @@
-﻿using System;
-using NonVisuals.Panels.StreamDeck;
+﻿using NonVisuals.Panels.StreamDeck;
+using System;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals
+namespace NonVisuals.Tests 
 {
     public class DCSBiosConverterTests
     {

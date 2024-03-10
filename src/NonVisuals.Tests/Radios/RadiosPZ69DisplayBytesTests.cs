@@ -1,11 +1,11 @@
-﻿using System;
+﻿using NonVisuals.Radios;
+using NonVisuals.Radios.Misc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using NonVisuals.Radios;
-using NonVisuals.Radios.Misc;
 using Xunit;
 
-namespace DCSFP.Tests.NonVisuals
+namespace NonVisuals.Tests.Radios 
 {
     public class RadiosPZ69DisplayBytesTests
     {
