@@ -10,6 +10,7 @@
 	<ItemGroup>
 		<PackageReference Include="ExpectedObjects" Version="3.5.4" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
 		<PackageReference Include="xunit" Version="2.7.0" />
 		<PackageReference Include="xunit.runner.console" Version="2.7.0">
 			<PrivateAssets>all</PrivateAssets>
