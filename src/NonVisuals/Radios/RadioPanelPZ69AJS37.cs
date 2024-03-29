@@ -450,7 +450,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _tilsChannelDialSkipper.Click(TILS_CHANNEL_DIAL_COMMAND_INC);
+                                                _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -479,7 +479,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _tilsChannelDialSkipper.Click(TILS_CHANNEL_DIAL_COMMAND_DEC);
+                                                _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -508,7 +508,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _masterModeSelectorDialSkipper.Click(MASTER_MODE_SELECTOR_COMMAND_INC);
+                                                _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_INC);
                                                 break;
                                             }
 
@@ -537,7 +537,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _masterModeSelectorDialSkipper.Click(MASTER_MODE_SELECTOR_COMMAND_DEC);
+                                                _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -566,7 +566,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _tilsChannelDialSkipper.Click(TILS_CHANNEL_DIAL_COMMAND_INC);
+                                                _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -595,7 +595,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _tilsChannelDialSkipper.Click(TILS_CHANNEL_DIAL_COMMAND_DEC);
+                                                _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -624,7 +624,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _masterModeSelectorDialSkipper.Click(MASTER_MODE_SELECTOR_COMMAND_INC);
+                                                _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_INC);
                                                 break;
                                             }
 
@@ -653,7 +653,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _masterModeSelectorDialSkipper.Click(MASTER_MODE_SELECTOR_COMMAND_DEC);
+                                                _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_DEC);
                                                 break;
                                             }
 

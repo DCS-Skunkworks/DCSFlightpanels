@@ -457,7 +457,7 @@ namespace NonVisuals.Radios
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob && dcsBiosBinding.WhenTurnedOn == radioPanelKey.IsOn)
                             {
-                                dcsBiosBinding.SendDCSBIOSCommands(new CancellationToken());
+                                dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
                                 break;
                             }
                         }

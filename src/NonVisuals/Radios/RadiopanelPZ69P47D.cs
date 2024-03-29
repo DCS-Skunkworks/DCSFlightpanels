@@ -410,7 +410,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP47DRadioMode.VHF:
                                             {
-                                                _vhfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(true));
+                                                _vhfRadioModePresetDialSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
@@ -433,7 +433,7 @@ namespace NonVisuals.Radios
                                         case CurrentP47DRadioMode.VHF:
                                             {
                                                 // MODE
-                                                _vhfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(false));
+                                                _vhfRadioModePresetDialSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
@@ -458,7 +458,7 @@ namespace NonVisuals.Radios
                                                 }
                                                 else
                                                 {
-                                                    _vhfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(true));
+                                                    _vhfRadioChannelPresetDialSkipper.ClickAsync(GetHFRadioChannelStringCommand(true));
                                                 }
                                                 break;
                                             }
@@ -484,7 +484,7 @@ namespace NonVisuals.Radios
                                                 }
                                                 else
                                                 {
-                                                    _vhfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(false));
+                                                    _vhfRadioChannelPresetDialSkipper.ClickAsync(GetHFRadioChannelStringCommand(false));
                                                 }
                                                 break;
                                             }
@@ -503,7 +503,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP47DRadioMode.VHF:
                                             {
-                                                _vhfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(true));
+                                                _vhfRadioModePresetDialSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
@@ -521,7 +521,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP47DRadioMode.VHF:
                                             {
-                                                _vhfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(false));
+                                                _vhfRadioModePresetDialSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
                                         case CurrentP47DRadioMode.DETROLA:
@@ -546,7 +546,7 @@ namespace NonVisuals.Radios
                                                 }
                                                 else 
                                                 {
-                                                    _vhfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(true));
+                                                    _vhfRadioChannelPresetDialSkipper.ClickAsync(GetHFRadioChannelStringCommand(true));
                                                 }
                                                 break;
                                             }
@@ -572,7 +572,7 @@ namespace NonVisuals.Radios
                                                 }
                                                 else
                                                 {
-                                                    _vhfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(false));
+                                                    _vhfRadioChannelPresetDialSkipper.ClickAsync(GetHFRadioChannelStringCommand(false));
                                                 }
                                                 break;
                                             }

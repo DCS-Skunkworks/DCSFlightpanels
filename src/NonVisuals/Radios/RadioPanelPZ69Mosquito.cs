@@ -350,13 +350,13 @@ namespace NonVisuals.Radios
                         {
                             case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_INC:
                                 {
-                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(true));
+                                    _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
                                     break;
                                 }
 
                             case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
-                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(false));
+                                    _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
                                     break;
                                 }
 
@@ -405,14 +405,14 @@ namespace NonVisuals.Radios
                             case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     // MODE
-                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(true));
+                                    _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
                                     break;
                                 }
 
                             case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     // MODE
-                                    _vhfDialChangeSkipper.Click(GetHFRadioModeStringCommand(false));
+                                    _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
                                     break;
                                 }
 

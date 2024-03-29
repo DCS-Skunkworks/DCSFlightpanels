@@ -426,7 +426,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                _vhfRadioDialSkipper.Click(GetHFRadioModeStringCommand(true));
+                                                _vhfRadioDialSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
                                         case CurrentP51DRadioMode.DETROLA:
@@ -444,7 +444,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                _vhfRadioDialSkipper.Click(GetHFRadioModeStringCommand(false));
+                                                _vhfRadioDialSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
                                         case CurrentP51DRadioMode.DETROLA:
@@ -514,7 +514,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                _vhfRadioDialSkipper.Click(GetHFRadioModeStringCommand(true));
+                                                _vhfRadioDialSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
                                         case CurrentP51DRadioMode.DETROLA:
@@ -532,7 +532,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                _vhfRadioDialSkipper.Click(GetHFRadioModeStringCommand(false));
+                                                _vhfRadioDialSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
                                         case CurrentP51DRadioMode.DETROLA:

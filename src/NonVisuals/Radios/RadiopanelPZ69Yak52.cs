@@ -571,12 +571,12 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                _adfFrontClickSkipper.Click(ADF_FRONT_CHANNEL_INC);
+                                                _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                _adfRearClickSkipper.Click(ADF_REAR_CHANNEL_INC);
+                                                _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
@@ -607,12 +607,12 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                _adfFrontClickSkipper.Click(ADF_FRONT_CHANNEL_DEC);
+                                                _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                _adfRearClickSkipper.Click(ADF_REAR_CHANNEL_DEC);
+                                                _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
@@ -699,12 +699,12 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                _adfFrontClickSkipper.Click(ADF_FRONT_CHANNEL_INC);
+                                                _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                _adfRearClickSkipper.Click(ADF_REAR_CHANNEL_INC);
+                                                _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
@@ -735,12 +735,12 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                _adfFrontClickSkipper.Click(ADF_FRONT_CHANNEL_DEC);
+                                                _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                _adfRearClickSkipper.Click(ADF_REAR_CHANNEL_DEC);
+                                                _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:

@@ -308,7 +308,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                     {
                         if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.FarmingPanelKey == farmingPanelKey.FarmingPanelMKKey && dcsBiosBinding.WhenTurnedOn == farmingPanelKey.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommands(new CancellationToken());
+                            dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
                             break;
                         }
                     }

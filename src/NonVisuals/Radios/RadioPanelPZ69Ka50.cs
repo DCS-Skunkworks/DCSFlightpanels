@@ -949,7 +949,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                _vhf1PresetDialSkipper.Click(VHF1_PRESET_COMMAND_INC);
+                                                _vhf1PresetDialSkipper.ClickAsync(VHF1_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -982,13 +982,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                _datalinkMasterModeDialSkipper.Click(DATALINK_MASTER_MODE_COMMAND_INC);
+                                                _datalinkMasterModeDialSkipper.ClickAsync(DATALINK_MASTER_MODE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                _adfPresetDialSkipper.Click(ADF_PRESET_COMMAND_INC);
+                                                _adfPresetDialSkipper.ClickAsync(ADF_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1006,7 +1006,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                _vhf1PresetDialSkipper.Click(VHF1_PRESET_COMMAND_DEC);
+                                                _vhf1PresetDialSkipper.ClickAsync(VHF1_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1039,13 +1039,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                _datalinkMasterModeDialSkipper.Click(DATALINK_MASTER_MODE_COMMAND_DEC);
+                                                _datalinkMasterModeDialSkipper.ClickAsync(DATALINK_MASTER_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                _adfPresetDialSkipper.Click(ADF_PRESET_COMMAND_DEC);
+                                                _adfPresetDialSkipper.ClickAsync(ADF_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1088,7 +1088,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                _datalinkSelfIdDialSkipper.Click(DATALINK_SELF_ID_COMMAND_INC);
+                                                _datalinkSelfIdDialSkipper.ClickAsync(DATALINK_SELF_ID_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1137,7 +1137,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                _datalinkSelfIdDialSkipper.Click(DATALINK_SELF_ID_COMMAND_DEC);
+                                                _datalinkSelfIdDialSkipper.ClickAsync(DATALINK_SELF_ID_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1161,7 +1161,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                _vhf1PresetDialSkipper.Click(VHF1_PRESET_COMMAND_INC);
+                                                _vhf1PresetDialSkipper.ClickAsync(VHF1_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1208,13 +1208,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                _datalinkMasterModeDialSkipper.Click(DATALINK_MASTER_MODE_COMMAND_INC);
+                                                _datalinkMasterModeDialSkipper.ClickAsync(DATALINK_MASTER_MODE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                _adfPresetDialSkipper.Click(ADF_PRESET_COMMAND_INC);
+                                                _adfPresetDialSkipper.ClickAsync(ADF_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1232,7 +1232,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                _vhf1PresetDialSkipper.Click(VHF1_PRESET_COMMAND_DEC);
+                                                _vhf1PresetDialSkipper.ClickAsync(VHF1_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1279,13 +1279,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                _datalinkMasterModeDialSkipper.Click(DATALINK_MASTER_MODE_COMMAND_DEC);
+                                                _datalinkMasterModeDialSkipper.ClickAsync(DATALINK_MASTER_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                _adfPresetDialSkipper.Click(ADF_PRESET_COMMAND_DEC);
+                                                _adfPresetDialSkipper.ClickAsync(ADF_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1329,7 +1329,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                _datalinkSelfIdDialSkipper.Click(DATALINK_SELF_ID_COMMAND_INC);
+                                                _datalinkSelfIdDialSkipper.ClickAsync(DATALINK_SELF_ID_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1378,7 +1378,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
-                                                _datalinkSelfIdDialSkipper.Click(DATALINK_SELF_ID_COMMAND_DEC);
+                                                _datalinkSelfIdDialSkipper.ClickAsync(DATALINK_SELF_ID_COMMAND_DEC);
                                                 break;
                                             }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using ClassLibraryCommon;
 using DCS_BIOS.Serialized;
 using Newtonsoft.Json;
@@ -25,8 +26,9 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
         internal static Logger Logger = LogManager.GetCurrentClassLogger();
         private bool _whenOnTurnedOn = true;
         private string _description;
-        [NonSerialized] private Thread _sendDCSBIOSCommandsThread;
         private volatile List<DCSBIOSInput> _dcsbiosInputs;
+        private Task _sendingCommandsTask;
+
         [JsonIgnore] public bool HasSequence => _dcsbiosInputs.Count > 1;
         internal abstract void ImportSettings(string settings);
         public abstract string ExportSettings();
@@ -61,14 +63,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
 
         public bool IsRunning()
         {
-            if (_sendDCSBIOSCommandsThread != null && (_sendDCSBIOSCommandsThread.ThreadState == ThreadState.Running ||
-                                                       _sendDCSBIOSCommandsThread.ThreadState == ThreadState.WaitSleepJoin ||
-                                                       _sendDCSBIOSCommandsThread.ThreadState == ThreadState.Unstarted))
-            {
-                return true;
-            }
-
-            return false;
+            return _sendingCommandsTask != null && _sendingCommandsTask.Status == TaskStatus.Running;
         }
 
 
@@ -83,17 +78,8 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
         *
         * 3) Command is repeatable, for single commands only. Just keep executing the command, use thread.
         */
-        public void SendDCSBIOSCommands(CancellationToken cancellationToken)
+        public async Task SendDCSBIOSCommandsAsync(CancellationToken cancellationToken)
         {
-            var repeatable = false;
-
-
-            if (this is ActionTypeDCSBIOS)
-            {
-                //Ugly, only Streamdeck has IsRepeatable
-                repeatable = ((ActionTypeDCSBIOS)this).IsRepeatable();
-            }
-
             if (DCSBIOSInputs.Count == 0)
             {
                 return;
@@ -101,7 +87,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
 
             if (_isSequenced && _sequenceIndex <= DCSBIOSInputs.Count - 1)
             {
-                DCSBIOSInputs[_sequenceIndex].SelectedDCSBIOSInterface.SendCommand();
+                await DCSBIOSInputs[_sequenceIndex].SelectedDCSBIOSInterface.SendCommand();
                 _sequenceIndex++;
 
                 if (_sequenceIndex >= DCSBIOSInputs.Count)
@@ -116,12 +102,11 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
             {
                 Thread.Sleep(200);
             }
-            
-            _sendDCSBIOSCommandsThread = new Thread(() => SendDCSBIOSCommandsThread(DCSBIOSInputs, cancellationToken));
-            _sendDCSBIOSCommandsThread.Start();
+
+            _sendingCommandsTask = Task.Run(() => SendDCSBIOSCommandsAsync(DCSBIOSInputs, cancellationToken));
         }
 
-        private void SendDCSBIOSCommandsThread(List<DCSBIOSInput> dcsbiosInputs, CancellationToken cancellationToken)
+        private async Task SendDCSBIOSCommandsAsync(List<DCSBIOSInput> dcsbiosInputs, CancellationToken cancellationToken)
         {
             try
             {
@@ -129,7 +114,7 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
                 {
                     Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInterface.Delay);
 
-                    dcsbiosInput.SelectedDCSBIOSInterface.SendCommand();
+                    await dcsbiosInput.SelectedDCSBIOSInterface.SendCommand();
 
                     if (_shutdownCommandsThread || cancellationToken.IsCancellationRequested)
                     {
@@ -137,8 +122,6 @@ namespace NonVisuals.BindingClasses.DCSBIOSBindings
                     }
                 }
             }
-            catch (ThreadAbortException)
-            { }
             catch (Exception ex)
             {
                 Logger.Error(ex);

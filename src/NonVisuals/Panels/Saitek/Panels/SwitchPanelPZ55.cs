@@ -499,7 +499,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                     {
                         if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == switchPanelKey.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommands(new CancellationToken());
+                            dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
                             break;
                         }
                     }
@@ -922,19 +922,12 @@ namespace NonVisuals.Panels.Saitek.Panels
         {
             try
             {
-                if (HIDSkeletonBase.HIDWriteDevice != null)
-                {
-                    var array = new[] { (byte)0x0, (byte)switchPanelPZ55LEDs };
+                if (HIDSkeletonBase.HIDWriteDevice == null) return;
 
-                    // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel);
-                    HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(new byte[] { 0, 0 });
-                    HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
-                }
+                var array = new[] { (byte)0x0, (byte)switchPanelPZ55LEDs };
 
-                // if (IsAttached)
-                // {
-                // Common.DebugP("Write ending");
-                // }
+                HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(new byte[] { 0, 0 });
+                HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
             }
             catch (Exception ex)
             {

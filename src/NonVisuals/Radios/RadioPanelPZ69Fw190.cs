@@ -412,13 +412,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_INC);
+                                                _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                _fug25AIFFDialSkipper.Click(FUG25_AIFF_COMMAND_INC);
+                                                _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_INC);
                                                 break;
                                             }
 
@@ -442,13 +442,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_DEC);
+                                                _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                _fug25AIFFDialSkipper.Click(FUG25_AIFF_COMMAND_DEC);
+                                                _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -532,13 +532,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_INC);
+                                                _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                _fug25AIFFDialSkipper.Click(FUG25_AIFF_COMMAND_INC);
+                                                _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_INC);
                                                 break;
                                             }
 
@@ -562,13 +562,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                _fug16ZyPresetDialSkipper.Click(FUG16_ZY_PRESET_COMMAND_DEC);
+                                                _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                _fug25AIFFDialSkipper.Click(FUG25_AIFF_COMMAND_DEC);
+                                                _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_DEC);
                                                 break;
                                             }
 

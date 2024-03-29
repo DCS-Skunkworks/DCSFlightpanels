@@ -509,25 +509,25 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                _vhfPresetDialSkipper.Click(VHF_PRESET_COMMAND_INC);
+                                                _vhfPresetDialSkipper.ClickAsync(VHF_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                _uhfPresetDialSkipper.Click(UHF_PRESET_COMMAND_INC);
+                                                _uhfPresetDialSkipper.ClickAsync(UHF_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                _tacanDialSkipper.Click(_upperFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_INC : TACAN_TENS_COMMAND_INC);
+                                                _tacanDialSkipper.ClickAsync(_upperFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_INC : TACAN_TENS_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                _vorDialSkipper.Click(_upperFreqSwitchPressedDown ? VOR_POWER_COMMAND_INC : VOR_DECIMALS_COMMAND_INC);
+                                                _vorDialSkipper.ClickAsync(_upperFreqSwitchPressedDown ? VOR_POWER_COMMAND_INC : VOR_DECIMALS_COMMAND_INC);
                                                 break;
                                             }
 
@@ -545,25 +545,25 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                _vhfPresetDialSkipper.Click(VHF_PRESET_COMMAND_DEC);
+                                                _vhfPresetDialSkipper.ClickAsync(VHF_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                _uhfPresetDialSkipper.Click(UHF_PRESET_COMMAND_DEC);
+                                                _uhfPresetDialSkipper.ClickAsync(UHF_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                _tacanDialSkipper.Click(_upperFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_DEC : TACAN_TENS_COMMAND_DEC);
+                                                _tacanDialSkipper.ClickAsync(_upperFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_DEC : TACAN_TENS_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                _vorDialSkipper.Click(_upperFreqSwitchPressedDown ? VOR_POWER_COMMAND_DEC : VOR_DECIMALS_COMMAND_DEC);
+                                                _vorDialSkipper.ClickAsync(_upperFreqSwitchPressedDown ? VOR_POWER_COMMAND_DEC : VOR_DECIMALS_COMMAND_DEC);
                                                 break;
                                             }
                                     }
@@ -588,13 +588,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                _tacanDialSkipper.Click(_upperFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_INC : TACAN_ONES_COMMAND_INC);
+                                                _tacanDialSkipper.ClickAsync(_upperFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_INC : TACAN_ONES_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                _vorDialSkipper.Click(_upperFreqSwitchPressedDown ? VOR_TEST_COMMAND_INC : VOR_ONES_COMMAND_INC);
+                                                _vorDialSkipper.ClickAsync(_upperFreqSwitchPressedDown ? VOR_TEST_COMMAND_INC : VOR_ONES_COMMAND_INC);
                                                 break;
                                             }
 
@@ -624,13 +624,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                _tacanDialSkipper.Click(_upperFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_DEC : TACAN_ONES_COMMAND_DEC);
+                                                _tacanDialSkipper.ClickAsync(_upperFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_DEC : TACAN_ONES_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                _vorDialSkipper.Click(_upperFreqSwitchPressedDown ? VOR_TEST_COMMAND_DEC : VOR_ONES_COMMAND_DEC);
+                                                _vorDialSkipper.ClickAsync(_upperFreqSwitchPressedDown ? VOR_TEST_COMMAND_DEC : VOR_ONES_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -648,25 +648,25 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                _vhfPresetDialSkipper.Click(VHF_PRESET_COMMAND_INC);
+                                                _vhfPresetDialSkipper.ClickAsync(VHF_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                _uhfPresetDialSkipper.Click(UHF_PRESET_COMMAND_INC);
+                                                _uhfPresetDialSkipper.ClickAsync(UHF_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                _tacanDialSkipper.Click(_lowerFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_INC : TACAN_TENS_COMMAND_INC);
+                                                _tacanDialSkipper.ClickAsync(_lowerFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_INC : TACAN_TENS_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                _vorDialSkipper.Click(_lowerFreqSwitchPressedDown ? VOR_POWER_COMMAND_INC : VOR_DECIMALS_COMMAND_INC);
+                                                _vorDialSkipper.ClickAsync(_lowerFreqSwitchPressedDown ? VOR_POWER_COMMAND_INC : VOR_DECIMALS_COMMAND_INC);
                                                 break;
                                             }
 
@@ -684,25 +684,25 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                _vhfPresetDialSkipper.Click(VHF_PRESET_COMMAND_DEC);
+                                                _vhfPresetDialSkipper.ClickAsync(VHF_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                _uhfPresetDialSkipper.Click(UHF_PRESET_COMMAND_DEC);
+                                                _uhfPresetDialSkipper.ClickAsync(UHF_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                _tacanDialSkipper.Click(_lowerFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_DEC : TACAN_TENS_COMMAND_DEC);
+                                                _tacanDialSkipper.ClickAsync(_lowerFreqSwitchPressedDown ? TACANXY_SELECT_COMMAND_DEC : TACAN_TENS_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                _vorDialSkipper.Click(_lowerFreqSwitchPressedDown ? VOR_POWER_COMMAND_DEC : VOR_DECIMALS_COMMAND_DEC);
+                                                _vorDialSkipper.ClickAsync(_lowerFreqSwitchPressedDown ? VOR_POWER_COMMAND_DEC : VOR_DECIMALS_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -732,13 +732,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                _tacanDialSkipper.Click(_lowerFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_INC : TACAN_ONES_COMMAND_INC);
+                                                _tacanDialSkipper.ClickAsync(_lowerFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_INC : TACAN_ONES_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                _vorDialSkipper.Click(_lowerFreqSwitchPressedDown ? VOR_TEST_COMMAND_INC : VOR_ONES_COMMAND_INC);
+                                                _vorDialSkipper.ClickAsync(_lowerFreqSwitchPressedDown ? VOR_TEST_COMMAND_INC : VOR_ONES_COMMAND_INC);
                                                 break;
                                             }
 
@@ -768,13 +768,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
-                                                _tacanDialSkipper.Click(_lowerFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_DEC : TACAN_ONES_COMMAND_DEC);
+                                                _tacanDialSkipper.ClickAsync(_lowerFreqSwitchPressedDown ? TACAN_MODE_SELECT_COMMAND_DEC : TACAN_ONES_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VOR:
                                             {
-                                                _vorDialSkipper.Click(_lowerFreqSwitchPressedDown ? VOR_TEST_COMMAND_DEC : VOR_ONES_COMMAND_DEC);
+                                                _vorDialSkipper.ClickAsync(_lowerFreqSwitchPressedDown ? VOR_TEST_COMMAND_DEC : VOR_ONES_COMMAND_DEC);
                                                 break;
                                             }
 

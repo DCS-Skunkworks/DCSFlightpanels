@@ -676,93 +676,6 @@ namespace NonVisuals.Radios
             }
         }
 
-        /*
-        private void SendIntercommToDCSBIOS()
-        {
-            if (IntercommSyncing())
-            {
-                return;
-            }
-            SaveCockpitIntercomm();
-            if (_intercommSyncThread != null)
-            {
-                _intercommSyncThread.Aborttt();
-            }
-            
-            _intercommSyncThread = new Thread(IntercommSynchThreadMethod);
-            _intercommSyncThread.Start();
-        }
-
-        private void IntercommSynchThreadMethod()
-        {
-            try
-            {
-                try
-                {
-                    String str;
-                    Interlocked.Exchange(ref _intercommThreadNowSynching, 1);
-                    long dial1Timeout = DateTime.Now.Ticks;
-                    long dial1OkTime = 0;
-                    var dial1SendCount = 0;
-
-                    do
-                    {
-                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "INTERCOMM dial1Timeout"))
-                        {
-                            ResetWaitingForFeedBack(ref _intercommDialWaitingForFeedback); //Lets do an ugly reset
-                            Common.DebugP("Resetting SYNC for INTERCOMM");
-                        }
-
-                        //0 - 5
-                        if (Interlocked.Read(ref _intercommDialWaitingForFeedback) == 0)
-                        {
-                            lock (_lockIntercommDialObject)
-                            {
-
-                                
-                                if (_intercommDialPosStandby != _intercommCockpitDial1Pos)
-                                {
-                                    dial1OkTime = DateTime.Now.Ticks;
-                                    str = IntercommDialCommand + (_intercommDialPosStandby < _intercommCockpitDial1Pos ? Decrease : Increase);
-                                    Common.DebugP("Sending " + str);
-                                    DCSBIOS.Send(str);
-                                    dial1SendCount++;
-                                    Interlocked.Exchange(ref _intercommDialWaitingForFeedback, 1);
-                                }
-                                Reset(ref dial1Timeout);
-                            }
-                        }
-                        else
-                        {
-                            dial1OkTime = DateTime.Now.Ticks;
-                        }
-
-                        if (dial1SendCount > 5)
-                        {
-                            //"Race" condition detected?
-                            dial1SendCount = 0;
-                            Thread.Sleep(5000);
-                        }
-
-                        Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
-                    } while (IsTooShort(dial1OkTime));
-
-                    SwapCockpitIntercomm();
-                    ShowFrequenciesOnPanel();
-                }
-                finally
-                {
-                    ResetWaitingForFeedBack(ref _intercommThreadNowSynching);
-                }
-            }
-            catch (ThreadAbortException)
-            { }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-            }
-        }
-        */
         private void SendVhfCommToDCSBIOS()
         {
             if (VhfCommSyncing())
@@ -1945,7 +1858,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            _interCommSkipper.Click(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
+                                            _interCommSkipper.ClickAsync(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
 
@@ -2011,7 +1924,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            _interCommSkipper.Click(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
+                                            _interCommSkipper.ClickAsync(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
 
@@ -2076,7 +1989,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            _interCommSkipper.Click(INTERCOMM_DIAL_COMMAND_INC);
+                                            _interCommSkipper.ClickAsync(INTERCOMM_DIAL_COMMAND_INC);
                                             break;
                                         }
 
@@ -2138,7 +2051,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            _interCommSkipper.Click(INTERCOMM_DIAL_COMMAND_DEC);
+                                            _interCommSkipper.ClickAsync(INTERCOMM_DIAL_COMMAND_DEC);
                                             break;
                                         }
 
@@ -2199,7 +2112,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            _interCommSkipper.Click(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
+                                            _interCommSkipper.ClickAsync(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
 
@@ -2265,7 +2178,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            _interCommSkipper.Click(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
+                                            _interCommSkipper.ClickAsync(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
 
@@ -2330,7 +2243,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            _interCommSkipper.Click(INTERCOMM_DIAL_COMMAND_INC);
+                                            _interCommSkipper.ClickAsync(INTERCOMM_DIAL_COMMAND_INC);
                                             break;
                                         }
 
@@ -2392,7 +2305,7 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentUH1HRadioMode.INTERCOMM:
                                         {
-                                            _interCommSkipper.Click(INTERCOMM_DIAL_COMMAND_DEC);
+                                            _interCommSkipper.ClickAsync(INTERCOMM_DIAL_COMMAND_DEC);
                                             break;
                                         }
 

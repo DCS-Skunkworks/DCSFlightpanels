@@ -962,7 +962,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            _r863PresetDialSkipper.Click(R863_PRESET_COMMAND_INC);
+                                            _r863PresetDialSkipper.ClickAsync(R863_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.YADRO1A:
@@ -972,22 +972,22 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            _r828PresetDialSkipper.Click(R828_PRESET_COMMAND_INC);
+                                            _r828PresetDialSkipper.ClickAsync(R828_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            _adfPresetDial1Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
+                                            _adfPresetDial1Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
                                         {
-                                            _dmePresetDial1Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_INC : DME_BACKUP1_KHZ_PRESET_COMMAND_INC);
+                                            _dmePresetDial1Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_INC : DME_BACKUP1_KHZ_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            _spu8DialSkipper.Click(SPU8_COMMAND_INC);
+                                            _spu8DialSkipper.ClickAsync(SPU8_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.NO_USE:
@@ -1007,7 +1007,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            _r863PresetDialSkipper.Click(R863_PRESET_COMMAND_DEC);
+                                            _r863PresetDialSkipper.ClickAsync(R863_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.YADRO1A:
@@ -1017,22 +1017,22 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            _r828PresetDialSkipper.Click(R828_PRESET_COMMAND_DEC);
+                                            _r828PresetDialSkipper.ClickAsync(R828_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            _adfPresetDial1Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
+                                            _adfPresetDial1Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
                                         {
-                                            _dmePresetDial1Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_DEC : DME_BACKUP1_KHZ_PRESET_COMMAND_DEC);
+                                            _dmePresetDial1Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_DEC : DME_BACKUP1_KHZ_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            _spu8DialSkipper.Click(SPU8_COMMAND_DEC);
+                                            _spu8DialSkipper.ClickAsync(SPU8_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.NO_USE:
@@ -1067,7 +1067,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            _adfPresetDial2Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
+                                            _adfPresetDial2Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
@@ -1111,7 +1111,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            _adfPresetDial2Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
+                                            _adfPresetDial2Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
@@ -1140,7 +1140,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            _r863PresetDialSkipper.Click(R863_PRESET_COMMAND_INC);
+                                            _r863PresetDialSkipper.ClickAsync(R863_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.YADRO1A:
@@ -1150,22 +1150,22 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            _r828PresetDialSkipper.Click(R828_PRESET_COMMAND_INC);
+                                            _r828PresetDialSkipper.ClickAsync(R828_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            _adfPresetDial1Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
+                                            _adfPresetDial1Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
                                         {
-                                            _dmePresetDial1Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_INC : DME_BACKUP1_KHZ_PRESET_COMMAND_INC);
+                                            _dmePresetDial1Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_INC : DME_BACKUP1_KHZ_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            _spu8DialSkipper.Click(SPU8_COMMAND_INC);
+                                            _spu8DialSkipper.ClickAsync(SPU8_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.NO_USE:
@@ -1185,7 +1185,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            _r863PresetDialSkipper.Click(R863_PRESET_COMMAND_DEC);
+                                            _r863PresetDialSkipper.ClickAsync(R863_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.YADRO1A:
@@ -1195,22 +1195,22 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            _r828PresetDialSkipper.Click(R828_PRESET_COMMAND_DEC);
+                                            _r828PresetDialSkipper.ClickAsync(R828_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            _adfPresetDial1Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
+                                            _adfPresetDial1Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
                                         {
-                                            _dmePresetDial1Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_DEC : DME_BACKUP1_KHZ_PRESET_COMMAND_DEC);
+                                            _dmePresetDial1Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? DME_MAIN1_KHZ_PRESET_COMMAND_DEC : DME_BACKUP1_KHZ_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            _spu8DialSkipper.Click(SPU8_COMMAND_DEC);
+                                            _spu8DialSkipper.ClickAsync(SPU8_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.NO_USE:
@@ -1245,7 +1245,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            _adfPresetDial2Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
+                                            _adfPresetDial2Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:
@@ -1289,7 +1289,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
                                         {
-                                            _adfPresetDial2Skipper.Click(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
+                                            _adfPresetDial2Skipper.ClickAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.DME_ARK15_LOW:

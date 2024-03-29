@@ -297,7 +297,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                     {
                         if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && dcsBiosBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommands(new CancellationToken());
+                            dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
                             break;
                         }
                     }

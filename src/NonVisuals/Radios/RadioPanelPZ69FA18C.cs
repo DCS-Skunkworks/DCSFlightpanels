@@ -205,11 +205,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                // Common.DebugP("RadioPanelPZ69FA18C Received DCSBIOS stringData : ->" + e.StringData + "<-");
-                if (string.IsNullOrWhiteSpace(e.StringData))
-                {
-                    // Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
-                }
             }
             catch (Exception ex)
             {

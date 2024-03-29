@@ -163,7 +163,6 @@ namespace NonVisuals.KeyEmulation
                     if (Common.APIModeUsed == APIModeEnum.KeybdEvent)
                     {
                         KeyBdEvenAPI.Press(keyPressInfo.LengthOfBreak, keyPressInfo.VirtualKeyCodes.ToArray(), keyPressInfo.LengthOfKeyPress, _cancellationTokenSource.Token,outerCancellationToken, SLEEP_VALUE);
-                        // Common.DebugP("KeyBdEventAPI result code -----------------------------------> " + Marshal.GetLastWin32Error());
                     }
                     else
                     {

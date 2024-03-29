@@ -951,7 +951,6 @@ namespace NonVisuals.Radios
 
                         if (Interlocked.Read(ref _tacanOnesWaitingForFeedback) == 0)
                         {
-                            // Common.DebugP("b");
                             lock (_lockTacanOnesObject)
                             {
                                 if (_tacanCockpitOnesDialPos != desiredPositionDial2)
@@ -1064,7 +1063,6 @@ namespace NonVisuals.Radios
 
                         if (Interlocked.Read(ref _vorKhzWaitingForFeedback) == 0)
                         {
-                            // Common.DebugP("b");
                             lock (_lockVorKhzObject)
                             {
                                 if (_vorCockpitKhzDialPos != desiredPositionDial2)

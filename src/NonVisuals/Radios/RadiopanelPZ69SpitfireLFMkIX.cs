@@ -393,13 +393,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
-                                                _hfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(true));
+                                                _hfRadioModePresetDialSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                _iffDiffDialSkipper.Click(IFFD_COMMAND_INC);
+                                                _iffDiffDialSkipper.ClickAsync(IFFD_COMMAND_INC);
                                                 break;
                                             }
 
@@ -418,13 +418,13 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // MODE
-                                                _hfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(false));
+                                                _hfRadioModePresetDialSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                _iffDiffDialSkipper.Click(IFFD_COMMAND_DEC);
+                                                _iffDiffDialSkipper.ClickAsync(IFFD_COMMAND_DEC);
                                                 break;
                                             }
                                     }
@@ -438,13 +438,13 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // CHANNEL
-                                                _hfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(true));
+                                                _hfRadioChannelPresetDialSkipper.ClickAsync(GetHFRadioChannelStringCommand(true));
                                                 break;
                                             }
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                _iffBiffDialSkipper.Click(IFFB_COMMAND_INC);
+                                                _iffBiffDialSkipper.ClickAsync(IFFB_COMMAND_INC);
                                                 break;
                                             }
                                     }
@@ -457,13 +457,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
-                                                _hfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(false));
+                                                _hfRadioChannelPresetDialSkipper.ClickAsync(GetHFRadioChannelStringCommand(false));
                                                 break;
                                             }
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                _iffBiffDialSkipper.Click(IFFB_COMMAND_DEC);
+                                                _iffBiffDialSkipper.ClickAsync(IFFB_COMMAND_DEC);
                                                 break;
                                             }
                                     }
@@ -476,13 +476,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
-                                                _hfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(true));
+                                                _hfRadioModePresetDialSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                _iffDiffDialSkipper.Click(IFFD_COMMAND_INC);
+                                                _iffDiffDialSkipper.ClickAsync(IFFD_COMMAND_INC);
                                                 break;
                                             }
                                     }
@@ -495,13 +495,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
-                                                _hfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(false));
+                                                _hfRadioModePresetDialSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                _iffDiffDialSkipper.Click(IFFD_COMMAND_DEC);
+                                                _iffDiffDialSkipper.ClickAsync(IFFD_COMMAND_DEC);
                                                 break;
                                             }
                                     }
@@ -514,13 +514,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
-                                                _hfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(true));
+                                                _hfRadioChannelPresetDialSkipper.ClickAsync(GetHFRadioChannelStringCommand(true));
                                                 break;
                                             }
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                _iffBiffDialSkipper.Click(IFFB_COMMAND_INC);
+                                                _iffBiffDialSkipper.ClickAsync(IFFB_COMMAND_INC);
                                                 break;
                                             }
                                     }
@@ -533,13 +533,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
-                                                _hfRadioChannelPresetDialSkipper.Click(GetHFRadioChannelStringCommand(false));
+                                                _hfRadioChannelPresetDialSkipper.ClickAsync(GetHFRadioChannelStringCommand(false));
                                                 break;
                                             }
 
                                         case CurrentSpitfireLFMkIXRadioMode.IFF:
                                             {
-                                                _iffBiffDialSkipper.Click(IFFB_COMMAND_DEC);
+                                                _iffBiffDialSkipper.ClickAsync(IFFB_COMMAND_DEC);
                                                 break;
                                             }
                                     }

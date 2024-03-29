@@ -566,7 +566,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                // Common.DebugP("RadioPanelPZ69A10C Received DCSBIOS stringData : ->" + e.StringData + "<-");
                 if (string.IsNullOrWhiteSpace(e.StringData))
                 {
                     return;
@@ -1603,7 +1602,7 @@ namespace NonVisuals.Radios
 
                         if (Interlocked.Read(ref _vhfFmDial2WaitingForFeedback) == 0)
                         {
-                            // Common.DebugP("b");
+                            
                             lock (_lockVhfFmDialsObject2)
                             {
                                 if (_vhfFmCockpitFreq2DialPos != desiredPositionDial2)
@@ -1950,7 +1949,6 @@ namespace NonVisuals.Radios
 
                         if (Interlocked.Read(ref _tacanDial2WaitingForFeedback) == 0)
                         {
-                            // Common.DebugP("b");
                             lock (_lockTacanDialsObject2)
                             {
                                 if (_tacanCockpitFreq2DialPos != desiredPositionDial2)

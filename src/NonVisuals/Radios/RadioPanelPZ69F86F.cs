@@ -539,7 +539,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27PresetDialSkipper.Click(ARC27_PRESET_COMMAND_INC);
+                                                _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -552,13 +552,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.Click(ARN6_MODE_COMMAND_INC);
+                                                _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                _apx6ModeDialSkipper.Click(APX6_MODE_DIAL_COMMAND_INC);
+                                                _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -576,7 +576,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27PresetDialSkipper.Click(ARC27_PRESET_COMMAND_DEC);
+                                                _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -589,13 +589,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.Click(ARN6_MODE_COMMAND_DEC);
+                                                _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                _apx6ModeDialSkipper.Click(APX6_MODE_DIAL_COMMAND_DEC);
+                                                _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -613,7 +613,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27ModeDialSkipper.Click(ARC27_MODE_COMMAND_INC);
+                                                _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_INC);
                                                 break;
                                             }
 
@@ -625,13 +625,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                _arn6BandDialSkipper.Click(ARN6_BAND_DIAL_COMMAND_INC);
+                                                _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.Click(ARN6_VOLUME_KNOB_COMMAND_INC);
+                                                _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -650,7 +650,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27ModeDialSkipper.Click(ARC27_MODE_COMMAND_DEC);
+                                                _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -662,13 +662,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                _arn6BandDialSkipper.Click(ARN6_BAND_DIAL_COMMAND_DEC);
+                                                _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.Click(ARN6_VOLUME_KNOB_COMMAND_DEC);
+                                                _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -687,7 +687,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27PresetDialSkipper.Click(ARC27_PRESET_COMMAND_INC);
+                                                _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -700,13 +700,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.Click(ARN6_MODE_COMMAND_INC);
+                                                _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                _apx6ModeDialSkipper.Click(APX6_MODE_DIAL_COMMAND_INC);
+                                                _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -724,7 +724,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27PresetDialSkipper.Click(ARC27_PRESET_COMMAND_DEC);
+                                                _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -737,13 +737,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.Click(ARN6_MODE_COMMAND_DEC);
+                                                _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                _apx6ModeDialSkipper.Click(APX6_MODE_DIAL_COMMAND_DEC);
+                                                _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -761,7 +761,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27ModeDialSkipper.Click(ARC27_MODE_COMMAND_INC);
+                                                _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_INC);
                                                 break;
                                             }
 
@@ -773,13 +773,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                _arn6BandDialSkipper.Click(ARN6_BAND_DIAL_COMMAND_INC);
+                                                _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.Click(ARN6_VOLUME_KNOB_COMMAND_INC);
+                                                _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -798,7 +798,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27ModeDialSkipper.Click(ARC27_MODE_COMMAND_DEC);
+                                                _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -810,13 +810,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                _arn6BandDialSkipper.Click(ARN6_BAND_DIAL_COMMAND_DEC);
+                                                _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.Click(ARN6_VOLUME_KNOB_COMMAND_DEC);
+                                                _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 

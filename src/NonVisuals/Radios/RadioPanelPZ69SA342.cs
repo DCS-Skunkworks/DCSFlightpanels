@@ -1019,7 +1019,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            _adf10SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit10S, true));
+                                            _adf10SDialSkipper.ClickAsync(GetAdfCommand(AdfDigit.Digit10S, true));
                                             break;
                                         }
 
@@ -1086,7 +1086,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            _adf100SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit100S, true));
+                                            _adf100SDialSkipper.ClickAsync(GetAdfCommand(AdfDigit.Digit100S, true));
                                             break;
                                         }
 
@@ -1151,7 +1151,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, true));
+                                            _adf1SDialSkipper.ClickAsync(GetAdfCommand(AdfDigit.Digits1S, true));
                                             break;
                                         }
 
@@ -1216,7 +1216,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, false));
+                                            _adf1SDialSkipper.ClickAsync(GetAdfCommand(AdfDigit.Digits1S, false));
                                             break;
                                         }
 
@@ -1288,7 +1288,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            _adf10SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit10S, true));
+                                            _adf10SDialSkipper.ClickAsync(GetAdfCommand(AdfDigit.Digit10S, true));
                                             break;
                                         }
 
@@ -1355,7 +1355,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            _adf100SDialSkipper.Click(GetAdfCommand(AdfDigit.Digit100S, true));
+                                            _adf100SDialSkipper.ClickAsync(GetAdfCommand(AdfDigit.Digit100S, true));
                                             break;
                                         }
 
@@ -1420,7 +1420,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, true));
+                                            _adf1SDialSkipper.ClickAsync(GetAdfCommand(AdfDigit.Digits1S, true));
                                             break;
                                         }
 
@@ -1485,7 +1485,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            _adf1SDialSkipper.Click(GetAdfCommand(AdfDigit.Digits1S, false));
+                                            _adf1SDialSkipper.ClickAsync(GetAdfCommand(AdfDigit.Digits1S, false));
                                             break;
                                         }
 

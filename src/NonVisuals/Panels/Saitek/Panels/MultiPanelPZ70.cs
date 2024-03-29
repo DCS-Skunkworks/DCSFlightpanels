@@ -887,7 +887,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                         if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob
                             && dcsBiosBinding.WhenTurnedOn == multiPanelKnob.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommands(new CancellationToken());
+                            dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
                             break;
                         }
                     }
@@ -1370,7 +1370,6 @@ namespace NonVisuals.Panels.Saitek.Panels
         {
             try
             {
-                // Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel);
                 HIDSkeletonBase.HIDWriteDevice?.WriteFeatureData(array);
             }
             catch (Exception ex)

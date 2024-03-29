@@ -80,7 +80,7 @@ namespace NonVisuals.Panels.StreamDeck
         public void Execute(CancellationToken threadCancellationToken, bool executeOnce = false)
         {
             Common.PlaySoundFile(SoundFile, Volume);
-            SendDCSBIOSCommands(threadCancellationToken);
+            SendDCSBIOSCommandsAsync(threadCancellationToken);
         }
 
         internal override void ImportSettings(string settings) { }

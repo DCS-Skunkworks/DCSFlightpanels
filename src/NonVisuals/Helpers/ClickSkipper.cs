@@ -1,4 +1,5 @@
-﻿using DCS_BIOS;
+﻿using System.Threading.Tasks;
+using DCS_BIOS;
 
 namespace NonVisuals.Helpers
 {
@@ -38,7 +39,7 @@ namespace NonVisuals.Helpers
         /// Executes DCS-BIOS command if not skipping.
         /// </summary>
         /// <returns></returns>
-        public bool Click(string dcsBIOSCommand)
+        public async Task<bool> ClickAsync(string dcsBIOSCommand)
         {
             _clicksDetected++;
             if (_clicksDetected <= ClicksToSkip)
@@ -50,7 +51,7 @@ namespace NonVisuals.Helpers
 
             if (!string.IsNullOrEmpty(dcsBIOSCommand))
             {
-                DCSBIOS.SendAsync(dcsBIOSCommand);
+                await DCSBIOS.SendAsync(dcsBIOSCommand);
             }
 
             return false;
