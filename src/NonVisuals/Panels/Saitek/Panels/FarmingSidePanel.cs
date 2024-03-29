@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.BindingClasses.DCSBIOSBindings;
 using NonVisuals.BindingClasses.Key;
 using NonVisuals.BindingClasses.OSCommand;
@@ -232,7 +233,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             set => _operatingSystemCommandBindings = value;
         }
 
-        private void FarmingSidePanelSwitchChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        private async Task FarmingSidePanelSwitchChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (!ForwardPanelEvent)
             {
@@ -308,7 +309,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                     {
                         if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.FarmingPanelKey == farmingPanelKey.FarmingPanelMKKey && dcsBiosBinding.WhenTurnedOn == farmingPanelKey.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
+                            await dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
                             break;
                         }
                     }
@@ -599,9 +600,9 @@ namespace NonVisuals.Panels.Saitek.Panels
         }
 
 
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override async Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            FarmingSidePanelSwitchChanged(isFirstReport, hashSet);
+            await FarmingSidePanelSwitchChangedAsync(isFirstReport, hashSet);
         }
 
         private void CreateKeys()

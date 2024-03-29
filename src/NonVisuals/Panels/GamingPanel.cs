@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Panels
+﻿using System.Threading.Tasks;
+
+namespace NonVisuals.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -24,7 +26,7 @@
         public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
         public abstract void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e);
         public abstract void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
-        protected abstract void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet);
+        protected abstract Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet);
         protected abstract void StartListeningForHidPanelChanges();
 
         private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;

@@ -5,6 +5,7 @@ using System;
 using DCS_BIOS.Interfaces;
 using NonVisuals.CockpitMaster.Switches;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using NonVisuals.HID;
 using DCS_BIOS.Serialized;
 using DCS_BIOS.ControlLocator;
@@ -12,7 +13,7 @@ using DCS_BIOS.ControlLocator;
 namespace NonVisuals.CockpitMaster.PreProgrammed
 {
 
-    public class CDU737PanelAH64D : CDU737PanelBase , IDCSBIOSStringListener
+    public class CDU737PanelAH64D : CDU737PanelBase, IDCSBIOSStringListener
     {
         // List the DCSBios Mappings Here
 
@@ -38,7 +39,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
         private DCSBIOSOutput _PLT_MASTER_WARNING_L;
 
         public CDU737PanelAH64D(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {}
+        { }
 
         public override void InitPanel()
         {
@@ -84,7 +85,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
                 SetLine(0, string.Format("{0,24}", "AH64D profile"));
 
                 StartListeningForHidPanelChanges();
-                
+
             }
             catch (Exception ex)
             {
@@ -111,9 +112,9 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
             base.Dispose(disposing);
         }
 
-        
 
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+
+        protected override async Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (isFirstReport)
             {
@@ -124,7 +125,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
 
                 foreach (CDUMappedCommandKey key in hashSet)
                 {
-                    _ = DCSBIOS.SendAsync(key.MappedCommand());
+                    await DCSBIOS.SendAsync(key.MappedCommand());
                 }
             }
             catch (Exception)
@@ -135,7 +136,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            
+
             if (SettingsLoading)
             {
                 return;
@@ -148,20 +149,20 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
 
                 UpdateCounter(e.Address, e.Data);
 
-                ( shouldUpdate, newValue) = ShouldHandleDCSBiosData(e, _PLT_EUFD_BRT);
+                (shouldUpdate, newValue) = ShouldHandleDCSBiosData(e, _PLT_EUFD_BRT);
 
                 if (shouldUpdate)
                 {
                     int eufdBright = (int)newValue;
                     // MAX_BRIGHT is 256 , so 655356 / 256 is 256 , we need to divide by 2^8
                     ScreenBrightness = eufdBright >> 8;
-                    KeyboardBrightness= eufdBright >>8;
+                    KeyboardBrightness = eufdBright >> 8;
                     refreshLedsAndBrightness();
                 }
 
                 // AH - 64D / PLT_MASTER_WARNING_L
                 (shouldUpdate, newValue) = ShouldHandleDCSBiosData(e, _PLT_MASTER_WARNING_L);
-                if(shouldUpdate)
+                if (shouldUpdate)
                 {
                     if (newValue == 1)
                     {
@@ -195,7 +196,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
                     {
                         SetLine(0, string.Format("{0,24}", incomingData));
                     }
-                    
+
                 }
 
                 if (e.Address.Equals(_PLT_EUFD_LINE1.Address))
@@ -203,9 +204,9 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
                     incomingData = e.StringData.Substring(38, 17);
                     if (HandleStringData(1, e, incomingData, ref linesChanged))
                     {
-                        SetLine(1, string.Format("{0,24}", incomingData ));
+                        SetLine(1, string.Format("{0,24}", incomingData));
                     }
-                    
+
                 }
 
                 if (e.Address.Equals(_PLT_EUFD_LINE2.Address))
@@ -254,9 +255,9 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
                     incomingData = e.StringData.Substring(0, 18);
                     if (HandleStringData(7, e, incomingData, ref linesChanged))
                     {
-                        SetLine(7, incomingData );
+                        SetLine(7, incomingData);
                     }
-                        
+
                 }
                 if (e.Address.Equals(_PLT_EUFD_LINE9.Address))
                 {

@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.CockpitMaster.Panels
+﻿using System.Threading.Tasks;
+
+namespace NonVisuals.CockpitMaster.Panels
 {
     using System;
     using System.Collections.Generic;
@@ -210,9 +212,8 @@
             base.Dispose(disposing);
         }
 
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override async Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
-
         }
 
         public Dictionary<char, CDUCharset> ConvertTable { 
@@ -435,7 +436,7 @@
 
         }
 
-        private void OnReport(HidReport report)
+        private async Task OnReport(HidReport report)
         {
             if (TypeOfPanel == GamingPanelEnum.CDU737 && report.Data.Length == 64)
             {
@@ -444,7 +445,7 @@
                 HashSet<object> hashSet = GetHashSetOfChangedKnobs(OldCDUPanelValues, NewCDUPanelValues);
                 if (hashSet.Count > 0)
                 {
-                    GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
+                    await GamingPanelKnobChangedAsync(!FirstReportHasBeenRead, hashSet);
                     AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
                 }
 

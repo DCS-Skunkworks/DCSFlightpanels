@@ -1,4 +1,5 @@
-﻿using NonVisuals.Interfaces;
+﻿using System.Threading.Tasks;
+using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios
 {
@@ -79,7 +80,7 @@ namespace NonVisuals.Radios
 
         protected abstract void PZ69KnobChanged(IEnumerable<object> hashSet);
 
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override async Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
             /*
              * Here we want to remove ACT/STBY info. This way we get what radio mode is chosen.

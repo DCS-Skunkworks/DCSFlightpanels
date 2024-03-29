@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.BindingClasses.DCSBIOSBindings;
 using NonVisuals.BindingClasses.Key;
 using NonVisuals.BindingClasses.OSCommand;
@@ -372,11 +373,11 @@ namespace NonVisuals.Panels.Saitek.Panels
             }
         }
 
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override async Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
             // Set _selectedMode and LCD button statuses
             // and performs the actual actions for key presses
-            PZ70SwitchChanged(isFirstReport, hashSet);
+            await PZ70SwitchChangedAsync(isFirstReport, hashSet);
         }
 
         public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
@@ -697,7 +698,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             }
         }
 
-        private void PZ70SwitchChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        private async Task PZ70SwitchChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
             foreach (var o in hashSet)
             {
@@ -887,7 +888,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                         if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob
                             && dcsBiosBinding.WhenTurnedOn == multiPanelKnob.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
+                            await dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
                             break;
                         }
                     }

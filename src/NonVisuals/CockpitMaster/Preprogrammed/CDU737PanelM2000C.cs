@@ -5,6 +5,7 @@ using System;
 using DCS_BIOS.Interfaces;
 using NonVisuals.CockpitMaster.Switches;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using NonVisuals.HID;
 
 namespace NonVisuals.CockpitMaster.PreProgrammed
@@ -60,7 +61,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override async Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (isFirstReport)
             {
@@ -71,7 +72,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
             {
                 foreach (CDUMappedCommandKey key in hashSet)
                 {
-                    _ = DCSBIOS.SendAsync(key.MappedCommand());
+                    await DCSBIOS.SendAsync(key.MappedCommand());
                 }
 
             }

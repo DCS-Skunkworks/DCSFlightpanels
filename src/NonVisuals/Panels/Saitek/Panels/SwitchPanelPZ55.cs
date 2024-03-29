@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.BindingClasses.DCSBIOSBindings;
 using NonVisuals.BindingClasses.Key;
 using NonVisuals.BindingClasses.OSCommand;
@@ -400,7 +401,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             }
         }
 
-        private void PZ55SwitchChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        private async Task PZ55SwitchChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (!ForwardPanelEvent)
             {
@@ -499,7 +500,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                     {
                         if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == switchPanelKey.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
+                            await dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
                             break;
                         }
                     }
@@ -861,9 +862,9 @@ namespace NonVisuals.Panels.Saitek.Panels
         }
 
 
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override async Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            PZ55SwitchChanged(isFirstReport, hashSet);
+            await PZ55SwitchChangedAsync(isFirstReport, hashSet);
         }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

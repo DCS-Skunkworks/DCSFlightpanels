@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.BindingClasses.DCSBIOSBindings;
 using NonVisuals.BindingClasses.Key;
 using NonVisuals.BindingClasses.OSCommand;
@@ -222,7 +223,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             set => _bipLinks = value;
         }
 
-        private void TPMSwitchChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        private async Task TPMSwitchChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (!ForwardPanelEvent)
             {
@@ -297,7 +298,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                     {
                         if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && dcsBiosBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
+                            await dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
                             break;
                         }
                     }
@@ -605,9 +606,9 @@ namespace NonVisuals.Panels.Saitek.Panels
             SetIsDirty();
         }
 
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override async Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            TPMSwitchChanged(isFirstReport, hashSet);
+            await TPMSwitchChanged(isFirstReport, hashSet);
         }
 
         private void CreateSwitchKeys()

@@ -100,7 +100,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 var hashSet = GetHashSetOfChangedKnobs(_oldSaitekPanelValueTPM, _newSaitekPanelValueTPM);
                 if (hashSet.Count > 0)
                 {
-                    GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
+                    GamingPanelKnobChangedAsync(!FirstReportHasBeenRead, hashSet);
                     AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
                 }
 
@@ -113,7 +113,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 var hashSet = GetHashSetOfChangedKnobs(_oldSaitekPanelValue, _newSaitekPanelValue);
                 if (hashSet.Count > 0)
                 {
-                    GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
+                    GamingPanelKnobChangedAsync(!FirstReportHasBeenRead, hashSet);
                     AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
                 }
 
@@ -126,7 +126,7 @@ namespace NonVisuals.Panels.Saitek.Panels
                 var hashSet = GetHashSetOfChangedKnobs(_oldPanelValueFarmingPanel, _newPanelValueFarmingPanel);
                 if (hashSet.Count > 0)
                 {
-                    GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
+                    GamingPanelKnobChangedAsync(!FirstReportHasBeenRead, hashSet);
                     AppEventHandler.SwitchesChanged(this, HIDSkeletonBase.HIDInstance, TypeOfPanel, hashSet);
                 }
 
