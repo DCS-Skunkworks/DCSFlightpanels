@@ -177,7 +177,7 @@ namespace NonVisuals.Radios
                         {
                             case CurrentF15ERadioMode.ARC210:
                                 {
-                                    DCSBIOS.Send(_arc210Radio.GetDCSBIOSCommand());
+                                    DCSBIOS.SendAsync(_arc210Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
@@ -197,7 +197,7 @@ namespace NonVisuals.Radios
 
                             case CurrentF15ERadioMode.ARC210:
                                 {
-                                    DCSBIOS.Send(_arc210Radio.GetDCSBIOSCommand());
+                                    DCSBIOS.SendAsync(_arc210Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
@@ -217,7 +217,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _uhfCockpitFrequency;
-                DCSBIOS.Send($"{UHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentF15ERadioMode.UHF)}\n");
+                DCSBIOS.SendAsync($"{UHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentF15ERadioMode.UHF)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _uhfBigFrequencyStandby = uint.Parse(array[0]);
                 _uhfSmallFrequencyStandby = uint.Parse(array[1]);

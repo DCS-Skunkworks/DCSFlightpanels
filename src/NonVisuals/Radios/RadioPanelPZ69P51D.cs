@@ -359,7 +359,7 @@ namespace NonVisuals.Radios
                                             {
                                                 // Do not synch if user has pressed the button to configure the radio
                                                 // Do when user releases button
-                                                DCSBIOS.Send(VHF_RADIO_LIGHT_SWITCH_COMMAND);
+                                                DCSBIOS.SendAsync(VHF_RADIO_LIGHT_SWITCH_COMMAND);
                                             }
 
                                             _upperButtonPressedAndDialRotated = false;
@@ -379,7 +379,7 @@ namespace NonVisuals.Radios
                                             {
                                                 // Do not synch if user has pressed the button to configure the radio
                                                 // Do when user releases button
-                                                DCSBIOS.Send(VHF_RADIO_LIGHT_SWITCH_COMMAND);
+                                                DCSBIOS.SendAsync(VHF_RADIO_LIGHT_SWITCH_COMMAND);
                                             }
 
                                             _lowerButtonPressedAndDialRotated = false;
@@ -465,7 +465,7 @@ namespace NonVisuals.Radios
                                                 if (_upperButtonPressed)
                                                 {
                                                     _upperButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
+                                                    DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 }
                                                 else if (!_vhfRadioDialSkipper.ShouldSkip())
                                                 {
@@ -491,7 +491,7 @@ namespace NonVisuals.Radios
                                                 if (_upperButtonPressed)
                                                 {
                                                     _upperButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
+                                                    DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 }
                                                 else if (!_vhfRadioDialSkipper.ShouldSkip())
                                                 {
@@ -553,7 +553,7 @@ namespace NonVisuals.Radios
                                                 if (_lowerButtonPressed)
                                                 {
                                                     _lowerButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
+                                                    DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 }
                                                 else if (!_vhfRadioDialSkipper.ShouldSkip())
                                                 {
@@ -579,7 +579,7 @@ namespace NonVisuals.Radios
                                                 if (_lowerButtonPressed)
                                                 {
                                                     _lowerButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
+                                                    DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 }
                                                 else if (!_vhfRadioDialSkipper.ShouldSkip())
                                                 {
@@ -725,25 +725,25 @@ namespace NonVisuals.Radios
                 {
                     case 0:
                         {
-                            DCSBIOS.Send("VHF_RADIO_CHAN_A 1\n");
+                            DCSBIOS.SendAsync("VHF_RADIO_CHAN_A 1\n");
                             break;
                         }
 
                     case 1:
                         {
-                            DCSBIOS.Send("VHF_RADIO_CHAN_B 1\n");
+                            DCSBIOS.SendAsync("VHF_RADIO_CHAN_B 1\n");
                             break;
                         }
 
                     case 2:
                         {
-                            DCSBIOS.Send("VHF_RADIO_CHAN_C 1\n");
+                            DCSBIOS.SendAsync("VHF_RADIO_CHAN_C 1\n");
                             break;
                         }
 
                     case 3:
                         {
-                            DCSBIOS.Send("VHF_RADIO_CHAN_D 1\n");
+                            DCSBIOS.SendAsync("VHF_RADIO_CHAN_D 1\n");
                             break;
                         }
 
@@ -758,12 +758,12 @@ namespace NonVisuals.Radios
 
         private void SendLFFrequencyCommand(bool increase)
         {
-            DCSBIOS.Send(GetDetrolaFrequencyStringCommand(increase, _lfFrequencyDialChangeMonitor.ClickAndCheck() ? _lfFrequencyChangeValue * 10 : _lfFrequencyChangeValue));
+            DCSBIOS.SendAsync(GetDetrolaFrequencyStringCommand(increase, _lfFrequencyDialChangeMonitor.ClickAndCheck() ? _lfFrequencyChangeValue * 10 : _lfFrequencyChangeValue));
         }
 
         private void SendLFVolumeCommand(bool increase)
         {
-            DCSBIOS.Send(GetDetrolaVolumeStringCommand(increase, _lfVolumeDialChangeMonitor.ClickAndCheck() ? _lfVolumeChangeValue * 10 : _lfVolumeChangeValue));
+            DCSBIOS.SendAsync(GetDetrolaVolumeStringCommand(increase, _lfVolumeDialChangeMonitor.ClickAndCheck() ? _lfVolumeChangeValue * 10 : _lfVolumeChangeValue));
         }
 
 
@@ -846,25 +846,25 @@ namespace NonVisuals.Radios
 
                     case 1:
                         {
-                            DCSBIOS.Send("VHF_RADIO_ON_OFF 1\n");
+                            DCSBIOS.SendAsync("VHF_RADIO_ON_OFF 1\n");
                             break;
                         }
 
                     case 2:
                         {
-                            DCSBIOS.Send("VHF_RADIO_CHAN_A 1\n");
+                            DCSBIOS.SendAsync("VHF_RADIO_CHAN_A 1\n");
                             break;
                         }
 
                     case 3:
                         {
-                            DCSBIOS.Send("VHF_RADIO_CHAN_B 1\n");
+                            DCSBIOS.SendAsync("VHF_RADIO_CHAN_B 1\n");
                             break;
                         }
 
                     case 4:
                         {
-                            DCSBIOS.Send("VHF_RADIO_CHAN_C 1\n");
+                            DCSBIOS.SendAsync("VHF_RADIO_CHAN_C 1\n");
                             break;
                         }
                 }

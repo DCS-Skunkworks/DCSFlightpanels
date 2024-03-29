@@ -338,7 +338,7 @@ namespace NonVisuals.Radios
                                         {
                                             // Do not synch if user has pressed the button to configure the radio
                                             // Do when user releases button
-                                            DCSBIOS.Send(VHF_RADIO_LIGHT_SWITCH_COMMAND);
+                                            DCSBIOS.SendAsync(VHF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
 
                                         _upperButtonPressedAndDialRotated = false;
@@ -359,7 +359,7 @@ namespace NonVisuals.Radios
                                         {
                                             // Do not synch if user has pressed the button to configure the radio
                                             // Do when user releases button
-                                            DCSBIOS.Send(VHF_RADIO_LIGHT_SWITCH_COMMAND);
+                                            DCSBIOS.SendAsync(VHF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
 
                                         _lowerButtonPressedAndDialRotated = false;
@@ -454,7 +454,7 @@ namespace NonVisuals.Radios
                                                 if (_upperButtonPressed)
                                                 {
                                                     _upperButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(VHF_VOLUME_KNOB_COMMAND_INC);
+                                                    DCSBIOS.SendAsync(VHF_VOLUME_KNOB_COMMAND_INC);
                                                 }
                                                 else
                                                 {
@@ -480,7 +480,7 @@ namespace NonVisuals.Radios
                                                 if (_upperButtonPressed)
                                                 {
                                                     _upperButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(VHF_VOLUME_KNOB_COMMAND_DEC);
+                                                    DCSBIOS.SendAsync(VHF_VOLUME_KNOB_COMMAND_DEC);
                                                 }
                                                 else
                                                 {
@@ -542,7 +542,7 @@ namespace NonVisuals.Radios
                                                 if (_lowerButtonPressed)
                                                 {
                                                     _lowerButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(VHF_VOLUME_KNOB_COMMAND_INC);
+                                                    DCSBIOS.SendAsync(VHF_VOLUME_KNOB_COMMAND_INC);
                                                 }
                                                 else 
                                                 {
@@ -568,7 +568,7 @@ namespace NonVisuals.Radios
                                                 if (_lowerButtonPressed)
                                                 {
                                                     _lowerButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(VHF_VOLUME_KNOB_COMMAND_DEC);
+                                                    DCSBIOS.SendAsync(VHF_VOLUME_KNOB_COMMAND_DEC);
                                                 }
                                                 else
                                                 {
@@ -783,12 +783,12 @@ namespace NonVisuals.Radios
         
         private void SendLFFrequencyCommand(bool increase)
         {
-            DCSBIOS.Send(GetDetrolaFrequencyStringCommand(increase, _lfFrequencyDialChangeMonitor.ClickAndCheck() ? _lfFrequencyChangeValue * 10 : _lfFrequencyChangeValue));
+            DCSBIOS.SendAsync(GetDetrolaFrequencyStringCommand(increase, _lfFrequencyDialChangeMonitor.ClickAndCheck() ? _lfFrequencyChangeValue * 10 : _lfFrequencyChangeValue));
         }
 
         private void SendLFVolumeCommand(bool increase)
         {
-            DCSBIOS.Send(GetDetrolaVolumeStringCommand(increase, _lfVolumeDialChangeMonitor.ClickAndCheck() ? _lfVolumeChangeValue * 10 : _lfVolumeChangeValue));
+            DCSBIOS.SendAsync(GetDetrolaVolumeStringCommand(increase, _lfVolumeDialChangeMonitor.ClickAndCheck() ? _lfVolumeChangeValue * 10 : _lfVolumeChangeValue));
         }
 
         private string GetHFRadioChannelStringCommand(bool moveUp)

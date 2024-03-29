@@ -50,7 +50,7 @@ namespace NonVisuals.Helpers
 
             if (!string.IsNullOrEmpty(dcsBIOSCommand))
             {
-                DCSBIOS.Send(dcsBIOSCommand);
+                DCSBIOS.SendAsync(dcsBIOSCommand);
             }
 
             return false;

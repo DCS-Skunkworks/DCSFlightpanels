@@ -476,7 +476,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (knobIsOn)
                                         {
-                                            DCSBIOS.Send(SPU8_ICS_SWITCH_TOGGLE_COMMAND);
+                                            DCSBIOS.SendAsync(SPU8_ICS_SWITCH_TOGGLE_COMMAND);
                                         }
                                         break;
                                     }
@@ -508,7 +508,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (knobIsOn)
                                         {
-                                            DCSBIOS.Send(SPU8_ICS_SWITCH_TOGGLE_COMMAND);
+                                            DCSBIOS.SendAsync(SPU8_ICS_SWITCH_TOGGLE_COMMAND);
                                         }
                                         break;
                                     }
@@ -633,7 +633,7 @@ namespace NonVisuals.Radios
                                         {
                                             str = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                                         }
-                                        DCSBIOS.Send(str);
+                                        DCSBIOS.SendAsync(str);
                                         Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial1Timeout);
@@ -651,7 +651,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial2OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _yadro1ACockpitFreq2DialPos);
-                                        DCSBIOS.Send(str);
+                                        DCSBIOS.SendAsync(str);
                                         Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial2Timeout);
@@ -669,7 +669,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _yadro1ACockpitFreq3DialPos);
-                                        DCSBIOS.Send(str);
+                                        DCSBIOS.SendAsync(str);
                                         Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial3Timeout);
@@ -687,7 +687,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_4DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial4X, _yadro1ACockpitFreq4DialPos);
-                                        DCSBIOS.Send(str);
+                                        DCSBIOS.SendAsync(str);
                                         Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial4Timeout);
@@ -823,7 +823,7 @@ namespace NonVisuals.Radios
                                     }
                                     else if (_currentUpperRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.Send(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
+                                        DCSBIOS.SendAsync(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
                                     }
                                     else if (_currentUpperRadioMode == CurrentMi24PRadioMode.DME_ARK15_LOW && radioPanelKnob.IsOn)
                                     {
@@ -841,7 +841,7 @@ namespace NonVisuals.Radios
                                     }
                                     else if (_currentLowerRadioMode == CurrentMi24PRadioMode.ADF_ARK15_HIGH && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.Send(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
+                                        DCSBIOS.SendAsync(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
                                     }
                                     else if (_currentLowerRadioMode == CurrentMi24PRadioMode.DME_ARK15_LOW && radioPanelKnob.IsOn)
                                     {
@@ -1052,7 +1052,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                            DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.YADRO1A:
@@ -1062,7 +1062,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                            DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
@@ -1076,7 +1076,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_INC);
+                                            DCSBIOS.SendAsync(SPU8_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.NO_USE:
@@ -1096,7 +1096,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.YADRO1A:
@@ -1106,7 +1106,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
@@ -1120,7 +1120,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(SPU8_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.NO_USE:
@@ -1230,7 +1230,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                            DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.YADRO1A:
@@ -1240,7 +1240,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                            DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
@@ -1254,7 +1254,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_INC);
+                                            DCSBIOS.SendAsync(SPU8_VOLUME_KNOB_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.NO_USE:
@@ -1274,7 +1274,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R863_PRESET:
                                         {
-                                            DCSBIOS.Send(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.YADRO1A:
@@ -1284,7 +1284,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.R828_PRESETS:
                                         {
-                                            DCSBIOS.Send(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.ADF_ARK15_HIGH:
@@ -1298,7 +1298,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentMi24PRadioMode.SPU8:
                                         {
-                                            DCSBIOS.Send(SPU8_VOLUME_KNOB_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(SPU8_VOLUME_KNOB_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentMi24PRadioMode.NO_USE:

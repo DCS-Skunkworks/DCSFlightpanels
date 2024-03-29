@@ -176,14 +176,14 @@ namespace NonVisuals.Radios
                         {
                             case CurrentAV8BNARadioMode.COMM1:
                                 {
-                                    DCSBIOS.Send(knob.IsOn ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
+                                    DCSBIOS.SendAsync(knob.IsOn ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
                                     ShowFrequenciesOnPanel();
                                     break;
                                 }
 
                             case CurrentAV8BNARadioMode.COMM2:
                                 {
-                                    DCSBIOS.Send(knob.IsOn ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
+                                    DCSBIOS.SendAsync(knob.IsOn ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
                                     ShowFrequenciesOnPanel();
                                     break;
                                 }
@@ -197,14 +197,14 @@ namespace NonVisuals.Radios
                         {
                             case CurrentAV8BNARadioMode.COMM1:
                                 {
-                                    DCSBIOS.Send(knob.IsOn ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
+                                    DCSBIOS.SendAsync(knob.IsOn ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
                                     ShowFrequenciesOnPanel();
                                     break;
                                 }
 
                             case CurrentAV8BNARadioMode.COMM2:
                                 {
-                                    DCSBIOS.Send(knob.IsOn ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
+                                    DCSBIOS.SendAsync(knob.IsOn ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
                                     ShowFrequenciesOnPanel();
                                     break;
                                 }
@@ -326,11 +326,11 @@ namespace NonVisuals.Radios
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.Send(COMM1_CHANNEL_INC);
+                                                DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.Send(COMM1_CHANNEL_INC);
+                                                DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
                                             }
                                             break;
                                         }
@@ -340,11 +340,11 @@ namespace NonVisuals.Radios
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.Send(COMM2_CHANNEL_INC);
+                                                DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.Send(COMM2_CHANNEL_INC);
+                                                DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
                                             }
                                             break;
                                         }
@@ -361,11 +361,11 @@ namespace NonVisuals.Radios
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.Send(COMM1_CHANNEL_DEC);
+                                                DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.Send(COMM1_CHANNEL_DEC);
+                                                DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
                                             }
                                             break;
                                         }
@@ -375,11 +375,11 @@ namespace NonVisuals.Radios
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.Send(COMM2_CHANNEL_DEC);
+                                                DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.Send(COMM2_CHANNEL_DEC);
+                                                DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
                                             }
                                             break;
                                         }
@@ -393,13 +393,13 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentAV8BNARadioMode.COMM1:
                                         {
-                                            DCSBIOS.Send(COMM1_VOL_INC);
+                                            DCSBIOS.SendAsync(COMM1_VOL_INC);
                                             break;
                                         }
 
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
-                                            DCSBIOS.Send(COMM2_VOL_INC);
+                                            DCSBIOS.SendAsync(COMM2_VOL_INC);
                                             break;
                                         }
                                 }
@@ -412,13 +412,13 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentAV8BNARadioMode.COMM1:
                                         {
-                                            DCSBIOS.Send(COMM1_VOL_DEC);
+                                            DCSBIOS.SendAsync(COMM1_VOL_DEC);
                                             break;
                                         }
 
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
-                                            DCSBIOS.Send(COMM2_VOL_DEC);
+                                            DCSBIOS.SendAsync(COMM2_VOL_DEC);
                                             break;
                                         }
                                 }
@@ -434,11 +434,11 @@ namespace NonVisuals.Radios
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.Send(COMM1_CHANNEL_INC);
+                                                DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.Send(COMM1_CHANNEL_INC);
+                                                DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
                                             }
                                             break;
                                         }
@@ -448,11 +448,11 @@ namespace NonVisuals.Radios
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.Send(COMM2_CHANNEL_INC);
+                                                DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.Send(COMM2_CHANNEL_INC);
+                                                DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
                                             }
                                             break;
                                         }
@@ -469,11 +469,11 @@ namespace NonVisuals.Radios
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.Send(COMM1_CHANNEL_DEC);
+                                                DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.Send(COMM1_CHANNEL_DEC);
+                                                DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
                                             }
                                             break;
                                         }
@@ -483,11 +483,11 @@ namespace NonVisuals.Radios
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.Send(COMM2_CHANNEL_DEC);
+                                                DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.Send(COMM2_CHANNEL_DEC);
+                                                DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
                                             }
                                             break;
                                         }
@@ -501,13 +501,13 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentAV8BNARadioMode.COMM1:
                                         {
-                                            DCSBIOS.Send(COMM1_VOL_INC);
+                                            DCSBIOS.SendAsync(COMM1_VOL_INC);
                                             break;
                                         }
 
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
-                                            DCSBIOS.Send(COMM2_VOL_INC);
+                                            DCSBIOS.SendAsync(COMM2_VOL_INC);
                                             break;
                                         }
                                 }
@@ -520,13 +520,13 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentAV8BNARadioMode.COMM1:
                                         {
-                                            DCSBIOS.Send(COMM1_VOL_DEC);
+                                            DCSBIOS.SendAsync(COMM1_VOL_DEC);
                                             break;
                                         }
 
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
-                                            DCSBIOS.Send(COMM2_VOL_DEC);
+                                            DCSBIOS.SendAsync(COMM2_VOL_DEC);
                                             break;
                                         }
                                 }

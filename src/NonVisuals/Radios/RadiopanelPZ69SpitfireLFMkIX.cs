@@ -331,7 +331,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
+                                            DCSBIOS.SendAsync(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
                                     break;
@@ -343,7 +343,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
+                                            DCSBIOS.SendAsync(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
                                     break;

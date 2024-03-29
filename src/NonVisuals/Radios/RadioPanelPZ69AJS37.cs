@@ -214,7 +214,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentAJS37RadioMode.TILS:
                                     {
-                                        DCSBIOS.Send(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
+                                        DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                         break;
                                     }
 
@@ -242,7 +242,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentAJS37RadioMode.TILS:
                                     {
-                                        DCSBIOS.Send(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
+                                        DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                         break;
                                     }
 
@@ -369,7 +369,7 @@ namespace NonVisuals.Radios
                                     }
                                     else if (_currentUpperRadioMode == CurrentAJS37RadioMode.TILS && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.Send(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
+                                        DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                     }
                                     else if (radioPanelKnob.IsOn)
                                     {
@@ -393,7 +393,7 @@ namespace NonVisuals.Radios
                                     }
                                     else if (_currentLowerRadioMode == CurrentAJS37RadioMode.TILS && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.Send(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
+                                        DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                     }
                                     else if (radioPanelKnob.IsOn)
                                     {
@@ -439,7 +439,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_INCREASE_COMMAND : FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND);
+                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_INCREASE_COMMAND : FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
 
@@ -468,7 +468,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_DECREASE_COMMAND : FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND);
+                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_DECREASE_COMMAND : FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
 
@@ -497,7 +497,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND);
+                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
 
@@ -526,7 +526,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND);
+                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
 
@@ -555,7 +555,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_INCREASE_COMMAND : FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND);
+                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_INCREASE_COMMAND : FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
 
@@ -584,7 +584,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_DECREASE_COMMAND : FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND);
+                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_DECREASE_COMMAND : FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
 
@@ -613,7 +613,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND);
+                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
 
@@ -642,7 +642,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND);
+                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
 

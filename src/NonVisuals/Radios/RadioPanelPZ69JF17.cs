@@ -211,7 +211,7 @@ namespace NonVisuals.Radios
         {
             try
             {
-                DCSBIOS.Send(_com1Radio.GetDCSBIOSCommand());
+                DCSBIOS.SendAsync(_com1Radio.GetDCSBIOSCommand());
                 Interlocked.Increment(ref _doUpdatePanelLCD);
             }
             catch (Exception ex)
@@ -224,7 +224,7 @@ namespace NonVisuals.Radios
         {
             try
             {
-                DCSBIOS.Send(_com2Radio.GetDCSBIOSCommand());
+                DCSBIOS.SendAsync(_com2Radio.GetDCSBIOSCommand());
                 Interlocked.Increment(ref _doUpdatePanelLCD);
             }
             catch (Exception ex)

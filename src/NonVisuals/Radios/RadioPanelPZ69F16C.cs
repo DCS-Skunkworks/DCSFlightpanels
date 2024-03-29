@@ -284,13 +284,13 @@ namespace NonVisuals.Radios
                         {
                             case CurrentF16CRadioMode.ARC164_UHF:
                                 {
-                                    DCSBIOS.Send(_arc164Radio.GetDCSBIOSCommand());
+                                    DCSBIOS.SendAsync(_arc164Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
                             case CurrentF16CRadioMode.ARC222_VHF:
                                 {
-                                    DCSBIOS.Send(_arc222Radio.GetDCSBIOSCommand());
+                                    DCSBIOS.SendAsync(_arc222Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
@@ -304,13 +304,13 @@ namespace NonVisuals.Radios
                         {
                             case CurrentF16CRadioMode.ARC164_UHF:
                                 {
-                                    DCSBIOS.Send(_arc164Radio.GetDCSBIOSCommand());
+                                    DCSBIOS.SendAsync(_arc164Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
                             case CurrentF16CRadioMode.ARC222_VHF:
                                 {
-                                    DCSBIOS.Send(_arc222Radio.GetDCSBIOSCommand());
+                                    DCSBIOS.SendAsync(_arc222Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }

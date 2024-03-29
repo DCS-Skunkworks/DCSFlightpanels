@@ -341,7 +341,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentLowerRadioMode == CurrentBf109RadioMode.IFF)
                                     {
-                                        DCSBIOS.Send(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
+                                        DCSBIOS.SendAsync(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
                                     }
 
                                     if (_currentUpperRadioMode == CurrentBf109RadioMode.HOMING)
@@ -350,7 +350,7 @@ namespace NonVisuals.Radios
                                         {
                                             lock (_lockHomingDialObject1)
                                             {
-                                                DCSBIOS.Send(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
+                                                DCSBIOS.SendAsync(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
                                             }
                                         }
                                     }
@@ -361,7 +361,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentLowerRadioMode == CurrentBf109RadioMode.IFF)
                                     {
-                                        DCSBIOS.Send(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
+                                        DCSBIOS.SendAsync(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
                                     }
 
                                     if (_currentLowerRadioMode == CurrentBf109RadioMode.HOMING)
@@ -370,7 +370,7 @@ namespace NonVisuals.Radios
                                         {
                                             lock (_lockHomingDialObject1)
                                             {
-                                                DCSBIOS.Send(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
+                                                DCSBIOS.SendAsync(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
                                             }
                                         }
                                     }
@@ -483,13 +483,13 @@ namespace NonVisuals.Radios
                                                     // Change faster
                                                     changeFaster = true;
                                                 }
-                                                DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_INC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_INC);
+                                                DCSBIOS.SendAsync(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_INC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_INC);
+                                                DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -520,13 +520,13 @@ namespace NonVisuals.Radios
                                                     // Change faster
                                                     changeFaster = true;
                                                 }
-                                                DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_DEC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_DEC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -617,13 +617,13 @@ namespace NonVisuals.Radios
                                                     // Change faster
                                                     changeFaster = true;
                                                 }
-                                                DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_INC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_INC);
+                                                DCSBIOS.SendAsync(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_INC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_INC);
+                                                DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -654,13 +654,13 @@ namespace NonVisuals.Radios
                                                     // Change faster
                                                     changeFaster = true;
                                                 }
-                                                DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_DEC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_DEC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 

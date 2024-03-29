@@ -207,7 +207,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _vhfCockpitFrequency;
-                DCSBIOS.Send($"{VHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentC101RadioMode.VHF)}\n");
+                DCSBIOS.SendAsync($"{VHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentC101RadioMode.VHF)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _vhfBigFrequencyStandby = uint.Parse(array[0]);
                 _vhfSmallFrequencyStandby = uint.Parse(array[1]);
@@ -224,7 +224,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _uhfCockpitFrequency;
-                DCSBIOS.Send($"{UHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentC101RadioMode.UHF)}\n");
+                DCSBIOS.SendAsync($"{UHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentC101RadioMode.UHF)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _uhfBigFrequencyStandby = uint.Parse(array[0]);
                 _uhfSmallFrequencyStandby = uint.Parse(array[1]);

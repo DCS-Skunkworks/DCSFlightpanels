@@ -576,13 +576,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_INC);
+                                                DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                DCSBIOS.Send(UHF_VOLUME_COMMAND_INC);
+                                                DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_INC);
                                                 break;
                                             }
 
@@ -612,13 +612,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                DCSBIOS.Send(UHF_VOLUME_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -720,13 +720,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                DCSBIOS.Send(UHF_VOLUME_COMMAND_INC);
+                                                DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_INC);
+                                                DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_INC);
                                                 break;
                                             }
 
@@ -756,13 +756,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                DCSBIOS.Send(UHF_VOLUME_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.Send(VHF_VOLUME_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_DEC);
                                                 break;
                                             }
 

@@ -297,7 +297,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _vhfCockpitFrequency;
-                DCSBIOS.Send($"{VHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.VHF)}\n");
+                DCSBIOS.SendAsync($"{VHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.VHF)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _vhfBigFrequencyStandby = uint.Parse(array[0]);
                 _vhfSmallFrequencyStandby = uint.Parse(array[1]);
@@ -314,7 +314,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _uhfCockpitFrequency;
-                DCSBIOS.Send($"{UHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.UHF)}\n");
+                DCSBIOS.SendAsync($"{UHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.UHF)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _uhfBigFrequencyStandby = uint.Parse(array[0]);
                 _uhfSmallFrequencyStandby = uint.Parse(array[1]);
@@ -331,7 +331,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _fm1CockpitFrequency;
-                DCSBIOS.Send($"{FM1_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.FM1)}\n");
+                DCSBIOS.SendAsync($"{FM1_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.FM1)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _fm1BigFrequencyStandby = uint.Parse(array[0]);
                 _fm1SmallFrequencyStandby = uint.Parse(array[1]);
@@ -348,7 +348,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _fm2CockpitFrequency;
-                DCSBIOS.Send($"{FM2_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.FM2)}\n");
+                DCSBIOS.SendAsync($"{FM2_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.FM2)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _fm2BigFrequencyStandby = uint.Parse(array[0]);
                 _fm2SmallFrequencyStandby = uint.Parse(array[1]);
@@ -365,7 +365,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _hfCockpitFrequency;
-                DCSBIOS.Send($"{HF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.HF)}\n");
+                DCSBIOS.SendAsync($"{HF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.HF)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _hfBigFrequencyStandby = uint.Parse(array[0]);
                 _hfSmallFrequencyStandby = uint.Parse(array[1]);

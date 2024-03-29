@@ -294,7 +294,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentF86FRadioMode.ADF_APX6:
                                     {
-                                        DCSBIOS.Send(APX_6DIAL_STOP_TOGGLE_COMMAND);
+                                        DCSBIOS.SendAsync(APX_6DIAL_STOP_TOGGLE_COMMAND);
                                         break;
                                     }
                             }
@@ -327,7 +327,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentF86FRadioMode.ADF_APX6:
                                     {
-                                        DCSBIOS.Send(APX_6DIAL_STOP_TOGGLE_COMMAND);
+                                        DCSBIOS.SendAsync(APX_6DIAL_STOP_TOGGLE_COMMAND);
                                         break;
                                     }
                             }
@@ -546,7 +546,7 @@ namespace NonVisuals.Radios
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqIncreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_INC : ARN6_FREQUENCY_COMMAND_INC);
+                                                DCSBIOS.SendAsync(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_INC : ARN6_FREQUENCY_COMMAND_INC);
                                                 break;
                                             }
 
@@ -583,7 +583,7 @@ namespace NonVisuals.Radios
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqDecreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_DEC : ARN6_FREQUENCY_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_DEC : ARN6_FREQUENCY_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -619,7 +619,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
-                                                DCSBIOS.Send(ARC27_VOLUME_KNOB_COMMAND_INC);
+                                                DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -656,7 +656,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
-                                                DCSBIOS.Send(ARC27_VOLUME_KNOB_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -694,7 +694,7 @@ namespace NonVisuals.Radios
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqIncreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_INC : ARN6_FREQUENCY_COMMAND_INC);
+                                                DCSBIOS.SendAsync(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_INC : ARN6_FREQUENCY_COMMAND_INC);
                                                 break;
                                             }
 
@@ -731,7 +731,7 @@ namespace NonVisuals.Radios
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqDecreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_DEC : ARN6_FREQUENCY_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_DEC : ARN6_FREQUENCY_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -767,7 +767,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
-                                                DCSBIOS.Send(ARC27_VOLUME_KNOB_COMMAND_INC);
+                                                DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -804,7 +804,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
-                                                DCSBIOS.Send(ARC27_VOLUME_KNOB_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 

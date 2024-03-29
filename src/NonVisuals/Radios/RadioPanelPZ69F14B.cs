@@ -809,8 +809,8 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitDial1Frequency != desiredValueDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    DCSBIOS.Send(_uhfCockpitDial1Frequency < desiredValueDial1 ? UHF_1ST_DIAL_INCREASE : UHF_1ST_DIAL_DECREASE);
-                                    DCSBIOS.Send(UHF_1ST_DIAL_NEUTRAL);
+                                    DCSBIOS.SendAsync(_uhfCockpitDial1Frequency < desiredValueDial1 ? UHF_1ST_DIAL_INCREASE : UHF_1ST_DIAL_DECREASE);
+                                    DCSBIOS.SendAsync(UHF_1ST_DIAL_NEUTRAL);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
                                 }
@@ -829,8 +829,8 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitDial2Frequency != desiredValueDial2)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    DCSBIOS.Send(UHF_2ND_DIAL_COMMAND + GetCommandDirection10Dial(desiredValueDial2, _uhfCockpitDial2Frequency));
-                                    DCSBIOS.Send(UHF_2ND_DIAL_NEUTRAL);
+                                    DCSBIOS.SendAsync(UHF_2ND_DIAL_COMMAND + GetCommandDirection10Dial(desiredValueDial2, _uhfCockpitDial2Frequency));
+                                    DCSBIOS.SendAsync(UHF_2ND_DIAL_NEUTRAL);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
                                 }
@@ -849,8 +849,8 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitDial3Frequency != desiredValueDial3)
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
-                                    DCSBIOS.Send(UHF_3RD_DIAL_COMMAND + GetCommandDirection10Dial(desiredValueDial3, _uhfCockpitDial3Frequency));
-                                    DCSBIOS.Send(UHF_3RD_DIAL_NEUTRAL);
+                                    DCSBIOS.SendAsync(UHF_3RD_DIAL_COMMAND + GetCommandDirection10Dial(desiredValueDial3, _uhfCockpitDial3Frequency));
+                                    DCSBIOS.SendAsync(UHF_3RD_DIAL_NEUTRAL);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
                                 }
@@ -869,8 +869,8 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitDial4Frequency != desiredValueDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    DCSBIOS.Send(_uhfCockpitDial4Frequency < desiredValueDial4 ? UHF_4TH_DIAL_INCREASE : UHF_4TH_DIAL_DECREASE);
-                                    DCSBIOS.Send(UHF_4TH_DIAL_NEUTRAL);
+                                    DCSBIOS.SendAsync(_uhfCockpitDial4Frequency < desiredValueDial4 ? UHF_4TH_DIAL_INCREASE : UHF_4TH_DIAL_DECREASE);
+                                    DCSBIOS.SendAsync(UHF_4TH_DIAL_NEUTRAL);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
                                 }
@@ -1004,8 +1004,8 @@ namespace NonVisuals.Radios
                                 if (_vuhfCockpitDial1Frequency != desiredValueDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    DCSBIOS.Send(_vuhfCockpitDial1Frequency < desiredValueDial1 ? VUHF_1ST_DIAL_INCREASE : VUHF_1ST_DIAL_DECREASE);
-                                    DCSBIOS.Send(VUHF_1ST_DIAL_NEUTRAL);
+                                    DCSBIOS.SendAsync(_vuhfCockpitDial1Frequency < desiredValueDial1 ? VUHF_1ST_DIAL_INCREASE : VUHF_1ST_DIAL_DECREASE);
+                                    DCSBIOS.SendAsync(VUHF_1ST_DIAL_NEUTRAL);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _vuhfDial1WaitingForFeedback, 1);
                                 }
@@ -1024,8 +1024,8 @@ namespace NonVisuals.Radios
                                 if (_vuhfCockpitDial2Frequency != desiredValueDial2)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    DCSBIOS.Send(VUHF_2ND_DIAL_COMMAND + GetCommandDirection10Dial(desiredValueDial2, _vuhfCockpitDial2Frequency));
-                                    DCSBIOS.Send(VUHF_2ND_DIAL_NEUTRAL);
+                                    DCSBIOS.SendAsync(VUHF_2ND_DIAL_COMMAND + GetCommandDirection10Dial(desiredValueDial2, _vuhfCockpitDial2Frequency));
+                                    DCSBIOS.SendAsync(VUHF_2ND_DIAL_NEUTRAL);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _vuhfDial2WaitingForFeedback, 1);
                                 }
@@ -1044,8 +1044,8 @@ namespace NonVisuals.Radios
                                 if (_vuhfCockpitDial3Frequency != desiredValueDial3)
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
-                                    DCSBIOS.Send(VUHF_3RD_DIAL_COMMAND + GetCommandDirection10Dial(desiredValueDial3, _vuhfCockpitDial3Frequency));
-                                    DCSBIOS.Send(VUHF_3RD_DIAL_NEUTRAL);
+                                    DCSBIOS.SendAsync(VUHF_3RD_DIAL_COMMAND + GetCommandDirection10Dial(desiredValueDial3, _vuhfCockpitDial3Frequency));
+                                    DCSBIOS.SendAsync(VUHF_3RD_DIAL_NEUTRAL);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _vuhfDial3WaitingForFeedback, 1);
                                 }
@@ -1064,8 +1064,8 @@ namespace NonVisuals.Radios
                                 if (_vuhfCockpitDial4Frequency != desiredValueDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    DCSBIOS.Send(_vuhfCockpitDial4Frequency < desiredValueDial4 ? VUHF_4TH_DIAL_INCREASE : VUHF_4TH_DIAL_DECREASE);
-                                    DCSBIOS.Send(VUHF_4TH_DIAL_NEUTRAL);
+                                    DCSBIOS.SendAsync(_vuhfCockpitDial4Frequency < desiredValueDial4 ? VUHF_4TH_DIAL_INCREASE : VUHF_4TH_DIAL_DECREASE);
+                                    DCSBIOS.SendAsync(VUHF_4TH_DIAL_NEUTRAL);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vuhfDial4WaitingForFeedback, 1);
                                 }
@@ -1167,7 +1167,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
                                     var str = RIO_LINK4_HUNDREDS_DIAL_COMMAND + (_rioLink4HundredsCockpitFrequency < desiredPositionDial1 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.Send(str);
+                                    DCSBIOS.SendAsync(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioLinkHundredsWaitingForFeedback, 1);
                                 }
@@ -1187,7 +1187,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
                                     var str = RIO_LINK4_TENS_DIAL_COMMAND + (_rioLink4TensCockpitFrequency < desiredPositionDial2 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.Send(str);
+                                    DCSBIOS.SendAsync(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 1);
                                 }
@@ -1207,7 +1207,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
                                     var str = RIO_LINK4_ONES_DIAL_COMMAND + (_rioLink4OnesCockpitFrequency < desiredPositionDial3 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.Send(str);
+                                    DCSBIOS.SendAsync(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 1);
                                 }
@@ -1321,7 +1321,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
                                     var str = PILOT_TACAN_TENS_DIAL_COMMAND + (_pilotTacanCockpitTensDialPos < desiredPositionDial1 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.Send(str);
+                                    DCSBIOS.SendAsync(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanTensWaitingForFeedback, 1);
                                 }
@@ -1343,7 +1343,7 @@ namespace NonVisuals.Radios
                                     dial2OkTime = DateTime.Now.Ticks;
 
                                     var str = PILOT_TACAN_ONES_DIAL_COMMAND + (_pilotTacanCockpitOnesDialPos < desiredPositionDial2 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.Send(str);
+                                    DCSBIOS.SendAsync(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanOnesWaitingForFeedback, 1);
                                 }
@@ -1364,7 +1364,7 @@ namespace NonVisuals.Radios
                                     dial3OkTime = DateTime.Now.Ticks;
 
                                     var str = PILOT_TACAN_XY_DIAL_COMMAND + (_pilotTacanCockpitXYDialPos < desiredPositionDial3 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.Send(str);
+                                    DCSBIOS.SendAsync(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanXYWaitingForFeedback, 1);
                                 }
@@ -1465,7 +1465,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
                                     var str = RIO_TACAN_TENS_DIAL_COMMAND + (_rioTacanCockpitTensDialPos < desiredPositionDial1 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.Send(str);
+                                    DCSBIOS.SendAsync(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioTacanTensWaitingForFeedback, 1);
                                 }
@@ -1487,7 +1487,7 @@ namespace NonVisuals.Radios
                                     dial2OkTime = DateTime.Now.Ticks;
 
                                     var str = RIO_TACAN_ONES_DIAL_COMMAND + (_rioTacanCockpitOnesDialPos < desiredPositionDial2 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.Send(str);
+                                    DCSBIOS.SendAsync(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _rioTacanOnesWaitingForFeedback, 1);
                                 }
@@ -1508,7 +1508,7 @@ namespace NonVisuals.Radios
                                     dial3OkTime = DateTime.Now.Ticks;
 
                                     var str = RIO_TACAN_XY_DIAL_COMMAND + (_rioTacanCockpitXYDialPos < desiredPositionDial3 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.Send(str);
+                                    DCSBIOS.SendAsync(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _rioTacanXYWaitingForFeedback, 1);
                                 }
@@ -1935,7 +1935,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_MODE_INCREASE);
+                                                    DCSBIOS.SendAsync(UHF_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -1944,7 +1944,7 @@ namespace NonVisuals.Radios
                                                 {
                                                     if (_uhfCockpitPresetChannel < 20)
                                                     {
-                                                        DCSBIOS.Send(UHF_PRESET_INCREASE);
+                                                        DCSBIOS.SendAsync(UHF_PRESET_INCREASE);
                                                     }
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(399))
@@ -1966,7 +1966,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vuhfModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_MODE_INCREASE);
+                                                    DCSBIOS.SendAsync(VUHF_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -1975,7 +1975,7 @@ namespace NonVisuals.Radios
                                                 {
                                                     if (_vuhfCockpitPresetChannel < 30)
                                                     {
-                                                        DCSBIOS.Send(VUHF_PRESET_INCREASE);
+                                                        DCSBIOS.SendAsync(VUHF_PRESET_INCREASE);
                                                     }
                                                 }
                                                 else
@@ -2024,7 +2024,7 @@ namespace NonVisuals.Radios
                                             if (_upperButtonPressed)
                                             {
                                                 _upperButtonPressedAndDialRotated = true;
-                                                DCSBIOS.Send(RIO_LINK4_POWER_COMMAND_INC);
+                                                DCSBIOS.SendAsync(RIO_LINK4_POWER_COMMAND_INC);
                                             }
                                             else
                                             {
@@ -2053,14 +2053,14 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_MODE_DECREASE);
+                                                    DCSBIOS.SendAsync(UHF_MODE_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_PRESET_DECREASE);
+                                                    DCSBIOS.SendAsync(UHF_PRESET_DECREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(225))
                                                 {
@@ -2081,14 +2081,14 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vuhfModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_MODE_DECREASE);
+                                                    DCSBIOS.SendAsync(VUHF_MODE_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (VuhfPresetSelected() && _vuhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_PRESET_DECREASE);
+                                                    DCSBIOS.SendAsync(VUHF_PRESET_DECREASE);
                                                 }
                                                 else
                                                 {
@@ -2136,7 +2136,7 @@ namespace NonVisuals.Radios
                                             if (_upperButtonPressed)
                                             {
                                                 _upperButtonPressedAndDialRotated = true;
-                                                DCSBIOS.Send(RIO_LINK4_POWER_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(RIO_LINK4_POWER_COMMAND_DEC);
                                             }
                                             else
                                             {
@@ -2165,7 +2165,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_FREQ_MODE_INCREASE);
+                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -2182,7 +2182,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vuhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_FREQ_MODE_INCREASE);
+                                                    DCSBIOS.SendAsync(VUHF_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -2247,7 +2247,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_FREQ_MODE_DECREASE);
+                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -2264,7 +2264,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vuhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_FREQ_MODE_DECREASE);
+                                                    DCSBIOS.SendAsync(VUHF_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -2329,7 +2329,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_MODE_INCREASE);
+                                                    DCSBIOS.SendAsync(UHF_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -2338,7 +2338,7 @@ namespace NonVisuals.Radios
                                                 {
                                                     if (_uhfCockpitPresetChannel < 20)
                                                     {
-                                                        DCSBIOS.Send(UHF_PRESET_INCREASE);
+                                                        DCSBIOS.SendAsync(UHF_PRESET_INCREASE);
                                                     }
                                                 }
                                                 else if (!_lowerButtonPressed && _uhfBigFrequencyStandby.Equals(399))
@@ -2360,7 +2360,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vuhfModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_MODE_INCREASE);
+                                                    DCSBIOS.SendAsync(VUHF_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -2369,7 +2369,7 @@ namespace NonVisuals.Radios
                                                 {
                                                     if (_vuhfCockpitPresetChannel < 30)
                                                     {
-                                                        DCSBIOS.Send(VUHF_PRESET_INCREASE);
+                                                        DCSBIOS.SendAsync(VUHF_PRESET_INCREASE);
                                                     }
                                                 }
                                                 else
@@ -2418,7 +2418,7 @@ namespace NonVisuals.Radios
                                             if (_lowerButtonPressed)
                                             {
                                                 _lowerButtonPressedAndDialRotated = true;
-                                                DCSBIOS.Send(RIO_LINK4_POWER_COMMAND_INC);
+                                                DCSBIOS.SendAsync(RIO_LINK4_POWER_COMMAND_INC);
                                             }
                                             else
                                             {
@@ -2447,14 +2447,14 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_MODE_DECREASE);
+                                                    DCSBIOS.SendAsync(UHF_MODE_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_PRESET_DECREASE);
+                                                    DCSBIOS.SendAsync(UHF_PRESET_DECREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(225))
                                                 {
@@ -2476,14 +2476,14 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vuhfModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_MODE_DECREASE);
+                                                    DCSBIOS.SendAsync(VUHF_MODE_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (VuhfPresetSelected() && _vuhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_PRESET_DECREASE);
+                                                    DCSBIOS.SendAsync(VUHF_PRESET_DECREASE);
                                                 }
                                                 else
                                                 {
@@ -2531,7 +2531,7 @@ namespace NonVisuals.Radios
                                             if (_lowerButtonPressed)
                                             {
                                                 _lowerButtonPressedAndDialRotated = true;
-                                                DCSBIOS.Send(RIO_LINK4_POWER_COMMAND_DEC);
+                                                DCSBIOS.SendAsync(RIO_LINK4_POWER_COMMAND_DEC);
                                             }
                                             else
                                             {
@@ -2560,7 +2560,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_FREQ_MODE_INCREASE);
+                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -2577,7 +2577,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vuhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_FREQ_MODE_INCREASE);
+                                                    DCSBIOS.SendAsync(VUHF_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -2642,7 +2642,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_FREQ_MODE_DECREASE);
+                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -2659,7 +2659,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vuhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_FREQ_MODE_DECREASE);
+                                                    DCSBIOS.SendAsync(VUHF_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else

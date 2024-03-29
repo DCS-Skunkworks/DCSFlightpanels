@@ -220,19 +220,19 @@ namespace NonVisuals.Radios
                         {
                             case CurrentMiG21BisRadioMode.Radio:
                                 {
-                                    DCSBIOS.Send(RADIO_ON_OFF_TOGGLE_COMMAND);
+                                    DCSBIOS.SendAsync(RADIO_ON_OFF_TOGGLE_COMMAND);
                                     break;
                                 }
 
                             case CurrentMiG21BisRadioMode.RSBN:
                                 {
-                                    DCSBIOS.Send(SELECT_RSBN_COMMAND);
+                                    DCSBIOS.SendAsync(SELECT_RSBN_COMMAND);
                                     break;
                                 }
 
                             case CurrentMiG21BisRadioMode.ARC:
                                 {
-                                    DCSBIOS.Send(SELECT_ARC_COMMAND);
+                                    DCSBIOS.SendAsync(SELECT_ARC_COMMAND);
                                     break;
                                 }
                         }
@@ -245,19 +245,19 @@ namespace NonVisuals.Radios
                         {
                             case CurrentMiG21BisRadioMode.Radio:
                                 {
-                                    DCSBIOS.Send(RADIO_ON_OFF_TOGGLE_COMMAND);
+                                    DCSBIOS.SendAsync(RADIO_ON_OFF_TOGGLE_COMMAND);
                                     break;
                                 }
 
                             case CurrentMiG21BisRadioMode.RSBN:
                                 {
-                                    DCSBIOS.Send(SELECT_RSBN_COMMAND);
+                                    DCSBIOS.SendAsync(SELECT_RSBN_COMMAND);
                                     break;
                                 }
 
                             case CurrentMiG21BisRadioMode.ARC:
                                 {
-                                    DCSBIOS.Send(SELECT_ARC_COMMAND);
+                                    DCSBIOS.SendAsync(SELECT_ARC_COMMAND);
                                     break;
                                 }
                         }
@@ -388,19 +388,19 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentMiG21BisRadioMode.Radio:
                                         {
-                                            DCSBIOS.Send(RADIO_FREQ_SELECTOR_POSITION_COMMAND_INC);
+                                            DCSBIOS.SendAsync(RADIO_FREQ_SELECTOR_POSITION_COMMAND_INC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
-                                            DCSBIOS.Send(RSBN_NAV_CHANNEL_COMMAND_INC);
+                                            DCSBIOS.SendAsync(RSBN_NAV_CHANNEL_COMMAND_INC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
-                                            DCSBIOS.Send(ARC_SECTOR_COMMAND_INC);
+                                            DCSBIOS.SendAsync(ARC_SECTOR_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -413,19 +413,19 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentMiG21BisRadioMode.Radio:
                                         {
-                                            DCSBIOS.Send(RADIO_FREQ_SELECTOR_POSITION_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(RADIO_FREQ_SELECTOR_POSITION_COMMAND_DEC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
-                                            DCSBIOS.Send(RSBN_NAV_CHANNEL_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(RSBN_NAV_CHANNEL_COMMAND_DEC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
-                                            DCSBIOS.Send(ARC_SECTOR_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(ARC_SECTOR_COMMAND_DEC);
                                             break;
                                         }
                                 }
@@ -438,19 +438,19 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentMiG21BisRadioMode.Radio:
                                         {
-                                            DCSBIOS.Send(RADIO_VOLUME_COMMAND_INC);
+                                            DCSBIOS.SendAsync(RADIO_VOLUME_COMMAND_INC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
-                                            DCSBIOS.Send(RSBN_ILS_CHANNEL_COMMAND_INC);
+                                            DCSBIOS.SendAsync(RSBN_ILS_CHANNEL_COMMAND_INC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
-                                            DCSBIOS.Send(ARC_PRESET_CHANNEL_COMMAND_INC);
+                                            DCSBIOS.SendAsync(ARC_PRESET_CHANNEL_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -463,19 +463,19 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentMiG21BisRadioMode.Radio:
                                         {
-                                            DCSBIOS.Send(RADIO_VOLUME_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(RADIO_VOLUME_COMMAND_DEC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
-                                            DCSBIOS.Send(RSBN_ILS_CHANNEL_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(RSBN_ILS_CHANNEL_COMMAND_DEC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
-                                            DCSBIOS.Send(ARC_PRESET_CHANNEL_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(ARC_PRESET_CHANNEL_COMMAND_DEC);
                                             break;
                                         }
                                 }
@@ -488,19 +488,19 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentMiG21BisRadioMode.Radio:
                                         {
-                                            DCSBIOS.Send(RADIO_FREQ_SELECTOR_POSITION_COMMAND_INC);
+                                            DCSBIOS.SendAsync(RADIO_FREQ_SELECTOR_POSITION_COMMAND_INC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
-                                            DCSBIOS.Send(RSBN_NAV_CHANNEL_COMMAND_INC);
+                                            DCSBIOS.SendAsync(RSBN_NAV_CHANNEL_COMMAND_INC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
-                                            DCSBIOS.Send(ARC_SECTOR_COMMAND_INC);
+                                            DCSBIOS.SendAsync(ARC_SECTOR_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -513,20 +513,20 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentMiG21BisRadioMode.Radio:
                                         {
-                                            DCSBIOS.Send(RADIO_FREQ_SELECTOR_POSITION_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(RADIO_FREQ_SELECTOR_POSITION_COMMAND_DEC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
 
-                                            DCSBIOS.Send(RSBN_NAV_CHANNEL_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(RSBN_NAV_CHANNEL_COMMAND_DEC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
-                                            DCSBIOS.Send(ARC_SECTOR_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(ARC_SECTOR_COMMAND_DEC);
                                             break;
                                         }
                                 }
@@ -539,19 +539,19 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentMiG21BisRadioMode.Radio:
                                         {
-                                            DCSBIOS.Send(RADIO_VOLUME_COMMAND_INC);
+                                            DCSBIOS.SendAsync(RADIO_VOLUME_COMMAND_INC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
-                                            DCSBIOS.Send(RSBN_ILS_CHANNEL_COMMAND_INC);
+                                            DCSBIOS.SendAsync(RSBN_ILS_CHANNEL_COMMAND_INC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
-                                            DCSBIOS.Send(ARC_PRESET_CHANNEL_COMMAND_INC);
+                                            DCSBIOS.SendAsync(ARC_PRESET_CHANNEL_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -564,19 +564,19 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentMiG21BisRadioMode.Radio:
                                         {
-                                            DCSBIOS.Send(RADIO_VOLUME_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(RADIO_VOLUME_COMMAND_DEC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.RSBN:
                                         {
-                                            DCSBIOS.Send(RSBN_ILS_CHANNEL_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(RSBN_ILS_CHANNEL_COMMAND_DEC);
                                             break;
                                         }
 
                                     case CurrentMiG21BisRadioMode.ARC:
                                         {
-                                            DCSBIOS.Send(ARC_PRESET_CHANNEL_COMMAND_DEC);
+                                            DCSBIOS.SendAsync(ARC_PRESET_CHANNEL_COMMAND_DEC);
                                             break;
                                         }
                                 }
