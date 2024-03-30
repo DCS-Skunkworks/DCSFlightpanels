@@ -864,10 +864,10 @@ namespace NonVisuals.Radios
 
             // #1
             _arc210VhfSyncTaskTokenSource = new CancellationTokenSource();
-            _arc210VhfSyncTask = Task.Run(() => ARC210VhfSyncThreadMethod(desiredPositionDial1, desiredPositionDial2, desiredPositionDial3, desiredPositionDial4, desiredPositionDial5, _arc210VhfSyncTaskTokenSource.Token));
+            _arc210VhfSyncTask = Task.Run(() => SyncARC210VhfAsync(desiredPositionDial1, desiredPositionDial2, desiredPositionDial3, desiredPositionDial4, desiredPositionDial5, _arc210VhfSyncTaskTokenSource.Token));
         }
 
-        private async Task ARC210VhfSyncThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, int desiredPositionDial4, int desiredPositionDial5, CancellationToken cancellationToken)
+        private async Task SyncARC210VhfAsync(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, int desiredPositionDial4, int desiredPositionDial5, CancellationToken cancellationToken)
         {
             try
             {   /*
@@ -1228,10 +1228,10 @@ namespace NonVisuals.Radios
 
             // #1
             _ilsSyncTaskTokenSource = new CancellationTokenSource();
-            _ilsSyncTask = Task.Run(() => UhfSyncThreadMethod(freqDial1, freqDial2, freqDial3, freqDial4, freqDial5, _ilsSyncTaskTokenSource.Token));
+            _ilsSyncTask = Task.Run(() => SyncUhfAsync(freqDial1, freqDial2, freqDial3, freqDial4, freqDial5, _ilsSyncTaskTokenSource.Token));
         }
 
-        private async Task UhfSyncThreadMethod(int desiredPosition1, int desiredPosition2, int desiredPosition3, int desiredPosition4, int desiredPosition5, CancellationToken cancellationToken)
+        private async Task SyncUhfAsync(int desiredPosition1, int desiredPosition2, int desiredPosition3, int desiredPosition4, int desiredPosition5, CancellationToken cancellationToken)
         {
             try
             {
@@ -1537,10 +1537,10 @@ namespace NonVisuals.Radios
             }
 
             _vhfFmSyncTaskTokenSource = new CancellationTokenSource();
-            _vhfFmSyncTask = Task.Run(() => VhfFmSyncThreadMethod(desiredPositionDial1, desiredPositionDial2, desiredPositionDial3, desiredPositionDial4, _vhfFmSyncTaskTokenSource.Token));
+            _vhfFmSyncTask = Task.Run(() => SyncVhfFmAsync(desiredPositionDial1, desiredPositionDial2, desiredPositionDial3, desiredPositionDial4, _vhfFmSyncTaskTokenSource.Token));
         }
 
-        private async Task VhfFmSyncThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, int frequencyDial4, CancellationToken cancellationToken)
+        private async Task SyncVhfFmAsync(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, int frequencyDial4, CancellationToken cancellationToken)
         {
             try
             {
@@ -1747,10 +1747,10 @@ namespace NonVisuals.Radios
 
 
             _ilsSyncTaskTokenSource = new CancellationTokenSource();
-            _ilsSyncTask = Task.Run(() => ILSSyncThreadMethod(freqDial1, freqDial2, _ilsSyncTaskTokenSource.Token));
+            _ilsSyncTask = Task.Run(() => SyncILSAsync(freqDial1, freqDial2, _ilsSyncTaskTokenSource.Token));
         }
 
-        private async Task ILSSyncThreadMethod(int position1, int position2, CancellationToken cancellationToken)
+        private async Task SyncILSAsync(int position1, int position2, CancellationToken cancellationToken)
         {
             try
             {
@@ -1894,10 +1894,10 @@ namespace NonVisuals.Radios
             // #2 = 0   (position = value)
             // #3 = 1   (position = value)
             _tacanSyncTaskTokenSource = new CancellationTokenSource();
-            _tacanSyncTask = Task.Run(() => TacanSyncThreadMethod(_tacanBigFrequencyStandby, _tacanSmallFrequencyStandby, _tacanXYStandby, _tacanSyncTaskTokenSource.Token));
+            _tacanSyncTask = Task.Run(() => TacanAsync(_tacanBigFrequencyStandby, _tacanSmallFrequencyStandby, _tacanXYStandby, _tacanSyncTaskTokenSource.Token));
         }
 
-        private async Task TacanSyncThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, CancellationToken cancellationToken)
+        private async Task TacanAsync(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, CancellationToken cancellationToken)
         {
             try
             {

@@ -69,7 +69,7 @@ namespace NonVisuals.Radios
         private const string VHF_AM_FREQ_3DIAL_COMMAND = "VHFAM_FREQ3 ";
         private const string VHF_AM_FREQ_4DIAL_COMMAND = "VHFAM_FREQ4 ";
         private Task _vhfAmSyncTask;
-        private CancellationTokenSource _vhfAmSyncTaskTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _vhfAmSyncTaskTokenSource = new();
         private long _vhfAmDial1WaitingForFeedback;
         private long _vhfAmDial2WaitingForFeedback;
         private long _vhfAmDial3WaitingForFeedback;
@@ -119,7 +119,7 @@ namespace NonVisuals.Radios
         private const string UHF_FREQ_4DIAL_COMMAND = "UHF_POINT1MHZ_SEL ";    // 0 1 2 3 4 5 6 7 8 9
         private const string UHF_FREQ_5DIAL_COMMAND = "UHF_POINT25_SEL ";		// "00" "25" "50" "75"
         private Task _uhfSyncTask;
-        private CancellationTokenSource _uhfSyncTaskTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _uhfSyncTaskTokenSource = new();
         private long _uhfDial1WaitingForFeedback;
         private long _uhfDial2WaitingForFeedback;
         private long _uhfDial3WaitingForFeedback;
@@ -166,7 +166,7 @@ namespace NonVisuals.Radios
         private const string VHF_FM_FREQ_3DIAL_COMMAND = "VHFFM_FREQ3 ";
         private const string VHF_FM_FREQ_4DIAL_COMMAND = "VHFFM_FREQ4 ";
         private Task _vhfFmSyncTask;
-        private CancellationTokenSource _vhfFmSyncTaskTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _vhfFmSyncTaskTokenSource = new();
         private long _vhfFmDial1WaitingForFeedback;
         private long _vhfFmDial2WaitingForFeedback;
         private long _vhfFmDial3WaitingForFeedback;
@@ -204,7 +204,7 @@ namespace NonVisuals.Radios
         private const string ILS_FREQ1_DIAL_COMMAND = "ILS_MHZ ";
         private const string ILS_FREQ2_DIAL_COMMAND = "ILS_KHZ ";
         private Task _ilsSyncTask;
-        private CancellationTokenSource _ilsSyncTaskTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _ilsSyncTaskTokenSource = new();
         private long _ilsDial1WaitingForFeedback;
         private long _ilsDial2WaitingForFeedback;
 
@@ -230,7 +230,7 @@ namespace NonVisuals.Radios
         private const string TACAN_FREQ2_DIAL_COMMAND = "TACAN_1 ";
         private const string TACAN_FREQ3_DIAL_COMMAND = "TACAN_XY ";
         private Task _tacanSyncTask;
-        private CancellationTokenSource _tacanSyncTaskTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _tacanSyncTaskTokenSource = new();
         private long _tacanDial1WaitingForFeedback;
         private long _tacanDial2WaitingForFeedback;
         private long _tacanDial3WaitingForFeedback;
