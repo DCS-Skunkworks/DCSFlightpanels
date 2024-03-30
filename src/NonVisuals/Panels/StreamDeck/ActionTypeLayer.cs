@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Panels.StreamDeck
+﻿using System.Threading.Tasks;
+
+namespace NonVisuals.Panels.StreamDeck
 {
     using System;
     using System.IO;
@@ -108,12 +110,13 @@
         }
 
 
-        public void Execute(CancellationToken threadCancellationToken, bool executeOnce = false)
+        public Task ExecuteAsync(CancellationToken threadCancellationToken, bool executeOnce = false)
         {
             _isRunning = true;
             Common.PlaySoundFile(SoundFile, Volume);
             Navigate(threadCancellationToken);
             _isRunning = false;
+            return Task.CompletedTask;
         }
 
 

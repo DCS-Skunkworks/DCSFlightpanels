@@ -108,7 +108,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69F86F(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -148,7 +148,7 @@ namespace NonVisuals.Radios
 
             // ADF
             _apx6ModeDcsbiosOutputCockpit = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("APX6_MASTER");
-            
+
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
         }
@@ -294,7 +294,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentF86FRadioMode.ADF_APX6:
                                     {
-                                        DCSBIOS.SendAsync(APX_6DIAL_STOP_TOGGLE_COMMAND);
+                                        await DCSBIOS.SendAsync(APX_6DIAL_STOP_TOGGLE_COMMAND);
                                         break;
                                     }
                             }
@@ -327,7 +327,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentF86FRadioMode.ADF_APX6:
                                     {
-                                        DCSBIOS.SendAsync(APX_6DIAL_STOP_TOGGLE_COMMAND);
+                                        await DCSBIOS.SendAsync(APX_6DIAL_STOP_TOGGLE_COMMAND);
                                         break;
                                     }
                             }
@@ -546,7 +546,7 @@ namespace NonVisuals.Radios
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqIncreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_INC : ARN6_FREQUENCY_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_INC : ARN6_FREQUENCY_COMMAND_INC);
                                                 break;
                                             }
 
@@ -583,7 +583,7 @@ namespace NonVisuals.Radios
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqDecreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_DEC : ARN6_FREQUENCY_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_DEC : ARN6_FREQUENCY_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -619,7 +619,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
-                                                DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -656,7 +656,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
-                                                DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -694,7 +694,7 @@ namespace NonVisuals.Radios
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqIncreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_INC : ARN6_FREQUENCY_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_INC : ARN6_FREQUENCY_COMMAND_INC);
                                                 break;
                                             }
 
@@ -731,7 +731,7 @@ namespace NonVisuals.Radios
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqDecreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_DEC : ARN6_FREQUENCY_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6_FREQUENCY_COMMAND_MORE_DEC : ARN6_FREQUENCY_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -767,7 +767,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
-                                                DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -804,7 +804,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARC27_VOL:
                                             {
-                                                DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(ARC27_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1063,7 +1063,7 @@ namespace NonVisuals.Radios
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

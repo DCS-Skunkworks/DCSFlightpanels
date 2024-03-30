@@ -117,7 +117,7 @@ namespace NonVisuals.Radios
         private bool _lowerFreqSwitchPressedDown;
 
         public RadioPanelPZ69M2000C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -576,13 +576,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_INC);
                                                 break;
                                             }
 
@@ -612,13 +612,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -720,13 +720,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_INC);
                                                 break;
                                             }
 
@@ -756,13 +756,13 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.UHF:
                                             {
-                                                DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(UHF_VOLUME_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(VHF_VOLUME_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1043,7 +1043,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
         public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
         public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }

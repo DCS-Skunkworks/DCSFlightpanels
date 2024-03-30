@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.DCSBIOSBindings;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.DCSBIOSBindings;
 
 namespace NonVisuals.Panels.StreamDeck
 {
@@ -77,10 +78,10 @@ namespace NonVisuals.Panels.StreamDeck
             }
         }
 
-        public void Execute(CancellationToken threadCancellationToken, bool executeOnce = false)
+        public async Task ExecuteAsync(CancellationToken threadCancellationToken, bool executeOnce = false)
         {
             Common.PlaySoundFile(SoundFile, Volume);
-            SendDCSBIOSCommandsAsync(threadCancellationToken);
+            await SendDCSBIOSCommandsAsync(threadCancellationToken);
         }
 
         internal override void ImportSettings(string settings) { }

@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.Key;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.Key;
 
 namespace NonVisuals.Panels.StreamDeck
 {
@@ -91,7 +92,7 @@ namespace NonVisuals.Panels.StreamDeck
          * Commands that must be cancelled by the release of the button are :
          * 1) Repeatable single command.
          */
-        public void Execute(CancellationToken threadCancellationToken, bool executeOnce = false)
+        public Task ExecuteAsync(CancellationToken threadCancellationToken, bool executeOnce = false)
         {
             Common.PlaySoundFile(SoundFile, Volume);
 
@@ -124,6 +125,8 @@ namespace NonVisuals.Panels.StreamDeck
                     true,
                     OSKeyPress.KeyPressSequence);
             }
+
+            return Task.CompletedTask;
         }
 
         private void SendKeysCommandsThread(CancellationToken threadCancellationToken)

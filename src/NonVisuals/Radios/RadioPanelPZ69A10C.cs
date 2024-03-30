@@ -746,7 +746,7 @@ namespace NonVisuals.Radios
 
         private void SendVhfAmToDCSBIOS()
         {
-            if (_vhfAmSyncTask.Status == TaskStatus.Running)
+            if (_vhfAmSyncTask?.Status == TaskStatus.Running)
             {
                 return;
             }
@@ -967,7 +967,6 @@ namespace NonVisuals.Radios
                 SwapCockpitStandbyFrequencyVhfAm();
                 ShowFrequenciesOnPanel();
             }
-            catch (ThreadAbortException) { }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
@@ -978,7 +977,7 @@ namespace NonVisuals.Radios
 
         private void SendUhfToDCSBIOS()
         {
-            if (_uhfSyncTask.Status == TaskStatus.Running)
+            if (_uhfSyncTask?.Status == TaskStatus.Running)
             {
                 return;
             }
@@ -1363,7 +1362,6 @@ namespace NonVisuals.Radios
                 SwapCockpitStandbyFrequencyUhf();
                 ShowFrequenciesOnPanel();
             }
-            catch (ThreadAbortException) { }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
@@ -1374,7 +1372,7 @@ namespace NonVisuals.Radios
 
         private void SendVhfFmToDCSBIOS()
         {
-            if (_vhfFmSyncTask.Status == TaskStatus.Running)
+            if (_vhfFmSyncTask?.Status == TaskStatus.Running)
             {
                 return;
             }
@@ -1607,8 +1605,6 @@ namespace NonVisuals.Radios
                 SwapCockpitStandbyFrequencyVhfFm();
                 ShowFrequenciesOnPanel();
             }
-            catch (ThreadAbortException)
-            { }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
@@ -1619,7 +1615,7 @@ namespace NonVisuals.Radios
 
         private void SendILSToDCSBIOS()
         {
-            if (_ilsSyncTask.Status == TaskStatus.Running)
+            if (_ilsSyncTask?.Status == TaskStatus.Running)
             {
                 return;
             }
@@ -1751,8 +1747,6 @@ namespace NonVisuals.Radios
                 SwapCockpitStandbyFrequencyIls();
                 ShowFrequenciesOnPanel();
             }
-            catch (ThreadAbortException)
-            { }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
@@ -1763,7 +1757,7 @@ namespace NonVisuals.Radios
 
         private void SendTacanToDCSBIOS()
         {
-            if (_tacanSyncTask.Status == TaskStatus.Running)
+            if (_tacanSyncTask?.Status == TaskStatus.Running)
             {
                 return;
             }
@@ -1920,8 +1914,6 @@ namespace NonVisuals.Radios
                 SwapCockpitStandbyFrequencyTacan();
                 ShowFrequenciesOnPanel();
             }
-            catch (ThreadAbortException)
-            { }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
@@ -2406,14 +2398,14 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_MODE_INCREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_PRESET_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_PRESET_INCREASE);
                                                 }
                                                 else if (_vhfAmBigFrequencyStandby.Equals(151.00))
                                                 {
@@ -2435,14 +2427,14 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FUNCTION_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FUNCTION_INCREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_PRESET_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_PRESET_INCREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(399.00))
                                                 {
@@ -2465,14 +2457,14 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfFmModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_MODE_INCREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_PRESET_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_PRESET_INCREASE);
                                                 }
                                                 else if (_vhfFmBigFrequencyStandby.Equals(76))
                                                 {
@@ -2535,14 +2527,14 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_MODE_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_PRESET_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_PRESET_DECREASE);
                                                 }
                                                 else if (_vhfAmBigFrequencyStandby.Equals(116.00))
                                                 {
@@ -2564,14 +2556,14 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FUNCTION_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FUNCTION_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_PRESET_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_PRESET_DECREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(225.00))
                                                 {
@@ -2593,14 +2585,14 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfFmModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_MODE_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_PRESET_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_PRESET_DECREASE);
                                                 }
                                                 else if (_vhfFmBigFrequencyStandby.Equals(30))
                                                 {
@@ -2663,7 +2655,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_FREQ_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -2681,7 +2673,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -2699,7 +2691,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_FREQ_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -2774,7 +2766,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_FREQ_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -2792,7 +2784,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -2810,7 +2802,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_FREQ_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -2885,14 +2877,14 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_MODE_INCREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_PRESET_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_PRESET_INCREASE);
                                                 }
                                                 else if (!_lowerButtonPressed && _vhfAmBigFrequencyStandby.Equals(151.00))
                                                 {
@@ -2914,7 +2906,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FUNCTION_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FUNCTION_INCREASE);
                                                 }
                                             }
                                             else
@@ -2922,7 +2914,7 @@ namespace NonVisuals.Radios
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
                                                     // 225-399
-                                                    DCSBIOS.SendAsync(UHF_PRESET_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_PRESET_INCREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(399.00))
                                                 {
@@ -2944,14 +2936,14 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vhfFmModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_MODE_INCREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_PRESET_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_PRESET_INCREASE);
                                                 }
                                                 else if (_vhfFmBigFrequencyStandby.Equals(76))
                                                 {
@@ -3014,14 +3006,14 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_MODE_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_PRESET_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_PRESET_DECREASE);
                                                 }
                                                 else if (_vhfAmBigFrequencyStandby.Equals(116.00))
                                                 {
@@ -3043,14 +3035,14 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FUNCTION_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FUNCTION_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_PRESET_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_PRESET_DECREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(225.00))
                                                 {
@@ -3072,14 +3064,14 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vhfFmModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_MODE_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_PRESET_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_PRESET_DECREASE);
                                                 }
                                                 else if (_vhfFmBigFrequencyStandby.Equals(30))
                                                 {
@@ -3142,7 +3134,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_FREQ_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -3160,7 +3152,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -3178,7 +3170,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_FREQ_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -3253,7 +3245,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_AM_FREQ_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_AM_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -3271,7 +3263,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -3289,7 +3281,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(VHF_FM_FREQ_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(VHF_FM_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -3517,7 +3509,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             lock (LockLCDUpdateObject)
             {
@@ -3695,7 +3687,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_upperButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Do when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10C.UPPER_FREQ_SWITCH);
                                     }
@@ -3713,7 +3705,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_lowerButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Do when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10C.LOWER_FREQ_SWITCH);
                                     }
@@ -3731,8 +3723,8 @@ namespace NonVisuals.Radios
                     }
                 }
 
-                AdjustFrequency(hashSet);
             }
+            await AdjustFrequencyAsync(hashSet);
         }
 
         public override void ClearSettings(bool setIsDirty = false)

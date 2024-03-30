@@ -83,7 +83,7 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _iffDiffDcsbiosOutputDial;
         private volatile uint _iffBiffCockpitDialPos = 1;
         private volatile uint _iffDiffCockpitDialPos;
-        private readonly ClickSkipper  _iffBiffDialSkipper = new(2);
+        private readonly ClickSkipper _iffBiffDialSkipper = new(2);
         private readonly ClickSkipper _iffDiffDialSkipper = new(2);
         private const string IFFB_COMMAND_INC = "IFF_B INC\n";
         private const string IFFB_COMMAND_DEC = "IFF_B DEC\n";
@@ -94,7 +94,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69SpitfireLFMkIX(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -331,7 +331,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            DCSBIOS.SendAsync(HF_RADIO_LIGHT_SWITCH_COMMAND);
+                                            await DCSBIOS.SendAsync(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
                                     break;
@@ -343,7 +343,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            DCSBIOS.SendAsync(HF_RADIO_LIGHT_SWITCH_COMMAND);
+                                            await DCSBIOS.SendAsync(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
                                     break;
@@ -745,7 +745,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         private string GetHFRadioChannelStringCommand(bool moveUp)
         {
             lock (_lockHFRadioPresetDialObject1)

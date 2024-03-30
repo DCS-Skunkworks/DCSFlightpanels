@@ -1,4 +1,5 @@
-﻿using NonVisuals.Images;
+﻿using System.Threading.Tasks;
+using NonVisuals.Images;
 
 namespace NonVisuals.Panels.StreamDeck.Panels
 {
@@ -401,11 +402,12 @@ namespace NonVisuals.Panels.StreamDeck.Panels
             }
         }
 
-        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        protected override Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
             // Set _selectedMode and LCD button statuses
             // and performs the actual actions for key presses
             // ADD METHOD ?
+            return Task.CompletedTask;
         }
 
         public DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

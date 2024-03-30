@@ -177,7 +177,7 @@ namespace NonVisuals.Radios
                         {
                             case CurrentF15ERadioMode.ARC210:
                                 {
-                                    DCSBIOS.SendAsync(_arc210Radio.GetDCSBIOSCommand());
+                                    await DCSBIOS.SendAsync(_arc210Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
@@ -197,7 +197,7 @@ namespace NonVisuals.Radios
 
                             case CurrentF15ERadioMode.ARC210:
                                 {
-                                    DCSBIOS.SendAsync(_arc210Radio.GetDCSBIOSCommand());
+                                    await DCSBIOS.SendAsync(_arc210Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
@@ -217,7 +217,7 @@ namespace NonVisuals.Radios
             try
             {
                 var newStandbyFrequency = _uhfCockpitFrequency;
-                DCSBIOS.SendAsync($"{UHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentF15ERadioMode.UHF)}\n");
+                await DCSBIOS.SendAsync($"{UHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentF15ERadioMode.UHF)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _uhfBigFrequencyStandby = uint.Parse(array[0]);
                 _uhfSmallFrequencyStandby = uint.Parse(array[1]);
@@ -656,7 +656,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_upperButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Sync when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.UPPER_FREQ_SWITCH);
                                     }
@@ -689,7 +689,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_lowerButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Sync when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.LOWER_FREQ_SWITCH);
                                     }
@@ -699,15 +699,15 @@ namespace NonVisuals.Radios
                                         switch (_currentLowerRadioMode)
                                         {
                                             case CurrentF15ERadioMode.ARC210:
-                                            {
-                                                _arc210Radio.SwitchFrequencyBand();
-                                                Interlocked.Increment(ref _doUpdatePanelLCD);
-                                                break;
-                                            }
+                                                {
+                                                    _arc210Radio.SwitchFrequencyBand();
+                                                    Interlocked.Increment(ref _doUpdatePanelLCD);
+                                                    break;
+                                                }
                                             case CurrentF15ERadioMode.UHF:
-                                            {
-                                                break;
-                                            }
+                                                {
+                                                    break;
+                                                }
                                         }
                                     }
 

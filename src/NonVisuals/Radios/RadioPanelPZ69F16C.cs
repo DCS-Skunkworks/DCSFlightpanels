@@ -55,7 +55,7 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _arc222RadioDCSBIOSControl;
 
         public RadioPanelPZ69F16C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -151,7 +151,7 @@ namespace NonVisuals.Radios
                 Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
         }
-       
+
         protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             try
@@ -262,7 +262,7 @@ namespace NonVisuals.Radios
 
         private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF16C knob)
         {
-            if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsF16C.UPPER_FREQ_SWITCH ||  knob == RadioPanelPZ69KnobsF16C.LOWER_FREQ_SWITCH))
+            if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsF16C.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsF16C.LOWER_FREQ_SWITCH))
             {
                 // Don't do anything on the very first button press as the panel sends ALL
                 // switches when it is manipulated the first time
@@ -284,13 +284,13 @@ namespace NonVisuals.Radios
                         {
                             case CurrentF16CRadioMode.ARC164_UHF:
                                 {
-                                    DCSBIOS.SendAsync(_arc164Radio.GetDCSBIOSCommand());
+                                    await DCSBIOS.SendAsync(_arc164Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
                             case CurrentF16CRadioMode.ARC222_VHF:
                                 {
-                                    DCSBIOS.SendAsync(_arc222Radio.GetDCSBIOSCommand());
+                                    await DCSBIOS.SendAsync(_arc222Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
@@ -304,13 +304,13 @@ namespace NonVisuals.Radios
                         {
                             case CurrentF16CRadioMode.ARC164_UHF:
                                 {
-                                    DCSBIOS.SendAsync(_arc164Radio.GetDCSBIOSCommand());
+                                    await DCSBIOS.SendAsync(_arc164Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
                             case CurrentF16CRadioMode.ARC222_VHF:
                                 {
-                                    DCSBIOS.SendAsync(_arc222Radio.GetDCSBIOSCommand());
+                                    await DCSBIOS.SendAsync(_arc222Radio.GetDCSBIOSCommand());
                                     Interlocked.Increment(ref _doUpdatePanelLCD);
                                     break;
                                 }
@@ -598,7 +598,7 @@ namespace NonVisuals.Radios
             }
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
@@ -634,7 +634,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-         
+
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
         }

@@ -134,7 +134,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69Yak52(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -423,9 +423,9 @@ namespace NonVisuals.Radios
                                         {
                                             if (!_upperButtonPressedAndDialRotated)
                                             {
-                                                // Do not synch if user has pressed the button to configure the radio
+                                                // Do not sync if user has pressed the button to configure the radio
                                                 // Do when user releases button
-                                                DCSBIOS.SendAsync(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
+                                                await DCSBIOS.SendAsync(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
                                             }
 
                                             _upperButtonPressedAndDialRotated = false;
@@ -444,9 +444,9 @@ namespace NonVisuals.Radios
                                         {
                                             if (!_lowerButtonPressedAndDialRotated)
                                             {
-                                                // Do not synch if user has pressed the button to configure the radio
+                                                // Do not sync if user has pressed the button to configure the radio
                                                 // Do when user releases button
-                                                DCSBIOS.SendAsync(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
+                                                await DCSBIOS.SendAsync(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
                                             }
 
                                             _lowerButtonPressedAndDialRotated = false;
@@ -503,19 +503,19 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                DCSBIOS.SendAsync(ADF_FRONT_VOLUME_INC);
+                                                await DCSBIOS.SendAsync(ADF_FRONT_VOLUME_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                DCSBIOS.SendAsync(ADF_REAR_VOLUME_INC);
+                                                await DCSBIOS.SendAsync(ADF_REAR_VOLUME_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
-                                        {
-                                            DCSBIOS.SendAsync(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(true));
-                                            break;
-                                        }
+                                            {
+                                                await DCSBIOS.SendAsync(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(true));
+                                                break;
+                                            }
                                         case CurrentYak52RadioMode.NO_USE:
                                             {
                                                 break;
@@ -535,17 +535,17 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                DCSBIOS.SendAsync(ADF_FRONT_VOLUME_DEC);
+                                                await DCSBIOS.SendAsync(ADF_FRONT_VOLUME_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                DCSBIOS.SendAsync(ADF_REAR_VOLUME_DEC);
+                                                await DCSBIOS.SendAsync(ADF_REAR_VOLUME_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
                                             {
-                                                DCSBIOS.SendAsync(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_DEC : GetGMKHeadingSelectorCommand(false));
+                                                await DCSBIOS.SendAsync(_upperButtonPressed ? GMK_HEMISPHERE_SELECTOR_DEC : GetGMKHeadingSelectorCommand(false));
                                                 break;
                                             }
                                     }
@@ -580,10 +580,10 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
-                                        {
-                                            DCSBIOS.SendAsync(_upperButtonPressed ? GMK_MODE_SELECTOR_INC : GMK_LATITUDE_SELECTOR_INC);
-                                            break;
-                                        }
+                                            {
+                                                await DCSBIOS.SendAsync(_upperButtonPressed ? GMK_MODE_SELECTOR_INC : GMK_LATITUDE_SELECTOR_INC);
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -616,10 +616,10 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
-                                        {
-                                            DCSBIOS.SendAsync(_upperButtonPressed ? GMK_MODE_SELECTOR_DEC : GMK_LATITUDE_SELECTOR_DEC);
-                                            break;
-                                        }
+                                            {
+                                                await DCSBIOS.SendAsync(_upperButtonPressed ? GMK_MODE_SELECTOR_DEC : GMK_LATITUDE_SELECTOR_DEC);
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -635,17 +635,17 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                DCSBIOS.SendAsync(ADF_FRONT_VOLUME_INC);
+                                                await DCSBIOS.SendAsync(ADF_FRONT_VOLUME_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                DCSBIOS.SendAsync(ADF_REAR_VOLUME_INC);
+                                                await DCSBIOS.SendAsync(ADF_REAR_VOLUME_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
                                             {
-                                                DCSBIOS.SendAsync(_lowerButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(true));
+                                                await DCSBIOS.SendAsync(_lowerButtonPressed ? GMK_HEMISPHERE_SELECTOR_INC : GetGMKHeadingSelectorCommand(true));
                                                 break;
                                             }
                                     }
@@ -663,17 +663,17 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                DCSBIOS.SendAsync(ADF_FRONT_VOLUME_DEC);
+                                                await DCSBIOS.SendAsync(ADF_FRONT_VOLUME_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                DCSBIOS.SendAsync(ADF_REAR_VOLUME_DEC);
+                                                await DCSBIOS.SendAsync(ADF_REAR_VOLUME_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
                                             {
-                                                DCSBIOS.SendAsync(_lowerButtonPressed ? GMK_HEMISPHERE_SELECTOR_DEC : GetGMKHeadingSelectorCommand(false));
+                                                await DCSBIOS.SendAsync(_lowerButtonPressed ? GMK_HEMISPHERE_SELECTOR_DEC : GetGMKHeadingSelectorCommand(false));
                                                 break;
                                             }
                                     }
@@ -708,10 +708,10 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
-                                        {
-                                            DCSBIOS.SendAsync(_lowerButtonPressed ? GMK_MODE_SELECTOR_INC : GMK_LATITUDE_SELECTOR_INC);
-                                            break;
-                                        }
+                                            {
+                                                await DCSBIOS.SendAsync(_lowerButtonPressed ? GMK_MODE_SELECTOR_INC : GMK_LATITUDE_SELECTOR_INC);
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -744,10 +744,10 @@ namespace NonVisuals.Radios
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
-                                        {
-                                            DCSBIOS.SendAsync(_lowerButtonPressed ? GMK_MODE_SELECTOR_DEC : GMK_LATITUDE_SELECTOR_DEC);
-                                            break;
-                                        }
+                                            {
+                                                await DCSBIOS.SendAsync(_lowerButtonPressed ? GMK_MODE_SELECTOR_DEC : GMK_LATITUDE_SELECTOR_DEC);
+                                                break;
+                                            }
                                     }
                                     break;
                                 }
@@ -969,7 +969,7 @@ namespace NonVisuals.Radios
             {
                 return;
             }
-            DCSBIOS.SendAsync(s);
+            await DCSBIOS.SendAsync(s);
         }
 
         private void SendVHFKhzCommand(bool increase)
@@ -979,7 +979,7 @@ namespace NonVisuals.Radios
             {
                 return;
             }
-            DCSBIOS.SendAsync(s);
+            await DCSBIOS.SendAsync(s);
         }
         private void SendVHFVolumeCommand(bool increase)
         {
@@ -988,7 +988,7 @@ namespace NonVisuals.Radios
             {
                 return;
             }
-            DCSBIOS.SendAsync(s);
+            await DCSBIOS.SendAsync(s);
         }
 
         private string GetVHFRadioMhzDialStringCommand(bool moveUp)

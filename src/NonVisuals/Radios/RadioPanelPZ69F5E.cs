@@ -132,7 +132,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69F5E(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -172,7 +172,7 @@ namespace NonVisuals.Radios
 
             // TACAN
             _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetStringDCSBIOSOutput("TACAN_CHANNEL");
-            
+
             BIOSEventHandler.AttachStringListener(this);
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
@@ -277,7 +277,7 @@ namespace NonVisuals.Radios
                     return;
                 }
 
-                if (_tacanDcsbiosOutputFreqChannel.StringValueHasChanged(e.Address,e.StringData))
+                if (_tacanDcsbiosOutputFreqChannel.StringValueHasChanged(e.Address, e.StringData))
                 {
                     try
                     {
@@ -468,12 +468,12 @@ namespace NonVisuals.Radios
             _shutdownUHFThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownUHFThread = false;
-            _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(freqDial1, freqDial2, freqDial3, freqDial4, freqDial5));
+            _uhfSyncThread = new Thread(() => UhfSyncThreadMethod(freqDial1, freqDial2, freqDial3, freqDial4, freqDial5));
             _uhfSyncThread.Start();
         }
 
         private volatile bool _shutdownUHFThread;
-        private void UhfSynchThreadMethod(int desiredPosition1, int desiredPosition2, int desiredPosition3, int desiredPosition4, int desiredPosition5)
+        private void UhfSyncThreadMethod(int desiredPosition1, int desiredPosition2, int desiredPosition3, int desiredPosition4, int desiredPosition5)
         {
             try
             {
@@ -499,27 +499,27 @@ namespace NonVisuals.Radios
                     {
                         if (IsTimedOut(ref dial1Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _uhfDial1WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _uhfDial1WaitingForFeedback); // Let's do an ugly reset
                         }
 
                         if (IsTimedOut(ref dial2Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _uhfDial2WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _uhfDial2WaitingForFeedback); // Let's do an ugly reset
                         }
 
                         if (IsTimedOut(ref dial3Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _uhfDial3WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _uhfDial3WaitingForFeedback); // Let's do an ugly reset
                         }
 
                         if (IsTimedOut(ref dial4Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _uhfDial4WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _uhfDial4WaitingForFeedback); // Let's do an ugly reset
                         }
 
                         if (IsTimedOut(ref dial5Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _uhfDial5WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _uhfDial5WaitingForFeedback); // Let's do an ugly reset
                         }
 
                         // Frequency selector 1     
@@ -537,14 +537,14 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitFreq1DialPos < desiredPosition1)
                                 {
                                     const string str = UHF_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq1DialPos > desiredPosition1)
                                 {
                                     const string str = UHF_FREQ_1DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
                                 }
@@ -569,14 +569,14 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitFreq2DialPos < desiredPosition2)
                                 {
                                     const string str = UHF_FREQ_2DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq2DialPos > desiredPosition2)
                                 {
                                     const string str = UHF_FREQ_2DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
                                 }
@@ -601,14 +601,14 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitFreq3DialPos < desiredPosition3)
                                 {
                                     const string str = UHF_FREQ_3DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq3DialPos > desiredPosition3)
                                 {
                                     const string str = UHF_FREQ_3DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
                                 }
@@ -633,14 +633,14 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitFreq4DialPos < desiredPosition4)
                                 {
                                     const string str = UHF_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq4DialPos > desiredPosition4)
                                 {
                                     const string str = UHF_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
                                 }
@@ -665,14 +665,14 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitFreq5DialPos < desiredPosition5)
                                 {
                                     const string str = UHF_FREQ_5DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq5DialPos > desiredPosition5)
                                 {
                                     const string str = UHF_FREQ_5DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
                                 }
@@ -742,12 +742,12 @@ namespace NonVisuals.Radios
             _shutdownTACANThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownTACANThread = false;
-            _tacanSyncThread = new Thread(() => TacanSynchThreadMethod(_tacanBigFrequencyStandby, _tacanSmallFrequencyStandby, _tacanXYStandby));
+            _tacanSyncThread = new Thread(() => TacanSyncThreadMethod(_tacanBigFrequencyStandby, _tacanSmallFrequencyStandby, _tacanXYStandby));
             _tacanSyncThread.Start();
         }
 
         private volatile bool _shutdownTACANThread;
-        private void TacanSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
+        private void TacanSyncThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
         {
             try
             {
@@ -770,17 +770,17 @@ namespace NonVisuals.Radios
 
                         if (IsTimedOut(ref dial1Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _tacanDial1WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _tacanDial1WaitingForFeedback); // Let's do an ugly reset
                         }
 
                         if (IsTimedOut(ref dial2Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _tacanDial2WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _tacanDial2WaitingForFeedback); // Let's do an ugly reset
                         }
 
                         if (IsTimedOut(ref dial3Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _tacanDial3WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _tacanDial3WaitingForFeedback); // Let's do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _tacanDial1WaitingForFeedback) == 0)
@@ -792,7 +792,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
                                     var str = TACAN_FREQ_1DIAL_COMMAND + (_tacanCockpitFreq1DialPos < desiredPositionDial1 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 1);
                                 }
@@ -814,7 +814,7 @@ namespace NonVisuals.Radios
                                     dial2OkTime = DateTime.Now.Ticks;
 
                                     var str = TACAN_FREQ_2DIAL_COMMAND + (_tacanCockpitFreq2DialPos < desiredPositionDial2 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 1);
                                 }
@@ -837,7 +837,7 @@ namespace NonVisuals.Radios
                                     dial3OkTime = DateTime.Now.Ticks;
 
                                     var str = TACAN_FREQ_3DIAL_COMMAND + (_tacanCockpitFreq3DialPos < desiredPositionDial3 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
-                                    DCSBIOS.SendAsync(str);
+                                    await DCSBIOS.SendAsync(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 1);
                                 }
@@ -1140,14 +1140,14 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FUNCTION_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FUNCTION_INCREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_PRESET_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_PRESET_INCREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(399.00))
                                                 {
@@ -1198,14 +1198,14 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FUNCTION_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FUNCTION_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_PRESET_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_PRESET_DECREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(100.00))
                                                 {
@@ -1255,7 +1255,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -1302,7 +1302,7 @@ namespace NonVisuals.Radios
                                                 _upperButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -1349,7 +1349,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FUNCTION_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FUNCTION_INCREASE);
                                                 }
                                             }
                                             else
@@ -1357,7 +1357,7 @@ namespace NonVisuals.Radios
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
                                                     // 225-399
-                                                    DCSBIOS.SendAsync(UHF_PRESET_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_PRESET_INCREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(399.00))
                                                 {
@@ -1407,14 +1407,14 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FUNCTION_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FUNCTION_DECREASE);
                                                 }
                                             }
                                             else
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_PRESET_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_PRESET_DECREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(100.00))
                                                 {
@@ -1464,7 +1464,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_INCREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FREQ_MODE_INCREASE);
                                                 }
                                             }
                                             else
@@ -1511,7 +1511,7 @@ namespace NonVisuals.Radios
                                                 _lowerButtonPressedAndDialRotated = true;
                                                 if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.SendAsync(UHF_FREQ_MODE_DECREASE);
+                                                    await DCSBIOS.SendAsync(UHF_FREQ_MODE_DECREASE);
                                                 }
                                             }
                                             else
@@ -1838,7 +1838,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_upperButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Do when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF5E.UPPER_FREQ_SWITCH);
                                     }
@@ -1855,7 +1855,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_lowerButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Do when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF5E.LOWER_FREQ_SWITCH);
                                     }
@@ -1875,14 +1875,14 @@ namespace NonVisuals.Radios
                 AdjustFrequency(hashSet);
             }
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
             throw new Exception("Radio Panel does not support color bindings with DCS-BIOS.");
         }
-        
+
         private void CreateRadioKnobs()
         {
             SaitekPanelKnobs = RadioPanelKnobF5E.GetRadioPanelKnobs();

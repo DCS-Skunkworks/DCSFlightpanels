@@ -211,7 +211,7 @@ namespace NonVisuals.Radios
         {
             try
             {
-                DCSBIOS.SendAsync(_com1Radio.GetDCSBIOSCommand());
+                await DCSBIOS.SendAsync(_com1Radio.GetDCSBIOSCommand());
                 Interlocked.Increment(ref _doUpdatePanelLCD);
             }
             catch (Exception ex)
@@ -224,7 +224,7 @@ namespace NonVisuals.Radios
         {
             try
             {
-                DCSBIOS.SendAsync(_com2Radio.GetDCSBIOSCommand());
+                await DCSBIOS.SendAsync(_com2Radio.GetDCSBIOSCommand());
                 Interlocked.Increment(ref _doUpdatePanelLCD);
             }
             catch (Exception ex)
@@ -641,7 +641,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_upperButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Sync when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelKnobsJF17.UPPER_FREQ_SWITCH);
                                     }
@@ -678,7 +678,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_lowerButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Sync when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelKnobsJF17.LOWER_FREQ_SWITCH);
                                     }

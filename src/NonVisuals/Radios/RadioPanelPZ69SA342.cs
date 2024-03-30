@@ -110,7 +110,7 @@ namespace NonVisuals.Radios
         private const string FM_RADIO_PRESET_COMMAND_INC = "FM_RADIO_CHANNEL INC\n";
         private const string FM_RADIO_PRESET_COMMAND_DEC = "FM_RADIO_CHANNEL DEC\n";
         private readonly object _lockFmRadioPresetObject = new();
-        
+
         /*NAV1 SA342 UHF Radio*/
         // Large dial 225-399
         // Small dial 000-975 where only 2 digits can be used
@@ -170,7 +170,7 @@ namespace NonVisuals.Radios
         // Large dial Mode selector (VENT, C.M DEC, V.S DER, TPS CAP,P.P, BUT)
         // Small dial Doppler modes ARRET, VEILLE, TERRE, MER, ANEMO,TEST SOL.
         // Large
-       // private readonly string _nadirParameter = "NADIR_PARAMETER";
+        // private readonly string _nadirParameter = "NADIR_PARAMETER";
         private readonly string _nadirDopplerMode = "NADIR_DOPPLER_MODE";
         private const string NADIR_MODE_COMMAND_INC = "NADIR_PARAMETER INC\n";
         private const string NADIR_MODE_COMMAND_DEC = "NADIR_PARAMETER DEC\n";
@@ -188,7 +188,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69SA342(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -233,7 +233,7 @@ namespace NonVisuals.Radios
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
         }
-        
+
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             UpdateCounter(e.Address, e.Data);
@@ -396,7 +396,7 @@ namespace NonVisuals.Radios
 
                             case CurrentSA342RadioMode.ADF:
                                 {
-                                    DCSBIOS.SendAsync(ADF_SWITCH_UNIT_COMMAND);
+                                    await DCSBIOS.SendAsync(ADF_SWITCH_UNIT_COMMAND);
                                     break;
                                 }
                         }
@@ -427,7 +427,7 @@ namespace NonVisuals.Radios
 
                             case CurrentSA342RadioMode.ADF:
                                 {
-                                    DCSBIOS.SendAsync(ADF_SWITCH_UNIT_COMMAND);
+                                    await DCSBIOS.SendAsync(ADF_SWITCH_UNIT_COMMAND);
                                     break;
                                 }
                         }
@@ -456,11 +456,11 @@ namespace NonVisuals.Radios
             _shutdownVHFAMThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownVHFAMThread = false;
-            _vhfAmSyncThread = new Thread(() => VhfAmSynchThreadMethod(desiredPositionDialWholeNumbers, desiredPositionDecimals));
+            _vhfAmSyncThread = new Thread(() => VhfAmSyncThreadMethod(desiredPositionDialWholeNumbers, desiredPositionDecimals));
             _vhfAmSyncThread.Start();
         }
 
-        private void VhfAmSynchThreadMethod(int desiredPositionDialWholeNumbers, int desiredPositionDialDecimals)
+        private void VhfAmSyncThreadMethod(int desiredPositionDialWholeNumbers, int desiredPositionDialDecimals)
         {
             try
             {
@@ -481,12 +481,12 @@ namespace NonVisuals.Radios
                     {
                         if (IsTimedOut(ref dial1Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _vhfAmValue1WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _vhfAmValue1WaitingForFeedback); // Let's do an ugly reset
                         }
 
                         if (IsTimedOut(ref dial2Timeout))
                         {
-                            ResetWaitingForFeedBack(ref _vhfAmValue2WaitingForFeedback); // Lets do an ugly reset
+                            ResetWaitingForFeedBack(ref _vhfAmValue2WaitingForFeedback); // Let's do an ugly reset
                         }
 
                         if (Interlocked.Read(ref _vhfAmValue1WaitingForFeedback) == 0 || Interlocked.Read(ref _vhfAmValue2WaitingForFeedback) == 0)
@@ -510,7 +510,7 @@ namespace NonVisuals.Radios
                                             command = VHF_AM_LEFT_DIAL_DIAL_COMMAND_DEC;
                                         }
 
-                                        DCSBIOS.SendAsync(command);
+                                        await DCSBIOS.SendAsync(command);
                                         dial1Time = DateTime.Now.Ticks;
                                         dial1SendCount++;
                                         Interlocked.Exchange(ref _vhfAmValue1WaitingForFeedback, 1);
@@ -539,10 +539,10 @@ namespace NonVisuals.Radios
                                         Debug.Print("desiredPositionDialDecimals = " + desiredPositionDialDecimals);
                                         Debug.Print("cockpit _vhfAmCockpitDecimal10sFrequencyValue RAW = " + _vhfAmCockpitDecimal10sFrequencyValue);
                                         Debug.Print("cockpit _vhfAmCockpitDecimal100sFrequencyValue RAW = " + _vhfAmCockpitDecimal100sFrequencyValue);*/
-                                        DCSBIOS.SendAsync(
-                                            SwitchVhfAmDecimalDirectionUp(int.Parse(cockpitFrequencyDecimals), desiredPositionDialDecimals)
-                                                ? VHF_AM_RIGHT_DIAL_DIAL_COMMAND_INC
-                                                : VHF_AM_RIGHT_DIAL_DIAL_COMMAND_DEC);
+                                        await DCSBIOS.SendAsync(
+                                                                                    SwitchVhfAmDecimalDirectionUp(int.Parse(cockpitFrequencyDecimals), desiredPositionDialDecimals)
+                                                                                        ? VHF_AM_RIGHT_DIAL_DIAL_COMMAND_INC
+                                                                                        : VHF_AM_RIGHT_DIAL_DIAL_COMMAND_DEC);
                                         dial2Time = DateTime.Now.Ticks;
                                         dial2SendCount++;
                                         Interlocked.Exchange(ref _vhfAmValue3WaitingForFeedback, 1);
@@ -601,90 +601,90 @@ namespace NonVisuals.Radios
                     case '0':
                         {
                             // Debug.Print("Sending 0 ");
-                            DCSBIOS.SendAsync(UHF_BUTTON0_COMMAND_ON);
+                            await DCSBIOS.SendAsync(UHF_BUTTON0_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.SendAsync(UHF_BUTTON0_COMMAND_OFF);
+                            await DCSBIOS.SendAsync(UHF_BUTTON0_COMMAND_OFF);
                             break;
                         }
 
                     case '1':
                         {
                             // Debug.Print("Sending 1 ");
-                            DCSBIOS.SendAsync(UHF_BUTTON1_COMMAND_ON);
+                            await DCSBIOS.SendAsync(UHF_BUTTON1_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.SendAsync(UHF_BUTTON1_COMMAND_OFF);
+                            await DCSBIOS.SendAsync(UHF_BUTTON1_COMMAND_OFF);
                             break;
                         }
 
                     case '2':
                         {
                             // Debug.Print("Sending 2 ");
-                            DCSBIOS.SendAsync(UHF_BUTTON2_COMMAND_ON);
+                            await DCSBIOS.SendAsync(UHF_BUTTON2_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.SendAsync(UHF_BUTTON2_COMMAND_OFF);
+                            await DCSBIOS.SendAsync(UHF_BUTTON2_COMMAND_OFF);
                             break;
                         }
 
                     case '3':
                         {
                             // Debug.Print("Sending 3 ");
-                            DCSBIOS.SendAsync(UHF_BUTTON3_COMMAND_ON);
+                            await DCSBIOS.SendAsync(UHF_BUTTON3_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.SendAsync(UHF_BUTTON3_COMMAND_OFF);
+                            await DCSBIOS.SendAsync(UHF_BUTTON3_COMMAND_OFF);
                             break;
                         }
 
                     case '4':
                         {
                             // Debug.Print("Sending 4 ");
-                            DCSBIOS.SendAsync(UHF_BUTTON4_COMMAND_ON);
+                            await DCSBIOS.SendAsync(UHF_BUTTON4_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.SendAsync(UHF_BUTTON4_COMMAND_OFF);
+                            await DCSBIOS.SendAsync(UHF_BUTTON4_COMMAND_OFF);
                             break;
                         }
 
                     case '5':
                         {
                             // Debug.Print("Sending 5 ");
-                            DCSBIOS.SendAsync(UHF_BUTTON5_COMMAND_ON);
+                            await DCSBIOS.SendAsync(UHF_BUTTON5_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.SendAsync(UHF_BUTTON5_COMMAND_OFF);
+                            await DCSBIOS.SendAsync(UHF_BUTTON5_COMMAND_OFF);
                             break;
                         }
 
                     case '6':
                         {
                             // Debug.Print("Sending 6 ");
-                            DCSBIOS.SendAsync(UHF_BUTTON6_COMMAND_ON);
+                            await DCSBIOS.SendAsync(UHF_BUTTON6_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.SendAsync(UHF_BUTTON6_COMMAND_OFF);
+                            await DCSBIOS.SendAsync(UHF_BUTTON6_COMMAND_OFF);
                             break;
                         }
 
                     case '7':
                         {
                             // Debug.Print("Sending 7 ");
-                            DCSBIOS.SendAsync(UHF_BUTTON7_COMMAND_ON);
+                            await DCSBIOS.SendAsync(UHF_BUTTON7_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.SendAsync(UHF_BUTTON7_COMMAND_OFF);
+                            await DCSBIOS.SendAsync(UHF_BUTTON7_COMMAND_OFF);
                             break;
                         }
 
                     case '8':
                         {
                             // Debug.Print("Sending 8 ");
-                            DCSBIOS.SendAsync(UHF_BUTTON8_COMMAND_ON);
+                            await DCSBIOS.SendAsync(UHF_BUTTON8_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.SendAsync(UHF_BUTTON8_COMMAND_OFF);
+                            await DCSBIOS.SendAsync(UHF_BUTTON8_COMMAND_OFF);
                             break;
                         }
 
                     case '9':
                         {
                             // Debug.Print("Sending 9 ");
-                            DCSBIOS.SendAsync(UHF_BUTTON9_COMMAND_ON);
+                            await DCSBIOS.SendAsync(UHF_BUTTON9_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.SendAsync(UHF_BUTTON9_COMMAND_OFF);
+                            await DCSBIOS.SendAsync(UHF_BUTTON9_COMMAND_OFF);
                             break;
                         }
                 }
@@ -693,15 +693,15 @@ namespace NonVisuals.Radios
             if (frequencyAsString.Length == 6)
             {
                 // Debug.Print("Sending 0 ");
-                DCSBIOS.SendAsync(UHF_BUTTON0_COMMAND_ON);
+                await DCSBIOS.SendAsync(UHF_BUTTON0_COMMAND_ON);
                 Thread.Sleep(sleepLength);
-                DCSBIOS.SendAsync(UHF_BUTTON0_COMMAND_OFF);
+                await DCSBIOS.SendAsync(UHF_BUTTON0_COMMAND_OFF);
             }
 
             // Debug.Print("Sending VALIDATE ");
-            DCSBIOS.SendAsync(UHF_BUTTON_VALIDATE_COMMAND_ON);
+            await DCSBIOS.SendAsync(UHF_BUTTON_VALIDATE_COMMAND_ON);
             Thread.Sleep(sleepLength);
-            DCSBIOS.SendAsync(UHF_BUTTON_VALIDATE_COMMAND_OFF);
+            await DCSBIOS.SendAsync(UHF_BUTTON_VALIDATE_COMMAND_OFF);
         }
 
         private void ShowFrequenciesOnPanel()
@@ -984,7 +984,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.VHFFM:
                                         {
-                                            DCSBIOS.SendAsync(FM_RADIO_PRESET_COMMAND_INC);
+                                            await DCSBIOS.SendAsync(FM_RADIO_PRESET_COMMAND_INC);
                                             break;
                                         }
 
@@ -1025,7 +1025,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.SendAsync(NADIR_MODE_COMMAND_INC);
+                                            await DCSBIOS.SendAsync(NADIR_MODE_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -1051,7 +1051,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.VHFFM:
                                         {
-                                            DCSBIOS.SendAsync(FM_RADIO_PRESET_COMMAND_DEC);
+                                            await DCSBIOS.SendAsync(FM_RADIO_PRESET_COMMAND_DEC);
                                             break;
                                         }
 
@@ -1092,7 +1092,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.SendAsync(NADIR_MODE_COMMAND_DEC);
+                                            await DCSBIOS.SendAsync(NADIR_MODE_COMMAND_DEC);
                                             break;
                                         }
                                 }
@@ -1157,7 +1157,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.SendAsync(NADIR_DOPPLER_COMMAND_INC);
+                                            await DCSBIOS.SendAsync(NADIR_DOPPLER_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -1222,7 +1222,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.SendAsync(NADIR_DOPPLER_COMMAND_DEC);
+                                            await DCSBIOS.SendAsync(NADIR_DOPPLER_COMMAND_DEC);
                                             break;
                                         }
                                 }
@@ -1253,7 +1253,7 @@ namespace NonVisuals.Radios
                                                 //@ max value
                                                 break;
                                             }*/
-                                            DCSBIOS.SendAsync(FM_RADIO_PRESET_COMMAND_INC);
+                                            await DCSBIOS.SendAsync(FM_RADIO_PRESET_COMMAND_INC);
                                             break;
                                         }
 
@@ -1294,7 +1294,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.SendAsync(NADIR_MODE_COMMAND_INC);
+                                            await DCSBIOS.SendAsync(NADIR_MODE_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -1320,7 +1320,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.VHFFM:
                                         {
-                                            DCSBIOS.SendAsync(FM_RADIO_PRESET_COMMAND_DEC);
+                                            await DCSBIOS.SendAsync(FM_RADIO_PRESET_COMMAND_DEC);
                                             break;
                                         }
 
@@ -1361,7 +1361,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.SendAsync(NADIR_MODE_COMMAND_DEC);
+                                            await DCSBIOS.SendAsync(NADIR_MODE_COMMAND_DEC);
                                             break;
                                         }
                                 }
@@ -1426,7 +1426,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.SendAsync(NADIR_DOPPLER_COMMAND_INC);
+                                            await DCSBIOS.SendAsync(NADIR_DOPPLER_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -1491,7 +1491,7 @@ namespace NonVisuals.Radios
 
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.SendAsync(NADIR_DOPPLER_COMMAND_DEC);
+                                            await DCSBIOS.SendAsync(NADIR_DOPPLER_COMMAND_DEC);
                                             break;
                                         }
                                 }

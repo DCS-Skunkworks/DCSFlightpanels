@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace NonVisuals.Interfaces
 {
     using System.Threading;
     using NonVisuals.Panels.StreamDeck.Panels;
@@ -20,7 +22,7 @@
 
         string ActionDescription { get; }
 
-        void Execute(CancellationToken threadCancellationToken, bool executeOnce = false);
+        Task ExecuteAsync(CancellationToken threadCancellationToken, bool executeOnce = false);
 
         bool IsRunning();
 

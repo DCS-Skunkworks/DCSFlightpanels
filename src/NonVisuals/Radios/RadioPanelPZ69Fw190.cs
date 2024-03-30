@@ -115,7 +115,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Fw190(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -149,7 +149,7 @@ namespace NonVisuals.Radios
 
             // NAV1
             _homingDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("FT_ZF_SWITCH");
-            
+
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
         }
@@ -337,7 +337,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentLowerRadioMode == CurrentFw190RadioMode.IFF)
                                     {
-                                        DCSBIOS.SendAsync(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
+                                        await DCSBIOS.SendAsync(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
                                     }
 
                                     if (_currentUpperRadioMode == CurrentFw190RadioMode.HOMING)
@@ -346,7 +346,7 @@ namespace NonVisuals.Radios
                                         {
                                             lock (_lockHomingDialObject1)
                                             {
-                                                DCSBIOS.SendAsync(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
                                             }
                                         }
                                     }
@@ -357,7 +357,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentLowerRadioMode == CurrentFw190RadioMode.IFF)
                                     {
-                                        DCSBIOS.SendAsync(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
+                                        await DCSBIOS.SendAsync(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
                                     }
 
                                     if (_currentLowerRadioMode == CurrentFw190RadioMode.HOMING)
@@ -366,7 +366,7 @@ namespace NonVisuals.Radios
                                         {
                                             lock (_lockHomingDialObject1)
                                             {
-                                                DCSBIOS.SendAsync(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
                                             }
                                         }
                                     }
@@ -472,13 +472,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Fine tuning
-                                                DCSBIOS.SendAsync(FUG16_ZY_FINE_TUNE_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(FUG16_ZY_FINE_TUNE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -502,13 +502,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Fine tuning
-                                                DCSBIOS.SendAsync(FUG16_ZY_FINE_TUNE_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(FUG16_ZY_FINE_TUNE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -592,13 +592,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Fine tuning
-                                                DCSBIOS.SendAsync(FUG16_ZY_FINE_TUNE_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(FUG16_ZY_FINE_TUNE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -622,13 +622,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Fine tuning
-                                                DCSBIOS.SendAsync(FUG16_ZY_FINE_TUNE_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(FUG16_ZY_FINE_TUNE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(RADIO_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 

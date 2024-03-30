@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.OSCommand;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.OSCommand;
 
 namespace NonVisuals.Panels.StreamDeck
 {
@@ -70,10 +71,11 @@ namespace NonVisuals.Panels.StreamDeck
         }
 
 
-        public void ExecuteAsync(CancellationToken threadCancellationToken, bool executeOnce = false)
+        public Task ExecuteAsync(CancellationToken threadCancellationToken, bool executeOnce = false)
         {
             Common.PlaySoundFile(SoundFile, Volume);
             OSCommandObject.ExecuteCommand(threadCancellationToken);
+            return Task.CompletedTask;
         }
 
         internal override void ImportSettings(string settings) { }

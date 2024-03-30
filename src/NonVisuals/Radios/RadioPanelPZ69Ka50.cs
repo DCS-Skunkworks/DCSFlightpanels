@@ -166,7 +166,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69Ka50(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -209,7 +209,7 @@ namespace NonVisuals.Radios
             _datalinkMasterModeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DLNK_MASTER_MODE");
             _datalinkSelfIdDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DLNK_SELF_ID");
             _datalinkPowerOnOffDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("PVI_POWER");
-            
+
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
         }
@@ -382,7 +382,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentKa50RadioMode.ABRIS:
                                     {
-                                        DCSBIOS.SendAsync(isOn ? ABRIS_RIGHT_DIAL_PUSH_TOGGLE_ON_COMMAND : ABRIS_RIGHT_DIAL_PUSH_TOGGLE_OFF_COMMAND);
+                                        await DCSBIOS.SendAsync(isOn ? ABRIS_RIGHT_DIAL_PUSH_TOGGLE_ON_COMMAND : ABRIS_RIGHT_DIAL_PUSH_TOGGLE_OFF_COMMAND);
                                         break;
                                     }
 
@@ -414,7 +414,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentKa50RadioMode.ABRIS:
                                     {
-                                        DCSBIOS.SendAsync(isOn ? ABRIS_RIGHT_DIAL_PUSH_TOGGLE_ON_COMMAND : ABRIS_RIGHT_DIAL_PUSH_TOGGLE_OFF_COMMAND);
+                                        await DCSBIOS.SendAsync(isOn ? ABRIS_RIGHT_DIAL_PUSH_TOGGLE_ON_COMMAND : ABRIS_RIGHT_DIAL_PUSH_TOGGLE_OFF_COMMAND);
                                         break;
                                     }
 
@@ -447,7 +447,7 @@ namespace NonVisuals.Radios
                 _shutdownR800L1Thread = true;
                 Thread.Sleep(Constants.ThreadShutDownWaitTime);
                 _shutdownR800L1Thread = false;
-                _r800L1SyncThread = new Thread(() => R800L1SynchThreadMethod());
+                _r800L1SyncThread = new Thread(() => R800L1SyncThreadMethod());
                 _r800L1SyncThread.Start();
             }
             catch (Exception ex)
@@ -457,7 +457,7 @@ namespace NonVisuals.Radios
         }
 
         private volatile bool _shutdownR800L1Thread;
-        private void R800L1SynchThreadMethod()
+        private void R800L1SyncThreadMethod()
         {
             try
             {
@@ -517,22 +517,22 @@ namespace NonVisuals.Radios
                         {
                             if (IsTimedOut(ref dial1Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _r800L1Dial1WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _r800L1Dial1WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             if (IsTimedOut(ref dial2Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _r800L1Dial2WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _r800L1Dial2WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             if (IsTimedOut(ref dial3Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _r800L1Dial3WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _r800L1Dial3WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             if (IsTimedOut(ref dial4Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _r800L1Dial4WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _r800L1Dial4WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             string str;
@@ -544,7 +544,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial1OkTime = DateTime.Now.Ticks;
                                         str = R800_L1_FREQ_1DIAL_COMMAND + GetCommandDirectionForR800L1Dial1(desiredPositionDial1X, _r800L1CockpitFreq1DialPos);
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         dial1SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 1);
                                     }
@@ -564,7 +564,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial2OkTime = DateTime.Now.Ticks;
                                         str = R800_L1_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r800L1CockpitFreq2DialPos);
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         dial2SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 1);
                                     }
@@ -584,7 +584,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
                                         str = R800_L1_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r800L1CockpitFreq3DialPos);
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         dial3SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 1);
                                     }
@@ -616,7 +616,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = R800_L1_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
                                     }
@@ -624,7 +624,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = R800_L1_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
                                     }
@@ -828,7 +828,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentUpperRadioMode == CurrentKa50RadioMode.VHF1_R828)
                                     {
-                                        DCSBIOS.SendAsync(radioPanelKnob.IsOn ? VHF1_TUNER_BUTTON_PRESS : VHF1_TUNER_BUTTON_RELEASE);
+                                        await DCSBIOS.SendAsync(radioPanelKnob.IsOn ? VHF1_TUNER_BUTTON_PRESS : VHF1_TUNER_BUTTON_RELEASE);
                                     }
                                     else if (_currentUpperRadioMode == CurrentKa50RadioMode.ADF_ARK22 && radioPanelKnob.IsOn)
                                     {
@@ -837,26 +837,26 @@ namespace NonVisuals.Radios
                                             if (_adfModeSwitchDirectionUp && _adfModeCockpitPos == 2)
                                             {
                                                 _adfModeSwitchDirectionUp = false;
-                                                DCSBIOS.SendAsync(ADF_MODE_DEC);
+                                                await DCSBIOS.SendAsync(ADF_MODE_DEC);
                                             }
                                             else if (!_adfModeSwitchDirectionUp && _adfModeCockpitPos == 0)
                                             {
                                                 _adfModeSwitchDirectionUp = true;
-                                                DCSBIOS.SendAsync(ADF_MODE_INC);
+                                                await DCSBIOS.SendAsync(ADF_MODE_INC);
                                             }
                                             else if (_adfModeSwitchDirectionUp)
                                             {
-                                                DCSBIOS.SendAsync(ADF_MODE_INC);
+                                                await DCSBIOS.SendAsync(ADF_MODE_INC);
                                             }
                                             else if (!_adfModeSwitchDirectionUp)
                                             {
-                                                DCSBIOS.SendAsync(ADF_MODE_DEC);
+                                                await DCSBIOS.SendAsync(ADF_MODE_DEC);
                                             }
                                         }
                                     }
                                     else if (_currentUpperRadioMode == CurrentKa50RadioMode.DATALINK && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.SendAsync(DATALINK_POWER_ON_OFF_COMMAND_TOGGLE);
+                                        await DCSBIOS.SendAsync(DATALINK_POWER_ON_OFF_COMMAND_TOGGLE);
                                     }
                                     else
                                     {
@@ -869,7 +869,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentLowerRadioMode == CurrentKa50RadioMode.VHF1_R828)
                                     {
-                                        DCSBIOS.SendAsync(radioPanelKnob.IsOn ? VHF1_TUNER_BUTTON_PRESS : VHF1_TUNER_BUTTON_RELEASE);
+                                        await DCSBIOS.SendAsync(radioPanelKnob.IsOn ? VHF1_TUNER_BUTTON_PRESS : VHF1_TUNER_BUTTON_RELEASE);
                                     }
                                     else if (_currentLowerRadioMode == CurrentKa50RadioMode.ADF_ARK22 && radioPanelKnob.IsOn)
                                     {
@@ -878,26 +878,26 @@ namespace NonVisuals.Radios
                                             if (_adfModeSwitchDirectionUp && _adfModeCockpitPos == 2)
                                             {
                                                 _adfModeSwitchDirectionUp = false;
-                                                DCSBIOS.SendAsync(ADF_MODE_DEC);
+                                                await DCSBIOS.SendAsync(ADF_MODE_DEC);
                                             }
                                             else if (!_adfModeSwitchDirectionUp && _adfModeCockpitPos == 0)
                                             {
                                                 _adfModeSwitchDirectionUp = true;
-                                                DCSBIOS.SendAsync(ADF_MODE_INC);
+                                                await DCSBIOS.SendAsync(ADF_MODE_INC);
                                             }
                                             else if (_adfModeSwitchDirectionUp)
                                             {
-                                                DCSBIOS.SendAsync(ADF_MODE_INC);
+                                                await DCSBIOS.SendAsync(ADF_MODE_INC);
                                             }
                                             else if (!_adfModeSwitchDirectionUp)
                                             {
-                                                DCSBIOS.SendAsync(ADF_MODE_DEC);
+                                                await DCSBIOS.SendAsync(ADF_MODE_DEC);
                                             }
                                         }
                                     }
                                     else if (_currentLowerRadioMode == CurrentKa50RadioMode.DATALINK && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.SendAsync(DATALINK_POWER_ON_OFF_COMMAND_TOGGLE);
+                                        await DCSBIOS.SendAsync(DATALINK_POWER_ON_OFF_COMMAND_TOGGLE);
                                     }
                                     else
                                     {
@@ -976,7 +976,7 @@ namespace NonVisuals.Radios
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisLeftDialIncreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_abrisLeftDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_INC_MORE : ABRIS_LEFT_DIAL_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_abrisLeftDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_INC_MORE : ABRIS_LEFT_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1033,7 +1033,7 @@ namespace NonVisuals.Radios
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisLeftDialDecreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_abrisLeftDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_DEC_MORE : ABRIS_LEFT_DIAL_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(_abrisLeftDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_DEC_MORE : ABRIS_LEFT_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1063,7 +1063,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1082,7 +1082,7 @@ namespace NonVisuals.Radios
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisRightDialIncreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_abrisRightDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_INC_MORE : ABRIS_RIGHT_DIAL_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_abrisRightDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_INC_MORE : ABRIS_RIGHT_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1094,7 +1094,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                DCSBIOS.SendAsync(ADF_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(ADF_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1112,7 +1112,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1131,7 +1131,7 @@ namespace NonVisuals.Radios
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisRightDialDecreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_abrisRightDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_DEC_MORE : ABRIS_RIGHT_DIAL_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(_abrisRightDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_DEC_MORE : ABRIS_RIGHT_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1143,7 +1143,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                DCSBIOS.SendAsync(ADF_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(ADF_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1202,7 +1202,7 @@ namespace NonVisuals.Radios
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisLeftDialIncreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_abrisLeftDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_INC_MORE : ABRIS_LEFT_DIAL_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_abrisLeftDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_INC_MORE : ABRIS_LEFT_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1273,7 +1273,7 @@ namespace NonVisuals.Radios
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisLeftDialDecreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_abrisLeftDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_DEC_MORE : ABRIS_LEFT_DIAL_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(_abrisLeftDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_DEC_MORE : ABRIS_LEFT_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1303,7 +1303,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1323,7 +1323,7 @@ namespace NonVisuals.Radios
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisRightDialIncreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_abrisRightDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_INC_MORE : ABRIS_RIGHT_DIAL_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_abrisRightDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_INC_MORE : ABRIS_RIGHT_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1335,7 +1335,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                DCSBIOS.SendAsync(ADF_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(ADF_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1353,7 +1353,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1372,7 +1372,7 @@ namespace NonVisuals.Radios
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisRightDialDecreaseChangeMonitor.Click();
-                                                DCSBIOS.SendAsync(_abrisRightDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_DEC_MORE : ABRIS_RIGHT_DIAL_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(_abrisRightDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_DEC_MORE : ABRIS_RIGHT_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1384,7 +1384,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                DCSBIOS.SendAsync(ADF_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(ADF_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1441,7 +1441,7 @@ namespace NonVisuals.Radios
                 Logger.Error(ex);
             }
         }
-        
+
         private void ShowFrequenciesOnPanel()
         {
             try
@@ -1715,7 +1715,7 @@ namespace NonVisuals.Radios
 
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
-        
+
         public override void ClearSettings(bool setIsDirty = false)
         {
         }
@@ -2256,7 +2256,7 @@ namespace NonVisuals.Radios
             return string.Empty;
         }
 
-        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff){ }
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff) { }
         public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength) { }
         public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence) { }
         public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description, bool isSequenced) { }

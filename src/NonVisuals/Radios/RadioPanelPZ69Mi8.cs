@@ -92,7 +92,7 @@ namespace NonVisuals.Radios
         private volatile uint _r863PresetCockpitDialPos = 1;
         private const string R863_PRESET_COMMAND_INC = "R863_CNL_SEL INC\n";
         private const string R863_PRESET_COMMAND_DEC = "R863_CNL_SEL DEC\n";
-        
+
         private const string R863_PRESET_VOLUME_KNOB_COMMAND_INC = "R863_VOL +2500\n";
         private const string R863_PRESET_VOLUME_KNOB_COMMAND_DEC = "R863_VOL -2500\n";
         private readonly object _lockR863UnitSwitchObject = new();
@@ -204,7 +204,7 @@ namespace NonVisuals.Radios
         private volatile uint _arkUdModeCockpitDial1Pos;
         private const string ARKUD_MODE_COMMAND_INC = "ARCUD_MODE INC\n";
         private const string ARKUD_MODE_COMMAND_DEC = "ARCUD_MODE DEC\n";
-        
+
         private readonly object _lockArkudVhfUhfModeDialObject = new();
         private DCSBIOSOutput _arkUdVhfUhfModeDcsbiosOutputDial;
         private volatile uint _arkUdVhfUhfModeCockpitDial1Pos;
@@ -232,7 +232,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Mi8(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -633,7 +633,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentMi8RadioMode.R828_PRESETS:
                                     {
-                                        DCSBIOS.SendAsync(knobIsOn ? R828_GAIN_CONTROL_COMMAND_ON : R828_GAIN_CONTROL_COMMAND_OFF);
+                                        await DCSBIOS.SendAsync(knobIsOn ? R828_GAIN_CONTROL_COMMAND_ON : R828_GAIN_CONTROL_COMMAND_OFF);
                                         break;
                                     }
 
@@ -646,7 +646,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (knobIsOn)
                                         {
-                                            DCSBIOS.SendAsync(SPU7_ICS_SWITCH_TOGGLE_COMMAND);
+                                            await DCSBIOS.SendAsync(SPU7_ICS_SWITCH_TOGGLE_COMMAND);
                                         }
                                         break;
                                     }
@@ -677,7 +677,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentMi8RadioMode.R828_PRESETS:
                                     {
-                                        DCSBIOS.SendAsync(knobIsOn ? R828_GAIN_CONTROL_COMMAND_ON : R828_GAIN_CONTROL_COMMAND_OFF);
+                                        await DCSBIOS.SendAsync(knobIsOn ? R828_GAIN_CONTROL_COMMAND_ON : R828_GAIN_CONTROL_COMMAND_OFF);
                                         break;
                                     }
 
@@ -690,7 +690,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (knobIsOn)
                                         {
-                                            DCSBIOS.SendAsync(SPU7_ICS_SWITCH_TOGGLE_COMMAND);
+                                            await DCSBIOS.SendAsync(SPU7_ICS_SWITCH_TOGGLE_COMMAND);
                                         }
                                         break;
                                     }
@@ -719,7 +719,7 @@ namespace NonVisuals.Radios
                 _shutdownR863Thread = true;
                 Thread.Sleep(Constants.ThreadShutDownWaitTime);
                 _shutdownR863Thread = false;
-                _r863ManualSyncThread = new Thread(R863ManualSynchThreadMethod);
+                _r863ManualSyncThread = new Thread(R863ManualSyncThreadMethod);
                 _r863ManualSyncThread.Start();
             }
             catch (Exception ex)
@@ -729,7 +729,7 @@ namespace NonVisuals.Radios
         }
 
         private volatile bool _shutdownR863Thread;
-        private void R863ManualSynchThreadMethod()
+        private void R863ManualSyncThreadMethod()
         {
             try
             {
@@ -794,22 +794,22 @@ namespace NonVisuals.Radios
                         {
                             if (IsTimedOut(ref dial1Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _r863ManualDial1WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _r863ManualDial1WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             if (IsTimedOut(ref dial2Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _r863ManualDial2WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _r863ManualDial2WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             if (IsTimedOut(ref dial3Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _r863ManualDial3WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _r863ManualDial3WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             if (IsTimedOut(ref dial4Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _r863ManualDial4WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _r863ManualDial4WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             string str;
@@ -833,7 +833,7 @@ namespace NonVisuals.Radios
                                         I have gotten the values above from DCS using the Lua console so I can see that they do actually change but there is something not working in DCS-BIOS
                                         So only go down with it
                                         */
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         dial1SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial1WaitingForFeedback, 1);
                                     }
@@ -854,7 +854,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial2OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r863ManualCockpitFreq2DialPos);
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         dial2SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial2WaitingForFeedback, 1);
                                     }
@@ -874,7 +874,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r863ManualCockpitFreq3DialPos);
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         dial3SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial3WaitingForFeedback, 1);
                                     }
@@ -894,7 +894,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
                                     }
@@ -902,7 +902,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
                                     }
@@ -986,7 +986,7 @@ namespace NonVisuals.Radios
                 _shutdownYaDRO1AThread = true;
                 Thread.Sleep(Constants.ThreadShutDownWaitTime);
                 _shutdownYaDRO1AThread = false;
-                _yadro1ASyncThread = new Thread(YaDRO1ASynchThreadMethod);
+                _yadro1ASyncThread = new Thread(YaDRO1ASyncThreadMethod);
                 _yadro1ASyncThread.Start();
             }
             catch (Exception ex)
@@ -995,7 +995,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void YaDRO1ASynchThreadMethod()
+        private void YaDRO1ASyncThreadMethod()
         {
             try
             {
@@ -1051,22 +1051,22 @@ namespace NonVisuals.Radios
                         {
                             if (IsTimedOut(ref dial1Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _yadro1ADial1WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _yadro1ADial1WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             if (IsTimedOut(ref dial2Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _yadro1ADial2WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _yadro1ADial2WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             if (IsTimedOut(ref dial3Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _yadro1ADial3WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _yadro1ADial3WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             if (IsTimedOut(ref dial4Timeout))
                             {
-                                ResetWaitingForFeedBack(ref _yadro1ADial4WaitingForFeedback); // Lets do an ugly reset
+                                ResetWaitingForFeedBack(ref _yadro1ADial4WaitingForFeedback); // Let's do an ugly reset
                             }
 
                             string str;
@@ -1086,7 +1086,7 @@ namespace NonVisuals.Radios
                                             str = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                                         }
 
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial1Timeout);
@@ -1105,7 +1105,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial2OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _yadro1ACockpitFreq2DialPos);
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial2Timeout);
@@ -1124,7 +1124,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _yadro1ACockpitFreq3DialPos);
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial3Timeout);
@@ -1143,7 +1143,7 @@ namespace NonVisuals.Radios
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_4DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial4X, _yadro1ACockpitFreq4DialPos);
-                                        DCSBIOS.SendAsync(str);
+                                        await DCSBIOS.SendAsync(str);
                                         Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial4Timeout);
@@ -1354,16 +1354,16 @@ namespace NonVisuals.Radios
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            DCSBIOS.SendAsync(R863_UNIT_SWITCH_COMMAND_TOGGLE);
+                                            await DCSBIOS.SendAsync(R863_UNIT_SWITCH_COMMAND_TOGGLE);
                                         }
                                     }
                                     else if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.SendAsync(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
+                                        await DCSBIOS.SendAsync(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
                                     }
                                     else if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.SendAsync(ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE);
+                                        await DCSBIOS.SendAsync(ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE);
                                     }
                                     else
                                     {
@@ -1378,16 +1378,16 @@ namespace NonVisuals.Radios
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            DCSBIOS.SendAsync(R863_UNIT_SWITCH_COMMAND_TOGGLE);
+                                            await DCSBIOS.SendAsync(R863_UNIT_SWITCH_COMMAND_TOGGLE);
                                         }
                                     }
                                     else if (_currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9 && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.SendAsync(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
+                                        await DCSBIOS.SendAsync(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
                                     }
                                     else if (_currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.SendAsync(ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE);
+                                        await DCSBIOS.SendAsync(ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE);
                                     }
                                     else
                                     {
@@ -1471,7 +1471,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                DCSBIOS.SendAsync(R863_PRESET_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(R863_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1504,25 +1504,25 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                DCSBIOS.SendAsync(R828_PRESET_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(R828_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                DCSBIOS.SendAsync(ARKUD_PRESET_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(ARKUD_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                DCSBIOS.SendAsync(SPU7_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(SPU7_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1572,7 +1572,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                DCSBIOS.SendAsync(R863_PRESET_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(R863_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1605,25 +1605,25 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                DCSBIOS.SendAsync(R828_PRESET_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(R828_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                DCSBIOS.SendAsync(ARKUD_PRESET_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(ARKUD_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                DCSBIOS.SendAsync(SPU7_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(SPU7_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1654,7 +1654,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1673,25 +1673,25 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                DCSBIOS.SendAsync(ARKUD_MODE_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(ARKUD_MODE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                DCSBIOS.SendAsync(SPU7_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(SPU7_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1721,7 +1721,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1739,25 +1739,25 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                DCSBIOS.SendAsync(ARKUD_MODE_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(ARKUD_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                DCSBIOS.SendAsync(SPU7_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(SPU7_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1807,7 +1807,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                DCSBIOS.SendAsync(R863_PRESET_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(R863_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1840,25 +1840,25 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                DCSBIOS.SendAsync(R828_PRESET_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(R828_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_INC : ADF_BACKUP100_KHZ_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                DCSBIOS.SendAsync(ARKUD_PRESET_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(ARKUD_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                DCSBIOS.SendAsync(SPU7_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(SPU7_COMMAND_INC);
                                                 break;
                                             }
 
@@ -1908,7 +1908,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                DCSBIOS.SendAsync(R863_PRESET_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(R863_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1941,25 +1941,25 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                DCSBIOS.SendAsync(R828_PRESET_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(R828_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN100_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP100_KHZ_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                DCSBIOS.SendAsync(ARKUD_PRESET_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(ARKUD_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                DCSBIOS.SendAsync(SPU7_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(SPU7_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -1990,7 +1990,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -2009,25 +2009,25 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_INC : ADF_BACKUP10_KHZ_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                DCSBIOS.SendAsync(ARKUD_MODE_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(ARKUD_MODE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                DCSBIOS.SendAsync(SPU7_VOLUME_KNOB_COMMAND_INC);
+                                                await DCSBIOS.SendAsync(SPU7_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -2057,7 +2057,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R863_PRESET:
                                             {
-                                                DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(R863_PRESET_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -2075,25 +2075,25 @@ namespace NonVisuals.Radios
 
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
-                                                DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(R828_PRESET_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(_adfBackupMainCockpitDial1Pos == 1 ? ADF_MAIN10_KHZ_PRESET_COMMAND_DEC : ADF_BACKUP10_KHZ_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.ARK_UD:
                                             {
-                                                DCSBIOS.SendAsync(ARKUD_MODE_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(ARKUD_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentMi8RadioMode.SPU7:
                                             {
-                                                DCSBIOS.SendAsync(SPU7_VOLUME_KNOB_COMMAND_DEC);
+                                                await DCSBIOS.SendAsync(SPU7_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
