@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -70,7 +71,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69AV8BNA(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -152,7 +153,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendFrequencyToDCSBIOS(RadioPanelKnobAV8BNA knob)
+        private async Task SendFrequencyToDCSBIOSAsync(RadioPanelKnobAV8BNA knob)
         {
             if (IgnoreSwitchButtonOnce() && (knob.RadioPanelPZ69Knob == RadioPanelPZ69KnobsAV8BNA.UPPER_FREQ_SWITCH || knob.RadioPanelPZ69Knob == RadioPanelPZ69KnobsAV8BNA.LOWER_FREQ_SWITCH))
             {
@@ -176,14 +177,14 @@ namespace NonVisuals.Radios
                         {
                             case CurrentAV8BNARadioMode.COMM1:
                                 {
-                                    DCSBIOS.SendAsync(knob.IsOn ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
+                                    await DCSBIOS.SendAsync(knob.IsOn ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
                                     ShowFrequenciesOnPanel();
                                     break;
                                 }
 
                             case CurrentAV8BNARadioMode.COMM2:
                                 {
-                                    DCSBIOS.SendAsync(knob.IsOn ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
+                                    await DCSBIOS.SendAsync(knob.IsOn ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
                                     ShowFrequenciesOnPanel();
                                     break;
                                 }
@@ -197,14 +198,14 @@ namespace NonVisuals.Radios
                         {
                             case CurrentAV8BNARadioMode.COMM1:
                                 {
-                                    DCSBIOS.SendAsync(knob.IsOn ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
+                                    await DCSBIOS.SendAsync(knob.IsOn ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
                                     ShowFrequenciesOnPanel();
                                     break;
                                 }
 
                             case CurrentAV8BNARadioMode.COMM2:
                                 {
-                                    DCSBIOS.SendAsync(knob.IsOn ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
+                                    await DCSBIOS.SendAsync(knob.IsOn ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
                                     ShowFrequenciesOnPanel();
                                     break;
                                 }
@@ -326,11 +327,11 @@ namespace NonVisuals.Radios
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
+                                                await DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
+                                                await DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
                                             }
                                             break;
                                         }
@@ -340,11 +341,11 @@ namespace NonVisuals.Radios
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
+                                                await DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
+                                                await DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
                                             }
                                             break;
                                         }
@@ -361,11 +362,11 @@ namespace NonVisuals.Radios
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
+                                                await DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
+                                                await DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
                                             }
                                             break;
                                         }
@@ -375,11 +376,11 @@ namespace NonVisuals.Radios
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
+                                                await DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
+                                                await DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
                                             }
                                             break;
                                         }
@@ -393,13 +394,13 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentAV8BNARadioMode.COMM1:
                                         {
-                                            DCSBIOS.SendAsync(COMM1_VOL_INC);
+                                            await DCSBIOS.SendAsync(COMM1_VOL_INC);
                                             break;
                                         }
 
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
-                                            DCSBIOS.SendAsync(COMM2_VOL_INC);
+                                            await DCSBIOS.SendAsync(COMM2_VOL_INC);
                                             break;
                                         }
                                 }
@@ -412,13 +413,13 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentAV8BNARadioMode.COMM1:
                                         {
-                                            DCSBIOS.SendAsync(COMM1_VOL_DEC);
+                                            await DCSBIOS.SendAsync(COMM1_VOL_DEC);
                                             break;
                                         }
 
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
-                                            DCSBIOS.SendAsync(COMM2_VOL_DEC);
+                                            await DCSBIOS.SendAsync(COMM2_VOL_DEC);
                                             break;
                                         }
                                 }
@@ -434,11 +435,11 @@ namespace NonVisuals.Radios
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
+                                                await DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
+                                                await DCSBIOS.SendAsync(COMM1_CHANNEL_INC);
                                             }
                                             break;
                                         }
@@ -448,11 +449,11 @@ namespace NonVisuals.Radios
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
+                                                await DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
+                                                await DCSBIOS.SendAsync(COMM2_CHANNEL_INC);
                                             }
                                             break;
                                         }
@@ -469,11 +470,11 @@ namespace NonVisuals.Radios
                                             if (_comm1ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
+                                                await DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
+                                                await DCSBIOS.SendAsync(COMM1_CHANNEL_DEC);
                                             }
                                             break;
                                         }
@@ -483,11 +484,11 @@ namespace NonVisuals.Radios
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 // No need for turbo
-                                                DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
+                                                await DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
+                                                await DCSBIOS.SendAsync(COMM2_CHANNEL_DEC);
                                             }
                                             break;
                                         }
@@ -501,13 +502,13 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentAV8BNARadioMode.COMM1:
                                         {
-                                            DCSBIOS.SendAsync(COMM1_VOL_INC);
+                                            await DCSBIOS.SendAsync(COMM1_VOL_INC);
                                             break;
                                         }
 
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
-                                            DCSBIOS.SendAsync(COMM2_VOL_INC);
+                                            await DCSBIOS.SendAsync(COMM2_VOL_INC);
                                             break;
                                         }
                                 }
@@ -520,13 +521,13 @@ namespace NonVisuals.Radios
                                 {
                                     case CurrentAV8BNARadioMode.COMM1:
                                         {
-                                            DCSBIOS.SendAsync(COMM1_VOL_DEC);
+                                            await DCSBIOS.SendAsync(COMM1_VOL_DEC);
                                             break;
                                         }
 
                                     case CurrentAV8BNARadioMode.COMM2:
                                         {
-                                            DCSBIOS.SendAsync(COMM2_VOL_DEC);
+                                            await DCSBIOS.SendAsync(COMM2_VOL_DEC);
                                             break;
                                         }
                                 }
@@ -541,139 +542,137 @@ namespace NonVisuals.Radios
         }
 
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
-            lock (LockLCDUpdateObject)
+            Interlocked.Increment(ref _doUpdatePanelLCD);
+            foreach (var radioPanelKnobObject in hashSet)
             {
-                Interlocked.Increment(ref _doUpdatePanelLCD);
-                foreach (var radioPanelKnobObject in hashSet)
+                var radioPanelKnob = (RadioPanelKnobAV8BNA)radioPanelKnobObject;
+
+                switch (radioPanelKnob.RadioPanelPZ69Knob)
                 {
-                    var radioPanelKnob = (RadioPanelKnobAV8BNA)radioPanelKnobObject;
-
-                    switch (radioPanelKnob.RadioPanelPZ69Knob)
-                    {
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_COMM1:
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_COMM1:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM1;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM1;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_COMM2:
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_COMM2:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM2;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM2;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_NAV1:
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_NAV2:
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_ADF:
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_DME:
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_XPDR:
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_NAV1:
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_NAV2:
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_ADF:
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_DME:
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_XPDR:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentAV8BNARadioMode.NO_USE;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentAV8BNARadioMode.NO_USE;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_COMM1:
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_COMM1:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM1;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM1;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_COMM2:
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_COMM2:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM2;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentAV8BNARadioMode.COMM2;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_NAV1:
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_NAV2:
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_ADF:
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_DME:
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_XPDR:
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_NAV1:
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_NAV2:
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_ADF:
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_DME:
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_XPDR:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentAV8BNARadioMode.NO_USE;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentAV8BNARadioMode.NO_USE;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_INC:
-                            {
-                                break;
-                            }
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_INC:
+                        {
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_DEC:
-                            {
-                                break;
-                            }
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        {
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_INC:
-                            {
-                                break;
-                            }
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_INC:
+                        {
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_DEC:
-                            {
-                                break;
-                            }
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        {
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_INC:
-                            {
-                                break;
-                            }
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_INC:
+                        {
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_DEC:
-                            {
-                                break;
-                            }
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        {
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_INC:
-                            {
-                                break;
-                            }
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_INC:
+                        {
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_DEC:
-                            {
-                                break;
-                            }
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_DEC:
+                        {
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.UPPER_FREQ_SWITCH:
-                            {
-                                SendFrequencyToDCSBIOS(radioPanelKnob);
-                                break;
-                            }
+                    case RadioPanelPZ69KnobsAV8BNA.UPPER_FREQ_SWITCH:
+                        {
+                            SendFrequencyToDCSBIOSAsync(radioPanelKnob);
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsAV8BNA.LOWER_FREQ_SWITCH:
-                            {
-                                SendFrequencyToDCSBIOS(radioPanelKnob);
-                                break;
-                            }
-                    }
-
-                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                    {
-                        PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AV8BNA, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
-                    }
+                    case RadioPanelPZ69KnobsAV8BNA.LOWER_FREQ_SWITCH:
+                        {
+                            SendFrequencyToDCSBIOSAsync(radioPanelKnob);
+                            break;
+                        }
                 }
-                AdjustFrequency(hashSet);
+
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AV8BNA, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                }
             }
+
+            await AdjustFrequencyAsync(hashSet);
         }
 
         public override void ClearSettings(bool setIsDirty = false) { }
@@ -682,7 +681,7 @@ namespace NonVisuals.Radios
         {
             throw new Exception("Radio Panel does not support color bindings with DCS-BIOS.");
         }
-        
+
         private void CreateRadioKnobs()
         {
             SaitekPanelKnobs = RadioPanelKnobAV8BNA.GetRadioPanelKnobs();

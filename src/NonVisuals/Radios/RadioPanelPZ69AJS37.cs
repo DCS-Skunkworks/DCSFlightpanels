@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -90,7 +91,7 @@ namespace NonVisuals.Radios
         private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69AJS37(HIDSkeleton hidSkeleton) : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -122,7 +123,7 @@ namespace NonVisuals.Radios
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
         }
-        
+
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
@@ -178,7 +179,7 @@ namespace NonVisuals.Radios
         }
 
 
-        private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsAJS37 knob)
+        private async Task SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsAJS37 knob)
         {
             try
             {
@@ -214,7 +215,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentAJS37RadioMode.TILS:
                                     {
-                                        DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
+                                        await DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                         break;
                                     }
 
@@ -242,7 +243,7 @@ namespace NonVisuals.Radios
 
                                 case CurrentAJS37RadioMode.TILS:
                                     {
-                                        DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
+                                        await DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                         break;
                                     }
 
@@ -262,154 +263,153 @@ namespace NonVisuals.Radios
         }
 
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
-                lock (LockLCDUpdateObject)
+
+                foreach (var radioPanelKnobObject in hashSet)
                 {
-                    foreach (var radioPanelKnobObject in hashSet)
+                    var radioPanelKnob = (RadioPanelKnobAJS37)radioPanelKnobObject;
+
+                    switch (radioPanelKnob.RadioPanelPZ69Knob)
                     {
-                        var radioPanelKnob = (RadioPanelKnobAJS37)radioPanelKnobObject;
+                        case RadioPanelPZ69KnobsAJS37.UPPER_FR22:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentAJS37RadioMode.FR22);
+                                }
+                                break;
+                            }
 
-                        switch (radioPanelKnob.RadioPanelPZ69Knob)
-                        {
-                            case RadioPanelPZ69KnobsAJS37.UPPER_FR22:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_FR24:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentAJS37RadioMode.FR24);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsAJS37.UPPER_TILS:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentAJS37RadioMode.TILS);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsAJS37.LOWER_FR22:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentAJS37RadioMode.FR22);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsAJS37.LOWER_FR24:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentAJS37RadioMode.FR24);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsAJS37.LOWER_TILS:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentAJS37RadioMode.TILS);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE0:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE1:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE2:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE3:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE0:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE1:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE2:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE3:
+                            {
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsAJS37.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_SMALL_FREQ_WHEEL_DEC:
+                            {
+                                // Ignore
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsAJS37.UPPER_FREQ_SWITCH:
+                            {
+                                if (_currentUpperRadioMode == CurrentAJS37RadioMode.FR22)
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentAJS37RadioMode.FR22);
+                                        _fr22DialSideSelected = _fr22DialSideSelected == FR22DialSideSelected.Left ? FR22DialSideSelected.Right : FR22DialSideSelected.Left;
                                     }
-                                    break;
                                 }
+                                else if (_currentUpperRadioMode == CurrentAJS37RadioMode.FR24 && radioPanelKnob.IsOn)
+                                {
 
-                            case RadioPanelPZ69KnobsAJS37.UPPER_FR24:
+                                }
+                                else if (_currentUpperRadioMode == CurrentAJS37RadioMode.TILS && radioPanelKnob.IsOn)
+                                {
+                                    await DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
+                                }
+                                else if (radioPanelKnob.IsOn)
+                                {
+                                    await SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsAJS37.UPPER_FREQ_SWITCH);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsAJS37.LOWER_FREQ_SWITCH:
+                            {
+                                if (_currentLowerRadioMode == CurrentAJS37RadioMode.FR22)
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentAJS37RadioMode.FR24);
+                                        _fr22DialSideSelected = _fr22DialSideSelected == FR22DialSideSelected.Left ? FR22DialSideSelected.Right : FR22DialSideSelected.Left;
                                     }
-                                    break;
                                 }
-
-                            case RadioPanelPZ69KnobsAJS37.UPPER_TILS:
+                                else if (_currentLowerRadioMode == CurrentAJS37RadioMode.FR24 && radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentAJS37RadioMode.TILS);
-                                    }
-                                    break;
-                                }
 
-                            case RadioPanelPZ69KnobsAJS37.LOWER_FR22:
+                                }
+                                else if (_currentLowerRadioMode == CurrentAJS37RadioMode.TILS && radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentAJS37RadioMode.FR22);
-                                    }
-                                    break;
+                                    await DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                 }
-
-                            case RadioPanelPZ69KnobsAJS37.LOWER_FR24:
+                                else if (radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentAJS37RadioMode.FR24);
-                                    }
-                                    break;
+                                    await SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsAJS37.LOWER_FREQ_SWITCH);
                                 }
-
-                            case RadioPanelPZ69KnobsAJS37.LOWER_TILS:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentAJS37RadioMode.TILS);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE0:
-                            case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE1:
-                            case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE2:
-                            case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE3:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE0:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE1:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE2:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE3:
-                                {
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsAJS37.UPPER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsAJS37.UPPER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsAJS37.UPPER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsAJS37.UPPER_SMALL_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_SMALL_FREQ_WHEEL_DEC:
-                                {
-                                    // Ignore
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsAJS37.UPPER_FREQ_SWITCH:
-                                {
-                                    if (_currentUpperRadioMode == CurrentAJS37RadioMode.FR22)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            _fr22DialSideSelected = _fr22DialSideSelected == FR22DialSideSelected.Left ? FR22DialSideSelected.Right : FR22DialSideSelected.Left;
-                                        }
-                                    }
-                                    else if (_currentUpperRadioMode == CurrentAJS37RadioMode.FR24 && radioPanelKnob.IsOn)
-                                    {
-
-                                    }
-                                    else if (_currentUpperRadioMode == CurrentAJS37RadioMode.TILS && radioPanelKnob.IsOn)
-                                    {
-                                        DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
-                                    }
-                                    else if (radioPanelKnob.IsOn)
-                                    {
-                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsAJS37.UPPER_FREQ_SWITCH);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsAJS37.LOWER_FREQ_SWITCH:
-                                {
-                                    if (_currentLowerRadioMode == CurrentAJS37RadioMode.FR22)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            _fr22DialSideSelected = _fr22DialSideSelected == FR22DialSideSelected.Left ? FR22DialSideSelected.Right : FR22DialSideSelected.Left;
-                                        }
-                                    }
-                                    else if (_currentLowerRadioMode == CurrentAJS37RadioMode.FR24 && radioPanelKnob.IsOn)
-                                    {
-
-                                    }
-                                    else if (_currentLowerRadioMode == CurrentAJS37RadioMode.TILS && radioPanelKnob.IsOn)
-                                    {
-                                        DCSBIOS.SendAsync(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
-                                    }
-                                    else if (radioPanelKnob.IsOn)
-                                    {
-                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsAJS37.LOWER_FREQ_SWITCH);
-                                    }
-                                    break;
-                                }
-                        }
-
-                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                        {
-                            PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AJS37, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
-                        }
+                                break;
+                            }
                     }
-                    AdjustFrequency(hashSet);
+
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AJS37, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                    }
                 }
+
+                await AdjustFrequencyAsync(hashSet);
             }
             catch (Exception ex)
             {
@@ -439,7 +439,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_INCREASE_COMMAND : FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND);
+                                                await DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_INCREASE_COMMAND : FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
 
@@ -450,7 +450,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_INC);
+                                                await _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -468,7 +468,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_DECREASE_COMMAND : FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND);
+                                                await DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_DECREASE_COMMAND : FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
 
@@ -479,7 +479,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_DEC);
+                                                await _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -497,7 +497,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND);
+                                                await DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
 
@@ -508,7 +508,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_INC);
+                                                await _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_INC);
                                                 break;
                                             }
 
@@ -526,7 +526,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND);
+                                                await DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
 
@@ -537,7 +537,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_DEC);
+                                                await _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -555,7 +555,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_INCREASE_COMMAND : FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND);
+                                                await DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_INCREASE_COMMAND : FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
 
@@ -566,7 +566,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_INC);
+                                                await _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -584,7 +584,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_DECREASE_COMMAND : FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND);
+                                                await DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_DECREASE_COMMAND : FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
 
@@ -595,7 +595,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_DEC);
+                                                await _tilsChannelDialSkipper.ClickAsync(TILS_CHANNEL_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -613,7 +613,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND);
+                                                await DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
 
@@ -624,7 +624,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_INC);
+                                                await _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_INC);
                                                 break;
                                             }
 
@@ -642,7 +642,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND);
+                                                await DCSBIOS.SendAsync(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
 
@@ -653,7 +653,7 @@ namespace NonVisuals.Radios
 
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_DEC);
+                                                await _masterModeSelectorDialSkipper.ClickAsync(MASTER_MODE_SELECTOR_COMMAND_DEC);
                                                 break;
                                             }
 
