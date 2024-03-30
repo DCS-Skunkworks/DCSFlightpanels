@@ -223,7 +223,7 @@ namespace NonVisuals.Panels.Saitek.Panels
             set => _bipLinks = value;
         }
 
-        private async Task TPMSwitchChanged(bool isFirstReport, IEnumerable<object> hashSet)
+        private async Task TPMSwitchChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (!ForwardPanelEvent)
             {
@@ -608,7 +608,7 @@ namespace NonVisuals.Panels.Saitek.Panels
 
         protected override async Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            await TPMSwitchChanged(isFirstReport, hashSet);
+            await TPMSwitchChangedAsync(isFirstReport, hashSet);
         }
 
         private void CreateSwitchKeys()

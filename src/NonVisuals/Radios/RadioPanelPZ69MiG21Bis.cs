@@ -368,7 +368,7 @@ namespace NonVisuals.Radios
             Interlocked.Decrement(ref _doUpdatePanelLCD);
         }
 
-        private void AdjustFrequency(IEnumerable<object> hashSet)
+        private async Task AdjustFrequencyAsync(IEnumerable<object> hashSet)
         {
             if (SkipCurrentFrequencyChange())
             {
@@ -589,7 +589,7 @@ namespace NonVisuals.Radios
             ShowFrequenciesOnPanel();
         }
 
-        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
+        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             lock (LockLCDUpdateObject)
             {

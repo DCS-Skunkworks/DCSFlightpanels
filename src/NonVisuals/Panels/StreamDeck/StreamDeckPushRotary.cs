@@ -119,16 +119,16 @@
                 _cancellationTokenSource = new CancellationTokenSource();
                 if (ActionForPress.IsRepeatable() && !ActionForPress.HasSequence)
                 {
-                    ActionForPress.Execute(_cancellationTokenSource.Token);
+                    ActionForPress.ExecuteAsync(_cancellationTokenSource.Token);
                 }
                 else
                 {
-                    ActionForPress.Execute(CancellationToken.None);
+                    ActionForPress.ExecuteAsync(CancellationToken.None);
                 }
             }
             else
             {
-                ActionForPress.Execute(new CancellationToken(), true);
+                ActionForPress.ExecuteAsync(new CancellationToken(), true);
             }
         }
 
@@ -172,7 +172,7 @@
                 _cancellationTokenSource?.Cancel();
             }
 
-            ActionForRelease.Execute(CancellationToken.None);
+            ActionForRelease.ExecuteAsync(CancellationToken.None);
         }
 
         public bool CheckIfWouldOverwrite(StreamDeckPushRotary newStreamDeckPushRotary)

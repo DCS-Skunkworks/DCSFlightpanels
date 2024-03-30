@@ -78,7 +78,7 @@ namespace NonVisuals.Radios
             base.Dispose(disposing);
         }
 
-        protected abstract void PZ69KnobChanged(IEnumerable<object> hashSet);
+        protected abstract Task PZ69KnobChangedAsync(IEnumerable<object> hashSet);
 
         protected override async Task GamingPanelKnobChangedAsync(bool isFirstReport, IEnumerable<object> hashSet)
         {
@@ -104,11 +104,11 @@ namespace NonVisuals.Radios
 
                     result.Add(hash);
                 }
-                PZ69KnobChanged(result);
+                await PZ69KnobChangedAsync(result);
                 return;
             }
 
-            PZ69KnobChanged(hashSet);
+            await PZ69KnobChangedAsync(hashSet);
         }
 
 

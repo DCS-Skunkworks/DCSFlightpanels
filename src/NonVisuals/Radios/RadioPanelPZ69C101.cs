@@ -598,7 +598,7 @@ namespace NonVisuals.Radios
             ShowFrequenciesOnPanel();
         }
 
-        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
+        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             Interlocked.Increment(ref _doUpdatePanelLCD);
             lock (LockLCDUpdateObject)

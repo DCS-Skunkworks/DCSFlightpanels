@@ -199,7 +199,7 @@ namespace NonVisuals.Radios
 
         public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet => _displayValues;
 
-        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
+        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             if (ForwardPanelEvent)
             {

@@ -124,7 +124,7 @@
             }
         }
 
-        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
+        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             try
             {

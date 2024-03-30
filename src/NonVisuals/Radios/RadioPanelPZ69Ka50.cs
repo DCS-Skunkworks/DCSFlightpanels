@@ -688,7 +688,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        protected override void PZ69KnobChanged(IEnumerable<object> hashSet)
+        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             try
             {
@@ -927,7 +927,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void AdjustFrequency(IEnumerable<object> hashSet)
+        private async Task AdjustFrequencyAsync(IEnumerable<object> hashSet)
         {
             try
             {

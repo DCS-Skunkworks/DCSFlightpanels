@@ -70,7 +70,7 @@ namespace NonVisuals.Panels.StreamDeck
         }
 
 
-        public void Execute(CancellationToken threadCancellationToken, bool executeOnce = false)
+        public void ExecuteAsync(CancellationToken threadCancellationToken, bool executeOnce = false)
         {
             Common.PlaySoundFile(SoundFile, Volume);
             OSCommandObject.ExecuteCommand(threadCancellationToken);
