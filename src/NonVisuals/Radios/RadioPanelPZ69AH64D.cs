@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.Helpers;
 
 namespace NonVisuals.Radios
@@ -93,7 +94,7 @@ namespace NonVisuals.Radios
 
         public RadioPanelPZ69AH64D(HIDSkeleton hidSkeleton)
             : base(hidSkeleton)
-        {}
+        { }
 
         private bool _disposed;
         // Protected implementation of Dispose pattern.
@@ -205,7 +206,7 @@ namespace NonVisuals.Radios
             //ShowFrequenciesOnPanel();
         }
 
-        private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsAH64D knob)
+        private async Task SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsAH64D knob)
         {
             if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsAH64D.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsAH64D.LOWER_FREQ_SWITCH))
             {
@@ -229,27 +230,27 @@ namespace NonVisuals.Radios
                         {
                             case CurrentAH64DRadioMode.VHF:
                                 {
-                                    SendVHFToDCSBIOS();
+                                    await SendVHFToDCSBIOSAsync();
                                     break;
                                 }
                             case CurrentAH64DRadioMode.UHF:
                                 {
-                                    SendUHFToDCSBIOS();
+                                    await SendUHFToDCSBIOSAsync();
                                     break;
                                 }
                             case CurrentAH64DRadioMode.FM1:
                                 {
-                                    SendFM1ToDCSBIOS();
+                                    await SendFM1ToDCSBIOSAsync();
                                     break;
                                 }
                             case CurrentAH64DRadioMode.FM2:
                                 {
-                                    SendFM2ToDCSBIOS();
+                                    await SendFM2ToDCSBIOSAsync();
                                     break;
                                 }
                             case CurrentAH64DRadioMode.HF:
                                 {
-                                    SendHFToDCSBIOS();
+                                    await SendHFToDCSBIOSAsync();
                                     break;
                                 }
                         }
@@ -263,27 +264,27 @@ namespace NonVisuals.Radios
 
                             case CurrentAH64DRadioMode.VHF:
                                 {
-                                    SendVHFToDCSBIOS();
+                                    await SendVHFToDCSBIOSAsync();
                                     break;
                                 }
                             case CurrentAH64DRadioMode.UHF:
                                 {
-                                    SendUHFToDCSBIOS();
+                                    await SendUHFToDCSBIOSAsync();
                                     break;
                                 }
                             case CurrentAH64DRadioMode.FM1:
                                 {
-                                    SendFM1ToDCSBIOS();
+                                    await SendFM1ToDCSBIOSAsync();
                                     break;
                                 }
                             case CurrentAH64DRadioMode.FM2:
                                 {
-                                    SendFM2ToDCSBIOS();
+                                    await SendFM2ToDCSBIOSAsync();
                                     break;
                                 }
                             case CurrentAH64DRadioMode.HF:
                                 {
-                                    SendHFToDCSBIOS();
+                                    await SendHFToDCSBIOSAsync();
                                     break;
                                 }
                         }
@@ -292,12 +293,12 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendVHFToDCSBIOS()
+        private async Task SendVHFToDCSBIOSAsync()
         {
             try
             {
                 var newStandbyFrequency = _vhfCockpitFrequency;
-                DCSBIOS.SendAsync($"{VHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.VHF)}\n");
+                await DCSBIOS.SendAsync($"{VHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.VHF)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _vhfBigFrequencyStandby = uint.Parse(array[0]);
                 _vhfSmallFrequencyStandby = uint.Parse(array[1]);
@@ -309,12 +310,12 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendUHFToDCSBIOS()
+        private async Task SendUHFToDCSBIOSAsync()
         {
             try
             {
                 var newStandbyFrequency = _uhfCockpitFrequency;
-                DCSBIOS.SendAsync($"{UHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.UHF)}\n");
+                await DCSBIOS.SendAsync($"{UHF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.UHF)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _uhfBigFrequencyStandby = uint.Parse(array[0]);
                 _uhfSmallFrequencyStandby = uint.Parse(array[1]);
@@ -326,12 +327,12 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendFM1ToDCSBIOS()
+        private async Task SendFM1ToDCSBIOSAsync()
         {
             try
             {
                 var newStandbyFrequency = _fm1CockpitFrequency;
-                DCSBIOS.SendAsync($"{FM1_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.FM1)}\n");
+                await DCSBIOS.SendAsync($"{FM1_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.FM1)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _fm1BigFrequencyStandby = uint.Parse(array[0]);
                 _fm1SmallFrequencyStandby = uint.Parse(array[1]);
@@ -343,12 +344,12 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendFM2ToDCSBIOS()
+        private async Task SendFM2ToDCSBIOSAsync()
         {
             try
             {
                 var newStandbyFrequency = _fm2CockpitFrequency;
-                DCSBIOS.SendAsync($"{FM2_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.FM2)}\n");
+                await DCSBIOS.SendAsync($"{FM2_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.FM2)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _fm2BigFrequencyStandby = uint.Parse(array[0]);
                 _fm2SmallFrequencyStandby = uint.Parse(array[1]);
@@ -360,12 +361,12 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendHFToDCSBIOS()
+        private async Task SendHFToDCSBIOSAsync()
         {
             try
             {
                 var newStandbyFrequency = _hfCockpitFrequency;
-                DCSBIOS.SendAsync($"{HF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.HF)}\n");
+                await DCSBIOS.SendAsync($"{HF_RADIO_COMMAND} {GetStandbyFrequencyString(CurrentAH64DRadioMode.HF)}\n");
                 var array = newStandbyFrequency.Split('.', StringSplitOptions.RemoveEmptyEntries);
                 _hfBigFrequencyStandby = uint.Parse(array[0]);
                 _hfSmallFrequencyStandby = uint.Parse(array[1]);
@@ -1106,146 +1107,145 @@ namespace NonVisuals.Radios
             ShowFrequenciesOnPanel();
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             Interlocked.Increment(ref _doUpdatePanelLCD);
-            lock (LockLCDUpdateObject)
+
+            foreach (var radioPanelKnobObject in hashSet)
             {
-                foreach (var radioPanelKnobObject in hashSet)
+                var radioPanelKnob = (RadioPanelKnobAH64D)radioPanelKnobObject;
+
+                switch (radioPanelKnob.RadioPanelPZ69Knob)
                 {
-                    var radioPanelKnob = (RadioPanelKnobAH64D)radioPanelKnobObject;
-
-                    switch (radioPanelKnob.RadioPanelPZ69Knob)
-                    {
-                        case RadioPanelPZ69KnobsAH64D.UPPER_VHF:
+                    case RadioPanelPZ69KnobsAH64D.UPPER_VHF:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentAH64DRadioMode.VHF;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentAH64DRadioMode.VHF;
                             }
-                        case RadioPanelPZ69KnobsAH64D.UPPER_UHF:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.UPPER_UHF:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentAH64DRadioMode.UHF;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentAH64DRadioMode.UHF;
                             }
-                        case RadioPanelPZ69KnobsAH64D.UPPER_FM1:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.UPPER_FM1:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentAH64DRadioMode.FM1;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentAH64DRadioMode.FM1;
                             }
-                        case RadioPanelPZ69KnobsAH64D.UPPER_FM2:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.UPPER_FM2:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentAH64DRadioMode.FM2;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentAH64DRadioMode.FM2;
                             }
-                        case RadioPanelPZ69KnobsAH64D.UPPER_HF:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.UPPER_HF:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentAH64DRadioMode.HF;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentAH64DRadioMode.HF;
                             }
-                        case RadioPanelPZ69KnobsAH64D.LOWER_VHF:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.LOWER_VHF:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentAH64DRadioMode.VHF;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentAH64DRadioMode.VHF;
                             }
-                        case RadioPanelPZ69KnobsAH64D.LOWER_UHF:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.LOWER_UHF:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentAH64DRadioMode.UHF;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentAH64DRadioMode.UHF;
                             }
-                        case RadioPanelPZ69KnobsAH64D.LOWER_FM1:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.LOWER_FM1:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentAH64DRadioMode.FM1;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentAH64DRadioMode.FM1;
                             }
-                        case RadioPanelPZ69KnobsAH64D.LOWER_FM2:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.LOWER_FM2:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentAH64DRadioMode.FM2;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentAH64DRadioMode.FM2;
                             }
-                        case RadioPanelPZ69KnobsAH64D.LOWER_HF:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.LOWER_HF:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentAH64DRadioMode.HF;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentAH64DRadioMode.HF;
                             }
-                        case RadioPanelPZ69KnobsAH64D.UPPER_FREQ_SWITCH:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.UPPER_FREQ_SWITCH:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsAH64D.UPPER_FREQ_SWITCH);
-                                }
-                                break;
+                                await SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsAH64D.UPPER_FREQ_SWITCH);
                             }
-                        case RadioPanelPZ69KnobsAH64D.LOWER_FREQ_SWITCH:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.LOWER_FREQ_SWITCH:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsAH64D.LOWER_FREQ_SWITCH);
-                                }
-                                break;
+                                await SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsAH64D.LOWER_FREQ_SWITCH);
                             }
-                        case RadioPanelPZ69KnobsAH64D.UPPER_NO_USE3:
-                        case RadioPanelPZ69KnobsAH64D.UPPER_NO_USE4:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.UPPER_NO_USE3:
+                    case RadioPanelPZ69KnobsAH64D.UPPER_NO_USE4:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentAH64DRadioMode.NO_USE;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentAH64DRadioMode.NO_USE;
                             }
-                        case RadioPanelPZ69KnobsAH64D.LOWER_NO_USE3:
-                        case RadioPanelPZ69KnobsAH64D.LOWER_NO_USE4:
+                            break;
+                        }
+                    case RadioPanelPZ69KnobsAH64D.LOWER_NO_USE3:
+                    case RadioPanelPZ69KnobsAH64D.LOWER_NO_USE4:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentAH64DRadioMode.NO_USE;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentAH64DRadioMode.NO_USE;
                             }
-                    }
-
-                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                    {
-                        PluginManager.DoEvent(
-                            DCSAircraft.SelectedAircraft.Description,
-                            HIDInstance,
-                            PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AH64D,
-                            (int)radioPanelKnob.RadioPanelPZ69Knob,
-                            radioPanelKnob.IsOn,
-                            null);
-                    }
+                            break;
+                        }
                 }
-                AdjustFrequency(hashSet);
+
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.DoEvent(
+                        DCSAircraft.SelectedAircraft.Description,
+                        HIDInstance,
+                        PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AH64D,
+                        (int)radioPanelKnob.RadioPanelPZ69Knob,
+                        radioPanelKnob.IsOn,
+                        null);
+                }
             }
+
+            AdjustFrequency(hashSet);
         }
 
         public override void ClearSettings(bool setIsDirty = false)
