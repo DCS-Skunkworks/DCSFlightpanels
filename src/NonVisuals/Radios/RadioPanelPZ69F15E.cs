@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using NonVisuals.BindingClasses.BIP;
 using NonVisuals.Radios.RadioControls;
 using NonVisuals.Radios.RadioSettings;
@@ -153,7 +154,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendFrequencyToDCSBIOS(RadioPanelKnobsF15E knob)
+        private async Task SendFrequencyToDCSBIOSAsync(RadioPanelKnobsF15E knob)
         {
             if (IgnoreSwitchButtonOnce() && (knob == RadioPanelKnobsF15E.UPPER_FREQ_SWITCH || knob == RadioPanelKnobsF15E.LOWER_FREQ_SWITCH))
             {
@@ -183,7 +184,7 @@ namespace NonVisuals.Radios
                                 }
                             case CurrentF15ERadioMode.UHF:
                                 {
-                                    SendUHFToDCSBIOS();
+                                    await SendUHFToDCSBIOSAsync();
                                     break;
                                 }
                         }
@@ -203,7 +204,7 @@ namespace NonVisuals.Radios
                                 }
                             case CurrentF15ERadioMode.UHF:
                                 {
-                                    SendUHFToDCSBIOS();
+                                    await SendUHFToDCSBIOSAsync();
                                     break;
                                 }
                         }
@@ -212,7 +213,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendUHFToDCSBIOS()
+        private async Task SendUHFToDCSBIOSAsync()
         {
             try
             {
@@ -582,154 +583,152 @@ namespace NonVisuals.Radios
             ShowFrequenciesOnPanel();
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             Interlocked.Increment(ref _doUpdatePanelLCD);
-            lock (LockLCDUpdateObject)
+            foreach (var radioPanelKnobObject in hashSet)
             {
-                foreach (var radioPanelKnobObject in hashSet)
+                var radioPanelKnob = (RadioPanelKnobF15E)radioPanelKnobObject;
+
+                switch (radioPanelKnob.RadioPanelPZ69Knob)
                 {
-                    var radioPanelKnob = (RadioPanelKnobF15E)radioPanelKnobObject;
-
-                    switch (radioPanelKnob.RadioPanelPZ69Knob)
-                    {
-                        case RadioPanelKnobsF15E.UPPER_ARC210:
+                    case RadioPanelKnobsF15E.UPPER_ARC210:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentF15ERadioMode.ARC210;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentF15ERadioMode.ARC210;
                             }
-                        case RadioPanelKnobsF15E.UPPER_UHF:
+                            break;
+                        }
+                    case RadioPanelKnobsF15E.UPPER_UHF:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentF15ERadioMode.UHF;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentF15ERadioMode.UHF;
                             }
-                        case RadioPanelKnobsF15E.UPPER_NAV1:
-                        case RadioPanelKnobsF15E.UPPER_NAV2:
-                        case RadioPanelKnobsF15E.UPPER_ADF:
-                        case RadioPanelKnobsF15E.UPPER_DME:
-                        case RadioPanelKnobsF15E.UPPER_XPDR:
+                            break;
+                        }
+                    case RadioPanelKnobsF15E.UPPER_NAV1:
+                    case RadioPanelKnobsF15E.UPPER_NAV2:
+                    case RadioPanelKnobsF15E.UPPER_ADF:
+                    case RadioPanelKnobsF15E.UPPER_DME:
+                    case RadioPanelKnobsF15E.UPPER_XPDR:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentF15ERadioMode.NO_USE;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentF15ERadioMode.NO_USE;
                             }
-                        case RadioPanelKnobsF15E.LOWER_ARC210:
+                            break;
+                        }
+                    case RadioPanelKnobsF15E.LOWER_ARC210:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentF15ERadioMode.ARC210;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentF15ERadioMode.ARC210;
                             }
-                        case RadioPanelKnobsF15E.LOWER_UHF:
+                            break;
+                        }
+                    case RadioPanelKnobsF15E.LOWER_UHF:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentF15ERadioMode.UHF;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentF15ERadioMode.UHF;
                             }
-                        case RadioPanelKnobsF15E.LOWER_NAV1:
-                        case RadioPanelKnobsF15E.LOWER_NAV2:
-                        case RadioPanelKnobsF15E.LOWER_ADF:
-                        case RadioPanelKnobsF15E.LOWER_DME:
-                        case RadioPanelKnobsF15E.LOWER_XPDR:
+                            break;
+                        }
+                    case RadioPanelKnobsF15E.LOWER_NAV1:
+                    case RadioPanelKnobsF15E.LOWER_NAV2:
+                    case RadioPanelKnobsF15E.LOWER_ADF:
+                    case RadioPanelKnobsF15E.LOWER_DME:
+                    case RadioPanelKnobsF15E.LOWER_XPDR:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentF15ERadioMode.NO_USE;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentF15ERadioMode.NO_USE;
                             }
-                        case RadioPanelKnobsF15E.UPPER_FREQ_SWITCH:
+                            break;
+                        }
+                    case RadioPanelKnobsF15E.UPPER_FREQ_SWITCH:
+                        {
+                            _upperButtonPressed = radioPanelKnob.IsOn;
+                            if (!radioPanelKnob.IsOn)
                             {
-                                _upperButtonPressed = radioPanelKnob.IsOn;
-                                if (!radioPanelKnob.IsOn)
+                                if (!_upperButtonPressedAndDialRotated)
                                 {
-                                    if (!_upperButtonPressedAndDialRotated)
+                                    // Do not sync if user has pressed the button to configure the radio
+                                    // Sync when user releases button
+                                    await SendFrequencyToDCSBIOSAsync(RadioPanelKnobsF15E.UPPER_FREQ_SWITCH);
+                                }
+                                else
+                                {
+                                    /* We must say that the user now has stopped rotating */
+                                    switch (_currentUpperRadioMode)
                                     {
-                                        // Do not sync if user has pressed the button to configure the radio
-                                        // Sync when user releases button
-                                        SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.UPPER_FREQ_SWITCH);
+                                        case CurrentF15ERadioMode.ARC210:
+                                            {
+                                                _arc210Radio.SwitchFrequencyBand();
+                                                Interlocked.Increment(ref _doUpdatePanelLCD);
+                                                break;
+                                            }
+                                        case CurrentF15ERadioMode.UHF:
+                                            {
+                                                break;
+                                            }
                                     }
-                                    else
-                                    {
-                                        /* We must say that the user now has stopped rotating */
-                                        switch (_currentUpperRadioMode)
-                                        {
-                                            case CurrentF15ERadioMode.ARC210:
-                                                {
-                                                    _arc210Radio.SwitchFrequencyBand();
-                                                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                                                    break;
-                                                }
-                                            case CurrentF15ERadioMode.UHF:
-                                                {
-                                                    break;
-                                                }
-                                        }
-                                    }
-
-                                    _upperButtonPressedAndDialRotated = false;
                                 }
-                                break;
+
+                                _upperButtonPressedAndDialRotated = false;
                             }
-                        case RadioPanelKnobsF15E.LOWER_FREQ_SWITCH:
+                            break;
+                        }
+                    case RadioPanelKnobsF15E.LOWER_FREQ_SWITCH:
+                        {
+                            _lowerButtonPressed = radioPanelKnob.IsOn;
+                            if (!radioPanelKnob.IsOn)
                             {
-                                _lowerButtonPressed = radioPanelKnob.IsOn;
-                                if (!radioPanelKnob.IsOn)
+                                if (!_lowerButtonPressedAndDialRotated)
                                 {
-                                    if (!_lowerButtonPressedAndDialRotated)
-                                    {
-                                        // Do not sync if user has pressed the button to configure the radio
-                                        // Sync when user releases button
-                                        SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.LOWER_FREQ_SWITCH);
-                                    }
-                                    else
-                                    {
-                                        /* We must say that the user now has stopped rotating */
-                                        switch (_currentLowerRadioMode)
-                                        {
-                                            case CurrentF15ERadioMode.ARC210:
-                                                {
-                                                    _arc210Radio.SwitchFrequencyBand();
-                                                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                                                    break;
-                                                }
-                                            case CurrentF15ERadioMode.UHF:
-                                                {
-                                                    break;
-                                                }
-                                        }
-                                    }
-
-                                    _lowerButtonPressedAndDialRotated = false;
+                                    // Do not sync if user has pressed the button to configure the radio
+                                    // Sync when user releases button
+                                    await SendFrequencyToDCSBIOSAsync(RadioPanelKnobsF15E.LOWER_FREQ_SWITCH);
                                 }
-                                break;
-                            }
-                    }
+                                else
+                                {
+                                    /* We must say that the user now has stopped rotating */
+                                    switch (_currentLowerRadioMode)
+                                    {
+                                        case CurrentF15ERadioMode.ARC210:
+                                            {
+                                                _arc210Radio.SwitchFrequencyBand();
+                                                Interlocked.Increment(ref _doUpdatePanelLCD);
+                                                break;
+                                            }
+                                        case CurrentF15ERadioMode.UHF:
+                                            {
+                                                break;
+                                            }
+                                    }
+                                }
 
-                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                    {
-                        PluginManager.DoEvent(
-                            DCSAircraft.SelectedAircraft.Description,
-                            HIDInstance,
-                            PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AH64D,
-                            (int)radioPanelKnob.RadioPanelPZ69Knob,
-                            radioPanelKnob.IsOn,
-                            null);
-                    }
+                                _lowerButtonPressedAndDialRotated = false;
+                            }
+                            break;
+                        }
                 }
-                AdjustFrequency(hashSet);
+
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.DoEvent(
+                        DCSAircraft.SelectedAircraft.Description,
+                        HIDInstance,
+                        PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AH64D,
+                        (int)radioPanelKnob.RadioPanelPZ69Knob,
+                        radioPanelKnob.IsOn,
+                        null);
+                }
             }
+
+            AdjustFrequency(hashSet);
         }
 
         public override void ClearSettings(bool setIsDirty = false)
