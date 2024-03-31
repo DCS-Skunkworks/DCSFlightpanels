@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -78,8 +79,8 @@ namespace NonVisuals.Radios
         private const string YADRO1_A_FREQ_2DIAL_COMMAND = "PLT_JADRO_100K ";
         private const string YADRO1_A_FREQ_3DIAL_COMMAND = "PLT_JADRO_10K ";
         private const string YADRO1_A_FREQ_4DIAL_COMMAND = "PLT_JADRO_1K ";
-        private Thread _yadro1ASyncThread;
-        private long _yadro1AThreadNowSynching;
+        private Task _yadro1ASyncTask;
+        private CancellationTokenSource _yadro1ASyncTokenSource = new();
         private long _yadro1ADial1WaitingForFeedback;
         private long _yadro1ADial2WaitingForFeedback;
         private long _yadro1ADial3WaitingForFeedback;
@@ -185,7 +186,7 @@ namespace NonVisuals.Radios
             {
                 if (disposing)
                 {
-                    _shutdownYaDRO1AThread = true;
+                    _yadro1ASyncTokenSource.Cancel();
                     BIOSEventHandler.DetachStringListener(this);
                     BIOSEventHandler.DetachDataListener(this);
                 }
@@ -433,7 +434,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendFrequencyToDCSBIOS(bool knobIsOn, RadioPanelPZ69KnobsMi24P knob)
+        private async Task SendFrequencyToDCSBIOSAsync(bool knobIsOn, RadioPanelPZ69KnobsMi24P knob)
         {
             try
             {
@@ -527,17 +528,15 @@ namespace NonVisuals.Radios
         {
             try
             {
-                if (YaDRO1ANowSyncing())
+                if (_yadro1ASyncTask?.Status == TaskStatus.Running)
                 {
                     return;
                 }
+
                 SaveCockpitFrequencyYaDRO1A();
 
-                _shutdownYaDRO1AThread = true;
-                Thread.Sleep(Constants.ThreadShutDownWaitTime);
-                _shutdownYaDRO1AThread = false;
-                _yadro1ASyncThread = new Thread(() => YaDRO1ASyncThreadMethod());
-                _yadro1ASyncThread.Start();
+                _yadro1ASyncTokenSource = new();
+                _yadro1ASyncTask = Task.Run(() => SyncYaDRO1Async(_yadro1ASyncTokenSource.Token));
             }
             catch (Exception ex)
             {
@@ -545,179 +544,186 @@ namespace NonVisuals.Radios
             }
         }
 
-        private volatile bool _shutdownYaDRO1AThread;
-        private void YaDRO1ASyncThreadMethod()
+        private async Task SyncYaDRO1Async(CancellationToken cancellationToken)
         {
             try
             {
-                try
+                // Mi-24P YaDRO-1A
+                long dial1Timeout = DateTime.Now.Ticks;
+                long dial2Timeout = DateTime.Now.Ticks;
+                long dial3Timeout = DateTime.Now.Ticks;
+                long dial4Timeout = DateTime.Now.Ticks;
+                long dial1OkTime = 0;
+                long dial2OkTime = 0;
+                long dial3OkTime = 0;
+                long dial4OkTime = 0;
+
+                var frequencyAsString = _yadro1ABigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1ASmallFrequencyStandby.ToString().PadLeft(2, '0');
+                frequencyAsString = frequencyAsString.PadRight(6, '0');
+                //Frequency selector 1      YADRO1A_FREQ1
+                //      "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14" "15" "16" "17"
+                //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15
+
+                //Frequency selector 2      YADRO1A_FREQ2
+                //0 1 2 3 4 5 6 7 8 9
+
+                //Frequency selector 3      YADRO1A_FREQ3
+                //0 1 2 3 4 5 6 7 8 9
+
+                //Frequency selector 4      YADRO1A_FREQ4
+                //0 1 2 3 4 5 6 7 8 9
+
+                //Reason for this is to separate the standby frequency from the sync loop
+                //If not the sync would pick up any changes made by the user during the
+                //sync process
+
+                //02000
+                //17999
+                //#1 = 17  (position = value)
+                //#2 = 9   (position = value)
+                //#3 = 9   (position = value)
+                //#4 = 9   (position = value)
+                var desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2));
+                var desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
+                var desiredPositionDial3X = int.Parse(frequencyAsString.Substring(3, 1));
+                var desiredPositionDial4X = int.Parse(frequencyAsString.Substring(4, 1));
+
+                do
                 {
-                    try
+                    if (IsTimedOut(ref dial1Timeout))
                     {
-                        // Mi-24P YaDRO-1A
-                        Interlocked.Exchange(ref _yadro1AThreadNowSynching, 1);
-                        long dial1Timeout = DateTime.Now.Ticks;
-                        long dial2Timeout = DateTime.Now.Ticks;
-                        long dial3Timeout = DateTime.Now.Ticks;
-                        long dial4Timeout = DateTime.Now.Ticks;
-                        long dial1OkTime = 0;
-                        long dial2OkTime = 0;
-                        long dial3OkTime = 0;
-                        long dial4OkTime = 0;
+                        ResetWaitingForFeedBack(ref _yadro1ADial1WaitingForFeedback); // Let's do an ugly reset
+                    }
+                    if (IsTimedOut(ref dial2Timeout))
+                    {
+                        //Let's do an ugly reset
+                        ResetWaitingForFeedBack(ref _yadro1ADial2WaitingForFeedback); // Let's do an ugly reset
+                    }
+                    if (IsTimedOut(ref dial3Timeout))
+                    {
+                        //Let's do an ugly reset
+                        ResetWaitingForFeedBack(ref _yadro1ADial3WaitingForFeedback); // Let's do an ugly reset
+                    }
+                    if (IsTimedOut(ref dial4Timeout))
+                    {
+                        //Let's do an ugly reset
+                        ResetWaitingForFeedBack(ref _yadro1ADial4WaitingForFeedback); // Let's do an ugly reset
+                    }
 
-                        var frequencyAsString = _yadro1ABigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1ASmallFrequencyStandby.ToString().PadLeft(2, '0');
-                        frequencyAsString = frequencyAsString.PadRight(6, '0');
-                        //Frequency selector 1      YADRO1A_FREQ1
-                        //      "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14" "15" "16" "17"
-                        //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15
+                    if (Interlocked.Read(ref _yadro1ADial1WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
 
-                        //Frequency selector 2      YADRO1A_FREQ2
-                        //0 1 2 3 4 5 6 7 8 9
-
-                        //Frequency selector 3      YADRO1A_FREQ3
-                        //0 1 2 3 4 5 6 7 8 9
-
-                        //Frequency selector 4      YADRO1A_FREQ4
-                        //0 1 2 3 4 5 6 7 8 9
-
-                        //Reason for this is to separate the standby frequency from the sync loop
-                        //If not the sync would pick up any changes made by the user during the
-                        //sync process
-
-                        //02000
-                        //17999
-                        //#1 = 17  (position = value)
-                        //#2 = 9   (position = value)
-                        //#3 = 9   (position = value)
-                        //#4 = 9   (position = value)
-                        var desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2));
-                        var desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
-                        var desiredPositionDial3X = int.Parse(frequencyAsString.Substring(3, 1));
-                        var desiredPositionDial4X = int.Parse(frequencyAsString.Substring(4, 1));
-
-                        do
+                        lock (_lockYadro1ADialsObject1)
                         {
-                            if (IsTimedOut(ref dial1Timeout))
-                            {
-                                ResetWaitingForFeedBack(ref _yadro1ADial1WaitingForFeedback); // Let's do an ugly reset
-                            }
-                            if (IsTimedOut(ref dial2Timeout))
-                            {
-                                //Let's do an ugly reset
-                                ResetWaitingForFeedBack(ref _yadro1ADial2WaitingForFeedback); // Let's do an ugly reset
-                            }
-                            if (IsTimedOut(ref dial3Timeout))
-                            {
-                                //Let's do an ugly reset
-                                ResetWaitingForFeedBack(ref _yadro1ADial3WaitingForFeedback); // Let's do an ugly reset
-                            }
-                            if (IsTimedOut(ref dial4Timeout))
-                            {
-                                //Let's do an ugly reset
-                                ResetWaitingForFeedBack(ref _yadro1ADial4WaitingForFeedback); // Let's do an ugly reset
-                            }
-
-                            string str;
-                            if (Interlocked.Read(ref _yadro1ADial1WaitingForFeedback) == 0)
-                            {
-                                lock (_lockYadro1ADialsObject1)
-                                {
-                                    if (_yadro1ACockpitFreq1DialPos != desiredPositionDial1X)
-                                    {
-                                        dial1OkTime = DateTime.Now.Ticks;
-                                        if (_yadro1ACockpitFreq1DialPos < desiredPositionDial1X)
-                                        {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                        }
-                                        else
-                                        {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                        }
-                                        await DCSBIOS.SendAsync(str);
-                                        Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial1Timeout);
-                                }
-                            }
-                            else
+                            if (_yadro1ACockpitFreq1DialPos != desiredPositionDial1X)
                             {
                                 dial1OkTime = DateTime.Now.Ticks;
-                            }
-                            if (Interlocked.Read(ref _yadro1ADial2WaitingForFeedback) == 0)
-                            {
-                                lock (_lockYadro1ADialsObject2)
+                                if (_yadro1ACockpitFreq1DialPos < desiredPositionDial1X)
                                 {
-                                    if (_yadro1ACockpitFreq2DialPos != desiredPositionDial2X)
-                                    {
-                                        dial2OkTime = DateTime.Now.Ticks;
-                                        str = YADRO1_A_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _yadro1ACockpitFreq2DialPos);
-                                        await DCSBIOS.SendAsync(str);
-                                        Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial2Timeout);
+                                    command = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                }
+                                else
+                                {
+                                    command = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                                 }
                             }
-                            else
+                        }
+
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial1Timeout);
+                    }
+                    else
+                    {
+                        dial1OkTime = DateTime.Now.Ticks;
+                    }
+                    if (Interlocked.Read(ref _yadro1ADial2WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
+
+                        lock (_lockYadro1ADialsObject2)
+                        {
+                            if (_yadro1ACockpitFreq2DialPos != desiredPositionDial2X)
                             {
                                 dial2OkTime = DateTime.Now.Ticks;
+                                command = YADRO1_A_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _yadro1ACockpitFreq2DialPos);
                             }
-                            if (Interlocked.Read(ref _yadro1ADial3WaitingForFeedback) == 0)
-                            {
-                                lock (_lockYadro1ADialsObject3)
-                                {
-                                    if (_yadro1ACockpitFreq3DialPos != desiredPositionDial3X)
-                                    {
-                                        dial3OkTime = DateTime.Now.Ticks;
-                                        str = YADRO1_A_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _yadro1ACockpitFreq3DialPos);
-                                        await DCSBIOS.SendAsync(str);
-                                        Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial3Timeout);
-                                }
-                            }
-                            else
+                        }
+
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial2Timeout);
+                    }
+                    else
+                    {
+                        dial2OkTime = DateTime.Now.Ticks;
+                    }
+                    if (Interlocked.Read(ref _yadro1ADial3WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
+
+                        lock (_lockYadro1ADialsObject3)
+                        {
+                            if (_yadro1ACockpitFreq3DialPos != desiredPositionDial3X)
                             {
                                 dial3OkTime = DateTime.Now.Ticks;
+                                command = YADRO1_A_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _yadro1ACockpitFreq3DialPos);
                             }
-                            if (Interlocked.Read(ref _yadro1ADial4WaitingForFeedback) == 0)
-                            {
-                                lock (_lockYadro1ADialsObject4)
-                                {
-                                    if (_yadro1ACockpitFreq4DialPos != desiredPositionDial4X)
-                                    {
-                                        dial4OkTime = DateTime.Now.Ticks;
-                                        str = YADRO1_A_FREQ_4DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial4X, _yadro1ACockpitFreq4DialPos);
-                                        await DCSBIOS.SendAsync(str);
-                                        Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial4Timeout);
-                                }
-                            }
-                            else
+                        }
+
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial3Timeout);
+                    }
+                    else
+                    {
+                        dial3OkTime = DateTime.Now.Ticks;
+                    }
+                    if (Interlocked.Read(ref _yadro1ADial4WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
+
+                        lock (_lockYadro1ADialsObject4)
+                        {
+                            if (_yadro1ACockpitFreq4DialPos != desiredPositionDial4X)
                             {
                                 dial4OkTime = DateTime.Now.Ticks;
+                                command = YADRO1_A_FREQ_4DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial4X, _yadro1ACockpitFreq4DialPos);
                             }
-                            Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
                         }
-                        while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownYaDRO1AThread);
-                        SwapCockpitStandbyFrequencyYaDRO1A();
-                        ShowFrequenciesOnPanel();
+
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial4Timeout);
                     }
-                    catch (ThreadAbortException)
-                    { }
-                    catch (Exception ex)
+                    else
                     {
-                        Common.ShowErrorMessageBox(ex);
+                        dial4OkTime = DateTime.Now.Ticks;
                     }
+                    Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
+
+                    if (cancellationToken.IsCancellationRequested) break;
                 }
-                finally
-                {
-                    Interlocked.Exchange(ref _yadro1AThreadNowSynching, 0);
-                }
+                while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+                SwapCockpitStandbyFrequencyYaDRO1A();
+                ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Common.ShowErrorMessageBox(ex);
             }
             //Refresh panel once this debacle is finished
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -830,7 +836,7 @@ namespace NonVisuals.Radios
                                     }
                                     else
                                     {
-                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi24P.UPPER_FREQ_SWITCH);
+                                        SendFrequencyToDCSBIOSAsync(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi24P.UPPER_FREQ_SWITCH);
                                     }
                                     break;
                                 }
@@ -848,7 +854,7 @@ namespace NonVisuals.Radios
                                     }
                                     else
                                     {
-                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi24P.LOWER_FREQ_SWITCH);
+                                        SendFrequencyToDCSBIOSAsync(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi24P.LOWER_FREQ_SWITCH);
                                     }
                                     break;
                                 }
@@ -1690,11 +1696,6 @@ namespace NonVisuals.Radios
             {
                 Logger.Error(ex);
             }
-        }
-
-        private bool YaDRO1ANowSyncing()
-        {
-            return Interlocked.Read(ref _yadro1AThreadNowSynching) > 0;
         }
 
         private void SaveCockpitFrequencyYaDRO1A()
