@@ -1,4 +1,5 @@
-﻿using ClassLibraryCommon;
+﻿using System.Threading.Tasks;
+using ClassLibraryCommon;
 using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
@@ -196,7 +197,7 @@ namespace NonVisuals.Radios
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e) { }
 
-        private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMiG21Bis knob)
+        private async Task SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsMiG21Bis knob)
         {
             if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch || knob == RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch))
             {
@@ -589,177 +590,175 @@ namespace NonVisuals.Radios
             ShowFrequenciesOnPanel();
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
-            lock (LockLCDUpdateObject)
+            Interlocked.Increment(ref _doUpdatePanelLCD);
+            foreach (var radioPanelKnobObject in hashSet)
             {
-                Interlocked.Increment(ref _doUpdatePanelLCD);
-                foreach (var radioPanelKnobObject in hashSet)
+                var radioPanelKnob = (RadioPanelKnobMiG21Bis)radioPanelKnobObject;
+
+                switch (radioPanelKnob.RadioPanelPZ69Knob)
                 {
-                    var radioPanelKnob = (RadioPanelKnobMiG21Bis)radioPanelKnobObject;
-
-                    switch (radioPanelKnob.RadioPanelPZ69Knob)
-                    {
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperRadio:
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperRadio:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentMiG21BisRadioMode.Radio;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentMiG21BisRadioMode.Radio;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperRsbn:
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperRsbn:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentMiG21BisRadioMode.RSBN;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentMiG21BisRadioMode.RSBN;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperArc:
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperArc:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentMiG21BisRadioMode.ARC;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentMiG21BisRadioMode.ARC;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperCom2:
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperCom2:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperNav2:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperDme:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperXpdr:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerRadio:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                break;
+                                _currentLowerRadioMode = CurrentMiG21BisRadioMode.Radio;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperNav2:
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerRsbn:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                break;
+                                _currentLowerRadioMode = CurrentMiG21BisRadioMode.RSBN;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperDme:
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerArc:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                break;
+                                _currentLowerRadioMode = CurrentMiG21BisRadioMode.ARC;
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperXpdr:
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerCom2:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerNav2:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerDme:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerXpdr:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperLargeFreqWheelInc:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperLargeFreqWheelDec:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelInc:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelDec:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerLargeFreqWheelInc:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerLargeFreqWheelDec:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerSmallFreqWheelInc:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerSmallFreqWheelDec:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                break;
+                                await SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch);
                             }
+                            break;
+                        }
 
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerRadio:
+                    case RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentMiG21BisRadioMode.Radio;
-                                }
-                                break;
+                                await SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch);
                             }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerRsbn:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentMiG21BisRadioMode.RSBN;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerArc:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentMiG21BisRadioMode.ARC;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerCom2:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerNav2:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerDme:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerXpdr:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperLargeFreqWheelInc:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperLargeFreqWheelDec:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelInc:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelDec:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerLargeFreqWheelInc:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerLargeFreqWheelDec:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerSmallFreqWheelInc:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerSmallFreqWheelDec:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMiG21Bis.UpperFreqSwitch);
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMiG21Bis.LowerFreqSwitch);
-                                }
-                                break;
-                            }
-                    }
-
-                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                    {
-                        PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_MIG21BIS, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
-                    }
+                            break;
+                        }
                 }
-                AdjustFrequency(hashSet);
+
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_MIG21BIS, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                }
             }
+
+            await AdjustFrequencyAsync(hashSet);
         }
 
         public override void ClearSettings(bool setIsDirty = false) { }
