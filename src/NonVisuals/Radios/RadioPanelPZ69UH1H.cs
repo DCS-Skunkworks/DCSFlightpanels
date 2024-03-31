@@ -68,7 +68,7 @@ namespace NonVisuals.Radios
         private volatile uint _vhfCommSavedCockpitSmallFrequency;
         private volatile uint _vhfCommSavedCockpitBigFrequency = 116;
         private double _vhfCommCockpitFrequency = 116.00;
-        private long _vhfCommThreadNowSynching;
+        private long _vhfCommThreadNowSyncing;
         private volatile uint _vhfCommCockpitDial1Frequency = 116;
         private volatile uint _vhfCommCockpitDial2Frequency = 95;
         private long _vhfCommDial1FreqWaitingForFeedback;
@@ -105,7 +105,7 @@ namespace NonVisuals.Radios
         private const string UHF_FREQ2_DIAL_COMMAND = "UHF_1MHZ "; // 0 1 2 3 4 5 6 7 8 9
         private const string UHF_FREQ3_DIAL_COMMAND = "UHF_50KHZ "; // 00 - 95
         private Thread _uhfSyncThread;
-        private long _uhfThreadNowSynching;
+        private long _uhfThreadNowSyncing;
         private long _uhfDial1WaitingForFeedback;
         private long _uhfDial2WaitingForFeedback;
         private long _uhfDial3WaitingForFeedback;
@@ -127,7 +127,7 @@ namespace NonVisuals.Radios
         private const string VHF_NAV_FREQ1_DIAL_COMMAND = "VHFNAV_MHZ ";
         private const string VHF_NAV_FREQ2_DIAL_COMMAND = "VHFNAV_KHZ ";
         private Thread _vhfNavSyncThread;
-        private long _vhfNavThreadNowSynching;
+        private long _vhfNavThreadNowSyncing;
         private long _vhfNavDial1WaitingForFeedback;
         private long _vhfNavDial2WaitingForFeedback;
 
@@ -154,7 +154,7 @@ namespace NonVisuals.Radios
         private const string VHF_FM_FREQ_3DIAL_COMMAND = "VHFFM_FREQ3 "; // 0 1 2 3 4 5 6 7 8 9
         private const string VHF_FM_FREQ_4DIAL_COMMAND = "VHFFM_FREQ4 "; // 0 5
         private Thread _vhfFmSyncThread;
-        private long _vhfFmThreadNowSynching;
+        private long _vhfFmThreadNowSyncing;
         private long _vhfFmDial1WaitingForFeedback;
         private long _vhfFmDial2WaitingForFeedback;
         private long _vhfFmDial3WaitingForFeedback;
@@ -190,7 +190,7 @@ namespace NonVisuals.Radios
         private const string ADF_GAIN_KNOB_COMMAND_DEC = "ADF_GAIN +2000\n";
         private const string ADF_FREQUENCY_BAND_COMMAND = "ADF_BAND ";
         private Thread _adfSyncThread;
-        private long _adfThreadNowSynching;
+        private long _adfThreadNowSyncing;
         private long _adfFrequencyBandWaitingForFeedback;
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -700,7 +700,7 @@ namespace NonVisuals.Radios
                 try
                 {
                     String str;
-                    Interlocked.Exchange(ref _intercommThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _intercommThreadNowSyncing, 1);
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial1OkTime = 0;
                     var dial1SendCount = 0;
@@ -752,7 +752,7 @@ namespace NonVisuals.Radios
                 }
                 finally
                 {
-                    ResetWaitingForFeedBack(ref _intercommThreadNowSynching);
+                    ResetWaitingForFeedBack(ref _intercommThreadNowSyncing);
                 }
             }
             catch (ThreadAbortException)
@@ -793,7 +793,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _vhfCommThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _vhfCommThreadNowSyncing, 1);
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial1OkTime = 0;
@@ -885,7 +885,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _vhfCommThreadNowSynching, 0);
+                Interlocked.Exchange(ref _vhfCommThreadNowSyncing, 0);
             }
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
@@ -924,7 +924,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _uhfThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _uhfThreadNowSyncing, 1);
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial3Timeout = DateTime.Now.Ticks;
@@ -1054,7 +1054,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
+                Interlocked.Exchange(ref _uhfThreadNowSyncing, 0);
             }
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
@@ -1081,7 +1081,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _vhfNavThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _vhfNavThreadNowSyncing, 1);
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial1OkTime = 0;
@@ -1183,7 +1183,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _vhfNavThreadNowSynching, 0);
+                Interlocked.Exchange(ref _vhfNavThreadNowSyncing, 0);
             }
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
@@ -1209,7 +1209,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _vhfFmThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _vhfFmThreadNowSyncing, 1);
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial3Timeout = DateTime.Now.Ticks;
@@ -1431,7 +1431,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _vhfFmThreadNowSynching, 0);
+                Interlocked.Exchange(ref _vhfFmThreadNowSyncing, 0);
             }
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
@@ -1452,7 +1452,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _adfThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _adfThreadNowSyncing, 1);
                     long freqBandDialTimeout = DateTime.Now.Ticks;
                     long freqBandDialOkTime = 0;
                     var freqBandDialSendCount = 0;
@@ -1552,7 +1552,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _adfThreadNowSynching, 0);
+                Interlocked.Exchange(ref _adfThreadNowSyncing, 0);
             }
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -3088,22 +3088,22 @@ namespace NonVisuals.Radios
 
         private bool VhfCommSyncing()
         {
-            return Interlocked.Read(ref _vhfCommThreadNowSynching) > 0;
+            return Interlocked.Read(ref _vhfCommThreadNowSyncing) > 0;
         }
 
         private bool VhfFmSyncing()
         {
-            return Interlocked.Read(ref _vhfFmThreadNowSynching) > 0;
+            return Interlocked.Read(ref _vhfFmThreadNowSyncing) > 0;
         }
 
         private bool UhfSyncing()
         {
-            return Interlocked.Read(ref _uhfThreadNowSynching) > 0;
+            return Interlocked.Read(ref _uhfThreadNowSyncing) > 0;
         }
 
         private bool VhfNavSyncing()
         {
-            return Interlocked.Read(ref _vhfNavThreadNowSynching) > 0;
+            return Interlocked.Read(ref _vhfNavThreadNowSyncing) > 0;
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)

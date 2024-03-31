@@ -101,7 +101,7 @@ namespace NonVisuals.Radios
         private volatile uint _uhfCockpitMode; // OFF = 0
         private readonly ClickSpeedDetector _uhfModeClickSpeedDetector = new(8);
         private byte _skipUhfSmallFreqChange;
-        private long _uhfThreadNowSynching;
+        private long _uhfThreadNowSyncing;
         private Thread _uhfSyncThread;
         private long _uhfDial1WaitingForFeedback;
         private long _uhfDial2WaitingForFeedback;
@@ -169,7 +169,7 @@ namespace NonVisuals.Radios
         private volatile uint _vuhfCockpitMode; // OFF = 0
         private readonly ClickSpeedDetector _vuhfModeClickSpeedDetector = new(8);
         private byte _skipVuhfSmallFreqChange;
-        private long _vuhfThreadNowSynching;
+        private long _vuhfThreadNowSyncing;
         private Thread _vuhfSyncThread;
         private long _vuhfDial1WaitingForFeedback;
         private long _vuhfDial2WaitingForFeedback;
@@ -199,7 +199,7 @@ namespace NonVisuals.Radios
         private const string PILOT_TACAN_ONES_DIAL_COMMAND = "PLT_TACAN_DIAL_ONES ";
         private const string PILOT_TACAN_XY_DIAL_COMMAND = "PLT_TACAN_CHANNEL "; // X = 0 | Y = 1
         private Thread _pilotTacanSyncThread;
-        private long _pilotTacanThreadNowSynching;
+        private long _pilotTacanThreadNowSyncing;
         private long _pilotTacanTensWaitingForFeedback;
         private long _pilotTacanOnesWaitingForFeedback;
         private long _pilotTacanXYWaitingForFeedback;
@@ -227,7 +227,7 @@ namespace NonVisuals.Radios
         private const string RIO_TACAN_ONES_DIAL_COMMAND = "RIO_TACAN_DIAL_ONES ";
         private const string RIO_TACAN_XY_DIAL_COMMAND = "RIO_TACAN_CHANNEL "; // X = 0 | Y = 1
         private Thread _rioTacanSyncThread;
-        private long _rioTacanThreadNowSynching;
+        private long _rioTacanThreadNowSyncing;
         private long _rioTacanTensWaitingForFeedback;
         private long _rioTacanOnesWaitingForFeedback;
         private long _rioTacanXYWaitingForFeedback;
@@ -257,7 +257,7 @@ namespace NonVisuals.Radios
         private const string RIO_LINK4_POWER_COMMAND_INC = "RIO_DATALINK_PW INC\n";
         private const string RIO_LINK4_POWER_COMMAND_DEC = "RIO_DATALINK_PW DEC\n";
         private Thread _rioLink4SyncThread;
-        private long _rioLink4ThreadNowSynching;
+        private long _rioLink4ThreadNowSyncing;
         private long _rioLinkHundredsWaitingForFeedback;
         private long _rioLinkTensWaitingForFeedback;
         private long _rioLinkOnesWaitingForFeedback;
@@ -766,7 +766,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _uhfThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _uhfThreadNowSyncing, 1);
                     var dial1Timeout = DateTime.Now.Ticks;
                     var dial2Timeout = DateTime.Now.Ticks;
                     var dial3Timeout = DateTime.Now.Ticks;
@@ -908,7 +908,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
+                Interlocked.Exchange(ref _uhfThreadNowSyncing, 0);
             }
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
@@ -961,7 +961,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _vuhfThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _vuhfThreadNowSyncing, 1);
                     var dial1Timeout = DateTime.Now.Ticks;
                     var dial2Timeout = DateTime.Now.Ticks;
                     var dial3Timeout = DateTime.Now.Ticks;
@@ -1101,7 +1101,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _vuhfThreadNowSynching, 0);
+                Interlocked.Exchange(ref _vuhfThreadNowSyncing, 0);
             }
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
@@ -1130,7 +1130,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _rioLink4ThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _rioLink4ThreadNowSyncing, 1);
 
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
@@ -1242,7 +1242,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _rioLink4ThreadNowSynching, 0);
+                Interlocked.Exchange(ref _rioLink4ThreadNowSyncing, 0);
             }
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
@@ -1284,7 +1284,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _pilotTacanThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _pilotTacanThreadNowSyncing, 1);
 
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
@@ -1399,7 +1399,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _pilotTacanThreadNowSynching, 0);
+                Interlocked.Exchange(ref _pilotTacanThreadNowSyncing, 0);
             }
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -1427,7 +1427,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _rioTacanThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _rioTacanThreadNowSyncing, 1);
 
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
@@ -1543,7 +1543,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _rioTacanThreadNowSynching, 0);
+                Interlocked.Exchange(ref _rioTacanThreadNowSyncing, 0);
             }
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
@@ -3287,17 +3287,17 @@ namespace NonVisuals.Radios
 
         private bool PilotTacanNowSyncing()
         {
-            return Interlocked.Read(ref _pilotTacanThreadNowSynching) > 0;
+            return Interlocked.Read(ref _pilotTacanThreadNowSyncing) > 0;
         }
 
         private bool Link4NowSyncing()
         {
-            return Interlocked.Read(ref _rioLink4ThreadNowSynching) > 0;
+            return Interlocked.Read(ref _rioLink4ThreadNowSyncing) > 0;
         }
 
         private bool RioTacanNowSyncing()
         {
-            return Interlocked.Read(ref _rioTacanThreadNowSynching) > 0;
+            return Interlocked.Read(ref _rioTacanThreadNowSyncing) > 0;
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
@@ -3326,12 +3326,12 @@ namespace NonVisuals.Radios
 
         private bool UHFNowSyncing()
         {
-            return Interlocked.Read(ref _uhfThreadNowSynching) > 0;
+            return Interlocked.Read(ref _uhfThreadNowSyncing) > 0;
         }
 
         private bool VUHFNowSyncing()
         {
-            return Interlocked.Read(ref _vuhfThreadNowSynching) > 0;
+            return Interlocked.Read(ref _vuhfThreadNowSyncing) > 0;
         }
 
         private static string GetCommandDirection10Dial(int desiredDialPosition, uint actualDialPosition)

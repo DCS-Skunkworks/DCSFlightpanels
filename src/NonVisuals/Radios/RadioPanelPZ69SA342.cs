@@ -92,7 +92,7 @@ namespace NonVisuals.Radios
         private volatile uint _vhfAmCockpitDecimal100SFrequencyValue = 6553;
 
         private Thread _vhfAmSyncThread;
-        private long _vhfAmThreadNowSynching;
+        private long _vhfAmThreadNowSyncing;
         private long _vhfAmValue1WaitingForFeedback; // 10s
         private long _vhfAmValue2WaitingForFeedback; // 1s
         private long _vhfAmValue3WaitingForFeedback; // Decimal 10s
@@ -470,7 +470,7 @@ namespace NonVisuals.Radios
                     * COM1 VHF AM
                     * 
                     */
-                    Interlocked.Exchange(ref _vhfAmThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _vhfAmThreadNowSyncing, 1);
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial1Time = 0;
@@ -582,7 +582,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _vhfAmThreadNowSynching, 0);
+                Interlocked.Exchange(ref _vhfAmThreadNowSyncing, 0);
             }
             Interlocked.Increment(ref _doUpdatePanelLCD);
         }
@@ -1871,7 +1871,7 @@ namespace NonVisuals.Radios
 
         private bool VhfAmNowSyncing()
         {
-            return Interlocked.Read(ref _vhfAmThreadNowSynching) > 0;
+            return Interlocked.Read(ref _vhfAmThreadNowSyncing) > 0;
         }
 
         private static bool SwitchVhfAmDecimalDirectionUp(int cockpitValue, int desiredValue)
