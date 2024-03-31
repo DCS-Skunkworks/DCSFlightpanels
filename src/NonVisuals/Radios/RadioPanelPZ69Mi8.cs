@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -74,8 +75,8 @@ namespace NonVisuals.Radios
         private const string R863_MANUAL_FREQ_2DIAL_COMMAND = "R863_FREQ2 ";
         private const string R863_MANUAL_FREQ_3DIAL_COMMAND = "R863_FREQ3 ";
         private const string R863_MANUAL_FREQ_4DIAL_COMMAND = "R863_FREQ4 ";
-        private Thread _r863ManualSyncThread;
-        private long _r863ManualThreadNowSynching;
+        private Task _r863ManualSyncTask;
+        private CancellationTokenSource _r863ManualSyncTaskTokenSource = new();
         private long _r863ManualDial1WaitingForFeedback;
         private long _r863ManualDial2WaitingForFeedback;
         private long _r863ManualDial3WaitingForFeedback;
@@ -125,13 +126,12 @@ namespace NonVisuals.Radios
         private const string YADRO1_A_FREQ_2DIAL_COMMAND = "YADRO1A_FREQ2 ";
         private const string YADRO1_A_FREQ_3DIAL_COMMAND = "YADRO1A_FREQ3 ";
         private const string YADRO1_A_FREQ_4DIAL_COMMAND = "YADRO1A_FREQ4 ";
-        private Thread _yadro1ASyncThread;
-        private long _yadro1AThreadNowSynching;
+        private Task _yadro1ASyncTask;
+        private CancellationTokenSource _yadro1ASyncTaskTokenSource = new();
         private long _yadro1ADial1WaitingForFeedback;
         private long _yadro1ADial2WaitingForFeedback;
         private long _yadro1ADial3WaitingForFeedback;
         private long _yadro1ADial4WaitingForFeedback;
-        private volatile bool _shutdownYaDRO1AThread;
 
         /*
          * Mi-8 R-828 FM Radio PRESETS NAV2
@@ -243,8 +243,8 @@ namespace NonVisuals.Radios
             {
                 if (disposing)
                 {
-                    _shutdownR863Thread = true;
-                    _shutdownYaDRO1AThread = true;
+                    _r863ManualSyncTaskTokenSource.Cancel();
+                    _yadro1ASyncTaskTokenSource.Cancel();
                     BIOSEventHandler.DetachStringListener(this);
                     BIOSEventHandler.DetachDataListener(this);
                 }
@@ -590,7 +590,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendFrequencyToDCSBIOS(bool knobIsOn, RadioPanelPZ69KnobsMi8 knob)
+        private async Task SendFrequencyToDCSBIOSAsync(bool knobIsOn, RadioPanelPZ69KnobsMi8 knob)
         {
             try
             {
@@ -709,18 +709,15 @@ namespace NonVisuals.Radios
         {
             try
             {
-                if (R863ManualNowSyncing())
+                if (_r863ManualSyncTask?.Status == TaskStatus.Running)
                 {
                     return;
                 }
 
                 SaveCockpitFrequencyR863Manual();
 
-                _shutdownR863Thread = true;
-                Thread.Sleep(Constants.ThreadShutDownWaitTime);
-                _shutdownR863Thread = false;
-                _r863ManualSyncThread = new Thread(R863ManualSyncThreadMethod);
-                _r863ManualSyncThread.Start();
+                _r863ManualSyncTaskTokenSource = new();
+                _r863ManualSyncTask = Task.Run(() => SyncR863ManualAsync(_r863ManualSyncTaskTokenSource.Token));
             }
             catch (Exception ex)
             {
@@ -728,229 +725,235 @@ namespace NonVisuals.Radios
             }
         }
 
-        private volatile bool _shutdownR863Thread;
-        private void R863ManualSyncThreadMethod()
+        private async Task SyncR863ManualAsync(CancellationToken cancellationToken)
         {
             try
             {
-                try
+                /*
+                * Mi-8 R-863 COM1
+                */
+                long dial1Timeout = DateTime.Now.Ticks;
+                long dial2Timeout = DateTime.Now.Ticks;
+                long dial3Timeout = DateTime.Now.Ticks;
+                long dial4Timeout = DateTime.Now.Ticks;
+                long dial1OkTime = 0;
+                long dial2OkTime = 0;
+                long dial3OkTime = 0;
+                long dial4OkTime = 0;
+                var dial1SendCount = 0;
+                var dial2SendCount = 0;
+                var dial3SendCount = 0;
+                var dial4SendCount = 0;
+
+                var frequencyAsString = _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(3, '0');
+                frequencyAsString = frequencyAsString.PadRight(7, '0');
+
+                // Frequency selector 1      R863_FREQ1
+                // "10" "11" "12" "13" "14" "22" "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" "36" "37" "38" "39"
+                // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19   20   21   22
+
+                // Frequency selector 2      R863_FREQ2
+                // 0 1 2 3 4 5 6 7 8 9
+
+                // Frequency selector 3      R863_FREQ3
+                // 0 1 2 3 4 5 6 7 8 9
+
+                // Frequency selector 4      R863_FREQ4
+                // "00" "25" "50" "75", only "00" and "50" used.
+                // Pos     0    1    2    3
+
+                // Reason for this is to separate the standby frequency from the sync loop
+                // If not the sync would pick up any changes made by the user during the
+                // sync process
+
+                // 151.95
+                // #1 = 15  (position = value - 3)
+                // #2 = 1   (position = value)
+                // #3 = 9   (position = value)
+                // #4 = 5
+                var desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2)); // Array.IndexOf(_r863ManualFreq1DialValues, int.Parse(xfrequencyAsString.Substring(0, 2)));
+                var desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
+                var desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
+                var desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 2));
+                Debug.WriteLine("Frequency " + frequencyAsString);
+                Debug.WriteLine("Desired1 " + desiredPositionDial1X);
+                Debug.WriteLine("Desired2 " + desiredPositionDial2X);
+                Debug.WriteLine("Desired3 " + desiredPositionDial3X);
+                Debug.WriteLine("Desired4 " + desiredPositionDial4X);
+
+                do
                 {
-                    try
+                    if (IsTimedOut(ref dial1Timeout))
                     {
-                        /*
-                        * Mi-8 R-863 COM1
-                        */
-                        Interlocked.Exchange(ref _r863ManualThreadNowSynching, 1);
-                        long dial1Timeout = DateTime.Now.Ticks;
-                        long dial2Timeout = DateTime.Now.Ticks;
-                        long dial3Timeout = DateTime.Now.Ticks;
-                        long dial4Timeout = DateTime.Now.Ticks;
-                        long dial1OkTime = 0;
-                        long dial2OkTime = 0;
-                        long dial3OkTime = 0;
-                        long dial4OkTime = 0;
-                        var dial1SendCount = 0;
-                        var dial2SendCount = 0;
-                        var dial3SendCount = 0;
-                        var dial4SendCount = 0;
+                        ResetWaitingForFeedBack(ref _r863ManualDial1WaitingForFeedback); // Let's do an ugly reset
+                    }
 
-                        var frequencyAsString = _r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(3, '0');
-                        frequencyAsString = frequencyAsString.PadRight(7, '0');
+                    if (IsTimedOut(ref dial2Timeout))
+                    {
+                        ResetWaitingForFeedBack(ref _r863ManualDial2WaitingForFeedback); // Let's do an ugly reset
+                    }
 
-                        // Frequency selector 1      R863_FREQ1
-                        // "10" "11" "12" "13" "14" "22" "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" "36" "37" "38" "39"
-                        // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19   20   21   22
+                    if (IsTimedOut(ref dial3Timeout))
+                    {
+                        ResetWaitingForFeedBack(ref _r863ManualDial3WaitingForFeedback); // Let's do an ugly reset
+                    }
 
-                        // Frequency selector 2      R863_FREQ2
-                        // 0 1 2 3 4 5 6 7 8 9
+                    if (IsTimedOut(ref dial4Timeout))
+                    {
+                        ResetWaitingForFeedBack(ref _r863ManualDial4WaitingForFeedback); // Let's do an ugly reset
+                    }
 
-                        // Frequency selector 3      R863_FREQ3
-                        // 0 1 2 3 4 5 6 7 8 9
+                    if (Interlocked.Read(ref _r863ManualDial1WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
 
-                        // Frequency selector 4      R863_FREQ4
-                        // "00" "25" "50" "75", only "00" and "50" used.
-                        // Pos     0    1    2    3
-
-                        // Reason for this is to separate the standby frequency from the sync loop
-                        // If not the sync would pick up any changes made by the user during the
-                        // sync process
-
-                        // 151.95
-                        // #1 = 15  (position = value - 3)
-                        // #2 = 1   (position = value)
-                        // #3 = 9   (position = value)
-                        // #4 = 5
-                        var desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2)); // Array.IndexOf(_r863ManualFreq1DialValues, int.Parse(xfrequencyAsString.Substring(0, 2)));
-                        var desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
-                        var desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
-                        var desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 2));
-                        Debug.WriteLine("Frequency " + frequencyAsString);
-                        Debug.WriteLine("Desired1 " + desiredPositionDial1X);
-                        Debug.WriteLine("Desired2 " + desiredPositionDial2X);
-                        Debug.WriteLine("Desired3 " + desiredPositionDial3X);
-                        Debug.WriteLine("Desired4 " + desiredPositionDial4X);
-
-                        do
+                        lock (_lockR863ManualDialsObject1)
                         {
-                            if (IsTimedOut(ref dial1Timeout))
-                            {
-                                ResetWaitingForFeedBack(ref _r863ManualDial1WaitingForFeedback); // Let's do an ugly reset
-                            }
-
-                            if (IsTimedOut(ref dial2Timeout))
-                            {
-                                ResetWaitingForFeedBack(ref _r863ManualDial2WaitingForFeedback); // Let's do an ugly reset
-                            }
-
-                            if (IsTimedOut(ref dial3Timeout))
-                            {
-                                ResetWaitingForFeedBack(ref _r863ManualDial3WaitingForFeedback); // Let's do an ugly reset
-                            }
-
-                            if (IsTimedOut(ref dial4Timeout))
-                            {
-                                ResetWaitingForFeedBack(ref _r863ManualDial4WaitingForFeedback); // Let's do an ugly reset
-                            }
-
-                            string str;
-                            if (Interlocked.Read(ref _r863ManualDial1WaitingForFeedback) == 0)
-                            {
-                                lock (_lockR863ManualDialsObject1)
-                                {
-                                    if (_r863ManualCockpitFreq1DialPos != desiredPositionDial1X)
-                                    {
-                                        dial1OkTime = DateTime.Now.Ticks;
-                                        str = R863_MANUAL_FREQ_1DIAL_COMMAND
-                                              + GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);// + Decrease; // is this still a problem? 30.7.2018 Went into loop GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
-
-                                        /*
-                                        25.7.2018
-                                        10	0.22999967634678
-                                        39	0.21999971568584
-                                        
-                                        10Mhz  Rotary Knob (Mi-8MT/R863_FREQ1)
-                                        Changing the dial (in cockpit) 39 => 10 does not show in DCS-BIOS in the CTRL-Ref page. But going down from 10 => 39 is OK.
-                                        I have gotten the values above from DCS using the Lua console so I can see that they do actually change but there is something not working in DCS-BIOS
-                                        So only go down with it
-                                        */
-                                        await DCSBIOS.SendAsync(str);
-                                        dial1SendCount++;
-                                        Interlocked.Exchange(ref _r863ManualDial1WaitingForFeedback, 1);
-                                    }
-
-                                    Reset(ref dial1Timeout);
-                                }
-                            }
-                            else
+                            if (_r863ManualCockpitFreq1DialPos != desiredPositionDial1X)
                             {
                                 dial1OkTime = DateTime.Now.Ticks;
+                                command = R863_MANUAL_FREQ_1DIAL_COMMAND
+                                      + GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);// + Decrease; // is this still a problem? 30.7.2018 Went into loop GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
+
+                                /*
+                                25.7.2018
+                                10	0.22999967634678
+                                39	0.21999971568584
+
+                                10Mhz  Rotary Knob (Mi-8MT/R863_FREQ1)
+                                Changing the dial (in cockpit) 39 => 10 does not show in DCS-BIOS in the CTRL-Ref page. But going down from 10 => 39 is OK.
+                                I have gotten the values above from DCS using the Lua console so I can see that they do actually change but there is something not working in DCS-BIOS
+                                So only go down with it
+                                */
                             }
 
-                            if (Interlocked.Read(ref _r863ManualDial2WaitingForFeedback) == 0)
-                            {
-                                lock (_lockR863ManualDialsObject2)
-                                {
-                                    if (_r863ManualCockpitFreq2DialPos != desiredPositionDial2X)
-                                    {
-                                        dial2OkTime = DateTime.Now.Ticks;
-                                        str = R863_MANUAL_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r863ManualCockpitFreq2DialPos);
-                                        await DCSBIOS.SendAsync(str);
-                                        dial2SendCount++;
-                                        Interlocked.Exchange(ref _r863ManualDial2WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial2Timeout);
-                                }
-                            }
-                            else
+                        }
+
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            dial1SendCount++;
+                            Interlocked.Exchange(ref _r863ManualDial1WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial1Timeout);
+                    }
+                    else
+                    {
+                        dial1OkTime = DateTime.Now.Ticks;
+                    }
+
+                    if (Interlocked.Read(ref _r863ManualDial2WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
+
+                        lock (_lockR863ManualDialsObject2)
+                        {
+                            if (_r863ManualCockpitFreq2DialPos != desiredPositionDial2X)
                             {
                                 dial2OkTime = DateTime.Now.Ticks;
+                                command = R863_MANUAL_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r863ManualCockpitFreq2DialPos);
                             }
+                        }
 
-                            if (Interlocked.Read(ref _r863ManualDial3WaitingForFeedback) == 0)
-                            {
-                                lock (_lockR863ManualDialsObject3)
-                                {
-                                    if (_r863ManualCockpitFreq3DialPos != desiredPositionDial3X)
-                                    {
-                                        dial3OkTime = DateTime.Now.Ticks;
-                                        str = R863_MANUAL_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r863ManualCockpitFreq3DialPos);
-                                        await DCSBIOS.SendAsync(str);
-                                        dial3SendCount++;
-                                        Interlocked.Exchange(ref _r863ManualDial3WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial3Timeout);
-                                }
-                            }
-                            else
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            dial2SendCount++;
+                            Interlocked.Exchange(ref _r863ManualDial2WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial2Timeout);
+                    }
+                    else
+                    {
+                        dial2OkTime = DateTime.Now.Ticks;
+                    }
+
+                    if (Interlocked.Read(ref _r863ManualDial3WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
+
+                        lock (_lockR863ManualDialsObject3)
+                        {
+                            if (_r863ManualCockpitFreq3DialPos != desiredPositionDial3X)
                             {
                                 dial3OkTime = DateTime.Now.Ticks;
+                                command = R863_MANUAL_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r863ManualCockpitFreq3DialPos);
                             }
+                        }
 
-                            if (Interlocked.Read(ref _r863ManualDial4WaitingForFeedback) == 0)
-                            {
-                                lock (_lockR863ManualDialsObject4)
-                                {
-                                    if (_r863ManualCockpitFreq4DialPos < desiredPositionDial4X)
-                                    {
-                                        dial4OkTime = DateTime.Now.Ticks;
-                                        str = R863_MANUAL_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                        await DCSBIOS.SendAsync(str);
-                                        dial4SendCount++;
-                                        Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
-                                    }
-                                    else if (_r863ManualCockpitFreq4DialPos > desiredPositionDial4X)
-                                    {
-                                        dial4OkTime = DateTime.Now.Ticks;
-                                        str = R863_MANUAL_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                        await DCSBIOS.SendAsync(str);
-                                        dial4SendCount++;
-                                        Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial4Timeout);
-                                }
-                            }
-                            else
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            dial3SendCount++;
+                            Interlocked.Exchange(ref _r863ManualDial3WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial3Timeout);
+                    }
+                    else
+                    {
+                        dial3OkTime = DateTime.Now.Ticks;
+                    }
+
+                    if (Interlocked.Read(ref _r863ManualDial4WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
+
+                        lock (_lockR863ManualDialsObject4)
+                        {
+                            if (_r863ManualCockpitFreq4DialPos < desiredPositionDial4X)
                             {
                                 dial4OkTime = DateTime.Now.Ticks;
+                                command = R863_MANUAL_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
                             }
-
-                            // if (dial1SendCount > 12 || dial2SendCount > 10 || dial3SendCount > 10 || dial4SendCount > 5)
-                            /* ATTN ! 12.05.2019
-                             * This radio is problematic, sometimes it goes bonkers, DCS-BIOS doesn't see the update from DCS
-                             * and everything goes wrong after that. Been like this from start.
-                             * Added big send counts here just to make sure it has time to find the correct position.
-                             */
-                            if (dial1SendCount > 40 || dial2SendCount > 20 || dial3SendCount > 20 || dial4SendCount > 10)
+                            else if (_r863ManualCockpitFreq4DialPos > desiredPositionDial4X)
                             {
-                                // "Race" condition detected?
-                                dial1SendCount = 0;
-                                dial2SendCount = 0;
-                                dial3SendCount = 0;
-                                dial4SendCount = 0;
-                                Thread.Sleep(5000);
+                                dial4OkTime = DateTime.Now.Ticks;
+                                command = R863_MANUAL_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                             }
-
-                            Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                         }
-                        while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownR863Thread);
+
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            dial4SendCount++;
+                            Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial4Timeout);
                     }
-                    catch (ThreadAbortException ex)
+                    else
                     {
-                        Logger.Error(ex);
+                        dial4OkTime = DateTime.Now.Ticks;
                     }
-                    catch (Exception ex)
+
+                    // if (dial1SendCount > 12 || dial2SendCount > 10 || dial3SendCount > 10 || dial4SendCount > 5)
+                    /* ATTN ! 12.05.2019
+                     * This radio is problematic, sometimes it goes bonkers, DCS-BIOS doesn't see the update from DCS
+                     * and everything goes wrong after that. Been like this from start.
+                     * Added big send counts here just to make sure it has time to find the correct position.
+                     */
+                    if (dial1SendCount > 40 || dial2SendCount > 20 || dial3SendCount > 20 || dial4SendCount > 10)
                     {
-                        Common.ShowErrorMessageBox(ex);
+                        // "Race" condition detected?
+                        dial1SendCount = 0;
+                        dial2SendCount = 0;
+                        dial3SendCount = 0;
+                        dial4SendCount = 0;
+                        Thread.Sleep(5000);
                     }
+
+                    Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+
+                    if (cancellationToken.IsCancellationRequested) break;
                 }
-                finally
-                {
-                    Interlocked.Exchange(ref _r863ManualThreadNowSynching, 0);
-                }
+                while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+            }
+            catch (ThreadAbortException ex)
+            {
+                Logger.Error(ex);
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Common.ShowErrorMessageBox(ex);
             }
 
             // Refresh panel once this debacle is finished
@@ -976,18 +979,15 @@ namespace NonVisuals.Radios
         {
             try
             {
-                if (YaDRO1ANowSyncing())
+                if (_yadro1ASyncTask?.Status == TaskStatus.Running)
                 {
                     return;
                 }
 
                 SaveCockpitFrequencyYaDRO1A();
 
-                _shutdownYaDRO1AThread = true;
-                Thread.Sleep(Constants.ThreadShutDownWaitTime);
-                _shutdownYaDRO1AThread = false;
-                _yadro1ASyncThread = new Thread(YaDRO1ASyncThreadMethod);
-                _yadro1ASyncThread.Start();
+                _yadro1ASyncTaskTokenSource = new();
+                _yadro1ASyncTask = Task.Run(() => SyncYaDRO1Async(_yadro1ASyncTaskTokenSource.Token));
             }
             catch (Exception ex)
             {
@@ -995,188 +995,194 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void YaDRO1ASyncThreadMethod()
+        private async Task SyncYaDRO1Async(CancellationToken cancellationToken)
         {
             try
             {
-                try
+                /*
+                  * Mi-8 YaDRO-1A
+                  */
+                long dial1Timeout = DateTime.Now.Ticks;
+                long dial2Timeout = DateTime.Now.Ticks;
+                long dial3Timeout = DateTime.Now.Ticks;
+                long dial4Timeout = DateTime.Now.Ticks;
+                long dial1OkTime = 0;
+                long dial2OkTime = 0;
+                long dial3OkTime = 0;
+                long dial4OkTime = 0;
+
+                var frequencyAsString = _yadro1ABigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1ASmallFrequencyStandby.ToString().PadLeft(2, '0');
+                frequencyAsString = frequencyAsString.PadRight(6, '0');
+
+                // Frequency selector 1      YADRO1A_FREQ1
+                // "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14" "15" "16" "17"
+                // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15
+
+                // Frequency selector 2      YADRO1A_FREQ2
+                // 0 1 2 3 4 5 6 7 8 9
+
+                // Frequency selector 3      YADRO1A_FREQ3
+                // 0 1 2 3 4 5 6 7 8 9
+
+                // Frequency selector 4      YADRO1A_FREQ4
+                // 0 1 2 3 4 5 6 7 8 9
+
+                // Reason for this is to separate the standby frequency from the sync loop
+                // If not the sync would pick up any changes made by the user during the
+                // sync process
+
+                // 02000
+                // 17999
+                // #1 = 17  (position = value)
+                // #2 = 9   (position = value)
+                // #3 = 9   (position = value)
+                // #4 = 9   (position = value)
+                var desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2));
+                var desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
+                var desiredPositionDial3X = int.Parse(frequencyAsString.Substring(3, 1));
+                var desiredPositionDial4X = int.Parse(frequencyAsString.Substring(4, 1));
+
+                do
                 {
-                    try
+                    if (IsTimedOut(ref dial1Timeout))
                     {
-                        /*
-                                          * Mi-8 YaDRO-1A
-                                          */
-                        Interlocked.Exchange(ref _yadro1AThreadNowSynching, 1);
-                        long dial1Timeout = DateTime.Now.Ticks;
-                        long dial2Timeout = DateTime.Now.Ticks;
-                        long dial3Timeout = DateTime.Now.Ticks;
-                        long dial4Timeout = DateTime.Now.Ticks;
-                        long dial1OkTime = 0;
-                        long dial2OkTime = 0;
-                        long dial3OkTime = 0;
-                        long dial4OkTime = 0;
+                        ResetWaitingForFeedBack(ref _yadro1ADial1WaitingForFeedback); // Let's do an ugly reset
+                    }
 
-                        var frequencyAsString = _yadro1ABigFrequencyStandby.ToString().PadLeft(3, '0') + _yadro1ASmallFrequencyStandby.ToString().PadLeft(2, '0');
-                        frequencyAsString = frequencyAsString.PadRight(6, '0');
+                    if (IsTimedOut(ref dial2Timeout))
+                    {
+                        ResetWaitingForFeedBack(ref _yadro1ADial2WaitingForFeedback); // Let's do an ugly reset
+                    }
 
-                        // Frequency selector 1      YADRO1A_FREQ1
-                        // "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14" "15" "16" "17"
-                        // Pos     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15
+                    if (IsTimedOut(ref dial3Timeout))
+                    {
+                        ResetWaitingForFeedBack(ref _yadro1ADial3WaitingForFeedback); // Let's do an ugly reset
+                    }
 
-                        // Frequency selector 2      YADRO1A_FREQ2
-                        // 0 1 2 3 4 5 6 7 8 9
+                    if (IsTimedOut(ref dial4Timeout))
+                    {
+                        ResetWaitingForFeedBack(ref _yadro1ADial4WaitingForFeedback); // Let's do an ugly reset
+                    }
 
-                        // Frequency selector 3      YADRO1A_FREQ3
-                        // 0 1 2 3 4 5 6 7 8 9
+                    if (Interlocked.Read(ref _yadro1ADial1WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
 
-                        // Frequency selector 4      YADRO1A_FREQ4
-                        // 0 1 2 3 4 5 6 7 8 9
-
-                        // Reason for this is to separate the standby frequency from the sync loop
-                        // If not the sync would pick up any changes made by the user during the
-                        // sync process
-
-                        // 02000
-                        // 17999
-                        // #1 = 17  (position = value)
-                        // #2 = 9   (position = value)
-                        // #3 = 9   (position = value)
-                        // #4 = 9   (position = value)
-                        var desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2));
-                        var desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
-                        var desiredPositionDial3X = int.Parse(frequencyAsString.Substring(3, 1));
-                        var desiredPositionDial4X = int.Parse(frequencyAsString.Substring(4, 1));
-
-                        do
+                        lock (_lockYadro1ADialsObject1)
                         {
-                            if (IsTimedOut(ref dial1Timeout))
-                            {
-                                ResetWaitingForFeedBack(ref _yadro1ADial1WaitingForFeedback); // Let's do an ugly reset
-                            }
-
-                            if (IsTimedOut(ref dial2Timeout))
-                            {
-                                ResetWaitingForFeedBack(ref _yadro1ADial2WaitingForFeedback); // Let's do an ugly reset
-                            }
-
-                            if (IsTimedOut(ref dial3Timeout))
-                            {
-                                ResetWaitingForFeedBack(ref _yadro1ADial3WaitingForFeedback); // Let's do an ugly reset
-                            }
-
-                            if (IsTimedOut(ref dial4Timeout))
-                            {
-                                ResetWaitingForFeedBack(ref _yadro1ADial4WaitingForFeedback); // Let's do an ugly reset
-                            }
-
-                            string str;
-                            if (Interlocked.Read(ref _yadro1ADial1WaitingForFeedback) == 0)
-                            {
-                                lock (_lockYadro1ADialsObject1)
-                                {
-                                    if (_yadro1ACockpitFreq1DialPos != desiredPositionDial1X)
-                                    {
-                                        dial1OkTime = DateTime.Now.Ticks;
-                                        if (_yadro1ACockpitFreq1DialPos < desiredPositionDial1X)
-                                        {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                        }
-                                        else
-                                        {
-                                            str = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                        }
-
-                                        await DCSBIOS.SendAsync(str);
-                                        Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial1Timeout);
-                                }
-                            }
-                            else
+                            if (_yadro1ACockpitFreq1DialPos != desiredPositionDial1X)
                             {
                                 dial1OkTime = DateTime.Now.Ticks;
-                            }
-
-                            if (Interlocked.Read(ref _yadro1ADial2WaitingForFeedback) == 0)
-                            {
-                                lock (_lockYadro1ADialsObject2)
+                                if (_yadro1ACockpitFreq1DialPos < desiredPositionDial1X)
                                 {
-                                    if (_yadro1ACockpitFreq2DialPos != desiredPositionDial2X)
-                                    {
-                                        dial2OkTime = DateTime.Now.Ticks;
-                                        str = YADRO1_A_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _yadro1ACockpitFreq2DialPos);
-                                        await DCSBIOS.SendAsync(str);
-                                        Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial2Timeout);
+                                    command = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                }
+                                else
+                                {
+                                    command = YADRO1_A_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                                 }
                             }
-                            else
+                        }
+
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial1Timeout);
+                    }
+                    else
+                    {
+                        dial1OkTime = DateTime.Now.Ticks;
+                    }
+
+                    if (Interlocked.Read(ref _yadro1ADial2WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
+
+                        lock (_lockYadro1ADialsObject2)
+                        {
+                            if (_yadro1ACockpitFreq2DialPos != desiredPositionDial2X)
                             {
                                 dial2OkTime = DateTime.Now.Ticks;
+                                command = YADRO1_A_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _yadro1ACockpitFreq2DialPos);
                             }
+                        }
 
-                            if (Interlocked.Read(ref _yadro1ADial3WaitingForFeedback) == 0)
-                            {
-                                lock (_lockYadro1ADialsObject3)
-                                {
-                                    if (_yadro1ACockpitFreq3DialPos != desiredPositionDial3X)
-                                    {
-                                        dial3OkTime = DateTime.Now.Ticks;
-                                        str = YADRO1_A_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _yadro1ACockpitFreq3DialPos);
-                                        await DCSBIOS.SendAsync(str);
-                                        Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial3Timeout);
-                                }
-                            }
-                            else
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial2Timeout);
+                    }
+                    else
+                    {
+                        dial2OkTime = DateTime.Now.Ticks;
+                    }
+
+                    if (Interlocked.Read(ref _yadro1ADial3WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
+
+                        lock (_lockYadro1ADialsObject3)
+                        {
+                            if (_yadro1ACockpitFreq3DialPos != desiredPositionDial3X)
                             {
                                 dial3OkTime = DateTime.Now.Ticks;
+                                command = YADRO1_A_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _yadro1ACockpitFreq3DialPos);
                             }
+                        }
 
-                            if (Interlocked.Read(ref _yadro1ADial4WaitingForFeedback) == 0)
-                            {
-                                lock (_lockYadro1ADialsObject4)
-                                {
-                                    if (_yadro1ACockpitFreq4DialPos != desiredPositionDial4X)
-                                    {
-                                        dial4OkTime = DateTime.Now.Ticks;
-                                        str = YADRO1_A_FREQ_4DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial4X, _yadro1ACockpitFreq4DialPos);
-                                        await DCSBIOS.SendAsync(str);
-                                        Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 1);
-                                    }
-                                    Reset(ref dial4Timeout);
-                                }
-                            }
-                            else
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial3Timeout);
+                    }
+                    else
+                    {
+                        dial3OkTime = DateTime.Now.Ticks;
+                    }
+
+                    if (Interlocked.Read(ref _yadro1ADial4WaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
+
+                        lock (_lockYadro1ADialsObject4)
+                        {
+                            if (_yadro1ACockpitFreq4DialPos != desiredPositionDial4X)
                             {
                                 dial4OkTime = DateTime.Now.Ticks;
+                                command = YADRO1_A_FREQ_4DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial4X, _yadro1ACockpitFreq4DialPos);
                             }
-
-                            Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                         }
-                        while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownYaDRO1AThread);
 
-                        SwapCockpitStandbyFrequencyYaDRO1A();
-                        ShowFrequenciesOnPanel();
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            await DCSBIOS.SendAsync(command);
+                            Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 1);
+                        }
+                        Reset(ref dial4Timeout);
                     }
-                    catch (ThreadAbortException)
+                    else
                     {
+                        dial4OkTime = DateTime.Now.Ticks;
                     }
-                    catch (Exception ex)
-                    {
-                        Common.ShowErrorMessageBox(ex);
-                    }
+
+                    Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+
+                    if (cancellationToken.IsCancellationRequested) break;
                 }
-                finally
-                {
-                    Interlocked.Exchange(ref _yadro1AThreadNowSynching, 0);
-                }
+                while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+
+                SwapCockpitStandbyFrequencyYaDRO1A();
+                ShowFrequenciesOnPanel();
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Common.ShowErrorMessageBox(ex);
             }
 
             // Refresh panel once this debacle is finished
@@ -1196,220 +1202,219 @@ namespace NonVisuals.Radios
             }
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
-                lock (LockLCDUpdateObject)
+
+                foreach (var radioPanelKnobObject in hashSet)
                 {
-                    foreach (var radioPanelKnobObject in hashSet)
+                    var radioPanelKnob = (RadioPanelKnobMi8)radioPanelKnobObject;
+
+                    switch (radioPanelKnob.RadioPanelPZ69Knob)
                     {
-                        var radioPanelKnob = (RadioPanelKnobMi8)radioPanelKnobObject;
+                        case RadioPanelPZ69KnobsMi8.UPPER_R863_MANUAL:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentMi8RadioMode.R863_MANUAL);
+                                }
+                                break;
+                            }
 
-                        switch (radioPanelKnob.RadioPanelPZ69Knob)
-                        {
-                            case RadioPanelPZ69KnobsMi8.UPPER_R863_MANUAL:
+                        case RadioPanelPZ69KnobsMi8.UPPER_R863_PRESET:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentMi8RadioMode.R863_PRESET);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.UPPER_YADRO1A:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentMi8RadioMode.YADRO1A);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.UPPER_R828:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentMi8RadioMode.R828_PRESETS);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.UPPER_ADF_ARK9:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentMi8RadioMode.ADF_ARK9);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.UPPER_SPU7:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentMi8RadioMode.SPU7);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.LOWER_R863_MANUAL:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentMi8RadioMode.R863_MANUAL);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.LOWER_R863_PRESET:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentMi8RadioMode.R863_PRESET);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.LOWER_YADRO1A:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentMi8RadioMode.YADRO1A);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.LOWER_R828:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentMi8RadioMode.R828_PRESETS);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.LOWER_ADF_ARK9:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentMi8RadioMode.ADF_ARK9);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.LOWER_SPU7:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentMi8RadioMode.SPU7);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.UPPER_ARK_UD:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentMi8RadioMode.ARK_UD);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.LOWER_ARK_UD:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentMi8RadioMode.ARK_UD);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsMi8.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsMi8.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsMi8.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsMi8.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsMi8.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsMi8.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsMi8.LOWER_SMALL_FREQ_WHEEL_DEC:
+                            {
+                                // Ignore
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH:
+                            {
+                                if (_currentUpperRadioMode == CurrentMi8RadioMode.R863_PRESET)
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentMi8RadioMode.R863_MANUAL);
+                                        await DCSBIOS.SendAsync(R863_UNIT_SWITCH_COMMAND_TOGGLE);
                                     }
-                                    break;
                                 }
+                                else if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 && radioPanelKnob.IsOn)
+                                {
+                                    await DCSBIOS.SendAsync(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
+                                }
+                                else if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD && radioPanelKnob.IsOn)
+                                {
+                                    await DCSBIOS.SendAsync(ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE);
+                                }
+                                else
+                                {
+                                    await SendFrequencyToDCSBIOSAsync(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH);
+                                }
+                                break;
+                            }
 
-                            case RadioPanelPZ69KnobsMi8.UPPER_R863_PRESET:
+                        case RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH:
+                            {
+                                if (_currentLowerRadioMode == CurrentMi8RadioMode.R863_PRESET)
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentMi8RadioMode.R863_PRESET);
+                                        await DCSBIOS.SendAsync(R863_UNIT_SWITCH_COMMAND_TOGGLE);
                                     }
-                                    break;
                                 }
-
-                            case RadioPanelPZ69KnobsMi8.UPPER_YADRO1A:
+                                else if (_currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9 && radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi8RadioMode.YADRO1A);
-                                    }
-                                    break;
+                                    await DCSBIOS.SendAsync(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
                                 }
-
-                            case RadioPanelPZ69KnobsMi8.UPPER_R828:
+                                else if (_currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD && radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi8RadioMode.R828_PRESETS);
-                                    }
-                                    break;
+                                    await DCSBIOS.SendAsync(ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE);
                                 }
-
-                            case RadioPanelPZ69KnobsMi8.UPPER_ADF_ARK9:
+                                else
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi8RadioMode.ADF_ARK9);
-                                    }
-                                    break;
+                                    await  SendFrequencyToDCSBIOSAsync(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH);
                                 }
-
-                            case RadioPanelPZ69KnobsMi8.UPPER_SPU7:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi8RadioMode.SPU7);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.LOWER_R863_MANUAL:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi8RadioMode.R863_MANUAL);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.LOWER_R863_PRESET:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi8RadioMode.R863_PRESET);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.LOWER_YADRO1A:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi8RadioMode.YADRO1A);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.LOWER_R828:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi8RadioMode.R828_PRESETS);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.LOWER_ADF_ARK9:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi8RadioMode.ADF_ARK9);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.LOWER_SPU7:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi8RadioMode.SPU7);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.UPPER_ARK_UD:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMi8RadioMode.ARK_UD);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.LOWER_ARK_UD:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMi8RadioMode.ARK_UD);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.UPPER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsMi8.UPPER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsMi8.UPPER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsMi8.UPPER_SMALL_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsMi8.LOWER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsMi8.LOWER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsMi8.LOWER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsMi8.LOWER_SMALL_FREQ_WHEEL_DEC:
-                                {
-                                    // Ignore
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH:
-                                {
-                                    if (_currentUpperRadioMode == CurrentMi8RadioMode.R863_PRESET)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            await DCSBIOS.SendAsync(R863_UNIT_SWITCH_COMMAND_TOGGLE);
-                                        }
-                                    }
-                                    else if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 && radioPanelKnob.IsOn)
-                                    {
-                                        await DCSBIOS.SendAsync(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
-                                    }
-                                    else if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD && radioPanelKnob.IsOn)
-                                    {
-                                        await DCSBIOS.SendAsync(ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE);
-                                    }
-                                    else
-                                    {
-                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH:
-                                {
-                                    if (_currentLowerRadioMode == CurrentMi8RadioMode.R863_PRESET)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            await DCSBIOS.SendAsync(R863_UNIT_SWITCH_COMMAND_TOGGLE);
-                                        }
-                                    }
-                                    else if (_currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9 && radioPanelKnob.IsOn)
-                                    {
-                                        await DCSBIOS.SendAsync(ADF_BACKUP_MAIN_SWITCH_TOGGLE_COMMAND);
-                                    }
-                                    else if (_currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD && radioPanelKnob.IsOn)
-                                    {
-                                        await DCSBIOS.SendAsync(ARKUD_VHF_UHF_MODE_COMMAND_TOGGLE);
-                                    }
-                                    else
-                                    {
-                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH);
-                                    }
-                                    break;
-                                }
-                        }
-
-                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                        {
-                            PluginManager.DoEvent(
-                                DCSAircraft.SelectedAircraft.Description,
-                                HIDInstance,
-                                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_MI8,
-                                (int)radioPanelKnob.RadioPanelPZ69Knob,
-                                radioPanelKnob.IsOn,
-                                null);
-                        }
+                                break;
+                            }
                     }
-                    AdjustFrequency(hashSet);
+
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.DoEvent(
+                            DCSAircraft.SelectedAircraft.Description,
+                            HIDInstance,
+                            PluginGamingPanelEnum.PZ69RadioPanel_PreProg_MI8,
+                            (int)radioPanelKnob.RadioPanelPZ69Knob,
+                            radioPanelKnob.IsOn,
+                            null);
+                    }
                 }
+
+                AdjustFrequencyAsync(hashSet);
             }
             catch (Exception ex)
             {
@@ -2616,16 +2621,6 @@ namespace NonVisuals.Radios
             {
                 Logger.Error(ex);
             }
-        }
-
-        private bool R863ManualNowSyncing()
-        {
-            return Interlocked.Read(ref _r863ManualThreadNowSynching) > 0;
-        }
-
-        private bool YaDRO1ANowSyncing()
-        {
-            return Interlocked.Read(ref _yadro1AThreadNowSynching) > 0;
         }
 
         private void SaveCockpitFrequencyR863Manual()
