@@ -902,17 +902,19 @@ namespace NonVisuals.Radios
 
                     if (Interlocked.Read(ref _vhfAmDial3WaitingForFeedback) == 0)
                     {
-                        string command;
-                        dial3OkTime = DateTime.Now.Ticks;
-                        lock (_lockVhfAmDialsObject3)
+                        if (_vhfAmCockpitFreq3DialPos != desiredPositionDial3)
                         {
-                            command = VHF_AM_FREQ_3DIAL_COMMAND + GetCommandDirectionForVhfDial23(desiredPositionDial3, _vhfAmCockpitFreq3DialPos);
+                            string command;
+                            dial3OkTime = DateTime.Now.Ticks;
+                            lock (_lockVhfAmDialsObject3)
+                            {
+                                command = VHF_AM_FREQ_3DIAL_COMMAND + GetCommandDirectionForVhfDial23(desiredPositionDial3, _vhfAmCockpitFreq3DialPos);
+                            }
 
+                            await DCSBIOS.SendAsync(command);
+                            dial3SendCount++;
+                            Interlocked.Exchange(ref _vhfAmDial3WaitingForFeedback, 1);
                         }
-                        await DCSBIOS.SendAsync(command);
-
-                        dial3SendCount++;
-                        Interlocked.Exchange(ref _vhfAmDial3WaitingForFeedback, 1);
 
                         Reset(ref dial3Timeout);
                     }
